@@ -1,6 +1,6 @@
-export interface AppUser{
-    FirstName: string,
-    LastName: string,
-    Email:string,
-    Password: string
+export interface AppUser {
+  FirstName?: string;
+  LastName?: string;
+  Email: string;
+  Password: string;
 }
