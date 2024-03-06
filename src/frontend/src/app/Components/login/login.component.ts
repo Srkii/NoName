@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.newUser).subscribe({
       next: (response) => {
         console.log(response);
+        localStorage.setItem('id', response.id);
+        localStorage.setItem('token', response.token);
         this.loggedIn = true;
         console.log('Successful login');
       },
