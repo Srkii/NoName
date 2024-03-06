@@ -5,37 +5,38 @@ using backend.Entities;
 using backend.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
-namespace backend.Services;
-
-public class TokenService : ITokenService
+namespace backend.Services
 {
-    private readonly SymmetricSecurityKey key;
-
-    public TokenService(IConfiguration config)
+    public class TokenService : ITokenService
     {
-        key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
-    }
+        private readonly SymmetricSecurityKey key;
 
-    public string CreateToken(AppUser user)
-    {
-        var claims = new List<Claim>
+        public TokenService(IConfiguration config)
         {
-            new Claim(JwtRegisteredClaimNames.Email,user.Email)
-        };
+            key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+        }
 
-        var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
-
-        var tokenDescriptor = new SecurityTokenDescriptor
+        public string CreateToken(AppUser user)
         {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddDays(7),
-            SigningCredentials = creds
-        };
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Email,user.Email)
+            };
 
-        var tokenHandler = new JwtSecurityTokenHandler();
+            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(7),
+                SigningCredentials = creds
+            };
 
-        return tokenHandler.WriteToken(token);
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
+        }
     }
 }
