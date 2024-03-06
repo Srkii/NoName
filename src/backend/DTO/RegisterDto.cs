@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace backend.DTO{
-
+namespace backend.DTO
+{
     public class RegisterDto
     {
         [Required]
@@ -13,5 +13,4 @@ namespace backend.DTO{
         [Required]
         public string Password{get; set;}
     }
-
 }

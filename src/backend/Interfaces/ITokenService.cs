@@ -1,8 +1,9 @@
 ﻿using backend.Entities;
 
-namespace backend;
-
-public interface ITokenService
+namespace backend.Interfaces
 {
-    string CreateToken(AppUser user);
+    public interface ITokenService
+    {
+        string CreateToken(AppUser user);
+    }
 }
