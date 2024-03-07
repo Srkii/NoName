@@ -7,10 +7,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RegisterComponent } from './Components/register/register.component';
 import { LoginComponent } from './Components/login/login.component';
+import { CommonModule } from '@angular/common';
+import { UserInfoComponent } from './Components/user-info/user-info.component';
+import { HomeComponent } from './Components/home/home.component';
 
 @NgModule({
-  declarations: [AppComponent, RegisterComponent, LoginComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
+  declarations: [AppComponent, RegisterComponent, LoginComponent,UserInfoComponent,HomeComponent],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule,CommonModule],
   providers: [],
   bootstrap: [AppComponent],
 })
