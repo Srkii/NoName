@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../Services/login.service';
 import { AppUser } from '../../Entities/AppUser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
 
   loggedIn = false;
 
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService,private router:Router) {}
 
   ngOnInit(): void {}
 
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
         this.loggedIn = true;
+        this.router.navigate(['/home']);
         console.log('Successful login');
       },
       error: (error) => {
