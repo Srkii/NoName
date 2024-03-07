@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
-    [Authorize]
+    // [Authorize]
     public class UsersController:BaseApiController
     {
         private readonly DataContext context;
@@ -15,7 +15,7 @@ namespace backend.Controllers
             this.context = context;
         }
 
-        [AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
+        // [AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers(){
             var users = await context.Users.ToListAsync();
