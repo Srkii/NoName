@@ -11,15 +11,16 @@ import { AppUser } from '../Entities/AppUser';
 export class UserinfoService {//unused
   constructor(private readonly httpClient:HttpClient) {}
 
-  async getUserInfo(id:any){
+  async getUserInfo(id:any,token:any){
     const response = await fetch(`https://localhost:5001/api/users/${id}`,
     {
       method: 'GET',
       headers: {
+        Authorization: `Bearer ${token}`,
         Accept: 'application/json',
       },
     });
-    var result  =(await response.json());
+    var result  = (await response.json());
     return result;
   }
 }
