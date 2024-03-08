@@ -13,9 +13,10 @@ export class UserInfoComponent implements OnInit {
   constructor(private userinfoService: UserinfoService, private router: Router) {}
 
   async ngOnInit(): Promise<void> {
-    const token = localStorage.getItem('id');
+    const id = localStorage.getItem('id');
+    const token = localStorage.getItem('token')
     if (token) {
-      this.userInfo = await this.userinfoService.getUserInfo(token);
+      this.userInfo = await this.userinfoService.getUserInfo(id,token);
     } else {
       console.error("Token not found in local storage");
     }
