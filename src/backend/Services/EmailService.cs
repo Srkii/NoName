@@ -1,19 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 using backend.Interfaces;
 
 namespace backend.Services
 {
     public class EmailService : IEmailSender
     {
-        public Task SendEmailAsync(string email, string subject, string message)
+        public Task SendEmailAsync(string email)
         {
-            string mail = "accessdenied522@gmail.com";
-            string password = "Admin_123";
+            var mail = "accessdenied522@gmail.com";
+            var password = "redg vikb xzxo edhb";
+
+            string subject = "Invitation to Register on Our Application";
+
+            string message = "Dear User, \n\n" +
+                 "We hope this message finds you well. You have been invited to join our community at 'Naziv aplikacije'! \n" +
+                 "To complete your registration, please follow the link below: \n\n" + 
+                 "Best regards, \n" + 
+                 "Access Denied, \n" +
+                 "Naziv Aplikacije";
 
             var client = new SmtpClient("smtp.gmail.com", 587)
             {
