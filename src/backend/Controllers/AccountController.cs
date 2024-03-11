@@ -33,7 +33,8 @@ namespace backend.Controllers
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
+                PasswordSalt = hmac.Key,
+                Role = UserRole.Member //default vrednost novo registrovanog korisnika je Member
             };
 
             context.Users.Add(user);
@@ -65,6 +66,7 @@ namespace backend.Controllers
             return new UserDto
             {
                 Id = user.Id,
+                Role = user.Role,
                 Email = user.Email,
                 Token = tokenService.CreateToken(user)
             };
