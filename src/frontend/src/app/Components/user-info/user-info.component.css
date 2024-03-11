@@ -21,7 +21,7 @@
     );
 }
 .mainbg{
-  height: 100vh;
+  height: 300vh;
   background-color: hsl(218, 41%, 15%);
   background-image: radial-gradient(
       hsl(218, 41%, 35%) 15%,
@@ -37,4 +37,25 @@
       hsl(218, 41%, 19%) 80%,
       transparent 100%
     );
+}
+ul{
+  display: inline;
+  text-decoration: none;
+}
+button{
+  background-color: hsl(218, 41%, 15%);
+}
+#maindiv{
+  margin-left:100px;
+  float:left;
+}
+p{
+  margin: 0;
+}
+input{
+  margin: 6px;
+}
+.update{
+  margin-left: 100px;
+  float:right;
 }
