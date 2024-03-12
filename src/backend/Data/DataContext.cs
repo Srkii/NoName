@@ -10,5 +10,6 @@ namespace backend.Data
         }
 
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
     }
 }
