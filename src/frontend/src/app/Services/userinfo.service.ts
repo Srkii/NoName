@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppUser } from '../Entities/AppUser';
+import { ChangeUserData } from '../Entities/ChangeUserData';
 
 
 @Injectable({
@@ -21,20 +22,20 @@ export class UserinfoService {//unused
       },
     });
     var result  = (await response.json());
-    console.log(result);
     return result;
   }
 
-  async updateUserInfo(newdata:any,id:any,token:any){
-    console.log("UPDATEUSERINFO begins...");
-    /*
-    ideja je da se na osnovu odgovora od api-a informise korisnik o uspesnosti promene podataka
-    moguce komplikacije:
-      server ne odgovori
-      omasena sifra
-      greska u requestu kod mene(nadajmo se da nece to da bude)
-    */
-   const headers = new HttpHeaders().set('Authorization',`Bearer ${token}`).set('Content-Type','application/json');
-   return await this.httpClient.put<any>(`https://localhost:5001/api/users/update/${id}`,newdata,{headers})
+  updateUserInfo(token: any, id:number, newdata:ChangeUserData){
+    const url = `https://localhost:5001/api/users/updateUser/${id}`;
+    const response = fetch(url,{
+      method:'PUT',
+      headers:{
+        Authorization:`Bearer ${token}`,
+        'Content-Type':'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(newdata)
+    });
+    return response;
   }
 }

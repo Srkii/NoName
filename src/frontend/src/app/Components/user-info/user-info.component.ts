@@ -13,7 +13,7 @@ export class UserInfoComponent implements OnInit {
   public userInfo: any;
   public passwordCheck:any;
   newData: ChangeUserData = {
-    ConfirmOldPass:""//ostale vrednosti su nullable
+    CurrentPassword:""
   }
 
   constructor(private userinfoService: UserinfoService, private router: Router) {}
@@ -31,7 +31,6 @@ export class UserInfoComponent implements OnInit {
     const token = localStorage.getItem('token')
     if (token) {
       this.userInfo = await this.userinfoService.getUserInfo(id,token);
-      console.log(this.userInfo.email)
     } else {
       console.error("Token not found in local storage");
     }
@@ -55,24 +54,31 @@ export class UserInfoComponent implements OnInit {
     }
   }
 
-    change_info(){
-      this.visibility_change('block',document.getElementById('update'));
+  change_info(){
+    this.visibility_change('block',document.getElementById('update'));
+  }
+  apply_changes(){
+    if(this.newData.CurrentPassword==''){
+      alert("input old password for verification...");
+      return;
+    }else if(this.newData.NewPassword!=this.newData.NewPasswordConfirm){
+      alert("passwords must match...");
+      return;
     }
-    apply_changes(){
-      if(this.newData.ConfirmOldPass==''){
-        alert("input old password for verification...");
-        return;
-      }else if(this.newData.NewPass!=this.newData.ConfirmNewPass){
-        alert("passwords must match...");
-        return;
+    console.log("applying changes...");
+    var id= Number(localStorage.getItem('id'));
+    var token = localStorage.getItem('token');
+    this.userinfoService.updateUserInfo(token,id,this.newData)
+    .then(response => {
+      if(response.ok){
+        alert("update successful!");
+      }else{
+        alert("update failed, invalid data...");
       }
-      console.log("applying changes...");
-      console.log("DATA TO UPDATE: ",this.newData);
-      var id = localStorage.getItem('id');
-      var token = localStorage.getItem('token');
-      var response = this.userinfoService.updateUserInfo(this.newData,id,token);
-      if(response == null) alert("Change failed, invalid data..");
-      alert("Update successfull!");
-    }
-
+    })
+    .catch(error => {
+      console.error("error in updating info: ",error);
+      alert("update failed,try again later.");
+    })
+  }
 }

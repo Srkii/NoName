@@ -20,9 +20,9 @@
         <input name="fname" type="text" placeholder="new first name" [(ngModel)]="newData.FirstName"/><br>
         <input name="lname" type="text" placeholder="new last name" [(ngModel)]="newData.LastName"/><br>
         <input name="email" type="text" placeholder="new email address" [(ngModel)]="newData.Email"/><br>
-        <input name="oldpass" type="text" placeholder="verify old password(*)" [(ngModel)]="newData.ConfirmOldPass"/><br>
-        <input name="newpass" type="text" placeholder="new password" [(ngModel)]="newData.NewPass"/><br>
-        <input name="confirmnewpass" type="text" placeholder="confirm new password" [(ngModel)]="newData.ConfirmNewPass"/><br>
+        <input name="oldpass" type="password" placeholder="verify old password(*)" [(ngModel)]="newData.CurrentPassword"/><br>
+        <input name="newpass" type="password" placeholder="new password" [(ngModel)]="newData.NewPassword"/><br>
+        <input name="confirmnewpass" type="password" placeholder="confirm new password" [(ngModel)]="newData.NewPasswordConfirm"/><br>
         <button  class="btn btn-primary btn-block mb-4" type="submit">Apply changes</button>
       </form>
       <p id="warning" style="color: red;"></p><!--da li da se koristi ovo ili alert-ovi-->
