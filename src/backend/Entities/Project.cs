@@ -26,5 +26,3 @@
         public Priority Priority { get; set; }
     }
 }
-
-

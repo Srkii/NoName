@@ -8,9 +8,15 @@
         Guest
     }
     public class ProjectMember
-    { //set composite key
-        public int UserId { get; set; }
+    {
+        public ProjectRole ProjectRole { get; set; }
+
+        // foreign key properties
+        public int AppUserId { get; set; }
         public int ProjectId { get; set; }
-        public ProjectRole ProjectRole  { get; set; }
+
+        // navigation properties
+        public AppUser AppUser { get; set; }
+        public Project Project { get; set; }
     }
 }
