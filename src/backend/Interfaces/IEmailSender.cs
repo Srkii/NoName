@@ -4,6 +4,6 @@ namespace backend.Interfaces
 {
     public interface IEmailSender
     {
-        Task SendEmailAsync(string email);
+        Task SendEmailAsync(string email,string token);
     }
 }
