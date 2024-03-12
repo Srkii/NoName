@@ -14,6 +14,7 @@ export class NavComponent {
       // Remove token and id from local storage
       localStorage.removeItem('token');
       localStorage.removeItem('id');
+      localStorage.removeItem('role');
 
       // Navigate to the login page
       this.router.navigate(['/login']);

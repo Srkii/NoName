@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { UserInfoComponent } from './Components/user-info/user-info.component';
 import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
+import { AdminComponent } from './Components/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { NavComponent } from './Components/nav/nav.component';
     UserInfoComponent,
     HomeComponent,
     NavComponent,
+    AdminComponent,
   ],
   imports: [
     BrowserModule,
