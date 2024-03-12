@@ -4,6 +4,7 @@ using backend.Data;
 using backend.DTO;
 using backend.Entities;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,9 @@ namespace backend.Controllers
         [HttpPost("register")] // POST: api/account/register
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {   
+            if(!await IsValidTokenAsync(registerDto.Token))
+                return BadRequest("Token is not valid");
+
             if(await EmailExists(registerDto.Email))
                 return BadRequest("E-mail is already in use.");
 
@@ -38,6 +42,7 @@ namespace backend.Controllers
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
+            await MarkTokenAsUsedAsync(registerDto.Token);
 
             return new UserDto
             {
@@ -73,6 +78,22 @@ namespace backend.Controllers
         private async Task<bool> EmailExists(string email)
         {
             return await context.Users.AnyAsync(x => x.Email == email); //ako bude problema ovo email.ToLower() treba da se prepravi
+        }
+
+        public async Task<bool> IsValidTokenAsync(string token)
+        {
+            var invitation = await context.Invitations.FirstOrDefaultAsync(i => i.Token == token && !i.IsUsed && i.ExpirationDate > DateTime.UtcNow);
+            return invitation != null;
+        }
+
+        public async Task MarkTokenAsUsedAsync(string token)
+        {
+            var invitation = await context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
+            if (invitation != null)
+            {
+                invitation.IsUsed = true;
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -26,5 +26,18 @@ namespace backend.Controllers
         public async Task<ActionResult<AppUser>> GetUser(int id){
             return await context.Users.FindAsync(id);
         }
+
+        [AllowAnonymous]
+        [HttpGet("token/{token}")] // /api/users/token
+         public async Task<ActionResult<String>> GetEmail(string token){
+            var invitation = await context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
+
+            if (invitation == null)
+            {
+                return NotFound();
+            }
+
+            return invitation.Email;
+        }
     }
 }
