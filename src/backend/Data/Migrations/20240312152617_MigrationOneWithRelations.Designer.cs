@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -10,9 +11,11 @@ using backend.Data;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240312152617_MigrationOneWithRelations")]
+    partial class MigrationOneWithRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -75,7 +78,10 @@ namespace backend.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", null, t =>
+                        {
+                            t.HasCheckConstraint("EndDate_GreaterThanOrEqual_StartDate", "EndDate >= StartDate");
+                        });
                 });
 
             modelBuilder.Entity("backend.Entities.ProjectMember", b =>
@@ -124,7 +130,10 @@ namespace backend.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectTasks");
+                    b.ToTable("ProjectTasks", null, t =>
+                        {
+                            t.HasCheckConstraint("EndDate_GreaterThanOrEqual_StartDate", "EndDate >= StartDate");
+                        });
                 });
 
             modelBuilder.Entity("backend.Entities.TaskDependency", b =>
