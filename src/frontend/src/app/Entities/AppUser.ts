@@ -3,4 +3,5 @@ export interface AppUser {
   LastName?: string;
   Email: string;
   Password: string;
+  Token?: string;
 }
