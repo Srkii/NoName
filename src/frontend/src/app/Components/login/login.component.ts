@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
         console.log(response);
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
+        localStorage.setItem('role', response.role);
         this.loggedIn = true;
         this.router.navigate(['/home']);
         console.log('Successful login');
