@@ -10,14 +10,8 @@ import { adminGuard } from './Guards/admin.guard';
 import { loginGuard } from './Guards/login.guard';
 import { authGuard } from './Guards/auth.guard';
 const routes: Routes = [
-  { path: '',
-    runGuardsAndResolvers:'always',
-    canActivate:[loginGuard],
-    children:[
-      { path: 'register', component: RegisterComponent },
-      { path: 'login', component: LoginComponent }
-    ]
-  }, 
+  { path: 'register', component: RegisterComponent, canActivate:[loginGuard] },
+  { path: 'login', component: LoginComponent,canActivate:[loginGuard] },
   { path: '',
     runGuardsAndResolvers:'always',
     canActivate:[authGuard],
