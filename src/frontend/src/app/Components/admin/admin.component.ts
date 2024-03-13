@@ -12,15 +12,24 @@ export class AdminComponent {
 
   constructor(private adminService:AdminService ){}
 
+  receiverEmail: string=''
+
   invatation:Invatation={
     reciever: ''
   }
 
   Invite(): void{
-    this.adminService.sendInvatation(this.invatation).subscribe({next:(res)=>{
-      console.log("Email successful sent")
-    },error:()=>{
+    if(this.receiverEmail)
+    {
+      this.adminService.sendInvatation(this.receiverEmail).subscribe(
+        ()=>{
+          console.log('Email sent successfully');
+        }
+      )
+    }
+    error:()=>{
       console.log("Email is not sent")
-    }})
+    }}
+    
   }
-}
+

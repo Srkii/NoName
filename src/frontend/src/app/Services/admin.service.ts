@@ -20,8 +20,8 @@ export class AdminService {
     else return false
   }
 
-  sendInvatation(invData:any):Observable<any>{
-    return this.httpClient.post(`${this.apiUrl}/email/send`,invData)
+  sendInvatation(invData:String):Observable<any>{
+    return this.httpClient.post<any>(`${this.apiUrl}/email/send`,invData)
   }
 
 }
