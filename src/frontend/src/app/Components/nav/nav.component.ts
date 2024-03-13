@@ -31,9 +31,7 @@ export class NavComponent implements OnInit {
   }
 
   isAdmin():boolean{
-    var role=localStorage.getItem('role')
-    this.admin=!!role
-    return this.admin
+   return localStorage.getItem('role')==='0';
   }
 
 }
