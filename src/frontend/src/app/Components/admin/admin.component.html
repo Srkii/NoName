@@ -1,9 +1,22 @@
-<!-- <app-nav></app-nav> -->
-<div>
+<app-nav></app-nav>
+<section class="background-radial-gradient overflow-hidden">
+<div class="left">
     <h2>Invite member</h2>
     <form (ngSubmit)="Invite()" autocomplete="off">
-        <input type="email" name="email" placeholder="Email" [(ngModel)]="receiverEmail" />
-        <button type="submit">Invite</button>
+        <div class="form-floating mb-4">
+            <input
+              type="password"
+              id="form3Example4"
+              class="form-control"
+              name="email"
+              [(ngModel)]="receiverEmail"
+              placeholder="Email"
+            />
+            <label class="form-label" for="form3Example4">Email</label>
+          </div>
+        <button type="submit" class="btn btn-primary btn-block mb-4">
+            Invite
+          </button>
     </form>
-
 </div>
+</section>

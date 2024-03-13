@@ -28,7 +28,7 @@ import { AdminComponent } from './Components/admin/admin.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    CommonModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent],

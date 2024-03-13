@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 
 import { AdminService } from '../../Services/admin.service';
 import { Invatation } from '../../Entities/Invatation';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css'
+  styleUrl: './admin.component.css',
 })
 export class AdminComponent {
 
