@@ -9,10 +9,11 @@ import { ChangeUserData } from '../Entities/ChangeUserData';
 @Injectable({
   providedIn: 'root'
 })
-export class UserinfoService {//unused
+export class UserinfoService {
   constructor(private readonly httpClient:HttpClient) {}
 
   async getUserInfo(id:any,token:any){
+    const url = `https://localhost:5001/api/users/updateUser/${id}`;
     const response = await fetch(`https://localhost:5001/api/users/${id}`,
     {
       method: 'GET',
@@ -25,17 +26,12 @@ export class UserinfoService {//unused
     return result;
   }
 
-  updateUserInfo(token: any, id:number, newdata:ChangeUserData){
+  updateUserInfo(token: any, id:number, newdata:ChangeUserData):Observable<any>{
     const url = `https://localhost:5001/api/users/updateUser/${id}`;
-    const response = fetch(url,{
-      method:'PUT',
-      headers:{
-        Authorization:`Bearer ${token}`,
-        'Content-Type':'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify(newdata)
-    });
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
+    const response = this.httpClient.put<any>(url,JSON.stringify(newdata),{headers})
     return response;
   }
 }

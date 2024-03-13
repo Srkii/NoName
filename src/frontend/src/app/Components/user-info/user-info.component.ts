@@ -74,17 +74,20 @@ export class UserInfoComponent implements OnInit {
     console.log("applying changes...");
     var id= Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
-    this.userinfoService.updateUserInfo(token,id,this.newData)
-    .then(response => {
-      if(response.ok){
-        alert("update successful!");
-      }else{
-        alert("update failed, invalid data...");
+    this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
+      next: (response) => {
+        console.log(response);
+        localStorage.clear();
+        localStorage.setItem('id',response.id);
+        localStorage.setItem('token',response.token);
+        console.log("change info successful!");
+        alert("Changes applied");
+        location.reload();
+      },
+      error: (error)=>{
+        console.log(error);
+        console.log("change info failed.");
       }
-    })
-    .catch(error => {
-      console.error("error in updating info: ",error);
-      alert("update failed,try again later.");
-    })
+    });
   }
 }

@@ -32,8 +32,7 @@ namespace backend.Controllers
         [HttpGet("{id}")] // /api/users/2
         public async Task<ActionResult<AppUser>> GetUser(int id){
             AppUser user = await context.Users.FindAsync(id);
-            if(user!=null) return user;
-            return null;
+            return user;//salje se ceo user na front iz nekog razloga...
         }
         [HttpPut("updateUser/{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateInfoDto data){            
@@ -52,6 +51,7 @@ namespace backend.Controllers
             await context.SaveChangesAsync();
           }
           return new UserDto{
+            Id=user.Id,
             Email = user.Email,
             Token = tokenService.CreateToken(user)
           };
