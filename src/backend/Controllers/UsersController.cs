@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.Controllers
 {
     [Authorize]
-    public class UsersController:BaseApiController
+    public class UsersController : BaseApiController
     {
         private readonly DataContext context;
         private ITokenService tokenService;
@@ -24,15 +24,15 @@ namespace backend.Controllers
 
         // [AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers(){
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        {
             var users = await context.Users.ToListAsync();
             return users;
         }
         //[AllowAnonymous] 
         [HttpGet("{id}")] // /api/users/2
         public async Task<ActionResult<AppUser>> GetUser(int id){
-            AppUser user = await context.Users.FindAsync(id);
-            return user;//salje se ceo user na front iz nekog razloga...
+            return await context.Users.FindAsync(id);
         }
         [HttpPut("updateUser/{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateInfoDto data){            
@@ -55,6 +55,22 @@ namespace backend.Controllers
             Email = user.Email,
             Token = tokenService.CreateToken(user)
           };
+
         }
+
+        [AllowAnonymous]
+        [HttpGet("token/{token}")] // /api/users/token
+        public async Task<ActionResult<InvitationDto>> GetEmail(string token)
+        {
+            var invitation = await context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
+
+            if (invitation == null)
+            {
+                return NotFound();
+            }
+
+            return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
+        }
+
     }
 }
