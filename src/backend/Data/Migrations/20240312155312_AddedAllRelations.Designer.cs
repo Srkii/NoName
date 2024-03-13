@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -10,9 +11,11 @@ using backend.Data;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240312155312_AddedAllRelations")]
+    partial class AddedAllRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -46,28 +49,12 @@ namespace backend.Data.Migrations
                     b.ToTable("Users");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("backend.Entities.Invitation", b =>
-=======
             modelBuilder.Entity("backend.Entities.Project", b =>
->>>>>>> 496bdf23c57e41cd58e3821962b6490ffec88bf1
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-<<<<<<< HEAD
-                    b.Property<string>("Email")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Token")
-=======
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
@@ -87,14 +74,10 @@ namespace backend.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("StartDate")
->>>>>>> 496bdf23c57e41cd58e3821962b6490ffec88bf1
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
-                    b.ToTable("Invitations");
-=======
                     b.ToTable("Projects");
                 });
 
@@ -249,7 +232,6 @@ namespace backend.Data.Migrations
                     b.Navigation("Member");
 
                     b.Navigation("Task");
->>>>>>> 496bdf23c57e41cd58e3821962b6490ffec88bf1
                 });
 #pragma warning restore 612, 618
         }
