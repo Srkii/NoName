@@ -55,7 +55,13 @@ export class UserInfoComponent implements OnInit {
   }
 
   change_info(){
-    this.visibility_change('block',document.getElementById('update'));
+    var changeinfodiv = document.getElementById('update');
+    if(changeinfodiv!=null){
+      this.visibility_change('block',changeinfodiv);
+      setTimeout(function(){
+        if(changeinfodiv!=null)changeinfodiv.style.opacity='1';
+      },10);
+    }
   }
   apply_changes(){
     if(this.newData.CurrentPassword==''){

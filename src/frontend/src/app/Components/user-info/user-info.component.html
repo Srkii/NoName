@@ -14,12 +14,18 @@
     <div class="update" id="update">
       <h2 style="color: hsl(218, 81%, 95%)">Change user info</h2>
       <form (ngSubmit)="apply_changes()"><br>
-        <input name="fname" type="text" placeholder="new first name" [(ngModel)]="newData.FirstName"/><br>
-        <input name="lname" type="text" placeholder="new last name" [(ngModel)]="newData.LastName"/><br>
-        <input name="email" type="text" placeholder="new email address" [(ngModel)]="newData.Email"/><br>
-        <input name="oldpass" type="password" placeholder="verify old password(*)" [(ngModel)]="newData.CurrentPassword"/><br>
-        <input name="newpass" type="password" placeholder="new password" [(ngModel)]="newData.NewPassword"/><br>
-        <input name="confirmnewpass" type="password" placeholder="confirm new password" [(ngModel)]="newData.NewPasswordConfirm"/><br>
+        <label for="fname">First Name</label>
+        <input id="fname" name="fname" type="text" placeholder="" [(ngModel)]="newData.FirstName"/><br>
+        <label for="lname">Last Name</label>
+        <input name="lname" type="text" placeholder="" [(ngModel)]="newData.LastName"/><br>
+        <label for="email">Email Address</label>
+        <input id="email" name="email" type="text" placeholder="" [(ngModel)]="newData.Email"/><br>
+        <label for="password1">Current Password</label>
+        <input id="password1"name="oldpass" type="password" placeholder="required*" [(ngModel)]="newData.CurrentPassword" required/><br>
+        <label for="password2">New Password</label>
+        <input  id="password2" name="newpass" type="password" placeholder="" [(ngModel)]="newData.NewPassword"/><br>
+        <label for="password3">Confirm New Password</label>
+        <input  id="password3" name="confirmnewpass" type="password" placeholder="" [(ngModel)]="newData.NewPasswordConfirm"/><br>
         <button type="submit">Apply changes</button>
       </form>
     </div>
