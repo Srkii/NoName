@@ -1,27 +1,33 @@
 <head>
   <title>USER INFO PAGE</title>
 </head>
-<body class="mainbg">
-  <!-- <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
-      <button class="btn btn-primary btn-block mb-4" (click)="onClickHome()"> Home </button>
-      <button class="btn btn-primary btn-block mb-4" (click)="onClickUser()"> User info </button>
-  </div> -->
+<body >
   <app-nav></app-nav>
-  <div
-    id="radius-shape-1"
-    class="position-absolute rounded-circle shadow-5-strong"
-  >
-    <div *ngIf="userInfo" class="form-outline mb-4">
-      <h1 style="color: hsl(218, 81%, 95%)">Account info</h1>
-      <p class="form-label" style="color: hsl(218, 81%, 95%)">
-        First name: {{ userInfo.firstName }}
-      </p>
-      <p class="form-label" style="color: hsl(218, 81%, 95%)">
-        Last name: {{ userInfo.lastName }}
-      </p>
-      <p class="form-label" style="color: hsl(218, 81%, 95%)">
-        email: {{ userInfo.email }}
-      </p>
+  <div id="container">
+    <div class="info" *ngIf="userInfo">
+      <h2 style="color: hsl(218, 81%, 95%)">Account info</h2>
+      <p style="color: hsl(218, 81%, 95%)">First name: {{userInfo.firstName}}</p><br>
+      <p style="color: hsl(218, 81%, 95%)">Last name: {{userInfo.lastName}}</p><br>
+      <p style="color: hsl(218, 81%, 95%)">Email: {{userInfo.email}}</p><br>
+      <button (click)="change_info()">Change Info</button>
+    </div>
+    <div class="update" id="update">
+      <h2 style="color: hsl(218, 81%, 95%)">Change user info</h2>
+      <form (ngSubmit)="apply_changes()"><br>
+        <label for="fname">First Name</label>
+        <input id="fname" name="fname" type="text" placeholder="" [(ngModel)]="newData.FirstName"/><br>
+        <label for="lname">Last Name</label>
+        <input name="lname" type="text" placeholder="" [(ngModel)]="newData.LastName"/><br>
+        <label for="email">Email Address</label>
+        <input id="email" name="email" type="text" placeholder="" [(ngModel)]="newData.Email"/><br>
+        <label for="password1">Current Password</label>
+        <input id="password1"name="oldpass" type="password" placeholder="required*" [(ngModel)]="newData.CurrentPassword" required/><br>
+        <label for="password2">New Password</label>
+        <input  id="password2" name="newpass" type="password" placeholder="" [(ngModel)]="newData.NewPassword"/><br>
+        <label for="password3">Confirm New Password</label>
+        <input  id="password3" name="confirmnewpass" type="password" placeholder="" [(ngModel)]="newData.NewPasswordConfirm"/><br>
+        <button type="submit">Apply changes</button>
+      </form>
     </div>
   </div>
 </body>
