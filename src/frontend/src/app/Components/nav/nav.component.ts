@@ -30,8 +30,11 @@ export class NavComponent implements OnInit {
     }
   }
 
-  isAdmin():boolean{
+  isAdmin(): boolean {
    return localStorage.getItem('role')==='0';
   }
 
+  isProjectManager(): boolean {
+    return localStorage.getItem('role')==='2';
+  }
 }

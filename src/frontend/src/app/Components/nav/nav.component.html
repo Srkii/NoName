@@ -9,8 +9,11 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/userinfo">User info</a>
       </li>
-      <li class="nav-item" *ngIf="admin" >
+      <li class="nav-item" *ngIf="isAdmin()" >
         <a class="nav-link" routerLink="/admin">Admin page</a>
+      </li>
+      <li class="nav-item" *ngIf="isProjectManager()">
+        <a class="nav-link" routerLink="/taskpage">Task Managment</a>
       </li>
     </ul>
     <button class="btn-outline-success" (click)="Logout()">Logout</button>

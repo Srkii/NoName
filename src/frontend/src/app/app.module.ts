@@ -12,6 +12,7 @@ import { UserInfoComponent } from './Components/user-info/user-info.component';
 import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
+import { TaskPageComponent } from './Components/task-page/task-page.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { AdminComponent } from './Components/admin/admin.component';
     HomeComponent,
     NavComponent,
     AdminComponent,
+    TaskPageComponent,
   ],
   imports: [
     BrowserModule,
