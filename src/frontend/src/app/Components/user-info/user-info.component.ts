@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserinfoService } from './../../Services/userinfo.service';
+import { AppUser } from '../../Entities/AppUser';
+import { ChangeUserData } from '../../Entities/ChangeUserData';
 
 @Component({
   selector: 'app-user-info',
@@ -9,13 +11,26 @@ import { UserinfoService } from './../../Services/userinfo.service';
 })
 export class UserInfoComponent implements OnInit {
   public userInfo: any;
+  public passwordCheck:any;
+  newData: ChangeUserData = {
+    CurrentPassword:""
+  }
 
   constructor(private userinfoService: UserinfoService, private router: Router) {}
+  //postavljanje defaultne vidljivosti div-ova
+
+  visibility_change(type:string,div:any){//promena vidljivosti div-a
+    if(div!=null) div.style.display = type;
+  }
 
   async ngOnInit(): Promise<void> {
-    const token = localStorage.getItem('id');
+
+    this.visibility_change('none',document.getElementById("update"));
+
+    const id = localStorage.getItem('id');
+    const token = localStorage.getItem('token')
     if (token) {
-      this.userInfo = await this.userinfoService.getUserInfo(token);
+      this.userInfo = await this.userinfoService.getUserInfo(id,token);
     } else {
       console.error("Token not found in local storage");
     }
@@ -37,5 +52,42 @@ export class UserInfoComponent implements OnInit {
     } catch (error) {
       console.error("Redirect failed:", error);
     }
+  }
+
+  change_info(){
+    var changeinfodiv = document.getElementById('update');
+    if(changeinfodiv!=null){
+      this.visibility_change('block',changeinfodiv);
+      setTimeout(function(){
+        if(changeinfodiv!=null)changeinfodiv.style.opacity='1';
+      },10);
+    }
+  }
+  apply_changes(){
+    if(this.newData.CurrentPassword==''){
+      alert("input old password for verification...");
+      return;
+    }else if(this.newData.NewPassword!=this.newData.NewPasswordConfirm){
+      alert("passwords must match...");
+      return;
+    }
+    console.log("applying changes...");
+    var id= Number(localStorage.getItem('id'));
+    var token = localStorage.getItem('token');
+    this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
+      next: (response) => {
+        console.log(response);
+        localStorage.clear();
+        localStorage.setItem('id',response.id);
+        localStorage.setItem('token',response.token);
+        console.log("change info successful!");
+        alert("Changes applied");
+        location.reload();
+      },
+      error: (error)=>{
+        console.log(error);
+        console.log("change info failed.");
+      }
+    });
   }
 }
