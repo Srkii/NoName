@@ -42,4 +42,29 @@ public class EmailController:BaseApiController
         
         await emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
     }
+
+    [HttpPost("sendRecovery")]
+    public async void SendRecoveryEmail(EmailDto emailDto)
+    {
+        var request = new UserRequest{
+            Email = emailDto.Receiver,
+            Token = Guid.NewGuid().ToString(),
+            ExpirationDate = DateTime.UtcNow.AddDays(7),
+            IsUsed = false
+        };
+
+        context.UserRequests.Add(request);
+        await context.SaveChangesAsync();
+        
+        string link = "http://localhost:4200/resetPassword?token="+request.Token;
+        string subject = "Forgot password";
+        string message = "Dear User, \n\n" +
+                 "We received a request to reset the password for your account.\n" +
+                 "To reset your password, click on the link below: \n\n" + link + "\n\n" +
+                 "Best regards, \n" + 
+                 "Access Denied, \n" +
+                 "Naziv Aplikacije";
+        
+        await emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
+    }
 }
