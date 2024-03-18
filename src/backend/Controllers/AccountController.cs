@@ -77,6 +77,29 @@ namespace backend.Controllers
             };
         }
 
+        [AllowAnonymous]
+        [HttpPost("changePassword")] // /api/account/changePassword
+        public async Task<ActionResult<InvitationDto>> ChangePassword(PasswordResetDto PassDto)
+        {
+            var request = await context.UserRequests.FirstOrDefaultAsync(i => i.Token == PassDto.Token);
+
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            var user = await context.Users.FirstOrDefaultAsync(i => i.Email == PassDto.Email);
+
+            var hmac = new HMACSHA512();
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(PassDto.NewPassword));
+            user.PasswordSalt = hmac.Key;
+
+            await context.SaveChangesAsync();
+            await MarkTokenAsUsedAsync(PassDto.Token);
+
+            return Ok();
+        }
+
         private async Task<bool> EmailExists(string email)
         {
             return await context.Users.AnyAsync(x => x.Email == email); //ako bude problema ovo email.ToLower() treba da se prepravi
