@@ -18,8 +18,8 @@ public class EmailController:BaseApiController
         this.context = context;
     }
 
-    [HttpPost("send")]
-    public async void SendEmail(EmailDto emailDto)
+    [HttpPost("sendInvitation")]
+    public async void SendInvitationEmail(EmailDto emailDto)
     {
         var invitation = new Invitation{
             Email = emailDto.Receiver,
@@ -31,6 +31,15 @@ public class EmailController:BaseApiController
         context.Invitations.Add(invitation);
         await context.SaveChangesAsync();
         
-        await emailSender.SendEmailAsync(emailDto.Receiver,invitation.Token);
+        string link = "http://localhost:4200/register?token="+invitation.Token;
+        string subject = "Invitation to Register on Our Application";
+        string message = "Dear User, \n\n" +
+                 "We hope this message finds you well. You have been invited to join our community at 'Naziv aplikacije' ! \n" +
+                 "To complete your registration, please follow the link below: \n\n" + link + "\n\n" +
+                 "Best regards, \n" + 
+                 "Access Denied, \n" +
+                 "Naziv Aplikacije";
+        
+        await emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
     }
 }
