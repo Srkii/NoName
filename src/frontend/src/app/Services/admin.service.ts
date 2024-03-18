@@ -21,7 +21,7 @@ export class AdminService {
   }
 
   sendInvatation(invData:String):Observable<any>{
-    return this.httpClient.post<any>(`${this.apiUrl}/email/send`,invData)
+    return this.httpClient.post<any>(`${this.apiUrl}/email/sendInvitation`,invData)
   }
 
 }
