@@ -77,6 +77,30 @@ namespace backend.Controllers
             };
         }
 
+        [AllowAnonymous]
+        [HttpPost("changePassword")] // /api/account/changePassword
+        public async Task<ActionResult<InvitationDto>> ChangePassword(PasswordResetDto PassDto)
+        {
+            var request = await context.UserRequests.FirstOrDefaultAsync(i => i.Token == PassDto.Token);
+
+            if (request == null)
+            {
+                return NotFound("Request not found");
+            }
+
+            request.IsUsed = true;
+
+            var user = await context.Users.FirstOrDefaultAsync(i => i.Email == PassDto.Email);
+
+            var hmac = new HMACSHA512();
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(PassDto.NewPassword));
+            user.PasswordSalt = hmac.Key;
+
+            await context.SaveChangesAsync();
+            
+            return Ok();
+        }
+
         private async Task<bool> EmailExists(string email)
         {
             return await context.Users.AnyAsync(x => x.Email == email); //ako bude problema ovo email.ToLower() treba da se prepravi
@@ -90,10 +114,11 @@ namespace backend.Controllers
 
         public async Task MarkTokenAsUsedAsync(string token)
         {
-            var invitation = await context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
-            if (invitation != null)
+            var entity = await context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
+            
+            if (entity != null)
             {
-                invitation.IsUsed = true;
+                entity.IsUsed = true;
                 await context.SaveChangesAsync();
             }
         }

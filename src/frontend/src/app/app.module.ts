@@ -13,7 +13,12 @@ import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
 import { TaskPageComponent } from './Components/task-page/task-page.component';
+<<<<<<< HEAD
 import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
+=======
+import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
+import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
+>>>>>>> db6c1897c339a32591db5dfdcb1743d4225cf7c5
 
 @NgModule({
   declarations: [
@@ -25,7 +30,12 @@ import { MyProjectsComponent } from './Components/my-projects/my-projects.compon
     NavComponent,
     AdminComponent,
     TaskPageComponent,
+<<<<<<< HEAD
     MyProjectsComponent,
+=======
+    ForgotPassComponent,
+    ForgotResetComponent,
+>>>>>>> db6c1897c339a32591db5dfdcb1743d4225cf7c5
   ],
   imports: [
     BrowserModule,
