@@ -4,7 +4,6 @@ export interface Project {
   id: number;
   parentId?: number;
   projectName: string;
-  // projectOwner: string;
   description?: string;
   startDate: Date;
   endDate: Date;

@@ -10,7 +10,7 @@
     <title>Document</title>
   </head>
   <body>
-    <div>
+    <div class="nav">
       <app-nav></app-nav>
     </div>
     <div id="all">
@@ -49,17 +49,15 @@
           <tr *ngFor="let project of projects">
             <ng-container *ngIf="isProjectVisible(project)">
               <td>{{ project.projectName }}</td>
-              <td>{{ project.projectName }}</td>
-              <!-- <td>{{ project.projectOwner }}</td> -->
-              <!-- <td>{{ project.description }}</td> -->
+              <td>Project owner name here</td>
               <td [ngClass]="getStatusString(project.projectStatus)">
                 <p>{{ getStatusString(project.projectStatus) }}</p>
               </td>
               <td [ngClass]="getPriorityString(project.priority)">
                 <p>{{ getPriorityString(project.priority) }}</p>
               </td>
-              <td>{{ project.startDate | date : "medium" }}</td>
-              <td>{{ project.endDate | date : "medium" }}</td>
+              <td>{{ project.startDate | date }}</td>
+              <td>{{ project.endDate | date }}</td>
             </ng-container>
           </tr>
         </table>
