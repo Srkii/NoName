@@ -13,6 +13,8 @@ import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
 import { TaskPageComponent } from './Components/task-page/task-page.component';
+import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
+import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { TaskPageComponent } from './Components/task-page/task-page.component';
     NavComponent,
     AdminComponent,
     TaskPageComponent,
+    ForgotPassComponent,
+    ForgotResetComponent,
   ],
   imports: [
     BrowserModule,

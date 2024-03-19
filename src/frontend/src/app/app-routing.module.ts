@@ -10,9 +10,13 @@ import { loginGuard } from './Guards/login.guard';
 import { authGuard } from './Guards/auth.guard';
 import { TaskPageComponent } from './Components/task-page/task-page.component';
 import { taskpageGuard } from './Guards/taskpage.guard';
+import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
+import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
 const routes: Routes = [
-  { path: 'register', component: RegisterComponent, canActivate:[loginGuard] },
-  { path: 'login', component: LoginComponent,canActivate:[loginGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [loginGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
+  { path: 'forgotpass', component: ForgotPassComponent, canActivate: [loginGuard] },
+  { path: 'forgotreset', component: ForgotResetComponent, canActivate: [loginGuard] },
   { path: '',
     runGuardsAndResolvers:'always',
     canActivate:[authGuard],
