@@ -1,14 +1,57 @@
-<head>
-  <title>Welcome</title>
-</head>
-<body class="mainbg">
-  <div>
-    <app-nav></app-nav>
-  </div>
-  <div
-    class="my-5 display-5 fw-bold ls-tight"
-    style="color: hsl(218, 81%, 95%)"
-  >
-    <h1>Welcome to my projects !</h1>
-  </div>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <app-nav></app-nav>
+    </div>
+    <div id="all">
+      <div id="all1">
+        <h5>All Projects</h5>
+        <br />
+        <input type="text" placeholder="Search Project" />
+        <select name="" id="">
+          <option value="" disabled selected>Select Status</option>
+          <option value="0">PREPOSED</option>
+          <option value="1">IN PROGRESS</option>
+          <option value="2">COMPLETED</option>
+        </select>
+        <select name="" id="">
+          <option value="" disabled selected>Select Priority</option>
+          <option value="0">LOW</option>
+          <option value="1">MEDIUM</option>
+          <option value="2">HIGH</option>
+        </select>
+        <br /><br />
+        <table>
+          <tr>
+            <th>PROJECT NAME</th>
+            <th>PROJECT OWNER</th>
+            <th>STATUS</th>
+            <th>PRIORITY</th>
+            <th>START DATE</th>
+            <th>END DATE</th>
+          </tr>
+          <tr *ngFor="let project of projects">
+            <td>{{ project.projectName }}</td>
+            <td>{{ project.projectName }}</td>
+            <!-- <td>{{ project.projectOwner }}</td> -->
+            <!-- <td>{{ project.description }}</td> -->
+            <td>{{ getStatusString(project.projectStatus) }}</td>
+            <td>{{ getPriorityString(project.priority) }}</td>
+            <td>{{ project.startDate | date : "medium" }}</td>
+            <td>{{ project.endDate | date : "medium" }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
