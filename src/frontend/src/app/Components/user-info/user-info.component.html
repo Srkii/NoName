@@ -5,21 +5,24 @@
   <app-nav></app-nav>
   <div id="container">
     <div class="info" *ngIf="userInfo">
-      <h2 style="color: hsl(218, 81%, 95%)">Account info</h2>
-      <p style="color: hsl(218, 81%, 95%)">First name: {{userInfo.firstName}}</p><br>
-      <p style="color: hsl(218, 81%, 95%)">Last name: {{userInfo.lastName}}</p><br>
-      <p style="color: hsl(218, 81%, 95%)">Email: {{userInfo.email}}</p><br>
-      <button (click)="change_info()">Change Info</button>
+      <div id="imageUser">
+        <img [src]="url" class="image">
+        {{userInfo.firstName}} {{userInfo.lastName}}
+        <input id="inp" type="file" style="display: none;" (change)="imageSelected($event)">
+      </div>
+      <div id="details">
+        <h4>Details</h4>
+        <p>First name: {{userInfo.firstName}}</p><br>
+        <p>Last name: {{userInfo.lastName}}</p><br>
+        <p>Email: {{userInfo.email}}</p><br>
+        <button (click)="change_info()">Change Info</button>
+      </div>
+      <button id="uploadButton" (click)="onClickUpload()">Change</button>
+      <div id="clear"></div>
     </div>
     <div class="update" id="update">
-      <h2 style="color: hsl(218, 81%, 95%)">Change user info</h2>
+      <h4>Change Password</h4>
       <form (ngSubmit)="apply_changes()"><br>
-        <label for="fname">First Name</label>
-        <input id="fname" name="fname" type="text" placeholder="" [(ngModel)]="newData.FirstName"/><br>
-        <label for="lname">Last Name</label>
-        <input name="lname" type="text" placeholder="" [(ngModel)]="newData.LastName"/><br>
-        <label for="email">Email Address</label>
-        <input id="email" name="email" type="text" placeholder="" [(ngModel)]="newData.Email"/><br>
         <label for="password1">Current Password</label>
         <input id="password1"name="oldpass" type="password" placeholder="required*" [(ngModel)]="newData.CurrentPassword" required/><br>
         <label for="password2">New Password</label>

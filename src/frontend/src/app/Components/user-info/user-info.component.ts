@@ -1,3 +1,4 @@
+import { UploadService } from './../../Services/upload.service';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserinfoService } from './../../Services/userinfo.service';
@@ -12,14 +13,13 @@ import { ChangeUserData } from '../../Entities/ChangeUserData';
 export class UserInfoComponent implements OnInit {
   public userInfo: any;
   public passwordCheck:any;
+  public url="../../../assets/1234.png";
   newData: ChangeUserData = {
     CurrentPassword:""
   }
 
-  constructor(private userinfoService: UserinfoService, private router: Router) {}
-  //postavljanje defaultne vidljivosti div-ova
-
-  visibility_change(type:string,div:any){//promena vidljivosti div-a
+  constructor(private userinfoService: UserinfoService, private router: Router,private uploadservice:UploadService) {}
+  visibility_change(type:string,div:any){
     if(div!=null) div.style.display = type;
   }
 
@@ -89,5 +89,21 @@ export class UserInfoComponent implements OnInit {
         console.log("change info failed.");
       }
     });
+  }
+  imageData:any=null;
+  imageSelected(event:any){
+    console.log("clicked");
+    this.imageData = event.target.files[0];
+    if(this.imageData != null){
+      const fd = new FormData();
+      fd.append('image',this.imageData,this.imageData.name);
+      this.uploadservice.UploadImage(fd);
+    }
+    else{
+      console.log("no data...");
+    }
+  }
+  onClickUpload(){
+    document.getElementById("inp")?.click();
   }
 }
