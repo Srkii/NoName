@@ -85,7 +85,7 @@ namespace backend.Controllers
 
             if (request == null)
             {
-                return NotFound();
+                return NotFound("Request not found");
             }
 
             var user = await context.Users.FirstOrDefaultAsync(i => i.Email == PassDto.Email);

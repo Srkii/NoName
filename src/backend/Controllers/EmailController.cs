@@ -19,7 +19,7 @@ public class EmailController:BaseApiController
     }
 
     [HttpPost("sendInvitation")]
-    public async void SendInvitationEmail(EmailDto emailDto)
+    public async Task<IActionResult> SendInvitationEmail(EmailDto emailDto)
     {
         var invitation = new Invitation{
             Email = emailDto.Receiver,
@@ -41,10 +41,19 @@ public class EmailController:BaseApiController
                  "Naziv Aplikacije";
         
         await emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
+
+        var responseData = new 
+        {
+            InvitationId = invitation.Id,
+            EmailSent = true,
+            Message = "Invitation email sent successfully."
+        };
+
+        return Ok(responseData);
     }
 
     [HttpPost("sendRecovery")]
-    public async void SendRecoveryEmail(EmailDto emailDto)
+    public async Task<IActionResult> SendRecoveryEmail(EmailDto emailDto)
     {
         var request = new UserRequest{
             Email = emailDto.Receiver,
@@ -66,5 +75,14 @@ public class EmailController:BaseApiController
                  "Naziv Aplikacije";
         
         await emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
+
+        var responseData = new 
+        {
+            InvitationId = request.Id,
+            EmailSent = true,
+            Message = "Request email sent successfully."
+        };
+
+        return Ok(responseData);
     }
 }
