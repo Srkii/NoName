@@ -45,4 +45,30 @@ export class MyProjectsComponent implements OnInit {
         return '';
     }
   }
+
+  selectedStatus: string = '';
+  selectedPriority: string = '';
+  ProjectName: string = '';
+
+  // Method to handle changes in status and priority
+  handleStatusChange(event: any) {
+    this.selectedStatus = event.target.value;
+  }
+
+  handlePriorityChange(event: any) {
+    this.selectedPriority = event.target.value;
+  }
+
+  isProjectVisible(project: Project): boolean {
+    const statusMatch =
+      this.selectedStatus === '' ||
+      this.getStatusString(project.projectStatus) === this.selectedStatus;
+    const priorityMatch =
+      this.selectedPriority === '' ||
+      this.getPriorityString(project.priority) === this.selectedPriority;
+    const nameMatch = project.projectName
+      .toLowerCase()
+      .includes(this.ProjectName.toLowerCase());
+    return statusMatch && priorityMatch && nameMatch;
+  }
 }

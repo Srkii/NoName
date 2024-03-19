@@ -17,19 +17,25 @@
       <div id="all1">
         <h5>All Projects</h5>
         <br />
-        <input type="text" placeholder="Search Project" />
-        <select name="" id="">
-          <option value="" disabled selected>Select Status</option>
-          <option value="0">PREPOSED</option>
-          <option value="1">IN PROGRESS</option>
-          <option value="2">COMPLETED</option>
+        <input
+          type="text"
+          placeholder="Search Project"
+          [(ngModel)]="ProjectName"
+        />
+        <select name="status" id="status" [(ngModel)]="selectedStatus">
+          <option value="" selected>Select Status</option>
+          <option value="PROPOSED">PROPOSED</option>
+          <option value="IN PROGRESS">IN PROGRESS</option>
+          <option value="COMPLETED">COMPLETED</option>
+          <option value="ARCHIVED">ARCHIVED</option>
         </select>
-        <select name="" id="">
-          <option value="" disabled selected>Select Priority</option>
-          <option value="0">LOW</option>
-          <option value="1">MEDIUM</option>
-          <option value="2">HIGH</option>
+        <select name="priority" id="priority" [(ngModel)]="selectedPriority">
+          <option value="" selected>Select Priority</option>
+          <option value="LOW">LOW</option>
+          <option value="MEDIUM">MEDIUM</option>
+          <option value="HIGH">HIGH</option>
         </select>
+
         <br /><br />
         <table>
           <tr>
@@ -41,14 +47,20 @@
             <th>END DATE</th>
           </tr>
           <tr *ngFor="let project of projects">
-            <td>{{ project.projectName }}</td>
-            <td>{{ project.projectName }}</td>
-            <!-- <td>{{ project.projectOwner }}</td> -->
-            <!-- <td>{{ project.description }}</td> -->
-            <td>{{ getStatusString(project.projectStatus) }}</td>
-            <td>{{ getPriorityString(project.priority) }}</td>
-            <td>{{ project.startDate | date : "medium" }}</td>
-            <td>{{ project.endDate | date : "medium" }}</td>
+            <ng-container *ngIf="isProjectVisible(project)">
+              <td>{{ project.projectName }}</td>
+              <td>{{ project.projectName }}</td>
+              <!-- <td>{{ project.projectOwner }}</td> -->
+              <!-- <td>{{ project.description }}</td> -->
+              <td [ngClass]="getStatusString(project.projectStatus)">
+                <p>{{ getStatusString(project.projectStatus) }}</p>
+              </td>
+              <td [ngClass]="getPriorityString(project.priority)">
+                <p>{{ getPriorityString(project.priority) }}</p>
+              </td>
+              <td>{{ project.startDate | date : "medium" }}</td>
+              <td>{{ project.endDate | date : "medium" }}</td>
+            </ng-container>
           </tr>
         </table>
       </div>
