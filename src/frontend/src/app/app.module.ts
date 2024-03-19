@@ -15,6 +15,7 @@ import { AdminComponent } from './Components/admin/admin.component';
 import { TaskPageComponent } from './Components/task-page/task-page.component';
 import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
 import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
+import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
 
 @NgModule({
   declarations: [
@@ -28,13 +29,14 @@ import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.com
     TaskPageComponent,
     ForgotPassComponent,
     ForgotResetComponent,
+    MyProjectsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,25 +1,27 @@
-<nav class="layout-navbar  navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">  
-  <div  class="navbar-nav-left d-flex " id="navbar-collapse">
-    <img src="../../../assets/navpictures/logo.png" alt="" >
+<nav
+  class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme"
+  id="layout-navbar"
+>
+  <div class="navbar-nav-left d-flex" id="navbar-collapse">
+    <img src="../../../assets/navpictures/logo.png" alt="" />
     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-      <li class="nav-item" *ngIf="isAdmin()" >
+      <li class="nav-item" *ngIf="isAdmin()">
         <a class="nav-link" routerLink="/admin">Manage Users</a>
       </li>
       <li class="nav-item" *ngIf="isProjectManager() || isAdmin()">
         <a class="nav-link" routerLink="/taskpage">Manage Projects</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/myProjects">My Projects</a>
+        <a class="nav-link" routerLink="/myprojects">My Projects</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/home">My Tasks</a>
       </li>
     </ul>
-    </div>
-  <div class="navbar-nav-right d-flex " id="navbar-collapse"> 
-      <img src="../../../assets/navpictures/sun.png" alt="" >
-      <img src="../../../assets/navpictures/timer.png" alt="">
-      <img src="../../../assets/navpictures/1.png" alt="" class="profilePic" >
-    </div>
+  </div>
+  <div class="navbar-nav-right d-flex" id="navbar-collapse">
+    <img src="../../../assets/navpictures/sun.png" alt="" />
+    <img src="../../../assets/navpictures/timer.png" alt="" />
+    <img src="../../../assets/navpictures/1.png" alt="" class="profilePic" />
+  </div>
 </nav>
-
