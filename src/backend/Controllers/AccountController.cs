@@ -88,6 +88,8 @@ namespace backend.Controllers
                 return NotFound("Request not found");
             }
 
+            request.IsUsed = true;
+
             var user = await context.Users.FirstOrDefaultAsync(i => i.Email == PassDto.Email);
 
             var hmac = new HMACSHA512();
@@ -95,8 +97,7 @@ namespace backend.Controllers
             user.PasswordSalt = hmac.Key;
 
             await context.SaveChangesAsync();
-            await MarkTokenAsUsedAsync(PassDto.Token);
-
+            
             return Ok();
         }
 
@@ -113,10 +114,11 @@ namespace backend.Controllers
 
         public async Task MarkTokenAsUsedAsync(string token)
         {
-            var invitation = await context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
-            if (invitation != null)
+            var entity = await context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
+            
+            if (entity != null)
             {
-                invitation.IsUsed = true;
+                entity.IsUsed = true;
                 await context.SaveChangesAsync();
             }
         }
