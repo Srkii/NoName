@@ -71,6 +71,6 @@ namespace backend.Controllers
 
             return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
         }
-
+        
     }
 }
