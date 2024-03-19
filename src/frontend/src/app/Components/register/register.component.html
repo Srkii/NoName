@@ -1,143 +1,61 @@
-<!-- <p>Register</p>
-<input type="text" placeholder="FisrtName" [(ngModel)]="newUser.FirstName"/><br>
-<input type="text" placeholder="LastName" [(ngModel)]="newUser.LastName"/><br>
-<input type="email" placeholder="Email" [(ngModel)]="newUser.Email"/><br>
-<input type="password" placeholder="Password" [(ngModel)]="newUser.Password"/><br>
-
-<button (click)="Regsiter()">Registruj se</button> -->
-
-<!-- Section: Design Block -->
-<section class="background-radial-gradient overflow-hidden">
-  <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
-    <div class="row gx-lg-5 align-items-center mb-5">
-      <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
-        <h1
-          class="my-5 display-5 fw-bold ls-tight"
-          style="color: hsl(218, 81%, 95%)"
-        >
-          The best offer <br />
-          <span style="color: hsl(218, 81%, 75%)">for your business</span>
-        </h1>
-        <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
-          Make you job easy and joyful with us!
-        </p>
-      </div>
-
-      <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
-        <div
-          id="radius-shape-1"
-          class="position-absolute rounded-circle shadow-5-strong"
-        ></div>
-        <div
-          id="radius-shape-2"
-          class="position-absolute shadow-5-strong"
-        ></div>
-
-        <div class="card bg-glass">
-          <div class="card-body px-4 py-5 px-md-5">
-            <form
-              #loginForm="ngForm"
-              class="log"
-              (ngSubmit)="Register()"
-              autocomplete="off"
-            >
-              <!-- 2 column grid layout with text inputs for the first and last names -->
-              <div class="row">
-                <div class="col-md-6 mb-4">
-                  <div class="form-floating mb-3">
-                    <input
-                      type="text"
-                      id="form3Example1"
-                      class="form-control"
-                      name="firstName"
-                      [(ngModel)]="newUser.FirstName"
-                      placeholder="First Name"
-                    />
-                    <label for="floatingInput">First name</label>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                  <div class="form-floating mb-3">
-                    <input
-                      type="text"
-                      id="form3Example2"
-                      class="form-control"
-                      name="lastName"
-                      [(ngModel)]="newUser.LastName"
-                      placeholder="Last name"
-                    />
-                    <label class="form-label" for="form3Example2"
-                      >Last name</label
-                    >
-                  </div>
-                </div>
-              </div>
-
+<body>
+  <div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic">
+      <div class="authentication-inner">
+        <div class="card">
+          <div class="card-body">
+            <div class="app-brand justify-content-center">
+              <img src="../../../assets/_images/logo_zoom.png" alt="Logo">
+              <span class="app-brand-text">AcessDenied</span>
+            </div>
+            <h4 class="mb-2">Welcome to AccessDenied! 👋</h4>
+            <p class="mb-4">Please sign-in to your account and start the adventure</p>
+  
+            <form #loginForm="ngForm" class="mg-3" (ngSubmit)="Register()" autocomplete="off" id="formAuthentication">
               <!-- Email input -->
-              <div class="form-floating mb-3">
-                <input
-                  type="email"
-                  id="form3Example3"
-                  class="form-control"
-                  name="email"
-                  [(ngModel)]="newUser.Email"
-                  placeholder="Email address"
-                  readonly
-                  style="color: gray"
-                  value=""
-                />
-                <label class="form-label" for="form3Example3"
-                  >Email address</label
-                >
+              <div class="mb-3">
+                <label for="firtname" class="form-label">First Name</label>
+                <input type="text" id="form3Example1" class="form-control" name="firtname" [(ngModel)]="newUser.FirstName" placeholder="Enter first name"/>
               </div>
-
+              <div class="mb-3">
+                <label for="lastname" class="form-label">Last Name</label>
+                <input type="text" id="form3Example2" class="form-control" name="lastname" [(ngModel)]="newUser.LastName" placeholder="Enter last name"/>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="newUser.Email" placeholder="Enter your email"/>
+              </div>
               <!-- Password input -->
-              <div class="form-floating mb-3">
-                <input
-                  type="password"
-                  id="form3Example4"
-                  class="form-control"
-                  name="password"
-                  [(ngModel)]="newUser.Password"
-                  placeholder="Password"
-                />
-                <label class="form-label" for="form3Example4">Password</label>
+              <div class="mb-3 form-password-toggle">
+                <div class="d-flex justify-content-between">
+                  <label class="form-label" for="password">Password</label>
               </div>
-              <div class="form-floating mb-3">
-                <input
-                  type="password"
-                  id="form3Example5"
-                  class="form-control"
-                  name="confirm_password"
-                  #confirmPasswordInput="ngModel"
-                  [(ngModel)]="confirmPassword"
-                  [class.is-invalid]="
+                  <div class="input-group input-group-merge">
+                    <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newUser.Password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+                  </div>
+              </div>
+              <div class="mb-3 form-password-toggle">
+                <div class="d-flex justify-content-between">
+                  <label class="form-label" for="password">Confirm Password</label>
+              </div>
+                  <div class="input-group input-group-merge">
+                    <input type="password" id="form3Example5" class="form-control" name="confirm_password" #confirmPasswordInput="ngModel" [(ngModel)]="confirmPassword" [class.is-invalid]="
                     confirmPassword !== newUser.Password &&
-                    confirmPassword !== ''
-                  "
-                  placeholder="Confirm Password"
-                />
-                <label class="form-label" for="form3Example5"
-                  >Confirm Password</label
-                >
-                <div class="invalid-feedback">Passwords do not match</div>
+                    confirmPassword !== ''"
+                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+                  </div>
               </div>
-
               <!-- Submit button -->
-              <br />
-              <button
-                type="submit"
-                class="btn btn-primary btn-block mb-4"
-                [disabled]="!passwordMatch()"
-              >
-                Register
-              </button>
-              <!-- Register buttons -->
+              <div class="mb-3">
+                <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="!passwordMatch()">Register</button>
+              </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-<!-- Section: Design Block -->
+    <div class="personimage">
+      <img src="../../../assets/_images/person1.png" alt="">
+    </div>
+  </div>  
+</body>
