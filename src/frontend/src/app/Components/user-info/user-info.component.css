@@ -34,10 +34,6 @@ button:hover {
   border: solid #70c1b3 2px;
 }
 
-#update {/* div for updating the password */
-  display: none;
-}
-
 #container{/* main div */
   justify-content: center;
   align-items: center;

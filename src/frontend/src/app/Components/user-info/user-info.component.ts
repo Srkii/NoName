@@ -24,9 +24,6 @@ export class UserInfoComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-
-    this.visibility_change('none',document.getElementById("update"));
-
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token')
     if (token) {
@@ -62,7 +59,9 @@ export class UserInfoComponent implements OnInit {
         if(changeinfodiv!=null)changeinfodiv.style.opacity='1';
       },10);
     }
-  }
+  }//nepotrebno
+
+
   apply_changes(){
     if(this.newData.CurrentPassword==''){
       alert("input old password for verification...");

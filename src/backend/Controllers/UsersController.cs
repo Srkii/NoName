@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
@@ -17,7 +18,10 @@ namespace backend.Controllers
     {
         private readonly DataContext context;
         private ITokenService tokenService;
-        public UsersController(DataContext context,ITokenService ts){
+
+        private readonly IPhotoService photoService;
+        public UsersController(DataContext context,ITokenService ts,IPhotoService photoService){
+            this.photoService = photoService;
             this.context = context;
             this.tokenService = ts;
         }
@@ -35,7 +39,7 @@ namespace backend.Controllers
             return await context.Users.FindAsync(id);
         }
         [HttpPut("updateUser/{id}")]
-        public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateInfoDto data){            
+        public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateInfoDto data){//mora da se menja jer samo sifra treba da bude changable...
           var user = await context.Users.FindAsync(id);
           var hmac = new HMACSHA512(user.PasswordSalt);
           var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.CurrentPassword));
@@ -71,6 +75,29 @@ namespace backend.Controllers
 
             return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
         }
+        [AllowAnonymous]
+        [HttpPost("add-photo/{id}")]//gadjamo ovo, da dodamo za posebnog usera fotografiju
+        //za sad racunam da moze samo profilna da se doda
+        //posle kad se bude dodavao attachment, nece da bude bitno da li je fotografija ili npr word document..
+        public async Task<ActionResult<PhotoDto>> AddPhoto(int id,IFormFile file)
+        {   
+          var user = await context.Users.FindAsync(id);
 
+          var result = await photoService.AddPhotoAsync(file);
+
+          var photo = new Photo{
+            url = result.SecureUrl.AbsoluteUri,
+            PublicId = result.PublicId,//ovo gadjamo da nadjemo fotografiju na cloud-u
+            AppUserId=user.Id//po ovome cemo da trazimo cija je fotografija u pitanju
+          };
+
+          context.Photos.Add(photo);
+
+          return new PhotoDto
+          {
+            Id=photo.Id,
+            Url = photo.url,
+          };
+        }
     }
 }

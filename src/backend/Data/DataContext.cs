@@ -10,13 +10,13 @@ namespace backend.Data
         public DataContext(DbContextOptions options) : base(options) { }
 
         public DbSet<AppUser> Users { get; set; }
-        public DbSet<Project> Projects {get; set;}
-        public DbSet<ProjectMember> ProjectMembers {get; set;}
-        public DbSet<ProjectTask> ProjectTasks {get; set;}
-        public DbSet<TaskMember> TaskMembers {get; set;}
-        public DbSet<TaskDependency> TaskDependencies {get; set;}
-        public DbSet<Invitation> Invitations {get; set;}
-
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectMember> ProjectMembers { get; set; }
+        public DbSet<ProjectTask> ProjectTasks { get; set; }
+        public DbSet<TaskMember> TaskMembers { get; set; }
+        public DbSet<TaskDependency> TaskDependencies { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<Photo> Photos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectMember>(entity =>
@@ -53,7 +53,7 @@ namespace backend.Data
                     .WithMany()
                     .HasForeignKey(td => td.DependencyTaskId);
                 // task can't be dependant on itself
-                entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId")); 
+                entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId"));
             });
 
             modelBuilder.Entity<TaskMember>(entity =>
