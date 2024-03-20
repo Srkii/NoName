@@ -11,14 +11,14 @@
               <h4 class="mb-2">Adventure continues here 🚀</h4>
               <p class="mb-4">Enter your new password</p>
     
-              <form #loginForm="ngForm" class="mg-3" autocomplete="off" id="formAuthentication">                
+              <form #loginForm="ngForm" class="mg-3" autocomplete="off" id="formAuthentication" (ngSubmit)="resetPassword()">                
                 <!-- Password input -->
                 <div class="mb-3 form-password-toggle">
                   <div class="d-flex justify-content-between">
                     <label class="form-label" for="password">Password</label>
                 </div>
                     <div class="input-group input-group-merge">
-                      <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newUser.Password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+                      <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newRequest.NewPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
                     </div>
                 </div>
                 <div class="mb-3 form-password-toggle">
@@ -27,7 +27,7 @@
                 </div>
                     <div class="input-group input-group-merge">
                       <input type="password" id="form3Example5" class="form-control" name="confirm_password" #confirmPasswordInput="ngModel" [(ngModel)]="confirmPassword" [class.is-invalid]="
-                      confirmPassword !== newUser.Password &&
+                      confirmPassword !== newRequest.NewPassword &&
                       confirmPassword !== ''"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
                     </div>
