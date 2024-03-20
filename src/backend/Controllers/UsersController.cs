@@ -48,14 +48,11 @@ namespace backend.Controllers
         }
 
         [HttpPut("updateUser/{id}")]
-        public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateInfoDto data){//mora da se menja jer samo sifra treba da bude changable...
+        public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] ChangePasswordDto data){
           var user = await context.Users.FindAsync(id);
           var hmac = new HMACSHA512(user.PasswordSalt);
           var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.CurrentPassword));
           if(computedHash.SequenceEqual(user.PasswordHash)){
-            if(data.FirstName!=null && data.FirstName!= "") user.FirstName=data.FirstName;
-            if(data.LastName!=null && data.LastName != "") user.LastName=data.LastName;
-            if(data.Email!=null && data.Email != "") user.Email=data.Email;
             if(data.NewPassword!=null && data.NewPassword != ""){
               var hmac2 = new HMACSHA512(user.PasswordSalt);
               user.PasswordHash = hmac2.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
@@ -84,9 +81,7 @@ namespace backend.Controllers
 
             return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
         }
-        [HttpPost("add-photo/{id}")]//gadjamo ovo, da dodamo za posebnog usera fotografiju
-        //za sad racunam da moze samo profilna da se doda
-        //posle kad se bude dodavao attachment, nece da bude bitno da li je fotografija ili npr word document..
+        [HttpPost("add-photo/{id}")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(int id,IFormFile image)
         {   
           var user = await context.Users.FindAsync(id);
@@ -96,8 +91,8 @@ namespace backend.Controllers
           var result = await photoService.AddPhotoAsync(image);
           var photo = new Photo{
             url = result.SecureUrl.AbsoluteUri,
-            PublicId = result.PublicId,//ovo gadjamo da nadjemo fotografiju na cloud-u
-            AppUserId=user.Id//po ovome cemo da trazimo cija je fotografija u pitanju
+            PublicId = result.PublicId,
+            AppUserId=user.Id
           };
           
           

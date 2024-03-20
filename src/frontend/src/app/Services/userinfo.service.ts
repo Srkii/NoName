@@ -1,9 +1,8 @@
+import { ChangePassword } from './../Entities/ChangePassword';
 import { ApiUrl } from './../ApiUrl/ApiUrl';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppUser } from '../Entities/AppUser';
-import { ChangeUserData } from '../Entities/ChangeUserData';
 
 
 @Injectable({
@@ -38,12 +37,13 @@ export class UserinfoService {
     var result = (await response.json());
     return result;
   }
-  updateUserInfo(token: any, id:number, newdata:ChangeUserData):Observable<any>{
+  updateUserInfo(token: any, id:number, data:ChangePassword):Observable<any>{
     const url = `https://localhost:5001/api/users/updateUser/${id}`;
+    console.log("Xd");
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'application/json');
-    const response = this.httpClient.put<any>(url,JSON.stringify(newdata),{headers})
+    const response = this.httpClient.put<any>(url,JSON.stringify(data),{headers})
     return response;
   }
 }

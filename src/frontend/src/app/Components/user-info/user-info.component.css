@@ -1,85 +1,101 @@
-body {
-  height:120vh;
-  font-family: "Public Sans", sans-serif;
-  background-color: #FFFFFF;
-  color: #566A7F;
-  margin:auto;
-  width: 800px;
+/*
+background color #FFFFFF
+text color #566A7F -> most of big text
+button color: #696CFF
+smaller text color : #697A8D
+font: Public Sans
 
+Change password textbox color: #FFAB00
+Password changed successfully color #83EDA1
+Change photo must have a hover over the image as an interactable...
+*/
+body{
+  width:900px;
+  margin: auto;
+  color: #697A8D;
+  font-family: "Public Sans" sans-serif;
+}
+h4{
+  color: #566A7F;
 }
 p{
-  padding: 0px;
-  margin: 0px;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  font-size: small;
 }
-input[type="text"],
-input[type="password"] {
-  width: 90%;
-  padding: 5px;
-  height: 30px;
-  margin: 5px 0;
-  box-sizing: border-box;
-  border-radius: 8px;
+button{
+  background-color: #696CFF;
+  color: #FFFFFF;
+  width: 40%;
+  height: 40px;
+  border-radius: 6px;
+  border: none;
 }
-button {
-  border: solid #286b60 2px;
-  border-radius: 8px;
-  background-color: #70c1b3; /* Aqua background color for button */
-  font-size: 18px;
-  padding: 8px 16px; /* Increased padding for better appearance */
-  font-weight: bold; /* Making the font weight bold */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Adding transition effect */
-}
-button:hover {
-  background-color: #286b60; /* Coral color for button background on hover */
-  border: solid #70c1b3 2px;
-}
-
-#container{/* main div */
-  justify-content: center;
-  align-items: center;
+#container{
+  margin-top: 90px;
   width: 100%;
-  padding-top: 200px;
 }
-
-.info{
-  width:100%;
-  height: 290px;
-  background-color: #FFFFFF;
-}
-.update{/*div for updating password*/
-  position: relative;
-  top: 100px;
-  padding: 10px;
-  display: block;
-  width:100%;
-  height: fit-content;
-  background-color: #FFFFFF;
-}
-.image{
-  width: 160px;
-  height: 160px;
-  margin-right: 10px;
-}
-#imageUser{
-  display: inline-flex;
+#User_banner{
+  width: 43%;
   float: left;
+}
+#Role_name{
+  display: inline-block;
+  vertical-align: top;
+}
+#role{
+  text-transform: uppercase;
+  background-color: #EBEEF0;
+  border-radius: 6px;
+  padding: 2px;
+  font-size: small;
+  font-weight: 600;
+}
+#name{
+  font-size: 120%;
+  font-weight: 600;
+}
+#Profile_image{
+  width: 130px;
+  height: 130px;
+  border-radius: 6px;
+}
+#User_info{
+  float: right;
   width: 50%;
-  height: 300px;
-
-  font-size: 150%;
+  padding-right: 17%;
+}
+#User_details{
   font-weight: 500;
 }
-#details{
-  float: left;
-  width: 50%;
-  height: 100px;
+#Change_alert{
+  border-radius: 6px;
+  padding: 20px;
+  color: #FFAB00;
+  background-color:#FFF2D6;
 }
-#uploadButton{
-  position: relative;
-  top: 60px;
-  right: 400px;
-  width: 80px;
+#Change_password{
+  margin-top: 100px;
+}
+#Inputs{
+  padding-top: 20px;
+  width: 50%;
+  margin: auto;
+}
+#clear{
+  clear: both;
+}
+#successtext{
+  display: none;
+}
+input[type="password"]{
+
+  border-radius: 6px;
   height: 40px;
-  text-align: center;
-  font-size: small;
+  width: 100%;
+  margin-bottom: 20px;
+}
+input:focus{
+  outline: 1px solid #D9DEE3;
 }

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserinfoService } from './../../Services/userinfo.service';
 import { AppUser } from '../../Entities/AppUser';
-import { ChangeUserData } from '../../Entities/ChangeUserData';
+import { ChangePassword } from '../../Entities/ChangePassword';
 
 @Component({
   selector: 'app-user-info',
@@ -12,11 +12,12 @@ import { ChangeUserData } from '../../Entities/ChangeUserData';
 })
 export class UserInfoComponent implements OnInit {
   public userInfo: any;
+  public role:any;
   public profilePic:any;
   public passwordCheck:any;
   public defaulturl="../../../assets/1234.png";
   public url="../../../assets/1234.png";
-  newData: ChangeUserData = {
+  newData: ChangePassword = {
     CurrentPassword:""
   }
 
@@ -32,6 +33,11 @@ export class UserInfoComponent implements OnInit {
       this.userInfo = await this.userinfoService.getUserInfo(id,token);
       this.profilePic = await this.userinfoService.getProfilePhoto(id,token);
       if(this.profilePic.url != null)this.url = this.profilePic.url;
+      if(this.userInfo.role == 1){
+        this.role="Project manager";
+      }else if(this.userInfo.role == 2){
+        this.role="Member";
+      }else this.role="Admin";
     } else {
       console.error("Token not found in local storage");
     }
@@ -84,8 +90,15 @@ export class UserInfoComponent implements OnInit {
         localStorage.setItem('id',response.id);
         localStorage.setItem('token',response.token);
         console.log("change info successful!");
-        alert("Changes applied");
-        location.reload();
+        var succ = document.getElementById("successtext")
+        if(succ) succ.style.display='block';
+        var base = document.getElementById("basetext");
+        if(base) base.style.display='none';
+        var change = document.getElementById("Change_alert");
+        if(change){
+          change.style.backgroundColor = '#83EDA1'
+          change.style.color = '#FFFFFF';
+        }
       },
       error: (error)=>{
         console.log(error);
