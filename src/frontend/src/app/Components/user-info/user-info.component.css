@@ -56,10 +56,29 @@ button{
   font-size: 120%;
   font-weight: 600;
 }
+#Image_container{
+  position: relative;
+}
 #Profile_image{
   width: 130px;
   height: 130px;
   border-radius: 6px;
+}
+#Profile_image:hover{
+  opacity: 70%;
+}
+#Overlay_image{
+  position: absolute;
+  display: flex;
+  width: 130px;
+  height: 130px;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+#Overlay_image:hover{
+  opacity: 40%;
 }
 #User_info{
   float: right;

@@ -7,8 +7,11 @@
       <div id="Account_info"  *ngIf="userInfo">
         <!--informacije o korisniku , div sa slikom i div sa detaljima o korisniku-->
         <div id="User_banner">
-          <img [src]="url" id="Profile_image" (click)="onClickUpload()">
-          <span id="Role_name">
+          <div id="Image_container">
+            <img [src]="url" id="Profile_image" (click)="onClickUpload()">
+            <img id="Overlay_image" src="../../../assets/change_photo.jpg" (click)="onClickUpload()">
+          </div>
+          <span id="Role_name" style="padding-left: 5px;">
             <span id="role">{{role}}</span><br>
             <span id="name">{{userInfo.firstName}} {{userInfo.lastName}}</span>
           </span>
