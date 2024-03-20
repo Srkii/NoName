@@ -12,7 +12,7 @@
             <p class="mb-4">Make your app management easy and fun</p>
   
             <form #loginForm="ngForm" class="mg-3" (ngSubmit)="Register()" autocomplete="off" id="formAuthentication">
-              <!-- Email input -->
+              <!-- Information input -->
               <div class="mb-3">
                 <label for="firtname" class="form-label">First Name</label>
                 <input type="text" id="form3Example1" class="form-control" name="firtname" [(ngModel)]="newUser.FirstName" placeholder="Enter first name"/>
@@ -23,7 +23,7 @@
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="newUser.Email" placeholder="Enter your email"/>
+                <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="newUser.Email" placeholder="Enter your email" readonly disabled/>
               </div>
               <!-- Password input -->
               <div class="mb-3 form-password-toggle">

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { RegisterService } from '../../Services/register.service';
 import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Token } from '@angular/compiler';
 import { Invintation } from '../../Entities/Invitation';
 @Component({
   selector: 'app-register',

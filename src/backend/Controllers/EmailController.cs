@@ -65,7 +65,7 @@ public class EmailController:BaseApiController
         context.UserRequests.Add(request);
         await context.SaveChangesAsync();
         
-        string link = "http://localhost:4200/resetPassword?token="+request.Token;
+        string link = "http://localhost:4200/forgotreset?token="+request.Token;
         string subject = "Forgot password";
         string message = "Dear User, \n\n" +
                  "We received a request to reset the password for your account.\n" +

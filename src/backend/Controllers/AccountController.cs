@@ -101,6 +101,20 @@ namespace backend.Controllers
             return Ok();
         }
 
+        [AllowAnonymous] //vraca mi mail na osnovu tokena koji je potreban za reset passworda
+        [HttpGet("token/{token}")] // /api/account/token
+        public async Task<ActionResult<UserRequestDto>> GetEmail(string token)
+        {
+            var userrequest = await context.UserRequests.FirstOrDefaultAsync(i => i.Token == token);
+
+            if (userrequest == null)
+            {
+                return NotFound();
+            }
+
+            return new UserRequestDto { Email = userrequest.Email, Token = userrequest.Token };
+        }
+
         private async Task<bool> EmailExists(string email)
         {
             return await context.Users.AnyAsync(x => x.Email == email); //ako bude problema ovo email.ToLower() treba da se prepravi
