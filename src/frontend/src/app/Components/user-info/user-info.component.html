@@ -7,7 +7,6 @@
     <div class="info" *ngIf="userInfo">
       <div id="imageUser">
         <img [src]="url" class="image">
-        <span>{{userInfo.role}} </span><br>
         <span>{{userInfo.firstName}} {{userInfo.lastName}}</span>
         <input id="inp" type="file" style="display: none;" (change)="imageSelected($event)">
       </div>
@@ -17,9 +16,9 @@
         <p>Last name: {{userInfo.lastName}}</p><br>
         <p>Email: {{userInfo.email}}</p><br>
         <p>Role: {{userInfo.role}}</p><br>
-        <!-- <button (click)="change_info()">Change Info</button> -->
       </div>
       <button id="uploadButton" (click)="onClickUpload()">Change</button>
+      <button id="uploadButton" (click)="RemoveImage()">Remove</button>
       <div id="clear"></div>
     </div>
     <div class="update" id="update">

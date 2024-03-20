@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
 using backend.DTO;
-using backend.Entities;
+using backend.Entities;       
 using backend.Interfaces;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +38,15 @@ namespace backend.Controllers
         public async Task<ActionResult<AppUser>> GetUser(int id){
             return await context.Users.FindAsync(id);
         }
+        [HttpGet("profilePic/{id}")]
+        public async Task<ActionResult<PhotoDto>> GetPhotoByUserId(int id){
+            var result = await context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
+            return new PhotoDto{
+              Id = result.Id,
+              Url= result.url
+            };
+        }
+
         [HttpPut("updateUser/{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateInfoDto data){//mora da se menja jer samo sifra treba da bude changable...
           var user = await context.Users.FindAsync(id);
@@ -62,7 +71,7 @@ namespace backend.Controllers
 
         }
 
-        [AllowAnonymous]
+        [AllowAnonymous]// za sad anonymous, vrv ne mora jos
         [HttpGet("token/{token}")] // /api/users/token
         public async Task<ActionResult<InvitationDto>> GetEmail(string token)
         {
@@ -75,29 +84,42 @@ namespace backend.Controllers
 
             return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
         }
-        [AllowAnonymous]
         [HttpPost("add-photo/{id}")]//gadjamo ovo, da dodamo za posebnog usera fotografiju
         //za sad racunam da moze samo profilna da se doda
         //posle kad se bude dodavao attachment, nece da bude bitno da li je fotografija ili npr word document..
-        public async Task<ActionResult<PhotoDto>> AddPhoto(int id,IFormFile file)
+        public async Task<ActionResult<PhotoDto>> AddPhoto(int id,IFormFile image)
         {   
           var user = await context.Users.FindAsync(id);
+          
+          var oldphoto = await context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
 
-          var result = await photoService.AddPhotoAsync(file);
-
+          var result = await photoService.AddPhotoAsync(image);
           var photo = new Photo{
             url = result.SecureUrl.AbsoluteUri,
             PublicId = result.PublicId,//ovo gadjamo da nadjemo fotografiju na cloud-u
             AppUserId=user.Id//po ovome cemo da trazimo cija je fotografija u pitanju
           };
-
+          
+          
+          if(oldphoto != null){
+            await photoService.DeletePhotoAsync(oldphoto.PublicId);
+            context.Photos.Remove(oldphoto);
+          }
+          
           context.Photos.Add(photo);
-
+          await context.SaveChangesAsync();
           return new PhotoDto
           {
             Id=photo.Id,
             Url = photo.url,
           };
+        }
+        [HttpDelete("remove-photo/{id}")]
+        public async Task<ActionResult> RemovePhoto(int id){
+          var image = await context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
+          var response = await photoService.DeletePhotoAsync(image.PublicId);
+          context.Photos.Remove(image);
+          return Ok(response);
         }
     }
 }

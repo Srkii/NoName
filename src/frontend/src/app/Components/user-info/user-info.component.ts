@@ -12,7 +12,9 @@ import { ChangeUserData } from '../../Entities/ChangeUserData';
 })
 export class UserInfoComponent implements OnInit {
   public userInfo: any;
+  public profilePic:any;
   public passwordCheck:any;
+  public defaulturl="../../../assets/1234.png";
   public url="../../../assets/1234.png";
   newData: ChangeUserData = {
     CurrentPassword:""
@@ -28,6 +30,8 @@ export class UserInfoComponent implements OnInit {
     const token = localStorage.getItem('token')
     if (token) {
       this.userInfo = await this.userinfoService.getUserInfo(id,token);
+      this.profilePic = await this.userinfoService.getProfilePhoto(id,token);
+      if(this.profilePic.url != null)this.url = this.profilePic.url;
     } else {
       console.error("Token not found in local storage");
     }
@@ -89,14 +93,12 @@ export class UserInfoComponent implements OnInit {
       }
     });
   }
-  imageData:any=null;
   imageSelected(event:any){
-    console.log("clicked");
-    this.imageData = event.target.files[0];
-    if(this.imageData != null){
-      const fd = new FormData();
-      fd.append('image',this.imageData,this.imageData.name);
-      this.uploadservice.UploadImage(fd);
+    const imageData:File = event.target.files[0];
+    if(imageData != null){
+      var id = Number(localStorage.getItem('id'));
+      var token = localStorage.getItem('token');
+      var response = this.uploadservice.UploadImage(id,imageData,token);
     }
     else{
       console.log("no data...");
@@ -104,5 +106,14 @@ export class UserInfoComponent implements OnInit {
   }
   onClickUpload(){
     document.getElementById("inp")?.click();
+  }
+  RemoveImage(){
+    console.log("removing user profile picture...");
+    if(this.url != "../../../assets/1234.png"){
+      var id = localStorage.getItem('id');
+      var token = localStorage.getItem('token');
+      this.uploadservice.RemoveImage(id,token);
+      this.url=this.defaulturl;
+    }
   }
 }

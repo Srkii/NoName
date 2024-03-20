@@ -25,7 +25,19 @@ export class UserinfoService {
     var result  = (await response.json());
     return result;
   }
-
+  async getProfilePhoto(id:any,token:any){
+    const url = `https://localhost:5001/api/users/profilePic/${id}`;
+    const response = await fetch(
+      url,{
+      method:'GET',
+      headers:{
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    });
+    var result = (await response.json());
+    return result;
+  }
   updateUserInfo(token: any, id:number, newdata:ChangeUserData):Observable<any>{
     const url = `https://localhost:5001/api/users/updateUser/${id}`;
     const headers = new HttpHeaders()
