@@ -31,7 +31,7 @@ public class EmailController:BaseApiController
         context.Invitations.Add(invitation);
         await context.SaveChangesAsync();
         
-        string link = "http://localhost:4200/register?token="+invitation.Token;
+        string link = "http://localhost:4200/forgotreset?token="+invitation.Token;
         string subject = "Invitation to Register on Our Application";
         string message = "Dear User, \n\n" +
                  "We hope this message finds you well. You have been invited to join our community at 'Naziv aplikacije' ! \n" +

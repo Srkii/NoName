@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240318211257_AddedUserRequests")]
-    partial class AddedUserRequests
+    [Migration("20240319225453_siw3")]
+    partial class siw3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
