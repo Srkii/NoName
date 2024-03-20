@@ -80,6 +80,13 @@ a {
   top: 230px;
   right: 360px;
 }
+
+@media (max-width: 1600px) {
+  .personimage {
+    display: none;
+  }
+}
+
 .authentication-wrapper {
   display: flex;
   flex-basis: 100%;
