@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../Services/login.service';
 import { AppUser } from '../../Entities/AppUser';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   loggedIn = false;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {}
 
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit {
       error: (error) => {
         console.log(error);
         console.log('Unsuccessful login');
+        this.toastr.error(error.error)
       },
     });
   }

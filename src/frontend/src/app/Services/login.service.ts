@@ -12,7 +12,6 @@ export class LoginService {
 
   private apiUrl = ApiUrl.apiUrl + '/account';
 
-
   login(newUser: AppUser): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, newUser, {
       responseType: 'json',
@@ -24,5 +23,4 @@ export class LoginService {
     let exist=!!token;
     return exist;
   }
-
 }

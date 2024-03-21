@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace backend.Entities;
+﻿namespace backend.Entities;
 
 public class Invitation
 {

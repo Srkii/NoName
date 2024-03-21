@@ -77,8 +77,14 @@ a {
   width: 300px;
   height: auto;
   position: absolute;
-  top: 230px;
-  right: 400px;
+  top: 150px;
+  right: 250px;
+}
+/* Hide .personimage on screens smaller than 1200px */
+@media (max-width: 1200px) {
+  .personimage {
+    display: none;
+  }
 }
 .authentication-wrapper {
   display: flex;
