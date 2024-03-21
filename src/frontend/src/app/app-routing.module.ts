@@ -10,18 +10,25 @@ import { loginGuard } from './Guards/login.guard';
 import { authGuard } from './Guards/auth.guard';
 import { TaskPageComponent } from './Components/task-page/task-page.component';
 import { taskpageGuard } from './Guards/taskpage.guard';
+import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
+import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
+import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
 const routes: Routes = [
-  { path: 'register', component: RegisterComponent, canActivate:[loginGuard] },
-  { path: 'login', component: LoginComponent,canActivate:[loginGuard] },
-  { path: '',
-    runGuardsAndResolvers:'always',
-    canActivate:[authGuard],
-    children:[
+  { path: 'register', component: RegisterComponent, canActivate: [loginGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
+  { path: 'forgotpass', component: ForgotPassComponent, canActivate: [loginGuard] },
+  { path: 'forgotreset', component: ForgotResetComponent, canActivate: [loginGuard] },
+  {
+    path: '',
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+    children: [
       { path: 'home', component: HomeComponent },
       { path: 'userinfo', component: UserInfoComponent },
+      { path: 'myprojects', component: MyProjectsComponent },
       { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },
-      { path: 'taskpage', component: TaskPageComponent, canActivate: [taskpageGuard] }
-    ]
+      { path: 'taskpage', component: TaskPageComponent, canActivate: [taskpageGuard] },
+    ],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];

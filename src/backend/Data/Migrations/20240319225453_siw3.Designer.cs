@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240313171108_Migration_13_03")]
-    partial class Migration_13_03
+    [Migration("20240319225453_siw3")]
+    partial class siw3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -187,6 +187,29 @@ namespace backend.Data.Migrations
                     b.HasIndex("AppUserId", "ProjectId");
 
                     b.ToTable("TaskMembers");
+                });
+
+            modelBuilder.Entity("backend.Entities.UserRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRequests");
                 });
 
             modelBuilder.Entity("backend.Entities.ProjectMember", b =>

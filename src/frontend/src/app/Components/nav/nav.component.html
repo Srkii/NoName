@@ -1,21 +1,27 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-  <div class="container">
-    <a class="navbar-brand" routerLink="/home">App</a>
+<nav
+  class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme"
+  id="layout-navbar"
+>
+  <div class="navbar-nav-left d-flex" id="navbar-collapse">
+    <img src="../../../assets/navpictures/logo.png" alt="" />
     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-      <li class="nav-item">
-        <!-- <a class="nav-link" (click)="onClickHome()">Home</a> -->
-        <a class="nav-link" routerLink="/home">Home</a>
+      <li class="nav-item" *ngIf="isAdmin()">
+        <a class="nav-link" routerLink="/admin">Manage Users</a>
+      </li>
+      <li class="nav-item" *ngIf="isProjectManager() || isAdmin()">
+        <a class="nav-link" routerLink="/taskpage">Manage Projects</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/userinfo">User info</a>
+        <a class="nav-link" routerLink="/myprojects">My Projects</a>
       </li>
-      <li class="nav-item" *ngIf="isAdmin()" >
-        <a class="nav-link" routerLink="/admin">Admin page</a>
-      </li>
-      <li class="nav-item" *ngIf="isProjectManager()">
-        <a class="nav-link" routerLink="/taskpage">Task Managment</a>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/home">My Tasks</a>
       </li>
     </ul>
-    <button class="btn-outline-success" (click)="Logout()">Logout</button>
+  </div>
+  <div class="navbar-nav-right d-flex" id="navbar-collapse">
+    <img src="../../../assets/navpictures/sun.png" alt="" />
+    <img src="../../../assets/navpictures/timer.png" alt="" />
+    <img src="../../../assets/navpictures/1.png" alt="" class="profilePic" />
   </div>
 </nav>

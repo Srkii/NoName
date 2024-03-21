@@ -13,6 +13,11 @@ import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
 import { TaskPageComponent } from './Components/task-page/task-page.component';
+import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
+import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
+import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -24,13 +29,20 @@ import { TaskPageComponent } from './Components/task-page/task-page.component';
     NavComponent,
     AdminComponent,
     TaskPageComponent,
+    ForgotPassComponent,
+    ForgotResetComponent,
+    MyProjectsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right'
+    }), // ToastrModule added
   ],
   providers: [],
   bootstrap: [AppComponent],

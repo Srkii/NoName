@@ -208,15 +208,27 @@ namespace backend.Data.Migrations
                     b.ToTable("TaskMembers");
                 });
 
-            modelBuilder.Entity("backend.Entities.Photo", b =>
+            modelBuilder.Entity("backend.Entities.UserRequest", b =>
                 {
-                    b.HasOne("backend.Entities.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Navigation("AppUser");
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRequests");
                 });
 
             modelBuilder.Entity("backend.Entities.ProjectMember", b =>

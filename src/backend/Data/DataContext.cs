@@ -10,13 +10,14 @@ namespace backend.Data
         public DataContext(DbContextOptions options) : base(options) { }
 
         public DbSet<AppUser> Users { get; set; }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<ProjectMember> ProjectMembers { get; set; }
-        public DbSet<ProjectTask> ProjectTasks { get; set; }
-        public DbSet<TaskMember> TaskMembers { get; set; }
-        public DbSet<TaskDependency> TaskDependencies { get; set; }
-        public DbSet<Invitation> Invitations { get; set; }
-        public DbSet<Photo> Photos { get; set; }
+        public DbSet<Project> Projects {get; set;}
+        public DbSet<ProjectMember> ProjectMembers {get; set;}
+        public DbSet<ProjectTask> ProjectTasks {get; set;}
+        public DbSet<TaskMember> TaskMembers {get; set;}
+        public DbSet<TaskDependency> TaskDependencies {get; set;}
+        public DbSet<Invitation> Invitations {get; set;}
+        public DbSet<UserRequest> UserRequests {get; set;}
+        public DbSet<Photo> Photos {get;set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectMember>(entity =>

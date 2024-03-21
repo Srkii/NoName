@@ -74,19 +74,18 @@ a {
   height: auto;
 }
 .personimage img {
-  width: 500px;
+  width: 450px;
   height: auto;
   position: absolute;
-  top: 230px;
+  top: 200px;
   right: 160px;
 }
 
 @media (max-width: 1200px) {
-  .personimage {
-    display: none;
-  }
+.personimage {
+  display: none;
 }
-
+}  
 .authentication-wrapper {
   display: flex;
   flex-basis: 100%;

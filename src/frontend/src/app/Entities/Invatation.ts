@@ -1,3 +1,3 @@
 export interface Invatation{
-    reciever:string
+    receiver:string
 }

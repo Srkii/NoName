@@ -14,18 +14,16 @@ export class AdminComponent {
 
   constructor(private adminService:AdminService ){}
 
-  receiverEmail: string=''
-
   invatation:Invatation={
-    reciever: ''
+    receiver: ''
   }
 
   Invite(): void{
-    if(this.receiverEmail)
+    if(this.invatation)
     {
-      this.adminService.sendInvatation(this.receiverEmail).subscribe(
-        ()=>{
-          console.log('Email sent successfully');
+      this.adminService.sendInvatation(this.invatation).subscribe(
+        (response)=>{
+          console.log(response);
         }
       )
     }
