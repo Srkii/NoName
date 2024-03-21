@@ -8,11 +8,11 @@ import { AdminComponent } from './Components/admin/admin.component';
 import { adminGuard } from './Guards/admin.guard';
 import { loginGuard } from './Guards/login.guard';
 import { authGuard } from './Guards/auth.guard';
-import { TaskPageComponent } from './Components/task-page/task-page.component';
-import { taskpageGuard } from './Guards/taskpage.guard';
 import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
 import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
 import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
+import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
+
 const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [loginGuard] },
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
@@ -27,7 +27,7 @@ const routes: Routes = [
       { path: 'userinfo', component: UserInfoComponent },
       { path: 'myprojects', component: MyProjectsComponent },
       { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },
-      { path: 'taskpage', component: TaskPageComponent, canActivate: [taskpageGuard] },
+      { path: 'mytasks', component: MyTasksComponent}
     ],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

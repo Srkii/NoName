@@ -11,7 +11,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
     return true;
   }
   else {
-    router.navigate(['/home']);
+    router.navigate(['/myprojects']);
     return false;
   }
 

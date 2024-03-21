@@ -3,25 +3,61 @@
   id="layout-navbar"
 >
   <div class="navbar-nav-left d-flex" id="navbar-collapse">
-    <img src="../../../assets/navpictures/logo.png" alt="" />
+    <img src="../../../assets/navIcons/logo.png" alt="" />
     <ul class="navbar-nav me-auto mb-2 mb-md-0">
       <li class="nav-item" *ngIf="isAdmin()">
         <a class="nav-link" routerLink="/admin">Manage Users</a>
-      </li>
-      <li class="nav-item" *ngIf="isProjectManager() || isAdmin()">
-        <a class="nav-link" routerLink="/taskpage">Manage Projects</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/myprojects">My Projects</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/home">My Tasks</a>
+        <a class="nav-link" routerLink="/mytasks">My Tasks</a>
       </li>
     </ul>
   </div>
   <div class="navbar-nav-right d-flex" id="navbar-collapse">
-    <img src="../../../assets/navpictures/sun.png" alt="" />
-    <img src="../../../assets/navpictures/timer.png" alt="" />
-    <img src="../../../assets/navpictures/1.png" alt="" class="profilePic" />
+    <img src="../../../assets/navIcons/sun.png" alt="" />
+    <img src="../../../assets/navIcons/bell (1).png" alt="" />
+    <!-- <ul>
+    <li class="nav-item navbar-dropdown dropdown-user dropdown"> -->
+      <img src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">     
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" href="pages-account-settings-account.html">
+            <div class="d-flex">
+              <div class="flex-shrink-0 me-3">
+                <div class="avatar avatar-online">
+                  <img src="../../../assets/navIcons/user (4).png" alt="">
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <span class="fw-medium d-block">{{user.firstName}} {{user.lastName}}</span>
+                <small class="text-muted">{{user.email}}</small>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <div class="dropdown-divider"></div>
+        </li>
+        <li>
+          <a class="dropdown-item" routerLink="/userinfo">
+            <i class="bx bx-user me-2"></i>
+            <img src="../../../assets/navIcons/user (4).png" alt="">
+            <span class="align-middle">My Profile</span>
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" (click)="Logout()">
+            <i class="bx bx-user me-2"></i>
+            <img src="../../../assets/navIcons/power.png" alt="">
+            <span class="align-middle">Logout</span>
+          </a>
+        </li>
+        
+      <!-- </ul>
+    </li> -->
+</ul>
   </div>
 </nav>

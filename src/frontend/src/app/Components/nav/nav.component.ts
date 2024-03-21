@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { UserinfoService } from './../../Services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
+import { AppUser } from '../../Entities/AppUser';
 
 @Component({
   selector: 'app-nav',
@@ -9,12 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,private userInfo:UserinfoService) {}
   ngOnInit(): void {
     this.isAdmin()
+    this.getUser()
   }
   admin!: boolean
   logovan!: boolean
+
+  user!:any
 
   async Logout(): Promise<void> {
     try {
@@ -37,4 +41,18 @@ export class NavComponent implements OnInit {
   isProjectManager(): boolean {
     return localStorage.getItem('role')==='2';
   }
+
+  getUser(): void{
+    var id=localStorage.getItem('id')
+    this.userInfo.getUserInfo2(id).subscribe({
+      next:(response)=>{
+        this.user=response;
+        console.log(this.user.firstName)
+      },error:(error)=>{
+        console.log(error)
+      }
+      
+    })
+  }
+
 }

@@ -7,7 +7,7 @@ using backend.Data;
 
 #nullable disable
 
-namespace backend.Migrations
+namespace backend.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
@@ -232,6 +232,17 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserRequests");
+                });
+
+            modelBuilder.Entity("backend.Entities.Photo", b =>
+                {
+                    b.HasOne("backend.Entities.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("backend.Entities.ProjectMember", b =>

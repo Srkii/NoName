@@ -11,6 +11,8 @@ import { Observable } from 'rxjs';
 export class UserinfoService {
   constructor(private readonly httpClient:HttpClient) {}
 
+  private apiUrl=ApiUrl.apiUrl;
+
   async getUserInfo(id:any,token:any){
     const url = `https://localhost:5001/api/users/updateUser/${id}`;
     const response = await fetch(`https://localhost:5001/api/users/${id}`,
@@ -45,5 +47,16 @@ export class UserinfoService {
       .set('Content-Type', 'application/json');
     const response = this.httpClient.put<any>(url,JSON.stringify(data),{headers})
     return response;
+  }
+
+  getUserInfo2(id: any): Observable<any>{
+
+    let token=localStorage.getItem("token");
+
+    let httpHeader=new HttpHeaders({
+      "Authorization": `Bearer ${token}`
+    });
+
+    return this.httpClient.get<any>(`${this.apiUrl}/users/${id}`,{headers:httpHeader})
   }
 }

@@ -3,14 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace backend.Migrations
+namespace backend.Data.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:src/backend/Data/Migrations/20240321083850_InitialCreate.cs
-    public partial class InitialCreate : Migration
-========
-    public partial class siw3 : Migration
->>>>>>>> f57f9dc368f2ecad99bf1faa659f901637192053:src/backend/Data/Migrations/20240319225453_siw3.cs
+    public partial class PrvaMigracija : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -110,6 +106,27 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    url = table.Column<string>(type: "TEXT", nullable: true),
+                    PublicId = table.Column<string>(type: "TEXT", nullable: true),
+                    AppUserId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Photos_Users_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProjectMembers",
                 columns: table => new
                 {
@@ -185,6 +202,11 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Photos_AppUserId",
+                table: "Photos",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProjectMembers_ProjectId",
                 table: "ProjectMembers",
                 column: "ProjectId");
@@ -210,6 +232,9 @@ namespace backend.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Invitations");
+
+            migrationBuilder.DropTable(
+                name: "Photos");
 
             migrationBuilder.DropTable(
                 name: "TaskDependencies");

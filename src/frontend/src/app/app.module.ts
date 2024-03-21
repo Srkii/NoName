@@ -12,12 +12,12 @@ import { UserInfoComponent } from './Components/user-info/user-info.component';
 import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
-import { TaskPageComponent } from './Components/task-page/task-page.component';
 import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
 import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
 import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 
 @NgModule({
   declarations: [
@@ -28,10 +28,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     NavComponent,
     AdminComponent,
-    TaskPageComponent,
     ForgotPassComponent,
     ForgotResetComponent,
     MyProjectsComponent,
+    MyTasksComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +41,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right'
+      positionClass: 'toast-bottom-right',
     }), // ToastrModule added
   ],
   providers: [],
