@@ -8,9 +8,6 @@
       <li class="nav-item" *ngIf="isAdmin()">
         <a class="nav-link" routerLink="/admin">Manage Users</a>
       </li>
-      <li class="nav-item" *ngIf="isProjectManager() || isAdmin()">
-        <a class="nav-link" routerLink="/taskpage">Manage Projects</a>
-      </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/myprojects">My Projects</a>
       </li>
@@ -45,7 +42,7 @@
           <div class="dropdown-divider"></div>
         </li>
         <li>
-          <a class="dropdown-item" href="pages-profile-user.html">
+          <a class="dropdown-item" routerLink="/userinfo">
             <i class="bx bx-user me-2"></i>
             <img src="../../../assets/navIcons/user (4).png" alt="">
             <span class="align-middle">My Profile</span>

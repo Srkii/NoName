@@ -12,7 +12,6 @@ import { UserInfoComponent } from './Components/user-info/user-info.component';
 import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
-import { TaskPageComponent } from './Components/task-page/task-page.component';
 import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
 import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
 import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
@@ -29,7 +28,6 @@ import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
     HomeComponent,
     NavComponent,
     AdminComponent,
-    TaskPageComponent,
     ForgotPassComponent,
     ForgotResetComponent,
     MyProjectsComponent,
