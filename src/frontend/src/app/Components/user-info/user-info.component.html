@@ -4,30 +4,50 @@
 <body >
   <app-nav></app-nav>
   <div id="container">
-    <div class="info" *ngIf="userInfo">
-      <h2 style="color: hsl(218, 81%, 95%)">Account info</h2>
-      <p style="color: hsl(218, 81%, 95%)">First name: {{userInfo.firstName}}</p><br>
-      <p style="color: hsl(218, 81%, 95%)">Last name: {{userInfo.lastName}}</p><br>
-      <p style="color: hsl(218, 81%, 95%)">Email: {{userInfo.email}}</p><br>
-      <button (click)="change_info()">Change Info</button>
-    </div>
-    <div class="update" id="update">
-      <h2 style="color: hsl(218, 81%, 95%)">Change user info</h2>
-      <form (ngSubmit)="apply_changes()"><br>
-        <label for="fname">First Name</label>
-        <input id="fname" name="fname" type="text" placeholder="" [(ngModel)]="newData.FirstName"/><br>
-        <label for="lname">Last Name</label>
-        <input name="lname" type="text" placeholder="" [(ngModel)]="newData.LastName"/><br>
-        <label for="email">Email Address</label>
-        <input id="email" name="email" type="text" placeholder="" [(ngModel)]="newData.Email"/><br>
-        <label for="password1">Current Password</label>
-        <input id="password1"name="oldpass" type="password" placeholder="required*" [(ngModel)]="newData.CurrentPassword" required/><br>
-        <label for="password2">New Password</label>
-        <input  id="password2" name="newpass" type="password" placeholder="" [(ngModel)]="newData.NewPassword"/><br>
-        <label for="password3">Confirm New Password</label>
-        <input  id="password3" name="confirmnewpass" type="password" placeholder="" [(ngModel)]="newData.NewPasswordConfirm"/><br>
-        <button type="submit">Apply changes</button>
-      </form>
-    </div>
+      <div id="Account_info"  *ngIf="userInfo">
+        <!--informacije o korisniku , div sa slikom i div sa detaljima o korisniku-->
+        <div id="User_banner">
+          <div id="Image_container">
+            <img [src]="url" id="Profile_image" (click)="onClickUpload()">
+            <img id="Overlay_image" src="../../../assets/change_photo.jpg" (click)="onClickUpload()">
+          </div>
+          <span id="Role_name" style="padding-left: 5px;">
+            <span id="role">{{role}}</span><br>
+            <span id="name">{{userInfo.firstName}} {{userInfo.lastName}}</span>
+          </span>
+          <input id="inp" type="file" style="display: none;" (change)="imageSelected($event)">
+        </div>
+        <div id="User_info">
+          <h4>Details</h4>
+          <div id="User_details">
+            First name: {{userInfo.firstName}}<br>
+            Last name: {{userInfo.lastName}}<br>
+            Email: {{userInfo.email}}<br>
+            Role: {{role}}<br>
+          </div>
+        </div>
+        <div id="clear"></div>
+        <div id="Change_password">
+          <h4>Change Password</h4>
+          <div id="Change_alert">
+            <div id="basetext">
+              Ensure that these requirements are met:<br>
+              Minimum 8 characters long , one uppercase letter and symbol.
+            </div>
+            <div id="successtext">
+              Password changed successfully!
+            </div>
+          </div>
+          <div id="Inputs">
+            <p>CURRENT PASSWORD</p>
+            <input id="password1"name="oldpass" type="password" placeholder="" [(ngModel)]="newData.CurrentPassword" required/><br>
+            <p>NEW PASSWORD</p>
+            <input  id="password2" name="newpass" type="password" placeholder="" [(ngModel)]="newData.NewPassword"/><br>
+            <p>CONFIRM NEW PASSWORD</p>
+            <input  id="password3" name="confirmnewpass" type="password" placeholder="" [(ngModel)]="newData.NewPasswordConfirm"/><br>
+            <button type="submit" (click)="apply_changes()">Change password</button>
+          </div>
+        </div>
+      </div>
   </div>
 </body>

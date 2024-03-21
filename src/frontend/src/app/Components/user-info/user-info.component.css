@@ -1,85 +1,120 @@
-body {
-  height:120vh;
-  font-family: "Raleway", sans-serif;
-  background-color: #333;
-  color: #fff;
-  margin: 0;
-  padding: 0;
-}
+/*
+background color #FFFFFF
+text color #566A7F -> most of big text
+button color: #696CFF
+smaller text color : #697A8D
+font: Public Sans
 
-h2 {
-  margin: 0;
-  padding: 0;
-  text-decoration: underline;
-  padding-bottom: 20px;
+Change password textbox color: #FFAB00
+Password changed successfully color #83EDA1
+Change photo must have a hover over the image as an interactable...
+*/
+body{
+  width:900px;
+  margin: auto;
+  color: #697A8D;
+  font-family: "Public Sans" sans-serif;
 }
-
-input[type="text"],
-input[type="password"] {
-  width: 90%;
-  padding: 5px;
-  height: 30px;
-  margin: 5px 0;
-  box-sizing: border-box;
-  border-radius: 8px;
-}
-
-button {
-  border: solid #286b60 2px;
-  border-radius: 8px;
-  background-color: #70c1b3; /* Aqua background color for button */
-  font-size: 18px;
-  padding: 8px 16px; /* Increased padding for better appearance */
-  font-weight: bold; /* Making the font weight bold */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Adding transition effect */
+h4{
+  color: #566A7F;
 }
 p{
-  padding: 0px;
-  margin: 0px;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  font-size: small;
 }
-button:hover {
-  background-color: #286b60; /* Coral color for button background on hover */
-  border: solid #70c1b3 2px;
-}
-
-#update {
-  display: none;
-}
-
-
-.info{
-  padding:10px;
-  float: left;
-  width:400px;
-  height: fit-content;
-  background-color: #403f3f;
-  border-radius: 20px;
-  margin-right: 10px;
+button{
+  background-color: #696CFF;
+  color: #FFFFFF;
+  width: 40%;
+  height: 40px;
+  border-radius: 6px;
+  border: none;
 }
 #container{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-@keyframes fadeIn{
-  from{
-    opacity:0;
-  }
-  to{
-    opacity: 1;
-  }
-}
-.update{
-  opacity: 0;
-  transition: fadeIn 1 ease;
-  padding: 10px;
-  float:left;
-  display: inline;
-  width:400px;
-  height: fit-content;
-  background-color: #403f3f;
-  border-radius: 20px;
-  margin-left: 10px;
   margin-top: 90px;
+  width: 100%;
+}
+#User_banner{
+  width: 43%;
+  float: left;
+}
+#Role_name{
+  display: inline-block;
+  vertical-align: top;
+}
+#role{
+  text-transform: uppercase;
+  background-color: #EBEEF0;
+  border-radius: 6px;
+  padding: 2px;
+  font-size: small;
+  font-weight: 600;
+}
+#name{
+  font-size: 120%;
+  font-weight: 600;
+}
+#Image_container{
+  position: relative;
+}
+#Profile_image{
+  width: 130px;
+  height: 130px;
+  border-radius: 6px;
+}
+#Profile_image:hover{
+  opacity: 70%;
+}
+#Overlay_image{
+  position: absolute;
+  display: flex;
+  width: 130px;
+  height: 130px;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+#Overlay_image:hover{
+  opacity: 40%;
+}
+#User_info{
+  float: right;
+  width: 50%;
+  padding-right: 17%;
+}
+#User_details{
+  font-weight: 500;
+}
+#Change_alert{
+  border-radius: 6px;
+  padding: 20px;
+  color: #FFAB00;
+  background-color:#FFF2D6;
+}
+#Change_password{
+  margin-top: 100px;
+}
+#Inputs{
+  padding-top: 20px;
+  width: 50%;
+  margin: auto;
+}
+#clear{
+  clear: both;
+}
+#successtext{
+  display: none;
+}
+input[type="password"]{
+
+  border-radius: 6px;
+  height: 40px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+input:focus{
+  outline: 1px solid #D9DEE3;
 }

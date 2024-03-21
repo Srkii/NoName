@@ -20,7 +20,8 @@ namespace backend.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Email,user.Email)
+                new Claim(JwtRegisteredClaimNames.Email,user.Email),
+                new Claim(ClaimTypes.Role,user.Role.ToString())
             };
 
             var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);

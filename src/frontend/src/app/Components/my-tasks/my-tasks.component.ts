@@ -5,12 +5,11 @@ import { Route, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-task-page',
-  templateUrl: './task-page.component.html',
-  styleUrl: './task-page.component.css',
-  providers: [DatePipe], // Add DatePipe to providers array
+  selector: 'app-my-tasks',
+  templateUrl: './my-tasks.component.html',
+  styleUrl: './my-tasks.component.css',
 })
-export class TaskPageComponent implements OnInit {
+export class MyTasksComponent implements OnInit {
   tasks: ProjectTask[] = [];
   clickedTask: ProjectTask | null = null;
   class: any;

@@ -1,4 +1,5 @@
 ﻿using backend.Data;
+using backend.Helpers;
 using backend.Interfaces;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,8 @@ namespace backend.Extensions
             });
             services.AddCors();
             services.AddScoped<ITokenService, TokenService>();
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.AddScoped<IPhotoService,PhotoService>();
 
             return services;
         }
