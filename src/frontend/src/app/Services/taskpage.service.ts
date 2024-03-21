@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TaskpageService {
+  constructor() {}
 
-  constructor() { }
-
-  check():boolean{
-    const role=localStorage.getItem('role')
-    if(role === '2')
-      return true;
+  check(): boolean {
+    const role = localStorage.getItem('role');
+    if (role === '2') return true;
     else return false;
   }
 }
