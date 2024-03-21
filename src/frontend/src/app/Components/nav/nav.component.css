@@ -109,3 +109,17 @@ body {
     margin-bottom: 5px;
   }
 }
+#logout-button {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black; /* default color */
+}
+
+#logout-button:active {
+  color: purple; /* color when clicked */
+}
+
+#logout-button img {
+  margin-right: 10px; /* space between image and text */
+}
