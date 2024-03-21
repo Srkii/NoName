@@ -484,3 +484,5 @@ $RECYCLE.BIN/
 *.swp
 
 ./backend/app.db
+./Data/Migrations
+./app.db
