@@ -5,12 +5,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace backend.Migrations
 {
-    /// <inheritdoc />
-<<<<<<<< HEAD:src/backend/Data/Migrations/20240321083850_InitialCreate.cs
-    public partial class InitialCreate : Migration
-========
+    public partial class InitialCreate : Migration{
     public partial class siw3 : Migration
->>>>>>>> f57f9dc368f2ecad99bf1faa659f901637192053:src/backend/Data/Migrations/20240319225453_siw3.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -232,5 +228,6 @@ namespace backend.Migrations
             migrationBuilder.DropTable(
                 name: "Projects");
         }
+    }
     }
 }
