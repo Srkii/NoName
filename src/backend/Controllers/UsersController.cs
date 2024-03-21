@@ -145,5 +145,14 @@ namespace backend.Controllers
           context.Photos.Remove(image);
           return Ok(response);
         }
+
+        [HttpGet("profilePic/{id}")]
+        public async Task<ActionResult<PhotoDto>> GetPhotoByUserId(int id){
+            var result = await context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
+            return new PhotoDto{
+              Id = result.Id,
+              Url= result.url
+            };
+        }
     }
 }
