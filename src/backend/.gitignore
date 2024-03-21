@@ -483,6 +483,8 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-./backend/app.db
+# Git ignore za SQLite bazu podataka
 ./Data/Migrations
 ./app.db
+./app.db-shm
+./app.db-wal
