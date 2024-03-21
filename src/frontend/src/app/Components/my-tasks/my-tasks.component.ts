@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrl: './my-tasks.component.css',
+  providers: [DatePipe] // Provide DatePipe here
 })
 export class MyTasksComponent implements OnInit {
   tasks: ProjectTask[] = [];
