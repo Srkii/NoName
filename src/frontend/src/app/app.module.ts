@@ -18,6 +18,7 @@ import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.com
 import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ForgotPassComponent,
     ForgotResetComponent,
     MyProjectsComponent,
+    MyTasksComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right'
+      positionClass: 'toast-bottom-right',
     }), // ToastrModule added
   ],
   providers: [],

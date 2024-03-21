@@ -11,19 +11,22 @@ using backend.Data;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240320112829_photomigration")]
-    partial class Photomigration
+    [Migration("20240321110948_PrvaMigracija")]
+    partial class PrvaMigracija
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
 
             modelBuilder.Entity("backend.Entities.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Archived")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
@@ -79,9 +82,6 @@ namespace backend.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("AppUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsMain")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PublicId")
@@ -214,10 +214,33 @@ namespace backend.Data.Migrations
                     b.ToTable("TaskMembers");
                 });
 
+            modelBuilder.Entity("backend.Entities.UserRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRequests");
+                });
+
             modelBuilder.Entity("backend.Entities.Photo", b =>
                 {
                     b.HasOne("backend.Entities.AppUser", "AppUser")
-                        .WithMany("Photos")
+                        .WithMany()
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -291,11 +314,6 @@ namespace backend.Data.Migrations
                     b.Navigation("Member");
 
                     b.Navigation("Task");
-                });
-
-            modelBuilder.Entity("backend.Entities.AppUser", b =>
-                {
-                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }
