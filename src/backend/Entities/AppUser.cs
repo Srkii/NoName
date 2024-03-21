@@ -1,4 +1,6 @@
-﻿namespace backend.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace backend.Entities
 {
     public enum UserRole
     {
@@ -15,5 +17,6 @@
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public UserRole Role { get; set; }
+        public bool Archived {get; set;}
     }
 }
