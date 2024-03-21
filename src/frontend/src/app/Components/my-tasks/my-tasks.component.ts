@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectTask, TaskStatus } from '../../Entities/ProjectTask';
-import { MyTasksService } from '../../Services/my-tasks.service';
+import { MyTasksService } from '../../_services/my-tasks.service';
 import { Route, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MailresetService } from '../../Services/mailreset.service';
+import { MailresetService } from '../../_services/mailreset.service';
 import { ResetRequest } from '../../Entities/ResetRequest';
 
 @Component({

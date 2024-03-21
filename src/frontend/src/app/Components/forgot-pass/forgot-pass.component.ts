@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MailReset } from '../../Entities/MailReset';
-import { MailresetService } from '../../Services/mailreset.service';
+import { MailresetService } from '../../_services/mailreset.service';
 @Component({
   selector: 'app-forgot-pass',
   templateUrl: './forgot-pass.component.html',

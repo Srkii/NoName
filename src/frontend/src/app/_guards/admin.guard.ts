@@ -1,5 +1,5 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { AdminService } from '../Services/admin.service';
+import { AdminService } from '../_services/admin.service';
 import { inject } from '@angular/core';
 
 export const adminGuard: CanActivateFn = (route, state) => {

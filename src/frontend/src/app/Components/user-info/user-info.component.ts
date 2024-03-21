@@ -1,7 +1,7 @@
-import { UploadService } from './../../Services/upload.service';
+import { UploadService } from '../../_services/upload.service';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserinfoService } from './../../Services/userinfo.service';
+import { UserinfoService } from '../../_services/userinfo.service';
 import { AppUser } from '../../Entities/AppUser';
 import { ChangePassword } from '../../Entities/ChangePassword';
 

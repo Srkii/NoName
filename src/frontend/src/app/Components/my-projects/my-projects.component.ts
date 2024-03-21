@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MyProjectsService } from '../../Services/my-projects.service';
+import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 
 @Component({

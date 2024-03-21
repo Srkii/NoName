@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RegisterService } from '../../Services/register.service';
+import { RegisterService } from '../../_services/register.service';
 import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Invintation } from '../../Entities/Invitation';
