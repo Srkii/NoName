@@ -1,9 +1,10 @@
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
 using backend.DTO;
-using backend.Entities;
+using backend.Entities;       
 using backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,10 @@ namespace backend.Controllers
     {
         private readonly DataContext context;
         private ITokenService tokenService;
-        public UsersController(DataContext context,ITokenService ts){
+
+        private readonly IPhotoService photoService;
+        public UsersController(DataContext context,ITokenService ts,IPhotoService photoService){
+            this.photoService = photoService;
             this.context = context;
             this.tokenService = ts;
         }
@@ -36,7 +40,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("updateUser/{id}")]
-        public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateInfoDto data){            
+        public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] ChangePasswordDto data){
           var user = await context.Users.FindAsync(id);
           if(data.FirstName!=null && data.FirstName!= "") user.FirstName=data.FirstName;
           if(data.LastName!=null && data.LastName != "") user.LastName=data.LastName;
@@ -106,6 +110,49 @@ namespace backend.Controllers
 
             return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
         }
-        
+        [HttpPost("add-photo/{id}")]
+        public async Task<ActionResult<PhotoDto>> AddPhoto(int id,IFormFile image)
+        {   
+          var user = await context.Users.FindAsync(id);
+          
+          var oldphoto = await context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
+
+          var result = await photoService.AddPhotoAsync(image);
+          var photo = new Photo{
+            url = result.SecureUrl.AbsoluteUri,
+            PublicId = result.PublicId,
+            AppUserId=user.Id
+          };
+          
+          
+          if(oldphoto != null){
+            await photoService.DeletePhotoAsync(oldphoto.PublicId);
+            context.Photos.Remove(oldphoto);
+          }
+          
+          context.Photos.Add(photo);
+          await context.SaveChangesAsync();
+          return new PhotoDto
+          {
+            Id=photo.Id,
+            Url = photo.url,
+          };
+        }
+        [HttpDelete("remove-photo/{id}")]
+        public async Task<ActionResult> RemovePhoto(int id){
+          var image = await context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
+          var response = await photoService.DeletePhotoAsync(image.PublicId);
+          context.Photos.Remove(image);
+          return Ok(response);
+        }
+
+        [HttpGet("profilePic/{id}")]
+        public async Task<ActionResult<PhotoDto>> GetPhotoByUserId(int id){
+            var result = await context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
+            return new PhotoDto{
+              Id = result.Id,
+              Url= result.url
+            };
+        }
     }
 }

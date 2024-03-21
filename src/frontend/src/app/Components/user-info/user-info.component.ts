@@ -1,8 +1,9 @@
+import { UploadService } from './../../Services/upload.service';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserinfoService } from './../../Services/userinfo.service';
 import { AppUser } from '../../Entities/AppUser';
-import { ChangeUserData } from '../../Entities/ChangeUserData';
+import { ChangePassword } from '../../Entities/ChangePassword';
 
 @Component({
   selector: 'app-user-info',
@@ -11,26 +12,32 @@ import { ChangeUserData } from '../../Entities/ChangeUserData';
 })
 export class UserInfoComponent implements OnInit {
   public userInfo: any;
+  public role:any;
+  public profilePic:any;
   public passwordCheck:any;
-  newData: ChangeUserData = {
+  public defaulturl="../../../assets/1234.png";
+  public url="../../../assets/1234.png";
+  newData: ChangePassword = {
     CurrentPassword:""
   }
 
-  constructor(private userinfoService: UserinfoService, private router: Router) {}
-  //postavljanje defaultne vidljivosti div-ova
-
-  visibility_change(type:string,div:any){//promena vidljivosti div-a
+  constructor(private userinfoService: UserinfoService, private router: Router,private uploadservice:UploadService) {}
+  visibility_change(type:string,div:any){
     if(div!=null) div.style.display = type;
   }
 
   async ngOnInit(): Promise<void> {
-
-    this.visibility_change('none',document.getElementById("update"));
-
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token')
     if (token) {
       this.userInfo = await this.userinfoService.getUserInfo(id,token);
+      this.profilePic = await this.userinfoService.getProfilePhoto(id,token);
+      if(this.profilePic.url != null)this.url = this.profilePic.url;
+      if(this.userInfo.role == 1){
+        this.role="Project manager";
+      }else if(this.userInfo.role == 2){
+        this.role="Member";
+      }else this.role="Admin";
     } else {
       console.error("Token not found in local storage");
     }
@@ -62,7 +69,9 @@ export class UserInfoComponent implements OnInit {
         if(changeinfodiv!=null)changeinfodiv.style.opacity='1';
       },10);
     }
-  }
+  }//nepotrebno
+
+
   apply_changes(){
     if(this.newData.CurrentPassword==''){
       alert("input old password for verification...");
@@ -81,13 +90,43 @@ export class UserInfoComponent implements OnInit {
         localStorage.setItem('id',response.id);
         localStorage.setItem('token',response.token);
         console.log("change info successful!");
-        alert("Changes applied");
-        location.reload();
+        var succ = document.getElementById("successtext")
+        if(succ) succ.style.display='block';
+        var base = document.getElementById("basetext");
+        if(base) base.style.display='none';
+        var change = document.getElementById("Change_alert");
+        if(change){
+          change.style.backgroundColor = '#83EDA1'
+          change.style.color = '#FFFFFF';
+        }
       },
       error: (error)=>{
         console.log(error);
         console.log("change info failed.");
       }
     });
+  }
+  imageSelected(event:any){
+    const imageData:File = event.target.files[0];
+    if(imageData != null){
+      var id = Number(localStorage.getItem('id'));
+      var token = localStorage.getItem('token');
+      var response = this.uploadservice.UploadImage(id,imageData,token);
+    }
+    else{
+      console.log("no data...");
+    }
+  }
+  onClickUpload(){
+    document.getElementById("inp")?.click();
+  }
+  RemoveImage(){
+    console.log("removing user profile picture...");
+    if(this.url != "../../../assets/1234.png"){
+      var id = localStorage.getItem('id');
+      var token = localStorage.getItem('token');
+      this.uploadservice.RemoveImage(id,token);
+      this.url=this.defaulturl;
+    }
   }
 }
