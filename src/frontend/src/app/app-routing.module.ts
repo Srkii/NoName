@@ -14,6 +14,7 @@ import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.com
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent, canActivate: [loginGuard] },
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
   { path: 'forgotpass', component: ForgotPassComponent, canActivate: [loginGuard] },
@@ -30,7 +31,7 @@ const routes: Routes = [
       { path: 'mytasks', component: MyTasksComponent}
     ],
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+ 
 ];
 
 @NgModule({

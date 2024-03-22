@@ -5,14 +5,14 @@
   <div class="navbar-nav-left d-flex" id="navbar-collapse">
     <img src="../../../assets/navIcons/logo.png" alt="" />
     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-      <li class="nav-item" *ngIf="isAdmin()">
+      <li class="nav-item active" *ngIf="isAdmin()">
         <a class="nav-link" routerLink="/admin">Manage Users</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" routerLink="/myprojects">My Projects</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/mytasks">My Tasks</a>
+        <a class="nav-link" routerLink="/mytasks" >My Tasks</a>
       </li>
     </ul>
   </div>

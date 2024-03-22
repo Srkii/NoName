@@ -68,8 +68,6 @@ export class RegisterComponent implements OnInit {
     // If passwords match, proceed with registration
     this.registerService.register(this.newUser).subscribe({
       next: (response) => {
-        console.log(response.id);
-        console.log(response)
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
