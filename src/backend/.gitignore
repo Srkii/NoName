@@ -484,7 +484,7 @@ $RECYCLE.BIN/
 *.swp
 
 # Git ignore za SQLite bazu podataka
-./Data/Migrations
-./app.db
-./app.db-shm
-./app.db-wal
+Data/Migrations
+app.db
+app.db-shm
+app.db-wal
