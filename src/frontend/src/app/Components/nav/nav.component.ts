@@ -47,7 +47,6 @@ export class NavComponent implements OnInit {
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.user=response;
-        console.log(this.user.firstName)
       },error:(error)=>{
         console.log(error)
       }

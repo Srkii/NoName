@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
         this.loggedIn = true;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/mytasks']);
         console.log('Successful login');
       },
       error: (error) => {

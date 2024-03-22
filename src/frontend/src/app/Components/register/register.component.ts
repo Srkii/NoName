@@ -67,10 +67,14 @@ export class RegisterComponent implements OnInit {
 
     // If passwords match, proceed with registration
     this.registerService.register(this.newUser).subscribe({
-      next: (res: string) => {
-        localStorage.setItem('token', res);
+      next: (response) => {
+        console.log(response.id);
+        console.log(response)
+        localStorage.setItem('id', response.id);
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('role', response.role);
         console.log('Successful registration');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/mytasks']);
       },
       error: () => {
         console.log('Unsuccessful registration');
