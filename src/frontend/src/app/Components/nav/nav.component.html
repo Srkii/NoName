@@ -5,14 +5,14 @@
   <div class="navbar-nav-left d-flex" id="navbar-collapse">
     <img src="../../../assets/navIcons/logo.png" alt="" />
     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-      <li class="nav-item" *ngIf="isAdmin()">
+      <li class="nav-item active" *ngIf="isAdmin()">
         <a class="nav-link" routerLink="/admin">Manage Users</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" routerLink="/myprojects">My Projects</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/mytasks">My Tasks</a>
+        <a class="nav-link" routerLink="/mytasks" >My Tasks</a>
       </li>
     </ul>
   </div>
@@ -24,7 +24,7 @@
       <img src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">     
       <ul class="dropdown-menu dropdown-menu-end">
         <li>
-          <a class="dropdown-item" href="pages-account-settings-account.html">
+          <div class="dropdown-item" href="pages-account-settings-account.html">
             <div class="d-flex">
               <div class="flex-shrink-0 me-3">
                 <div class="avatar avatar-online">
@@ -32,11 +32,11 @@
                 </div>
               </div>
               <div class="flex-grow-1">
-                <span class="fw-medium d-block">{{user.firstName}} {{user.lastName}}</span>
-                <small class="text-muted">{{user.email}}</small>
+                <span class="fw-medium d-block">{{user?.firstName}} {{user?.lastName}}</span>
+                <small class="text-muted">{{user?.email}}</small>
               </div>
             </div>
-          </a>
+          </div>
         </li>
         <li>
           <div class="dropdown-divider"></div>

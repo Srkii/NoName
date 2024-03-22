@@ -15,7 +15,7 @@ export class RegisterService {
 
   register(appUser: AppUser): Observable<any> {
     return this.httpClient.post(`${this.apiUrl}/account/register`, appUser, {
-      responseType: 'text',
+      responseType: 'json',
     });
   }
   getEmailByToken(token: string): Observable<Invintation> {

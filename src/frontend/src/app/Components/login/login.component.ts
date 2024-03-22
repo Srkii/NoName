@@ -15,8 +15,6 @@ export class LoginComponent implements OnInit {
     Password: '',
   };
 
-  loggedIn = false;
-
   constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {}
@@ -24,12 +22,10 @@ export class LoginComponent implements OnInit {
   login() {
     this.loginService.login(this.newUser).subscribe({
       next: (response) => {
-        console.log(response);
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
-        this.loggedIn = true;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/mytasks']);
         console.log('Successful login');
       },
       error: (error) => {
