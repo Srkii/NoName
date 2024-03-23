@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-my-projects',
@@ -10,9 +11,14 @@ import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 export class MyProjectsComponent implements OnInit {
   projects: Project[] = [];
 
-  constructor(private myProjectsService: MyProjectsService) {}
+  constructor(private myProjectsService: MyProjectsService, private spinner: NgxSpinnerService) {}
 
   ngOnInit(): void {
+    this.spinner.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinner.hide();
+    }, 700);
     this.myProjectsService.getProjects().subscribe((projects: Project[]) => {
       this.projects = projects;
     });
