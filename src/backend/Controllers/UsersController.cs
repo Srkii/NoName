@@ -52,7 +52,8 @@ namespace backend.Controllers
       var responseData = new
       {
         UserId = user.Id,
-        NewName = data.FirstName,
+        Updated = true,
+        Message = "User data has been updated"
       };
 
       return Ok(responseData);
@@ -104,6 +105,39 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
+    [HttpPut("changePassword/{id}")] // /api/users/changePassword
+    public async Task<ActionResult<UserDto>> ChangePassword(int id,[FromBody] ChangePasswordDto data)
+    {
+      var user = await context.Users.FindAsync(id);
+      
+      if(!VerifyPassword(user,data.CurrentPassword))
+      {
+        return Unauthorized("Password is unvalid");
+      }
+
+      var hmac = new HMACSHA512();
+      user.PasswordHash =  hmac.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
+      user.PasswordSalt = hmac.Key;
+      await context.SaveChangesAsync();
+
+      var responseData = new
+      {
+        UserId = user.Id,
+        Updated = true,
+        Message = "Password has been updated"
+      };
+
+      return Ok(responseData);
+    }
+
+    private bool VerifyPassword(AppUser user, string password)
+    {
+      using var hmac = new HMACSHA512(user.PasswordSalt);
+      var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+      
+      return computedHash.SequenceEqual(user.PasswordHash);
+    }
+
     [AllowAnonymous]
     [HttpGet("token/{token}")] // /api/users/token
     public async Task<ActionResult<InvitationDto>> GetEmail(string token)
@@ -131,7 +165,6 @@ namespace backend.Controllers
         PublicId = result.PublicId,
         AppUserId = user.Id
       };
-
 
       if (oldphoto != null)
       {
