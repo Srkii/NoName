@@ -17,7 +17,9 @@ namespace backend.Data
         public DbSet<TaskDependency> TaskDependencies {get; set;}
         public DbSet<Invitation> Invitations {get; set;}
         public DbSet<UserRequest> UserRequests {get; set;}
-        public DbSet<Photo> Photos {get;set;}
+        public DbSet<Photo> Photos {get; set;}
+        public DbSet<Comment> Comments {get; set;}
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectMember>(entity =>
