@@ -41,20 +41,22 @@ namespace backend.Controllers
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPut("updateUser/{id}")]
-    public async Task<ActionResult<UserDto>> UpdateUser(int id, [FromBody] ChangePasswordDto data)
+    [HttpPut("updateUser/{id}")] // /api/users/updateUser
+    public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateUserDto data)
     {
       var user = await context.Users.FindAsync(id);
       if (data.FirstName != null && data.FirstName != "") user.FirstName = data.FirstName;
       if (data.LastName != null && data.LastName != "") user.LastName = data.LastName;
       if (data.Email != null && data.Email != "") user.Email = data.Email;
       await context.SaveChangesAsync();
-      return new UserDto
+      var responseData = new
       {
-        Id = user.Id,
-        Email = user.Email,
-        Token = tokenService.CreateToken(user)
+        UserId = user.Id,
+        Updated = true,
+        Message = "User data has been updated"
       };
+
+      return Ok(responseData);
     }
 
     [Authorize(Roles = "Admin")]
@@ -103,6 +105,39 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
+    [HttpPut("changePassword/{id}")] // /api/users/changePassword
+    public async Task<ActionResult<UserDto>> ChangePassword(int id,[FromBody] ChangePasswordDto data)
+    {
+      var user = await context.Users.FindAsync(id);
+      
+      if(!VerifyPassword(user,data.CurrentPassword))
+      {
+        return Unauthorized("Password is unvalid");
+      }
+
+      var hmac = new HMACSHA512();
+      user.PasswordHash =  hmac.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
+      user.PasswordSalt = hmac.Key;
+      await context.SaveChangesAsync();
+
+      var responseData = new
+      {
+        UserId = user.Id,
+        Updated = true,
+        Message = "Password has been updated"
+      };
+
+      return Ok(responseData);
+    }
+
+    private bool VerifyPassword(AppUser user, string password)
+    {
+      using var hmac = new HMACSHA512(user.PasswordSalt);
+      var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+      
+      return computedHash.SequenceEqual(user.PasswordHash);
+    }
+
     [AllowAnonymous]
     [HttpGet("token/{token}")] // /api/users/token
     public async Task<ActionResult<InvitationDto>> GetEmail(string token)
@@ -130,7 +165,6 @@ namespace backend.Controllers
         PublicId = result.PublicId,
         AppUserId = user.Id
       };
-
 
       if (oldphoto != null)
       {

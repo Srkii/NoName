@@ -80,8 +80,8 @@ namespace backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("changePassword")] // /api/account/changePassword
-        public async Task<ActionResult<InvitationDto>> ChangePassword(PasswordResetDto PassDto)
+        [HttpPost("resetPassword")] // /api/account/resetPassword
+        public async Task<ActionResult<InvitationDto>> ResetPassword(PasswordResetDto PassDto)
         {
             var request = await context.UserRequests.FirstOrDefaultAsync(i => i.Token == PassDto.Token);
 
