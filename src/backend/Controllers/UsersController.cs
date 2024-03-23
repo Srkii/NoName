@@ -41,20 +41,21 @@ namespace backend.Controllers
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPut("updateUser/{id}")]
-    public async Task<ActionResult<UserDto>> UpdateUser(int id, [FromBody] ChangePasswordDto data)
+    [HttpPut("updateUser/{id}")] // /api/users/updateUser
+    public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateUserDto data)
     {
       var user = await context.Users.FindAsync(id);
       if (data.FirstName != null && data.FirstName != "") user.FirstName = data.FirstName;
       if (data.LastName != null && data.LastName != "") user.LastName = data.LastName;
       if (data.Email != null && data.Email != "") user.Email = data.Email;
       await context.SaveChangesAsync();
-      return new UserDto
+      var responseData = new
       {
-        Id = user.Id,
-        Email = user.Email,
-        Token = tokenService.CreateToken(user)
+        UserId = user.Id,
+        NewName = data.FirstName,
       };
+
+      return Ok(responseData);
     }
 
     [Authorize(Roles = "Admin")]
