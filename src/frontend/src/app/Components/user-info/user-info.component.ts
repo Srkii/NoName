@@ -34,7 +34,20 @@ export class UserInfoComponent implements OnInit {
         next: (response) =>{
           this.userInfo = response;
           console.log(response);
-          if(response.profilePicUrl!=null) this.url = response.profilePicUrl;
+          if(response.profilePicUrl!=null)
+          {
+            this.uploadservice.getImage(response.profilePicUrl)
+            .subscribe(response => {
+              const reader = new FileReader();
+              reader.readAsDataURL(response);
+              reader.onloadend = () =>{
+                this.url = reader.result as string;
+              };
+            },
+            error=>{
+              console.error("Error loading image",error);
+            });
+          }
           if(this.userInfo.role == 1){
             this.role="Project manager";
           }else if(this.userInfo.role == 2){
@@ -93,6 +106,7 @@ export class UserInfoComponent implements OnInit {
       this.uploadservice.UploadImage(id,imageData,token).subscribe({
         next: (response) => {
           console.log("RESPONSE",response);
+          location.reload();
         },
         error: (error) =>{
           console.log(error);

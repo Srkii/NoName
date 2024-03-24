@@ -1,9 +1,5 @@
-
 using backend.Interfaces;
-using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace backend.Services
 {
     [Authorize]
@@ -21,7 +17,7 @@ namespace backend.Services
                 {
                     file.CopyTo(filestream);
                 }
-                return filepath;
+                return file.FileName;
             }
             else return null;
         }

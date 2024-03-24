@@ -20,10 +20,7 @@ export class UploadService {
 
     return this.httpClient.post<any>(`https://localhost:5001/api/FileUpload/uploadpfp/${id}`,formData,{headers:httpheader});//saljem sliku na back
   }
-  getImage(id:any,token:any){
-    var httpheader = new HttpHeaders({
-      "Authorization":`Bearer ${token}`
-    });
-    return this.httpClient.get<string>(`https://localhost:5001/api/FileUpload/images/${id}`,{headers:httpheader});
+  getImage(filename:string){
+    return this.httpClient.get(`https://localhost:5001/api/FileUpload/images/${filename}`,{responseType:'blob'});
   }
 }
