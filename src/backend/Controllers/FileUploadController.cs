@@ -3,6 +3,7 @@ using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 namespace backend.Controllers
 {
     public class FileUploadController : BaseApiController
@@ -22,6 +23,7 @@ namespace backend.Controllers
         public async Task<ActionResult> UploadImage(int id,IFormFile image){
             if(image==null) return BadRequest("photo is null");
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            
             if(user.ProfilePicUrl!=null){
                 _photoService.DeletePhoto(user.ProfilePicUrl);
                 user.ProfilePicUrl = _photoService.AddPhoto(image);
@@ -30,6 +32,13 @@ namespace backend.Controllers
             }
             await _context.SaveChangesAsync();
             return Ok(user);
+        }
+        [HttpGet("images/{filename}")]
+        public FileContentResult GetImage(string filename){
+            string path = Directory.GetCurrentDirectory()+"\\Assets\\Images\\"+filename;
+            var imageBytes = System.IO.File.ReadAllBytes(path);
+
+            return File(imageBytes,"image/jpeg");
         }
 
         /*
