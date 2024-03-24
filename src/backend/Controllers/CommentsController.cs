@@ -2,6 +2,7 @@
 using backend.Data;
 using backend.DTO;
 using backend.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ public class CommentsController:BaseApiController
         {
             TaskId = commentDto.TaskId,
             Content = commentDto.Content,
+            SenderId = commentDto.SenderId,
             SenderFirstName = commentDto.SenderFirstName,
             SenderLastName = commentDto.SenderLastName
         };
@@ -35,5 +37,30 @@ public class CommentsController:BaseApiController
     {
         var comments = await context.Comments.Where(x => x.TaskId == taskId).OrderByDescending(x => x.MessageSent).ToListAsync();
         return Ok(comments);
+    }
+
+    [Authorize]
+    [HttpDelete("deleteComment")]
+    public async Task<IActionResult> DeleteComment(DeleteCommentDto dto)
+    {
+        var comment = await context.Comments.FindAsync(dto.CommentId);
+
+        if(comment == null)
+            return BadRequest("Comment doesn't exist");
+        
+        if(dto.Role!=UserRole.Admin && comment.SenderId != dto.SenderId)
+            return BadRequest("Unvalid request: You cannot delete other's people comments");
+        
+        context.Comments.Remove(comment);
+        await context.SaveChangesAsync();
+        
+        var responseData = new 
+        {
+            CommentId = comment.Id,
+            EmailSent = true,
+            Message = "Comment deleted successfully."
+        };
+
+        return Ok(responseData);
     }
 }
