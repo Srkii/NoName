@@ -10,42 +10,34 @@ body {
 .nav {
   display: inline;
 }
-
 #all {
   margin-top: 30px;
-  /* margin-left: 150px; */
-  margin: auto;
+  margin: auto; /* Center the div horizontally */
   padding: 20px;
-  width: 1000px;
-  height: 80vh;
+  width: 85%;
+  min-height: 80vh; /* Set a minimum height */
   background-color: #ffffff;
   color: #697a8d;
-  border-color: solid #d9dee3;
-  border-width: 0;
+  border: solid 1px #d9dee3;
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  overflow: auto;
+  overflow-y: hidden; /* Hide the vertical scrollbar */
+  overflow-x: hidden; /* Hide the vertical scrollbar */
+  box-sizing: border-box; /* Include padding and border in the total width and height */
 }
 
-input {
-  color: #697a8d;
-  border: 0.5px solid lightgray;
-  border-radius: 8px;
-  padding: 6px;
-  width: 280px;
-  margin-right: 20px;
-  margin-left: 35px;
-  font-size: 12px;
-}
+input,
 select {
   color: #697a8d;
   font-size: 12px;
   border: 0.5px solid lightgray;
   border-radius: 8px;
   padding: 6px;
-  width: 280px;
-  margin-right: 20px;
+  width: 27%;
+  margin-left: 5%; /* Add margin-bottom for the gap */
+  margin-bottom: 1%;
 }
+
 input:focus,
 select:focus {
   outline: none; /* Remove default focus outline */
@@ -56,16 +48,18 @@ select:focus {
 table {
   color: #697a8d;
   font-size: 12px;
-  margin-left: -20px;
   border: 1px solid lightgray;
   border-collapse: collapse;
   padding: 6px;
-  width: 996px;
+  margin-left: -20px;
+  margin-top: 10px;
+  width: 103.5%;
   /* margin-left: 20px; */
   border-left: none;
   border-right: none;
 }
 th {
+  font-size: 14px;
   border: 1.5px solid lightgray;
   text-align: center;
   font-weight: 600; /* thinner text */
@@ -79,6 +73,11 @@ td {
   border-left: none;
   border-right: none;
   padding-left: 20px;
+  font-size: 12px;
+}
+#name {
+  font-size: 14px;
+  font-weight: bold;
 }
 p {
   text-align: center;

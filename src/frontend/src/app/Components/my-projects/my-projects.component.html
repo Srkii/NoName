@@ -19,6 +19,11 @@
           placeholder="Search Project"
           [(ngModel)]="ProjectName"
         />
+        <input
+          type="text"
+          placeholder="Search Project Owner"
+          [(ngModel)]="ProjectName"
+        />
         <select name="status" id="status" [(ngModel)]="selectedStatus">
           <option value="" selected>Select Status</option>
           <option value="PROPOSED">PROPOSED</option>
@@ -32,8 +37,49 @@
           <option value="MEDIUM">MEDIUM</option>
           <option value="HIGH">HIGH</option>
         </select>
+        <select
+          name="date"
+          id="date"
+          [(ngModel)]="StartDateFilter"
+          (change)="
+            handleStartDateChange($event); sortProjects(StartDateFilter)
+          "
+        >
+          <option value="" selected>Filter by start date</option>
+          <option value="Today">Today</option>
+          <option value="Yesterday">Yesterday</option>
+          <option value="Last 7 days">Last 7 days</option>
+          <option value="Last 30 days">Last 30 days</option>
+          <option value="This month">This month</option>
+          <option value="Last month">Last month</option>
+          <option value="This Year">This Year</option>
+          <option value="From highest to lowest">From highest to lowest</option>
+          <option value="From lowest to highest">From lowest to highest</option>
+        </select>
 
-        <br /><br />
+        <select
+          name="date1"
+          id="date1"
+          [(ngModel)]="EndDateFilter"
+          (change)="handleEndDateChange($event); sortProjects1(EndDateFilter)"
+        >
+          <option value="" selected>Filter by end date</option>
+          <option value="Today1">Today</option>
+          <option value="Yesterday1">Yesterday</option>
+          <option value="Last 7 days1">Last 7 days</option>
+          <option value="Last 30 days1">Last 30 days</option>
+          <option value="This month1">This month</option>
+          <option value="Last month1">Last month</option>
+          <option value="This Year1">This Year</option>
+          <option value="From highest to lowest1">
+            From highest to lowest
+          </option>
+          <option value="From lowest to highest1">
+            From lowest to highest
+          </option>
+        </select>
+
+        <br />
         <table>
           <tr>
             <th>PROJECT NAME</th>
@@ -45,7 +91,7 @@
           </tr>
           <tr *ngFor="let project of projects">
             <ng-container *ngIf="isProjectVisible(project)">
-              <td>{{ project.projectName }}</td>
+              <td id="name">{{ project.projectName }}</td>
               <td>Project owner name here</td>
               <td [ngClass]="getStatusString(project.projectStatus)">
                 <p>{{ getStatusString(project.projectStatus) }}</p>
@@ -62,6 +108,11 @@
     </div>
   </body>
 </html>
-<ngx-spinner  bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
   <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
