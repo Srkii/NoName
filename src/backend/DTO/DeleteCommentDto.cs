@@ -6,5 +6,4 @@ public class DeleteCommentDto
 {
     public int SenderId {get; set;}
     public int CommentId {get; set;}
-    public UserRole Role {get; set;}
 }

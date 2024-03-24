@@ -33,22 +33,22 @@ public class CommentsController:BaseApiController
     }
 
     [HttpGet("getComments/{taskId}")] // /api/comments/getComments
-    public async Task<IActionResult> GetComments(int taskId)
+    public async Task<ActionResult<List<Comment>>> GetComments(int taskId)
     {
         var comments = await context.Comments.Where(x => x.TaskId == taskId).OrderByDescending(x => x.MessageSent).ToListAsync();
-        return Ok(comments);
+        return comments;
     }
 
     [Authorize]
     [HttpDelete("deleteComment")]
-    public async Task<IActionResult> DeleteComment(DeleteCommentDto dto)
+    public async Task<ActionResult> DeleteComment(DeleteCommentDto dto)
     {
         var comment = await context.Comments.FindAsync(dto.CommentId);
 
         if(comment == null)
             return BadRequest("Comment doesn't exist");
         
-        if(dto.Role!=UserRole.Admin && comment.SenderId != dto.SenderId)
+        if(comment.SenderId != dto.SenderId)
             return BadRequest("Unvalid request: You cannot delete other's people comments");
         
         context.Comments.Remove(comment);
