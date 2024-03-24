@@ -1,52 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Helpers;
+
 using backend.Interfaces;
-using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace backend.Services
 {
+    [Authorize]
     public class PhotoService : IPhotoService
     {
-        private readonly Cloudinary _cloudinary;
-        public PhotoService(IOptions<CloudinarySettings> config){
-            var acc = new Account
-            (
-                config.Value.CloudName,
-                config.Value.ApiKey,
-                config.Value.ApiSecret
-            );
+    
+        public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Images";
 
-            _cloudinary = new Cloudinary(acc);
-        }
-
-        public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
+        public string AddPhoto(IFormFile file)
         {
-           var uploadResult = new ImageUploadResult();
-
-           if(file.Length > 0)
-           {
-                using var stream = file.OpenReadStream();
-                var uploadParams = new ImageUploadParams
+            if (file.Length > 0)
+            {
+                string filepath = Path.Combine(_path, file.FileName);
+                using (Stream filestream = new FileStream(filepath, FileMode.Create))
                 {
-                    File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Height(300).Width(300).Crop("fill").Gravity("face"),//size adjustments maybe
-                    Folder = "ProfilePhotos"//ovo mozda nije dobro, proveri posle ako ne radi
-                };
-                uploadResult = await _cloudinary.UploadAsync(uploadParams);
-           }
-
-           return uploadResult;
+                    file.CopyTo(filestream);
+                }
+                return filepath;
+            }
+            else return null;
         }
 
-        public async Task<DeletionResult> DeletePhotoAsync(string publicId)
+        public void DeletePhoto(string url)
         {
-            var deleteParams = new DeletionParams(publicId);
-            return await _cloudinary.DestroyAsync(deleteParams);
+            if (File.Exists(url))
+            {
+                File.Delete(url);
+            }
         }
     }
 }

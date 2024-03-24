@@ -33,7 +33,7 @@ button{
   border: none;
 }
 #container{
-  margin-top: 90px;
+  margin-top: 20px;
   width: 100%;
 }
 #User_banner{
@@ -95,7 +95,15 @@ button{
   background-color:#FFF2D6;
 }
 #Change_password{
-  margin-top: 100px;
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  padding: 30px;
+  margin-top: 30px
+}
+#wrap{
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  padding: 30px
 }
 #Inputs{
   padding-top: 20px;
@@ -109,7 +117,7 @@ button{
   display: none;
 }
 input[type="password"]{
-
+  border: 1px solid #D9DEE3;
   border-radius: 6px;
   height: 40px;
   width: 100%;

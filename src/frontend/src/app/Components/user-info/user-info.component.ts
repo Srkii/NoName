@@ -11,7 +11,7 @@ import { ChangePassword } from '../../Entities/ChangePassword';
   styleUrls: ['./user-info.component.css']
 })
 export class UserInfoComponent implements OnInit {
-  public userInfo: any;
+  public userInfo:any;
   public role:any;
   public profilePic:any;
   public passwordCheck:any;
@@ -26,51 +26,30 @@ export class UserInfoComponent implements OnInit {
     if(div!=null) div.style.display = type;
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(){
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token')
     if (token) {
-      this.userInfo = await this.userinfoService.getUserInfo(id,token);
-      this.profilePic = await this.userinfoService.getProfilePhoto(id,token);
-      if(this.profilePic.url != null)this.url = this.profilePic.url;
-      if(this.userInfo.role == 1){
-        this.role="Project manager";
-      }else if(this.userInfo.role == 2){
-        this.role="Member";
-      }else this.role="Admin";
-    } else {
+      this.userinfoService.getUserInfo(id,token).subscribe({
+        next: (response) =>{
+          this.userInfo = response;
+          console.log(response);
+          if(response.profilePicUrl!=null) this.url = response.profilePicUrl;
+          if(this.userInfo.role == 1){
+            this.role="Project manager";
+          }else if(this.userInfo.role == 2){
+            this.role="Member";
+          }else this.role="Admin";
+        },
+        error: (error) => {
+          console.log(error);
+          console.log("GET USER INFO FAILED");
+        }
+      });
+    }else {
       console.error("Token not found in local storage");
     }
   }
-
-  async onClickUser(): Promise<void> {
-    if (this.router.url === '/userinfo') return;
-    try {
-      await this.router.navigate(['/userinfo']);
-    } catch (error) {
-      console.error("Redirect failed:", error);
-    }
-  }
-
-  async onClickHome(): Promise<void> {
-    if (this.router.url === '/home') return;
-    try {
-      await this.router.navigate(['/home']);
-    } catch (error) {
-      console.error("Redirect failed:", error);
-    }
-  }
-
-  change_info(){
-    var changeinfodiv = document.getElementById('update');
-    if(changeinfodiv!=null){
-      this.visibility_change('block',changeinfodiv);
-      setTimeout(function(){
-        if(changeinfodiv!=null)changeinfodiv.style.opacity='1';
-      },10);
-    }
-  }//nepotrebno
-
 
   apply_changes(){
     if(this.newData.CurrentPassword==''){
@@ -111,7 +90,14 @@ export class UserInfoComponent implements OnInit {
     if(imageData != null){
       var id = Number(localStorage.getItem('id'));
       var token = localStorage.getItem('token');
-      var response = this.uploadservice.UploadImage(id,imageData,token);
+      this.uploadservice.UploadImage(id,imageData,token).subscribe({
+        next: (response) => {
+          console.log("RESPONSE",response);
+        },
+        error: (error) =>{
+          console.log(error);
+        }
+      });
     }
     else{
       console.log("no data...");
@@ -119,14 +105,5 @@ export class UserInfoComponent implements OnInit {
   }
   onClickUpload(){
     document.getElementById("inp")?.click();
-  }
-  RemoveImage(){
-    console.log("removing user profile picture...");
-    if(this.url != "../../../assets/1234.png"){
-      var id = localStorage.getItem('id');
-      var token = localStorage.getItem('token');
-      this.uploadservice.RemoveImage(id,token);
-      this.url=this.defaulturl;
-    }
   }
 }
