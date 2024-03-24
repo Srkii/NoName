@@ -15,8 +15,8 @@ export class UserInfoComponent implements OnInit {
   public role:any;
   public profilePic:any;
   public passwordCheck:any;
-  public defaulturl="../../../assets/1234.png";
-  public url="../../../assets/1234.png";
+  public defaulturl="../../../assets/profile_photo_placeholders/1234.png";
+  public url="../../../assets/profile_photo_placeholders/1234.png";
   newData: ChangePassword = {
     CurrentPassword:""
   }
@@ -116,8 +116,5 @@ export class UserInfoComponent implements OnInit {
     else{
       console.log("no data...");
     }
-  }
-  onClickUpload(){
-    document.getElementById("inp")?.click();
   }
 }

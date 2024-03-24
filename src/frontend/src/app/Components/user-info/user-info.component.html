@@ -8,14 +8,14 @@
           <!--informacije o korisniku , div sa slikom i div sa detaljima o korisniku-->
           <div id="User_banner">
             <div id="Image_container">
-              <img [src]="url" id="Profile_image" (click)="onClickUpload()">
-              <img id="Overlay_image" src="../../../assets/change_photo.jpg" (click)="onClickUpload()">
+              <img [src]="url" id="Profile_image" (click)="inputClick.click()">
+              <img id="Overlay_image" src="../../../assets/profile_photo_placeholders/change_photo.jpg" (click)="inputClick.click()">
             </div>
             <span id="Role_name" style="padding-left: 5px;">
               <span id="role">{{role}}</span><br>
               <span id="name">{{userInfo.firstName}} {{userInfo.lastName}}</span>
             </span>
-            <input id="inp" type="file" style="display: none;" (change)="imageSelected($event)">
+            <input #inputClick id="inp" type="file" style="display: none;" (change)="imageSelected($event)">
           </div>
           <div id="User_info">
             <h4>Details</h4>
@@ -50,5 +50,6 @@
             <button type="submit" (click)="apply_changes()">Change password</button>
           </div>
         </div>
+        <app-upload-attachment></app-upload-attachment>
   </div>
 </body>
