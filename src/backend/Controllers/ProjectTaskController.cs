@@ -1,9 +1,8 @@
 ﻿using backend.Data;
+using backend.DTO;
 using backend.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
@@ -59,6 +58,23 @@ namespace backend.Controllers
                 return NotFound();
             }
             return task;
+        }
+
+        [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
+        public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
+        {
+            var task = await _context.ProjectTasks.FindAsync(dto.Id);
+
+            if(task == null)
+                return BadRequest("Task doesn't exists");
+            
+            if(dto.TaskName != null) task.TaskName = dto.TaskName;
+            if(dto.Description != null) task.Description = dto.Description;
+            if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(task);
         }
     }
 }
