@@ -25,12 +25,9 @@ export class MyTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
-    setTimeout(() => {
-      /** spinner ends after 5 seconds */
-      this.spinner.hide();
-    }, 700);
     this.myTasksService.GetProjectTasks().subscribe((tasks: ProjectTask[]) => {
       this.tasks = tasks;
+      this.spinner.hide();
     });
   }
   togglePopUp(task: ProjectTask) {

@@ -15,12 +15,9 @@ export class MyProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
-    setTimeout(() => {
-      /** spinner ends after 5 seconds */
-      this.spinner.hide();
-    }, 700);
     this.myProjectsService.getProjects().subscribe((projects: Project[]) => {
       this.projects = projects;
+      this.spinner.hide();
     });
   }
 
