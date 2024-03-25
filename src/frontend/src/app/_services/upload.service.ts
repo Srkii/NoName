@@ -23,4 +23,17 @@ export class UploadService {
   getImage(filename:string){
     return this.httpClient.get(`https://localhost:5001/api/FileUpload/images/${filename}`,{responseType:'blob'});
   }
+
+  UploadFile(id:any,file:File,token:any){//neki nacin za pronalazenje id-a taska
+    //upload logic
+    //nije gotovo
+    const formData = new FormData();
+    formData.append('file',file,file.name);
+
+    var httpheader = new HttpHeaders({
+      "Authorization": `Bearer ${token}`
+    });
+
+    return this.httpClient.post<any>(`https://localhost:5001/api/FileUpload/uploadfile/${id}`,formData,{headers:httpheader});
+  }
 }

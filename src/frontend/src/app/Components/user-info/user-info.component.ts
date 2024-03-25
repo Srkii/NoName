@@ -1,5 +1,5 @@
 import { UploadService } from '../../_services/upload.service';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, input, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { AppUser } from '../../Entities/AppUser';
@@ -98,6 +98,16 @@ export class UserInfoComponent implements OnInit {
       }
     });
   }
+
+  imageWidth = signal(0);
+  @Input() set width(val:number){
+    this.imageWidth.set(val);
+  }
+  imageHeight = signal(0);
+  @Input() set height(val:number){
+    this.imageHeight.set(val);
+  }
+
   imageSelected(event:any){
     const imageData:File = event.target.files[0];
     if(imageData != null){
@@ -114,7 +124,7 @@ export class UserInfoComponent implements OnInit {
       });
     }
     else{
-      console.log("no data...");
+      console.log("no image data.");
     }
   }
 }

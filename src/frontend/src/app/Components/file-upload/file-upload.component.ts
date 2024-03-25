@@ -9,9 +9,23 @@ import { Component } from '@angular/core';
 export class FileUploadComponent {
 
   constructor(private readonly uploadService:UploadService){}
-  fileDroppedHandler($event:any){
-    console.log("Xd");
-    var file = $event.target.files[0];
-    console.log(file);
+  fileInputHandler($event:any){
+    var file:File = $event.target.files[0];
+    var task_id = localStorage.getItem('selected_task');//ne znam sta ovde da radim..
+    var token = localStorage.getItem('token');
+    if(file!=null)
+    {
+      this.uploadService.UploadFile(task_id,file,token).subscribe({
+        next: (response) =>{
+          console.log(response);
+        },
+        error:(error) =>{
+          console.log(error);
+        }
+      });
+    }
+    else{
+      console.log("no file data");
+    }
   }
 }

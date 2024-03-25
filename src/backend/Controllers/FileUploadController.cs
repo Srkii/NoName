@@ -42,6 +42,7 @@ namespace backend.Controllers
 
             return File(imageBytes,"image/jpeg");
         }
+        [AllowAnonymous]
         [HttpPost("uploadfile/{id}")]
         public async Task<ActionResult> UploadFile(int id,IFormFile file){
             if(file==null) return BadRequest("file is null");
