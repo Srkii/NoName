@@ -43,9 +43,9 @@
             <th>START DATE</th>
             <th>END DATE</th>
           </tr>
-          <tr *ngFor="let project of projects">
+          <tr *ngFor="let project of projects" (click)="goToProject(project.id)">
             <ng-container *ngIf="isProjectVisible(project)">
-              <td>{{ project.projectName }}</td>
+              <td class="project-name">{{ project.projectName }}</td>
               <td>Project owner name here</td>
               <td [ngClass]="getStatusString(project.projectStatus)">
                 <p>{{ getStatusString(project.projectStatus) }}</p>

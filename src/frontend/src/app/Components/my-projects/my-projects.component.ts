@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from "ngx-spinner";
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-projects',
@@ -11,7 +12,11 @@ import { NgxSpinnerService } from "ngx-spinner";
 export class MyProjectsComponent implements OnInit {
   projects: Project[] = [];
 
-  constructor(private myProjectsService: MyProjectsService, private spinner: NgxSpinnerService) {}
+  constructor(
+    private myProjectsService: MyProjectsService,
+    private spinner: NgxSpinnerService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.spinner.show();
@@ -73,5 +78,9 @@ export class MyProjectsComponent implements OnInit {
       .toLowerCase()
       .includes(this.ProjectName.toLowerCase());
     return statusMatch && priorityMatch && nameMatch;
+  }
+
+  goToProject(id: number) {
+    this.router.navigate(['/project', id]);
   }
 }

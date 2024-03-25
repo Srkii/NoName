@@ -19,6 +19,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     ForgotResetComponent,
     MyProjectsComponent,
     MyTasksComponent,
+    ProjectDetailComponent,
   ],
   imports: [
     BrowserModule,

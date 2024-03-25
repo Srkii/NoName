@@ -10,7 +10,16 @@ body {
 .nav {
   display: inline;
 }
-
+.project-name:hover {
+  cursor: pointer;
+  background-color: #e7e7ff !important;
+  color: #5f61e6 !important;
+}
+.project-name.clicked {
+  cursor: pointer;
+  background-color: #e7e7ff !important;
+  color: #5f61e6 !important;
+}
 #all {
   margin-top: 30px;
   /* margin-left: 150px; */

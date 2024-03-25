@@ -1,0 +1,32 @@
+<div *ngIf="project">
+  <h2>Project Details</h2>
+  <form>
+    <div>
+      <label for="projectName">Project Name:</label>
+      <input type="text" id="projectName" name="projectName" [(ngModel)]="project.projectName" readonly>
+    </div>
+    <div>
+      <label for="projectStatus">Project Status:</label>
+      <input type="text" id="projectStatus" name="projectStatus" [(ngModel)]="project.projectStatus" readonly>
+    </div>
+    <div>
+      <label for="priority">Priority:</label>
+      <input type="text" id="priority" name="priority" [(ngModel)]="project.priority" readonly>
+    </div>
+    <div>
+      <label for="startDate">Start Date:</label>
+      <input type="text" id="startDate" name="startDate" [value]="project.startDate | date:'yyyy-MM-dd'" readonly>
+    </div>
+    <div>
+      <label for="endDate">End Date:</label>
+      <input type="text" id="endDate" name="endDate" [value]="project.endDate | date:'yyyy-MM-dd'" readonly>
+    </div>
+    <!-- Add more fields as needed -->
+    <h3>Project Tasks</h3>
+    <ul>
+      <li *ngFor="let task of projectTasks">
+        {{ task.taskName }} - {{ task.endDate | date }}
+      </li>
+    </ul>
+  </form>
+</div>

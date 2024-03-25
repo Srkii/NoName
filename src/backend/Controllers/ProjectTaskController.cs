@@ -3,6 +3,7 @@ using backend.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
@@ -60,5 +61,16 @@ namespace backend.Controllers
             }
             return task;
         }
+
+        [HttpGet("ByProject/{projectId}")] // New method to get tasks by project ID
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId)
+        {
+            var tasks = await _context.ProjectTasks
+                .Where(t => t.ProjectId == projectId)
+                .Include(t => t.Project) // Include project details if needed
+                .ToListAsync();
+            return tasks;
+        }
     }
 }
+
