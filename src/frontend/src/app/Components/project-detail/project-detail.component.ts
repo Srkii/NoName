@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project } from '../../Entities/Project';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { ProjectTask } from '../../Entities/ProjectTask';
+import { ProjectTask, TaskStatus } from '../../Entities/ProjectTask';
 import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
@@ -14,6 +14,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 export class ProjectDetailComponent implements OnInit {
   project: Project | undefined;
   projectTasks: ProjectTask[] = [];
+  viewMode: string = 'table';
 
   constructor(
     private route: ActivatedRoute,
@@ -38,5 +39,9 @@ export class ProjectDetailComponent implements OnInit {
         this.spinner.hide();
       });
     }
+  }
+
+  getStatusString(status: number): string {
+    return TaskStatus[status];
   }
 }

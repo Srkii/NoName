@@ -1,32 +1,41 @@
-<div *ngIf="project">
-  <h2>Project Details</h2>
-  <form>
-    <div>
-      <label for="projectName">Project Name:</label>
-      <input type="text" id="projectName" name="projectName" [(ngModel)]="project.projectName" readonly>
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div *ngIf="project">
+      <h5 class="card-header">{{ project.projectName }}</h5>
+      <div>
+        <button class="btn btn-primary btn-lg" (click)="viewMode = 'table'"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+          <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+        </svg> Table View</button>
+        <button class="btn btn-primary btn-lg" (click)="viewMode = 'view1'" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-kanban" viewBox="0 0 16 16">
+          <path d="M13.5 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm-11-1a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+          <path d="M6.5 3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm-4 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm8 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1z"/>
+        </svg> Kanban (Disabled)</button>
+        <button class="btn btn-primary btn-lg" (click)="viewMode = 'view2'" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-steps" viewBox="0 0 16 16">
+          <path d="M.5 0a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 .5 0M2 1.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
+        </svg> Gantt (Disabled)</button>
+      </div>
+      <div class="card" *ngIf="viewMode === 'table'">
+        <div class="table-responsive text-nowrap">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Task Name</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            <tr *ngFor="let task of projectTasks">
+              <td><span class="fw-medium">{{ task.taskName }}</span></td>
+              <td>{{ task.startDate | date }}</td>
+              <td>{{ task.endDate | date }}</td>
+              <td><span class="badge bg-label-primary me-1">{{ getStatusString(task.taskStatus) }}</span></td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <div>
-      <label for="projectStatus">Project Status:</label>
-      <input type="text" id="projectStatus" name="projectStatus" [(ngModel)]="project.projectStatus" readonly>
-    </div>
-    <div>
-      <label for="priority">Priority:</label>
-      <input type="text" id="priority" name="priority" [(ngModel)]="project.priority" readonly>
-    </div>
-    <div>
-      <label for="startDate">Start Date:</label>
-      <input type="text" id="startDate" name="startDate" [value]="project.startDate | date:'yyyy-MM-dd'" readonly>
-    </div>
-    <div>
-      <label for="endDate">End Date:</label>
-      <input type="text" id="endDate" name="endDate" [value]="project.endDate | date:'yyyy-MM-dd'" readonly>
-    </div>
-    <!-- Add more fields as needed -->
-    <h3>Project Tasks</h3>
-    <ul>
-      <li *ngFor="let task of projectTasks">
-        {{ task.taskName }} - {{ task.endDate | date }}
-      </li>
-    </ul>
-  </form>
+  </div>
 </div>
