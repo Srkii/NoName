@@ -16,6 +16,7 @@ namespace backend.Extensions
             services.AddCors();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IUploadService, UploadService>();
             return services;
         }
     }

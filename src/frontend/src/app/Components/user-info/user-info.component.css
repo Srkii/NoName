@@ -10,10 +10,11 @@ Password changed successfully color #83EDA1
 Change photo must have a hover over the image as an interactable...
 */
 body{
-  width:900px;
+  width:60%;
   margin: auto;
   color: #697A8D;
   font-family: "Public Sans" sans-serif;
+  font-size: 14px;
 }
 h4{
   color: #566A7F;

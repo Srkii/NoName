@@ -1,0 +1,8 @@
+<!-- <div id="dnd">
+  <img id="uploadimg" src="../../../assets/upload_files/file_upload_icon.webp">
+  <input type="file" (change)="fileDroppedHandler($event)" id="fileinput">
+</div>
+ -->
+<div id="wrap" (click)="inputClick.click()">
+  <input id="inputFile" type="file" #inputClick (change)="fileDroppedHandler($event)">
+</div>

@@ -19,7 +19,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { NgxSpinnerModule } from "ngx-spinner";
-
+import { FileUploadComponent } from './Components/file-upload/file-upload.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +33,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     ForgotResetComponent,
     MyProjectsComponent,
     MyTasksComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,7 +45,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
     }), // ToastrModule added
-    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
