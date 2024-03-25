@@ -12,10 +12,10 @@
       <li class="nav-item active" *ngIf="isAdmin()">
         <a class="nav-link" routerLink="/admin">Manage Users</a>
       </li>
-      <li class="nav-item active">
+      <li class="nav-item active" *ngIf="!isAdmin() && isProjectManager()">
         <a class="nav-link" routerLink="/myprojects">My Projects</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!isAdmin()">
         <a class="nav-link" routerLink="/mytasks" >My Tasks</a>
       </li>
       </ul>
