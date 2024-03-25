@@ -28,14 +28,11 @@ namespace backend.Controllers
                 EndDate = taskDto.EndDate,
                 TaskStatus = taskDto.TaskStatus,
                 ProjectId = taskDto.ProjectId,
-                // Avoid assigning the whole project object, just assign the ID
-                // Project = taskDto.Project,
             };
 
             _context.ProjectTasks.Add(task);
             await _context.SaveChangesAsync();
 
-            // Return 201 Created status with the created task DTO
             return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
         }
 
@@ -43,7 +40,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetProjectTasks()
         {
             var tasks = await _context.ProjectTasks
-                .Include(task => task.Project) // Include the associated project data
+                .Include(task => task.Project)
                 .ToListAsync();
             return tasks;
         }
@@ -71,6 +68,22 @@ namespace backend.Controllers
             if(dto.TaskName != null) task.TaskName = dto.TaskName;
             if(dto.Description != null) task.Description = dto.Description;
             if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(task);
+        }
+
+        [HttpPut("changeTaskSchedule")] // GET: api/projectTask/changeTaskSchedule
+        public async Task<ActionResult<ProjectTask>> ChangeTaskSchedule(TaskScheduleDto dto)
+        {
+            var task = await _context.ProjectTasks.FindAsync(dto.Id);
+
+            if(task == null)
+                return BadRequest("Task doesn't exists");
+            
+            if(dto.StartDate != null) task.StartDate = (DateTime)dto.StartDate;
+            if(dto.EndDate != null) task.EndDate = (DateTime)dto.EndDate;
 
             await _context.SaveChangesAsync();
 
