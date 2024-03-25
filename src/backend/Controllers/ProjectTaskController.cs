@@ -89,5 +89,20 @@ namespace backend.Controllers
 
             return Ok(task);
         }
+
+        [HttpPut("addTaskDependency")] // GET: api/projectTask/addTaskDependency
+        public async Task<ActionResult<ProjectTask>> AddTaskDependency(TaskDependencyDto dto)
+        {
+            var taskDep = new TaskDependency
+            {
+                TaskId = dto.TaskId,
+                DependencyTaskId = dto.DependencyTaskId
+            };
+
+            await _context.TaskDependencies.AddAsync(taskDep);
+            await _context.SaveChangesAsync();
+
+            return Ok(taskDep);
+        }
     }
 }
