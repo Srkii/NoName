@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { AppUser } from '../../Entities/AppUser';
 import { ChangePassword } from '../../Entities/ChangePassword';
-
+import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -21,12 +21,17 @@ export class UserInfoComponent implements OnInit {
     CurrentPassword:""
   }
 
-  constructor(private userinfoService: UserinfoService, private router: Router,private uploadservice:UploadService) {}
+  constructor(private userinfoService: UserinfoService, private router: Router,private uploadservice:UploadService, private spinner:NgxSpinnerService) {}
   visibility_change(type:string,div:any){
     if(div!=null) div.style.display = type;
   }
 
   ngOnInit(){
+    this.spinner.show();
+    this.UserInfo();
+    this.spinner.hide();
+  }
+  UserInfo(){
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token')
     if (token) {
@@ -63,7 +68,6 @@ export class UserInfoComponent implements OnInit {
       console.error("Token not found in local storage");
     }
   }
-
   apply_changes(){
     if(this.newData.CurrentPassword==''){
       alert("input old password for verification...");
@@ -99,14 +103,6 @@ export class UserInfoComponent implements OnInit {
     });
   }
 
-  imageWidth = signal(0);
-  @Input() set width(val:number){
-    this.imageWidth.set(val);
-  }
-  imageHeight = signal(0);
-  @Input() set height(val:number){
-    this.imageHeight.set(val);
-  }
 
   imageSelected(event:any){
     const imageData:File = event.target.files[0];
