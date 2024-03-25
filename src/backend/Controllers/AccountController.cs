@@ -1,7 +1,9 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
-using backend.DTO;
+using backend.DTO.AccountDTOs;
+using backend.DTO.EmailDTOs;
+using backend.DTO.UserDTOs;
 using backend.Entities;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;

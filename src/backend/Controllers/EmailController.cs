@@ -1,5 +1,5 @@
 ﻿using backend.Data;
-using backend.DTO;
+using backend.DTO.EmailDTOs;
 using backend.Entities;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;

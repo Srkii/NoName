@@ -1,5 +1,5 @@
 ﻿using backend.Data;
-using backend.DTO;
+using backend.DTO.TaskDTOs;
 using backend.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
