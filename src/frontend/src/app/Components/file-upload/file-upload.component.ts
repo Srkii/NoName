@@ -7,14 +7,11 @@ import { Component } from '@angular/core';
   styleUrl: './file-upload.component.css'
 })
 export class FileUploadComponent {
-  file:any;
 
   constructor(private readonly uploadService:UploadService){}
-
   fileDroppedHandler($event:any){
-    const data:File = $event.target.files[0];
-    if(data != null){
-
-    }
+    console.log("Xd");
+    var file = $event.target.files[0];
+    console.log(file);
   }
 }
