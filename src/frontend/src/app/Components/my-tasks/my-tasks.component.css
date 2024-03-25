@@ -12,49 +12,61 @@ body {
 
 .all {
   margin-top: 30px;
-  margin-left: 150px;
+  margin: auto; /* Center the div horizontally */
   padding: 20px;
-  width: 80%;
-  height: 40vh;
+  width: 85%;
+  min-height: 10vh; /* Set a minimum height */
   background-color: #ffffff;
   color: #697a8d;
-  border-color: solid #d9dee3;
-  border-width: 0;
+  border: solid 1px #d9dee3;
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  overflow: auto;
+  overflow-y: hidden; /* Hide the vertical scrollbar */
+  overflow-x: hidden; /* Hide the vertical scrollbar */
+  box-sizing: border-box; /* Include padding and border in the total width and height */
 }
 
 table {
   color: #697a8d;
   font-size: 12px;
-  margin-top: 15px;
-  margin-left: -20px;
   border: 1px solid lightgray;
   border-collapse: collapse;
-  padding: 6px;
-  width: 103%;
+  /* padding: 6px; */
+  /* margin-left: -20px; */
+  margin-bottom: -20px;
+  margin-top: 10px;
+  width: 100%;
   /* margin-left: 20px; */
   border-left: none;
   border-right: none;
 }
+@media (max-width: 1200px) {
+  td {
+    padding: 2px;
+  }
+}
 th {
+  font-size: 14px;
   border: 1.5px solid lightgray;
-  text-align: center;
   font-weight: 600; /* thinner text */
   padding: 5px;
-  /* border-left: none; */
-  /* border-right: none; */
+  border-left: none;
+  border-right: none;
 }
 td:first-child {
   text-align: center;
 }
 td {
-  padding: 15px;
+  padding: 10px;
   border: 1px solid lightgray;
-  /* border-left: none; */
-  /* border-right: none; */
-  padding-left: 20px;
+  border-left: none;
+  border-right: none;
+  /* padding-left: 20px; */
+  font-size: 12px;
+}
+.name {
+  font-size: 14px;
+  font-weight: bold;
 }
 .name:hover {
   cursor: pointer;
@@ -92,6 +104,7 @@ p {
   z-index: 999; /* Ensure it appears above other content */
   font-weight: 600;
   font-size: 12px;
+  overflow: hidden;
 }
 
 #popupTaskName {

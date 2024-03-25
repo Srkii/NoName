@@ -15,7 +15,7 @@ body {
   margin: auto; /* Center the div horizontally */
   padding: 20px;
   width: 85%;
-  min-height: 80vh; /* Set a minimum height */
+  min-height: 10vh; /* Set a minimum height */
   background-color: #ffffff;
   color: #697a8d;
   border: solid 1px #d9dee3;
@@ -50,29 +50,34 @@ table {
   font-size: 12px;
   border: 1px solid lightgray;
   border-collapse: collapse;
-  padding: 6px;
-  margin-left: -20px;
+  /* padding: 6px; */
+  /* margin-left: -20px; */
+  margin-bottom: -20px;
   margin-top: 10px;
-  width: 103.5%;
+  width: 100%;
   /* margin-left: 20px; */
   border-left: none;
   border-right: none;
 }
+@media (max-width: 1200px) {
+  td {
+    padding: 2px;
+  }
+}
 th {
   font-size: 14px;
   border: 1.5px solid lightgray;
-  text-align: center;
   font-weight: 600; /* thinner text */
   padding: 5px;
   border-left: none;
   border-right: none;
 }
 td {
-  padding: 15px;
+  padding: 10px;
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
-  padding-left: 20px;
+  /* padding-left: 20px; */
   font-size: 12px;
 }
 #name {
@@ -81,7 +86,7 @@ td {
 }
 p {
   text-align: center;
-  padding: 5px;
+  padding: 2px;
   border-radius: 8px;
   font-weight: 600;
 }

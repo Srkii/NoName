@@ -9,7 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrl: './my-tasks.component.css',
-  providers: [DatePipe] // Provide DatePipe here
+  providers: [DatePipe], // Provide DatePipe here
 })
 export class MyTasksComponent implements OnInit {
   tasks: ProjectTask[] = [];
@@ -25,13 +25,19 @@ export class MyTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
-    setTimeout(() => {
-      /** spinner ends after 5 seconds */
+    const userId = localStorage.getItem('id'); // Get the user ID from local storage
+    if (userId) {
+      this.myTasksService
+        .GetUserTasks(+userId)
+        .subscribe((tasks: ProjectTask[]) => {
+          // Convert userId to number
+          this.tasks = tasks;
+          this.spinner.hide();
+        });
+    } else {
+      // Handle case where user ID is not found, e.g., redirect to login
       this.spinner.hide();
-    }, 700);
-    this.myTasksService.GetProjectTasks().subscribe((tasks: ProjectTask[]) => {
-      this.tasks = tasks;
-    });
+    }
   }
   togglePopUp(task: ProjectTask) {
     const popUp = document.querySelector('.pop') as HTMLElement;
@@ -59,9 +65,11 @@ export class MyTasksComponent implements OnInit {
         popUpTaskName.textContent = task.taskName;
         popUpDueDate.textContent = this.datePipe.transform(
           task.endDate,
-          'M/d/y'
+          'yyyy-MM-dd HH:mm:ss'
         ); // Convert Date to string
-        popUpOriginProject.textContent = task.project.projectName;
+        popUpOriginProject.textContent = task.project
+          ? task.project.projectName
+          : 'No Project'; // Check if project is not null or undefined
         popUp.style.display = 'block';
       }
       this.setMarkButtonInnerHTML();
