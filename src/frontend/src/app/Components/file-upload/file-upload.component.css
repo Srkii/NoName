@@ -1,13 +1,21 @@
-#upload_button{
-  color: #FFFFFF;
-  background-color:#696CFF;
-  width: 150px;
-  height: 50px;
-  border-radius: 8px;
-  border: none;
-  align-items: center;
+.form-control {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  width: 95%;
+  margin-left: 20px;
 }
-svg{
-  width: 20px;
-  height: 20px;
+.form-control[type="file"]:not(:disabled):not([readonly]):hover {
+  cursor: pointer;
+  background-color: #e7e7ff !important;
+  color: #5f61e6 !important;
+}
+input:hover {
+  outline: none; /* Remove default focus outline */
+  border: 1px solid #5f61e6 !important; /* Add custom border */
+  box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
+}
+input:focus {
+  outline: none; /* Remove default focus outline */
+  border: 1px solid #5f61e6 !important; /* Add custom border */
+  box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
 }
