@@ -20,7 +20,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FileUploadComponent } from './Components/file-upload/file-upload.component';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';import { PopupComponent } from './Components/popup/popup.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +35,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     ForgotResetComponent,
     MyProjectsComponent,
     MyTasksComponent,
-    FileUploadComponent,
+    PopupComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,

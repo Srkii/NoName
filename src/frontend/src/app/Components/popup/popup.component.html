@@ -1,0 +1,31 @@
+<div class="pop" id="popUp" *ngIf="task">
+  <h6 id="popupTaskName">{{ task.taskName }}</h6>
+  <br />
+  <p class="header">
+    DUE DATE <span id="popupDueDate">{{ task.endDate | date }}</span>
+  </p>
+  <p class="header">
+    ORIGIN PROJECT
+    <span id="popupOriginProject">{{
+      task.project ? task.project.projectName : "No Project"
+    }}</span>
+  </p>
+  <p class="header">ASSIGNEES</p>
+  <input class="assignees" type="text" [value]="" />
+  <p class="header">ATTACH FILE</p>
+  <input class="form-control" type="file" />
+  <p class="header">DESCRIPTION</p>
+  <input class="assignees" type="text" [value]="task.description" />
+  <br /><br />
+  <button
+    class="mark"
+    [style.backgroundColor]="task && task.taskStatus === 2 ? 'green' : ''"
+  >
+    {{ task && task.taskStatus === 2 ? "Completed" : "Mark Complete" }}
+  </button>
+
+  <div class="comments">
+    <p class="header">COMMENTS</p>
+    <input class="comment" type="text" placeholder="Add a comment" />
+  </div>
+</div>
