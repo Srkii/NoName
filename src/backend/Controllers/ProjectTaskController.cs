@@ -19,7 +19,7 @@ namespace backend.Controllers
         }
 
         [HttpPost] // POST: api/projectTask/
-        public async Task<ActionResult<ProjectTaskDto>> CreateTask(ProjectTaskDto taskDto)
+        public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
         {
             var task = new ProjectTask
             {
@@ -60,5 +60,21 @@ namespace backend.Controllers
             }
             return task;
         }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
+        {
+            var tasks = await _context.ProjectTasks
+                                      .Include(task => task.Project)
+                                      .Join(_context.TaskMembers,
+                                            task => task.Id,
+                                            member => member.TaskId,
+                                            (task, member) => new { task, member })
+                                      .Where(tm => tm.member.AppUserId == userId)
+                                      .Select(tm => tm.task) // Change this line
+                                      .ToListAsync();
+            return tasks;
+        }
+
     }
 }

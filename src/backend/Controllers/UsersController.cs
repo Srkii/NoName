@@ -40,7 +40,7 @@ namespace backend.Controllers
 
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser/{id}")] // /api/users/updateUser
-    public async Task<ActionResult<UserDto>> UpdateUser(int id,[FromBody] UpdateUserDto data)
+    public async Task<ActionResult<UserDto>> UpdateUser(int id, [FromBody] UpdateUserDto data)
     {
       var user = await context.Users.FindAsync(id);
       if (data.FirstName != null && data.FirstName != "") user.FirstName = data.FirstName;
@@ -104,17 +104,17 @@ namespace backend.Controllers
     }
 
     [HttpPut("changePassword/{id}")] // /api/users/changePassword
-    public async Task<ActionResult<UserDto>> ChangePassword(int id,[FromBody] ChangePasswordDto data)
+    public async Task<ActionResult<UserDto>> ChangePassword(int id, [FromBody] ChangePasswordDto data)
     {
       var user = await context.Users.FindAsync(id);
-      
-      if(!VerifyPassword(user,data.CurrentPassword))
+
+      if (!VerifyPassword(user, data.CurrentPassword))
       {
         return Unauthorized("Password is unvalid");
       }
 
       var hmac = new HMACSHA512();
-      user.PasswordHash =  hmac.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
+      user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
       user.PasswordSalt = hmac.Key;
       await context.SaveChangesAsync();
 
@@ -131,7 +131,7 @@ namespace backend.Controllers
     {
       using var hmac = new HMACSHA512(user.PasswordSalt);
       var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-      
+
       return computedHash.SequenceEqual(user.PasswordHash);
     }
 
