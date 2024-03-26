@@ -18,6 +18,8 @@ export class MyTasksComponent implements OnInit {
   showPopUp: boolean = false;
   task!: ProjectTask;
   TaskStatus: any;
+  previousTaskStatus: TaskStatus | null = null;
+  static showPopUp: boolean;
 
   constructor(
     private myTasksService: MyTasksService,
@@ -26,9 +28,6 @@ export class MyTasksComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) {}
 
-  closePopUp(): void {
-    this.showPopUp = false;
-  }
   ngOnInit(): void {
     this.spinner.show();
     const userId = localStorage.getItem('id'); // Get the user ID from local storage
@@ -49,6 +48,7 @@ export class MyTasksComponent implements OnInit {
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); // Prevent event bubbling if necessary
     // Assuming GetProjectTaskById is a method that fetches the task details
+    const row = document.querySelector('.red') as HTMLElement;
     this.myTasksService
       .GetProjectTaskById(taskId)
       .subscribe((task: ProjectTask) => {
@@ -57,6 +57,7 @@ export class MyTasksComponent implements OnInit {
           this.clickedTask.id === taskId &&
           this.showPopUp
         ) {
+          row.style.backgroundColor = '';
           this.showPopUp = false;
           this.clickedTask = null;
         } else {
@@ -66,36 +67,61 @@ export class MyTasksComponent implements OnInit {
       });
   }
 
-  toggleTaskCompletion(task: ProjectTask): void {
-    if (task && task.taskStatus) {
-      task.taskStatus =
-        task.taskStatus === TaskStatus.Completed
-          ? TaskStatus.InProgress
-          : TaskStatus.Completed;
-      // Optionally, update the task status on the server here
-      this.updateTaskUI(task);
-    }
-  }
-
-  updateTaskUI(task: ProjectTask): void {
-    // Assuming you have a method to get the button and checkbox elements by task ID
-    const markButton = document.querySelector(
-      `#markButton-${task.id}`
-    ) as HTMLElement;
-    const checkBox = document.querySelector(
-      `#checkBox-${task.id}`
-    ) as HTMLInputElement;
-
-    if (task.taskStatus === TaskStatus.Completed) {
-      markButton.innerHTML = 'Completed';
-      markButton.style.backgroundColor = 'green';
-      checkBox.checked = true;
+  toggleTaskCompletion(event: any, task: ProjectTask): void {
+    event.stopPropagation();
+    if (event.target.checked) {
+      this.previousTaskStatus = task.taskStatus;
+      task.taskStatus = TaskStatus.Completed;
     } else {
-      markButton.innerHTML = 'Mark Complete';
-      markButton.style.backgroundColor = ''; // Reset to default
-      checkBox.checked = false;
+      if (this.previousTaskStatus !== null) {
+        task.taskStatus = this.previousTaskStatus;
+        this.previousTaskStatus = null;
+      } else {
+        task.taskStatus = TaskStatus.InProgress;
+      }
+    }
+    // Update the task status on the server
+    this.myTasksService.updateTaskStatus(task.id, task).subscribe(
+      (updatedTask: ProjectTask) => {
+        // Optionally, handle the updated task response from the server
+        console.log('Task status updated successfully:', updatedTask);
+      },
+      (error: any) => {
+        // Handle any errors that occur during the update process
+        // console.error('Error updating task status:', error);
+      }
+    );
+  }
+
+  handleTaskUpdate(updatedTask: ProjectTask): void {
+    // Update the tasks array with the updated task
+    // This can be done by finding the task by its ID and updating its status
+    const index = this.tasks.findIndex((task) => task.id === updatedTask.id);
+    if (index !== -1) {
+      this.tasks[index] = updatedTask;
+      // Optionally, you might want to persist this change to a backend server
     }
   }
+  sortOrder: 'asc' | 'desc' = 'asc'; // Variable to track sorting order
+
+  sortTasks() {
+    if (this.sortOrder === 'asc') {
+      this.tasks.sort((a, b) => {
+        const endDateA = new Date(a.endDate).getTime();
+        const endDateB = new Date(b.endDate).getTime();
+        return endDateA - endDateB;
+      });
+      this.sortOrder = 'desc'; // Update sorting order
+    } else {
+      this.tasks.sort((a, b) => {
+        const endDateA = new Date(a.endDate).getTime();
+        const endDateB = new Date(b.endDate).getTime();
+        return endDateB - endDateA;
+      });
+      this.sortOrder = 'asc'; // Update sorting order
+    }
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const popUp = document.querySelector('.pop') as HTMLElement;

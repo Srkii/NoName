@@ -82,15 +82,21 @@ p {
   border-radius: 8px;
   font-weight: 600;
 }
+.filter {
+  margin-left: 2%;
+}
+.filter:hover {
+  cursor: pointer;
+}
 
 /* .mark:hover {
   cursor: pointer;
-  box-shadow: 0 0 3px #5f61e6; 
+  box-shadow: 0 0 3px #5f61e6;
   filter: brightness(120%);
 }
 .mark:focus {
   background-color: #3fb94c;
-  box-shadow: 0 0 3px #3fb94c; 
+  box-shadow: 0 0 3px #3fb94c;
 }
 .checked-button {
   background-color: #3fb94c;

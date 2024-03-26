@@ -78,5 +78,45 @@ namespace backend.Controllers
             return tasks;
         }
 
+        [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
+        public async Task<IActionResult> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
+        {
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            // Update task properties
+            task.TaskStatus = taskDto.TaskStatus;
+
+            // No need to set EntityState.Modified, as EF Core tracks changes automatically
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjectTaskExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool ProjectTaskExists(int id)
+        {
+            return _context.ProjectTasks.Any(e => e.Id == id);
+        }
+
+
     }
 }

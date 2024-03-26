@@ -24,4 +24,10 @@ export class MyTasksService {
   GetProjectTaskById(taskId: number): Observable<ProjectTask> {
     return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}`);
   }
+  updateTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(
+      `${this.baseUrl}/updateStatus/${taskId}`,
+      task
+    );
+  }
 }
