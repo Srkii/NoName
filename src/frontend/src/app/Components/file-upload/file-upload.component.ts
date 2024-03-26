@@ -11,7 +11,7 @@ export class FileUploadComponent {
   constructor(private readonly uploadService:UploadService){}
   fileInputHandler($event:any){
     var file:File = $event.target.files[0];
-    var task_id = localStorage.getItem('selected_task');//ne znam sta ovde da radim..
+    var task_id = localStorage.getItem('id');//ovde kupi id korisnika cisto da vidim dal gadja
     var token = localStorage.getItem('token');
     if(file!=null)
     {
