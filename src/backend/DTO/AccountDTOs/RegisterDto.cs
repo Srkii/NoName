@@ -5,9 +5,11 @@ namespace backend.DTO.AccountDTOs
     public class RegisterDto
     {
         [Required]
+        [RegularExpression("^(?=[A-Z])[A-Za-z]{2,}$")]
         public string FirstName {get; set;}
 
         [Required]
+        [RegularExpression("^(?=[A-Z])[A-Za-z]{2,}$")]
         public string LastName {get; set;}
 
         [Required]

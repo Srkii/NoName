@@ -25,7 +25,6 @@
     <Folder Include="DTO\CommentDTOs\" />
     <Folder Include="DTO\EmailDTOs\" />
     <Folder Include="DTO\ProjectDTOs\" />
-    <Folder Include="DTO\TaskDTOs\" />
     <Folder Include="DTO\UserDTOs\" />
     <Folder Include="Services\" />
   </ItemGroup>

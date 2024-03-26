@@ -11,8 +11,7 @@ namespace backend.DTO.TaskDTOs
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public TaskStatus TaskStatus { get; set; }
-
-        public int ProjectId { get; set; } // foreign key
-        public Project Project { get; set; } // navigation
+        public int AppUserId { get; set; }
+        public int ProjectId { get; set; }
     }
 }

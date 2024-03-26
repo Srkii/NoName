@@ -2,6 +2,7 @@
 using backend.Data;
 using backend.DTO.ProjectDTOs;
 using backend.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace backend
             this.context = context;
         }
 
+        [Authorize(Roles = "ProjectManager")]
         [HttpPost] // POST: api/projects/
         public async Task<ActionResult<ProjectDto>> CreateProject(ProjectDto projectDto)
         {
@@ -41,6 +43,7 @@ namespace backend
             };
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet] // GET: api/projects/
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
@@ -48,12 +51,14 @@ namespace backend
             return projects;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("{id}")] // GET: api/projects/2
         public async Task<ActionResult<Project>> GetProject(int id)
         {
             return await context.Projects.FindAsync(id);
         }
 
+        [Authorize(Roles = "ProjectManager")]
         [HttpPut("{id}")] // PUT: api/projects/3
         public async Task<IActionResult> UpdateProject(int id, ProjectDto projectDto)
         {

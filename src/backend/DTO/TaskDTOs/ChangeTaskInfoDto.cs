@@ -9,5 +9,7 @@ namespace backend.DTO.TaskDTOs
         public string TaskName { get; set; }
         public string Description { get; set; }
         public TaskStatus? TaskStatus { get; set; }
+        public int AppUserId { get; set; }
+        public int ProjectId { get; set; }
     }
 }
