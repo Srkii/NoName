@@ -27,23 +27,25 @@
             <th>DUE DATE</th>
           </tr>
           <ng-container *ngFor="let task of tasks">
-            <tr *ngIf="task.taskStatus === 0">
-              <td><input class="check" type="checkbox" /></td>
-              <td
-                class="name"
-                [class.clicked]="task === clickedTask"
-                (click)="togglePopUp(task)"
-              >
+            <tr
+              class="red"
+              [class.clicked]="clickedTask?.id === task.id"
+              *ngIf="task.taskStatus === 0"
+              (click)="togglePopUp($event, task.id)"
+            >
+              <td>
+                <input
+                  type="checkbox"
+                  [id]="'checkBox-' + task.id"
+                  (change)="toggleTaskCompletion(task)"
+                />
+              </td>
+              <td class="name">
                 {{ task.taskName }}
               </td>
-
               <td>
                 {{ task.project ? task.project.projectName : "No Project" }}
               </td>
-
-              <!-- <td [ngClass]="getStatusString(task.taskStatus)">
-              <p>{{ getStatusString(task.taskStatus) }}</p>
-            </td> -->
               <td>Task visibility goes here</td>
               <td>{{ task.endDate | date }}</td>
             </tr>
@@ -62,17 +64,24 @@
             <th></th>
             <th>Task Name</th>
             <th>ORIGIN PROJECT</th>
-            <th>TASK VISIBILITY</th>
+            <th>ASSIGNEES</th>
             <th>DUE DATE</th>
           </tr>
           <ng-container *ngFor="let task of tasks">
-            <tr *ngIf="task.taskStatus === 1">
-              <td><input class="check" type="checkbox" /></td>
-              <td
-                class="name"
-                [class.clicked]="task === clickedTask"
-                (click)="togglePopUp(task)"
-              >
+            <tr
+              class="red"
+              [class.clicked]="clickedTask?.id === task.id"
+              *ngIf="task.taskStatus === 1"
+              (click)="togglePopUp($event, task.id)"
+            >
+              <td>
+                <input
+                  type="checkbox"
+                  [id]="'checkBox-' + task.id"
+                  (change)="toggleTaskCompletion(task)"
+                />
+              </td>
+              <td class="name">
                 {{ task.taskName }}
               </td>
 
@@ -100,17 +109,25 @@
             <th></th>
             <th>TASK NAME</th>
             <th>ORIGIN PROJECT</th>
-            <th>TASK VISIBILITY</th>
+            <th>ASSIGNEES</th>
             <th>DUE DATE</th>
           </tr>
           <ng-container *ngFor="let task of tasks">
-            <tr *ngIf="task.taskStatus === 2">
-              <td><input class="check" type="checkbox" checked /></td>
-              <td
-                class="name"
-                [class.clicked]="task === clickedTask"
-                (click)="togglePopUp(task)"
-              >
+            <tr
+              class="red"
+              [class.clicked]="clickedTask?.id === task.id"
+              *ngIf="task.taskStatus === 2"
+              (click)="togglePopUp($event, task.id)"
+            >
+              <td>
+                <input
+                  type="checkbox"
+                  [id]="'checkBox-' + task.id"
+                  (change)="toggleTaskCompletion(task)"
+                  [checked]="task.taskStatus === 2"
+                />
+              </td>
+              <td class="name">
                 {{ task.taskName }}
               </td>
               <td>
@@ -128,40 +145,6 @@
       </div>
     </div>
     <br />
-    <div class="pop">
-      <h6 id="popupTaskName"></h6>
-      <br />
-      <p class="header">DUE DATE <span id="popupDueDate"></span></p>
-      <p class="header">ORIGIN PROJECT <span id="popupOriginProject"></span></p>
-      <p class="header">ASSIGNEES</p>
-      <input class="assignees" type="text" value="Task assignees names" />
-      <p class="header">ATTACH FILE</p>
-      <input class="form-control" type="file" placeholder="No file chosen" />
-      <p class="header">DESCRIPTION</p>
-      <input class="assignees" type="text" value="Description here" />
-      <br /><br />
-      <button
-        class="mark"
-        *ngIf="clickedTask"
-        (click)="markComplete(clickedTask)"
-        [ngClass]="{
-          'checked-button': isTaskCompleted(clickedTask)
-        }"
-      >
-        Mark complete
-      </button>
-      <div class="comments">
-        <p class="header">COMMENTS</p>
-        <input class="assignees" type="text" placeholder="Add a comment" />
-      </div>
-    </div>
+    <app-popup class="pop" *ngIf="showPopUp" [task]="clickedTask"></app-popup>
   </body>
 </html>
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-scale-multiple"
->
-  <p style="font-size: 20px; color: white">Loading...</p>
-</ngx-spinner>

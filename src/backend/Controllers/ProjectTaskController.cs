@@ -53,12 +53,14 @@ namespace backend.Controllers
         [HttpGet("{id}")] // GET: api/projectTask/2
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
         {
-            var task = await _context.ProjectTasks.FindAsync(id);
-            if (task == null)
+            var tasklist = await _context.ProjectTasks
+              .Include(task => task.Project).Where(t => t.Id == id).ToListAsync();
+
+            if (tasklist == null)
             {
                 return NotFound();
             }
-            return task;
+            return tasklist[0];
         }
 
         [HttpGet("user/{userId}")]
