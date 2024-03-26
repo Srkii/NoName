@@ -1,4 +1,55 @@
 <div class="pop" id="popUp" *ngIf="task">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="back"
+    viewBox="0 0 16 16"
+    (click)="close()"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"
+    />
+  </svg>
+
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="full"
+    viewBox="0 0 16 16"
+    (click)="full()"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"
+    />
+  </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    viewBox="0 0 16 16"
+    class="file"
+    (click)="triggerFileInput()"
+  >
+    <path
+      d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
+    />
+    <path
+      d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"
+    />
+  </svg>
+  <input
+    type="file"
+    #fileInput
+    style="display: none"
+    (change)="handleFileInput($event)"
+  />
   <h6 id="popupTaskName">{{ task.taskName }}</h6>
   <br />
   <p class="header">
@@ -11,15 +62,21 @@
     }}</span>
   </p>
   <p class="header">ASSIGNEES</p>
-  <input class="assignees" type="text" [value]="" />
-  <p class="header">ATTACH FILE</p>
-  <input class="form-control" type="file" />
+  <input id="assignees1" class="assignees" type="text" [value]="" />
   <p class="header">DESCRIPTION</p>
-  <input class="assignees" type="text" [value]="task.description" />
+  <input
+    id="assignees1"
+    class="assignees"
+    type="text"
+    [value]="task.description"
+    readonly
+  />
   <br /><br />
   <button
     class="mark"
-    [style.backgroundColor]="task && task.taskStatus === 2 ? 'green' : ''"
+    [style.backgroundColor]="task && task.taskStatus === 2 ? '#3fb94c' : ''"
+    [style.boxShadow]="task && task.taskStatus === 2 ? '0 0 3px #3fb94c' : ''"
+    (click)="toggleTaskCompletion($event, task)"
   >
     {{ task && task.taskStatus === 2 ? "Completed" : "Mark Complete" }}
   </button>

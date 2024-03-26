@@ -1,7 +1,10 @@
+* {
+  font-family: "Public Sans", sans-serif;
+}
 .pop {
   padding: 15px;
   position: fixed;
-  top: 13.8%; /* Adjust as needed */
+  top: 84px; /* Adjust as needed */
   right: 10px; /* Adjust as needed */
   width: 40%;
   height: 86%;
@@ -17,15 +20,27 @@
   font-size: 12px;
   overflow: hidden;
 }
+@media (max-width: 1200px) {
+  .pop {
+    width: 100%;
+  }
+}
+@media (max-height: 500px) {
+  .pop {
+    top: 0;
+  }
+}
 
 #popupTaskName {
-  margin-bottom: -10px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: -5px;
 }
 
 .header {
   text-align: left;
   margin-right: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 3%;
 }
 
 #popupDueDate {
@@ -35,7 +50,7 @@
 #popupOriginProject {
   margin-left: 20px;
   font-size: 14px;
-  padding: 10px;
+  padding: 5px;
   padding-left: 80px;
   padding-right: 80px;
   border-radius: 8px;
@@ -77,11 +92,12 @@
   word-wrap: break-word;
 }
 .comments {
+  position: absolute;
+  bottom: 0;
   padding: 10px;
-  position: relative;
   color: #697a8d;
   background-color: #d9dee3;
-  margin-top: 18%;
+  /* margin-top: 31%; */
   border-radius: 8px;
   height: 25%;
   margin-left: -15px;
@@ -115,4 +131,22 @@ input:focus {
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   float: right;
+}
+/*file upload icon*/
+.file {
+  float: right;
+  margin-right: 5%;
+}
+.back:hover,
+.full:hover,
+.file:hover {
+  cursor: pointer;
+}
+.full {
+  float: right;
+  margin-right: 5%;
+}
+.back {
+  float: right;
+  margin-right: 2%;
 }
