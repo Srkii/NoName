@@ -1,6 +1,6 @@
 ﻿using backend.Entities;
 
-namespace backend.DTO.UserDTOs
+namespace backend.DTO
 {
     public class RoleChangeDTO
     {

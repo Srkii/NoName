@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace backend.DTO.EmailDTOs
+namespace backend.DTO
 {
-    public class InvitationDto
+    public class UserRequestDto
     {
         [EmailAddress]
         public string Email { get; set; }

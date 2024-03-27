@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using backend.Entities;
 
-namespace backend.DTO.UserDTOs
+namespace backend.DTO
 {
     public class UserDto
     {

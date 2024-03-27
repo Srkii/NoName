@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace backend.DTO.AccountDTOs
+namespace backend.DTO
 {
     public class RegisterDto
     {
@@ -17,7 +17,7 @@ namespace backend.DTO.AccountDTOs
         public string Email{get; set;}
 
         [Required]
-        [StringLength(7, ErrorMessage = "Password must have at least 7 characters", MinimumLength = 7)]
+        // [StringLength(7, ErrorMessage = "Password must have at least 7 characters", MinimumLength = 7)]
         public string Password{get; set;}
         
         public string Token{get; set;}

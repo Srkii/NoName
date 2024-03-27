@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace backend.DTO.AccountDTOs
+namespace backend.DTO
 {
     public class PasswordResetDto
     {
@@ -8,7 +8,7 @@ namespace backend.DTO.AccountDTOs
         public string Email { get; set; }
         public string Token { get; set; }
         
-        [StringLength(7, ErrorMessage = "Password must have at least 7 characters", MinimumLength = 7)]
+        // [StringLength(7, ErrorMessage = "Password must have at least 7 characters", MinimumLength = 7)]
         public string NewPassword{get;set;}
     }
 }

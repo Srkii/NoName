@@ -1,6 +1,6 @@
 ﻿using backend.Entities;
 
-namespace backend.DTO.ProjectDTOs
+namespace backend.DTO
 {
     public class ProjectDto
     {

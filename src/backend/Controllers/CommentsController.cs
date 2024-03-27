@@ -1,19 +1,17 @@
-﻿
-using backend.Data;
-using backend.DTO.CommentDTOs;
+﻿using backend.Data;
+using backend.DTO;
 using backend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 namespace backend.Controllers;
 
 public class CommentsController:BaseApiController
 {
-    private readonly DataContext context;
+    private readonly DataContext _context;
     public CommentsController(DataContext context)
     {
-        this.context = context;
+        _context = context;
     }
 
     [HttpPost("postComment")] // /api/comments/postComment
@@ -27,15 +25,15 @@ public class CommentsController:BaseApiController
             SenderFirstName = commentDto.SenderFirstName,
             SenderLastName = commentDto.SenderLastName
         };
-        context.Comments.Add(comment);
-        await context.SaveChangesAsync();
+        _context.Comments.Add(comment);
+        await _context.SaveChangesAsync();
         return Ok(comment);
     }
 
     [HttpGet("getComments/{taskId}")] // /api/comments/getComments
     public async Task<ActionResult<List<Comment>>> GetComments(int taskId)
     {
-        var comments = await context.Comments.Where(x => x.TaskId == taskId).OrderByDescending(x => x.MessageSent).ToListAsync();
+        var comments = await _context.Comments.Where(x => x.TaskId == taskId).OrderByDescending(x => x.MessageSent).ToListAsync();
         return comments;
     }
 
@@ -43,7 +41,7 @@ public class CommentsController:BaseApiController
     [HttpDelete("deleteComment")]
     public async Task<ActionResult> DeleteComment(DeleteCommentDto dto)
     {
-        var comment = await context.Comments.FindAsync(dto.CommentId);
+        var comment = await _context.Comments.FindAsync(dto.CommentId);
 
         if(comment == null)
             return BadRequest("Comment doesn't exist");
@@ -51,8 +49,8 @@ public class CommentsController:BaseApiController
         if(comment.SenderId != dto.SenderId)
             return BadRequest("Unvalid request: You cannot delete other's people comments");
         
-        context.Comments.Remove(comment);
-        await context.SaveChangesAsync();
+        _context.Comments.Remove(comment);
+        await _context.SaveChangesAsync();
         
         var responseData = new 
         {

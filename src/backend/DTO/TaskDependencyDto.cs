@@ -1,4 +1,4 @@
-﻿namespace backend.DTO.TaskDTOs
+﻿namespace backend.DTO
 {
     public class TaskDependencyDto
     {

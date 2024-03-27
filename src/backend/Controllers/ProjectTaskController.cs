@@ -1,5 +1,5 @@
 ﻿using backend.Data;
-using backend.DTO.TaskDTOs;
+using backend.DTO;
 using backend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

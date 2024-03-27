@@ -1,7 +1,7 @@
 using backend.Entities;
 using TaskStatus = backend.Entities.TaskStatus;
 
-namespace backend.DTO.TaskDTOs
+namespace backend.DTO
 {
     public class ProjectTaskDto
     {

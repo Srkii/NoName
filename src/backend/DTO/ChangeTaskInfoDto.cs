@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace backend.DTO.TaskDTOs
+namespace backend.DTO
 {
     public class ChangeTaskInfoDto
     {

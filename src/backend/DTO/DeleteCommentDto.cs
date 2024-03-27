@@ -1,4 +1,4 @@
-﻿namespace backend.DTO.CommentDTOs
+﻿namespace backend.DTO
 {
     public class DeleteCommentDto
     {
