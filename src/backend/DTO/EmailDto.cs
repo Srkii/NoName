@@ -1,6 +1,10 @@
-﻿namespace backend.DTO;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class EmailDto
+namespace backend.DTO
 {
-    public string Receiver{get; set;}
+    public class EmailDto
+    {
+        [EmailAddress]
+        public string Receiver{get; set;}
+    }
 }

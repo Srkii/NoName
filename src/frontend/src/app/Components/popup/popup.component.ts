@@ -20,6 +20,7 @@ export class PopupComponent {
   @Input() task: ProjectTask | null = null;
   @Output() taskUpdated: EventEmitter<ProjectTask> =
     new EventEmitter<ProjectTask>();
+  @Output() backClicked: EventEmitter<void> = new EventEmitter<void>();
 
   previousTaskStatus: TaskStatus | null = null;
   fullscreen: boolean = false;
@@ -79,6 +80,7 @@ export class PopupComponent {
   }
 
   close() {
+    this.backClicked.emit(); // Emit event when back button is clicked
     this.task = null;
   }
   full() {
@@ -91,7 +93,7 @@ export class PopupComponent {
     const mark = document.querySelector('.mark') as HTMLElement;
 
     if (!this.fullscreen) {
-      pop.style.width = '100%';
+      pop.style.width = '98.5%';
       pop.style.padding = '2%';
       back.style.marginRight = '1%';
       full.style.marginRight = '3%';

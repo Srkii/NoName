@@ -30,8 +30,40 @@ export class MyTasksComponent implements OnInit {
     private shared:SharedService
   ) {}
 
+  closePopup() {
+    this.clickedTask = null; // Set ClickedTask to null when back button is clicked
+    this.showPopUp = false; // Close the pop-up
+  }
+
   ngOnInit(): void {
     this.spinner.show();
+    this.myTasksService.GetProjectTasks().subscribe((tasks: ProjectTask[]) => {
+      this.tasks = tasks;
+      this.spinner.hide();
+    });
+  }
+  togglePopUp(task: ProjectTask) {
+    const popUp = document.querySelector('.pop') as HTMLElement;
+    const popUpTaskName = document.querySelector('.pop h6') as HTMLElement;
+    const popUpDueDate = document.querySelector(
+      '.pop #popupDueDate'
+    ) as HTMLElement;
+    const popUpOriginProject = document.querySelector(
+      '.pop #popupOriginProject'
+    ) as HTMLElement;
+
+    if (popUp && popUpTaskName && popUpDueDate && popUpOriginProject) {
+      if (this.clickedTask === task) {
+        // If so, reset clickedTask to null and hide the pop-up
+        this.clickedTask = null;
+      } else {
+        this.clickedTask = task;
+      }
+      if (
+        popUp.style.display === 'block' &&
+        popUpTaskName.textContent === task.taskName
+      ) {
+        popUp.style.display = 'none';
     const userId = localStorage.getItem('id'); // Get the user ID from local storage
     if (userId) {
       this.myTasksService
@@ -49,6 +81,13 @@ export class MyTasksComponent implements OnInit {
   }
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); // Prevent event bubbling if necessary
+
+    const target = event.target as HTMLElement;
+    if (target.tagName.toLowerCase() === 'input') {
+      // Ignore clicks on input elements
+      return;
+    }
+
     // Assuming GetProjectTaskById is a method that fetches the task details
     const row = document.querySelector('.red') as HTMLElement;
     this.myTasksService
@@ -131,7 +170,12 @@ export class MyTasksComponent implements OnInit {
     const popUp = document.querySelector('.pop') as HTMLElement;
     if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
       this.showPopUp = false;
+      this.clickedTask = null;
     }
+  }
+
+  isTasksEmpty(): boolean {
+    return this.tasks.length === 0;
   }
 
   // getStatusString(status: TaskStatus): string {

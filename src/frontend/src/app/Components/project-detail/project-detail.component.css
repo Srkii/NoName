@@ -1,0 +1,113 @@
+* {
+    font-family: 'Public Sans', sans-serif !important;
+}
+th {
+    border-radius: 0.5rem;
+}
+.text-nowrap {
+    white-space: nowrap !important;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+.card .table {
+    margin-bottom: 0;
+}
+.table tbody  {
+    padding-bottom: 0;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0.5rem;
+}
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0.5rem; /* Round bottom-left corner */
+}
+.table tbody tr:last-child {
+    margin-bottom: -30px;
+}
+.table tbody tr:last-child td {
+    border-bottom: none; /* Disable bottom border for the last row */
+}
+
+.card-header {
+    margin-bottom: -10px;
+    color: #697a8d;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #696cff;
+    border-color: #696cff;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    margin: 25px;
+    line-height: 1.45;
+    vertical-align: center;
+    width: 300px;
+}
+.bg-label-primary {
+    background-color: #e7e7ff !important;
+    color: #696cff !important;
+}
+.me-1 {
+    margin-right: 0.25rem !important;
+}
+.badge {
+    text-transform: uppercase;
+    line-height: 0.75;
+    --bs-badge-padding-x: 0.593em;
+    --bs-badge-padding-y: 0.52em;
+    --bs-badge-font-size: 0.8125em;
+    --bs-badge-font-weight: 500;
+    --bs-badge-color: #fff;
+    --bs-badge-border-radius: 0.25rem;
+    display: inline-block;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.5rem;
+}
+
+.content-wrapper {
+    display: flex;
+    align-items: stretch;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+.card {
+    background-clip: padding-box;
+    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: auto;
+    color: #697a8d;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0px solid #d9dee3;
+    border-radius: 0.5rem;
+}
+.content-wrapper {
+    display: flex;
+    align-items: stretch;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}

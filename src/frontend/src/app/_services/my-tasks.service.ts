@@ -17,6 +17,10 @@ export class MyTasksService {
     return this.http.get<ProjectTask[]>(this.baseUrl);
   }
 
+  GetTasksByProjectId(projectId: number): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}`);
+  }
+
   GetUserTasks(userId: number): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
   }

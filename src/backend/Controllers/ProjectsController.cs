@@ -1,6 +1,8 @@
 ﻿using backend.Controllers;
 using backend.Data;
+using backend.DTO;
 using backend.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,12 +10,13 @@ namespace backend
 {
     public class ProjectsController : BaseApiController
     {
-        private readonly DataContext context;
+        private readonly DataContext _context;
         public ProjectsController(DataContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
+        [Authorize(Roles = "ProjectManager")]
         [HttpPost] // POST: api/projects/
         public async Task<ActionResult<ProjectDto>> CreateProject(ProjectDto projectDto)
         {
@@ -27,8 +30,8 @@ namespace backend
                 ProjectStatus = projectDto.ProjectStatus,
                 Priority = projectDto.Priority
             };
-            context.Projects.Add(project);
-            await context.SaveChangesAsync();
+            _context.Projects.Add(project);
+            await _context.SaveChangesAsync();
             return new ProjectDto
             {
                 ProjectName = project.ProjectName,
@@ -40,23 +43,26 @@ namespace backend
             };
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet] // GET: api/projects/
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            var projects = await context.Projects.ToListAsync();
+            var projects = await _context.Projects.ToListAsync();
             return projects;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("{id}")] // GET: api/projects/2
         public async Task<ActionResult<Project>> GetProject(int id)
         {
-            return await context.Projects.FindAsync(id);
+            return await _context.Projects.FindAsync(id);
         }
 
+        [Authorize(Roles = "ProjectManager")]
         [HttpPut("{id}")] // PUT: api/projects/3
         public async Task<IActionResult> UpdateProject(int id, ProjectDto projectDto)
         {
-            var project = await context.Projects.FindAsync(id);
+            var project = await _context.Projects.FindAsync(id);
             if (project == null)
             {
                 return NotFound();
@@ -72,7 +78,7 @@ namespace backend
 
             try
             {
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException) when (!ProjectExists(id))
             {
@@ -84,7 +90,7 @@ namespace backend
 
         private bool ProjectExists(int id)
         {
-            return context.Projects.Any(e => e.Id == id);
+            return _context.Projects.Any(e => e.Id == id);
         }
 
 
