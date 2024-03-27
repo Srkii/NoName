@@ -24,6 +24,12 @@ export class AdminComponent implements OnInit{
 
   allUsers: Member[]=[]
 
+  admins: Member[]=[]
+  members: Member[]=[]
+  projectMangers: Member[]=[]
+
+  numberOfRoles!: number
+
   Invite(): void{
     if(this.invatation)
     {
@@ -45,7 +51,7 @@ export class AdminComponent implements OnInit{
       }})
     }
 
-    GetUserRole(role:UserRole): string{
+    GetUserRole(role: UserRole): string{
         switch(role){
           case UserRole.Admin:
             return "Admin"
@@ -58,7 +64,19 @@ export class AdminComponent implements OnInit{
         }
     }
 
-    
-    
+    SplitByRole(): void{
+      this.allUsers.forEach((user)=>{
+        if(user.role===UserRole.Admin){
+          this.admins.push(user)
+        }
+        else if(user.role===UserRole.Member)
+        {
+          this.members.push(user)
+        }
+        else if(user.role===UserRole.ProjectManager)
+          this.projectMangers.push(user)
+      })
+    }
+ 
   }
 
