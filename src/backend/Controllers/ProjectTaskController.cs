@@ -80,18 +80,6 @@ namespace backend.Controllers
             return tasks;
         }
 
-        [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
-        public async Task<IActionResult> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
-        {
-            var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
-
-            if (task == null)
-            {
-                return NotFound();
-            }
-            return task;
-        }
-
         [Authorize]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
         public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
