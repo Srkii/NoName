@@ -10,9 +10,10 @@ Password changed successfully color #83EDA1
 Change photo must have a hover over the image as an interactable...
 */
 body{
-  width:900px;
+  width:60%;
   margin: auto;
   color: #697A8D;
+  background-color: #f5f5f9;
   font-family: "Public Sans" sans-serif;
 }
 h4{
@@ -33,11 +34,11 @@ button{
   border: none;
 }
 #container{
-  margin-top: 90px;
+  margin-top: 7%;
   width: 100%;
 }
 #User_banner{
-  width: 43%;
+  width: 50%;
   float: left;
 }
 #Role_name{
@@ -58,11 +59,13 @@ button{
 }
 #Image_container{
   position: relative;
+  width: 130px;
 }
 #Profile_image{
   width: 130px;
   height: 130px;
   border-radius: 6px;
+  display: inline;
 }
 #Profile_image:hover{
   opacity: 70%;
@@ -83,10 +86,12 @@ button{
 #User_info{
   float: right;
   width: 50%;
-  padding-right: 17%;
 }
 #User_details{
-  font-weight: 500;
+  font-weight: 400;
+}
+#Account_info{
+  height: 250px;
 }
 #Change_alert{
   border-radius: 6px;
@@ -95,7 +100,21 @@ button{
   background-color:#FFF2D6;
 }
 #Change_password{
-  margin-top: 100px;
+  background-color: #FFFFFF;
+  border-color: solid #d9dee3;
+  border-width: 0;
+  border-radius: 15px;
+  padding: 30px;
+  margin-top: 30px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+}
+#wrap{
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  border-color: solid #d9dee3;
+  padding: 30px;
+  border-width: 0;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
 }
 #Inputs{
   padding-top: 20px;
@@ -109,7 +128,7 @@ button{
   display: none;
 }
 input[type="password"]{
-
+  border: 1px solid #D9DEE3;
   border-radius: 6px;
   height: 40px;
   width: 100%;
@@ -117,4 +136,7 @@ input[type="password"]{
 }
 input:focus{
   outline: 1px solid #D9DEE3;
+}
+#tasks_done{
+  display: inline-block;
 }

@@ -9,13 +9,13 @@ namespace backend.Controllers;
 public class EmailController:BaseApiController
 {
     
-    private readonly DataContext context;
-    private readonly IEmailSender emailSender;
+    private readonly DataContext _context;
+    private readonly IEmailSender _emailSender;
 
     public EmailController(IEmailSender emailSender,DataContext context)
     {
-        this.emailSender = emailSender;
-        this.context = context;
+        _emailSender = emailSender;
+        _context = context;
     }
 
     [HttpPost("sendInvitation")]
@@ -28,8 +28,8 @@ public class EmailController:BaseApiController
             IsUsed = false
         };
 
-        context.Invitations.Add(invitation);
-        await context.SaveChangesAsync();
+        _context.Invitations.Add(invitation);
+        await _context.SaveChangesAsync();
         
         string link = "http://localhost:4200/register?token="+invitation.Token;
         string subject = "Invitation to Register on Our Application";
@@ -40,7 +40,7 @@ public class EmailController:BaseApiController
                  "Access Denied, \n" +
                  "Naziv Aplikacije";
         
-        await emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
+        await _emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
 
         var responseData = new 
         {
@@ -62,8 +62,8 @@ public class EmailController:BaseApiController
             IsUsed = false
         };
 
-        context.UserRequests.Add(request);
-        await context.SaveChangesAsync();
+        _context.UserRequests.Add(request);
+        await _context.SaveChangesAsync();
         
         string link = "http://localhost:4200/forgotreset?token="+request.Token;
         string subject = "Forgot password";
@@ -74,7 +74,7 @@ public class EmailController:BaseApiController
                  "Access Denied, \n" +
                  "Naziv Aplikacije";
         
-        await emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
+        await _emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
 
         var responseData = new 
         {

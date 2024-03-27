@@ -1,8 +1,16 @@
-﻿namespace backend.DTO;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class UpdateUserDto
+namespace backend.DTO
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
+    public class UpdateUserDto
+    {
+        [RegularExpression("^(?=[A-Z])[A-Za-z]{2,}$")]
+        public string FirstName { get; set; }
+
+        [RegularExpression("^(?=[A-Z])[A-Za-z]{2,}$")]
+        public string LastName { get; set; }
+        
+        [EmailAddress]
+        public string Email { get; set; }
+    }
 }

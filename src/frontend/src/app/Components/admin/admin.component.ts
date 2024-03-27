@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AdminService } from '../../_services/admin.service';
-import { Invatation } from '../../Entities/Invatation';
-import { Member, UserRole } from '../../Entities/Member';
-import { ChangeRole } from '../../Entities/ChangeRole';
+import { Invatation } from '../../Entities/RegisterInvitation';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 

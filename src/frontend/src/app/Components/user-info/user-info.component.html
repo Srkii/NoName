@@ -3,29 +3,32 @@
 </head>
 <body >
   <div id="container">
-      <div id="Account_info"  *ngIf="userInfo">
-        <!--informacije o korisniku , div sa slikom i div sa detaljima o korisniku-->
-        <div id="User_banner">
-          <div id="Image_container">
-            <img [src]="url" id="Profile_image" (click)="onClickUpload()">
-            <img id="Overlay_image" src="../../../assets/change_photo.jpg" (click)="onClickUpload()">
+      <div id="wrap">
+        <div id="Account_info"  *ngIf="userInfo">
+          <!--informacije o korisniku , div sa slikom i div sa detaljima o korisniku-->
+          <div id="User_banner">
+            <div id="Image_container">
+              <img [src]="url" id="Profile_image" (click)="inputClick.click()">
+              <img id="Overlay_image" src="../../../assets/profile_photo_placeholders/change_photo.jpg" (click)="inputClick.click()">
+            </div>
+            <span id="Role_name" style="padding-left: 5px;">
+              <span id="role">{{role}}</span><br>
+              <span id="name">{{userInfo.firstName}} {{userInfo.lastName}}</span>
+            </span>
+            <input #inputClick id="inp" type="file" style="display: none;" (change)="imageSelected($event)">
           </div>
-          <span id="Role_name" style="padding-left: 5px;">
-            <span id="role">{{role}}</span><br>
-            <span id="name">{{userInfo.firstName}} {{userInfo.lastName}}</span>
-          </span>
-          <input id="inp" type="file" style="display: none;" (change)="imageSelected($event)">
-        </div>
-        <div id="User_info">
-          <h4>Details</h4>
-          <div id="User_details">
-            First name: {{userInfo.firstName}}<br>
-            Last name: {{userInfo.lastName}}<br>
-            Email: {{userInfo.email}}<br>
-            Role: {{role}}<br>
+          <div id="User_info">
+            <h4>Details</h4>
+            <div id="User_details">
+              First name: {{userInfo.firstName}}<br>
+              Last name: {{userInfo.lastName}}<br>
+              Email: {{userInfo.email}}<br>
+              Role: {{role}}<br>
+            </div>
           </div>
+          <div id="clear"></div>
         </div>
-        <div id="clear"></div>
+      </div>
         <div id="Change_password">
           <h4>Change Password</h4>
           <div id="Change_alert">
@@ -47,6 +50,5 @@
             <button type="submit" (click)="apply_changes()">Change password</button>
           </div>
         </div>
-      </div>
   </div>
 </body>

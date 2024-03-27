@@ -1,9 +1,10 @@
 ﻿using backend.Entities;
 
-namespace backend.DTO;
-
-public class RoleChangeDTO
+namespace backend.DTO
 {
-    public int Id { get; set; }
-    public UserRole Role { get; set; }
+    public class RoleChangeDTO
+    {
+        public int Id { get; set; }
+        public UserRole Role { get; set; }
+    }
 }
