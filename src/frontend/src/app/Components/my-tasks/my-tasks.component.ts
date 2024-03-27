@@ -5,6 +5,7 @@ import { Route, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProjectStatus } from '../../Entities/Project';
+import { SharedService } from '../../_services/shared.service';
 
 @Component({
   selector: 'app-my-tasks',
@@ -25,7 +26,8 @@ export class MyTasksComponent implements OnInit {
     private myTasksService: MyTasksService,
     private router: Router,
     private datePipe: DatePipe,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private shared:SharedService
   ) {}
 
   closePopup() {
@@ -39,43 +41,6 @@ export class MyTasksComponent implements OnInit {
       this.tasks = tasks;
       this.spinner.hide();
     });
-  }
-  togglePopUp(task: ProjectTask) {
-    const popUp = document.querySelector('.pop') as HTMLElement;
-    const popUpTaskName = document.querySelector('.pop h6') as HTMLElement;
-    const popUpDueDate = document.querySelector(
-      '.pop #popupDueDate'
-    ) as HTMLElement;
-    const popUpOriginProject = document.querySelector(
-      '.pop #popupOriginProject'
-    ) as HTMLElement;
-
-    if (popUp && popUpTaskName && popUpDueDate && popUpOriginProject) {
-      if (this.clickedTask === task) {
-        // If so, reset clickedTask to null and hide the pop-up
-        this.clickedTask = null;
-      } else {
-        this.clickedTask = task;
-      }
-      if (
-        popUp.style.display === 'block' &&
-        popUpTaskName.textContent === task.taskName
-      ) {
-        popUp.style.display = 'none';
-    const userId = localStorage.getItem('id'); // Get the user ID from local storage
-    if (userId) {
-      this.myTasksService
-        .GetUserTasks(+userId)
-        .subscribe((tasks: ProjectTask[]) => {
-          // Convert userId to number
-          this.tasks = tasks;
-          this.spinner.hide();
-          // Set inner HTML of 'Mark complete' button for checked tasks
-        });
-    } else {
-      // Handle case where user ID is not found, e.g., redirect to login
-      this.spinner.hide();
-    }
   }
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); // Prevent event bubbling if necessary
@@ -104,7 +69,7 @@ export class MyTasksComponent implements OnInit {
           this.showPopUp = true;
         }
       });
-  }
+    }
 
   toggleTaskCompletion(event: any, task: ProjectTask): void {
     event.stopPropagation();

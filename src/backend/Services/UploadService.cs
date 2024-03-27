@@ -1,17 +1,13 @@
 using backend.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+
 namespace backend.Services
 {
-    [Authorize]
-    public class PhotoService : IPhotoService
+    public class UploadService : IUploadService
     {
-    
-        public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Images";
-
-        public string AddPhoto(IFormFile file)
+        public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Attachments";
+        public string AddFile(IFormFile file)
         {
-            if (file.Length > 0)
-            {
+            if(file.Length>0){
                 string filepath = Path.Combine(_path, file.FileName);
                 using (Stream filestream = new FileStream(filepath, FileMode.Create))
                 {
@@ -22,7 +18,7 @@ namespace backend.Services
             else return null;
         }
 
-        public void DeletePhoto(string url)
+        public void DeleteFile(string url)
         {
             if (File.Exists(url))
             {

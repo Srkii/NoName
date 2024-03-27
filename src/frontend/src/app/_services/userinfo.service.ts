@@ -13,32 +13,13 @@ export class UserinfoService {
 
   private apiUrl=ApiUrl.apiUrl;
 
-  async getUserInfo(id:any,token:any){
-    const url = `https://localhost:5001/api/users/updateUser/${id}`;
-    const response = await fetch(`https://localhost:5001/api/users/${id}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-      },
-    });
-    var result  = (await response.json());
-    return result;
+  getUserInfo(id:any,token:any){
+    var httpheaders = new HttpHeaders({
+      'Authorization':`Bearer ${token}`
+    })
+    return this.httpClient.get<any>(`${this.apiUrl}/users/${id}`,{headers:httpheaders});
   }
-  async getProfilePhoto(id:any,token:any){
-    const url = `https://localhost:5001/api/users/profilePic/${id}`;
-    const response = await fetch(
-      url,{
-      method:'GET',
-      headers:{
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-      },
-    });
-    var result = (await response.json());
-    return result;
-  }
+
   updateUserInfo(token: any, id:number, data:ChangePassword):Observable<any>{
     const url = `https://localhost:5001/api/users/updateUser/${id}`;
     console.log("Xd");

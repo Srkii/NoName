@@ -19,8 +19,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { PopupComponent } from './Components/popup/popup.component';
 import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
+import { FileUploadComponent } from './Components/file-upload/file-upload.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { PopupComponent } from './Components/popup/popup.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { ProjectDetailComponent } from './Components/project-detail/project-deta
     MyTasksComponent,
     PopupComponent,
     ProjectDetailComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,7 @@ import { ProjectDetailComponent } from './Components/project-detail/project-deta
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
+  providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

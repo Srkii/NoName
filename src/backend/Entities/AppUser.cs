@@ -14,9 +14,10 @@ namespace backend.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public string ProfilePicUrl { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public UserRole Role { get; set; }
-        public bool Archived {get; set;}
+        public bool Archived { get; set; }
     }
 }
