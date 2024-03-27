@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../_services/admin.service';
 import { Invatation } from '../../Entities/Invatation';
 import { Member, UserRole } from '../../Entities/Member';
+import { ChangeRole } from '../../Entities/ChangeRole';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -27,6 +28,15 @@ export class AdminComponent implements OnInit{
   admins: Member[]=[]
   members: Member[]=[]
   projectMangers: Member[]=[]
+
+  role!: string
+
+  roles: UserRole[] = [UserRole.Admin, UserRole.Member, UserRole.ProjectManager];
+
+  changeRole:ChangeRole={
+    Id: 0,
+    Role: UserRole.Member
+  }
 
   numberOfRoles!: number
 
@@ -77,6 +87,20 @@ export class AdminComponent implements OnInit{
           this.projectMangers.push(user)
       })
     }
+
+    ChangeUserRole(): void{
+      if(this.changeRole)
+      {
+        this.adminService.changeUserRole(this.changeRole).subscribe(
+          (response)=>{
+            console.log(response);
+          }
+        )
+      }
+      error:()=>{
+        console.log("Email is not sent")
+      }}
+    
  
   }
 
