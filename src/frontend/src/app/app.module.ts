@@ -18,7 +18,8 @@ import { MyProjectsComponent } from './Components/my-projects/my-projects.compon
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { PopupComponent } from './Components/popup/popup.component';
 import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { ProjectDetailComponent } from './Components/project-detail/project-deta
     ForgotResetComponent,
     MyProjectsComponent,
     MyTasksComponent,
+    PopupComponent,
     ProjectDetailComponent,
   ],
   imports: [
@@ -46,7 +48,7 @@ import { ProjectDetailComponent } from './Components/project-detail/project-deta
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
     }), // ToastrModule added
-    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],

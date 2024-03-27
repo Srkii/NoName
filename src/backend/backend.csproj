@@ -21,6 +21,11 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="DTO\AccountDTOs\" />
+    <Folder Include="DTO\CommentDTOs\" />
+    <Folder Include="DTO\EmailDTOs\" />
+    <Folder Include="DTO\ProjectDTOs\" />
+    <Folder Include="DTO\UserDTOs\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

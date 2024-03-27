@@ -15,7 +15,6 @@
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public TaskStatus TaskStatus { get; set; }
-
         public int ProjectId { get; set; } // foreign key
         public Project Project { get; set; } // navigation
     }
