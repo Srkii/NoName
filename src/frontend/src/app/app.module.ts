@@ -38,6 +38,8 @@ import { PopupComponent } from './Components/popup/popup.component';
     MyProjectsComponent,
     MyTasksComponent,
     PopupComponent,
+    ProjectDetailComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,
