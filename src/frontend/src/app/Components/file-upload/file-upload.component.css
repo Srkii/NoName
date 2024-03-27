@@ -1,9 +1,111 @@
-.form-control {
-  margin-top: -10px;
-  margin-bottom: 10px;
-  width: 95%;
-  margin-left: 20px;
+* {
+  font-family: "Public Sans", sans-serif;
 }
+.pop {
+  padding: 15px;
+  position: fixed;
+  top: 84px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  width: 40%;
+  height: 86%;
+  background-color: #ffffff;
+  color: #697a8d;
+  border-color: solid #d9dee3;
+  border-width: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  overflow: auto;
+  z-index: 999; /* Ensure it appears above other content */
+  font-weight: 600;
+  font-size: 12px;
+  overflow: hidden;
+}
+@media (max-width: 1200px) {
+  .pop {
+    width: 100%;
+  }
+}
+@media (max-height: 500px) {
+  .pop {
+    top: 0;
+  }
+}
+
+#popupTaskName {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: -5px;
+}
+
+.header {
+  text-align: left;
+  margin-right: 20px;
+  margin-bottom: 3%;
+}
+
+#popupDueDate {
+  margin-left: 60px;
+  font-size: 14px;
+}
+#popupOriginProject {
+  margin-left: 20px;
+  font-size: 14px;
+  padding: 5px;
+  padding-left: 80px;
+  padding-right: 80px;
+  border-radius: 8px;
+  background-color: #d9dee3;
+  border: none;
+}
+
+.assignees {
+  color: #697a8d;
+  font-size: 12px;
+  border: 0.5px solid lightgray;
+  border-radius: 8px;
+  padding: 6px;
+  width: 95%;
+  margin-left: 5%; /* Add margin-bottom for the gap */
+  margin-bottom: 1%;
+  padding: auto;
+  word-wrap: break-word;
+}
+.form-control {
+  color: #697a8d;
+  font-size: 12px;
+  border: 0.5px solid lightgray;
+  border-radius: 8px;
+  padding: 6px;
+  width: 95%;
+  margin-left: 5%; /* Add margin-bottom for the gap */
+  margin-bottom: 1%;
+}
+.comment {
+  margin-top: -1%;
+  color: #697a8d;
+  font-size: 12px;
+  border: 0.5px solid lightgray;
+  border-radius: 8px;
+  padding: 15px;
+  width: 90%;
+  margin-left: 5%; /* Add margin-bottom for the gap */
+  word-wrap: break-word;
+}
+.comments {
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  color: #697a8d;
+  background-color: #d9dee3;
+  /* margin-top: 31%; */
+  border-radius: 8px;
+  height: 25%;
+  margin-left: -15px;
+  margin-bottom: -15px;
+  margin-right: -15px;
+  width: 106.3%;
+}
+
 .form-control[type="file"]:not(:disabled):not([readonly]):hover {
   cursor: pointer;
   background-color: #e7e7ff !important;
@@ -18,4 +120,33 @@ input:focus {
   outline: none; /* Remove default focus outline */
   border: 1px solid #5f61e6 !important; /* Add custom border */
   box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
+}
+.mark {
+  padding: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  border: none;
+  background-color: #5f61e6;
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  float: right;
+}
+/*file upload icon*/
+.file {
+  float: right;
+  margin-right: 5%;
+}
+.back:hover,
+.full:hover,
+.file:hover {
+  cursor: pointer;
+}
+.full {
+  float: right;
+  margin-right: 5%;
+}
+.back {
+  float: right;
+  margin-right: 2%;
 }

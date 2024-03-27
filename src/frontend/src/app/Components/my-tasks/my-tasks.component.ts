@@ -5,6 +5,7 @@ import { Route, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProjectStatus } from '../../Entities/Project';
+import { SharedService } from '../../_services/shared.service';
 
 @Component({
   selector: 'app-my-tasks',
@@ -25,7 +26,8 @@ export class MyTasksComponent implements OnInit {
     private myTasksService: MyTasksService,
     private router: Router,
     private datePipe: DatePipe,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private shared:SharedService
   ) {}
 
   ngOnInit(): void {
@@ -60,9 +62,11 @@ export class MyTasksComponent implements OnInit {
           row.style.backgroundColor = '';
           this.showPopUp = false;
           this.clickedTask = null;
+          this.shared.current_task_id=null;
         } else {
           this.clickedTask = task;
           this.showPopUp = true;
+          this.shared.current_task_id = this.clickedTask.id;//cycluje trenutni task id u shared servisu
         }
       });
   }
