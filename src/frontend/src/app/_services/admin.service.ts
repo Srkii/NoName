@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Observable } from 'rxjs';
 import { Invintation } from '../Entities/Invitation';
-import { Invatation } from '../Entities/Invatation';
+import { Invatation } from '../Entities/RegisterInvitation';
 
 @Injectable({
   providedIn: 'root'
