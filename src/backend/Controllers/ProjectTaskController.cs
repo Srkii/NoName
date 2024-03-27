@@ -81,7 +81,7 @@ namespace backend.Controllers
         }
 
         [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
-        public async Task<IActionResult> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
+        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
         {
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
 
