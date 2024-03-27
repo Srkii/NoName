@@ -18,14 +18,14 @@
       <div id="all1">
         <h5>📬 New Tasks</h5>
 
-        <table>
+        <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
           <tr>
-            <th></th>
-            <th>TASK NAME</th>
-            <th>ORIGIN PROJECT</th>
-            <th>ASSIGNEES</th>
+            <th class="check"></th>
+            <th>Task Name</th>
+            <th>Origin Project</th>
+            <th>Assignee</th>
             <th>
-              DUE DATE
+              Due Date
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -75,14 +75,14 @@
       <div id="all1">
         <h5>&#10024; Due in 3 days</h5>
 
-        <table>
+        <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
           <tr>
-            <th></th>
+            <th class="check"></th>
             <th>Task Name</th>
-            <th>ORIGIN PROJECT</th>
-            <th>ASSIGNEES</th>
+            <th>Origin Project</th>
+            <th>Assignee</th>
             <th>
-              DUE DATE
+              Due Date
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -136,14 +136,14 @@
       <div id="all1">
         <h5>🎉 Completed</h5>
 
-        <table>
+        <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
           <tr>
-            <th></th>
-            <th>TASK NAME</th>
-            <th>ORIGIN PROJECT</th>
-            <th>ASSIGNEES</th>
+            <th class="check"></th>
+            <th>Task Name</th>
+            <th>Origin Project</th>
+            <th>Assignee</th>
             <th>
-              DUE DATE
+              Due Date
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -193,6 +193,10 @@
       </div>
     </div>
     <br />
-    <app-popup *ngIf="showPopUp" [task]="clickedTask"></app-popup>
+    <app-popup
+      *ngIf="showPopUp"
+      [task]="clickedTask"
+      (backClicked)="closePopup()"
+    ></app-popup>
   </body>
 </html>

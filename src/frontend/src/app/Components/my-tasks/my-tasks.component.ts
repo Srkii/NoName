@@ -28,6 +28,11 @@ export class MyTasksComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) {}
 
+  closePopup() {
+    this.clickedTask = null; // Set ClickedTask to null when back button is clicked
+    this.showPopUp = false; // Close the pop-up
+  }
+
   ngOnInit(): void {
     this.spinner.show();
     const userId = localStorage.getItem('id'); // Get the user ID from local storage
@@ -47,6 +52,13 @@ export class MyTasksComponent implements OnInit {
   }
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); // Prevent event bubbling if necessary
+
+    const target = event.target as HTMLElement;
+    if (target.tagName.toLowerCase() === 'input') {
+      // Ignore clicks on input elements
+      return;
+    }
+
     // Assuming GetProjectTaskById is a method that fetches the task details
     const row = document.querySelector('.red') as HTMLElement;
     this.myTasksService
@@ -127,7 +139,12 @@ export class MyTasksComponent implements OnInit {
     const popUp = document.querySelector('.pop') as HTMLElement;
     if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
       this.showPopUp = false;
+      this.clickedTask = null;
     }
+  }
+
+  isTasksEmpty(): boolean {
+    return this.tasks.length === 0;
   }
 
   // getStatusString(status: TaskStatus): string {

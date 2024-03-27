@@ -38,8 +38,10 @@ table {
   width: 100%;
   /* margin-left: 20px; */
   border-left: none;
+  border-bottom: none;
   border-right: none;
 }
+
 @media (max-width: 1200px) {
   td {
     padding: 2px;
@@ -52,6 +54,7 @@ th {
   padding: 5px;
   border-left: none;
   border-right: none;
+  width: 15%;
 }
 td:first-child {
   text-align: center;
@@ -64,6 +67,18 @@ td {
   /* padding-left: 20px; */
   font-size: 12px;
 }
+
+.check {
+  width: 7%;
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+
 .name {
   font-size: 14px;
   font-weight: bold;
@@ -87,6 +102,10 @@ p {
 }
 .filter:hover {
   cursor: pointer;
+}
+.empty-table tr :first-child {
+  border: 1px solid red;
+  /* border-bottom: none; */
 }
 
 /* .mark:hover {
