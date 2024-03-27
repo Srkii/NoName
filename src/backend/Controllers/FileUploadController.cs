@@ -67,15 +67,5 @@ namespace backend.Controllers
 
         //     return File(fileBytes,)
         // } za sad ne mora, smislicu posle
-        /*
-        TODO
-        upload fotografije 
-        removal fotografije
-        upload attachmenta:
-            za njih nije bitno sta su
-            za profilne slike je bitno jer su veszane za korisnike direktno
-            a za attachment nije bitno da li je .docx ili .png ili .c fajl 
-            oni svi idu u attachment folder i izvlace se odatle za preuzimanje...
-        */
     }
 }

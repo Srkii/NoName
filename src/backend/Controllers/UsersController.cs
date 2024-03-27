@@ -148,53 +148,5 @@ namespace backend.Controllers
 
       return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
     }
-    [HttpPost("add-photo/{id}")]
-    public async Task<ActionResult<PhotoDto>> AddPhoto(int id, IFormFile image)
-    {
-      var user = await _context.Users.FindAsync(id);
-
-      var oldphoto = await _context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
-
-      var result = await _photoService.AddPhotoAsync(image);
-      var photo = new Photo
-      {
-        url = result.SecureUrl.AbsoluteUri,
-        PublicId = result.PublicId,
-        AppUserId = user.Id
-      };
-
-      if (oldphoto != null)
-      {
-        await _photoService.DeletePhotoAsync(oldphoto.PublicId);
-        _context.Photos.Remove(oldphoto);
-      }
-
-      _context.Photos.Add(photo);
-      await _context.SaveChangesAsync();
-      return new PhotoDto
-      {
-        Id = photo.Id,
-        Url = photo.url,
-      };
-    }
-    [HttpDelete("remove-photo/{id}")]
-    public async Task<ActionResult> RemovePhoto(int id)
-    {
-      var image = await _context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
-      var response = await _photoService.DeletePhotoAsync(image.PublicId);
-      _context.Photos.Remove(image);
-      return Ok(response);
-    }
-
-    [HttpGet("profilePic/{id}")]
-    public async Task<ActionResult<PhotoDto>> GetPhotoByUserId(int id)
-    {
-      var result = await _context.Photos.FirstOrDefaultAsync(x => x.AppUserId == id);
-      return new PhotoDto
-      {
-        Id = result.Id,
-        Url = result.url
-      };
-    }
   }
 }
