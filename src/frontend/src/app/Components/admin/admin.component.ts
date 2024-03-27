@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { AdminService } from '../../_services/admin.service';
 import { Invatation } from '../../Entities/RegisterInvitation';
+import { Member, UserRole } from '../../Entities/Member';
+import { ChangeRole } from '../../Entities/ChangeRole';
+import { UpdateUser } from '../../Entities/UpdateUser';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -31,12 +34,18 @@ export class AdminComponent implements OnInit{
 
   roles: UserRole[] = [UserRole.Admin, UserRole.Member, UserRole.ProjectManager];
 
-  changeRole:ChangeRole={
+  changeRole: ChangeRole={
     Id: 0,
-    Role: UserRole.Member
+    Role: 0
   }
 
   numberOfRoles!: number
+
+  updateUser: UpdateUser={
+    FirstName: '',
+    LastName: '',
+    Email: ''
+  }
 
   Invite(): void{
     if(this.invatation)
@@ -89,6 +98,7 @@ export class AdminComponent implements OnInit{
     ChangeUserRole(): void{
       if(this.changeRole)
       {
+        console.log(this.changeRole)
         this.adminService.changeUserRole(this.changeRole).subscribe(
           (response)=>{
             console.log(response);
@@ -96,9 +106,17 @@ export class AdminComponent implements OnInit{
         )
       }
       error:()=>{
-        console.log("Email is not sent")
+        console.log("Can't change user role")
       }}
     
- 
+    UpdateUser(id: number): void{
+      if(this.updateUser){
+        this.adminService.updateUser(id,this.updateUser).subscribe(
+          (response)=>{
+            console.log(response)
+          }
+        )
+      }
+    }
   }
 

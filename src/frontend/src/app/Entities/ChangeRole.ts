@@ -1,6 +1,6 @@
 export interface ChangeRole{
     Id: number,
-    Role: UserRole
+    Role: number
 }
 export enum UserRole {
     Admin,

@@ -4,6 +4,9 @@ import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Observable, of } from 'rxjs';
 import { Invintation } from '../Entities/Invitation';
 import { Invatation } from '../Entities/RegisterInvitation';
+import { Member } from '../Entities/Member';
+import { ChangeRole } from '../Entities/ChangeRole';
+import { UpdateUser } from '../Entities/UpdateUser';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +48,18 @@ export class AdminService {
   }
 
   //updateUser
+  updateUser(id: number, user:UpdateUser): Observable<any>{
+    let token=localStorage.getItem("token");
+    if(token)
+    {
+      let httpHeader=new HttpHeaders({
+        "Authorization": `Bearer ${token}`
+      });
+
+      return this.httpClient.put<Member>(`${this.apiUrl}/users/updateUser/${id}`,user,{headers:httpHeader})
+    }
+    else return of(null); 
+  }
 
   //ArchiveUser
 
