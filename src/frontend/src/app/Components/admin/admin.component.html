@@ -1,5 +1,4 @@
-<section class="background-radial-gradient overflow-hidden">
-<div class="left">
+<!-- <div class="left">
     <h2>Invite member</h2>
     <form (ngSubmit)="Invite()" autocomplete="off">
         <div class="form-floating mb-4">
@@ -17,5 +16,57 @@
             Invite
           </button>
     </form>
+</div> -->
+
+
+    <div class="col-sm-6 col-md-3 col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title d-flex align-items-start justify-content-between mb-4">
+            <div class="avatar flex-shrink-0">
+              <img src="../../assets/img/icons/unicons/cube-secondary.png" alt="cube" class="rounded">
+            </div>
+            <div class="dropdown">
+              <button class="btn p-0" type="button" id="cardOpt2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="bx bx-dots-vertical-rounded"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt2">
+                <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+              </div>
+            </div>
+          </div>
+          <span class="fw-medium d-block mb-1">Order</span>
+          <h4 class="card-title mb-2">$1,286</h4>
+          <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -13.24%</small>
+        </div>
+      </div>
+    </div>
+
+
+<!-- <form class="d-flex" onsubmit="return false">
+  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+  <button class="btn btn-outline-primary" type="submit">Search</button>
+</form>
+
+<div *ngFor="let user of allUsers">
+<h1>{{user.firstName}} {{user.lastName}} {{ GetUserRole(user.role) }}</h1>
 </div>
-</section>
+
+<button (click)="SplitByRole()">Split</button>
+<div *ngFor="let user of admins">
+  <h1>{{user.firstName}} {{user.lastName}} {{ GetUserRole(user.role) }}</h1>
+</div>
+<br>
+<div>
+  <form (ngSubmit)="ChangeUserRole()">
+    <input type="number" name="id" [(ngModel)]="changeRole.Id" placeholder="id">
+    <select name="role" [(ngModel)]="changeRole.Role" placeholder="role">
+      <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+    </select>
+    <button type="submit">Change</button>
+  </form>
+</div> -->
+
+
+
