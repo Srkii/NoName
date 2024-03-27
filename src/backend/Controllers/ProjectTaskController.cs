@@ -18,7 +18,8 @@ namespace backend.Controllers
             _context = context;
         }
         
-        [Authorize]
+        // [Authorize]
+        [AllowAnonymous]
         [HttpPost] // POST: api/projectTask/
         public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
         {
@@ -41,7 +42,8 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
         }
         
-        [Authorize]
+        // [Authorize]
+        [AllowAnonymous]
         [HttpGet] // GET: api/projectTask/
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetProjectTasks()
         {
@@ -51,7 +53,8 @@ namespace backend.Controllers
             return tasks;
         }
 
-        [Authorize]
+        // [Authorize]
+        [AllowAnonymous]
         [HttpGet("{id}")] // GET: api/projectTask/2
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
         {
@@ -64,7 +67,7 @@ namespace backend.Controllers
             }
             return tasklist[0];
         }
-
+        [AllowAnonymous]
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
         {

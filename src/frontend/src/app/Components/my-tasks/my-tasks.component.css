@@ -107,8 +107,8 @@ p {
   cursor: pointer;
 }
 .empty-table tr :first-child {
-  border: 1px solid red;
-  /* border-bottom: none; */
+  /* border: 1px solid red; */
+  border-bottom: none;
 }
 
 /* .mark:hover {

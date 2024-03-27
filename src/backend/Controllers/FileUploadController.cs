@@ -40,7 +40,7 @@ namespace backend.Controllers
             string path = Directory.GetCurrentDirectory()+"\\Assets\\Images\\"+filename;
             var imageBytes = System.IO.File.ReadAllBytes(path);
 
-            return File(imageBytes,"image/jpeg");
+            return File(imageBytes,"image/jpeg/png");
         }
         [AllowAnonymous]
         [HttpPost("uploadfile/{id}")]
