@@ -19,7 +19,7 @@ namespace backend.Controllers
         }
 
         [HttpPost] // POST: api/projectTask/
-        public async Task<ActionResult<ProjectTaskDto>> CreateTask(ProjectTaskDto taskDto)
+        public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
         {
             var task = new ProjectTask
             {
@@ -53,12 +53,70 @@ namespace backend.Controllers
         [HttpGet("{id}")] // GET: api/projectTask/2
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
         {
-            var task = await _context.ProjectTasks.FindAsync(id);
+            var tasklist = await _context.ProjectTasks
+              .Include(task => task.Project).Where(t => t.Id == id).ToListAsync();
+
+            if (tasklist == null)
+            {
+                return NotFound();
+            }
+            return tasklist[0];
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
+        {
+            var tasks = await _context.ProjectTasks
+                                      .Include(task => task.Project)
+                                      .Join(_context.TaskMembers,
+                                            task => task.Id,
+                                            member => member.TaskId,
+                                            (task, member) => new { task, member })
+                                      .Where(tm => tm.member.AppUserId == userId)
+                                      .Select(tm => tm.task) // Change this line
+                                      .ToListAsync();
+            return tasks;
+        }
+
+        [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
+        public async Task<IActionResult> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
+        {
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
+
             if (task == null)
             {
                 return NotFound();
             }
-            return task;
+
+            // Update task properties
+            task.TaskStatus = taskDto.TaskStatus;
+
+            // No need to set EntityState.Modified, as EF Core tracks changes automatically
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjectTaskExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
+
+        private bool ProjectTaskExists(int id)
+        {
+            return _context.ProjectTasks.Any(e => e.Id == id);
+        }
+
+
     }
 }
