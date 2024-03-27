@@ -80,6 +80,18 @@ namespace backend.Controllers
             return tasks;
         }
 
+        [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
+        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
+        {
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+            return task;
+        }
+
         [Authorize]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
         public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
@@ -136,7 +148,7 @@ namespace backend.Controllers
 
             await _context.TaskDependencies.AddAsync(taskDep);
             await _context.SaveChangesAsync();
-
+        //komentar
             return Ok(taskDep);
         }
 
@@ -159,5 +171,16 @@ namespace backend.Controllers
             var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(x => x.AppUserId == userId && x.ProjectId == projectId && roles.Contains(x.ProjectRole));
             return projectMember != null;
         }
+
+        [HttpGet("ByProject/{projectId}")] // New method to get tasks by project ID
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId)
+        {
+            var tasks = await _context.ProjectTasks
+                .Where(t => t.ProjectId == projectId)
+                .Include(t => t.Project) // Include project details if needed
+                .ToListAsync();
+            return tasks;
+        }
     }
 }
+

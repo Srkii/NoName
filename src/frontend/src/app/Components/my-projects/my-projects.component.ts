@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-projects',
@@ -12,18 +13,19 @@ export class MyProjectsComponent implements OnInit {
   projects: Project[] = [];
 
   constructor(
+    
     private myProjectsService: MyProjectsService,
-    private spinner: NgxSpinnerService
+   
+    private spinner: NgxSpinnerService,
+    private router: Router
+  
   ) {}
 
   ngOnInit(): void {
     this.spinner.show();
-    setTimeout(() => {
-      /** spinner ends after 5 seconds */
-      this.spinner.hide();
-    }, 700);
     this.myProjectsService.getProjects().subscribe((projects: Project[]) => {
       this.projects = projects;
+      this.spinner.hide();
     });
   }
 
@@ -331,5 +333,9 @@ export class MyProjectsComponent implements OnInit {
         : currentDate.getFullYear();
 
     return date.getMonth() === lastMonth && date.getFullYear() === lastYear;
+  }
+
+  goToProject(id: number) {
+    this.router.navigate(['/project', id]);
   }
 }

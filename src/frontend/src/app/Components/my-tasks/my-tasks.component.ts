@@ -35,6 +35,33 @@ export class MyTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
+    this.myTasksService.GetProjectTasks().subscribe((tasks: ProjectTask[]) => {
+      this.tasks = tasks;
+      this.spinner.hide();
+    });
+  }
+  togglePopUp(task: ProjectTask) {
+    const popUp = document.querySelector('.pop') as HTMLElement;
+    const popUpTaskName = document.querySelector('.pop h6') as HTMLElement;
+    const popUpDueDate = document.querySelector(
+      '.pop #popupDueDate'
+    ) as HTMLElement;
+    const popUpOriginProject = document.querySelector(
+      '.pop #popupOriginProject'
+    ) as HTMLElement;
+
+    if (popUp && popUpTaskName && popUpDueDate && popUpOriginProject) {
+      if (this.clickedTask === task) {
+        // If so, reset clickedTask to null and hide the pop-up
+        this.clickedTask = null;
+      } else {
+        this.clickedTask = task;
+      }
+      if (
+        popUp.style.display === 'block' &&
+        popUpTaskName.textContent === task.taskName
+      ) {
+        popUp.style.display = 'none';
     const userId = localStorage.getItem('id'); // Get the user ID from local storage
     if (userId) {
       this.myTasksService

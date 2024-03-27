@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { PopupComponent } from './Components/popup/popup.component';
+import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { PopupComponent } from './Components/popup/popup.component';
     MyProjectsComponent,
     MyTasksComponent,
     PopupComponent,
+    ProjectDetailComponent,
   ],
   imports: [
     BrowserModule,
