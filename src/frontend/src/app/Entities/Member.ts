@@ -1,11 +1,11 @@
 export interface Member {
-    firstName?: string;
-    lastName?: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
     token: string;
-    role?: UserRole;
-    archived?:boolean;
+    role: UserRole;
+    archived:boolean;
 }
 export enum UserRole {
     Admin,

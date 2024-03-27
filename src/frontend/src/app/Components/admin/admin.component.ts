@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { AdminService } from '../../_services/admin.service';
 import { Invatation } from '../../Entities/Invatation';
-import { Member } from '../../Entities/Member';
+import { Member, UserRole } from '../../Entities/Member';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -16,7 +16,6 @@ export class AdminComponent implements OnInit{
   constructor(private adminService:AdminService ){}
   ngOnInit(): void {
     this.GetAllUsers()
-   
   }
 
   invatation:Invatation={
@@ -41,20 +40,25 @@ export class AdminComponent implements OnInit{
     GetAllUsers(): void{
       this.adminService.getAllUsers().subscribe({next:(response)=>{
         this.allUsers=response
-        console.log(response)
-        console.log(this.allUsers)
-        this.print()
       },error:(error)=>{
         console.log(error)
       }})
     }
 
-    print():void{
-      console.log(this.allUsers)
-      this.allUsers.forEach(user => {
-        console.log(`${user?.email} ${user?.lastName}`);
-    });
+    GetUserRole(role:UserRole): string{
+        switch(role){
+          case UserRole.Admin:
+            return "Admin"
+          case UserRole.Member:
+            return "Member"
+          case UserRole.ProjectManager:
+            return "Project Manager"
+          default:
+            return ''
+        }
     }
+
+    
     
   }
 
