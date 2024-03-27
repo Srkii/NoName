@@ -68,7 +68,7 @@ export class UserInfoComponent implements OnInit {
       console.error("Token not found in local storage");
     }
   }
-  apply_changes(){
+  apply_changes(){//menjaj celo
     if(this.newData.CurrentPassword==''){
       alert("input old password for verification...");
       return;

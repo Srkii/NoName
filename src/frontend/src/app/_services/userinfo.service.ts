@@ -21,7 +21,7 @@ export class UserinfoService {
   }
 
   updateUserInfo(token: any, id:number, data:ChangePassword):Observable<any>{
-    const url = `https://localhost:5001/api/users/updateUser/${id}`;
+    const url = `https://localhost:5001/api/users/changePassword/${id}`;
     console.log("Xd");
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${token}`)
