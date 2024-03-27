@@ -3,6 +3,7 @@ import { ProjectTask, TaskStatus } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { Route, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-my-tasks',
@@ -18,10 +19,16 @@ export class MyTasksComponent implements OnInit {
   constructor(
     private myTasksService: MyTasksService,
     private router: Router,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
+    this.spinner.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinner.hide();
+    }, 700);
     this.myTasksService.GetProjectTasks().subscribe((tasks: ProjectTask[]) => {
       this.tasks = tasks;
     });

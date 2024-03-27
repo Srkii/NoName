@@ -26,7 +26,7 @@ export class MailresetService {
   }
 
   resetPassword(resetRequest: ResetRequest): Observable<any> {
-    return this.http.post(`${this.resetPUrl}/account/changePassword`, resetRequest, {
+    return this.http.post(`${this.resetPUrl}/account/resetPassword`, resetRequest, {
       responseType: 'json',
     });
   }

@@ -1,8 +1,14 @@
-﻿namespace backend.DTO;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class PasswordResetDto
+namespace backend.DTO
 {
-    public string Email { get; set; }
-    public string Token { get; set; }
-    public string NewPassword{get;set;}
+    public class PasswordResetDto
+    {
+        [EmailAddress]
+        public string Email { get; set; }
+        public string Token { get; set; }
+        
+        // [StringLength(7, ErrorMessage = "Password must have at least 7 characters", MinimumLength = 7)]
+        public string NewPassword{get;set;}
+    }
 }

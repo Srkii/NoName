@@ -1,14 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+
 namespace backend.DTO
 {
     public class ChangePasswordDto
     {
         [Required]
         public string CurrentPassword { get; set; }
+        
+        // [StringLength(7, ErrorMessage = "Password must have at least 7 characters", MinimumLength = 7)]
         public string NewPassword { get; set; }
-        public string NewPasswordConfirm { get; set; }
-        public string FirstName { get; internal set; }
-        public string LastName { get; internal set; }
-        public string Email { get; internal set; }
     }
 }
