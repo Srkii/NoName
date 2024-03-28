@@ -35,7 +35,6 @@ export class KanbanComponent implements OnInit{
     });
     this.GetTaskStatuses();
     this.getProjectTasks();
-    console.log(this.tasksBySection);
     this.spinner.hide();
   }
   
@@ -80,7 +79,6 @@ export class KanbanComponent implements OnInit{
       this.taskStatuses = statuses;
       this.taskStatuses.forEach(status => {
         this.tasksBySection[status.name] = [];
-        console.log(this.tasksBySection);
       });
       this.getProjectTasks();
     });
@@ -97,14 +95,7 @@ export class KanbanComponent implements OnInit{
       const newStatus = this.taskStatuses.find(s => s.name === event.container.id);
       if (task && newStatus) {
         task.taskStatus = newStatus.id;
-        this.myTasksService.updateTaskStatus(task.id, task).subscribe(
-          (updatedTask: ProjectTask) => {
-            console.log('Task status updated successfully:', updatedTask);
-          },
-          (error: any) => {
-            console.error('Error updating task status:', error);
-          }
-        );
+        this.myTasksService.updateTaskStatus(task.id, task).subscribe();
       }                        
     }
   }
