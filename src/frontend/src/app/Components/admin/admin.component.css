@@ -1,13 +1,84 @@
-html {
+*{
     font-family: "Public Sans", sans-serif;
     background-color: #f5f5f9;
-  }
-  body {
+}
+body{
     background-color: #f5f5f9;
     color: #697a8d;
     margin: auto;
-  }
+}
+
+.container {
+  display: flex; /* Koristi flexbox */
+  justify-content: center; /* Centriraj horizontalno */
+  align-items: center;
+}
+
+
+
+.caard {
+  display: flex;
+  justify-content: space-between;
+  flex: 1; /* Ravnomjerno raspoređuje prostore između kartica */
+  border: 1px solid #ccc; /* Dodaj ivicu radi bolje vidljivosti */
+  margin-right: 10px; /* Dodaj malo margine između kartica */
+  padding: 10px 20px 10px 20px;
+  width: 25%;
+  text-shadow:  rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: saturate(200%) blur(6px);
+  border-radius: 8px;
+  color: #697a8d;
+  margin-bottom: 2%;
+}
   
+.col-md-6 col-lg-7 mb-0{
+  width: 100%;
+}
 
+#tableIcon{
+  width: 20px;
+  height: auto;
+}
 
+.invite {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  float: right;
+  margin-right: 7%;
+}
 
+.btn-primary {
+  background-color:rgb(103, 30, 221);; /* Postavi boju dugmeta na ljubičastu */
+  border-color: rgb(103, 30, 221); /* Postavi boju ivice na ljubičastu */
+  width: 20%;
+  float: right;
+}
+
+.btn-primary:hover {
+  background-color: darkpurple; /* Promeni boju dugmeta na tamnoljubičastu prilikom prelaska mišem */
+  border-color: darkpurple; /* Promeni boju ivice na tamnoljubičastu prilikom prelaska mišem */
+}
+
+.search{
+  float: left;
+}
+
+.inputs{
+  display: flex; /* Koristi flexbox */
+  justify-content: center; /* Centriraj horizontalno */
+ padding-left: 7%;
+ padding-right: 7;
+ margin-top: 2;
+}
+.row{
+  width: 100%;
+}
+.inputs .invite{
+  margin-left: 5%;
+}
+.inputs .search{
+  margin-left: 1%;
+  margin-right: 5%;
+}

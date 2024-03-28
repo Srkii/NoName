@@ -10,5 +10,8 @@ body {
 .toast-error {
   background-color: #696cff;
 }
+.toast-success {
+  background-color: #696cff;
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

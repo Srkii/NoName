@@ -2,11 +2,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Observable, of } from 'rxjs';
-import { Invintation } from '../Entities/Invitation';
-import { Invatation } from '../Entities/RegisterInvitation';
+
 import { Member } from '../Entities/Member';
 import { ChangeRole } from '../Entities/ChangeRole';
 import { UpdateUser } from '../Entities/UpdateUser';
+import { AppUser } from '../Entities/AppUser';
+import { RegisterInvitation } from '../Entities/RegisterInvitation';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class AdminService {
     else return false
   }
 
-  sendInvatation(invData: Invatation): Observable<any>{
+  sendInvatation(invData: RegisterInvitation): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -62,6 +63,18 @@ export class AdminService {
   }
 
   //ArchiveUser
+  archiveUser(id: number): Observable<any> {
+    const token = localStorage.getItem('jwt_token')
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      })
+    };
+
+    return this.httpClient.post(`${this.apiUrl}/users/setAsArchived/${id}`, null, httpOptions);
+  }
 
   changeUserRole(response: ChangeRole): Observable<any>{
     let token=localStorage.getItem("token");
