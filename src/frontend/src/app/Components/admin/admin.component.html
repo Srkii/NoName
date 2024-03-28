@@ -1,72 +1,149 @@
-<!-- <div class="left">
-    <h2>Invite member</h2>
-    <form (ngSubmit)="Invite()" autocomplete="off">
-        <div class="form-floating mb-4">
-            <input
-              type="text"
-              id="form3Example4"
-              class="form-control"
-              name="email"
-              [(ngModel)]="invatation.receiver"
-              placeholder="Email"
-            />
-            <label class="form-label" for="form3Example4">Email</label>
-          </div>
-        <button type="submit" class="btn btn-primary btn-block mb-4">
-            Invite
-          </button>
-    </form>
-</div> -->
-
-
-    <div class="col-sm-6 col-md-3 col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-            <div class="avatar flex-shrink-0">
-              <img src="../../assets/img/icons/unicons/cube-secondary.png" alt="cube" class="rounded">
-            </div>
-            <div class="dropdown">
-              <button class="btn p-0" type="button" id="cardOpt2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="bx bx-dots-vertical-rounded"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt2">
-                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-              </div>
-            </div>
-          </div>
-          <span class="fw-medium d-block mb-1">Order</span>
-          <h4 class="card-title mb-2">$1,286</h4>
-          <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -13.24%</small>
-        </div>
-      </div>
-    </div>
-
-
-<!-- <form class="d-flex" onsubmit="return false">
-  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-  <button class="btn btn-outline-primary" type="submit">Search</button>
-</form>
-
-<div *ngFor="let user of allUsers">
-<h1>{{user.firstName}} {{user.lastName}} {{ GetUserRole(user.role) }}</h1>
+<div class="container">
+  <div class="caard">
+    <small>Total 4 users</small> 
+    <h3>Administratorts</h3>
+  </div>
+  <div class="caard" (click)="SplitByRole()">
+    <small>Total 4 users</small> 
+    <h3>Project Menagers</h3>
+  </div>
+  <div class="caard">
+    <small>Total 4 users</small> 
+    <h3>Members</h3>
+  </div>
 </div>
 
-<button (click)="SplitByRole()">Split</button>
+<div class="inputs">
+<div class="search">
+  <form class="d-flex" onsubmit="return false">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-primary" type="submit">Search</button>
+  </form>
+
+</div>
+
+<div class="invite">
+
+  <input type="text"
+  id="form3Example4"
+  class="form-control"
+  name="email"
+  [(ngModel)]="invitation.receiver"
+  placeholder="Email" />
+
+  <button type="submit" class="btn btn-primary btn-block mb-4" (click)="Invite()">
+    Invite
+  </button>
+</div>
+
+</div>
+
+<div class="container">
+  <div class="row justify-content-center">
+
+  <div class="card">
+    <div class="card-datatable table-responsive">
+      <table class="invoice-list-table table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Role</th>
+            <!-- <th>WorkLoad</th> -->
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          <tr *ngFor="let user of allUsers" >
+            <td  *ngIf="!user.archived">
+              <div class="d-flex justify-content-start align-items-center">
+                <div class="avatar-wrapper">
+                  <div class="avatar avatar-sm me-2"><img src="../../../assets/navIcons/user (4).png" alt="Avatar"></div>
+                </div>
+                <div class="d-flex flex-column">
+                  <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
+                  <small class="text-truncate text-muted">{{user.email}}</small>
+                </div>
+              </div>
+            </td>
+            <td  *ngIf="!user.archived">{{GetUserRole(user.role)}}</td>
+            <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
+            <td  *ngIf="!user.archived">
+              <div class="d-flex align-items-center">
+                <img src="../../../assets/navIcons/edit.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
+                   href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <span class="dropdown-item">Update user</span>
+                    <form (ngSubmit)="UpdateUser(user.id)">
+                    <input type="text" id="text" name="email" [(ngModel)]="updateUser.Email" placeholder="email">
+                    <input type="text" id="text" name="name" [(ngModel)]="updateUser.FirstName" placeholder="first name">
+                    <input type="text" id="text" name="email" [(ngModel)]="updateUser.LastName" placeholder="last name">
+                    <button type="submit">Update user</button>
+                    <div class="dropdown-divider"></div>
+                  </form>
+                  </div>
+
+                  <img src="../../../assets/navIcons/delete.png" (click)="ArchiveUser(user.id)" id="tableIcon" aria-expanded="false">
+                
+                  <img src="../../../assets/navIcons/more.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
+                    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <span class="dropdown-item">Change user role</span>
+                    <form (ngSubmit)="ChangeUserRole()">
+                      <input type="number" name="id" [(ngModel)]="changeRole.Id" placeholder="id">
+                      <input type="number" name="role" [(ngModel)]="changeRole.Role" placeholder="role">
+                       <button type="submit">Change</button>
+                    </form>
+                  </div>
+                  
+               
+              </div>
+            </td>
+          </tr>
+
+
+
+       
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  </div>
+
+
+
+<!-- <div *ngFor="let user of allUsers">
+<h3 *ngIf="!user.archived">{{user.firstName}} {{user.lastName}} {{ GetUserRole(user.role) }}</h3>
+<div>
+  <p>Update user</p>
+  <form>
+    <input type="text" id="text" name="email" [(ngModel)]="updateUser.Email" placeholder="email">
+    <input type="text" id="text" name="name" [(ngModel)]="updateUser.FirstName" placeholder="first name">
+    <input type="text" id="text" name="email" [(ngModel)]="updateUser.LastName" placeholder="prezime">
+    <button type="submit" (click)="UpdateUser(user.id)">update</button>
+    <button type="submit" (click)="ArchiveUser(user.id)">archive</button>
+  </form>
+</div>
+</div> -->
+
+<!-- <button (click)="SplitByRole()">Split</button>
 <div *ngFor="let user of admins">
   <h1>{{user.firstName}} {{user.lastName}} {{ GetUserRole(user.role) }}</h1>
+
 </div>
 <br>
 <div>
   <form (ngSubmit)="ChangeUserRole()">
     <input type="number" name="id" [(ngModel)]="changeRole.Id" placeholder="id">
-    <select name="role" [(ngModel)]="changeRole.Role" placeholder="role">
+    <input type="number" name="role" [(ngModel)]="changeRole.Role" placeholder="role"> -->
+    <!-- <select name="role" [(ngModel)]="changeRole.Role" placeholder="role">
       <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-    </select>
-    <button type="submit">Change</button>
+    </select> -->
+    <!-- <button type="submit">Change</button>
   </form>
 </div> -->
+
+
 
 
 

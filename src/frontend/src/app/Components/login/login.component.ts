@@ -25,7 +25,14 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
-        this.router.navigate(['/mytasks']);
+        if(localStorage.getItem('role')=='0')
+        {
+          this.router.navigate(['/admin']);
+        }
+        else
+        {
+          this.router.navigate(['/mytasks']);
+        }
         console.log('Successful login');
       },
       error: (error) => {

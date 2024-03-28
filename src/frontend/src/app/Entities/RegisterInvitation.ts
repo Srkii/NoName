@@ -1,3 +1,3 @@
-export interface Invatation{
+export interface RegisterInvitation{
     receiver:string
 }

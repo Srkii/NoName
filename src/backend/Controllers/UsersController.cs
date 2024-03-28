@@ -57,7 +57,8 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     [HttpPost("setAsArchived/{id}")]   //api/users/setAsArchived/1
     public async Task<ActionResult<UserDto>> ArchiveUser(int id)
     {
