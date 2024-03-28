@@ -1,0 +1,50 @@
+.board-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    min-width: 0;
+    min-height: 0;
+}
+
+.board-wrapper {
+    display: flex;
+    flex-grow: 1;
+    overflow-x: auto;
+}
+
+.board-column {
+    background-color: rgb(230, 224, 224);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* flex-basis: 0; */
+    min-width: 100px;
+    margin: 20px;
+    padding: 25px;
+    border-radius: 0.5rem;
+}
+
+.column-title {
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+.tasks-container {
+    flex-grow: 1;
+}
+.task {
+    display: flex;
+    padding: 15px 12px;
+    background: white;
+    border-bottom: solid 1px #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05), 0 3px 14px 2px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+}

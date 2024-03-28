@@ -43,7 +43,7 @@ namespace backend
             };
         }
 
-        [Authorize(Roles = "ProjectManager,Member")]
+        // [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet] // GET: api/projects/
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
@@ -51,14 +51,14 @@ namespace backend
             return projects;
         }
 
-        [Authorize(Roles = "ProjectManager,Member")]
+        // [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("{id}")] // GET: api/projects/2
         public async Task<ActionResult<Project>> GetProject(int id)
         {
             return await _context.Projects.FindAsync(id);
         }
 
-        [Authorize(Roles = "ProjectManager")]
+        // [Authorize(Roles = "ProjectManager")]
         [HttpPut("{id}")] // PUT: api/projects/3
         public async Task<IActionResult> UpdateProject(int id, ProjectDto projectDto)
         {

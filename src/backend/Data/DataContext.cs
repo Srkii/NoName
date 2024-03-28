@@ -1,7 +1,5 @@
 ﻿using backend.Entities;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace backend.Data
 {

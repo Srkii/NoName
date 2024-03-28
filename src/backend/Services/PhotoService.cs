@@ -24,9 +24,10 @@ namespace backend.Services
 
         public void DeletePhoto(string url)
         {
-            if (File.Exists(url))
+            string path_check=_path+"\\"+url;
+            if (File.Exists(path_check))
             {
-                File.Delete(url);
+                File.Delete(path_check);
             }
         }
     }

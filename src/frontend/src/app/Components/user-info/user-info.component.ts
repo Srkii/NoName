@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { AppUser } from '../../Entities/AppUser';
 import { ChangePassword } from '../../Entities/ChangePassword';
-import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -53,9 +53,9 @@ export class UserInfoComponent implements OnInit {
               console.error("Error loading image",error);
             });
           }
-          if(this.userInfo.role == 1){
+          if(this.userInfo.role == 2){
             this.role="Project manager";
-          }else if(this.userInfo.role == 2){
+          }else if(this.userInfo.role == 1){
             this.role="Member";
           }else this.role="Admin";
         },
@@ -68,7 +68,7 @@ export class UserInfoComponent implements OnInit {
       console.error("Token not found in local storage");
     }
   }
-  apply_changes(){
+  apply_changes(){//menjaj celo
     if(this.newData.CurrentPassword==''){
       alert("input old password for verification...");
       return;

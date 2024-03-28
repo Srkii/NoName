@@ -18,7 +18,8 @@ namespace backend.Controllers
             _context = context;
         }
         
-        [Authorize]
+        // [Authorize]
+        [AllowAnonymous]
         [HttpPost] // POST: api/projectTask/
         public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
         {
@@ -41,7 +42,8 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
         }
         
-        [Authorize]
+        // [Authorize]
+        [AllowAnonymous]
         [HttpGet] // GET: api/projectTask/
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetProjectTasks()
         {
@@ -51,7 +53,8 @@ namespace backend.Controllers
             return tasks;
         }
 
-        [Authorize]
+        // [Authorize]
+        [AllowAnonymous]
         [HttpGet("{id}")] // GET: api/projectTask/2
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
         {
@@ -64,7 +67,7 @@ namespace backend.Controllers
             }
             return tasklist[0];
         }
-
+        [AllowAnonymous]
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
         {
@@ -89,8 +92,13 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            return task;
-        }
+
+            task.TaskStatus = (Entities.TaskStatus)taskDto.TaskStatus;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(task);
+}
 
         [Authorize]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
@@ -180,6 +188,17 @@ namespace backend.Controllers
                 .Include(t => t.Project) // Include project details if needed
                 .ToListAsync();
             return tasks;
+        }
+
+        [HttpGet("statuses")] // GET: api/projectTask/statuses
+        public ActionResult<IEnumerable<object>> GetTaskStatuses()
+        {
+            var statuses = Enum.GetValues(typeof(Entities.TaskStatus))
+                .Cast<Entities.TaskStatus>()
+                .Select(status => new { id = (int)status, name = status.ToString() })
+                .ToList();
+
+            return Ok(statuses);
         }
     }
 }

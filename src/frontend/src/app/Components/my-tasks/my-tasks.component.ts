@@ -54,21 +54,24 @@ export class MyTasksComponent implements OnInit {
     // Assuming GetProjectTaskById is a method that fetches the task details
     const row = document.querySelector('.red') as HTMLElement;
     this.myTasksService
-      .GetProjectTaskById(taskId)
-      .subscribe((task: ProjectTask) => {
-        if (
-          this.clickedTask &&
-          this.clickedTask.id === taskId &&
-          this.showPopUp
-        ) {
-          row.style.backgroundColor = '';
-          this.showPopUp = false;
-          this.clickedTask = null;
-        } else {
-          this.clickedTask = task;
-          this.showPopUp = true;
-        }
-      });
+    .GetProjectTaskById(taskId)
+    .subscribe((task: ProjectTask) => {
+      if (
+        this.clickedTask &&
+        this.clickedTask.id === taskId &&
+        this.showPopUp
+      ) {
+        row.style.backgroundColor = '';
+        this.showPopUp = false;
+        this.clickedTask = null;
+        this.shared.current_task_id = null;
+
+      } else {
+        this.clickedTask = task;
+        this.showPopUp = true;
+        this.shared.current_task_id = this.clickedTask.id;
+      }
+    });
     }
 
   toggleTaskCompletion(event: any, task: ProjectTask): void {

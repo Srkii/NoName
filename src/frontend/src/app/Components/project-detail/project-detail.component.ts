@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project } from '../../Entities/Project';
@@ -43,5 +43,18 @@ export class ProjectDetailComponent implements OnInit {
 
   getStatusString(status: number): string {
     return TaskStatus[status];
+  }
+
+  changeToTable() {
+    this.getProjectInfo();
+    this.viewMode = 'table';
+  }
+  changeToKanban() {
+    this.getProjectInfo();
+    this.viewMode = 'kanban';
+  }
+  changeToGant() {
+    this.getProjectInfo();
+    this.viewMode = 'gantt';
   }
 }
