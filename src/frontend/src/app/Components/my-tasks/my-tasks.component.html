@@ -181,4 +181,5 @@
   *ngIf="showPopUp"
   [task]="clickedTask"
   (backClicked)="closePopup()"
+  (taskUpdated)="handleTaskUpdate($event)"
 ></app-popup>
