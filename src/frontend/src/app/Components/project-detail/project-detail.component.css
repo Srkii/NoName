@@ -22,15 +22,21 @@ th {
     border-bottom-right-radius: 0.5rem;
 }
 .table tbody tr:last-child td:first-child {
-    border-bottom-left-radius: 0.5rem; /* Round bottom-left corner */
+    border-bottom-left-radius: 0.5rem;
 }
 .table tbody tr:last-child {
     margin-bottom: -30px;
 }
 .table tbody tr:last-child td {
-    border-bottom: none; /* Disable bottom border for the last row */
+    border-bottom: none;
 }
-
+.btn-active {
+    background-color: #696cff !important;
+}
+.btn-inactive {
+    background-color: #aeaff3 !important;
+    border-color: #aeaff3 !important;
+}
 .card-header {
     margin-bottom: -10px;
     color: #697a8d;
@@ -38,7 +44,6 @@ th {
     font-weight: 500;
     line-height: 1.5;
 }
-
 .btn-primary {
     color: #fff;
     background-color: #696cff;
@@ -79,7 +84,12 @@ th {
     vertical-align: baseline;
     border-radius: 0.5rem;
 }
-
+.btn-primary svg {
+    margin-right: 8px;
+}
+.btn-primary .btn-text {
+    margin-left: 8px;
+}
 .content-wrapper {
     display: flex;
     align-items: stretch;

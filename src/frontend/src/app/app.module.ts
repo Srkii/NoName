@@ -23,6 +23,8 @@ import { ProjectDetailComponent } from './Components/project-detail/project-deta
 import { FileUploadComponent } from './Components/file-upload/file-upload.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { PopupComponent } from './Components/popup/popup.component';
+import { KanbanComponent } from './Components/kanban/kanban.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,8 @@ import { PopupComponent } from './Components/popup/popup.component';
     MyTasksComponent,
     PopupComponent,
     ProjectDetailComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    KanbanComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,7 @@ import { PopupComponent } from './Components/popup/popup.component';
       positionClass: 'toast-bottom-right',
     }), // ToastrModule added
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
+    DragDropModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

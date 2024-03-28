@@ -34,4 +34,11 @@ export class MyTasksService {
       task
     );
   }
+  
+  //tico kanban ; ne diraj!
+  GetTaskStatuses(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.baseUrl}/statuses`);
+  }
+
+  
 }

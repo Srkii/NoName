@@ -92,8 +92,13 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            return task;
-        }
+
+            task.TaskStatus = (Entities.TaskStatus)taskDto.TaskStatus;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(task);
+}
 
         [Authorize]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
@@ -183,6 +188,17 @@ namespace backend.Controllers
                 .Include(t => t.Project) // Include project details if needed
                 .ToListAsync();
             return tasks;
+        }
+
+        [HttpGet("statuses")] // GET: api/projectTask/statuses
+        public ActionResult<IEnumerable<object>> GetTaskStatuses()
+        {
+            var statuses = Enum.GetValues(typeof(Entities.TaskStatus))
+                .Cast<Entities.TaskStatus>()
+                .Select(status => new { id = (int)status, name = status.ToString() })
+                .ToList();
+
+            return Ok(statuses);
         }
     }
 }
