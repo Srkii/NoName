@@ -17,6 +17,7 @@ namespace backend.Data
         public DbSet<UserRequest> UserRequests {get; set;}
         public DbSet<Attachment> Attachments{get; set;}
         public DbSet<Comment> Comments {get; set;}
+        public DbSet<TskStatus> TaskStatuses { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +41,10 @@ namespace backend.Data
                 entity.HasOne(pt => pt.Project)
                     .WithMany() // define the relationship between ProjectTask and Project
                     .HasForeignKey(pt => pt.ProjectId); // define ProjectId as the foreign key
+
+                entity.HasOne(pt => pt.TskStatus) // dal je HasOne proveri! Tico
+                .WithMany() // You may want to specify the collection property of TskStatus if one exists
+                .HasForeignKey(pt => pt.TskStatusId); // This sets up the foreign key relationship
             });
 
             modelBuilder.Entity<TaskDependency>(entity =>

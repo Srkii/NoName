@@ -23,8 +23,8 @@ namespace backend.Controllers
         [HttpPost] // POST: api/projectTask/
         public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
         {
-            if(!await RoleCheck(taskDto.AppUserId,taskDto.ProjectId))
-                return Unauthorized("Unvalid role");
+            // if(!await RoleCheck(taskDto.AppUserId,taskDto.ProjectId))
+            //     return Unauthorized("Invalid role");
 
             var task = new ProjectTask
             {
@@ -32,8 +32,11 @@ namespace backend.Controllers
                 Description = taskDto.Description,
                 StartDate = taskDto.StartDate,
                 EndDate = taskDto.EndDate,
-                TaskStatus = taskDto.TaskStatus,
                 ProjectId = taskDto.ProjectId,
+                TskStatusId = _context.TaskStatuses
+                        .Where(ts => ts.ProjectId == taskDto.ProjectId && ts.Position == 0)
+                        .Select(ts => ts.Id)
+                        .FirstOrDefault()
             };
 
             _context.ProjectTasks.Add(task);
@@ -48,9 +51,16 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetProjectTasks()
         {
             var tasks = await _context.ProjectTasks
-                .Include(task => task.Project)
+                // .Include(task => task.Project)
+                // .Include(task => task.TskStatus)
+                .Select(task => new
+                {
+                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                    task.ProjectId, task.TskStatus.StatusName
+                })
                 .ToListAsync();
-            return tasks;
+            // return tasks;
+            return Ok(tasks);
         }
 
         // [Authorize]
@@ -58,15 +68,21 @@ namespace backend.Controllers
         [HttpGet("{id}")] // GET: api/projectTask/2
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
         {
-            var tasklist = await _context.ProjectTasks
-              .Include(task => task.Project).Where(t => t.Id == id).ToListAsync();
+            var task = await _context.ProjectTasks
+            .Select(task => new
+            {
+                task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                task.ProjectId, task.TskStatus.StatusName
+            })
+            .FirstOrDefaultAsync(t => t.Id == id); // Use FirstOrDefaultAsync instead of ToListAsync
 
-            if (tasklist == null)
+            if (task == null)
             {
                 return NotFound();
             }
-            return tasklist[0];
+            return Ok(task);
         }
+        
         [AllowAnonymous]
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
@@ -93,7 +109,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            task.TaskStatus = (Entities.TaskStatus)taskDto.TaskStatus;
+            // task.TaskStatus = (Entities.TaskStatus)taskDto.TaskStatus;
 
             await _context.SaveChangesAsync();
 
@@ -114,7 +130,7 @@ namespace backend.Controllers
             
             if(dto.TaskName != null) task.TaskName = dto.TaskName;
             if(dto.Description != null && dto.Description != "") task.Description = dto.Description;
-            if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
+            // if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
 
             await _context.SaveChangesAsync();
 
@@ -190,16 +206,16 @@ namespace backend.Controllers
             return tasks;
         }
 
-        [HttpGet("statuses")] // GET: api/projectTask/statuses
-        public ActionResult<IEnumerable<object>> GetTaskStatuses()
-        {
-            var statuses = Enum.GetValues(typeof(Entities.TaskStatus))
-                .Cast<Entities.TaskStatus>()
-                .Select(status => new { id = (int)status, name = status.ToString() })
-                .ToList();
+        // [HttpGet("statuses")] // GET: api/projectTask/statuses
+        // public ActionResult<IEnumerable<object>> GetTaskStatuses()
+        // {
+        //     var statuses = Enum.GetValues(typeof(Entities.TaskStatus))
+        //         .Cast<Entities.TaskStatus>()
+        //         .Select(status => new { id = (int)status, name = status.ToString() })
+        //         .ToList();
 
-            return Ok(statuses);
-        }
+        //     return Ok(statuses);
+        // }
     }
 }
 

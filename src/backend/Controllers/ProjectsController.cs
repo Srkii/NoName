@@ -16,7 +16,7 @@ namespace backend
             _context = context;
         }
 
-        [Authorize(Roles = "ProjectManager")]
+        // [Authorize(Roles = "ProjectManager")]
         [HttpPost] // POST: api/projects/
         public async Task<ActionResult<ProjectDto>> CreateProject(ProjectDto projectDto)
         {
@@ -32,6 +32,9 @@ namespace backend
             };
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
+
+            // dodavanje inicijalnih statusa
+            await AddStarterStatuses(project);
             return new ProjectDto
             {
                 ProjectName = project.ProjectName,
@@ -41,6 +44,23 @@ namespace backend
                 ProjectStatus = project.ProjectStatus,
                 Priority = project.Priority
             };
+        }
+
+        //metoda za dodavanje inicijalnih statusa pri kreiranju projekta
+        private async Task AddStarterStatuses(Project project)
+        {
+            var starterStatuses = new List<TskStatus>
+            {
+                new TskStatus { StatusName = "Proposed", Position = 0, Project = project },
+                new TskStatus { StatusName = "InProgress", Position = 1, Project = project },
+                // Add other starter statuses here with incremental positions
+                new TskStatus { StatusName = "Completed", Position = 2, Project = project },
+                new TskStatus { StatusName = "InReview", Position = 3, Project = project },
+                new TskStatus { StatusName = "Archived", Position = 4, Project = project }
+            };
+
+            _context.TaskStatuses.AddRange(starterStatuses);
+            await _context.SaveChangesAsync();
         }
 
         // [Authorize(Roles = "ProjectManager,Member")]

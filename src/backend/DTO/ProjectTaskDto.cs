@@ -1,5 +1,4 @@
 using backend.Entities;
-using TaskStatus = backend.Entities.TaskStatus;
 
 namespace backend.DTO
 {
