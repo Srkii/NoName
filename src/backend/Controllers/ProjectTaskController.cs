@@ -7,9 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
-    [ApiController]
-    [Route("api/projectTask")]
-    public class ProjectTaskController : ControllerBase
+    // [Authorize]
+    public class ProjectTaskController : BaseApiController
     {
         private readonly DataContext _context;
 
@@ -18,7 +17,6 @@ namespace backend.Controllers
             _context = context;
         }
         
-        // [Authorize]
         [AllowAnonymous]
         [HttpPost] // POST: api/projectTask/
         public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
@@ -45,25 +43,20 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
         }
         
-        // [Authorize]
         [AllowAnonymous]
         [HttpGet] // GET: api/projectTask/
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetProjectTasks()
         {
             var tasks = await _context.ProjectTasks
-                // .Include(task => task.Project)
-                // .Include(task => task.TskStatus)
                 .Select(task => new
                 {
                     task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                    task.ProjectId, task.TskStatus.StatusName
+                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color
                 })
                 .ToListAsync();
-            // return tasks;
             return Ok(tasks);
         }
 
-        // [Authorize]
         [AllowAnonymous]
         [HttpGet("{id}")] // GET: api/projectTask/2
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
@@ -72,7 +65,7 @@ namespace backend.Controllers
             .Select(task => new
             {
                 task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                task.ProjectId, task.TskStatus.StatusName
+                task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color
             })
             .FirstOrDefaultAsync(t => t.Id == id); // Use FirstOrDefaultAsync instead of ToListAsync
 
@@ -108,15 +101,13 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-
             // task.TaskStatus = (Entities.TaskStatus)taskDto.TaskStatus;
-
             await _context.SaveChangesAsync();
 
             return Ok(task);
-}
+        }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
         public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
         {
@@ -137,7 +128,7 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPut("changeTaskSchedule")] // GET: api/projectTask/changeTaskSchedule
         public async Task<ActionResult<ProjectTask>> ChangeTaskSchedule(TaskScheduleDto dto)
         {
@@ -157,7 +148,7 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPut("addTaskDependency")] // GET: api/projectTask/addTaskDependency
         public async Task<ActionResult<ProjectTask>> AddTaskDependency(TaskDependencyDto dto)
         {
@@ -176,7 +167,7 @@ namespace backend.Controllers
             return Ok(taskDep);
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPut("addTaskAssignee")] // GET: api/projectTask/addTaskAssignee
         public async Task<ActionResult<ProjectTask>> AddTaskAssignee(TaskMember data)
         {
@@ -196,6 +187,7 @@ namespace backend.Controllers
             return projectMember != null;
         }
 
+        [AllowAnonymous]
         [HttpGet("ByProject/{projectId}")] // New method to get tasks by project ID
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId)
         {

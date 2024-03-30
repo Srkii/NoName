@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
-    [ApiController]
-    [Route("api/taskMembers")]
-    public class TaskMemberController : ControllerBase
+    public class TaskMemberController : BaseApiController
     {
         private readonly DataContext _context;
 

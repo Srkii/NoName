@@ -7,6 +7,7 @@ namespace backend
         public int Id { get; set; }
         public string StatusName { get; set; }
         public int Position { get; set; }
+        public string Color { get; set; }
         public int ProjectId { get; set; } // foreign key
         public Project Project { get; set; } // navigation
     }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend
+namespace backend.Controllers
 {
     public class ProjectsController : BaseApiController
     {
@@ -51,12 +51,11 @@ namespace backend
         {
             var starterStatuses = new List<TskStatus>
             {
-                new TskStatus { StatusName = "Proposed", Position = 0, Project = project },
-                new TskStatus { StatusName = "InProgress", Position = 1, Project = project },
-                // Add other starter statuses here with incremental positions
-                new TskStatus { StatusName = "Completed", Position = 2, Project = project },
-                new TskStatus { StatusName = "InReview", Position = 3, Project = project },
-                new TskStatus { StatusName = "Archived", Position = 4, Project = project }
+                new TskStatus { StatusName = "Proposed", Position = 0, Project = project, Color = "#007bff" },
+                new TskStatus { StatusName = "InProgress", Position = 1, Project = project, Color = "#03c3ec" },
+                new TskStatus { StatusName = "InReview", Position = 2, Project = project, Color = "#20c997" },
+                new TskStatus { StatusName = "Completed", Position = 3, Project = project, Color = "#71dd37" },
+                new TskStatus { StatusName = "Archived", Position = 4, Project = project, Color = "#8592a3" }
             };
 
             _context.TaskStatuses.AddRange(starterStatuses);
