@@ -8,7 +8,7 @@ export interface ProjectTask {
   description: string;
   startDate: Date;
   endDate: Date;
-  taskStatusId: number;
+  statusName: string;
   projectId: number;
   project: Project;
 }

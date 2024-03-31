@@ -6,7 +6,7 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { ProjectTask, TaskStatus } from '../../Entities/ProjectTask';
+import { ProjectTask} from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { MyTasksComponent } from '../my-tasks/my-tasks.component';
 
@@ -22,48 +22,48 @@ export class PopupComponent {
     new EventEmitter<ProjectTask>();
   @Output() backClicked: EventEmitter<void> = new EventEmitter<void>();
 
-  previousTaskStatus: TaskStatus | null = null;
+  // previousTaskStatus: TaskStatus | null = null;
   fullscreen: boolean = false;
 
   constructor(private myTasksService: MyTasksService) {}
 
   ngOnInit(): void {
-    if (this.task) {
-      // Store the initial task status to revert back if needed
-      this.previousTaskStatus = this.task.taskStatus;
-    }
+    // if (this.task) {
+    //   // Store the initial task status to revert back if needed
+    //   this.previousTaskStatus = this.task.taskStatus;
+    // }
   }
 
-  toggleTaskCompletion(event: any, task: ProjectTask): void {
-    event.stopPropagation();
-    if (
-      task.taskStatus === TaskStatus.InProgress ||
-      task.taskStatus === TaskStatus.Proposed
-    ) {
-      this.previousTaskStatus = task.taskStatus;
-      task.taskStatus = TaskStatus.Completed;
-    } else {
-      if (this.previousTaskStatus !== null) {
-        task.taskStatus = this.previousTaskStatus;
-        this.previousTaskStatus = null;
-      } else {
-        task.taskStatus = TaskStatus.InProgress;
-      }
-    }
-    // Update the task status on the server
-    this.myTasksService.updateTaskStatus(task.id, task).subscribe(
-      (updatedTask: ProjectTask) => {
-        // Optionally, handle the updated task response from the server
-        console.log('Task status updated successfully:', updatedTask);
-        // Emit the updated task to notify the parent component
-        this.taskUpdated.emit(updatedTask);
-      },
-      (error: any) => {
-        // Handle any errors that occur during the update process
-        // console.error('Error updating task status:', error);
-      }
-    );
-  }
+  // toggleTaskCompletion(event: any, task: ProjectTask): void {
+  //   event.stopPropagation();
+  //   if (
+  //     task.taskStatus === TaskStatus.InProgress ||
+  //     task.taskStatus === TaskStatus.Proposed
+  //   ) {
+  //     this.previousTaskStatus = task.taskStatus;
+  //     task.taskStatus = TaskStatus.Completed;
+  //   } else {
+  //     if (this.previousTaskStatus !== null) {
+  //       task.taskStatus = this.previousTaskStatus;
+  //       this.previousTaskStatus = null;
+  //     } else {
+  //       task.taskStatus = TaskStatus.InProgress;
+  //     }
+  //   }
+  //   // Update the task status on the server
+  //   this.myTasksService.updateTaskStatus(task.id, task).subscribe(
+  //     (updatedTask: ProjectTask) => {
+  //       // Optionally, handle the updated task response from the server
+  //       console.log('Task status updated successfully:', updatedTask);
+  //       // Emit the updated task to notify the parent component
+  //       this.taskUpdated.emit(updatedTask);
+  //     },
+  //     (error: any) => {
+  //       // Handle any errors that occur during the update process
+  //       // console.error('Error updating task status:', error);
+  //     }
+  //   );
+  // }
 
   triggerFileInput(): void {
     // Programmatically click the hidden file input

@@ -74,31 +74,31 @@ export class MyTasksComponent implements OnInit {
     });
     }
 
-    toggleTaskCompletion(event: any, task: ProjectTask): void {
-      event.stopPropagation();
-      if (event.target.checked) {
-        this.previousTaskStatus = task.taskStatusId;
-        task.taskStatusId = TaskStatus.Completed;
-      } else {
-        if (this.previousTaskStatus !== null) {
-          task.taskStatusId = this.previousTaskStatus;
-          this.previousTaskStatus = null;
-        } else {
-          task.taskStatusId = TaskStatus.InProgress;
-        }
-      }
-      // Update the task status on the server
-      this.myTasksService.updateTaskStatus(task.id, task).subscribe(
-        (updatedTask: ProjectTask) => {
-          // Optionally, handle the updated task response from the server
-          console.log('Task status updated successfully:', updatedTask);
-        },
-        (error: any) => {
-          // Handle any errors that occur during the update process
-          // console.error('Error updating task status:', error);
-        }
-      );
-  }
+  //   toggleTaskCompletion(event: any, task: ProjectTask): void {
+  //     event.stopPropagation();
+  //     if (event.target.checked) {
+  //       this.previousTaskStatus = task.taskStatusId;
+  //       task.taskStatusId = TaskStatus.Completed;
+  //     } else {
+  //       if (this.previousTaskStatus !== null) {
+  //         task.taskStatusId = this.previousTaskStatus;
+  //         this.previousTaskStatus = null;
+  //       } else {
+  //         task.taskStatusId = TaskStatus.InProgress;
+  //       }
+  //     }
+  //     // Update the task status on the server
+  //     this.myTasksService.updateTaskStatus(task.id, task).subscribe(
+  //       (updatedTask: ProjectTask) => {
+  //         // Optionally, handle the updated task response from the server
+  //         console.log('Task status updated successfully:', updatedTask);
+  //       },
+  //       (error: any) => {
+  //         // Handle any errors that occur during the update process
+  //         // console.error('Error updating task status:', error);
+  //       }
+  //     );
+  // }
 
   handleTaskUpdate(updatedTask: ProjectTask): void {
     // Update the tasks array with the updated task

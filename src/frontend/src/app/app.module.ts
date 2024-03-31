@@ -25,6 +25,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { PopupComponent } from './Components/popup/popup.component';
 import { KanbanComponent } from './Components/kanban/kanban.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { GanttComponent } from './Components/gantt/gantt.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     PopupComponent,
     ProjectDetailComponent,
     FileUploadComponent,
-    KanbanComponent
+    KanbanComponent,
+    GanttComponent
   ],
   imports: [
     BrowserModule,

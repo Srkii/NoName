@@ -195,10 +195,15 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId)
         {
             var tasks = await _context.ProjectTasks
+                .Select(task => new
+                {
+                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                    task.ProjectSection.SectionName
+                })
                 .Where(t => t.ProjectId == projectId)
-                .Include(t => t.Project) // Include project details if needed
                 .ToListAsync();
-            return tasks;
+            return Ok(tasks);
         }
 
         // [HttpGet("statuses")] // GET: api/projectTask/statuses

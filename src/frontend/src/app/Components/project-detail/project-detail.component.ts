@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project } from '../../Entities/Project';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { ProjectTask, TaskStatus } from '../../Entities/ProjectTask';
+import { ProjectTask} from '../../Entities/ProjectTask';
 import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
@@ -35,15 +35,16 @@ export class ProjectDetailComponent implements OnInit {
         this.project = project;
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
           this.projectTasks = tasks;
+          console.log(this.projectTasks);
         });
         this.spinner.hide();
       });
     }
   }
 
-  getStatusString(status: number): string {
-    return TaskStatus[status];
-  }
+  // getStatusString(status: number): string {
+  //   return TaskStatus[status];
+  // }
 
   changeToTable() {
     this.getProjectInfo();

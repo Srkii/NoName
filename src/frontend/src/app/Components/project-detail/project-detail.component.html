@@ -30,7 +30,7 @@
               <td><span class="fw-medium">{{ task.taskName }}</span></td>
               <td>{{ task.startDate | date }}</td>
               <td>{{ task.endDate | date }}</td>
-              <td><span class="badge bg-label-primary me-1">{{ getStatusString(task.taskStatus) }}</span></td>
+              <td><span class="badge bg-label-primary me-1">{{ task.statusName }}</span></td>
             </tr>
           </tbody>
           </table>
@@ -38,6 +38,9 @@
       </div>
       <div *ngIf="viewMode === 'kanban'">
         <app-kanban></app-kanban>
-  </div>
+      </div>
+      <div *ngIf="viewMode === 'gantt'">
+        <app-gantt></app-gantt>
+      </div>
 </div>
 

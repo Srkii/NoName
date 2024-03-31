@@ -26,9 +26,10 @@
           </svg>
         </th>
       </tr>
-      <ng-container *ngFor="let task of tasks">
+      <!-- zasto se klasa zove red?? -->
+      <!-- <ng-container *ngFor="let task of tasks">
         <tr
-          class="red"
+          class="red" 
           [class.clicked]="clickedTask?.id === task.id"
           *ngIf="task.taskStatus === 0"
           (click)="togglePopUp($event, task.id)"
@@ -49,7 +50,7 @@
           <td>Task visibility goes here</td>
           <td>{{ task.endDate | date }}</td>
         </tr>
-      </ng-container>
+      </ng-container> -->
     </table>
   </div>
 </div>
@@ -83,7 +84,7 @@
           </svg>
         </th>
       </tr>
-      <ng-container *ngFor="let task of tasks">
+      <!-- <ng-container *ngFor="let task of tasks">
         <tr
           class="red"
           [class.clicked]="clickedTask?.id === task.id"
@@ -105,13 +106,13 @@
             {{ task.project ? task.project.projectName : "No Project" }}
           </td>
 
-          <!-- <td [ngClass]="getStatusString(task.taskStatus)">
+          <td [ngClass]="getStatusString(task.taskStatus)">
           <p>{{ getStatusString(task.taskStatus) }}</p>
-        </td> -->
+        </td>
           <td>Task visibility goes here</td>
           <td>{{ task.endDate | date }}</td>
         </tr>
-      </ng-container>
+      </ng-container> -->
     </table>
   </div>
 </div>
@@ -144,7 +145,7 @@
           </svg>
         </th>
       </tr>
-      <ng-container *ngFor="let task of tasks">
+      <!-- <ng-container *ngFor="let task of tasks">
         <tr
           class="red"
           [class.clicked]="clickedTask?.id === task.id"
@@ -166,13 +167,13 @@
             {{ task.project ? task.project.projectName : "No Project" }}
           </td>
 
-          <!-- <td [ngClass]="getStatusString(task.taskStatus)">
+          <td [ngClass]="getStatusString(task.taskStatus)">
           <p>{{ getStatusString(task.taskStatus) }}</p>
-        </td> -->
+        </td>
           <td>Task visibility goes here</td>
           <td>{{ task.endDate | date }}</td>
         </tr>
-      </ng-container>
+      </ng-container> -->
     </table>
   </div>
 </div>
