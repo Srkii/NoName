@@ -9,6 +9,7 @@ export interface ProjectTask {
   startDate: Date;
   endDate: Date;
   statusName: string;
+  sectionName: string;
   projectId: number;
   project: Project;
 }

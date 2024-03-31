@@ -15,6 +15,7 @@ export class ProjectDetailComponent implements OnInit {
   project: Project | undefined;
   projectTasks: ProjectTask[] = [];
   viewMode: string = 'table';
+  groupedTasks: { [key: string]: any[] } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +36,8 @@ export class ProjectDetailComponent implements OnInit {
         this.project = project;
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
           this.projectTasks = tasks;
+          this.groupedTasks = this.groupTasksBySection(tasks); // Store grouped tasks in a component property
+          console.log(this.groupedTasks);
           console.log(this.projectTasks);
         });
         this.spinner.hide();
@@ -42,9 +45,18 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-  // getStatusString(status: number): string {
-  //   return TaskStatus[status];
-  // }
+  groupTasksBySection(tasks: any[]): { [key: string]: any[] } {
+    const grouped = tasks.reduce((acc, task) => {
+      const section = task.sectionName || 'No Section';
+      if (!acc[section]) {
+        acc[section] = [];
+      }
+      acc[section].push(task);
+      return acc;
+    }, {});
+  
+    return grouped;
+  }
 
   changeToTable() {
     this.getProjectInfo();
