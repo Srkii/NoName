@@ -1,5 +1,6 @@
 // import { Project } from './project';
 
+import { AppUser } from './AppUser';
 import { Project } from './Project';
 
 export interface ProjectTask {
@@ -11,5 +12,7 @@ export interface ProjectTask {
   statusName: string;
   sectionName: string;
   projectId: number;
-  project: Project;
+  firstName?: string;
+  lastName?: string;
+  project: Project; //cemu ovo sluzi?
 }

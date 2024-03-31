@@ -53,7 +53,7 @@ namespace backend.Controllers
                 {
                     task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
                     task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                    task.ProjectSection.SectionName
+                    task.ProjectSection.SectionName, task.AppUser
                 })
                 .ToListAsync();
             return Ok(tasks);
@@ -84,15 +84,15 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
         {
             var tasks = await _context.ProjectTasks
-                                      .Include(task => task.Project)
-                                      .Join(_context.TaskMembers,
-                                            task => task.Id,
-                                            member => member.TaskId,
-                                            (task, member) => new { task, member })
-                                      .Where(tm => tm.member.AppUserId == userId)
-                                      .Select(tm => tm.task) // Change this line
+                                      .Where(task => task.AppUserId == userId)
+                                      .Select(task => new
+                                      {
+                                          task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                                          task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                                          task.ProjectSection.SectionName
+                                      })
                                       .ToListAsync();
-            return tasks;
+            return Ok(tasks);
         }
 
         [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
@@ -170,17 +170,24 @@ namespace backend.Controllers
             return Ok(taskDep);
         }
 
-        [AllowAnonymous]
-        [HttpPut("addTaskAssignee")] // GET: api/projectTask/addTaskAssignee
-        public async Task<ActionResult<ProjectTask>> AddTaskAssignee(TaskMember data)
+        public async Task<ActionResult<ProjectTask>> AddTaskAssignee(int taskId, int userId, int projectId)
         {
-            if(!await RoleCheck(data.AppUserId,data.ProjectId))
-                return Unauthorized("Unvalid role");
+            var isMember = await _context.ProjectMembers.AnyAsync(pm => pm.AppUserId == userId && pm.ProjectId == projectId);
+            if (!isMember)
+            {
+                return BadRequest("User is not a member of the project");
+            }
+            if(!await RoleCheck(userId, projectId))
+                return Unauthorized("Invalid role");
+            
+            var task = await _context.ProjectTasks.FindAsync(taskId);
+            if (task == null)
+                return NotFound("Task not found");
 
-            await _context.TaskMembers.AddAsync(data);
+            task.AppUserId = userId;
             await _context.SaveChangesAsync();
 
-            return Ok(data);
+            return Ok(task);
         }
 
         public async Task<bool> RoleCheck(int userId,int projectId)
@@ -199,7 +206,7 @@ namespace backend.Controllers
                 {
                     task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
                     task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                    task.ProjectSection.SectionName
+                    task.ProjectSection.SectionName, task.AppUser.FirstName, task.AppUser.LastName
                 })
                 .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
