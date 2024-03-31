@@ -1,76 +1,50 @@
-/*
-background color #FFFFFF
-text color #566A7F -> most of big text
-button color: #696CFF
-smaller text color : #697A8D
-font: Public Sans
-
-Change password textbox color: #FFAB00
-Password changed successfully color #83EDA1
-Change photo must have a hover over the image as an interactable...
-*/
 body{
-  width:60%;
+  width: 65%;
   margin: auto;
-  color: #697A8D;
   background-color: #f5f5f9;
-  font-family: "Public Sans" sans-serif;
+  font-family: 'Public Sans', sans-serif;
 }
-h4{
-  color: #566A7F;
-}
-p{
-  margin: 0;
-  padding: 0;
-  font-weight: 600;
-  font-size: small;
-}
-button{
-  background-color: #696CFF;
-  color: #FFFFFF;
-  width: 40%;
-  height: 40px;
-  border-radius: 6px;
-  border: none;
-}
-#container{
-  margin-top: 7%;
-  width: 100%;
-}
-#User_banner{
-  width: 50%;
-  float: left;
-}
-#Role_name{
-  display: inline-block;
-  vertical-align: top;
-}
-#role{
-  text-transform: uppercase;
-  background-color: #EBEEF0;
-  border-radius: 6px;
-  padding: 2px;
-  font-size: small;
+h5{
+  font-size: 18px;
   font-weight: 600;
 }
-#name{
-  font-size: 120%;
-  font-weight: 600;
+a {
+  color: #696cff;
 }
-#Image_container{
+.card {
+  color:#697a8d;
+  border-color: solid #d9dee3;
+  border-width: 0;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+}
+.btn-primary {
+  margin-top: 2%;
+  color: #fff;
+  background-color: #696cff;
+  border-color: #696cff;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+}
+.btn-primary:hover {
+  color: #fff !important;
+  background-color: #5f61e6 !important;
+  border-color: #5f61e6 !important;
+  transform: translateY(-1px) !important;
+}
+/*kopiran kod za overlay slike jer drugacije nije htelo xd.*/
+#photo_wrap{
   position: relative;
-  width: 130px;
+  width: 100px;
 }
-#Profile_image{
+#profile_photo{
   width: 130px;
   height: 130px;
   border-radius: 6px;
   display: inline;
 }
-#Profile_image:hover{
+#profile_photo:hover{
   opacity: 70%;
 }
-#Overlay_image{
+#overlay_photo{
   position: absolute;
   display: flex;
   width: 130px;
@@ -80,63 +54,68 @@ button{
   opacity: 0;
   transition: opacity 1s ease;
 }
-#Overlay_image:hover{
+#overlay_photo:hover{
   opacity: 40%;
 }
-#User_info{
-  float: right;
-  width: 50%;
+.align-items-start {
+  align-items: flex-start !important;
 }
-#User_details{
-  font-weight: 400;
+.d-flex {
+  display: flex !important;
 }
-#Account_info{
-  height: 250px;
-}
-#Change_alert{
-  border-radius: 6px;
-  padding: 20px;
+#alert_div{
+  width: 100%;
+  height: fit-content;
+  padding: 10px;
   color: #FFAB00;
-  background-color:#FFF2D6;
+  background-color: #FFF2D6;
+  border-radius: 8px;
 }
-#Change_password{
-  background-color: #FFFFFF;
-  border-color: solid #d9dee3;
-  border-width: 0;
-  border-radius: 15px;
-  padding: 30px;
-  margin-top: 30px;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+#success_div{
+  display: none;
+  opacity: 71%;
 }
-#wrap{
-  background-color: #FFFFFF;
-  border-radius: 15px;
-  border-color: solid #d9dee3;
-  padding: 30px;
-  border-width: 0;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-}
-#Inputs{
-  padding-top: 20px;
+#inputs{
+  height: fit-content;
+  margin-top: 3%;
   width: 50%;
   margin: auto;
 }
-#clear{
-  clear: both;
-}
-#successtext{
-  display: none;
-}
-input[type="password"]{
-  border: 1px solid #D9DEE3;
-  border-radius: 6px;
-  height: 40px;
+input{
   width: 100%;
-  margin-bottom: 20px;
+  height: 35px;
+  border-radius: 8px;
+  border: 1px solid #D9DEE3;
 }
 input:focus{
+  border: 1px solid #D9DEE3;
   outline: 1px solid #D9DEE3;
 }
-#tasks_done{
-  display: inline-block;
+label{
+  display: block;
+  font-size:small;
+  font-weight: 600;
+}
+#account_banner{
+  display: flex;
+  align-items: flex-start;
+}
+.fullname{
+  margin-left: 35px;
+  font-size: 20px;
+  font-weight: 700;
+}
+#rolename{
+  background-color: #EBEEF0;
+  padding: 2px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: small;
+}
+#user_info{
+  margin-left: 20%;
+  font-size: 16px;
+  font-weight: bold;
+  line-height:200%;
 }

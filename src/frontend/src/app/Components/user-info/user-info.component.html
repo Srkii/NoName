@@ -1,54 +1,50 @@
-<head>
-  <title>USER INFO PAGE</title>
-</head>
-<body >
-  <div id="container">
-      <div id="wrap">
-        <div id="Account_info"  *ngIf="userInfo">
-          <!--informacije o korisniku , div sa slikom i div sa detaljima o korisniku-->
-          <div id="User_banner">
-            <div id="Image_container">
-              <img [src]="url" id="Profile_image" (click)="inputClick.click()">
-              <img id="Overlay_image" src="../../../assets/profile_photo_placeholders/change_photo.jpg" (click)="inputClick.click()">
-            </div>
-            <span id="Role_name" style="padding-left: 5px;">
-              <span id="role">{{role}}</span><br>
-              <span id="name">{{userInfo.firstName}} {{userInfo.lastName}}</span>
-            </span>
-            <input #inputClick id="inp" type="file" style="display: none;" (change)="imageSelected($event)">
+<body>
+  <div class="container-xxl">
+    <div class="card" style="padding: 3%;">
+      <div class="d-flex align-items-start align-items-sm-center">
+        <div id="account_banner">
+          <div id="photo_wrap">
+            <img id="profile_photo"[src]="url"(click)="inputClick.click()">
+            <img id="overlay_photo"src="../../../assets/profile_photo_placeholders/change_photo.jpg" (click)="inputClick.click()">
           </div>
-          <div id="User_info">
-            <h4>Details</h4>
-            <div id="User_details">
-              First name: {{userInfo.firstName}}<br>
-              Last name: {{userInfo.lastName}}<br>
-              Email: {{userInfo.email}}<br>
-              Role: {{role}}<br>
-            </div>
+          <div class="fullname">
+            <span id="rolename">{{role}}</span><br>
+            <span id="full_name">{{userInfo.firstName}} {{userInfo.lastName}}</span><!--ne razumem error message ovde-->
           </div>
-          <div id="clear"></div>
+          <input #inputClick type="file" style="display: none;" (change)="imageSelected($event)">
+        </div>
+        <div id="user_info" *ngIf="userInfo">
+          <h5>Details</h5>
+          <div>
+            First name: {{userInfo.firstName}}<br>
+            Last name: {{userInfo.lastName}}<br>
+            Email: {{userInfo.email}}<br>
+            Role: {{role}}<br>
+          </div>
+        </div>
+        <div id="clear"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 2%; padding: 3%;">
+      <h5>Change Password</h5>
+      <div id="alert_div">
+        <div id="warning_div">
+          Ensure that these requirements are met:<br>
+          Minimum 8 characters long , one uppercase letter and symbol.
+        </div>
+        <div id="success_div">
+          Password changed successfully!
         </div>
       </div>
-        <div id="Change_password">
-          <h4>Change Password</h4>
-          <div id="Change_alert">
-            <div id="basetext">
-              Ensure that these requirements are met:<br>
-              Minimum 8 characters long , one uppercase letter and symbol.
-            </div>
-            <div id="successtext">
-              Password changed successfully!
-            </div>
-          </div>
-          <div id="Inputs">
-            <p>CURRENT PASSWORD</p>
-            <input id="password1"name="oldpass" type="password" placeholder="" [(ngModel)]="newData.CurrentPassword" required/><br>
-            <p>NEW PASSWORD</p>
-            <input  id="password2" name="newpass" type="password" placeholder="" [(ngModel)]="newData.NewPassword"/><br>
-            <p>CONFIRM NEW PASSWORD</p>
-            <input  id="password3" name="confirmnewpass" type="password" placeholder="" [(ngModel)]="newData.NewPasswordConfirm"/><br>
-            <button type="submit" (click)="apply_changes()">Change password</button>
-          </div>
-        </div>
+      <div id="inputs">
+        <label for="oldpass">OLD PASSWORD</label>
+        <input name="oldpass" type="password" placeholder="" [(ngModel)]="newData.CurrentPassword" required/><br>
+        <label for="newpass">NEW PASSWORD</label>
+        <input name="newpass" type="password" placeholder="" [(ngModel)]="newData.NewPassword"/><br>
+        <label for="confirmnewpass">CONFIRM NEW PASSWORD</label>
+        <input name="confirmnewpass" type="password" placeholder="" [(ngModel)]="newData.NewPasswordConfirm"/><br>
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="apply_changes()">Change password</button>
+      </div>
+    </div>
   </div>
 </body>
