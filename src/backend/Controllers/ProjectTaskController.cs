@@ -34,7 +34,8 @@ namespace backend.Controllers
                 TskStatusId = _context.TaskStatuses
                         .Where(ts => ts.ProjectId == taskDto.ProjectId && ts.Position == 0)
                         .Select(ts => ts.Id)
-                        .FirstOrDefault()
+                        .FirstOrDefault(),
+                ProjectSectionId = taskDto.ProjectSectionId
             };
 
             _context.ProjectTasks.Add(task);
@@ -51,7 +52,8 @@ namespace backend.Controllers
                 .Select(task => new
                 {
                     task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color
+                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                    task.ProjectSection.SectionName
                 })
                 .ToListAsync();
             return Ok(tasks);
@@ -65,7 +67,8 @@ namespace backend.Controllers
             .Select(task => new
             {
                 task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color
+                task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                task.ProjectSection.SectionName
             })
             .FirstOrDefaultAsync(t => t.Id == id); // Use FirstOrDefaultAsync instead of ToListAsync
 
@@ -101,7 +104,7 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            // task.TaskStatus = (Entities.TaskStatus)taskDto.TaskStatus;
+            // task.TaskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
 
             return Ok(task);

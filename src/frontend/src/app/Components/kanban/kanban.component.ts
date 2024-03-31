@@ -34,7 +34,7 @@ export class KanbanComponent implements OnInit{
       this.tasksBySection[status] = [];
     });
     this.GetTaskStatuses();
-    this.getProjectTasks();
+    // this.getProjectTasks();
     this.spinner.hide();
   }
   
@@ -51,26 +51,27 @@ export class KanbanComponent implements OnInit{
   //   }
   // }
 
-  getProjectTasks() {
-    const projectId = this.route.snapshot.paramMap.get('id');
-    if (projectId) {
-      this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
-        this.project = project;
-        this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
-          this.projectTasks = tasks;
-          const newTasksBySection = this.projectTasks.reduce((acc: { [key: string]: ProjectTask[] }, task: ProjectTask) => {
-            const statusName = this.getStatusString(task.taskStatus);
-            if (!acc[statusName]) {
-              acc[statusName] = [];
-            }
-            acc[statusName].push(task);
-            return acc;
-          }, {});
-          this.tasksBySection = { ...this.tasksBySection, ...newTasksBySection };
-        });
-      });
-    }
-  }
+  // tico ispravi
+  // getProjectTasks() {
+  //   const projectId = this.route.snapshot.paramMap.get('id');
+  //   if (projectId) {
+  //     this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
+  //       this.project = project;
+  //       this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
+  //         this.projectTasks = tasks;
+  //         const newTasksBySection = this.projectTasks.reduce((acc: { [key: string]: ProjectTask[] }, task: ProjectTask) => {
+  //           const statusName = this.getStatusString(task.taskStatus);
+  //           if (!acc[statusName]) {
+  //             acc[statusName] = [];
+  //           }
+  //           acc[statusName].push(task);
+  //           return acc;
+  //         }, {});
+  //         this.tasksBySection = { ...this.tasksBySection, ...newTasksBySection };
+  //       });
+  //     });
+  //   }
+  // }
   getStatusString(status: number): string {
     return this.taskStatuses.find(s => s.id === status)?.name || 'Unknown';
   }
@@ -80,7 +81,7 @@ export class KanbanComponent implements OnInit{
       this.taskStatuses.forEach(status => {
         this.tasksBySection[status.name] = [];
       });
-      this.getProjectTasks();
+      // this.getProjectTasks();
     });
   }
   drop(event: CdkDragDrop<ProjectTask[]>) {
@@ -94,7 +95,7 @@ export class KanbanComponent implements OnInit{
       const task = event.item.data;
       const newStatus = this.taskStatuses.find(s => s.name === event.container.id);
       if (task && newStatus) {
-        task.taskStatus = newStatus.id;
+        task.taskStatusId = newStatus.id; // Changed from taskStatus to taskStatusId
         this.myTasksService.updateTaskStatus(task.id, task).subscribe();
       }                        
     }

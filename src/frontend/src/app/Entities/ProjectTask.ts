@@ -8,14 +8,7 @@ export interface ProjectTask {
   description: string;
   startDate: Date;
   endDate: Date;
-  taskStatus: TaskStatus;
+  taskStatusId: number;
   projectId: number;
   project: Project;
-}
-
-export enum TaskStatus {
-  Proposed,
-  InProgress,
-  Completed,
-  Archived,
 }

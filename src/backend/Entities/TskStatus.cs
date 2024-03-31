@@ -10,6 +10,7 @@ namespace backend
         public string Color { get; set; }
         public int ProjectId { get; set; } // foreign key
         public Project Project { get; set; } // navigation
+        public ICollection<ProjectTask> Tasks { get; set; }
     }
 }
 

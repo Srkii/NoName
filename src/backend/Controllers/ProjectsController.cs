@@ -23,7 +23,6 @@ namespace backend.Controllers
             var project = new Project
             {
                 ProjectName = projectDto.ProjectName,
-                ParentId = projectDto.ParentId,
                 Description = projectDto.Description,
                 StartDate = projectDto.StartDate,
                 EndDate = projectDto.EndDate,
@@ -88,7 +87,6 @@ namespace backend.Controllers
             }
 
             project.ProjectName = projectDto.ProjectName;
-            project.ParentId = projectDto.ParentId;
             project.Description = projectDto.Description;
             project.StartDate = projectDto.StartDate;
             project.EndDate = projectDto.EndDate;

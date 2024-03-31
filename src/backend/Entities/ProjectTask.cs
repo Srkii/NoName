@@ -11,5 +11,7 @@
         public TskStatus TskStatus { get; set; } // navigation
         public int ProjectId { get; set; } // foreign key
         public Project Project { get; set; } // navigation
+        public int? ProjectSectionId { get; set; } // foreign key to ProjectSection (nullable)
+        public ProjectSection ProjectSection { get; set; } // navigation property
     }
 }

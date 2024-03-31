@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ProjectTask, TaskStatus } from '../../Entities/ProjectTask';
+import { ProjectTask} from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { Route, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -19,7 +19,7 @@ export class MyTasksComponent implements OnInit {
   showPopUp: boolean = false;
   task!: ProjectTask;
   TaskStatus: any;
-  previousTaskStatus: TaskStatus | null = null;
+  // previousTaskStatus: TaskStatus | null = null;
   static showPopUp: boolean;
 
   constructor(
@@ -74,30 +74,30 @@ export class MyTasksComponent implements OnInit {
     });
     }
 
-  toggleTaskCompletion(event: any, task: ProjectTask): void {
-    event.stopPropagation();
-    if (event.target.checked) {
-      this.previousTaskStatus = task.taskStatus;
-      task.taskStatus = TaskStatus.Completed;
-    } else {
-      if (this.previousTaskStatus !== null) {
-        task.taskStatus = this.previousTaskStatus;
-        this.previousTaskStatus = null;
+    toggleTaskCompletion(event: any, task: ProjectTask): void {
+      event.stopPropagation();
+      if (event.target.checked) {
+        this.previousTaskStatus = task.taskStatusId;
+        task.taskStatusId = TaskStatus.Completed;
       } else {
-        task.taskStatus = TaskStatus.InProgress;
+        if (this.previousTaskStatus !== null) {
+          task.taskStatusId = this.previousTaskStatus;
+          this.previousTaskStatus = null;
+        } else {
+          task.taskStatusId = TaskStatus.InProgress;
+        }
       }
-    }
-    // Update the task status on the server
-    this.myTasksService.updateTaskStatus(task.id, task).subscribe(
-      (updatedTask: ProjectTask) => {
-        // Optionally, handle the updated task response from the server
-        console.log('Task status updated successfully:', updatedTask);
-      },
-      (error: any) => {
-        // Handle any errors that occur during the update process
-        // console.error('Error updating task status:', error);
-      }
-    );
+      // Update the task status on the server
+      this.myTasksService.updateTaskStatus(task.id, task).subscribe(
+        (updatedTask: ProjectTask) => {
+          // Optionally, handle the updated task response from the server
+          console.log('Task status updated successfully:', updatedTask);
+        },
+        (error: any) => {
+          // Handle any errors that occur during the update process
+          // console.error('Error updating task status:', error);
+        }
+      );
   }
 
   handleTaskUpdate(updatedTask: ProjectTask): void {

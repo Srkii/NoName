@@ -18,6 +18,7 @@ namespace backend.Data
         public DbSet<Attachment> Attachments{get; set;}
         public DbSet<Comment> Comments {get; set;}
         public DbSet<TskStatus> TaskStatuses { get; set; }
+        public DbSet<ProjectSection> ProjectSections { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,9 +43,13 @@ namespace backend.Data
                     .WithMany() // define the relationship between ProjectTask and Project
                     .HasForeignKey(pt => pt.ProjectId); // define ProjectId as the foreign key
 
-                entity.HasOne(pt => pt.TskStatus) // dal je HasOne proveri! Tico
-                .WithMany() // You may want to specify the collection property of TskStatus if one exists
-                .HasForeignKey(pt => pt.TskStatusId); // This sets up the foreign key relationship
+                entity.HasOne(pt => pt.TskStatus)
+                    .WithMany(ts => ts.Tasks) // Specify the collection property here
+                    .HasForeignKey(pt => pt.TskStatusId);
+
+                entity.HasOne(pt => pt.ProjectSection)
+                    .WithMany(ps => ps.Tasks)
+                    .HasForeignKey(pt => pt.ProjectSectionId);
             });
 
             modelBuilder.Entity<TaskDependency>(entity =>
@@ -64,7 +69,7 @@ namespace backend.Data
 
             modelBuilder.Entity<TaskMember>(entity =>
             {
-                entity.HasKey(tm => new { tm.TaskId, tm.AppUserId, tm.ProjectId });
+                entity.HasKey(tm => new { tm.TaskId, tm.ProjectId });
 
                 entity.HasOne(tm => tm.Task)
                     .WithMany()
