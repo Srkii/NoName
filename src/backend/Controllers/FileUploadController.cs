@@ -24,6 +24,7 @@ namespace backend.Controllers
         [HttpPost("uploadpfp/{id}")] // /api/FileUpload
         public async Task<ActionResult> UploadImage(int id,IFormFile image){
             if(image==null) return BadRequest("photo is null");
+            if(!_photoService.IsPhoto(image)) return BadRequest("file sent is not a photo.");
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             
             if(user.ProfilePicUrl!=null){

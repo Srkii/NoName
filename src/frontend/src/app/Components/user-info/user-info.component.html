@@ -9,9 +9,9 @@
           </div>
           <div class="fullname">
             <span id="rolename">{{role}}</span><br>
-            <span id="full_name">{{userInfo.firstName}} {{userInfo.lastName}}</span><!--ne razumem error message ovde-->
+            <span id="full_name">{{userInfo.firstName}} {{userInfo.lastName}}</span>
           </div>
-          <input #inputClick type="file" style="display: none;" (change)="imageSelected($event)">
+          <input #inputClick type="file" style="display: none;" (change)="imageSelected($event)" accept="image/*">
         </div>
         <div id="user_info" *ngIf="userInfo">
           <h5>Details</h5>
@@ -43,7 +43,7 @@
         <input name="newpass" type="password" placeholder="" [(ngModel)]="newData.NewPassword"/><br>
         <label for="confirmnewpass">CONFIRM NEW PASSWORD</label>
         <input name="confirmnewpass" type="password" placeholder="" [(ngModel)]="newData.NewPasswordConfirm"/><br>
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="apply_changes()">Change password</button>
+        <button class="btn btn-primary d-grid" type="submit" (click)="apply_changes()">Change password</button>
       </div>
     </div>
   </div>
