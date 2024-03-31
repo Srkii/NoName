@@ -15,6 +15,9 @@
         margin: 10px !important;
         width: 250px !important;
     }
+    .card-header {
+        font-size: 20px !important;
+    }
 }
 .project-heading {
     text-align: center;
@@ -22,7 +25,8 @@
 .card-header {
     color: black;
     font-weight: bold;
-    font-size: 50px !important;
+    font-size: 40px !important;
+    letter-spacing: -1px;
 }
 /* za telefone */
 @media screen and (max-width: 500px) { 
@@ -32,6 +36,9 @@
     .btn-primary {
         margin: 10px !important;
         width: 250px !important;
+    }
+    .card-header {
+        font-size: 20px !important;
     }
 }
 .section {
@@ -49,6 +56,7 @@
         margin-right: 8px;
     }
 }
+/* Assignee temp */
 .asgplc {
     svg {
         margin-right: 8px;
