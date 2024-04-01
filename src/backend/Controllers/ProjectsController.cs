@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend
+namespace backend.Controllers
 {
     public class ProjectsController : BaseApiController
     {
@@ -16,14 +16,13 @@ namespace backend
             _context = context;
         }
 
-        [Authorize(Roles = "ProjectManager")]
+        // [Authorize(Roles = "ProjectManager")]
         [HttpPost] // POST: api/projects/
         public async Task<ActionResult<ProjectDto>> CreateProject(ProjectDto projectDto)
         {
             var project = new Project
             {
                 ProjectName = projectDto.ProjectName,
-                ParentId = projectDto.ParentId,
                 Description = projectDto.Description,
                 StartDate = projectDto.StartDate,
                 EndDate = projectDto.EndDate,
@@ -32,6 +31,9 @@ namespace backend
             };
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
+
+            // dodavanje inicijalnih statusa
+            await AddStarterStatuses(project);
             return new ProjectDto
             {
                 ProjectName = project.ProjectName,
@@ -41,6 +43,22 @@ namespace backend
                 ProjectStatus = project.ProjectStatus,
                 Priority = project.Priority
             };
+        }
+
+        //metoda za dodavanje inicijalnih statusa pri kreiranju projekta
+        private async Task AddStarterStatuses(Project project)
+        {
+            var starterStatuses = new List<TskStatus>
+            {
+                new TskStatus { StatusName = "Proposed", Position = 0, Project = project, Color = "#007bff" },
+                new TskStatus { StatusName = "InProgress", Position = 1, Project = project, Color = "#03c3ec" },
+                new TskStatus { StatusName = "InReview", Position = 2, Project = project, Color = "#20c997" },
+                new TskStatus { StatusName = "Completed", Position = 3, Project = project, Color = "#71dd37" },
+                new TskStatus { StatusName = "Archived", Position = 4, Project = project, Color = "#8592a3" }
+            };
+
+            _context.TaskStatuses.AddRange(starterStatuses);
+            await _context.SaveChangesAsync();
         }
 
         // [Authorize(Roles = "ProjectManager,Member")]
@@ -69,7 +87,6 @@ namespace backend
             }
 
             project.ProjectName = projectDto.ProjectName;
-            project.ParentId = projectDto.ParentId;
             project.Description = projectDto.Description;
             project.StartDate = projectDto.StartDate;
             project.EndDate = projectDto.EndDate;

@@ -1,5 +1,6 @@
 // import { Project } from './project';
 
+import { AppUser } from './AppUser';
 import { Project } from './Project';
 
 export interface ProjectTask {
@@ -8,14 +9,10 @@ export interface ProjectTask {
   description: string;
   startDate: Date;
   endDate: Date;
-  taskStatus: TaskStatus;
+  statusName: string;
+  sectionName: string;
   projectId: number;
-  project: Project;
-}
-
-export enum TaskStatus {
-  Proposed,
-  InProgress,
-  Completed,
-  Archived,
+  firstName?: string;
+  lastName?: string;
+  project: Project; //cemu ovo sluzi?
 }

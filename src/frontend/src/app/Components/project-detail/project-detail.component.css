@@ -1,8 +1,66 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
-th {
-    border-radius: 0.5rem;
+.button-selectors {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* za tablete */
+@media screen and (max-width: 1200px) {
+    .button-selectors {
+        flex-direction: row;
+    }
+    .btn-primary {
+        margin: 10px !important;
+        width: 250px !important;
+    }
+    .card-header {
+        font-size: 20px !important;
+    }
+}
+.project-heading {
+    text-align: center;
+}
+.card-header {
+    color: black;
+    font-weight: bold;
+    font-size: 40px !important;
+    letter-spacing: -1px;
+}
+/* za telefone */
+@media screen and (max-width: 500px) { 
+    .button-selectors {
+        flex-direction: column;
+    }
+    .btn-primary {
+        margin: 10px !important;
+        width: 250px !important;
+    }
+    .card-header {
+        font-size: 20px !important;
+    }
+}
+.section {
+    margin-bottom: 20px; /* Adjust the space between sections */
+    margin-top: 20px
+}
+.section-name {
+    cursor: pointer;
+    color: black;
+    text-decoration: underline;
+    font-size: large;
+    line-height: 1.5;
+
+    svg {
+        margin-right: 8px;
+    }
+}
+/* Assignee temp */
+.asgplc {
+    svg {
+        margin-right: 8px;
+    }
 }
 .text-nowrap {
     white-space: nowrap !important;
@@ -12,6 +70,9 @@ th {
 }
 .card .table {
     margin-bottom: 0;
+}
+thead th{
+    border-radius: 0.5rem;
 }
 .table tbody  {
     padding-bottom: 0;
@@ -27,9 +88,11 @@ th {
 .table tbody tr:last-child {
     margin-bottom: -30px;
 }
-.table tbody tr:last-child td {
+/* sklanja border poslednjeg elementa
+ .table tbody tr:last-child td {
     border-bottom: none;
-}
+} */
+
 .btn-active {
     background-color: #696cff !important;
 }
@@ -49,9 +112,9 @@ th {
     background-color: #696cff;
     border-color: #696cff;
     box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    /* display: inline-flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
     font-size: 1rem;
@@ -64,9 +127,6 @@ th {
 .bg-label-primary {
     background-color: #e7e7ff !important;
     color: #696cff !important;
-}
-.me-1 {
-    margin-right: 0.25rem !important;
 }
 .badge {
     text-transform: uppercase;
@@ -90,6 +150,7 @@ th {
 .btn-primary .btn-text {
     margin-left: 8px;
 }
+
 .content-wrapper {
     display: flex;
     align-items: stretch;
@@ -112,6 +173,7 @@ th {
     background-clip: border-box;
     border: 0px solid #d9dee3;
     border-radius: 0.5rem;
+    padding: 15px;
 }
 .content-wrapper {
     display: flex;
@@ -121,3 +183,16 @@ th {
     justify-content: space-between;
     box-sizing: border-box;
 }
+/* .table {
+    border: 1px solid black;
+} */
+.table td, th {
+    /* border: 1px solid #d9dee3 !important; */
+    width: 20%;
+}
+
+/* sklanja border za poslednji row svake tabele */
+/* .table tbody tr:last-child td, 
+.table tbody tr:last-child th {
+  border-bottom: none;
+} */
