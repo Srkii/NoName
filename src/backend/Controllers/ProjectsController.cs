@@ -76,6 +76,21 @@ namespace backend.Controllers
             return await _context.Projects.FindAsync(id);
         }
 
+        // [Authorize(Roles = "ProjectManager,Member")]
+        [HttpGet("getUsersProjects/{userid}")]  // GET: api/projects/getProjects/1
+        public async Task<ActionResult<IEnumerable<Project>>> GetUsersProjects(int userid)
+        {
+            var projects = await _context.Projects
+                                         .Join(_context.ProjectMembers,
+                                                project => project.Id,
+                                                member => member.ProjectId,
+                                                (project, member) => new { Project = project, Member = member })
+                                         .Where(x => x.Member.AppUserId == userid)
+                                         .Select(x => x.Project)
+                                         .ToListAsync();
+            return projects;
+        }
+
         // [Authorize(Roles = "ProjectManager")]
         [HttpPut("{id}")] // PUT: api/projects/3
         public async Task<IActionResult> UpdateProject(int id, ProjectDto projectDto)
