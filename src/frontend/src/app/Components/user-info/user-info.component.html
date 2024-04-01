@@ -37,13 +37,37 @@
         </div>
       </div>
       <div id="inputs">
-        <label for="oldpass">OLD PASSWORD</label>
-        <input name="oldpass" type="password" placeholder="" [(ngModel)]="newData.CurrentPassword" required/><br>
-        <label for="newpass">NEW PASSWORD</label>
-        <input name="newpass" type="password" placeholder="" [(ngModel)]="newData.NewPassword"/><br>
-        <label for="confirmnewpass">CONFIRM NEW PASSWORD</label>
-        <input name="confirmnewpass" type="password" placeholder="" [(ngModel)]="newData.NewPasswordConfirm"/><br>
-        <button class="btn btn-primary d-grid" type="submit" (click)="apply_changes()">Change password</button>
+        <div class="mb-3 form-password-toggle">
+          <div class="d-flex justify-content-between">
+            <label class="form-label" for="password">Current Password</label>
+        </div>
+            <div class="input-group input-group-merge">
+              <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+            </div>
+        </div>
+        <div class="mb-3 form-password-toggle">
+          <div class="d-flex justify-content-between">
+            <label class="form-label" for="password">New Password</label>
+        </div>
+            <div class="input-group input-group-merge">
+              <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+            </div>
+        </div>
+        <div class="mb-3 form-password-toggle">
+          <div class="d-flex justify-content-between">
+            <label class="form-label" for="password">New Password</label>
+        </div>
+            <div class="input-group input-group-merge">
+              <input type="password" id="form3Example5" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
+              confirmpass !== newData.NewPassword &&
+              confirmpass !== ''"
+              placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+            </div>
+        </div>
+        <!-- Submit button -->
+        <div class="mb-3">
+          <button class="btn btn-primary d-grid" type="submit" [disabled]="!passwordMatch()" (click)="apply_changes()">Change Password</button>
+        </div>
       </div>
     </div>
   </div>

@@ -12,9 +12,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class UserInfoComponent implements OnInit {
   public userInfo:any;
+  public oldPass="";
+  public newpas="";
+  public confirmpass="";
   public role:any;
   public profilePic:any;
-  public passwordCheck:any;
   public defaulturl="../../../assets/profile_photo_placeholders/1234.png";
   public url="../../../assets/profile_photo_placeholders/1234.png";
   newData: ChangePassword = {
@@ -68,14 +70,11 @@ export class UserInfoComponent implements OnInit {
       console.error("Token not found in local storage");
     }
   }
-  apply_changes(){//menjaj celo
-    if(this.newData.CurrentPassword==''){
-      alert("input old password for verification...");
-      return;
-    }else if(this.newData.NewPassword!=this.newData.NewPasswordConfirm){
-      alert("passwords must match...");
-      return;
-    }
+  passwordMatch(): boolean {
+    return this.newData.NewPassword === this.confirmpass;
+  }
+
+  apply_changes(){
     console.log("applying changes...");
     var id= Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
