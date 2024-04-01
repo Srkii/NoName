@@ -95,17 +95,7 @@ body {
 .navbar-collapse{
   margin-left:  20px;
 }
-@media (min-width: 1280px) {
-  .tabs-to-dropdown .nav-wrapper {
-    padding: 15px 30px;
-  }
-}
 
-@media (min-width:900px){
-  .navbar-collapse dropdown-menu dropdown-menu-end{
-    border-radius: 0%;
-  }
-}
 
 .firstDrop{
   padding-left: 10px;
@@ -162,7 +152,7 @@ body {
 .logoImg{
   width: 60px;
 }
-/* @media only screen and (min-width: 768px){
+ @media only screen and (min-width: 768px){
 
   .navbar-brand .dropdown-menu{
     display: none;
@@ -172,41 +162,3 @@ body {
   }
 }
 
-@media only screen and (min-width: 755px) {
-  .navbar-brand .dropdown-menu{
-    display: none;
-  }
-  .tabs-to-dropdown{
-    display: block
-  }
-  .navbar-brand .dropdown-menu {
-    display: block;
-  }
-  .tabs-to-dropdown {
-    display: block;
-  }
-} */
-
-/* Responsive design */
-/* @media (max-width: 768px) {
-  .layout-navbar {
-    flex-direction: column;
-  }
-
-  .navbar-nav-left,
-  .navbar-nav-right {
-    width: 100%;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-
-   .navbar-nav-left ul {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .navbar-nav-left li {
-    margin-right: 0;
-    margin-bottom: 5px;
-  }
-} */

@@ -1,9 +1,10 @@
-<nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+<nav class="layout-navbar navbar navbar-expand-md align-items-center bg-navbar-theme" id="layout-navbar">
 
   <div class="navbar-brand">
     <!-- Logo image will act as a toggle for small screens -->
     <img src="../../../assets/navIcons/logo.png" class="logoImg d-xl-none dropdown-toggle hide-arrow"
-    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">    <div class="dropdown-menu dropdown-menu-responsive">
+    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="dropdown-menu dropdown-menu-responsive">
       <ul class="firstDrop">
         <li class="nav-item active" *ngIf="isAdmin()">
           <a class="nav-link" routerLink="/admin">Manage Users</a>
@@ -22,7 +23,7 @@
 
 
 
-  <div class="collapse navbar-collapse " id="navbarSupportedContent">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <!-- Content for larger screens -->
     <div class="tabs-to-dropdown">
       <div class="nav-wrapper d-flex align-items-center justify-content-between">
