@@ -1,12 +1,12 @@
 <div class="board" cdkDropListGroup>
-    <!-- <div class="board-wrapper">
-        <div *ngFor="let status of taskStatuses" class="board-column" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" [cdkDropListConnectedTo]="taskStatusNames" (cdkDropListDropped)="drop($event)">
+    <div class="board-wrapper">
+        <div *ngFor="let status of taskStatuses"  class="board-column" [style.background-color]="status.color"
+        cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" [cdkDropListConnectedTo]="taskStatusNames" (cdkDropListDropped)="drop($event)">
             <div class="column-title">{{status.name}}</div>
             <div class="tasks-container">
-                <div class="task" *ngFor="let task of tasksBySection[status.name]" cdkDrag [cdkDragData]="task">
+                <div *ngFor="let task of tasksBySection[status.name]" class="task" cdkDrag [cdkDragData]="task">
                     <div class="task-title">{{task.taskName}}</div>
-                </div>
             </div>
         </div>
-    </div> -->
+    </div>
 </div>

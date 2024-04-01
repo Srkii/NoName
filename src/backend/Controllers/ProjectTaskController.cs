@@ -104,7 +104,7 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            // task.TaskStatusId = taskDto.TaskStatusId;
+            task.TskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
 
             return Ok(task);
@@ -213,16 +213,16 @@ namespace backend.Controllers
             return Ok(tasks);
         }
 
-        // [HttpGet("statuses")] // GET: api/projectTask/statuses
-        // public ActionResult<IEnumerable<object>> GetTaskStatuses()
-        // {
-        //     var statuses = Enum.GetValues(typeof(Entities.TaskStatus))
-        //         .Cast<Entities.TaskStatus>()
-        //         .Select(status => new { id = (int)status, name = status.ToString() })
-        //         .ToList();
+        [HttpGet("statuses/{projectId}")] // GET: api/projectTask/statuses/{projectId}
+        public ActionResult<IEnumerable<object>> GetTaskStatuses(int projectId)
+        {
+            var statuses = _context.TaskStatuses
+                .Where(status => status.ProjectId == projectId)
+                .Select(status => new { id = status.Id, name = status.StatusName, position = status.Position, color = status.Color })
+                .ToList();
 
-        //     return Ok(statuses);
-        // }
+            return Ok(statuses);
+        }
     }
 }
 
