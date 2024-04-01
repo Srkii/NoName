@@ -18,6 +18,10 @@ export class MyProjectsService {
     return this.http.get<Project[]>(this.baseUrl);
   }
 
+  getUsersProjects(id: any): Observable<Project[]> {
+    return this.http.get<Project[]>(`${this.baseUrl}/getUsersProjects/${id}`);
+  }
+
   getProjectById(id: number): Observable<Project> {
     return this.http.get<Project>(`${this.baseUrl}/${id}`);
   }
