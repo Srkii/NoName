@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
-import { MyProjectsService } from '../../_services/my-projects.service';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { Project } from '../../Entities/Project';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
@@ -16,14 +14,11 @@ export class KanbanComponent implements OnInit{
   tasks: any[] = [];
   taskStatuses: any[] = [];
   tasksBySection: { [key: string]: ProjectTask[] } = {};
-  project: Project | undefined;
-  // projectTasks: ProjectTask[] = [];
   taskStatusNames: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
-    private myProjectsService: MyProjectsService,
     private myTasksService: MyTasksService
   ) {}
 
@@ -79,7 +74,7 @@ export class KanbanComponent implements OnInit{
       const task = event.item.data;
       const newStatus = this.taskStatuses.find(s => s.name === event.container.id);
       if (task && newStatus) {
-        task.taskStatusId = newStatus.id; // Changed from taskStatus to taskStatusId
+        task.taskStatusId = newStatus.id;
         this.myTasksService.updateTaskStatus(task.id, task).subscribe();
       }                        
     }
