@@ -8,7 +8,7 @@ namespace backend.DTO
         public int Id { get; set; }
         public string TaskName { get; set; }
         public string Description { get; set; }
-        public TaskStatus? TaskStatus { get; set; }
+        public int? TaskStatusId { get; set; } //nece raditi mora da se menja
         public int AppUserId { get; set; }
         public int ProjectId { get; set; }
     }

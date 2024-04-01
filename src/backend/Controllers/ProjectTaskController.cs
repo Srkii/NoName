@@ -7,9 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
-    [ApiController]
-    [Route("api/projectTask")]
-    public class ProjectTaskController : ControllerBase
+    // [Authorize]
+    public class ProjectTaskController : BaseApiController
     {
         private readonly DataContext _context;
 
@@ -18,13 +17,12 @@ namespace backend.Controllers
             _context = context;
         }
         
-        // [Authorize]
         [AllowAnonymous]
         [HttpPost] // POST: api/projectTask/
         public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
         {
-            if(!await RoleCheck(taskDto.AppUserId,taskDto.ProjectId))
-                return Unauthorized("Unvalid role");
+            // if(!await RoleCheck(taskDto.AppUserId,taskDto.ProjectId))
+            //     return Unauthorized("Invalid role");
 
             var task = new ProjectTask
             {
@@ -32,8 +30,12 @@ namespace backend.Controllers
                 Description = taskDto.Description,
                 StartDate = taskDto.StartDate,
                 EndDate = taskDto.EndDate,
-                TaskStatus = taskDto.TaskStatus,
                 ProjectId = taskDto.ProjectId,
+                TskStatusId = _context.TaskStatuses
+                        .Where(ts => ts.ProjectId == taskDto.ProjectId && ts.Position == 0)
+                        .Select(ts => ts.Id)
+                        .FirstOrDefault(),
+                ProjectSectionId = taskDto.ProjectSectionId
             };
 
             _context.ProjectTasks.Add(task);
@@ -42,45 +44,55 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
         }
         
-        // [Authorize]
         [AllowAnonymous]
         [HttpGet] // GET: api/projectTask/
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetProjectTasks()
         {
             var tasks = await _context.ProjectTasks
-                .Include(task => task.Project)
+                .Select(task => new
+                {
+                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                    task.ProjectSection.SectionName, task.AppUser
+                })
                 .ToListAsync();
-            return tasks;
+            return Ok(tasks);
         }
 
-        // [Authorize]
         [AllowAnonymous]
         [HttpGet("{id}")] // GET: api/projectTask/2
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
         {
-            var tasklist = await _context.ProjectTasks
-              .Include(task => task.Project).Where(t => t.Id == id).ToListAsync();
+            var task = await _context.ProjectTasks
+            .Select(task => new
+            {
+                task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                task.ProjectSection.SectionName
+            })
+            .FirstOrDefaultAsync(t => t.Id == id); // Use FirstOrDefaultAsync instead of ToListAsync
 
-            if (tasklist == null)
+            if (task == null)
             {
                 return NotFound();
             }
-            return tasklist[0];
+            return Ok(task);
         }
+        
         [AllowAnonymous]
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
         {
             var tasks = await _context.ProjectTasks
-                                      .Include(task => task.Project)
-                                      .Join(_context.TaskMembers,
-                                            task => task.Id,
-                                            member => member.TaskId,
-                                            (task, member) => new { task, member })
-                                      .Where(tm => tm.member.AppUserId == userId)
-                                      .Select(tm => tm.task) // Change this line
+                                      .Where(task => task.AppUserId == userId)
+                                      .Select(task => new
+                                      {
+                                          task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                                          task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                                          task.ProjectSection.SectionName
+                                      })
                                       .ToListAsync();
-            return tasks;
+            return Ok(tasks);
         }
 
         [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
@@ -92,15 +104,13 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-
-            task.TaskStatus = (Entities.TaskStatus)taskDto.TaskStatus;
-
+            task.TskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
 
             return Ok(task);
-}
+        }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
         public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
         {
@@ -114,14 +124,14 @@ namespace backend.Controllers
             
             if(dto.TaskName != null) task.TaskName = dto.TaskName;
             if(dto.Description != null && dto.Description != "") task.Description = dto.Description;
-            if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
+            // if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
 
             await _context.SaveChangesAsync();
 
             return Ok(task);
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPut("changeTaskSchedule")] // GET: api/projectTask/changeTaskSchedule
         public async Task<ActionResult<ProjectTask>> ChangeTaskSchedule(TaskScheduleDto dto)
         {
@@ -141,7 +151,7 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPut("addTaskDependency")] // GET: api/projectTask/addTaskDependency
         public async Task<ActionResult<ProjectTask>> AddTaskDependency(TaskDependencyDto dto)
         {
@@ -160,17 +170,24 @@ namespace backend.Controllers
             return Ok(taskDep);
         }
 
-        [Authorize]
-        [HttpPut("addTaskAssignee")] // GET: api/projectTask/addTaskAssignee
-        public async Task<ActionResult<ProjectTask>> AddTaskAssignee(TaskMember data)
+        public async Task<ActionResult<ProjectTask>> AddTaskAssignee(int taskId, int userId, int projectId)
         {
-            if(!await RoleCheck(data.AppUserId,data.ProjectId))
-                return Unauthorized("Unvalid role");
+            var isMember = await _context.ProjectMembers.AnyAsync(pm => pm.AppUserId == userId && pm.ProjectId == projectId);
+            if (!isMember)
+            {
+                return BadRequest("User is not a member of the project");
+            }
+            if(!await RoleCheck(userId, projectId))
+                return Unauthorized("Invalid role");
+            
+            var task = await _context.ProjectTasks.FindAsync(taskId);
+            if (task == null)
+                return NotFound("Task not found");
 
-            await _context.TaskMembers.AddAsync(data);
+            task.AppUserId = userId;
             await _context.SaveChangesAsync();
 
-            return Ok(data);
+            return Ok(task);
         }
 
         public async Task<bool> RoleCheck(int userId,int projectId)
@@ -180,22 +197,28 @@ namespace backend.Controllers
             return projectMember != null;
         }
 
+        [AllowAnonymous]
         [HttpGet("ByProject/{projectId}")] // New method to get tasks by project ID
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId)
         {
             var tasks = await _context.ProjectTasks
+                .Select(task => new
+                {
+                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                    task.ProjectSection.SectionName, task.AppUser.FirstName, task.AppUser.LastName
+                })
                 .Where(t => t.ProjectId == projectId)
-                .Include(t => t.Project) // Include project details if needed
                 .ToListAsync();
-            return tasks;
+            return Ok(tasks);
         }
 
-        [HttpGet("statuses")] // GET: api/projectTask/statuses
-        public ActionResult<IEnumerable<object>> GetTaskStatuses()
+        [HttpGet("statuses/{projectId}")] // GET: api/projectTask/statuses/{projectId}
+        public ActionResult<IEnumerable<object>> GetTaskStatuses(int projectId)
         {
-            var statuses = Enum.GetValues(typeof(Entities.TaskStatus))
-                .Cast<Entities.TaskStatus>()
-                .Select(status => new { id = (int)status, name = status.ToString() })
+            var statuses = _context.TaskStatuses
+                .Where(status => status.ProjectId == projectId)
+                .Select(status => new { id = status.Id, name = status.StatusName, position = status.Position, color = status.Color })
                 .ToList();
 
             return Ok(statuses);
