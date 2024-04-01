@@ -12,9 +12,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class UserInfoComponent implements OnInit {
   public userInfo:any;
+  public oldPass="";
+  public newpas="";
+  public confirmpass="";
   public role:any;
   public profilePic:any;
-  public passwordCheck:any;
   public defaulturl="../../../assets/profile_photo_placeholders/1234.png";
   public url="../../../assets/profile_photo_placeholders/1234.png";
   newData: ChangePassword = {
@@ -68,29 +70,23 @@ export class UserInfoComponent implements OnInit {
       console.error("Token not found in local storage");
     }
   }
-  apply_changes(){//menjaj celo
-    if(this.newData.CurrentPassword==''){
-      alert("input old password for verification...");
-      return;
-    }else if(this.newData.NewPassword!=this.newData.NewPasswordConfirm){
-      alert("passwords must match...");
-      return;
-    }
+  passwordMatch(): boolean {
+    return this.newData.NewPassword === this.confirmpass;
+  }
+
+  apply_changes(){
     console.log("applying changes...");
     var id= Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
     this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
       next: (response) => {
         console.log(response);
-        localStorage.clear();
-        localStorage.setItem('id',response.id);
-        localStorage.setItem('token',response.token);
         console.log("change info successful!");
-        var succ = document.getElementById("successtext")
+        var succ = document.getElementById("success_div")
         if(succ) succ.style.display='block';
-        var base = document.getElementById("basetext");
+        var base = document.getElementById("warning_div");
         if(base) base.style.display='none';
-        var change = document.getElementById("Change_alert");
+        var change = document.getElementById("alert_div");
         if(change){
           change.style.backgroundColor = '#83EDA1'
           change.style.color = '#FFFFFF';
@@ -106,18 +102,24 @@ export class UserInfoComponent implements OnInit {
 
   imageSelected(event:any){
     const imageData:File = event.target.files[0];
+
     if(imageData != null){
-      var id = Number(localStorage.getItem('id'));
-      var token = localStorage.getItem('token');
-      this.uploadservice.UploadImage(id,imageData,token).subscribe({
-        next: (response) => {
-          console.log("RESPONSE",response);
-          location.reload();
-        },
-        error: (error) =>{
-          console.log(error);
-        }
-      });
+      if(imageData && imageData.type.startsWith('image/')){
+        var id = Number(localStorage.getItem('id'));
+        var token = localStorage.getItem('token');
+        this.uploadservice.UploadImage(id,imageData,token).subscribe({
+          next: (response) => {
+            console.log("RESPONSE",response);
+            location.reload();
+          },
+          error: (error) =>{
+            console.log(error);
+          }
+        });
+      }
+      else{
+        console.log("file uploaded is not an image.");
+      }
     }
     else{
       console.log("no image data.");
