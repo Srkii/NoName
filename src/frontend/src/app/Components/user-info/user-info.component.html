@@ -9,16 +9,16 @@
           </div>
           <div class="fullname">
             <span id="rolename">{{role}}</span><br>
-            <span id="full_name">{{userInfo.firstName}} {{userInfo.lastName}}</span>
+            <span id="full_name">{{userInfo?.firstName}} {{userInfo?.lastName}}</span>
           </div>
           <input #inputClick type="file" style="display: none;" (change)="imageSelected($event)" accept="image/*">
         </div>
         <div id="user_info" *ngIf="userInfo">
           <h5>Details</h5>
           <div>
-            First name: {{userInfo.firstName}}<br>
-            Last name: {{userInfo.lastName}}<br>
-            Email: {{userInfo.email}}<br>
+            First name: {{userInfo?.firstName}}<br>
+            Last name: {{userInfo?.lastName}}<br>
+            Email: {{userInfo?.email}}<br>
             Role: {{role}}<br>
           </div>
         </div>
@@ -42,7 +42,7 @@
             <label class="form-label" for="password">Current Password</label>
         </div>
             <div class="input-group input-group-merge">
-              <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+              <input type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
             </div>
         </div>
         <div class="mb-3 form-password-toggle">
@@ -50,15 +50,15 @@
             <label class="form-label" for="password">New Password</label>
         </div>
             <div class="input-group input-group-merge">
-              <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+              <input type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
             </div>
         </div>
         <div class="mb-3 form-password-toggle">
           <div class="d-flex justify-content-between">
-            <label class="form-label" for="password">New Password</label>
+            <label class="form-label" for="password">Confirm New Password</label>
         </div>
             <div class="input-group input-group-merge">
-              <input type="password" id="form3Example5" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
+              <input type="password" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
               confirmpass !== newData.NewPassword &&
               confirmpass !== ''"
               placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
