@@ -27,6 +27,7 @@
     /* flex-grow: 1; */
     /* flex-basis: 0; */
     min-width: 100px;
+    min-height: 300px;
     margin: 15px;
     padding: 15px;
     padding-top: 5px !important;
