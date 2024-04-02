@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ProjectTask} from '../../Entities/ProjectTask';
+import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { Route, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -27,7 +27,7 @@ export class MyTasksComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private spinner: NgxSpinnerService,
-    private shared:SharedService
+    private shared: SharedService
   ) {}
 
   closePopup() {
@@ -37,11 +37,17 @@ export class MyTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
-    this.myTasksService.GetProjectTasks().subscribe((tasks: ProjectTask[]) => {
-      this.tasks = tasks;
-      this.spinner.hide();
-    });
+    const projectId = 1;
+    const userId = localStorage.getItem('id');
+
+    this.myTasksService
+      .GetValidTasks(projectId, userId)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.tasks = tasks;
+        this.spinner.hide();
+      });
   }
+
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); // Prevent event bubbling if necessary
 
@@ -54,25 +60,24 @@ export class MyTasksComponent implements OnInit {
     // Assuming GetProjectTaskById is a method that fetches the task details
     const row = document.querySelector('.red') as HTMLElement;
     this.myTasksService
-    .GetProjectTaskById(taskId)
-    .subscribe((task: ProjectTask) => {
-      if (
-        this.clickedTask &&
-        this.clickedTask.id === taskId &&
-        this.showPopUp
-      ) {
-        row.style.backgroundColor = '';
-        this.showPopUp = false;
-        this.clickedTask = null;
-        this.shared.current_task_id = null;
-
-      } else {
-        this.clickedTask = task;
-        this.showPopUp = true;
-        this.shared.current_task_id = this.clickedTask.id;
-      }
-    });
-    }
+      .GetProjectTaskById(taskId)
+      .subscribe((task: ProjectTask) => {
+        if (
+          this.clickedTask &&
+          this.clickedTask.id === taskId &&
+          this.showPopUp
+        ) {
+          row.style.backgroundColor = '';
+          this.showPopUp = false;
+          this.clickedTask = null;
+          this.shared.current_task_id = null;
+        } else {
+          this.clickedTask = task;
+          this.showPopUp = true;
+          this.shared.current_task_id = this.clickedTask.id;
+        }
+      });
+  }
 
   //   toggleTaskCompletion(event: any, task: ProjectTask): void {
   //     event.stopPropagation();

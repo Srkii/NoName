@@ -18,7 +18,9 @@ export class MyTasksService {
   }
 
   GetTasksByProjectId(projectId: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}`);
+    return this.http.get<ProjectTask[]>(
+      `${this.baseUrl}/ByProject/${projectId}`
+    );
   }
 
   GetUserTasks(userId: number): Observable<ProjectTask[]> {
@@ -34,11 +36,15 @@ export class MyTasksService {
       task
     );
   }
-  
+
   //tico kanban ; ne diraj!
   GetTaskStatuses(projectId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/statuses/${projectId}`);
   }
 
-  
+  GetValidTasks(projectId: number, userId: any): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(
+      `${this.baseUrl}/getValidTasks/${projectId}/${userId}`
+    );
+  }
 }

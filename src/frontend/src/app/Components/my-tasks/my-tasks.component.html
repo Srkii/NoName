@@ -27,20 +27,19 @@
         </th>
       </tr>
       <!-- zasto se klasa zove red?? -->
-      <!-- <ng-container *ngFor="let task of tasks">
+      <ng-container *ngFor="let task of tasks">
         <tr
-          class="red" 
+          class="red"
           [class.clicked]="clickedTask?.id === task.id"
-          *ngIf="task.taskStatus === 0"
           (click)="togglePopUp($event, task.id)"
         >
-          <td>
+          <!-- <td>
             <input
               type="checkbox"
               [id]="'checkBox-' + task.id"
               (change)="toggleTaskCompletion($event, task)"
             />
-          </td>
+          </td> -->
           <td class="name">
             {{ task.taskName }}
           </td>
@@ -50,7 +49,7 @@
           <td>Task visibility goes here</td>
           <td>{{ task.endDate | date }}</td>
         </tr>
-      </ng-container> -->
+      </ng-container>
     </table>
   </div>
 </div>
