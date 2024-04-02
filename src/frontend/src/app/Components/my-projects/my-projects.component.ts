@@ -23,7 +23,8 @@ export class MyProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
-    this.myProjectsService.getProjects().subscribe((projects: Project[]) => {
+    const id = localStorage.getItem('id');
+    this.myProjectsService.getUsersProjects(id).subscribe((projects: Project[]) => {
       this.projects = projects;
       this.spinner.hide();
     });

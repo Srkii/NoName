@@ -11,12 +11,13 @@ namespace backend.Data
         public DbSet<Project> Projects {get; set;}
         public DbSet<ProjectMember> ProjectMembers {get; set;}
         public DbSet<ProjectTask> ProjectTasks {get; set;}
-        public DbSet<TaskMember> TaskMembers {get; set;}
         public DbSet<TaskDependency> TaskDependencies {get; set;}
         public DbSet<Invitation> Invitations {get; set;}
         public DbSet<UserRequest> UserRequests {get; set;}
         public DbSet<Attachment> Attachments{get; set;}
         public DbSet<Comment> Comments {get; set;}
+        public DbSet<TskStatus> TaskStatuses { get; set; }
+        public DbSet<ProjectSection> ProjectSections { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +41,18 @@ namespace backend.Data
                 entity.HasOne(pt => pt.Project)
                     .WithMany() // define the relationship between ProjectTask and Project
                     .HasForeignKey(pt => pt.ProjectId); // define ProjectId as the foreign key
+
+                entity.HasOne(pt => pt.TskStatus)
+                    .WithMany(ts => ts.Tasks) // Specify the collection property here
+                    .HasForeignKey(pt => pt.TskStatusId);
+
+                entity.HasOne(pt => pt.ProjectSection)
+                    .WithMany(ps => ps.Tasks)
+                    .HasForeignKey(pt => pt.ProjectSectionId);
+                
+                entity.HasOne(pt => pt.AppUser)
+                    .WithMany()
+                    .HasForeignKey(pt => pt.AppUserId);
             });
 
             modelBuilder.Entity<TaskDependency>(entity =>
@@ -55,19 +68,6 @@ namespace backend.Data
                     .HasForeignKey(td => td.DependencyTaskId);
                 // task can't be dependant on itself
                 entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId"));
-            });
-
-            modelBuilder.Entity<TaskMember>(entity =>
-            {
-                entity.HasKey(tm => new { tm.TaskId, tm.AppUserId, tm.ProjectId });
-
-                entity.HasOne(tm => tm.Task)
-                    .WithMany()
-                    .HasForeignKey(tm => tm.TaskId);
-
-                entity.HasOne(tm => tm.Member)
-                    .WithMany()
-                    .HasForeignKey(tm => new { tm.AppUserId, tm.ProjectId }); // composite foreign key
             });
         }
     }

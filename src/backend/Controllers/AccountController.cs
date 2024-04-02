@@ -79,7 +79,7 @@ namespace backend.Controllers
             };
         }
 
-        [AllowAnonymous]
+        // [AllowAnonymous]
         [HttpPost("resetPassword")] // /api/account/resetPassword
         public async Task<ActionResult<InvitationDto>> ResetPassword(PasswordResetDto PassDto)
         {
@@ -103,7 +103,7 @@ namespace backend.Controllers
             return Ok();
         }
 
-        [AllowAnonymous] //vraca mi mail na osnovu tokena koji je potreban za reset passworda
+        // [AllowAnonymous] //vraca mi mail na osnovu tokena koji je potreban za reset passworda
         [HttpGet("token/{token}")] // /api/account/token
         public async Task<ActionResult<UserRequestDto>> GetEmail(string token)
         {

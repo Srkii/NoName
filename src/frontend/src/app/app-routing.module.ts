@@ -11,8 +11,9 @@ import { authGuard } from './_guards/auth.guard';
 import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
 import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
 import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
-import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
+// import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
+import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },

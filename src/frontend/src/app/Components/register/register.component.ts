@@ -3,6 +3,8 @@ import { RegisterService } from '../../_services/register.service';
 import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Invintation } from '../../Entities/Invitation';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -25,7 +27,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private registerService: RegisterService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {}
 
   token: any;
@@ -75,7 +78,7 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/mytasks']);
       },
       error: () => {
-        console.log('Unsuccessful registration');
+        this.toastr.error('Unsuccessful registration');
       },
     });
   }

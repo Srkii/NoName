@@ -30,5 +30,8 @@ namespace backend.Services
                 File.Delete(path_check);
             }
         }
+        public bool IsPhoto(IFormFile file){
+            return file.ContentType.StartsWith("image/",StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

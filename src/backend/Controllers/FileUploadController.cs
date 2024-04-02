@@ -24,6 +24,7 @@ namespace backend.Controllers
         [HttpPost("uploadpfp/{id}")] // /api/FileUpload
         public async Task<ActionResult> UploadImage(int id,IFormFile image){
             if(image==null) return BadRequest("photo is null");
+            if(!_photoService.IsPhoto(image)) return BadRequest("file sent is not a photo.");
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             
             if(user.ProfilePicUrl!=null){
@@ -47,7 +48,7 @@ namespace backend.Controllers
         public async Task<ActionResult> UploadFile(int id,IFormFile file){
             if(file==null) return BadRequest("file is null");
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
-
+            //doraditi: treba da proveri dal task postoji pa onda da upload file. ako ne postoji vraca BadRequest sa opisom greske
             var filename =  _uploadService.AddFile(file);
             var attachment = new Attachment{
                 task_id = task.Id,

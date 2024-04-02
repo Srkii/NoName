@@ -2,10 +2,11 @@
 {
     public enum ProjectRole
     {
+        ProjectManager, //osoba koja je kreirala projekat
         ProjectOwner,
         Manager,
         Participant,
-        Guest
+        Guest,
     }
     public class ProjectMember
     {
