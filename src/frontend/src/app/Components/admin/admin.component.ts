@@ -52,6 +52,8 @@ export class AdminComponent implements OnInit{
   flagM:boolean=false
   flagPM:boolean=false
 
+
+
   Invite(): void{
     if(this.invitation)
     {
@@ -104,7 +106,7 @@ export class AdminComponent implements OnInit{
           this.projectMangers.push(user)
           this.flagPM=true
         }
-          
+
       })
     }
 
@@ -121,7 +123,7 @@ export class AdminComponent implements OnInit{
       error:()=>{
         console.log("Can't change user role")
       }}
-    
+
     UpdateUser(id: number): void{
       if(this.updateUser){
         this.adminService.updateUser(id,this.updateUser).subscribe(
@@ -138,6 +140,28 @@ export class AdminComponent implements OnInit{
           console.log(response)
         }
       )
+    }
+
+
+
+    sortUsersByName(): void {
+      this.allUsers.sort((a, b) => {
+        const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+        const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+        if (fullNameA < fullNameB) return -1;
+        if (fullNameA > fullNameB) return 1;
+        return 0;
+      });
+    }
+
+    sortUsersByName1(): void {
+      this.allUsers.sort((a, b) => {
+        const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+        const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+        if (fullNameA < fullNameB) return 1;
+        if (fullNameA > fullNameB) return -1;
+        return 0;
+      });
     }
 
 
