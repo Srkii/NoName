@@ -21,12 +21,18 @@
 }
 .project-heading {
     text-align: center;
+    padding: 0px !important;
+    margin: 0px !important;
+    
 }
-.card-header {
-    color: black;
-    font-weight: bold;
-    font-size: 40px !important;
+.project-heading > span {
+    /* font-weight: bold; */
+    /* font-size: 40px !important; */
     letter-spacing: -1px;
+    color: #676f79;
+    font-size: 2.5rem;
+    font-weight: 550;
+    /* line-height: 1.5; */
 }
 /* za telefone */
 @media screen and (max-width: 500px) { 
@@ -51,15 +57,15 @@
     text-decoration: underline;
     font-size: large;
     line-height: 1.5;
-
     svg {
-        margin-right: 8px;
+        margin-right: 4px;
+        
     }
 }
 /* Assignee temp */
 .asgplc {
     svg {
-        margin-right: 8px;
+        margin-right: 4px;
     }
 }
 .text-nowrap {
@@ -100,13 +106,7 @@ thead th{
     background-color: #aeaff3 !important;
     border-color: #aeaff3 !important;
 }
-.card-header {
-    margin-bottom: -10px;
-    color: #697a8d;
-    font-size: 2rem;
-    font-weight: 500;
-    line-height: 1.5;
-}
+
 .btn-primary {
     color: #fff;
     background-color: #696cff;
@@ -120,6 +120,7 @@ thead th{
     font-size: 1rem;
     border-radius: 0.5rem;
     margin: 25px;
+    margin-top: 10px !important;
     line-height: 1.45;
     vertical-align: center;
     width: 300px;
