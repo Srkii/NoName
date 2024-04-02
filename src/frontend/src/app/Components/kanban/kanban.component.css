@@ -18,8 +18,8 @@
     overflow-x: auto;
 }
 
-.board-column {
-    background-color: rgb(230, 224, 224);
+.card {
+    /* background-color: rgb(230, 224, 224); */
     display: flex;
     flex-direction: column;
     flex-grow: 0;
@@ -29,29 +29,47 @@
     min-width: 100px;
     min-height: 300px;
     margin: 15px;
-    padding: 15px;
-    padding-top: 5px !important;
     border-radius: 0.5rem;
+
+    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+    border: 0px solid #d9dee3;
+    background-clip: border-box;
+    background: rgb(247, 244, 244);
 }
 
-.column-title {
-    font-size: 15px;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+.card-header {
+    /* font-size: 15px; */
+    font-weight: 400;
+    /* text-transform: uppercase; */
+    /* margin-bottom: 10px; */
     text-align: center;
+    height: 25px;
+    padding: 1px !important;
+    /* color: #fff; */
+    border: 0px solid #d9dee3;
+    background-clip: border-box;
+    /* border: 1px solid rgb(211, 210, 210); */
 }
 .tasks-container {
     flex-grow: 1;
 }
 .task {
     display: flex;
+    flex-direction: column;
     padding: 10px;
-    background: white;
-    border-bottom: solid 1px #ddd;
+    background: rgb(247, 244, 244);
+    /* border-bottom: solid 1px #ddd; */
     border-radius: 0.5rem;
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05), 0 3px 14px 2px rgba(0, 0, 0, 0.05);
     margin-bottom: 15px;
+    /* box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05), 0 3px 14px 2px rgba(0, 0, 0, 0.05); */
+    
+    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+    /* border: 1px solid #d9dee3; */
+    background-clip: border-box;
+    background-color: #fff;
+}
+.task {
+    min-height: 70px !important;
 }
 .cdk-drag-preview {
     box-sizing: border-box;
@@ -68,6 +86,10 @@
 .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
-.tasks-container.cdk-drop-list-dragging .task:not(.cdk-drag-placeholder) {
+.card-body.cdk-drop-list-dragging .task:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
+}
+
+.board-wrapper.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
