@@ -42,9 +42,8 @@ export class MyTasksService {
     return this.http.get<any[]>(`${this.baseUrl}/statuses/${projectId}`);
   }
 
-  GetValidTasks(projectId: number, userId: any): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(
-      `${this.baseUrl}/getValidTasks/${projectId}/${userId}`
-    );
+  GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
   }
+
 }

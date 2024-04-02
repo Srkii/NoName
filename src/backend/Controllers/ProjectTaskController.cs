@@ -108,7 +108,8 @@ namespace backend.Controllers
                                           task.ProjectId,
                                           task.TskStatus.StatusName,
                                           task.TskStatus.Color,
-                                          task.ProjectSection.SectionName
+                                          task.ProjectSection.SectionName,
+                                          task.Project,
                                       })
                                       .ToListAsync();
             return Ok(tasks);
@@ -249,23 +250,6 @@ namespace backend.Controllers
                 .ToList();
 
             return Ok(statuses);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("getValidTasks/{projectId}/{userId}")]
-        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetValidTasks(int projectId, int userId)
-        {
-
-            var validTasks = await _context.ProjectTasks
-                .Where(task =>
-                    task.ProjectId == projectId &&
-                    task.AppUserId == userId &&
-                    _context.TaskStatuses.Any(status =>
-                        status.ProjectId == projectId &&
-                        status.Id == task.TskStatusId))
-                .ToListAsync();
-
-            return Ok(validTasks);
         }
 
     }

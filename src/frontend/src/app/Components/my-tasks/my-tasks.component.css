@@ -58,10 +58,9 @@ th {
   border-left: none;
   border-right: none;
   width: 15%;
+  padding-left: 10%;
 }
-td:first-child {
-  text-align: center;
-}
+
 td {
   padding: 10px;
   border: 1px solid lightgray;
@@ -69,11 +68,9 @@ td {
   border-right: none;
   /* padding-left: 20px; */
   font-size: 12px;
+  padding-left: 10%;
 }
 
-.check {
-  width: 7%;
-}
 
 tr:last-child {
   border-bottom: none;

@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProjectStatus } from '../../Entities/Project';
 import { SharedService } from '../../_services/shared.service';
+import { coerceStringArray } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'app-my-tasks',
@@ -31,29 +32,33 @@ export class MyTasksComponent implements OnInit {
   ) {}
 
   closePopup() {
-    this.clickedTask = null; // Set ClickedTask to null when back button is clicked
-    this.showPopUp = false; // Close the pop-up
+    this.clickedTask = null; 
+    this.showPopUp = false; 
   }
 
   ngOnInit(): void {
     this.spinner.show();
-    const projectId = 1;
     const userId = localStorage.getItem('id');
 
-    this.myTasksService
-      .GetValidTasks(projectId, userId)
+    if (userId !== null) {
+    const t=this.myTasksService
+      .GetTasksByUserId(userId)
       .subscribe((tasks: ProjectTask[]) => {
         this.tasks = tasks;
         this.spinner.hide();
+        console.log(tasks);
       });
+    } else {
+      console.error('User ID is null');
+      this.spinner.hide();
+    }
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation(); // Prevent event bubbling if necessary
+    event.stopPropagation(); 
 
     const target = event.target as HTMLElement;
     if (target.tagName.toLowerCase() === 'input') {
-      // Ignore clicks on input elements
       return;
     }
 
