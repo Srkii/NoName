@@ -18,6 +18,7 @@ namespace backend.Controllers
         [HttpPost("postComment")] // /api/comments/postComment
         public async Task<IActionResult> PostComment(CommentDto commentDto)
         {
+            //doraditi: treba da proveri dal task postoji pa onda da post komentar. ako ne postoji vraca BadRequest sa opisom greske
             var comment = new Comment
             {
                 TaskId = commentDto.TaskId,
@@ -34,6 +35,7 @@ namespace backend.Controllers
         [HttpGet("getComments/{taskId}")] // /api/comments/getComments
         public async Task<ActionResult<List<Comment>>> GetComments(int taskId)
         {
+            //doraditi: treba da proveri dal task postoji pa onda da trazi komentar. ako ne postoji vraca BadRequest sa opisom greske
             var comments = await _context.Comments.Where(x => x.TaskId == taskId).OrderByDescending(x => x.MessageSent).ToListAsync();
             return comments;
         }

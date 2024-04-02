@@ -48,7 +48,7 @@ namespace backend.Controllers
         public async Task<ActionResult> UploadFile(int id,IFormFile file){
             if(file==null) return BadRequest("file is null");
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
-
+            //doraditi: treba da proveri dal task postoji pa onda da upload file. ako ne postoji vraca BadRequest sa opisom greske
             var filename =  _uploadService.AddFile(file);
             var attachment = new Attachment{
                 task_id = task.Id,
