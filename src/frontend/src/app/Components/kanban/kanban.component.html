@@ -1,6 +1,6 @@
 <div class="board">
-    <div class="board-wrapper" cdkDropListGroup>
-        <div *ngFor="let status of taskStatuses"  class="board-column" [style.background-color]="status.color">
+    <div class="board-wrapper" cdkDropListGroup cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="taskStatuses" (cdkDropListDropped)="dropColumn($event)">
+        <div *ngFor="let status of taskStatuses"  class="board-column" [style.background-color]="status.color" cdkDrag>
             <div class="column-title">{{status.name}}</div>
             <div class="tasks-container" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" (cdkDropListDropped)="drop($event)">
                 <div *ngFor="let task of tasksBySection[status.name]" class="task" cdkDrag [cdkDragData]="task">

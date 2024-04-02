@@ -39,6 +39,8 @@ export class MyTasksService {
   GetTaskStatuses(projectId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/statuses/${projectId}`);
   }
-
-  
+  // za kanban
+  updateTaskStatusPositions(updatedStatuses: any[]): Observable<any> {
+  return this.http.put(`${this.baseUrl}/updateStatusPositions`, updatedStatuses);
+}
 }

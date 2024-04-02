@@ -223,6 +223,21 @@ namespace backend.Controllers
 
             return Ok(statuses);
         }
+
+        [HttpPut("updateStatusPositions")]
+        public async Task<IActionResult> UpdateTaskStatusPositions([FromBody] List<TskStatus> updatedStatuses)
+        {
+            foreach (var status in updatedStatuses)
+            {
+                var dbStatus = await _context.TaskStatuses.FindAsync(status.Id);
+                if (dbStatus != null)
+                {
+                    dbStatus.Position = status.Position;
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
 

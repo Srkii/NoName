@@ -64,6 +64,11 @@ export class KanbanComponent implements OnInit{
   }
 
   drop(event: CdkDragDrop<ProjectTask[]>) {
+    // mozda zatreba
+    // if (!event.previousContainer.data || !event.container.data) {
+    //   console.warn('Drag and drop data is not ready.');
+    //   return;
+    // }
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -78,5 +83,20 @@ export class KanbanComponent implements OnInit{
         this.myTasksService.updateTaskStatus(task.id, task).subscribe();
       }                        
     }
+  }
+
+  dropColumn(event: CdkDragDrop<any[]>) {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+    moveItemInArray(this.taskStatuses, event.previousIndex, event.currentIndex);
+    this.updateTaskStatusPositions();
+  }
+
+  updateTaskStatusPositions() {
+    const updatedStatuses = this.taskStatuses.map((status, index) => ({ ...status, position: index }));
+    this.myTasksService.updateTaskStatusPositions(updatedStatuses).subscribe(() => {
+      this.GetTaskStatuses(); // Refresh the statuses to reflect the new positions
+    });
   }
 }
