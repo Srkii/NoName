@@ -51,16 +51,9 @@ namespace backend.Controllers
             var tasks = await _context.ProjectTasks
                 .Select(task => new
                 {
-                    task.Id,
-                    task.TaskName,
-                    task.Description,
-                    task.StartDate,
-                    task.EndDate,
-                    task.ProjectId,
-                    task.TskStatus.StatusName,
-                    task.TskStatus.Color,
-                    task.ProjectSection.SectionName,
-                    task.AppUser
+                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                    task.ProjectSection.SectionName, task.AppUser
                 })
                 .ToListAsync();
             return Ok(tasks);
@@ -73,16 +66,9 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks
             .Select(task => new
             {
-                task.Id,
-                task.TaskName,
-                task.Description,
-                task.StartDate,
-                task.EndDate,
-                task.ProjectId,
-                task.TskStatus.StatusName,
-                task.TskStatus.Color,
-                task.ProjectSection.SectionName,
-                task.Project
+                task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                task.ProjectSection.SectionName
             })
             .FirstOrDefaultAsync(t => t.Id == id); // Use FirstOrDefaultAsync instead of ToListAsync
 
@@ -101,20 +87,29 @@ namespace backend.Controllers
                                       .Where(task => task.AppUserId == userId)
                                       .Select(task => new
                                       {
-                                          task.Id,
-                                          task.TaskName,
-                                          task.Description,
-                                          task.StartDate,
-                                          task.EndDate,
-                                          task.ProjectId,
-                                          task.TskStatus.StatusName,
-                                          task.TskStatus.Color,
-                                          task.ProjectSection.SectionName,
-                                          task.Project,
+                                          task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                                          task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                                          task.ProjectSection.SectionName
                                       })
                                       .ToListAsync();
             return Ok(tasks);
         }
+
+        [HttpPut("updateTicoStatus/{id}")] // PUT: api/projectTask/updateStatus/5
+        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
+        {
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+            task.TskStatusId = taskDto.TaskStatusId;
+            await _context.SaveChangesAsync();
+
+            return Ok(task);
+        }
+
 
         [HttpPut("updateStatus/{id}/{statusName}")] // Adjust the route to include statusName
         public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, string statusName)
@@ -234,17 +229,9 @@ namespace backend.Controllers
             var tasks = await _context.ProjectTasks
                 .Select(task => new
                 {
-                    task.Id,
-                    task.TaskName,
-                    task.Description,
-                    task.StartDate,
-                    task.EndDate,
-                    task.ProjectId,
-                    task.TskStatus.StatusName,
-                    task.TskStatus.Color,
-                    task.ProjectSection.SectionName,
-                    task.AppUser.FirstName,
-                    task.AppUser.LastName
+                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
+                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
+                    task.ProjectSection.SectionName, task.AppUser.FirstName, task.AppUser.LastName
                 })
                 .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
@@ -262,6 +249,20 @@ namespace backend.Controllers
             return Ok(statuses);
         }
 
+        [HttpPut("updateStatusPositions")]
+        public async Task<IActionResult> UpdateTaskStatusPositions([FromBody] List<TskStatus> updatedStatuses)
+        {
+            foreach (var status in updatedStatuses)
+            {
+                var dbStatus = await _context.TaskStatuses.FindAsync(status.Id);
+                if (dbStatus != null)
+                {
+                    dbStatus.Position = status.Position;
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
 
