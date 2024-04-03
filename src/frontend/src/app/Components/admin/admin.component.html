@@ -1,149 +1,97 @@
-<div class="container">
-  <div class="caard">
-    <small>Total 4 users</small> 
-    <h3>Administratorts</h3>
-  </div>
-  <div class="caard" (click)="SplitByRole()">
-    <small>Total 4 users</small> 
-    <h3>Project Menagers</h3>
-  </div>
-  <div class="caard">
-    <small>Total 4 users</small> 
-    <h3>Members</h3>
-  </div>
-</div>
+<div id="all">
+  <div id="all1">
+    <h5>All Projects</h5>
+    <br />
 
-<div class="inputs">
-<div class="search">
-  <form class="d-flex" onsubmit="return false">
-    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-    <button class="btn btn-outline-primary" type="submit">Search</button>
-  </form>
 
-</div>
+    <br />
+    <table class="invoice-list-table table">
+      <thead>
+        <tr>
+          <th class="specth">User
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="filter"
+              viewBox="0 0 16 16"
+              (click)="sortUsersByName()"
+            >
+            <path
+            fill-rule="evenodd"
+            d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"
+          />
+        </svg>
 
-<div class="invite">
+          </th>
 
-  <input type="text"
-  id="form3Example4"
-  class="form-control"
-  name="email"
-  [(ngModel)]="invitation.receiver"
-  placeholder="Email" />
-
-  <button type="submit" class="btn btn-primary btn-block mb-4" (click)="Invite()">
-    Invite
-  </button>
-</div>
-
-</div>
-
-<div class="container">
-  <div class="row justify-content-center">
-
-  <div class="card">
-    <div class="card-datatable table-responsive">
-      <table class="invoice-list-table table">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Role</th>
-            <!-- <th>WorkLoad</th> -->
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody class="table-border-bottom-0">
-          <tr *ngFor="let user of allUsers" >
-            <td  *ngIf="!user.archived">
-              <div class="d-flex justify-content-start align-items-center">
-                <div class="avatar-wrapper">
-                  <div class="avatar avatar-sm me-2"><img src="../../../assets/navIcons/user (4).png" alt="Avatar"></div>
-                </div>
-                <div class="d-flex flex-column">
-                  <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
-                  <small class="text-truncate text-muted">{{user.email}}</small>
-                </div>
+          <th>Role </th>
+          <!-- <th>WorkLoad</th> -->
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        <tr *ngFor="let user of allUsers" >
+          <td  *ngIf="!user.archived">
+            <div class="d-flex justify-content-start align-items-center">
+              <div class="avatar-wrapper">
+                <div class="avatar avatar-sm me-2"><img src="../../../assets/navIcons/user (4).png" alt="Avatar"></div>
               </div>
-            </td>
-            <td  *ngIf="!user.archived">{{GetUserRole(user.role)}}</td>
-            <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
-            <td  *ngIf="!user.archived">
-              <div class="d-flex align-items-center">
-                <img src="../../../assets/navIcons/edit.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
-                   href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <span class="dropdown-item">Update user</span>
-                    <form (ngSubmit)="UpdateUser(user.id)">
-                    <input type="text" id="text" name="email" [(ngModel)]="updateUser.Email" placeholder="email">
-                    <input type="text" id="text" name="name" [(ngModel)]="updateUser.FirstName" placeholder="first name">
-                    <input type="text" id="text" name="email" [(ngModel)]="updateUser.LastName" placeholder="last name">
-                    <button type="submit">Update user</button>
-                    <div class="dropdown-divider"></div>
+              <div class="d-flex flex-column">
+                <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
+                <small class="text-truncate text-muted">{{user.email}}</small>
+              </div>
+            </div>
+          </td>
+          <td  *ngIf="!user.archived">{{GetUserRole(user.role)}}</td>
+          <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
+          <td  *ngIf="!user.archived">
+            <div class="d-flex align-items-center">
+              <img src="../../../assets/navIcons/edit.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
+                 href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown-menu dropdown-menu-end">
+                  <span class="dropdown-item">Update user</span>
+                  <form (ngSubmit)="UpdateUser(user.id)">
+                  <input type="text" id="text" name="email" [(ngModel)]="updateUser.Email" placeholder="email">
+                  <input type="text" id="text" name="name" [(ngModel)]="updateUser.FirstName" placeholder="first name">
+                  <input type="text" id="text" name="email" [(ngModel)]="updateUser.LastName" placeholder="last name">
+                  <button type="submit">Update user</button>
+                  <div class="dropdown-divider"></div>
+                </form>
+                </div>
+
+                <img src="../../../assets/navIcons/delete.png" (click)="ArchiveUser(user.id)" id="tableIcon" aria-expanded="false">
+
+                <img src="../../../assets/navIcons/more.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
+                  href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown-menu dropdown-menu-end">
+                  <span class="dropdown-item">Change user role</span>
+                  <form (ngSubmit)="ChangeUserRole()">
+                    <input type="number" name="id" [(ngModel)]="changeRole.Id" placeholder="id">
+                    <input type="number" name="role" [(ngModel)]="changeRole.Role" placeholder="role">
+                     <button type="submit">Change</button>
                   </form>
-                  </div>
+                </div>
 
-                  <img src="../../../assets/navIcons/delete.png" (click)="ArchiveUser(user.id)" id="tableIcon" aria-expanded="false">
-                
-                  <img src="../../../assets/navIcons/more.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
-                    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <span class="dropdown-item">Change user role</span>
-                    <form (ngSubmit)="ChangeUserRole()">
-                      <input type="number" name="id" [(ngModel)]="changeRole.Id" placeholder="id">
-                      <input type="number" name="role" [(ngModel)]="changeRole.Role" placeholder="role">
-                       <button type="submit">Change</button>
-                    </form>
-                  </div>
-                  
-               
-              </div>
-            </td>
-          </tr>
+
+            </div>
+          </td>
+        </tr>
 
 
 
-       
-        </tbody>
-      </table>
-    </div>
-  </div>
+
+      </tbody>
+</table>
 </div>
-  </div>
-
-
-
-<!-- <div *ngFor="let user of allUsers">
-<h3 *ngIf="!user.archived">{{user.firstName}} {{user.lastName}} {{ GetUserRole(user.role) }}</h3>
-<div>
-  <p>Update user</p>
-  <form>
-    <input type="text" id="text" name="email" [(ngModel)]="updateUser.Email" placeholder="email">
-    <input type="text" id="text" name="name" [(ngModel)]="updateUser.FirstName" placeholder="first name">
-    <input type="text" id="text" name="email" [(ngModel)]="updateUser.LastName" placeholder="prezime">
-    <button type="submit" (click)="UpdateUser(user.id)">update</button>
-    <button type="submit" (click)="ArchiveUser(user.id)">archive</button>
-  </form>
 </div>
-</div> -->
 
-<!-- <button (click)="SplitByRole()">Split</button>
-<div *ngFor="let user of admins">
-  <h1>{{user.firstName}} {{user.lastName}} {{ GetUserRole(user.role) }}</h1>
-
-</div>
-<br>
-<div>
-  <form (ngSubmit)="ChangeUserRole()">
-    <input type="number" name="id" [(ngModel)]="changeRole.Id" placeholder="id">
-    <input type="number" name="role" [(ngModel)]="changeRole.Role" placeholder="role"> -->
-    <!-- <select name="role" [(ngModel)]="changeRole.Role" placeholder="role">
-      <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-    </select> -->
-    <!-- <button type="submit">Change</button>
-  </form>
-</div> -->
-
-
-
-
-
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

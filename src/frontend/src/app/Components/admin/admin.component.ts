@@ -52,6 +52,8 @@ export class AdminComponent implements OnInit{
   flagM:boolean=false
   flagPM:boolean=false
 
+  sortOrder: 'asc' | 'desc' = 'asc';
+
 
 
   Invite(): void{
@@ -145,6 +147,8 @@ export class AdminComponent implements OnInit{
 
 
     sortUsersByName(): void {
+      if(this.sortOrder==='asc')
+      {
       this.allUsers.sort((a, b) => {
         const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
         const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
@@ -152,9 +156,9 @@ export class AdminComponent implements OnInit{
         if (fullNameA > fullNameB) return 1;
         return 0;
       });
+      this.sortOrder = 'desc';
     }
-
-    sortUsersByName1(): void {
+    else{
       this.allUsers.sort((a, b) => {
         const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
         const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
@@ -162,8 +166,9 @@ export class AdminComponent implements OnInit{
         if (fullNameA > fullNameB) return -1;
         return 0;
       });
+      this.sortOrder = 'asc';
     }
-
+    }
 
   }
 
