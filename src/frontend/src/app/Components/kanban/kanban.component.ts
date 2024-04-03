@@ -80,7 +80,7 @@ export class KanbanComponent implements OnInit{
       const newStatus = this.taskStatuses.find(s => s.name === event.container.id);
       if (task && newStatus) {
         task.taskStatusId = newStatus.id;
-        this.myTasksService.updateTaskStatus(task.id, task).subscribe();
+        this.myTasksService.updateTicoTaskStatus(task.id, task).subscribe();
       }                        
     }
   }

@@ -18,7 +18,9 @@ export class MyTasksService {
   }
 
   GetTasksByProjectId(projectId: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}`);
+    return this.http.get<ProjectTask[]>(
+      `${this.baseUrl}/ByProject/${projectId}`
+    );
   }
 
   GetUserTasks(userId: number): Observable<ProjectTask[]> {
@@ -28,13 +30,14 @@ export class MyTasksService {
   GetProjectTaskById(taskId: number): Observable<ProjectTask> {
     return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}`);
   }
-  updateTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(
-      `${this.baseUrl}/updateStatus/${taskId}`,
-      task
-    );
+  updateTaskStatus(taskId: number, statusName: string): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${taskId}/${statusName}`, null); // Pass null as the body since you're not sending any data
   }
-  
+
+  updateTicoTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateTicoStatus/${taskId}`,task );
+  }
+
   //tico kanban ; ne diraj!
   GetTaskStatuses(projectId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/statuses/${projectId}`);
@@ -42,5 +45,8 @@ export class MyTasksService {
   // za kanban
   updateTaskStatusPositions(updatedStatuses: any[]): Observable<any> {
   return this.http.put(`${this.baseUrl}/updateStatusPositions`, updatedStatuses);
+}
+GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
+  return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
 }
 }
