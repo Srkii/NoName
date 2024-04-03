@@ -30,10 +30,10 @@ export class MyTasksService {
   GetProjectTaskById(taskId: number): Observable<ProjectTask> {
     return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}`);
   }
-  updateTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
+  updateTaskStatus(taskId: number, statusName: string): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(
-      `${this.baseUrl}/updateStatus/${taskId}`,
-      task
+      `${this.baseUrl}/updateStatus/${taskId}/${statusName}`,
+      null // Pass null as the body since you're not sending any data
     );
   }
 

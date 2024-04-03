@@ -81,7 +81,8 @@ namespace backend.Controllers
                 task.ProjectId,
                 task.TskStatus.StatusName,
                 task.TskStatus.Color,
-                task.ProjectSection.SectionName
+                task.ProjectSection.SectionName,
+                task.Project
             })
             .FirstOrDefaultAsync(t => t.Id == id); // Use FirstOrDefaultAsync instead of ToListAsync
 
@@ -115,20 +116,29 @@ namespace backend.Controllers
             return Ok(tasks);
         }
 
-        [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
-        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
+        [HttpPut("updateStatus/{id}/{statusName}")] // Adjust the route to include statusName
+        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, string statusName)
         {
-            var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
+            var task = await _context.ProjectTasks.Include(t => t.TskStatus).FirstOrDefaultAsync(t => t.Id == id);
 
             if (task == null)
             {
                 return NotFound();
             }
-            task.TskStatusId = taskDto.TaskStatusId;
+
+            var status = await _context.TaskStatuses.FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
+
+            if (status == null)
+            {
+                return NotFound("Status not found.");
+            }
+
+            task.TskStatusId = status.Id;
             await _context.SaveChangesAsync();
 
             return Ok(task);
         }
+
 
         [AllowAnonymous]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo

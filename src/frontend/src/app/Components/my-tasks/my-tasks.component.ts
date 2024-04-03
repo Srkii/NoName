@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { Route, Router } from '@angular/router';
@@ -20,7 +20,6 @@ export class MyTasksComponent implements OnInit {
   showPopUp: boolean = false;
   task!: ProjectTask;
   TaskStatus: any;
-  // previousTaskStatus: TaskStatus | null = null;
   static showPopUp: boolean;
 
   constructor(
@@ -28,7 +27,8 @@ export class MyTasksComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private spinner: NgxSpinnerService,
-    private shared: SharedService
+    private shared: SharedService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   closePopup() {
@@ -46,7 +46,6 @@ export class MyTasksComponent implements OnInit {
       .subscribe((tasks: ProjectTask[]) => {
         this.tasks = tasks;
         this.spinner.hide();
-        console.log(tasks);
       });
     } else {
       console.error('User ID is null');
@@ -56,11 +55,6 @@ export class MyTasksComponent implements OnInit {
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
-
-    const target = event.target as HTMLElement;
-    if (target.tagName.toLowerCase() === 'input') {
-      return;
-    }
 
     // Assuming GetProjectTaskById is a method that fetches the task details
     const row = document.querySelector('.red') as HTMLElement;
@@ -109,14 +103,14 @@ export class MyTasksComponent implements OnInit {
   //       }
   //     );
   // }
-
   handleTaskUpdate(updatedTask: ProjectTask): void {
-    // Update the tasks array with the updated task
-    // This can be done by finding the task by its ID and updating its status
     const index = this.tasks.findIndex((task) => task.id === updatedTask.id);
     if (index !== -1) {
       this.tasks[index] = updatedTask;
-      // Optionally, you might want to persist this change to a backend server
+      this.clickedTask = updatedTask; // Set clickedTask to updatedTask
+
+      // Manually trigger change detection
+      this.cdr.detectChanges();
     }
   }
   sortOrder: 'asc' | 'desc' = 'asc'; // Variable to track sorting order
