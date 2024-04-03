@@ -4,6 +4,7 @@ import { AppUser } from './AppUser';
 import { Project } from './Project';
 
 export interface ProjectTask {
+[x: string]: any;
   id: number;
   taskName: string;
   description: string;

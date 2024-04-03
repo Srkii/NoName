@@ -16,7 +16,7 @@ namespace backend.Controllers
         {
             _context = context;
         }
-        
+
         [AllowAnonymous]
         [HttpPost] // POST: api/projectTask/
         public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
@@ -43,7 +43,7 @@ namespace backend.Controllers
 
             return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
         }
-        
+
         [AllowAnonymous]
         [HttpGet] // GET: api/projectTask/
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetProjectTasks()
@@ -51,9 +51,16 @@ namespace backend.Controllers
             var tasks = await _context.ProjectTasks
                 .Select(task => new
                 {
-                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                    task.ProjectSection.SectionName, task.AppUser
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.AppUser
                 })
                 .ToListAsync();
             return Ok(tasks);
@@ -66,9 +73,16 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks
             .Select(task => new
             {
-                task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                task.ProjectSection.SectionName
+                task.Id,
+                task.TaskName,
+                task.Description,
+                task.StartDate,
+                task.EndDate,
+                task.ProjectId,
+                task.TskStatus.StatusName,
+                task.TskStatus.Color,
+                task.ProjectSection.SectionName,
+                task.Project
             })
             .FirstOrDefaultAsync(t => t.Id == id); // Use FirstOrDefaultAsync instead of ToListAsync
 
@@ -78,7 +92,7 @@ namespace backend.Controllers
             }
             return Ok(task);
         }
-        
+
         [AllowAnonymous]
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
@@ -87,43 +101,59 @@ namespace backend.Controllers
                                       .Where(task => task.AppUserId == userId)
                                       .Select(task => new
                                       {
-                                          task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                                          task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                                          task.ProjectSection.SectionName
+                                          task.Id,
+                                          task.TaskName,
+                                          task.Description,
+                                          task.StartDate,
+                                          task.EndDate,
+                                          task.ProjectId,
+                                          task.TskStatus.StatusName,
+                                          task.TskStatus.Color,
+                                          task.ProjectSection.SectionName,
+                                          task.Project,
                                       })
                                       .ToListAsync();
             return Ok(tasks);
         }
 
-        [HttpPut("updateStatus/{id}")] // PUT: api/projectTask/updateStatus/5
-        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
+        [HttpPut("updateStatus/{id}/{statusName}")] // Adjust the route to include statusName
+        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, string statusName)
         {
-            var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
+            var task = await _context.ProjectTasks.Include(t => t.TskStatus).FirstOrDefaultAsync(t => t.Id == id);
 
             if (task == null)
             {
                 return NotFound();
             }
-            task.TskStatusId = taskDto.TaskStatusId;
+
+            var status = await _context.TaskStatuses.FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
+
+            if (status == null)
+            {
+                return NotFound("Status not found.");
+            }
+
+            task.TskStatusId = status.Id;
             await _context.SaveChangesAsync();
 
             return Ok(task);
         }
 
+
         [AllowAnonymous]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
         public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
         {
-            if(!await RoleCheck(dto.AppUserId,dto.ProjectId))
+            if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
                 return Unauthorized("Unvalid role");
 
             var task = await _context.ProjectTasks.FindAsync(dto.Id);
 
-            if(task == null)
+            if (task == null)
                 return BadRequest("Task doesn't exists");
-            
-            if(dto.TaskName != null) task.TaskName = dto.TaskName;
-            if(dto.Description != null && dto.Description != "") task.Description = dto.Description;
+
+            if (dto.TaskName != null) task.TaskName = dto.TaskName;
+            if (dto.Description != null && dto.Description != "") task.Description = dto.Description;
             // if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
 
             await _context.SaveChangesAsync();
@@ -135,16 +165,16 @@ namespace backend.Controllers
         [HttpPut("changeTaskSchedule")] // GET: api/projectTask/changeTaskSchedule
         public async Task<ActionResult<ProjectTask>> ChangeTaskSchedule(TaskScheduleDto dto)
         {
-            if(!await RoleCheck(dto.AppUserId,dto.ProjectId))
+            if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
                 return Unauthorized("Unvalid role");
 
             var task = await _context.ProjectTasks.FindAsync(dto.Id);
 
-            if(task == null)
+            if (task == null)
                 return BadRequest("Task doesn't exists");
-            
-            if(dto.StartDate != null) task.StartDate = (DateTime)dto.StartDate;
-            if(dto.EndDate != null) task.EndDate = (DateTime)dto.EndDate;
+
+            if (dto.StartDate != null) task.StartDate = (DateTime)dto.StartDate;
+            if (dto.EndDate != null) task.EndDate = (DateTime)dto.EndDate;
 
             await _context.SaveChangesAsync();
 
@@ -155,7 +185,7 @@ namespace backend.Controllers
         [HttpPut("addTaskDependency")] // GET: api/projectTask/addTaskDependency
         public async Task<ActionResult<ProjectTask>> AddTaskDependency(TaskDependencyDto dto)
         {
-            if(!await RoleCheck(dto.AppUserId,dto.ProjectId))
+            if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
                 return Unauthorized("Unvalid role");
 
             var taskDep = new TaskDependency
@@ -166,7 +196,7 @@ namespace backend.Controllers
 
             await _context.TaskDependencies.AddAsync(taskDep);
             await _context.SaveChangesAsync();
-        //komentar
+            //komentar
             return Ok(taskDep);
         }
 
@@ -177,9 +207,9 @@ namespace backend.Controllers
             {
                 return BadRequest("User is not a member of the project");
             }
-            if(!await RoleCheck(userId, projectId))
+            if (!await RoleCheck(userId, projectId))
                 return Unauthorized("Invalid role");
-            
+
             var task = await _context.ProjectTasks.FindAsync(taskId);
             if (task == null)
                 return NotFound("Task not found");
@@ -190,9 +220,9 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        public async Task<bool> RoleCheck(int userId,int projectId)
+        public async Task<bool> RoleCheck(int userId, int projectId)
         {
-            var roles = new List<ProjectRole>{ProjectRole.ProjectOwner,ProjectRole.Manager};
+            var roles = new List<ProjectRole> { ProjectRole.ProjectOwner, ProjectRole.Manager };
             var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(x => x.AppUserId == userId && x.ProjectId == projectId && roles.Contains(x.ProjectRole));
             return projectMember != null;
         }
@@ -204,9 +234,17 @@ namespace backend.Controllers
             var tasks = await _context.ProjectTasks
                 .Select(task => new
                 {
-                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                    task.ProjectSection.SectionName, task.AppUser.FirstName, task.AppUser.LastName
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.AppUser.FirstName,
+                    task.AppUser.LastName
                 })
                 .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
@@ -223,6 +261,7 @@ namespace backend.Controllers
 
             return Ok(statuses);
         }
+
     }
 }
 
