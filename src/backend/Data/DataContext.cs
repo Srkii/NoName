@@ -26,24 +26,24 @@ namespace backend.Data
                 entity.HasKey(pm => new { pm.AppUserId, pm.ProjectId });
 
                 entity.HasOne(pm => pm.AppUser)
-                    .WithMany() // Define the relationship between ProjectMember and AppUser
+                    .WithMany() // definise vezu izmedju ProjectMember and AppUser
                     .HasForeignKey(pm => pm.AppUserId);
 
                 entity.HasOne(pm => pm.Project)
-                    .WithMany() // Define the relationship between ProjectMember and Project
+                    .WithMany() // definise vezu izmedju ProjectMember and Project
                     .HasForeignKey(pm => pm.ProjectId);
             });
 
             modelBuilder.Entity<ProjectTask>(entity =>
             {
-                entity.HasKey(pt => pt.Id); // define Id as the primary key
+                entity.HasKey(pt => pt.Id); // definise Id as the primary key
 
                 entity.HasOne(pt => pt.Project)
-                    .WithMany() // define the relationship between ProjectTask and Project
-                    .HasForeignKey(pt => pt.ProjectId); // define ProjectId as the foreign key
+                    .WithMany() // definise vezu izmedju ProjectTask and Project
+                    .HasForeignKey(pt => pt.ProjectId); // definise ProjectId as the foreign key
 
                 entity.HasOne(pt => pt.TskStatus)
-                    .WithMany(ts => ts.Tasks) // Specify the collection property here
+                    .WithMany(ts => ts.Tasks)
                     .HasForeignKey(pt => pt.TskStatusId);
 
                 entity.HasOne(pt => pt.ProjectSection)
@@ -66,7 +66,7 @@ namespace backend.Data
                 entity.HasOne(td => td.DependencyTask)
                     .WithMany()
                     .HasForeignKey(td => td.DependencyTaskId);
-                // task can't be dependant on itself
+                // task ne moze da zavisi sam od sebe
                 entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId"));
             });
         }

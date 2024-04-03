@@ -24,18 +24,18 @@ body {
 }
 #all {
   margin-top: 30px;
-  margin: auto; /* Center the div horizontally */
+  margin: auto;
   padding: 20px;
   width: 85%;
-  min-height: 10vh; /* Set a minimum height */
+  min-height: 10vh;
   background-color: #ffffff;
   color: #697a8d;
   border: solid 1px #d9dee3;
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  overflow-y: hidden; /* Hide the vertical scrollbar */
-  overflow-x: hidden; /* Hide the vertical scrollbar */
-  box-sizing: border-box; /* Include padding and border in the total width and height */
+  overflow-y: hidden;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 input,
@@ -46,20 +46,20 @@ select {
   border-radius: 8px;
   padding: 6px;
   width: 27%;
-  margin-left: 5%; /* Add margin-bottom for the gap */
+  margin-left: 5%;
   margin-bottom: 1%;
 }
 select:hover,
 input:hover {
-  outline: none; /* Remove default focus outline */
-  border: 1px solid #5f61e6 !important; /* Add custom border */
-  box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
 }
 input:focus,
 select:focus {
-  outline: none; /* Remove default focus outline */
-  border: 1px solid #5f61e6 !important; /* Add custom border */
-  box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
 }
 
 table {
@@ -84,7 +84,7 @@ table {
 th {
   font-size: 14px;
   border: 1.5px solid lightgray;
-  font-weight: 700; /* thinner text */
+  font-weight: 700;
   padding: 5px;
   border-left: none;
   border-right: none;

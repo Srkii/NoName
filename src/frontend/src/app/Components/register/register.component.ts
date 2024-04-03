@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
     this.registerService.getEmailByToken(token).subscribe({
       next: (response: any) => {
         console.log(response);
-        const email = response?.email; // Change this line according to your API response structure
+        const email = response?.email;
         if (email) {
           this.newUser.Email = email;
         } else {
@@ -63,12 +63,10 @@ export class RegisterComponent implements OnInit {
   Register(): void {
     if (this.newUser.Password !== this.confirmPassword) {
       console.log('Passwords do not match');
-      // You can show an error message or handle the mismatch as needed
       return;
     }
     this.newUser.Token = this.token;
 
-    // If passwords match, proceed with registration
     this.registerService.register(this.newUser).subscribe({
       next: (response) => {
         localStorage.setItem('id', response.id);
@@ -83,7 +81,6 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  // Function to check if password and confirm password match
   passwordMatch(): boolean {
     return this.newUser.Password === this.confirmPassword;
   }

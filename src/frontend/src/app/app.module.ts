@@ -1,6 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,7 +8,6 @@ import { RegisterComponent } from './Components/register/register.component';
 import { LoginComponent } from './Components/login/login.component';
 import { CommonModule } from '@angular/common';
 import { UserInfoComponent } from './Components/user-info/user-info.component';
-import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
 import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
@@ -33,7 +31,6 @@ import { GanttComponent } from './Components/gantt/gantt.component';
     RegisterComponent,
     LoginComponent,
     UserInfoComponent,
-    HomeComponent,
     NavComponent,
     AdminComponent,
     ForgotPassComponent,
@@ -52,10 +49,10 @@ import { GanttComponent } from './Components/gantt/gantt.component';
     HttpClientModule,
     FormsModule,
     CommonModule,
-    BrowserAnimationsModule, // required animations module
+    BrowserAnimationsModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
-    }), // ToastrModule added
+    }),
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     DragDropModule
   ],

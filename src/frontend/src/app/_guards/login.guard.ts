@@ -9,7 +9,7 @@ export const loginGuard: CanActivateFn = (route, state) => {
   if(service.checkToken()===false)
     return true;
   else{
-    router.navigate(['/home']);
+    router.navigate(['/mytasks']);
     return false;
   }
 

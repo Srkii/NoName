@@ -27,7 +27,6 @@
               </tr>
             </thead>
           </table>
-          <!-- Iterating over sections for table body -->
           <div *ngFor="let section of groupedTasks | keyvalue: sectionOrder" class="section">
             <p class="section-name" *ngIf="section.key !== 'No Section'" (click)="toggleSectionVisibility(section.key)">
               <svg *ngIf="!section.value.visible" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">

@@ -96,7 +96,7 @@ export class KanbanComponent implements OnInit{
   updateTaskStatusPositions() {
     const updatedStatuses = this.taskStatuses.map((status, index) => ({ ...status, position: index }));
     this.myTasksService.updateTaskStatusPositions(updatedStatuses).subscribe(() => {
-      this.GetTaskStatuses(); // Refresh the statuses to reflect the new positions
+      this.GetTaskStatuses();
     });
   }
 }

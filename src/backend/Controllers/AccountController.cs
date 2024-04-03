@@ -4,7 +4,6 @@ using backend.Data;
 using backend.DTO;
 using backend.Entities;
 using backend.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

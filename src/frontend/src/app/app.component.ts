@@ -18,4 +18,3 @@ export class AppComponent implements OnInit{
     return this.router.url === '/login' || this.router.url.startsWith('/register') || this.router.url === '/forgotpass' || this.router.url.startsWith('/forgotreset') ;
   }
 }
- 

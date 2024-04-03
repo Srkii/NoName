@@ -1,5 +1,3 @@
-// project.model.ts
-
 export interface Project {
   id: number;
   parentId?: number;

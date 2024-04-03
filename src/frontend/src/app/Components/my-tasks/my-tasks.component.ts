@@ -1,12 +1,10 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ProjectStatus } from '../../Entities/Project';
 import { SharedService } from '../../_services/shared.service';
-import { coerceStringArray } from '@angular/cdk/coercion';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
@@ -46,8 +44,6 @@ export class MyTasksComponent implements OnInit {
 
   constructor(
     private myTasksService: MyTasksService,
-    private router: Router,
-    private datePipe: DatePipe,
     private spinner: NgxSpinnerService,
     private shared: SharedService,
     private cdr: ChangeDetectorRef
@@ -77,8 +73,6 @@ export class MyTasksComponent implements OnInit {
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
-
-    // Assuming GetProjectTaskById is a method that fetches the task details
     const row = document.querySelector('.red') as HTMLElement;
     this.myTasksService
       .GetProjectTaskById(taskId)
@@ -129,13 +123,11 @@ export class MyTasksComponent implements OnInit {
     const index = this.tasks.findIndex((task) => task.id === updatedTask.id);
     if (index !== -1) {
       this.tasks[index] = updatedTask;
-      this.clickedTask = updatedTask; // Set clickedTask to updatedTask
-
-      // Manually trigger change detection
+      this.clickedTask = updatedTask;
       this.cdr.detectChanges();
     }
   }
-  sortOrder: 'asc' | 'desc' = 'asc'; // Variable to track sorting order
+  sortOrder: 'asc' | 'desc' = 'asc';
 
   sortTasks() {
     if (this.sortOrder === 'asc') {
@@ -144,14 +136,14 @@ export class MyTasksComponent implements OnInit {
         const endDateB = new Date(b.endDate).getTime();
         return endDateA - endDateB;
       });
-      this.sortOrder = 'desc'; // Update sorting order
+      this.sortOrder = 'desc';
     } else {
       this.tasks.sort((a, b) => {
         const endDateA = new Date(a.endDate).getTime();
         const endDateB = new Date(b.endDate).getTime();
         return endDateB - endDateA;
       });
-      this.sortOrder = 'asc'; // Update sorting order
+      this.sortOrder = 'asc';
     }
   }
 
@@ -167,21 +159,4 @@ export class MyTasksComponent implements OnInit {
   isTasksEmpty(status: string): boolean {
     return this.tasks.filter(task => task.statusName === status).length === 0;
   }
-  
-
-
-  // getStatusString(status: TaskStatus): string {
-  //   switch (status) {
-  //     case TaskStatus.Proposed:
-  //       return 'PROPOSED';
-  //     case TaskStatus.InProgress:
-  //       return 'IN PROGRESS';
-  //     case TaskStatus.Completed:
-  //       return 'COMPLETED';
-  //     case TaskStatus.Archived:
-  //       return 'ARCHIVED';
-  //     default:
-  //       return '';
-  //   }
-  // }
 }

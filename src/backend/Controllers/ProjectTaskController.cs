@@ -70,7 +70,7 @@ namespace backend.Controllers
                 task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
                 task.ProjectSection.SectionName
             })
-            .FirstOrDefaultAsync(t => t.Id == id); // Use FirstOrDefaultAsync instead of ToListAsync
+            .FirstOrDefaultAsync(t => t.Id == id);
 
             if (task == null)
             {
@@ -111,7 +111,7 @@ namespace backend.Controllers
         }
 
 
-        [HttpPut("updateStatus/{id}/{statusName}")] // Adjust the route to include statusName
+        [HttpPut("updateStatus/{id}/{statusName}")]
         public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, string statusName)
         {
             var task = await _context.ProjectTasks.Include(t => t.TskStatus).FirstOrDefaultAsync(t => t.Id == id);
@@ -223,7 +223,7 @@ namespace backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("ByProject/{projectId}")] // New method to get tasks by project ID
+        [HttpGet("ByProject/{projectId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId)
         {
             var tasks = await _context.ProjectTasks

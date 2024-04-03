@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class MyTasksService {
   private apiUrl = ApiUrl.apiUrl;
-  private baseUrl = `${this.apiUrl}/projectTask`; // corrected base URL
+  private baseUrl = `${this.apiUrl}/projectTask`;
 
   constructor(private http: HttpClient) {}
 
@@ -30,8 +30,9 @@ export class MyTasksService {
   GetProjectTaskById(taskId: number): Observable<ProjectTask> {
     return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}`);
   }
+  //tico: mirkov updateTaskStatus. Treba da se promeni
   updateTaskStatus(taskId: number, statusName: string): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${taskId}/${statusName}`, null); // Pass null as the body since you're not sending any data
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${taskId}/${statusName}`, null);
   }
 
   updateTicoTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
@@ -45,8 +46,9 @@ export class MyTasksService {
   // za kanban
   updateTaskStatusPositions(updatedStatuses: any[]): Observable<any> {
   return this.http.put(`${this.baseUrl}/updateStatusPositions`, updatedStatuses);
-}
-GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
-  return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
-}
+  }
+  //tico: duplikat GetUserTasks... Ispraviti gde se koristi
+  GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
+  }
 }
