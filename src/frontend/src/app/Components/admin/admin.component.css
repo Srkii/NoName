@@ -6,18 +6,18 @@ body {
 }
 #all {
   margin-top: 30px;
-  margin: auto; /* Center the div horizontally */
+  margin: auto;
   padding: 20px;
   width: 85%;
-  min-height: 10vh; /* Set a minimum height */
+  min-height: 10vh;
   background-color: #ffffff;
   color: #697a8d;
   border: solid 1px #d9dee3;
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  overflow-y: hidden; /* Hide the vertical scrollbar */
-  overflow-x: hidden; /* Hide the vertical scrollbar */
-  box-sizing: border-box; /* Include padding and border in the total width and height */
+  overflow-y: hidden;
+  overflow-x: hidden;
+  box-sizing: border-box; /
 }
 table {
   color: #697a8d;
@@ -54,8 +54,8 @@ td {
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
-  /* padding-left: 20px; */
   font-size: 12px;
+  color: #697a8d;
 }
 #name {
   font-size: 14px;
@@ -68,9 +68,53 @@ p {
   font-weight: 600;
 }
 
-.IN p {
-  /*IN PROGGRES*/
-  background-color: #e7e7ff !important;
-  color: #696cff !important;
+.thead{
+  color: #697a8d;
 }
 
+.input-group{
+  width: 20%;
+  margin: 10px;
+  float: right;
+}
+#button-addon2{
+  background-color: #5d57c2;
+  border-color: #5d57c2;
+}
+.btn btn-primary{
+  background-color: #5d57c2;
+}
+.dropdown-menu pop
+{
+  background-color: #ffffff;
+  color: #697a8d;
+  border: solid 1px #d9dee3;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  width: 40%;
+  height: auto
+}
+.update{
+  margin: 10px;
+}
+.span-dropdown-item{
+  float: center;
+  color: #565f6a;
+  margin-bottom: 15px;
+}
+.form-label{
+  color: #697a8d;
+  font-size: small;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #696cff;
+  border-color: #696cff;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+}
+.btn-primary:hover {
+  color: #fff !important;
+  background-color: #5f61e6 !important;
+  border-color: #5f61e6 !important;
+  transform: translateY(-1px) !important;
+}

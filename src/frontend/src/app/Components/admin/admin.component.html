@@ -1,8 +1,22 @@
 <div id="all">
   <div id="all1">
-    <h5>All Projects</h5>
+    <h5>Users</h5>
     <br />
 
+    <!-- <div class="invite">
+      <input type="email" id="form3Example3" class="form-control" name="email" placeholder="Enter users's email"/>
+
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid w-100" type="submit">Invite user</button>
+      </div>
+    </div> -->
+
+    <div class="input-group">
+      <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter user's email"/>
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="Invite()">Invite</button>
+      </div>
+    </div>
 
     <br />
     <table class="invoice-list-table table">
@@ -50,30 +64,55 @@
             <div class="d-flex align-items-center">
               <img src="../../../assets/navIcons/edit.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
                  href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
-                <div class="dropdown-menu dropdown-menu-end">
-                  <span class="dropdown-item">Update user</span>
+                <div class="dropdown-menu pop">
+
+                <div class="update">
+                <span class="span-dropdown-item">Update user</span>
                   <form (ngSubmit)="UpdateUser(user.id)">
-                  <input type="text" id="text" name="email" [(ngModel)]="updateUser.Email" placeholder="email">
-                  <input type="text" id="text" name="name" [(ngModel)]="updateUser.FirstName" placeholder="first name">
-                  <input type="text" id="text" name="email" [(ngModel)]="updateUser.LastName" placeholder="last name">
-                  <button type="submit">Update user</button>
-                  <div class="dropdown-divider"></div>
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="updateUser.Email" placeholder="Enter user's email"/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="fisrt name" class="form-label">Fisrt Name</label>
+                      <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="updateUser.FirstName" placeholder="Enter user's First Nsme"/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Last Name</label>
+                      <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="updateUser.LastName" placeholder="Enter user Last Name"/>
+                    </div>
+                    <div class="mb-3">
+                      <button class="btn btn-primary d-grid w-100" type="submit">Update</button>
+                    </div>
+
                 </form>
-                </div>
+              </div>
+              </div>
 
                 <img src="../../../assets/navIcons/delete.png" (click)="ArchiveUser(user.id)" id="tableIcon" aria-expanded="false">
 
                 <img src="../../../assets/navIcons/more.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
                   href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
-                <div class="dropdown-menu dropdown-menu-end">
-                  <span class="dropdown-item">Change user role</span>
+
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <div class="update">
+                  <span class="span-dropdown-item">Change user role</span>
                   <form (ngSubmit)="ChangeUserRole()">
-                    <input type="number" name="id" [(ngModel)]="changeRole.Id" placeholder="id">
-                    <input type="number" name="role" [(ngModel)]="changeRole.Role" placeholder="role">
-                     <button type="submit">Change</button>
+
+                     <div class="mb-3">
+                      <label for="fisrt name" class="form-label">User's id</label>
+                      <input type="number" id="form3Example3" class="form-control" name="email" [(ngModel)]="changeRole.Id" placeholder="User's id"/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Role</label>
+                      <input type="number" id="form3Example3" class="form-control" name="email" name="role" [(ngModel)]="changeRole.Role" placeholder="User's role"/>
+                    </div>
+                    <div class="mb-3">
+                      <button class="btn btn-primary d-grid w-100" type="submit">Change</button>
+                    </div>
                   </form>
                 </div>
-
+              </div>
 
             </div>
           </td>
