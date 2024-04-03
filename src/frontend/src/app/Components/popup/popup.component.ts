@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { ProjectTask} from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
+import { UserinfoService } from '../../_services/userinfo.service';
 
 @Component({
   selector: 'app-popup',
@@ -24,14 +25,16 @@ export class PopupComponent {
 
   previousTaskStatus: string="";
   fullscreen: boolean = false;
+  user!:any;
 
-  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef) {}
+  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService) {}
 
   ngOnInit(): void {
     if (this.task) {
       // Store the initial task status to revert back if needed
       this.previousTaskStatus = this.task.statusName;
     }
+    this.getUser();
   }
 
   toggleTaskCompletion(event: any, task: ProjectTask): void {
@@ -70,6 +73,7 @@ export class PopupComponent {
         }
       );
     }
+    this.taskUpdated.emit(task);
   }
   
 
@@ -97,28 +101,54 @@ export class PopupComponent {
     const full = document.querySelector('.full') as HTMLElement;
     const file = document.querySelector('.file') as HTMLElement;
     const comments = document.querySelector('.comments') as HTMLElement;
-    const assignees = document.querySelector('.assignees') as HTMLElement;
-
+    const description = document.querySelector('.description') as HTMLElement;
+    const windowWidth= window.innerWidth;
     if (!this.fullscreen) {
-      pop.style.width = '98.5%';
+      console.log(windowWidth);
+      if(windowWidth<1200)
+      {
+        pop.style.top="0";
+        pop.style.height="100%";
+      }
+      else
+      {
+        pop.style.top="";
+        pop.style.height="";
+      }
+      pop.style.width = '99%';
       pop.style.padding = '2%';
       back.style.marginRight = '1%';
       full.style.marginRight = '3%';
       file.style.marginRight = '3%';
       comments.style.marginTop = '3%';
-      assignees.style.marginTop = '-3%';
-      comments.style.marginTop = '1.9%';
+      description.style.marginTop = '-3%';
+      comments.style.marginTop = '2.3%';
       comments.style.width = '100%';
       this.fullscreen = true;
     } else {
+      pop.style.top="";
+      pop.style.height="";
       pop.style.width = '';
       pop.style.padding = '';
       back.style.marginRight = '';
       full.style.marginRight = '';
       file.style.marginRight = '';
       comments.style.marginTop = '';
+      description.style.marginTop = '-3%';
       comments.style.marginTop = '';
       this.fullscreen = false;
     }
+  }
+  getUser(): void{
+    var id=localStorage.getItem('id')
+    this.userInfo.getUserInfo2(id).subscribe({
+      next:(response)=>{
+        this.user=response;
+        console.log(this.user);
+      },error:(error)=>{
+        console.log(error)
+      }
+      
+    })
   }
 }

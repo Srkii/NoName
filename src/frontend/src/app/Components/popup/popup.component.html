@@ -32,20 +32,21 @@
   <h6 id="popupTaskName">{{ task.taskName }}</h6>
   <br />
   <p class="header">
-    DUE DATE <span id="popupDueDate">{{ task.endDate | date }}</span>
+    Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
   </p>
   <p class="header">
-    ORIGIN PROJECT
+    Origin Project
     <span id="popupOriginProject">{{
        task.project ? task.project.projectName : "No Project" 
     }}</span>
   </p>
-  <p class="header">ASSIGNEE</p>
-  <input id="assignees1" class="assignees" type="text" [value]="" />
-  <p class="header">DESCRIPTION</p>
+  <p class="header">Assignee
+  <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
+    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
+  </p>
+    <p class="header">Description</p>
   <input
-    id="description"
-    class="assignees"
+    class="description"
     type="text"
     [value]="task.description"
     readonly
@@ -59,7 +60,6 @@
   >
     {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
   </button>
-
   <div class="comments">
     <p class="header">COMMENTS</p>
     <input class="comment" type="text" placeholder="Add a comment" />

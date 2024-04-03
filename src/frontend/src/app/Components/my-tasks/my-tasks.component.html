@@ -2,7 +2,8 @@
   <div id="all1">
     <h5>📬 In Progress</h5>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
+    <table [ngClass]="{ 'empty-table': isTasksEmpty('InProgress') }">
+
       <tr>
         <th>Task Name</th>
         <th>Origin Project</th>
@@ -36,7 +37,7 @@
           <td class="name">
             {{ task.taskName }}
           </td>
-          <td>
+          <td class="projectname">
             {{ task.project ? task.project.projectName : "No Project" }}
           </td>
           <td>{{task.sectionName? task.sectionName: "No section"}}</td>
@@ -52,7 +53,8 @@
   <div id="all1">
     <h5>&#10024; In Review</h5>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
+    <table [ngClass]="{ 'empty-table': isTasksEmpty('InReview') }">
+
       <tr>
         <th>Task Name</th>
         <th>Origin Project</th>
@@ -103,7 +105,8 @@
   <div id="all1">
     <h5>🎉 Completed</h5>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
+    <table [ngClass]="{ 'empty-table': isTasksEmpty('Completed') }">
+
       <tr>
         <th>Task Name</th>
         <th>Origin Project</th>
@@ -151,4 +154,5 @@
   [task]="clickedTask"
   (backClicked)="closePopup()"
   (taskUpdated)="handleTaskUpdate($event)"
+  [@popFromSide]="showPopUp ? 'popFromSide' : ''"
 ></app-popup>

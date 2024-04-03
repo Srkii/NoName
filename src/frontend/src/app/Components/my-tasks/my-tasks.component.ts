@@ -7,13 +7,35 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ProjectStatus } from '../../Entities/Project';
 import { SharedService } from '../../_services/shared.service';
 import { coerceStringArray } from '@angular/cdk/coercion';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrl: './my-tasks.component.css',
   providers: [DatePipe], // Provide DatePipe here
+  animations: [
+    trigger('popFromSide', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'translateX(50%)',
+        }),
+        animate('300ms ease-out', style({
+          opacity: 1,
+          transform: 'translateX(0)',
+        })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({
+          opacity: 0,
+          transform: 'translateX(50%)',
+        })),
+      ]),
+    ]),
+  ],
 })
+
 export class MyTasksComponent implements OnInit {
   tasks: ProjectTask[] = [];
   clickedTask: ProjectTask | null = null;
@@ -142,9 +164,11 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
-  isTasksEmpty(): boolean {
-    return this.tasks.length === 0;
+  isTasksEmpty(status: string): boolean {
+    return this.tasks.filter(task => task.statusName === status).length === 0;
   }
+  
+
 
   // getStatusString(status: TaskStatus): string {
   //   switch (status) {
