@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 import { AdminService } from '../../_services/admin.service';
 import { RegisterInvitation } from '../../Entities/RegisterInvitation';
@@ -13,6 +13,10 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
+  template: `
+    <button (click)="refreshPage()">Refresh Page</button>
+    <i class="fa fa-refresh" (click)="refreshPage()"></i>
+  `,
 })
 export class AdminComponent implements OnInit{
 
@@ -31,14 +35,14 @@ export class AdminComponent implements OnInit{
   members: Member[]=[]
   projectMangers: Member[]=[]
 
-  role!: string
+  role!: number
+
+  selectedRole!: UserRole;
+  roles1 : string =''
 
   roles: UserRole[] = [UserRole.Admin, UserRole.Member, UserRole.ProjectManager];
 
-  changeRole: ChangeRole={
-    Id: 0,
-    Role: 0
-  }
+  changeRole!: ChangeRole
 
   numberOfRoles!: number
 
@@ -53,8 +57,6 @@ export class AdminComponent implements OnInit{
   flagPM:boolean=false
 
   sortOrder: 'asc' | 'desc' = 'asc';
-
-
 
   Invite(): void{
     if(this.invitation)
@@ -90,6 +92,18 @@ export class AdminComponent implements OnInit{
             return ''
         }
     }
+    GetUserRole1(role: string): number{
+      switch(role){
+        case "Admin":
+          return 0
+        case "Member":
+          return UserRole.Member
+        case "Project manager":
+          return UserRole.ProjectManager
+        default:
+          return UserRole.Member
+      }
+  }
 
     SplitByRole(): void{
       this.allUsers.forEach((user)=>{
@@ -112,15 +126,22 @@ export class AdminComponent implements OnInit{
       })
     }
 
-    ChangeUserRole(): void{
+    ChangeUserRole(id:number): void{
+      // this.changeRole.Role=this.GetUserRole(this.role)
+      this.changeRole.Id=id;
+      this.changeRole.Role=this.role
+      console.log(this.changeRole.Role)
       if(this.changeRole)
       {
         console.log(this.changeRole)
         this.adminService.changeUserRole(this.changeRole).subscribe(
           (response)=>{
             console.log(response);
+            this.GetAllUsers();
           }
+
         )
+
       }
       error:()=>{
         console.log("Can't change user role")
@@ -131,6 +152,7 @@ export class AdminComponent implements OnInit{
         this.adminService.updateUser(id,this.updateUser).subscribe(
           (response)=>{
             console.log(response)
+            this.GetAllUsers();
           }
         )
       }
@@ -140,12 +162,11 @@ export class AdminComponent implements OnInit{
       this.adminService.archiveUser(id).subscribe(
         (response)=>{
           console.log(response)
+          this.GetAllUsers();
         }
       )
+
     }
-
-
-
     sortUsersByName(): void {
       if(this.sortOrder==='asc')
       {
@@ -169,6 +190,7 @@ export class AdminComponent implements OnInit{
       this.sortOrder = 'asc';
     }
     }
+
 
   }
 

@@ -17,7 +17,7 @@ body {
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   overflow-y: hidden;
   overflow-x: hidden;
-  box-sizing: border-box; /
+  box-sizing: border-box;
 }
 table {
   color: #697a8d;
@@ -48,6 +48,7 @@ th {
   padding: 5px;
   border-left: none;
   border-right: none;
+  color: #565f6a;
 }
 td {
   padding: 10px;
@@ -68,15 +69,22 @@ p {
   font-weight: 600;
 }
 
-.thead{
-  color: #697a8d;
+.invite {
+  display: flex;
+  align-items: baseline;
+  width: 30%;
 }
 
-.input-group{
-  width: 20%;
-  margin: 10px;
-  float: right;
+.invite input {
+  flex: 1;
+  margin-right: 10px;
+  width: 60%;
 }
+.invite btn{
+  flex: 1;
+  margin-right: 10px;
+}
+
 #button-addon2{
   background-color: #5d57c2;
   border-color: #5d57c2;
@@ -117,4 +125,8 @@ p {
   background-color: #5f61e6 !important;
   border-color: #5f61e6 !important;
   transform: translateY(-1px) !important;
+}
+.avatar{
+  width: 30px;
+  height: auto;
 }
