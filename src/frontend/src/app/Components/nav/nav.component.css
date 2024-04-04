@@ -18,6 +18,10 @@ body {
   border-radius: 8px;
   color: #697a8d;
 }
+.navbar-brand {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
 
 .navbar-nav-right img {
   width: 30px;
@@ -105,6 +109,7 @@ body {
   width: 60px;
   padding-top: 0%;
   padding-bottom: 0%;
+  margin: 0px !important;
 }
  @media only screen and (min-width: 768px){
 
