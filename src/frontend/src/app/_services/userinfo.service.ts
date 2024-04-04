@@ -19,7 +19,7 @@ export class UserinfoService {
     })
     return this.httpClient.get<any>(`${this.apiUrl}/users/${id}`,{headers:httpheaders});
   }
-
+  //tico: koristi apiUrl ako si ga vec importovao
   updateUserInfo(token: any, id:number, data:ChangePassword):Observable<any>{
     const url = `https://localhost:5001/api/users/changePassword/${id}`;
     console.log("Xd");

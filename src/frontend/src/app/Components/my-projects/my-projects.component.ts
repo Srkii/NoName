@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-projects',
@@ -97,8 +97,6 @@ export class MyProjectsComponent implements OnInit {
         });
         break;
 
-      // Add other sorting options as needed
-
       default:
         this.myProjectsService
           .getProjects()
@@ -126,8 +124,6 @@ export class MyProjectsComponent implements OnInit {
         });
         break;
 
-      // Add other sorting options as needed
-
       default:
         this.myProjectsService
           .getProjects()
@@ -149,11 +145,9 @@ export class MyProjectsComponent implements OnInit {
       .toLowerCase()
       .includes(this.ProjectName.toLowerCase());
 
-    // Check if default option is selected for start and end dates
     const startDateDefaultSelected = this.StartDateFilter === '';
     const endDateDefaultSelected = this.EndDateFilter === '';
 
-    // If default option is selected, return true for start and end date conditions
     if (startDateDefaultSelected && endDateDefaultSelected) {
       return statusMatch && priorityMatch && nameMatch;
     }
@@ -161,24 +155,22 @@ export class MyProjectsComponent implements OnInit {
     let startDateMatch = false;
     let endDateMatch = false;
 
-    // Compare start date filter with project start date
     if (!startDateDefaultSelected) {
       startDateMatch = this.compareStartDate(
         project.startDate,
         new Date(this.StartDateFilter)
       );
     } else {
-      startDateMatch = true; // No filter applied, so it's always a match
+      startDateMatch = true;
     }
 
-    // Compare end date filter with project end date
     if (!endDateDefaultSelected) {
       endDateMatch = this.compareEndDate(
         project.endDate,
         new Date(this.EndDateFilter)
       );
     } else {
-      endDateMatch = true; // No filter applied, so it's always a match
+      endDateMatch = true;
     }
 
     return (
@@ -191,13 +183,9 @@ export class MyProjectsComponent implements OnInit {
   }
 
   compareStartDate(startDate: any, filterDate: Date): boolean {
-    // Check if startDate is a string
     if (typeof startDate === 'string') {
-      // Parse the string into a Date object
       startDate = new Date(startDate);
     }
-
-    // Check if startDate is a valid Date object
     if (!(startDate instanceof Date) || isNaN(startDate.getTime())) {
       return false;
     }
@@ -256,13 +244,9 @@ export class MyProjectsComponent implements OnInit {
   }
 
   compareEndDate(endDate: any, filterDate: Date): boolean {
-    // Check if endDate is a string
     if (typeof endDate === 'string') {
-      // Parse the string into a Date object
       endDate = new Date(endDate);
     }
-
-    // Check if endDate is a valid Date object
     if (!(endDate instanceof Date) || isNaN(endDate.getTime())) {
       return false;
     }
@@ -299,7 +283,6 @@ export class MyProjectsComponent implements OnInit {
         return this.isLastMonth(endDate);
       case 'This Year1':
         return currentDate.getFullYear() === endDate.getFullYear();
-      // Other cases...
       case 'From lowest to highest1':
         this.projects.sort((a, b) => {
           const endDateA = new Date(a.endDate).getTime();
@@ -315,12 +298,8 @@ export class MyProjectsComponent implements OnInit {
           return endDateA - endDateB;
         });
         return true;
-
-      // Default case...
-
-      // Add logic for other options as needed
       default:
-        return true; // Default to true if no filter selected
+        return true;
     }
   }
 

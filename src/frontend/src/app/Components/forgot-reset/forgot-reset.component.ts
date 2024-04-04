@@ -35,7 +35,7 @@ export class ForgotResetComponent implements OnInit{
     this.mailresetService.getEmailByToken(token).subscribe({
       next: (response: any) => {
         console.log(response);
-        const email = response?.email; // Change this line according to your API response structure
+        const email = response?.email;
         if (email) {
           this.newRequest.Email = email;
         } else {

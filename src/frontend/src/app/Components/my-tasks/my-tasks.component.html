@@ -1,13 +1,13 @@
 <div class="all">
   <div id="all1">
-    <h5>📬 New Tasks</h5>
+    <h5>📬 In Progress</h5>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
+    <table [ngClass]="{ 'empty-table': isTasksEmpty('InProgress') }">
+
       <tr>
-        <th class="check"></th>
         <th>Task Name</th>
         <th>Origin Project</th>
-        <th>Assignee</th>
+        <th>Section Name</th>
         <th>
           Due Date
           <svg
@@ -27,30 +27,23 @@
         </th>
       </tr>
       <!-- zasto se klasa zove red?? -->
-      <!-- <ng-container *ngFor="let task of tasks">
+      <ng-container *ngFor="let task of tasks">
         <tr
-          class="red" 
+          class="red"
+          *ngIf="task.statusName=='InProgress'"
           [class.clicked]="clickedTask?.id === task.id"
-          *ngIf="task.taskStatus === 0"
           (click)="togglePopUp($event, task.id)"
         >
-          <td>
-            <input
-              type="checkbox"
-              [id]="'checkBox-' + task.id"
-              (change)="toggleTaskCompletion($event, task)"
-            />
-          </td>
           <td class="name">
             {{ task.taskName }}
           </td>
-          <td>
+          <td class="projectname">
             {{ task.project ? task.project.projectName : "No Project" }}
           </td>
-          <td>Task visibility goes here</td>
+          <td>{{task.sectionName? task.sectionName: "No section"}}</td>
           <td>{{ task.endDate | date }}</td>
         </tr>
-      </ng-container> -->
+      </ng-container>
     </table>
   </div>
 </div>
@@ -58,14 +51,14 @@
 
 <div class="all">
   <div id="all1">
-    <h5>&#10024; Due in 3 days</h5>
+    <h5>&#10024; In Review</h5>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
+    <table [ngClass]="{ 'empty-table': isTasksEmpty('InReview') }">
+
       <tr>
-        <th class="check"></th>
         <th>Task Name</th>
         <th>Origin Project</th>
-        <th>Assignee</th>
+        <th>Section Name</th>
         <th>
           Due Date
           <svg
@@ -84,20 +77,14 @@
           </svg>
         </th>
       </tr>
-      <!-- <ng-container *ngFor="let task of tasks">
+      <ng-container *ngFor="let task of tasks">
         <tr
-          class="red"
-          [class.clicked]="clickedTask?.id === task.id"
-          *ngIf="task.taskStatus === 1"
-          (click)="togglePopUp($event, task.id)"
-        >
-          <td>
-            <input
-              type="checkbox"
-              [id]="'checkBox-' + task.id"
-              (change)="toggleTaskCompletion($event, task)"
-            />
-          </td>
+        class="red"
+        *ngIf="task.statusName=='InReview'"
+        [class.clicked]="clickedTask?.id === task.id"
+        (click)="togglePopUp($event, task.id)"
+      >
+
           <td class="name">
             {{ task.taskName }}
           </td>
@@ -106,13 +93,10 @@
             {{ task.project ? task.project.projectName : "No Project" }}
           </td>
 
-          <td [ngClass]="getStatusString(task.taskStatus)">
-          <p>{{ getStatusString(task.taskStatus) }}</p>
-        </td>
-          <td>Task visibility goes here</td>
+          <td>{{task.sectionName? task.sectionName: "No section"}}</td>
           <td>{{ task.endDate | date }}</td>
         </tr>
-      </ng-container> -->
+      </ng-container>
     </table>
   </div>
 </div>
@@ -121,12 +105,12 @@
   <div id="all1">
     <h5>🎉 Completed</h5>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty() }">
+    <table [ngClass]="{ 'empty-table': isTasksEmpty('Completed') }">
+
       <tr>
-        <th class="check"></th>
         <th>Task Name</th>
         <th>Origin Project</th>
-        <th>Assignee</th>
+        <th>Section Name</th>
         <th>
           Due Date
           <svg
@@ -145,35 +129,22 @@
           </svg>
         </th>
       </tr>
-      <!-- <ng-container *ngFor="let task of tasks">
+      <ng-container *ngFor="let task of tasks">
         <tr
-          class="red"
-          [class.clicked]="clickedTask?.id === task.id"
-          *ngIf="task.taskStatus === 2"
-          (click)="togglePopUp($event, task.id)"
-        >
-          <td>
-            <input
-              type="checkbox"
-              [id]="'checkBox-' + task.id"
-              (change)="toggleTaskCompletion($event, task)"
-              [checked]="task.taskStatus === 2"
-            />
-          </td>
+        class="red"
+        *ngIf="task.statusName=='Completed'"
+        [class.clicked]="clickedTask?.id === task.id"
+        (click)="togglePopUp($event, task.id)"
+      >
           <td class="name">
             {{ task.taskName }}
           </td>
-          <td>
-            {{ task.project ? task.project.projectName : "No Project" }}
-          </td>
+          <td>{{ task.project ? task.project.projectName : 'No Project' }}</td>
 
-          <td [ngClass]="getStatusString(task.taskStatus)">
-          <p>{{ getStatusString(task.taskStatus) }}</p>
-        </td>
-          <td>Task visibility goes here</td>
+          <td>{{task.sectionName? task.sectionName: "No section"}}</td>
           <td>{{ task.endDate | date }}</td>
         </tr>
-      </ng-container> -->
+      </ng-container>
     </table>
   </div>
 </div>
@@ -183,4 +154,5 @@
   [task]="clickedTask"
   (backClicked)="closePopup()"
   (taskUpdated)="handleTaskUpdate($event)"
+  [@popFromSide]="showPopUp ? 'popFromSide' : ''"
 ></app-popup>

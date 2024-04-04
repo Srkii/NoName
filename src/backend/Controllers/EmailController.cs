@@ -8,7 +8,6 @@ namespace backend.Controllers
 {
     public class EmailController : BaseApiController
     {
-        
         private readonly DataContext _context;
         private readonly IEmailSender _emailSender;
 

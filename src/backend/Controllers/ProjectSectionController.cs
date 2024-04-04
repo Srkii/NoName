@@ -29,7 +29,6 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetSection), new { id = section.Id }, section);
         }
 
-        // Optional: Implement a method to retrieve a section by its ID
         [HttpGet("{id}")] // GET: api/ProjectSection/5
         public async Task<ActionResult<ProjectSection>> GetSection(int id)
         {

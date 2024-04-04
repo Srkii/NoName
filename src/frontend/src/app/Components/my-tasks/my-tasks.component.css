@@ -25,7 +25,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   overflow-y: hidden; /* Hide the vertical scrollbar */
-  overflow-x: hidden; /* Hide the vertical scrollbar */
+  overflow-x: auto; /* Hide the vertical scrollbar */
   box-sizing: border-box; /* Include padding and border in the total width and height */
 }
 
@@ -58,21 +58,18 @@ th {
   border-left: none;
   border-right: none;
   width: 15%;
+  padding-left: 10%;
 }
-td:first-child {
-  text-align: center;
-}
+
 td {
   padding: 10px;
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
-  /* padding-left: 20px; */
   font-size: 12px;
-}
-
-.check {
-  width: 7%;
+  padding-left: 10%;
+  white-space: nowrap; /* Prevent text wrapping */
+  text-overflow: ellipsis; /* Add ellipsis for overflowed content */
 }
 
 tr:last-child {
@@ -106,10 +103,10 @@ p {
 .filter:hover {
   cursor: pointer;
 }
-.empty-table tr :first-child {
-  /* border: 1px solid red; */
+.empty-table th {
   border-bottom: none;
 }
+
 
 /* .mark:hover {
   cursor: pointer;

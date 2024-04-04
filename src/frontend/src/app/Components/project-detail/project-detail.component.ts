@@ -52,8 +52,6 @@ export class ProjectDetailComponent implements OnInit {
       acc[section].tasks.push(task);
       return acc;
     }, {});
-  
-    // Ensure "No Section" is always visible
     if (!grouped['No Section']) {
       grouped['No Section'] = { tasks: [], visible: true };
     }
