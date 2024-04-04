@@ -139,6 +139,117 @@ namespace backend.Controllers
 
         //     return NoContent();
         // }
+
+        [HttpGet("filter")]
+        public async Task<ActionResult<IEnumerable<Project>>> FilterProjects(
+            string projectName = null,
+            ProjectStatus? projectStatus = null,
+            Priority? projectPriority = null,
+            string endDateFilter = null,
+            string startDateFilter = null)
+        {
+            var query = _context.Projects.AsQueryable();
+
+            if (!string.IsNullOrEmpty(projectName))
+            {
+                query = query.Where(p => EF.Functions.Like(p.ProjectName.ToLower(), $"%{projectName.ToLower()}%"));
+            }
+
+            if (projectStatus != null)
+            {
+                query = query.Where(p => p.ProjectStatus == projectStatus);
+            }
+
+            if (projectPriority != null)
+            {
+                query = query.Where(p => p.Priority == projectPriority);
+            }
+
+            if (!string.IsNullOrEmpty(endDateFilter))
+            {
+                DateTime endDate;
+                switch (endDateFilter)
+                {
+                    case "Today1":
+                        endDate = DateTime.Today;
+                        query = query.Where(p => p.EndDate.Date == endDate.Date);
+                        break;
+                    case "Yesterday1":
+                        endDate = DateTime.Today.AddDays(-1);
+                        query = query.Where(p => p.EndDate.Date == endDate.Date);
+                        break;
+                    case "Last 7 days1":
+                        var last7DaysStart = DateTime.Today.AddDays(-6);
+                        query = query.Where(p => p.EndDate.Date >= last7DaysStart.Date && p.EndDate.Date <= DateTime.Today.Date);
+                        break;
+                    case "Last 30 days1":
+                        var last30DaysStart = DateTime.Today.AddDays(-29);
+                        query = query.Where(p => p.EndDate.Date >= last30DaysStart.Date && p.EndDate.Date <= DateTime.Today.Date);
+                        break;
+                    case "This month1":
+                        var startOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                        var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+                        query = query.Where(p => p.EndDate.Date >= startOfMonth.Date && p.EndDate.Date <= endOfMonth.Date);
+                        break;
+                    case "Last month1":
+                        var startOfLastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-1);
+                        var endOfLastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddDays(-1);
+                        query = query.Where(p => p.EndDate.Date >= startOfLastMonth.Date && p.EndDate.Date <= endOfLastMonth.Date);
+                        break;
+                    case "This Year1":
+                        var startOfYear = new DateTime(DateTime.Today.Year, 1, 1);
+                        var endOfYear = new DateTime(DateTime.Today.Year, 12, 31);
+                        query = query.Where(p => p.EndDate.Date >= startOfYear.Date && p.EndDate.Date <= endOfYear.Date);
+                        break;
+                    default:
+                        return BadRequest("Invalid end date filter option");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(startDateFilter))
+            {
+                DateTime startDate;
+                switch (startDateFilter)
+                {
+                    case "Today":
+                        startDate = DateTime.Today;
+                        query = query.Where(p => p.StartDate.Date == startDate.Date);
+                        break;
+                    case "Yesterday":
+                        startDate = DateTime.Today.AddDays(-1);
+                        query = query.Where(p => p.StartDate.Date == startDate.Date);
+                        break;
+                    case "Last 7 days":
+                        var last7DaysStart = DateTime.Today.AddDays(-6);
+                        query = query.Where(p => p.StartDate.Date >= last7DaysStart.Date && p.StartDate.Date <= DateTime.Today.Date);
+                        break;
+                    case "Last 30 days":
+                        var last30DaysStart = DateTime.Today.AddDays(-29);
+                        query = query.Where(p => p.StartDate.Date >= last30DaysStart.Date && p.StartDate.Date <= DateTime.Today.Date);
+                        break;
+                    case "This month":
+                        var startOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                        var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+                        query = query.Where(p => p.StartDate.Date >= startOfMonth.Date && p.StartDate.Date <= endOfMonth.Date);
+                        break;
+                    case "Last month":
+                        var startOfLastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-1);
+                        var endOfLastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddDays(-1);
+                        query = query.Where(p => p.StartDate.Date >= startOfLastMonth.Date && p.StartDate.Date <= endOfLastMonth.Date);
+                        break;
+                    case "This Year":
+                        var startOfYear = new DateTime(DateTime.Today.Year, 1, 1);
+                        var endOfYear = new DateTime(DateTime.Today.Year, 12, 31);
+                        query = query.Where(p => p.StartDate.Date >= startOfYear.Date && p.StartDate.Date <= endOfYear.Date);
+                        break;
+                    default:
+                        return BadRequest("Invalid start date filter option");
+                }
+            }
+
+            var filteredProjects = await query.ToListAsync();
+            return filteredProjects;
+        }
     }
 
 

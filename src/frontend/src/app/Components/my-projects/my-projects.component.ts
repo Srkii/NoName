@@ -11,6 +11,11 @@ import { Router } from '@angular/router';
 })
 export class MyProjectsComponent implements OnInit {
   projects: Project[] = [];
+  filteredProjects: Project[] | undefined;
+  pageSize: number = 5;
+  currentPage: number = 1;
+  totalPages: number = 0;
+  originalProjects: Project[] = [];
 
   constructor(
     
@@ -26,6 +31,7 @@ export class MyProjectsComponent implements OnInit {
     const id = localStorage.getItem('id');
     this.myProjectsService.getUsersProjects(id).subscribe((projects: Project[]) => {
       this.projects = projects;
+       this.originalProjects = [...projects];
       this.spinner.hide();
     });
   }
@@ -318,4 +324,64 @@ export class MyProjectsComponent implements OnInit {
   goToProject(id: number) {
     this.router.navigate(['/project', id]);
   }
+
+  fillterProjects(): void {
+    // Convert the input value to lowercase for case-insensitive search
+    const projectName = this.ProjectName.trim();
+    const projectStatus = this.selectedStatus;
+    const projectPriority = this.selectedPriority;
+    const projectStartDate = this.StartDateFilter;
+    const projectEndDate = this.EndDateFilter;
+    if (projectStartDate === '' && projectEndDate === '' && projectPriority === '' && projectStatus === '' && projectName === '') {
+      // If all search queries are empty, reload all projects
+      this.reloadProjects();
+      return;
+    }
+
+  
+    this.spinner.show();
+    this.myProjectsService.filterProjects(projectName,projectStatus,projectPriority,projectEndDate,projectStartDate).subscribe((filteredProjects: Project[]) => {
+      this.projects = filteredProjects;
+      this.spinner.hide();
+    });
+  }
+
+  handleDateFilterChange(): void {
+    if (this.StartDateFilter === 'From highest to lowest' || this.StartDateFilter === 'From lowest to highest') {
+        this.sortProjects(this.StartDateFilter);
+    } else if(this.EndDateFilter === 'From highest to lowest1' || this.EndDateFilter === 'From lowest to highest1') {
+        this.sortProjects1(this.EndDateFilter);
+    } else {
+        this.fillterProjects();
+    }
+}
+
+  
+  reloadProjects(): void {
+    this.spinner.show();
+    const id = localStorage.getItem('id');
+    this.myProjectsService.getUsersProjects(id).subscribe((projects: Project[]) => {
+      this.projects = projects;
+      this.spinner.hide();
+    });
+  }
+  nextPage(): void {
+    if ((this.currentPage * this.pageSize) < this.projects.length) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  getDisplayedProjects(): Project[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = Math.min(startIndex + this.pageSize, this.projects.length);
+    return this.projects.slice(startIndex, endIndex);
+  }
+
+
 }
