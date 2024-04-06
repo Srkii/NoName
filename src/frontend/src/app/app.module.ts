@@ -26,6 +26,9 @@ import { PopupComponent } from './Components/popup/popup.component';
 import { KanbanComponent } from './Components/kanban/kanban.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GanttComponent } from './Components/gantt/gantt.component';
+import { ProjectCardComponent } from './Components/project-card/project-card.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -44,7 +47,8 @@ import { GanttComponent } from './Components/gantt/gantt.component';
     ProjectDetailComponent,
     FileUploadComponent,
     KanbanComponent,
-    GanttComponent
+    GanttComponent,
+    ProjectCardComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +61,9 @@ import { GanttComponent } from './Components/gantt/gantt.component';
       positionClass: 'toast-bottom-right',
     }), // ToastrModule added
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
-    DragDropModule
+    DragDropModule,
+    MatDatepickerModule,
+    MultiSelectModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

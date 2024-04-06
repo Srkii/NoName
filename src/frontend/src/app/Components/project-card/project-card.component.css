@@ -16,9 +16,17 @@ input[type="date"]{
 
 .col-md div{ margin-bottom: 0; }
 
+:host ::ng-deep .p-multiselect {
+  width: 100%;
+}
+
+:host ::ng-deep .p-multiselect-label {
+  width: calc(100% - 2em); /* Oduzimamo padding i ikonu za brisanje */
+}
+
 label{ margin-right: 1rem; }
 
-h2{ 
+h4{
     color: #212529;
     margin-bottom: 0;
     padding: 1rem 0 0 1rem;
@@ -63,7 +71,14 @@ h2{
 }
 
 #addProjectBtn{
-    margin-left: auto;
-    margin-right: 0;
+    display: flex;
+   justify-content: right;
+   margin-top: 16px;
+   margin-bottom: 0;
+}
+
+#lbl{
+    display: block;
+    margin-bottom: 10px;
 }
 

@@ -6,6 +6,18 @@ import { Component } from '@angular/core';
   styleUrl: './project-card.component.css'
 })
 export class ProjectCardComponent {
+  
+  cities = [
+    { name: 'New York', code: 'NY' },
+    { name: 'Los Angeles', code: 'LA' },
+    { name: 'Chicago', code: 'CH' },
+    { name: 'Houston', code: 'HO' },
+    { name: 'Phoenix', code: 'PH' }
+  ]
 
-  constructor() {}
+  selectedCities: any[];
+
+  constructor() {
+    this.selectedCities = [];
+  }
 }
