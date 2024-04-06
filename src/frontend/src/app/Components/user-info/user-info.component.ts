@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { UploadService } from '../../_services/upload.service';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
-import { UserinfoService } from './../../Services/userinfo.service';
-import { AppUser } from '../../Entities/AppUser';
-import { ChangeUserData } from '../../Entities/ChangeUserData';
+import { UserinfoService } from '../../_services/userinfo.service';
+import { ChangePassword } from '../../Entities/ChangePassword';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-user-info',
@@ -10,84 +11,119 @@ import { ChangeUserData } from '../../Entities/ChangeUserData';
   styleUrls: ['./user-info.component.css']
 })
 export class UserInfoComponent implements OnInit {
-  public userInfo: any;
-  public passwordCheck:any;
-  newData: ChangeUserData = {
+  public userInfo:any;
+  public oldPass="";
+  public newpas="";
+  public confirmpass="";
+  public role:any;
+  public profilePic:any;
+  public defaulturl="../../../assets/profile_photo_placeholders/1234.png";
+  public url="../../../assets/profile_photo_placeholders/1234.png";
+  newData: ChangePassword = {
     CurrentPassword:""
   }
 
-  constructor(private userinfoService: UserinfoService, private router: Router) {}
-  //postavljanje defaultne vidljivosti div-ova
-
-  visibility_change(type:string,div:any){//promena vidljivosti div-a
+  constructor(private userinfoService: UserinfoService, private router: Router,private uploadservice:UploadService, private spinner:NgxSpinnerService) {}
+  visibility_change(type:string,div:any){
     if(div!=null) div.style.display = type;
   }
 
-  async ngOnInit(): Promise<void> {
-
-    this.visibility_change('none',document.getElementById("update"));
-
+  ngOnInit(){
+    this.spinner.show();
+    this.UserInfo();
+    this.spinner.hide();
+  }
+  
+  UserInfo(){
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token')
     if (token) {
-      this.userInfo = await this.userinfoService.getUserInfo(id,token);
-    } else {
+      this.userinfoService.getUserInfo(id,token).subscribe({
+        next: (response) =>{
+          this.userInfo = response;
+          console.log(response);
+          if(response.profilePicUrl!=null)
+          {
+            this.uploadservice.getImage(response.profilePicUrl)
+            .subscribe(response => {
+              const reader = new FileReader();
+              reader.readAsDataURL(response);
+              reader.onloadend = () =>{
+                this.url = reader.result as string;
+              };
+            },
+            error=>{
+              console.error("Error loading image",error);
+            });
+          }
+          if(this.userInfo.role == 2){
+            this.role="Project manager";
+          }else if(this.userInfo.role == 1){
+            this.role="Member";
+          }else this.role="Admin";
+        },
+        error: (error) => {
+          console.log(error);
+          console.log("GET USER INFO FAILED");
+        }
+      });
+    }else {
       console.error("Token not found in local storage");
     }
   }
-
-  async onClickUser(): Promise<void> {
-    if (this.router.url === '/userinfo') return;
-    try {
-      await this.router.navigate(['/userinfo']);
-    } catch (error) {
-      console.error("Redirect failed:", error);
-    }
+  passwordMatch(): boolean {
+    return this.newData.NewPassword === this.confirmpass;
   }
 
-  async onClickHome(): Promise<void> {
-    if (this.router.url === '/home') return;
-    try {
-      await this.router.navigate(['/home']);
-    } catch (error) {
-      console.error("Redirect failed:", error);
-    }
-  }
-
-  change_info(){
-    var changeinfodiv = document.getElementById('update');
-    if(changeinfodiv!=null){
-      this.visibility_change('block',changeinfodiv);
-      setTimeout(function(){
-        if(changeinfodiv!=null)changeinfodiv.style.opacity='1';
-      },10);
-    }
-  }
   apply_changes(){
-    if(this.newData.CurrentPassword==''){
-      alert("input old password for verification...");
-      return;
-    }else if(this.newData.NewPassword!=this.newData.NewPasswordConfirm){
-      alert("passwords must match...");
-      return;
-    }
     console.log("applying changes...");
     var id= Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
     this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
       next: (response) => {
         console.log(response);
-        localStorage.clear();
-        localStorage.setItem('id',response.id);
-        localStorage.setItem('token',response.token);
         console.log("change info successful!");
-        alert("Changes applied");
-        location.reload();
+        var succ = document.getElementById("success_div")
+        if(succ) succ.style.display='block';
+        var base = document.getElementById("warning_div");
+        if(base) base.style.display='none';
+        var change = document.getElementById("alert_div");
+        if(change){
+          change.style.backgroundColor = '#83EDA1'
+          change.style.color = '#FFFFFF';
+        }
       },
       error: (error)=>{
         console.log(error);
         console.log("change info failed.");
       }
     });
+  }
+
+
+  imageSelected(event:any){
+    const imageData:File = event.target.files[0];
+
+    if(imageData != null){
+      if(imageData && imageData.type.startsWith('image/')){
+        var id = Number(localStorage.getItem('id'));
+        var token = localStorage.getItem('token');
+        this.uploadservice.UploadImage(id,imageData,token).subscribe({
+          next: (response) => {
+            console.log("RESPONSE",response);
+            location.reload();
+          },
+          error: (error) =>{
+            console.log(error);
+          }
+        });
+      }
+      else{
+        console.log("file uploaded is not an image.");
+      }
+    }
+    else{
+      console.log("no image data.");
+    }
   }
 }

@@ -1,7 +1,5 @@
 ﻿using backend.Entities;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace backend.Data
 {
@@ -13,10 +11,14 @@ namespace backend.Data
         public DbSet<Project> Projects {get; set;}
         public DbSet<ProjectMember> ProjectMembers {get; set;}
         public DbSet<ProjectTask> ProjectTasks {get; set;}
-        public DbSet<TaskMember> TaskMembers {get; set;}
         public DbSet<TaskDependency> TaskDependencies {get; set;}
         public DbSet<Invitation> Invitations {get; set;}
-
+        public DbSet<UserRequest> UserRequests {get; set;}
+        public DbSet<Attachment> Attachments{get; set;}
+        public DbSet<Comment> Comments {get; set;}
+        public DbSet<TskStatus> TaskStatuses { get; set; }
+        public DbSet<ProjectSection> ProjectSections { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectMember>(entity =>
@@ -24,21 +26,33 @@ namespace backend.Data
                 entity.HasKey(pm => new { pm.AppUserId, pm.ProjectId });
 
                 entity.HasOne(pm => pm.AppUser)
-                    .WithMany() // Define the relationship between ProjectMember and AppUser
+                    .WithMany() // definise vezu izmedju ProjectMember and AppUser
                     .HasForeignKey(pm => pm.AppUserId);
 
                 entity.HasOne(pm => pm.Project)
-                    .WithMany() // Define the relationship between ProjectMember and Project
+                    .WithMany() // definise vezu izmedju ProjectMember and Project
                     .HasForeignKey(pm => pm.ProjectId);
             });
 
             modelBuilder.Entity<ProjectTask>(entity =>
             {
-                entity.HasKey(pt => pt.Id); // define Id as the primary key
+                entity.HasKey(pt => pt.Id); // definise Id as the primary key
 
                 entity.HasOne(pt => pt.Project)
-                    .WithMany() // define the relationship between ProjectTask and Project
-                    .HasForeignKey(pt => pt.ProjectId); // define ProjectId as the foreign key
+                    .WithMany() // definise vezu izmedju ProjectTask and Project
+                    .HasForeignKey(pt => pt.ProjectId); // definise ProjectId as the foreign key
+
+                entity.HasOne(pt => pt.TskStatus)
+                    .WithMany(ts => ts.Tasks)
+                    .HasForeignKey(pt => pt.TskStatusId);
+
+                entity.HasOne(pt => pt.ProjectSection)
+                    .WithMany(ps => ps.Tasks)
+                    .HasForeignKey(pt => pt.ProjectSectionId);
+                
+                entity.HasOne(pt => pt.AppUser)
+                    .WithMany()
+                    .HasForeignKey(pt => pt.AppUserId);
             });
 
             modelBuilder.Entity<TaskDependency>(entity =>
@@ -52,21 +66,8 @@ namespace backend.Data
                 entity.HasOne(td => td.DependencyTask)
                     .WithMany()
                     .HasForeignKey(td => td.DependencyTaskId);
-                // task can't be dependant on itself
-                entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId")); 
-            });
-
-            modelBuilder.Entity<TaskMember>(entity =>
-            {
-                entity.HasKey(tm => new { tm.TaskId, tm.AppUserId, tm.ProjectId });
-
-                entity.HasOne(tm => tm.Task)
-                    .WithMany()
-                    .HasForeignKey(tm => tm.TaskId);
-
-                entity.HasOne(tm => tm.Member)
-                    .WithMany()
-                    .HasForeignKey(tm => new { tm.AppUserId, tm.ProjectId }); // composite foreign key
+                // task ne moze da zavisi sam od sebe
+                entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId"));
             });
         }
     }

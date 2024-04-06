@@ -1,58 +1,145 @@
-.navbar-brand {
-  display: inline-block;
-  text-decoration: none;
-  font-size: 26px;
-  font-weight: bold;
-  font-family: "Raleway", sans-serif;
-  position: relative;
+/* navbar.css */
+nav {
+  margin: 10px;
 }
-
-.nav-item {
-  display: inline-block;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-left: 50px;
-  text-decoration: none;
-  color: #6b5b95; /* Amethyst color for navbar items */
-  font-size: 18px;
-  font-weight: bold;
-  font-family: "Raleway", sans-serif;
-  position: relative;
+body {
+  background-color: #f5f5f9;
 }
-
-.nav-item a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 10px;
-  width: 100%;
-  height: 3px;
-  background-color: #70c1b3; /* Aqua color for hover effect */
-  transform: scaleX(0);
-  transform-origin: initial;
-  transition: transform 0.25s ease-out;
-}
-
-.nav-item a:hover::after {
-  transform: scaleX(1);
-}
-
-.nav-item a:hover {
-  color: #70c1b3; /* Aqua color on hover */
-}
-
-.btn-outline-success {
-  border: solid #286b60 2px;
+.layout-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  /* padding: 10px 20px; */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: saturate(200%) blur(6px);
   border-radius: 8px;
-  background-color: #70c1b3; /* Aqua background color for button */
-  font-size: 18px;
-  padding: 8px 16px; /* Increased padding for better appearance */
-  font-weight: bold; /* Making the font weight bold */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Adding transition effect */
+  color: #697a8d;
+}
+.navbar-brand {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 
-.btn-outline-success:hover {
-  border: solid #70c1b3 2px;
-  color: #fff; /* White color for button text on hover */
-  background-color: #286b60; /* Coral color for button background on hover */
+.navbar-nav-right img {
+  width: 30px;
+  height: auto;
+  padding-right: 7px;
 }
+
+/* .navbar-nav-right {
+  display: flex;
+  align-items: center;
+} */
+
+.navbar-nav-right img {
+  margin-left: 15px;
+}
+
+.tabs-to-dropdown a:hover {
+  color: #413561;
+}
+
+.tabs-to-dropdown a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.navbar-toggler{
+  border-color: #413561;
+}
+.navbar-collapse{
+  margin-left:  20px;
+}
+.dropdown-menu .firstDrop{
+  text-align: justify;
+  padding-top: 6px;
+  list-style: none;
+  background-color: #ffffff;
+}
+.dropdown-menu .firstDrop .nav-item{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.dropdown-menu .firstDrop .nav-item a::after{
+  background-color: #413561;
+}
+
+.imgRight{
+  padding-left: 2px;
+}
+.avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.avatar img {
+  display: block;
+  width: 75%;
+  height: 75%;
+  object-fit: cover;
+  padding-left: 0%;
+  padding-right: 10px;
+}
+
+.dropdown-item{
+  font-family: "Public Sans", sans-serif;
+  color: #697a8d;
+  padding-left: 0px;
+
+}
+.align-middle{
+  padding-left: 5px;
+}
+.dropdown-menu{
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: saturate(200%) blur(6px);
+  color: #697a8d;
+  border-color: #f5f5f9;
+  border-radius: 8px;
+}
+.rightImg{
+  width: 30px;
+}
+.logoImg{
+  width: 60px;
+  padding-top: 0%;
+  padding-bottom: 0%;
+  margin: 0px !important;
+}
+ @media only screen and (min-width: 768px){
+
+  .navbar-brand .dropdown-menu{
+    display: none;
+  }
+  .tabs-to-dropdown{
+    display: block
+  }
+}
+.dropdown-menu-responsive a:hover {
+  background-color: #ff0000; /* Change this to the color you want */
+  color: #413561;
+}
+
+.active-link-text {
+  text-decoration: underline;
+  color: #7308ee;
+  text-underline-offset: 30px;
+
+}
+
+.dropdown-menu-responsive .nav-item:active{
+  background-color: #bc9fde;
+}
+
+@media (min-width: 768px) {
+  .dropdown-menu-responsive .firstDrop li:active {
+    background-color: #0000ff; /* Change this to the color you want */
+    color: #413561;
+  }
+}
+

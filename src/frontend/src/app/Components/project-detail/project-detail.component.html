@@ -1,0 +1,66 @@
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div *ngIf="project">
+      <div class="project-heading"><span>{{ project.projectName }}</span></div>
+      <div class="button-selectors">
+        <button class="btn btn-primary btn-lg" [ngClass]="{'btn-active': viewMode === 'table', 'btn-inactive': viewMode !== 'table'}" (click)="changeToTable()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+          <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+        </svg> Table View</button>
+        <button class="btn btn-primary btn-lg" [ngClass]="{'btn-active': viewMode === 'kanban', 'btn-inactive': viewMode !== 'kanban'}" (click)="changeToKanban()" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-kanban" viewBox="0 0 16 16">
+          <path d="M13.5 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm-11-1a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+          <path d="M6.5 3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm-4 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm8 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1z"/>
+        </svg> Kanban</button>
+        <button class="btn btn-primary btn-lg" [ngClass]="{'btn-active': viewMode === 'gantt', 'btn-inactive': viewMode !== 'gantt'}" (click)="changeToGant()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-steps" viewBox="0 0 16 16">
+          <path d="M.5 0a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 .5 0M2 1.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
+        </svg> Gantt (Disabled)</button>
+      </div>
+      <div class="card" *ngIf="viewMode === 'table'">
+        <div class="table-responsive text-nowrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Task Name</th>
+                <th>Assignee</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+          </table>
+          <div *ngFor="let section of groupedTasks | keyvalue: sectionOrder" class="section">
+            <p class="section-name" *ngIf="section.key !== 'No Section'" (click)="toggleSectionVisibility(section.key)">
+              <svg *ngIf="!section.value.visible" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+              </svg>
+              <svg *ngIf="section.value.visible" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+              </svg>
+              {{ section.key }}
+            </p>
+            <div *ngIf="section.value.visible || section.key === 'No Section'">
+              <table *ngIf="section.value.tasks.length > 0" class="table">
+                <tbody>
+                  <tr *ngFor="let task of section.value.tasks">
+                    <td>{{ task.taskName }}</td>
+                    <td class="asgplc"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                      <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                    </svg>{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}</td>
+                    <td>{{ task.startDate | date }}</td>
+                    <td>{{ task.endDate | date }}</td>
+                    <td>
+                      <span class="badge" [style.background-color]="task.color">{{ task.statusName }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="viewMode === 'kanban'">
+        <app-kanban></app-kanban>
+      </div>
+      <div *ngIf="viewMode === 'gantt'">
+        <app-gantt></app-gantt>
+      </div>
+</div>

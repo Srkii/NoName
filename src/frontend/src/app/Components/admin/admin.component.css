@@ -1,42 +1,132 @@
-.left {
-    background-color: white; /* Postavljanje bijele pozadine */
-    padding: 20px; /* Dodavanje prostora oko sadržaja unutar diva */
-    width: 300px; /* Postavljanje fiksne širine diva */
-    position: absolute; /* Postavljanje apsolutne pozicije */
-    top: 76px; /* Visina <app-nav> komponente */
-    left: 3%; /* Poravnavanje na lijevu stranu */
-    border-radius: 10px;
+
+body {
+  background-color: #f5f5f9;
+  color: #697a8d;
+  margin: auto;
 }
+#all {
+  margin-top: 30px;
+  margin: auto;
+  padding: 20px;
+  width: 85%;
+  min-height: 10vh;
+  background-color: #ffffff;
+  color: #697a8d;
 
-/* Prilagođavanje stila na manjim ekranima */
-@media (max-width: 768px) {
-    .left {
-        width: 100%; /* Širina se postavlja na 100% za manje ekrane */
-        padding: 10px; /* Manji padding za manje ekrane */
-        top: 56px; /* Visina <app-nav> komponente */
-        left: 0; /* Poravnavanje na lijevu stranu */
-    }
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  overflow-y: hidden;
+  overflow-x: hidden;
+
 }
-
-
-.background-radial-gradient.overflow-hidden {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: hsl(218, 41%, 15%);
-    background-image: radial-gradient(
-        hsl(218, 41%, 35%) 15%,
-        hsl(218, 41%, 30%) 35%,
-        hsl(218, 41%, 20%) 75%,
-        hsl(218, 41%, 19%) 80%,
-        transparent 100%
-      ),
-      radial-gradient(
-        hsl(218, 41%, 45%) 15%,
-        hsl(218, 41%, 30%) 35%,
-        hsl(218, 41%, 20%) 75%,
-        hsl(218, 41%, 19%) 80%,
-        transparent 100%
-      );
+table {
+  color: #697a8d;
+  font-size: 12px;
+  border: 1px solid lightgray;
+  border-collapse: collapse;
+  /* padding: 6px; */
+  /* margin-left: -20px; */
+  margin-bottom: -20px;
+  margin-top: 10px;
+  width: 100%;
+  /* margin-left: 20px; */
+  border-left: none;
+  border-right: none;
+}
+#tableIcon{
+  width: 20px;
+}
+@media (max-width: 1200px) {
+  td {
+    padding: 2px;
   }
+}
+th {
+  font-size: 14px;
+  border: 1.5px solid lightgray;
+  font-weight: 700; /* thinner text */
+  padding: 5px;
+  border-left: none;
+  border-right: none;
+  color: #565f6a;
+}
+td {
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-left: none;
+  border-right: none;
+  font-size: 12px;
+  color: #697a8d;
+}
+#name {
+  font-size: 14px;
+  font-weight: bold;
+}
+p {
+  text-align: center;
+  padding: 2px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.invite {
+  display: flex;
+  align-items: baseline;
+  width: 30%;
+}
+
+.invite input {
+  flex: 1;
+  margin-right: 10px;
+  width: 60%;
+}
+.invite btn{
+  flex: 1;
+  margin-right: 10px;
+}
+
+#button-addon2{
+  background-color: #5d57c2;
+  border-color: #5d57c2;
+}
+.btn btn-primary{
+  background-color: #5d57c2;
+}
+.dropdown-menu pop
+{
+  background-color: #ffffff;
+  color: #697a8d;
+  border: solid 1px #d9dee3;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  width: 40%;
+  height: auto
+}
+.update{
+  margin: 10px;
+}
+.span-dropdown-item{
+  float: center;
+  color: #565f6a;
+  margin-bottom: 15px;
+}
+.form-label{
+  color: #697a8d;
+  font-size: small;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #696cff;
+  border-color: #696cff;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+}
+.btn-primary:hover {
+  color: #fff !important;
+  background-color: #5f61e6 !important;
+  border-color: #5f61e6 !important;
+  transform: translateY(-1px) !important;
+}
+.avatar{
+  width: 30px;
+  height: auto;
+}

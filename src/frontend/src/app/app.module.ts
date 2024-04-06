@@ -1,6 +1,5 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,10 +8,22 @@ import { RegisterComponent } from './Components/register/register.component';
 import { LoginComponent } from './Components/login/login.component';
 import { CommonModule } from '@angular/common';
 import { UserInfoComponent } from './Components/user-info/user-info.component';
-import { HomeComponent } from './Components/home/home.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
-import { TaskPageComponent } from './Components/task-page/task-page.component';
+import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
+import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
+import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
+import { FileUploadComponent } from './Components/file-upload/file-upload.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { PopupComponent } from './Components/popup/popup.component';
+import { KanbanComponent } from './Components/kanban/kanban.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { GanttComponent } from './Components/gantt/gantt.component';
 
 @NgModule({
   declarations: [
@@ -20,19 +31,33 @@ import { TaskPageComponent } from './Components/task-page/task-page.component';
     RegisterComponent,
     LoginComponent,
     UserInfoComponent,
-    HomeComponent,
     NavComponent,
     AdminComponent,
-    TaskPageComponent,
+    ForgotPassComponent,
+    ForgotResetComponent,
+    MyProjectsComponent,
+    MyTasksComponent,
+    PopupComponent,
+    ProjectDetailComponent,
+    FileUploadComponent,
+    KanbanComponent,
+    GanttComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+    }),
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
+    DragDropModule
   ],
-  providers: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

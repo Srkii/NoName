@@ -1,21 +1,84 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-  <div class="container">
-    <a class="navbar-brand" routerLink="/home">App</a>
-    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-      <li class="nav-item">
-        <!-- <a class="nav-link" (click)="onClickHome()">Home</a> -->
-        <a class="nav-link" routerLink="/home">Home</a>
+<nav class="layout-navbar navbar navbar-expand-md align-items-center bg-navbar-theme" id="layout-navbar">
+
+  <div class="navbar-brand">
+    <!-- Logo image will act as a toggle for small screens -->
+    <img src="../../../assets/navIcons/logo.png" class="logoImg d-xl-none dropdown-toggle hide-arrow"
+    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="dropdown-menu dropdown-menu-responsive">
+      <ul class="firstDrop">
+        <li class="nav-item active" *ngIf="isAdmin()">
+          <a class="nav-link" routerLink="/admin">Manage Users</a>
+        </li>
+        <li class="nav-item active" *ngIf="!isAdmin()">
+          <a class="nav-link" routerLink="/myprojects">My Projects</a>
+        </li>
+        <li class="nav-item" *ngIf="!isAdmin()">
+          <a class="nav-link" routerLink="/mytasks">My Tasks</a>
+        </li>
+      </ul>
+    </div>
+    <!-- Logo for larger screens -->
+    <img src="../../../assets/navIcons/logo.png" alt="" class="logoImg d-none d-xl-block d-l-block" />
+  </div>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <!-- Content for larger screens -->
+    <div class="tabs-to-dropdown">
+      <div class="nav-wrapper d-flex align-items-center justify-content-between">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item active" *ngIf="isAdmin()" routerLinkActive="active-link-text">
+            <a class="nav-link" routerLink="/admin">Manage Users</a>
+          </li>
+          <li class="nav-item active" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
+            <a class="nav-link" routerLink="/myprojects">My Projects</a>
+          </li>
+          <li class="nav-item" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
+            <a class="nav-link" routerLink="/mytasks">My Tasks</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Responsive content that will show in a dropdown for smaller screens -->
+
+
+  <!-- Icons on the right remain visible on all screen sizes -->
+  <div class="navbar-nav-right d-flex">
+    <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg" />
+    <img src="../../../assets/navIcons/bell (1).png" alt="" class="rightImg" />
+    <img src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow rightImg"
+      href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li>
+        <div class="dropdown-item">
+          <div class="d-flex">
+            <div class="avatar avatar-online">
+              <img src="../../../assets/navIcons/user (4).png" alt="" >
+            </div>
+            <div class="flex-grow-1">
+              <span class="fw-medium d-block">{{user?.firstName}} {{user?.lastName}}</span>
+              <small class="text-muted">{{user?.email}}</small>
+            </div>
+          </div>
+        </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/userinfo">User info</a>
+      <li>
+        <div class="dropdown-divider"></div>
       </li>
-      <li class="nav-item" *ngIf="isAdmin()" >
-        <a class="nav-link" routerLink="/admin">Admin page</a>
+      <li>
+        <a class="dropdown-item" routerLink="/userinfo">
+          <img src="../../../assets/navIcons/user (5).png" alt="" class="dropImg">
+          <span class="align-middle">My Profile</span>
+        </a>
       </li>
-      <li class="nav-item" *ngIf="isProjectManager()">
-        <a class="nav-link" routerLink="/taskpage">Task Managment</a>
+      <li>
+        <a class="dropdown-item" (click)="Logout()">
+          <img src="../../../assets/navIcons/power.png" alt="" class="dropImg">
+          <span class="align-middle">Logout</span>
+        </a>
       </li>
     </ul>
-    <button class="btn-outline-success" (click)="Logout()">Logout</button>
   </div>
+
 </nav>

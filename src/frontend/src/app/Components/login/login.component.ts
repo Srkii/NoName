@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../../Services/login.service';
+import { LoginService } from '../../_services/login.service';
 import { AppUser } from '../../Entities/AppUser';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -14,26 +15,30 @@ export class LoginComponent implements OnInit {
     Password: '',
   };
 
-  loggedIn = false;
-
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {}
 
   login() {
     this.loginService.login(this.newUser).subscribe({
       next: (response) => {
-        console.log(response);
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
-        this.loggedIn = true;
-        this.router.navigate(['/home']);
+        if(localStorage.getItem('role')=='0')
+        {
+          this.router.navigate(['/admin']);
+        }
+        else
+        {
+          this.router.navigate(['/mytasks']);
+        }
         console.log('Successful login');
       },
       error: (error) => {
         console.log(error);
         console.log('Unsuccessful login');
+        this.toastr.error(error.error)
       },
     });
   }

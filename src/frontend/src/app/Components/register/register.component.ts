@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { RegisterService } from '../../Services/register.service';
+import { RegisterService } from '../../_services/register.service';
 import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Token } from '@angular/compiler';
 import { Invintation } from '../../Entities/Invitation';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -26,7 +27,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private registerService: RegisterService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {}
 
   token: any;
@@ -45,7 +47,7 @@ export class RegisterComponent implements OnInit {
     this.registerService.getEmailByToken(token).subscribe({
       next: (response: any) => {
         console.log(response);
-        const email = response?.email; // Change this line according to your API response structure
+        const email = response?.email;
         if (email) {
           this.newUser.Email = email;
         } else {
@@ -61,25 +63,24 @@ export class RegisterComponent implements OnInit {
   Register(): void {
     if (this.newUser.Password !== this.confirmPassword) {
       console.log('Passwords do not match');
-      // You can show an error message or handle the mismatch as needed
       return;
     }
     this.newUser.Token = this.token;
 
-    // If passwords match, proceed with registration
     this.registerService.register(this.newUser).subscribe({
-      next: (res: string) => {
-        localStorage.setItem('token', res);
+      next: (response) => {
+        localStorage.setItem('id', response.id);
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('role', response.role);
         console.log('Successful registration');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/mytasks']);
       },
       error: () => {
-        console.log('Unsuccessful registration');
+        this.toastr.error('Unsuccessful registration');
       },
     });
   }
 
-  // Function to check if password and confirm password match
   passwordMatch(): boolean {
     return this.newUser.Password === this.confirmPassword;
   }

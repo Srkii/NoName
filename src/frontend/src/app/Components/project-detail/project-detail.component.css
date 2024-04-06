@@ -1,0 +1,201 @@
+* {
+    font-family: 'Public Sans', sans-serif !important;
+}
+/* za tablete */
+@media screen and (max-width: 1200px) {
+    .button-selectors {
+        flex-direction: row;
+    }
+    .btn-primary {
+        margin: 10px !important;
+        width: 250px !important;
+    }
+    .card-header {
+        font-size: 20px !important;
+    }
+}
+.project-heading {
+    /* text-align: center; */
+    padding: 0px !important;
+    margin: 0px !important;
+    
+}
+.project-heading > span {
+    /* font-weight: bold; */
+    font-size: 30px !important;
+    letter-spacing: -1px;
+    color: #676f79;
+    font-weight: 550;
+    /* line-height: 1.5; */
+}
+/* za telefone */
+@media screen and (max-width: 500px) { 
+    .button-selectors {
+        flex-direction: column;
+    }
+    .btn-primary {
+        margin: 10px !important;
+        width: 250px !important;
+    }
+    .card-header {
+        font-size: 20px !important;
+    }
+}
+.section {
+    margin-bottom: 20px; /* Adjust the space between sections */
+    margin-top: 20px
+}
+.section-name {
+    cursor: pointer;
+    color: black;
+    text-decoration: underline;
+    font-size: large;
+    line-height: 1.5;
+    svg {
+        margin-right: 4px;
+        
+    }
+}
+/* Assignee temp */
+.asgplc {
+    svg {
+        margin-right: 4px;
+    }
+}
+.text-nowrap {
+    white-space: nowrap !important;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+.card .table {
+    margin-bottom: 0;
+}
+thead th{
+    border-radius: 0.5rem;
+}
+.table tbody  {
+    padding-bottom: 0;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0.5rem;
+}
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0.5rem;
+}
+.table tbody tr:last-child {
+    margin-bottom: -30px;
+}
+/* sklanja border poslednjeg elementa
+ .table tbody tr:last-child td {
+    border-bottom: none;
+} */
+
+.btn-active {
+    background-color: #d7d7f8 !important;
+    border: 0px;
+}
+.btn-inactive {
+    background-color: #e7e7ee !important;
+    border: 0px;
+}
+.button-selectors {
+    display: flex;
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+    /* margin-bottom: 50px; */
+    margin-top: 10px !important;
+}
+.btn-primary {
+    color: #696cff;
+    /* background-color: #696cff; */
+    border-color: #696cff;
+    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+    /* display: inline-flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    margin-right: 25px;
+    line-height: 1.45;
+    width: 300px;
+    text-align: left;
+}
+.btn-primary:focus{ color:#696cff }
+.bg-label-primary {
+    background-color: #e7e7ff !important;
+    color: #696cff !important;
+}
+.badge {
+    text-transform: uppercase;
+    line-height: 0.75;
+    --bs-badge-padding-x: 0.593em;
+    --bs-badge-padding-y: 0.52em;
+    --bs-badge-font-size: 0.8125em;
+    --bs-badge-font-weight: 500;
+    --bs-badge-color: #fff;
+    --bs-badge-border-radius: 0.25rem;
+    display: inline-block;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.5rem;
+}
+.btn-primary svg {
+    margin-right: 8px;
+}
+.btn-primary .btn-text {
+    margin-left: 8px;
+}
+
+.content-wrapper {
+    display: flex;
+    align-items: stretch;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+.card {
+    background-clip: padding-box;
+    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: auto;
+    color: #697a8d;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0px solid #d9dee3;
+    border-radius: 0.5rem;
+    padding: 15px;
+    margin-top: 50px;
+}
+.content-wrapper {
+    display: flex;
+    align-items: stretch;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+/* .table {
+    border: 1px solid black;
+} */
+.table td, th {
+    /* border: 1px solid #d9dee3 !important; */
+    width: 20%;
+}
+
+/* sklanja border za poslednji row svake tabele */
+/* .table tbody tr:last-child td, 
+.table tbody tr:last-child th {
+  border-bottom: none;
+} */

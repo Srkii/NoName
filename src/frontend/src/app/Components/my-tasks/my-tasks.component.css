@@ -1,0 +1,123 @@
+* {
+  font-family: 'Public Sans', sans-serif !important;
+}
+html {
+  background-color: #f5f5f9;
+}
+
+body {
+  background-color: #f5f5f9;
+  color: #697a8d;
+}
+.nav {
+  display: inline;
+}
+
+.all {
+  margin-top: 30px;
+  margin: auto; /* Center the div horizontally */
+  padding: 20px;
+  width: 85%;
+  min-height: 10vh; /* Set a minimum height */
+  background-color: #ffffff;
+  color: #697a8d;
+  border: solid 1px #d9dee3;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  overflow-y: hidden; /* Hide the vertical scrollbar */
+  overflow-x: auto; /* Hide the vertical scrollbar */
+  box-sizing: border-box; /* Include padding and border in the total width and height */
+}
+
+table {
+  color: #697a8d;
+  font-size: 12px;
+  border: 1px solid lightgray;
+  border-collapse: collapse;
+  /* padding: 6px; */
+  /* margin-left: -20px; */
+  margin-bottom: -20px;
+  margin-top: 10px;
+  width: 100%;
+  /* margin-left: 20px; */
+  border-left: none;
+  border-bottom: none;
+  border-right: none;
+}
+
+@media (max-width: 1200px) {
+  td {
+    padding: 2px;
+  }
+}
+th {
+  font-size: 14px;
+  border: 1.5px solid lightgray;
+  font-weight: 700; /* thinner text */
+  padding: 5px;
+  border-left: none;
+  border-right: none;
+  width: 15%;
+  padding-left: 10%;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-left: none;
+  border-right: none;
+  font-size: 12px;
+  padding-left: 10%;
+  white-space: nowrap; /* Prevent text wrapping */
+  text-overflow: ellipsis; /* Add ellipsis for overflowed content */
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.red:hover,
+.red.clicked {
+  cursor: pointer;
+  background-color: #e7e7ff !important;
+  color: #5f61e6 !important;
+}
+
+p {
+  text-align: center;
+  padding: 5px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.filter {
+  margin-left: 2%;
+}
+.filter:hover {
+  cursor: pointer;
+}
+.empty-table th {
+  border-bottom: none;
+}
+
+
+/* .mark:hover {
+  cursor: pointer;
+  box-shadow: 0 0 3px #5f61e6;
+  filter: brightness(120%);
+}
+.mark:focus {
+  background-color: #3fb94c;
+  box-shadow: 0 0 3px #3fb94c;
+}
+.checked-button {
+  background-color: #3fb94c;
+  box-shadow: 0 0 3px #3fb94c;
+} */
