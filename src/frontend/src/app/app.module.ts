@@ -24,6 +24,9 @@ import { PopupComponent } from './Components/popup/popup.component';
 import { KanbanComponent } from './Components/kanban/kanban.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GanttComponent } from './Components/gantt/gantt.component';
+import { AvatarModule } from 'ngx-avatars';
+
+const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
 
 @NgModule({
   declarations: [
@@ -54,7 +57,10 @@ import { GanttComponent } from './Components/gantt/gantt.component';
       positionClass: 'toast-bottom-right',
     }),
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
-    DragDropModule
+    DragDropModule,
+    AvatarModule.forRoot({
+      colors: avatarColors
+    })
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

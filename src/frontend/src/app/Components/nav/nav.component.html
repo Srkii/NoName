@@ -35,6 +35,12 @@
           <li class="nav-item" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
             <a class="nav-link" routerLink="/mytasks">My Tasks</a>
           </li>
+          <li class="nav-item" *ngIf="" routerLinkActive="active-link-text">
+            <a class="nav-link" routerLink="/mytasks">My Profile</a>
+          </li>
+          <li class="nav-item" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
+            <a class="nav-link" routerLink="/mytasks">My Tasks</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -47,14 +53,16 @@
   <div class="navbar-nav-right d-flex">
     <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg" />
     <img src="../../../assets/navIcons/bell (1).png" alt="" class="rightImg" />
-    <img src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow rightImg"
-      href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+    <ngx-avatars size="40" [name]="user.firstName + ' ' + user.lastName" class="nav-link dropdown-toggle hide-arrow rightImg"
+      href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
     <ul class="dropdown-menu dropdown-menu-end">
       <li>
         <div class="dropdown-item">
           <div class="d-flex">
             <div class="avatar avatar-online">
-              <img src="../../../assets/navIcons/user (4).png" alt="" >
+              <!-- <img src="../../../assets/navIcons/user (4).png" alt="" > -->
+              <ngx-avatars size="45" bgColor="#5d57c2" [name]="user.firstName + ' ' + user.lastName" value="75%"></ngx-avatars>
+
             </div>
             <div class="flex-grow-1">
               <span class="fw-medium d-block">{{user?.firstName}} {{user?.lastName}}</span>
