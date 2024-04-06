@@ -53,11 +53,14 @@ body {
 .navbar-collapse{
   margin-left:  20px;
 }
+
 .dropdown-menu .firstDrop{
   text-align: justify;
   padding-top: 6px;
   list-style: none;
   background-color: #ffffff;
+  z-index: 1000;
+  position: absolute;
 }
 .dropdown-menu .firstDrop .nav-item{
   padding-top: 5px;
@@ -111,6 +114,9 @@ body {
   padding-bottom: 0%;
   margin: 0px !important;
 }
+.dropdown-menu-end{
+  --bs-dropdown-link-active-bg: #ecd0f9;
+}
  @media only screen and (min-width: 768px){
 
   .navbar-brand .dropdown-menu{
@@ -119,6 +125,13 @@ body {
   .tabs-to-dropdown{
     display: block
   }
+}
+/*za telefone*/
+@media screen and (max-width: 500px) {
+  .dropdown-menu-end
+    {
+      z-index: 100;
+    }
 }
 .dropdown-menu-responsive a:hover {
   background-color: #ff0000; /* Change this to the color you want */

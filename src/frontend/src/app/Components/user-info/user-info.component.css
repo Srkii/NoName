@@ -16,6 +16,7 @@ a {
   border-color: solid #d9dee3;
   border-width: 0;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  position: static;
 }
 .btn-primary {
   margin-top: 2%;
