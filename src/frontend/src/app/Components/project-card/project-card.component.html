@@ -3,46 +3,48 @@
       <div class="card shadow border-0">
         <h4>Create New Project</h4>
         <div class="card-body">
-          <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Name">
-          </div>
-          <div class="mb-3">
-            <label for="StartDate" class="form-label">Start Date</label>
-            <input class="form-control" type="date" placeholder="Start Date">
-          </div>
-          <div class="mb-3">
-            <label for="EndDate" class="form-label">End Date</label>
-            <input class="form-control" type="date" placeholder="End Date">
-          </div>
-          <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-          </div>
-          <div class="mb-3">
-            <label id="lbl" for="assignee" class="form-label">Assignees</label>
-            <p-multiSelect [options]="cities" [(ngModel)]="selectedCities" placeholder="Select Cities" optionLabel="name" display="chip" [showClear]="true" id="assignee"></p-multiSelect>
-          </div>
-          <div class="col-md">
-            <label for="priorityDiv" class="form-label">Priority</label>
-            <div id="PriorityChoice">
-              <div class="form-check form-check-success">
-                <input class="form-check-input" type="radio" value="" id="customRadio1" name="priority">
-                <label class="form-check-label" for="customCheck1">Low</label>
-              </div>
-              <div class="form-check form-check-danger">
-                <input class="form-check-input" type="radio" value="" id="customRadio2" name="priority">
-                <label class="form-check-label" for="customCheck2">Medium</label>
-              </div>
-              <div class="form-check form-check-warning">
-                <input class="form-check-input" type="radio" value="" id="customRadio3" name="priority">
-                <label class="form-check-label" for="customCheck3">High</label>
+          <form #createProjectForm="ngForm" class="mg-3" (ngSubmit)="CreateProject()" autocomplete="off" id="ProjectCreate">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Name</label>
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Name" [(ngModel)]="newProject.ProjectName" name="Name">
+            </div>
+            <div class="mb-3">
+              <label for="StartDate" class="form-label">Start Date</label>
+              <input class="form-control" type="date" placeholder="Start Date" [(ngModel)]="newProject.StartDate" name="StartDate">
+            </div>
+            <div class="mb-3">
+              <label for="EndDate" class="form-label">End Date</label>
+              <input class="form-control" type="date" placeholder="End Date" [(ngModel)]="newProject.EndDate" name="EndDate">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="newProject.Description" name="Description"></textarea>
+            </div>
+            <div class="mb-3">
+              <label id="lbl" for="assignee" class="form-label">Assignees</label>
+              <p-multiSelect [options]="users" [(ngModel)]="selectedUsers" placeholder="Select Assignees" optionLabel="assignees" display="chip" [showClear]="true" id="assignee" name="Assignees"></p-multiSelect>
+            </div>
+            <div class="col-md">
+              <label for="priorityDiv" class="form-label">Priority</label>
+              <div id="PriorityChoice">
+                <div class="form-check form-check-success">
+                  <input class="form-check-input" type="radio" value=0 id="customRadio1" name="Priority" [(ngModel)]="newProject.Priority">
+                  <label class="form-check-label" for="customCheck1">Low</label>
+                </div>
+                <div class="form-check form-check-danger">
+                  <input class="form-check-input" type="radio" value=1 id="customRadio2" name="Priority" [(ngModel)]="newProject.Priority">
+                  <label class="form-check-label" for="customCheck2">Medium</label>
+                </div>
+                <div class="form-check form-check-warning">
+                  <input class="form-check-input" type="radio" value=2 id="customRadio3" name="Priority" [(ngModel)]="newProject.Priority">
+                  <label class="form-check-label" for="customCheck3">High</label>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="mb-3" id="addProjectBtn">
-            <button class="btn" tabindex="0" aria-controls="DataTables_Table_0" type="button"><span><i class="bx bx-plus me-0 me-sm-1"></i><span class="d-none d-sm-inline-block">Add Project</span></span></button>
-          </div>
+            <div class="mb-3" id="addProjectBtn">
+              <button class="btn" tabindex="0" aria-controls="DataTables_Table_0" type="submit"><span><i class="bx bx-plus me-0 me-sm-1"></i><span class="d-none d-sm-inline-block">Add Project</span></span></button>
+            </div>
+        </form>
         </div>
       </div>
     </div>
