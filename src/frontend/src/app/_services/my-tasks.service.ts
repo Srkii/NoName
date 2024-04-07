@@ -51,4 +51,8 @@ export class MyTasksService {
   GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
   }
+  // za addNewSection modal
+  addTaskStatus(taskStatus: { statusName: string; projectId: number }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/addTaskStatus`, taskStatus);
+  }
 }
