@@ -53,15 +53,17 @@
   <div class="navbar-nav-right d-flex">
     <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg" />
     <img src="../../../assets/navIcons/bell (1).png" alt="" class="rightImg" />
-    <ngx-avatars size="40" [name]="user.firstName + ' ' + user.lastName" class="nav-link dropdown-toggle hide-arrow rightImg"
+    <ngx-avatars size="30" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
-    <ul class="dropdown-menu dropdown-menu-end">
-      <li>
+      <!-- <img src="../../../assets/navIcons/user (4).png" alt="Avatar" class="nav-link dropdown-toggle hide-arrow"
+      href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"> -->
+      <ul class="dropdown-menu dropdown-menu-end">
+      <li class="rightDrop">
         <div class="dropdown-item">
           <div class="d-flex">
             <div class="avatar avatar-online">
               <!-- <img src="../../../assets/navIcons/user (4).png" alt="" > -->
-              <ngx-avatars size="45" bgColor="#5d57c2" [name]="user.firstName + ' ' + user.lastName" value="75%"></ngx-avatars>
+              <ngx-avatars size="45" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
 
             </div>
             <div class="flex-grow-1">
@@ -74,13 +76,13 @@
       <li>
         <div class="dropdown-divider"></div>
       </li>
-      <li>
+      <li class="rightDrop">
         <a class="dropdown-item" routerLink="/userinfo">
           <img src="../../../assets/navIcons/user (5).png" alt="" class="dropImg">
           <span class="align-middle">My Profile</span>
         </a>
       </li>
-      <li>
+      <li class="rightDrop">
         <a class="dropdown-item" (click)="Logout()">
           <img src="../../../assets/navIcons/power.png" alt="" class="dropImg">
           <span class="align-middle">Logout</span>
