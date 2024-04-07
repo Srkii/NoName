@@ -31,18 +31,20 @@ export class KanbanComponent implements OnInit{
   ngOnInit() {
     this.spinner.show();
     this.GetTaskStatuses();
-
     const projectId = this.route.snapshot.paramMap.get('id');
-    if (projectId) {
-      this.currentProjectId = +projectId;
-      this.myTasksService.GetTasksByProjectId(+projectId).subscribe((tasks) => {
+    this.currentProjectId = projectId ? +projectId : null;
+    this.populateTasks();
+    this.spinner.hide();
+  }
+
+  populateTasks() {
+    if (this.currentProjectId) {
+      this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) => {
         this.tasks = tasks;
         this.groupTasksByStatus();
         console.log(this.tasksBySection);
       });
     }
-    
-    this.spinner.hide();
   }
 
   GetTaskStatuses() {
@@ -72,11 +74,12 @@ export class KanbanComponent implements OnInit{
   }
 
   drop(event: CdkDragDrop<ProjectTask[]>) {
-    // mozda zatreba
-    // if (!event.previousContainer.data || !event.container.data) {
-    //   console.warn('Drag and drop data is not ready.');
-    //   return;
-    // }
+    // kad nece da prevuce ukoliko se odmah nakon pokretanja servera zabaguje
+    // samo prvo preblacenje nece da radi. sledece hoce
+    if (!event.previousContainer.data || !event.container.data) {
+      this.populateTasks();
+      return;
+    }
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
