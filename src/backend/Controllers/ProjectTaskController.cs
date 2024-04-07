@@ -263,6 +263,32 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPost("addTaskStatus")]
+        public async Task<IActionResult> AddTaskStatus([FromBody] TaskStatusDto taskStatusDto)
+        {
+            if (await _context.TaskStatuses.AnyAsync(ts => ts.StatusName == taskStatusDto.StatusName && ts.ProjectId == taskStatusDto.ProjectId))
+            {
+                return BadRequest("A status with the same name already exists.");
+            }
+
+            var inReviewStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "InReview" && ts.ProjectId == taskStatusDto.ProjectId);
+            var newPosition = inReviewStatus != null ? inReviewStatus.Position + 1 : 0; // Assuming positions are 0-indexed
+
+            var newTaskStatus = new TskStatus
+            {
+                StatusName = taskStatusDto.StatusName,
+                Position = newPosition,
+                Color = taskStatusDto.Color,
+                ProjectId = taskStatusDto.ProjectId
+            };
+
+            _context.TaskStatuses.Add(newTaskStatus);
+            await _context.SaveChangesAsync();
+
+            return Ok(newTaskStatus);
+        }
+
     }
 }
 

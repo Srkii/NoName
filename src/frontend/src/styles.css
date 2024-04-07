@@ -15,3 +15,8 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* modal na kanbanu ; jedino ovde hoce da ga overwrite */
+.modal-content {
+  border: 0px !important;
+}
