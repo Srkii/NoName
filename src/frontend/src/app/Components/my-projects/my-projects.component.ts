@@ -53,6 +53,7 @@ export class MyProjectsComponent implements OnInit {
       this.pageSize
     ).subscribe((projects: Project[]) => {
       this.projects = projects;
+      this.filteredProjects=this.all_projects;
       this.totalPages = Math.ceil(this.all_projects / this.pageSize);
       this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
       this.spinner.hide();

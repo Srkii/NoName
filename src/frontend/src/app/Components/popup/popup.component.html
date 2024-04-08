@@ -1,68 +1,71 @@
-<div class="pop" id="popUp" *ngIf="task">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
-    class="back"
-    viewBox="0 0 16 16"
-    (click)="close()"
-  >
-    <path
-      fill-rule="evenodd"
-      d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"
-    />
-  </svg>
+<div class="container1">
 
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
-    class="full"
-    viewBox="0 0 16 16"
-    (click)="full()"
-  >
-    <path
-      fill-rule="evenodd"
-      d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"
-    />
-  </svg>
-  <app-file-upload></app-file-upload>
-  <h6 id="popupTaskName">{{ task.taskName }}</h6>
-  <br />
-  <p class="header">
-    Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
-  </p>
-  <p class="header">
-    Origin Project
-    <span id="popupOriginProject">{{
-       task.project ? task.project.projectName : "No Project" 
-    }}</span>
-  </p>
-  <p class="header">Assignee
-  <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
-    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
-  </p>
-    <p class="header">Description</p>
-      <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly></textarea>
-  <!-- <input
-    class="description"
-    type="text"
-    [value]="task.description"
-    readonly
-  /> -->
-  <br /><br />
-  <button
-    class="mark"
-    [style.backgroundColor]="task && task.statusName === 'Completed' ? '#3fb94c' : ''"
-    [style.boxShadow]="task && task.statusName === 'Completed' ? '0 0 3px #3fb94c' : ''"
-    (click)="toggleTaskCompletion($event, task)"
-  >
-    {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
-  </button>
-  <div class="comments">
-    <p class="header">COMMENTS</p>
-    <textarea class="comment" rows="3" placeholder="Add a comment"></textarea>
+  <div class="col-md-5 mx-2 float-end" id="popUp" *ngIf="task">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="back"
+      viewBox="0 0 16 16"
+      (click)="close()"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"
+      />
+    </svg>
+  
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="full"
+      viewBox="0 0 16 16"
+      (click)="full()"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"
+      />
+    </svg>
+    <app-file-upload></app-file-upload>
+    <h6 id="popupTaskName">{{ task.taskName }}</h6>
+    <br />
+    <p class="header">
+      Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
+    </p>
+    <p class="header">
+      Origin Project
+      <span id="popupOriginProject">{{
+         task.project ? task.project.projectName : "No Project" 
+      }}</span>
+    </p>
+    <p class="header">Assignee
+    <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
+      href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
+    </p>
+      <p class="header">Description</p>
+        <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly></textarea>
+    <!-- <input
+      class="description"
+      type="text"
+      [value]="task.description"
+      readonly
+    /> -->
+    <br /><br />
+    <button
+      class="mark"
+      [style.backgroundColor]="task && task.statusName === 'Completed' ? '#3fb94c' : ''"
+      [style.boxShadow]="task && task.statusName === 'Completed' ? '0 0 3px #3fb94c' : ''"
+      (click)="toggleTaskCompletion($event, task)"
+    >
+      {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
+    </button>
+    <div class="comments">
+      <p class="header">COMMENTS</p>
+      <textarea class="comment" rows="3" placeholder="Add a comment"></textarea>
+    </div>
   </div>
 </div>

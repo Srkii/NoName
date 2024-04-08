@@ -1,7 +1,7 @@
 * {
   font-family: "Public Sans", sans-serif;
 }
-.pop {
+/* .pop {
   padding: 15px;
   position: fixed;
   bottom: 0; 
@@ -19,14 +19,11 @@
   font-weight: 600;
   font-size: 12px;
   overflow: hidden;
-}
+} */
 @media (max-width: 1200px) {
   .pop {
     left: 10px;
     width: 96.5%;
-  }
-  #popupOriginProject{
-    /* padding-top: 20%; ne radi */ 
   }
 }
 
@@ -111,7 +108,7 @@ img{
 .comments {
   /* padding: 10px; */
   color: #697a8d;
-  margin-top: 22%;
+  margin-top: 17%;
   border-radius: 8px;
   height: 27%;
   width: 100%;
@@ -163,4 +160,22 @@ input:focus {
 .back {
   float: right;
   margin-right: 2%;
+}
+#container1{
+  position: relative;
+}
+.col-md-5 {
+  background-color: #ffffff;
+  padding: 15px;
+  position: absolute;
+  right: 0.2%;
+  transition: right 0.5s;
+  color: #697a8d;
+  border-color: solid #d9dee3;
+  border-width: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  font-weight: 600;
+  font-size: 12px;
+  overflow: hidden;
 }

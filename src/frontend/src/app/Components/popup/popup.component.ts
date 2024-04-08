@@ -86,7 +86,8 @@ export class PopupComponent {
     this.task = null;
   }
   full() {
-    const pop = document.querySelector('.pop') as HTMLElement;
+    const container1 = document.querySelector('.container1') as HTMLElement;
+    const pop=document.querySelector(".col-md-5") as HTMLElement;
     const back = document.querySelector('.back') as HTMLElement;
     const full = document.querySelector('.full') as HTMLElement;
     const file = document.querySelector('.file') as HTMLElement;
@@ -94,25 +95,24 @@ export class PopupComponent {
     const description = document.querySelector('.description') as HTMLElement;
     const windowWidth= window.innerWidth;
     if (!this.fullscreen) {
-      console.log(windowWidth);
-      if(windowWidth<1200)
+      if(windowWidth<800)
       {
-        pop.style.top="0";
+        // pop.style.top="0";
         pop.style.height="100%";
+        pop.style.width="95%";
       }
       else
       {
         pop.style.top="";
         pop.style.height="";
       }
-      pop.style.width = '99%';
+      pop.style.width="97.5%";
       pop.style.padding = '2%';
       back.style.marginRight = '1%';
       full.style.marginRight = '3%';
       file.style.marginRight = '3%';
-      comments.style.marginTop = '3%';
       description.style.marginTop = '-3%';
-      comments.style.marginTop = '2.3%';
+      comments.style.marginTop = '0%';
       comments.style.width = '100%';
       this.fullscreen = true;
     } else {
@@ -124,7 +124,7 @@ export class PopupComponent {
       full.style.marginRight = '';
       file.style.marginRight = '';
       comments.style.marginTop = '';
-      description.style.marginTop = '-3%';
+      description.style.marginTop = '';
       comments.style.marginTop = '';
       this.fullscreen = false;
     }
