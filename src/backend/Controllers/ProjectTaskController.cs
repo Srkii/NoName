@@ -51,9 +51,16 @@ namespace backend.Controllers
             var tasks = await _context.ProjectTasks
                 .Select(task => new
                 {
-                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                    task.ProjectSection.SectionName, task.AppUser
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.AppUser
                 })
                 .ToListAsync();
             return Ok(tasks);
@@ -66,9 +73,16 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks
             .Select(task => new
             {
-                task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                task.ProjectSection.SectionName
+                task.Id,
+                task.TaskName,
+                task.Description,
+                task.StartDate,
+                task.EndDate,
+                task.ProjectId,
+                task.TskStatus.StatusName,
+                task.TskStatus.Color,
+                task.ProjectSection.SectionName,
+                task.Project
             })
             .FirstOrDefaultAsync(t => t.Id == id);
 
@@ -87,9 +101,17 @@ namespace backend.Controllers
                                       .Where(task => task.AppUserId == userId)
                                       .Select(task => new
                                       {
-                                          task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                                          task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                                          task.ProjectSection.SectionName
+                                          task.Id,
+                                          task.TaskName,
+                                          task.Description,
+                                          task.StartDate,
+                                          task.EndDate,
+                                          task.ProjectId,
+                                          task.TskStatus.StatusName,
+                                          task.TskStatus.Color,
+                                          task.ProjectSection.SectionName,
+                                          task.Project
+
                                       })
                                       .ToListAsync();
             return Ok(tasks);
@@ -111,28 +133,45 @@ namespace backend.Controllers
         }
 
 
-        [HttpPut("updateStatus/{id}/{statusName}")]
-        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, string statusName)
-        {
-            var task = await _context.ProjectTasks.Include(t => t.TskStatus).FirstOrDefaultAsync(t => t.Id == id);
+      [HttpPut("updateStatus/{taskId}/{statusName}")]
+public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
+{
+    var task = await _context.ProjectTasks
+        .Include(t => t.TskStatus)
+        .FirstOrDefaultAsync(t => t.Id == taskId);
 
-            if (task == null)
-            {
-                return NotFound();
-            }
+    if (task == null)
+    {
+        return NotFound();
+    }
 
-            var status = await _context.TaskStatuses.FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
+    var status = await _context.TaskStatuses
+        .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
 
-            if (status == null)
-            {
-                return NotFound("Status not found.");
-            }
+    if (status == null)
+    {
+        return NotFound("Status not found.");
+    }
 
-            task.TskStatusId = status.Id;
-            await _context.SaveChangesAsync();
+    task.TskStatusId = status.Id;
+    await _context.SaveChangesAsync();
 
-            return Ok(task);
-        }
+    // Now, after saving changes, fetch the updated task again
+    task = await _context.ProjectTasks
+        .Include(t => t.TskStatus)
+        .FirstOrDefaultAsync(t => t.Id == taskId);
+
+    // Create a DTO to shape the response
+    var taskDto = new ProjectTaskDto
+    {
+        Id = task.Id,
+        // Add other properties you want to include in the DTO
+    };
+
+    return taskDto;
+}
+
+
 
 
         [AllowAnonymous]
@@ -229,9 +268,17 @@ namespace backend.Controllers
             var tasks = await _context.ProjectTasks
                 .Select(task => new
                 {
-                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                    task.ProjectSection.SectionName, task.AppUser.FirstName, task.AppUser.LastName
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.AppUser.FirstName,
+                    task.AppUser.LastName,
                 })
                 .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
@@ -289,6 +336,47 @@ namespace backend.Controllers
             return Ok(newTaskStatus);
         }
 
+
+        [AllowAnonymous]
+        [HttpGet("sortTasksByDueDate")]
+        public async Task<ActionResult<IEnumerable<object>>> SortTasksByDueDate(string sortOrder)
+        {
+            var query = _context.ProjectTasks.AsQueryable();
+            // Apply sorting based on the sortBy parameter
+            switch (sortOrder)
+            {
+                case "asc":
+                    query = query.OrderBy(task => task.EndDate);
+                    break;
+                // Add more cases for additional sorting criteria if needed
+                case "desc":
+                    // Default sorting by task ID if sortBy parameter is not recognized
+                    query = query.OrderByDescending(task => task.EndDate);
+                    break;
+            }
+
+            var sortedTasks = await query
+                .Select(task => new
+                {
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.AppUser.FirstName,
+                    task.AppUser.LastName,
+                    task.Project
+                })
+                .ToListAsync();
+
+            return sortedTasks;
+        }
+
     }
+
 }
 

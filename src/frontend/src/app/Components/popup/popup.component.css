@@ -1,11 +1,11 @@
 * {
   font-family: "Public Sans", sans-serif;
 }
-.pop {
+/* .pop {
   padding: 15px;
   position: fixed;
   bottom: 0; 
-  right: 10px; /* Adjust as needed */
+  right: 10px; 
   width: 40%;
   height: 89%;
   background-color: #ffffff;
@@ -15,18 +15,15 @@
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   overflow: auto;
-  z-index: 999; /* Ensure it appears above other content */
+  z-index: 999; 
   font-weight: 600;
   font-size: 12px;
   overflow: hidden;
-}
+} */
 @media (max-width: 1200px) {
   .pop {
     left: 10px;
     width: 96.5%;
-  }
-  #popupOriginProject{
-    /* padding-top: 20%; ne radi */ 
   }
 }
 
@@ -82,9 +79,10 @@ img{
 .description{
   color: #697a8d;
   font-size: 12px;
+  outline: none;
   border: 0.5px solid lightgray;
   border-radius: 8px;
-  padding: 30px;
+  padding: 5px;
   width: 100%;
   word-wrap: break-word;
 }
@@ -98,19 +96,19 @@ img{
   margin-bottom: 1%;
 }
 .comment {
-  margin-top: -2%;
   color: #697a8d;
   font-size: 12px;
+  outline: none;
   border: 0.5px solid lightgray;
   border-radius: 8px;
-  padding: 30px;
+  padding: 5px;
   width: 100%;
   word-wrap: break-word;
 }
 .comments {
   /* padding: 10px; */
   color: #697a8d;
-  margin-top: 22%;
+  margin-top: 17%;
   border-radius: 8px;
   height: 27%;
   width: 100%;
@@ -122,11 +120,13 @@ img{
   background-color: #e7e7ff !important;
   color: #5f61e6 !important;
 }
+textarea:hover,
 input:hover {
   outline: none; /* Remove default focus outline */
   border: 1px solid #5f61e6 !important; /* Add custom border */
   box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
 }
+textarea:focus
 input:focus {
   outline: none; /* Remove default focus outline */
   border: 1px solid #5f61e6 !important; /* Add custom border */
@@ -160,4 +160,22 @@ input:focus {
 .back {
   float: right;
   margin-right: 2%;
+}
+#container1{
+  position: relative;
+}
+.col-md-5 {
+  background-color: #ffffff;
+  padding: 15px;
+  position: absolute;
+  right: 0.2%;
+  transition: right 0.5s;
+  color: #697a8d;
+  border-color: solid #d9dee3;
+  border-width: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  font-weight: 600;
+  font-size: 12px;
+  overflow: hidden;
 }
