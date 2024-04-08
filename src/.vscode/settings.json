@@ -1,0 +1,5 @@
+{
+    "csharp.format.enable": false,
+    "razor.format.enable": false,
+    "omnisharp.useEditorFormattingSettings": false
+}

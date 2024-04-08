@@ -40,7 +40,7 @@ export class PopupComponent {
   toggleTaskCompletion(event: any, task: ProjectTask): void {
     event.stopPropagation();
     let newStatus: string;
-  
+    
     if (task.statusName === "InProgress" || task.statusName === "InReview") {
       this.previousTaskStatus = task.statusName;
       newStatus = "Completed";
@@ -52,29 +52,19 @@ export class PopupComponent {
         newStatus = "InReview";
       }
     }
-  
-    // Update the task status locally if it's changed
-    if (task.statusName !== newStatus) {
-      task.statusName = newStatus;
-  
-      // Update the task status on the server
-      this.myTasksService.updateTaskStatus(task.id, newStatus).subscribe(
-        (updatedTask: ProjectTask) => {
-          console.dir(task);
-          this.cdr.detectChanges();
-          // Optionally, handle the updated task response from the server
-          console.log('Task status updated successfully:', updatedTask);
-          // Emit the updated task to notify the parent component
-          this.taskUpdated.emit(updatedTask);
-        },
-        (error: any) => {
-          // Handle any errors that occur during the update process
-          // console.error('Error updating task status:', error);
-        }
-      );
-    }
-    this.taskUpdated.emit(task);
+    
+    // Update the task status on the server
+    this.myTasksService.updateTaskStatus1(task.id, newStatus).subscribe({
+      next: (updatedTask: ProjectTask) => {
+        this.taskUpdated.emit(updatedTask); // Emit the updated task
+      },
+      error: (error: any) => {
+        console.error('Error updating task status:', error);
+      }
+    });
   }
+  
+  
   
 
   triggerFileInput(): void {
@@ -96,7 +86,8 @@ export class PopupComponent {
     this.task = null;
   }
   full() {
-    const pop = document.querySelector('.pop') as HTMLElement;
+    const container1 = document.querySelector('.container1') as HTMLElement;
+    const pop=document.querySelector(".col-md-5") as HTMLElement;
     const back = document.querySelector('.back') as HTMLElement;
     const full = document.querySelector('.full') as HTMLElement;
     const file = document.querySelector('.file') as HTMLElement;
@@ -104,25 +95,24 @@ export class PopupComponent {
     const description = document.querySelector('.description') as HTMLElement;
     const windowWidth= window.innerWidth;
     if (!this.fullscreen) {
-      console.log(windowWidth);
-      if(windowWidth<1200)
+      if(windowWidth<800)
       {
-        pop.style.top="0";
+        // pop.style.top="0";
         pop.style.height="100%";
+        pop.style.width="95%";
       }
       else
       {
         pop.style.top="";
         pop.style.height="";
       }
-      pop.style.width = '99%';
+      pop.style.width="97.5%";
       pop.style.padding = '2%';
       back.style.marginRight = '1%';
       full.style.marginRight = '3%';
       file.style.marginRight = '3%';
-      comments.style.marginTop = '3%';
       description.style.marginTop = '-3%';
-      comments.style.marginTop = '2.3%';
+      comments.style.marginTop = '0%';
       comments.style.width = '100%';
       this.fullscreen = true;
     } else {
@@ -134,7 +124,7 @@ export class PopupComponent {
       full.style.marginRight = '';
       file.style.marginRight = '';
       comments.style.marginTop = '';
-      description.style.marginTop = '-3%';
+      description.style.marginTop = '';
       comments.style.marginTop = '';
       this.fullscreen = false;
     }
