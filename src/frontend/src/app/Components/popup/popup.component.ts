@@ -40,7 +40,7 @@ export class PopupComponent {
   toggleTaskCompletion(event: any, task: ProjectTask): void {
     event.stopPropagation();
     let newStatus: string;
-  
+    
     if (task.statusName === "InProgress" || task.statusName === "InReview") {
       this.previousTaskStatus = task.statusName;
       newStatus = "Completed";
@@ -52,7 +52,7 @@ export class PopupComponent {
         newStatus = "InReview";
       }
     }
-  
+    
     // Update the task status on the server
     this.myTasksService.updateTaskStatus1(task.id, newStatus).subscribe({
       next: (updatedTask: ProjectTask) => {
@@ -63,6 +63,7 @@ export class PopupComponent {
       }
     });
   }
+  
   
   
 

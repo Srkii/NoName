@@ -28,7 +28,7 @@
       <!-- zasto se klasa zove red?? -->
       <ng-container *ngFor="let task of tasks">
         <tr
-          class="red"
+          class="td_row"
           *ngIf="task.statusName=='InProgress'"
           [class.clicked]="clickedTask?.id === task.id"
           (click)="togglePopUp($event, task.id)"
@@ -76,7 +76,7 @@
       </tr>
       <ng-container *ngFor="let task of tasks">
         <tr
-        class="red"
+        class="td_row"
         *ngIf="task.statusName=='InReview'"
         [class.clicked]="clickedTask?.id === task.id"
         (click)="togglePopUp($event, task.id)"
@@ -126,7 +126,7 @@
       </tr>
       <ng-container *ngFor="let task of tasks">
         <tr
-        class="red"
+        class="td_row"
         *ngIf="task.statusName=='Completed'"
         [class.clicked]="clickedTask?.id === task.id"
         (click)="togglePopUp($event, task.id)"

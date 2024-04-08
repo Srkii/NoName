@@ -5,7 +5,7 @@
   padding: 15px;
   position: fixed;
   bottom: 0; 
-  right: 10px; /* Adjust as needed */
+  right: 10px; 
   width: 40%;
   height: 89%;
   background-color: #ffffff;
@@ -15,7 +15,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   overflow: auto;
-  z-index: 999; /* Ensure it appears above other content */
+  z-index: 999; 
   font-weight: 600;
   font-size: 12px;
   overflow: hidden;

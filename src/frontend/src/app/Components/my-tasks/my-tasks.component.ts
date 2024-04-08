@@ -123,9 +123,11 @@ export class MyTasksComponent implements OnInit {
     const index = this.tasks.findIndex(task => task.id === updatedTask.id);
     if (index !== -1) {
       this.tasks[index] = updatedTask; // Update the task in the task list
-      this.cdr.detectChanges(); // Trigger change detection
+      // Optionally, you can reassign the task array to trigger change detection
+      this.tasks = [...this.tasks];
     }
   }
+  
   sortOrder: 'asc' | 'desc' = 'asc';
 
   sortTasks() {
