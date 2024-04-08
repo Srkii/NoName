@@ -82,9 +82,15 @@
     font-weight: 400;
     /* text-transform: uppercase; */
     /* margin-bottom: 10px; */
-    text-align: center;
+    /* text-align: center; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     height: 25px;
     padding: 1px !important;
+    padding-left: 15px !important;
+    padding-top: 4px !important;
+    padding-right: 5px !important;
     /* color: #fff; */
     border: 0px solid #d9dee3;
     background-clip: border-box;
@@ -155,6 +161,14 @@
     border-color: #696cff;
     box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
 }
+
+.btn-primary:hover {
+    color: #fff !important;
+    background-color: #5f61e6 !important;
+    border-color: #5f61e6 !important;
+    transform: translateY(-1px) !important;
+}
+
 .form-control {
     display: inline;
     width: 100%;
@@ -176,4 +190,13 @@
 }
 .btn-save-section {
     margin-bottom: 0px !important;
+}
+.more-options {
+    display: none; /* Hide by default */
+}
+.more-options:hover {
+    cursor: pointer;
+}
+.card-header:hover .more-options {
+    display: block; /* Show on hover */
 }

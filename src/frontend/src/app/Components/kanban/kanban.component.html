@@ -1,7 +1,15 @@
 <div class="board">
     <div class="board-wrapper" cdkDropListGroup cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="taskStatuses" (cdkDropListDropped)="dropColumn($event)">
         <div *ngFor="let status of taskStatuses"  class="card" cdkDrag>
-            <div class="card-header" [style.background-color]="status.color">{{status.name}}
+            <div class="card-header" [style.background-color]="status.color">
+                <div class="status-name">
+                    {{status.name}}
+                </div>
+                <div class="more-options" (click)="openModal(deleteSection, 'deleteSection')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                      </svg>
+                </div>
             </div>
             <div class="card-body" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" (cdkDropListDropped)="drop($event)">
                 <div *ngFor="let task of tasksBySection[status.name]" class="card task" cdkDrag [cdkDragData]="task">
@@ -36,7 +44,34 @@
         <button class="btn-primary">Save Task</button>
     </div>
 </ng-template>
+
+<ng-template #deleteSection>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Delete section?</h4>
+      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="mb-3">This action will delete your section. Please choose where you want to move your tasks:</div>
+      <div class="mb-3">
+        <select class="form-select">
+            <option *ngFor="let status of taskStatuses" [value]="status.id">{{ status.name }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid w-100 mx-auto">Delete Section</button>
+      </div>
+    </div>
+</ng-template>
+
 <ng-template #newSection>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add New Section?</h4>
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+          <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+      </div>
     <div class="modal-body">
         <form (ngSubmit)="saveSection()" class="mb-3">
             <div class="mb-3" autocomplete="off">

@@ -30,27 +30,25 @@ export class KanbanComponent implements OnInit{
 
   ngOnInit() {
     this.spinner.show();
-    this.GetTaskStatuses();
-    const projectId = this.route.snapshot.paramMap.get('id');
-    this.currentProjectId = projectId ? +projectId : null;
     this.populateTasks();
     this.spinner.hide();
   }
 
   populateTasks() {
+    const projectId = this.route.snapshot.paramMap.get('id');
+    this.currentProjectId = projectId ? +projectId : null;
+    this.GetTaskStatuses();
     if (this.currentProjectId) {
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) => {
         this.tasks = tasks;
         this.groupTasksByStatus();
-        console.log(this.tasksBySection);
       });
     }
   }
 
   GetTaskStatuses() {
-    const projectId = this.route.snapshot.paramMap.get('id');
-    if (projectId) {
-      this.myTasksService.GetTaskStatuses(+projectId).subscribe((statuses) => {
+    if (this.currentProjectId) {
+      this.myTasksService.GetTaskStatuses(this.currentProjectId).subscribe((statuses) => {
         this.taskStatuses = statuses;
         this.taskStatuses.sort((a, b) => a.position - b.position);
       });
@@ -75,7 +73,7 @@ export class KanbanComponent implements OnInit{
 
   drop(event: CdkDragDrop<ProjectTask[]>) {
     // kad nece da prevuce ukoliko se odmah nakon pokretanja servera zabaguje
-    // samo prvo preblacenje nece da radi. sledece hoce
+    // samo prvo prevlacenje nece da radi. sledece hoce
     if (!event.previousContainer.data || !event.container.data) {
       this.populateTasks();
       return;
@@ -111,7 +109,7 @@ export class KanbanComponent implements OnInit{
     });
   }
   openModal(modal: TemplateRef<void>, modalType: string) {
-    const modalClass = modalType === 'newSection' ? 'modal-sm modal-dialog-centered' : 'modal-lg modal-dialog-centered';
+    const modalClass = (modalType === 'newSection' || modalType === 'deleteSection') ? 'modal-sm modal-dialog-centered' : 'modal-lg modal-dialog-centered';
     this.modalRef = this.modalService.show(
       modal,
       {

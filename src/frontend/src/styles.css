@@ -20,3 +20,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .modal-content {
   border: 0px !important;
 }
+.modal-body {
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
+}
