@@ -30,7 +30,9 @@ export class MyProjectsService {
     projectStatus: string | null = null,
     projectPriority: string | null = null,
     endDateFilter: string | null = null,
-    startDateFilter: string | null = null
+    startDateFilter: string | null = null,
+    currentPage: number = 0,
+    pageSize: number = 0
   ): Observable<Project[]> {
     // Construct query parameters
     let params = new HttpParams();
@@ -49,9 +51,30 @@ export class MyProjectsService {
     if (startDateFilter) {
       params = params.set('startDateFilter', startDateFilter);
     }
+    if (currentPage) {
+      params = params.set('currentPage', currentPage.toString());
+    }
+    if (pageSize) {
+      params = params.set('pageSize', pageSize.toString());
+    }
 
     // Make GET request with query parameters
     return this.http.get<Project[]>(this.baseUrl + '/filter', { params: params });
   }
+
+  getUsersProjectsByPage(id: any, currentPage: number = 0, pageSize: number = 0): Observable<Project[]> {
+    // Construct query parameters
+    let params = new HttpParams();
+    params = params.set('currentPage', currentPage.toString());
+    params = params.set('pageSize', pageSize.toString());
+
+    // Make GET request with query parameters
+    return this.http.get<Project[]>(`${this.baseUrl}/getUsersProjectsByPage/${id}`, { params: params });
+  }
+
+  GetUsersProjectsCount(id: any): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/getUsersProjectsCount/${id}`);
+  }
+
 }
 

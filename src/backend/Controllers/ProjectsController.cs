@@ -1,4 +1,5 @@
-﻿using backend.Data;
+﻿using System.Globalization;
+using backend.Data;
 using backend.DTO;
 using backend.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -146,7 +147,9 @@ namespace backend.Controllers
             ProjectStatus? projectStatus = null,
             Priority? projectPriority = null,
             string endDateFilter = null,
-            string startDateFilter = null)
+            string startDateFilter = null,
+            int currentPage = 0,
+            int pageSize = 0)
         {
             var query = _context.Projects.AsQueryable();
 
@@ -201,6 +204,12 @@ namespace backend.Controllers
                         var endOfYear = new DateTime(DateTime.Today.Year, 12, 31);
                         query = query.Where(p => p.EndDate.Date >= startOfYear.Date && p.EndDate.Date <= endOfYear.Date);
                         break;
+                    case "From highest to lowest1":
+                        query = query.OrderByDescending(p => p.EndDate);
+                        break;
+                    case "From lowest to highest1":
+                        query = query.OrderBy(p => p.EndDate);
+                        break;
                     default:
                         return BadRequest("Invalid end date filter option");
                 }
@@ -242,16 +251,57 @@ namespace backend.Controllers
                         var endOfYear = new DateTime(DateTime.Today.Year, 12, 31);
                         query = query.Where(p => p.StartDate.Date >= startOfYear.Date && p.StartDate.Date <= endOfYear.Date);
                         break;
+                    case "From highest to lowest":
+                        query = query.OrderByDescending(p => p.StartDate);
+                        break;
+                    case "From lowest to highest":
+                        query = query.OrderBy(p => p.StartDate);
+                        break;
                     default:
                         return BadRequest("Invalid start date filter option");
                 }
             }
 
-            var filteredProjects = await query.ToListAsync();
+            var filteredProjects = await query.Skip((currentPage - 1) * pageSize)
+                                      .Take(pageSize)
+                                      .ToListAsync();
             return filteredProjects;
         }
+
+        // [Authorize(Roles = "ProjectManager,Member")]
+        [HttpGet("getUsersProjectsByPage/{userid}")]  // GET: api/projects/getUsersProjectsByPage/1
+        public async Task<ActionResult<IEnumerable<Project>>> GetUsersProjectsByPage(int userid, int currentPage = 0, int pageSize = 0)
+        {
+            var query = _context.Projects
+                                  .Join(_context.ProjectMembers,
+                                        project => project.Id,
+                                        member => member.ProjectId,
+                                        (project, member) => new { Project = project, Member = member })
+                                  .Where(x => x.Member.AppUserId == userid)
+                                  .Select(x => x.Project);
+
+            var projects = await query.Skip((currentPage - 1) * pageSize)
+                                      .Take(pageSize)
+                                      .ToListAsync();
+
+            return projects;
+        }
+
+        [HttpGet("getUsersProjectsCount/{userid}")]  // GET: api/projects/getProjects/1
+        public async Task<ActionResult<int>> GetUsersProjectsCount(int userid)
+        {
+            var projects = await _context.Projects
+                                         .Join(_context.ProjectMembers,
+                                                project => project.Id,
+                                                member => member.ProjectId,
+                                                (project, member) => new { Project = project, Member = member })
+                                         .Where(x => x.Member.AppUserId == userid)
+                                         .Select(x => x.Project)
+                                         .ToListAsync();
+            return projects.Count;
+        }
+
+
     }
-
-
 }
 
