@@ -28,11 +28,11 @@ Rešenje se sastoji iz 2 dela, odnosno 2 odvojene aplikacije, _**Angular** front
 
 ### Pokretanje aplikacija
 
-- **Angular**, u direktorijumu `/src/front/angular` pokrenuti pomocu _AngularCLI_ aplikacije, u terminalu otkucati `ng serve`
+- **Angular**, u direktorijumu `/src/frontend/` pokrenuti pomocu _AngularCLI_ aplikacije, u terminalu otkucati `ng serve`
 - **.NET**, u direktorijumu `/src/backend/` pokrenuti pomocu _DotNetCLI_ aplikacije, u terminalu otkucati `dotnet watch --no-hot-reload`
 
 
 
 ## Portovi
-- 5001 - Frontend
-- 4200 - Backend
+- 5001 - Backend
+- 4200 - Frontend
