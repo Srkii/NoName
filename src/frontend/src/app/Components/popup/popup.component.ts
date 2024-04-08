@@ -53,28 +53,17 @@ export class PopupComponent {
       }
     }
   
-    // Update the task status locally if it's changed
-    if (task.statusName !== newStatus) {
-      task.statusName = newStatus;
-  
-      // Update the task status on the server
-      this.myTasksService.updateTaskStatus(task.id, newStatus).subscribe(
-        (updatedTask: ProjectTask) => {
-          console.dir(task);
-          this.cdr.detectChanges();
-          // Optionally, handle the updated task response from the server
-          console.log('Task status updated successfully:', updatedTask);
-          // Emit the updated task to notify the parent component
-          this.taskUpdated.emit(updatedTask);
-        },
-        (error: any) => {
-          // Handle any errors that occur during the update process
-          // console.error('Error updating task status:', error);
-        }
-      );
-    }
-    this.taskUpdated.emit(task);
+    // Update the task status on the server
+    this.myTasksService.updateTaskStatus1(task.id, newStatus).subscribe({
+      next: (updatedTask: ProjectTask) => {
+        this.taskUpdated.emit(updatedTask); // Emit the updated task
+      },
+      error: (error: any) => {
+        console.error('Error updating task status:', error);
+      }
+    });
   }
+  
   
 
   triggerFileInput(): void {

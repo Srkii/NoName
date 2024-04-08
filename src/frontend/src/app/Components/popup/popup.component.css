@@ -82,9 +82,10 @@ img{
 .description{
   color: #697a8d;
   font-size: 12px;
+  outline: none;
   border: 0.5px solid lightgray;
   border-radius: 8px;
-  padding: 30px;
+  padding: 5px;
   width: 100%;
   word-wrap: break-word;
 }
@@ -98,12 +99,12 @@ img{
   margin-bottom: 1%;
 }
 .comment {
-  margin-top: -2%;
   color: #697a8d;
   font-size: 12px;
+  outline: none;
   border: 0.5px solid lightgray;
   border-radius: 8px;
-  padding: 30px;
+  padding: 5px;
   width: 100%;
   word-wrap: break-word;
 }
@@ -122,11 +123,13 @@ img{
   background-color: #e7e7ff !important;
   color: #5f61e6 !important;
 }
+textarea:hover,
 input:hover {
   outline: none; /* Remove default focus outline */
   border: 1px solid #5f61e6 !important; /* Add custom border */
   box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
 }
+textarea:focus
 input:focus {
   outline: none; /* Remove default focus outline */
   border: 1px solid #5f61e6 !important; /* Add custom border */

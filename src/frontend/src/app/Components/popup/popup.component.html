@@ -45,12 +45,13 @@
     href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
   </p>
     <p class="header">Description</p>
-  <input
+      <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly></textarea>
+  <!-- <input
     class="description"
     type="text"
     [value]="task.description"
     readonly
-  />
+  /> -->
   <br /><br />
   <button
     class="mark"
@@ -62,6 +63,6 @@
   </button>
   <div class="comments">
     <p class="header">COMMENTS</p>
-    <input class="comment" type="text" placeholder="Add a comment" />
+    <textarea class="comment" rows="3" placeholder="Add a comment"></textarea>
   </div>
 </div>

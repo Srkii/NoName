@@ -1,5 +1,4 @@
 <div class="all">
-  <div id="all1">
     <h5>📬 In Progress</h5>
 
     <table [ngClass]="{ 'empty-table': isTasksEmpty('InProgress') }">
@@ -45,12 +44,10 @@
         </tr>
       </ng-container>
     </table>
-  </div>
 </div>
 <br />
 
 <div class="all">
-  <div id="all1">
     <h5>&#10024; In Review</h5>
 
     <table [ngClass]="{ 'empty-table': isTasksEmpty('InReview') }">
@@ -98,11 +95,9 @@
         </tr>
       </ng-container>
     </table>
-  </div>
 </div>
 <br />
 <div class="all">
-  <div id="all1">
     <h5>🎉 Completed</h5>
 
     <table [ngClass]="{ 'empty-table': isTasksEmpty('Completed') }">
@@ -147,12 +142,13 @@
       </ng-container>
     </table>
   </div>
-</div>
 <br />
 <app-popup
-  *ngIf="showPopUp"
+  class="pop"
+  *ngIf="showPopUp && clickedTask"
   [task]="clickedTask"
   (backClicked)="closePopup()"
   (taskUpdated)="handleTaskUpdate($event)"
   [@popFromSide]="showPopUp ? 'popFromSide' : ''"
+  
 ></app-popup>

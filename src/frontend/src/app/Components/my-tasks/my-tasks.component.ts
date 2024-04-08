@@ -59,7 +59,7 @@ export class MyTasksComponent implements OnInit {
     const userId = localStorage.getItem('id');
 
     if (userId !== null) {
-    const t=this.myTasksService
+    this.myTasksService
       .GetTasksByUserId(userId)
       .subscribe((tasks: ProjectTask[]) => {
         this.tasks = tasks;
@@ -75,7 +75,7 @@ export class MyTasksComponent implements OnInit {
     event.stopPropagation(); 
     const row = document.querySelector('.red') as HTMLElement;
     this.myTasksService
-      .GetProjectTaskById(taskId)
+      .GetProjectTask(taskId)
       .subscribe((task: ProjectTask) => {
         if (
           this.clickedTask &&
@@ -120,32 +120,31 @@ export class MyTasksComponent implements OnInit {
   //     );
   // }
   handleTaskUpdate(updatedTask: ProjectTask): void {
-    const index = this.tasks.findIndex((task) => task.id === updatedTask.id);
+    const index = this.tasks.findIndex(task => task.id === updatedTask.id);
     if (index !== -1) {
-      this.tasks[index] = updatedTask;
-      this.clickedTask = updatedTask;
-      this.cdr.detectChanges();
+      this.tasks[index] = updatedTask; // Update the task in the task list
+      this.cdr.detectChanges(); // Trigger change detection
     }
   }
   sortOrder: 'asc' | 'desc' = 'asc';
 
   sortTasks() {
-    if (this.sortOrder === 'asc') {
-      this.tasks.sort((a, b) => {
-        const endDateA = new Date(a.endDate).getTime();
-        const endDateB = new Date(b.endDate).getTime();
-        return endDateA - endDateB;
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; // Update sortOrder based on the current value
+
+    this.spinner.show();
+    this.myTasksService.sortTasksByDueDate(this.sortOrder)
+      .subscribe({
+        next: (sortedTasks: ProjectTask[]) => {
+          this.tasks = sortedTasks;
+          this.spinner.hide();
+        },
+        error: (error: any) => {
+          console.error('Error sorting tasks:', error);
+          this.spinner.hide();
+        }
       });
-      this.sortOrder = 'desc';
-    } else {
-      this.tasks.sort((a, b) => {
-        const endDateA = new Date(a.endDate).getTime();
-        const endDateB = new Date(b.endDate).getTime();
-        return endDateB - endDateA;
-      });
-      this.sortOrder = 'asc';
-    }
-  }
+}
+
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
