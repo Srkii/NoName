@@ -133,38 +133,43 @@ namespace backend.Controllers
         }
 
 
-        [HttpPut("updateStatus/{taskId}/{statusName}")]
-        public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
-        {
-            var task = await _context.ProjectTasks
-                .Include(t => t.TskStatus)
-                .FirstOrDefaultAsync(t => t.Id == taskId);
+      [HttpPut("updateStatus/{taskId}/{statusName}")]
+public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
+{
+    var task = await _context.ProjectTasks
+        .Include(t => t.TskStatus)
+        .FirstOrDefaultAsync(t => t.Id == taskId);
 
-            if (task == null)
-            {
-                return NotFound();
-            }
+    if (task == null)
+    {
+        return NotFound();
+    }
 
-            var status = await _context.TaskStatuses
-                .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
+    var status = await _context.TaskStatuses
+        .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
 
-            if (status == null)
-            {
-                return NotFound("Status not found.");
-            }
+    if (status == null)
+    {
+        return NotFound("Status not found.");
+    }
 
-            task.TskStatusId = status.Id;
-            await _context.SaveChangesAsync();
+    task.TskStatusId = status.Id;
+    await _context.SaveChangesAsync();
 
-            // Create a DTO to shape the response
-            var taskDto = new ProjectTaskDto
-            {
-                Id = task.Id,
-                // Add other properties you want to include in the DTO
-            };
+    // Now, after saving changes, fetch the updated task again
+    task = await _context.ProjectTasks
+        .Include(t => t.TskStatus)
+        .FirstOrDefaultAsync(t => t.Id == taskId);
 
-            return taskDto;
-        }
+    // Create a DTO to shape the response
+    var taskDto = new ProjectTaskDto
+    {
+        Id = task.Id,
+        // Add other properties you want to include in the DTO
+    };
+
+    return taskDto;
+}
 
 
 
