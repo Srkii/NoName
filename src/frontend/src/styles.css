@@ -24,3 +24,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin-bottom: 0px !important;
   padding-bottom: 0px !important;
 }
+.modal-header {
+  padding-top: 5px;
+  padding-bottom: 1px;
+}

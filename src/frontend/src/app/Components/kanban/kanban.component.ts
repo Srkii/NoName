@@ -21,6 +21,13 @@ export class KanbanComponent implements OnInit{
   currentProjectId: number | null = null;
   newSectionColor: string = '#ffffff'; // default boja
 
+  newTaskName: string = '';
+  newTaskDescription: string = '';
+  newTaskStartDate: Date | null = null;
+  newTaskEndDate: Date | null = null;
+  newTaskStatusId: number | null = null;
+  newTaskProjectSectionId: number | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
@@ -108,12 +115,11 @@ export class KanbanComponent implements OnInit{
       this.GetTaskStatuses();
     });
   }
-  openModal(modal: TemplateRef<void>, modalType: string) {
-    const modalClass = (modalType === 'newSection' || modalType === 'deleteSection') ? 'modal-sm modal-dialog-centered' : 'modal-lg modal-dialog-centered';
+  openModal(modal: TemplateRef<void>) {
     this.modalRef = this.modalService.show(
       modal,
       {
-        class: modalClass
+        class: 'modal-sm modal-dialog-centered'
       });
   }
 
@@ -135,4 +141,24 @@ export class KanbanComponent implements OnInit{
       error: (error) => console.error('Error adding task status:', error)
     });
   }
+
+  saveTask() {
+    const task = {
+      TaskName: this.newTaskName,
+      Description: this.newTaskDescription,
+      StartDate: this.newTaskStartDate,
+      EndDate: this.newTaskEndDate,
+      TskStatusId: this.newTaskStatusId,
+      ProjectSectionId: this.newTaskProjectSectionId,
+      ProjectId: this.currentProjectId
+    };
+    this.myTasksService.createTask(task).subscribe({
+      next: (response) => {
+        console.log('Task created:', response);
+        this.modalRef?.hide();
+      },
+      error: (error) => console.error('Error creating task:', error)
+    });
+  }
+
 }

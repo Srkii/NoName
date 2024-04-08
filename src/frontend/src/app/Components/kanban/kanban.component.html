@@ -5,7 +5,7 @@
                 <div class="status-name">
                     {{status.name}}
                 </div>
-                <div class="more-options" (click)="openModal(deleteSection, 'deleteSection')">
+                <div class="more-options" (click)="openModal(deleteSection)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
                         <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
                       </svg>
@@ -21,14 +21,19 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer add-task" (click)="openModal(newTask, 'newTask')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-              </svg> Add New Task</div>
+            
         </div>
     </div>
-    <div class="new-status" (click)="openModal(newSection, 'newSection')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-      </svg>Add New Section</div>
+    <div class="new-items">
+        <div class="new-item" (click)="openModal(newTask)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>Add New Task
+        </div>
+        <div class="new-item" (click)="openModal(newSection)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>Add New Section
+        </div>
+    </div>
 </div>
 <ng-template #newTask>
     <div class="modal-header">
@@ -38,10 +43,27 @@
       </button>
     </div>
     <div class="modal-body">
-      This is a modal.
+      <form action="" class="mb-3">
+        <div class="mb-1" autocomplete="off">
+            <label for="taskName" class="form-label">Task Name</label>
+            <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName" placeholder="Enter new tasks's name"/> 
+        </div>
+        <div class="mb-1" autocomplete="off">
+            <label for="taskDescription" class="form-label">Task Description</label>
+            <textarea class="form-control" class="form-control" name="taskDescription" [(ngModel)]="newSectionName" placeholder="Enter new tasks's description"></textarea>
+        </div>
+        <div class="mb-1">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" placeholder="Start Date"/>
+        </div>
+        <div class="mb-1">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" placeholder="End Date"/>
+        </div>
+      </form>
     </div>
     <div class="modal-footer">
-        <button class="btn-primary">Save Task</button>
+        <button class="btn btn-primary d-grid w-100 mx-auto">Save Task</button>
     </div>
 </ng-template>
 

@@ -55,4 +55,8 @@ export class MyTasksService {
   addTaskStatus(taskStatus: { statusName: string; projectId: number }): Observable<any> {
     return this.http.post(`${this.baseUrl}/addTaskStatus`, taskStatus);
   }
+  // za addNewTask modal
+  createTask(task: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, task);
+  }
 }
