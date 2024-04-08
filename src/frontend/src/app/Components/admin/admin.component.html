@@ -51,7 +51,8 @@
           <td  *ngIf="!user.archived">
             <div class="d-flex justify-content-start align-items-center">
               <div class="avatar-wrapper">
-                <div class="avatar avatar-sm me-2"><img src="../../../assets/navIcons/user (4).png" alt="Avatar" class="avatar"></div>
+                <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar"></div>
+                <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
               </div>
               <div class="d-flex flex-column">
                 <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>

@@ -7,6 +7,7 @@ export interface Member {
     token: string,
     role: UserRole,
     archived:boolean,
+    profilePicUrl:string
 }
 export enum UserRole {
     Admin,

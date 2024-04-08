@@ -59,7 +59,7 @@ export class AdminService {
 
       return this.httpClient.put<Member>(`${this.apiUrl}/users/updateUser/${id}`,user,{headers:httpHeader})
     }
-    else return of(null); 
+    else return of(null);
   }
 
   //ArchiveUser
@@ -69,7 +69,7 @@ export class AdminService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` 
+        'Authorization': `Bearer ${token}`
       })
     };
 
@@ -86,7 +86,7 @@ export class AdminService {
 
       return this.httpClient.post<ChangeRole>(`${this.apiUrl}/users/changeUserRole`,response,{headers:httpHeader})
     }
-    else return of(null); 
+    else return of(null);
   }
 
   //getPhotoByUserId

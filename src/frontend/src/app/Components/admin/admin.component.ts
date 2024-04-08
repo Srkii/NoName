@@ -6,6 +6,8 @@ import { Member, UserRole } from '../../Entities/Member';
 import { ChangeRole } from '../../Entities/ChangeRole';
 import { UpdateUser } from '../../Entities/UpdateUser';
 import { ToastrService } from 'ngx-toastr';
+import { UploadService } from '../../_services/upload.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -20,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AdminComponent implements OnInit{
 
-  constructor(private adminService:AdminService,private toastr: ToastrService ){}
+  constructor(private adminService:AdminService,private toastr: ToastrService ,private uploadservice:UploadService,private spinner:NgxSpinnerService){}
   ngOnInit(): void {
     this.GetAllUsers()
   }
@@ -74,7 +76,19 @@ export class AdminComponent implements OnInit{
 
     GetAllUsers(): void{
       this.adminService.getAllUsers().subscribe({next:(response)=>{
-        this.allUsers=response
+        this.allUsers=response;
+        this.allUsers.forEach(user => {
+          if(user.profilePicUrl!=null) {
+            this.uploadservice.getImage(user.profilePicUrl).subscribe(
+              response=>{
+                const reader=new FileReader();
+              reader.readAsDataURL(response);
+              reader.onloadend=()=>{
+                user.profilePicUrl=reader.result as string;
+              };
+            }
+          )
+        }});
       },error:(error)=>{
         console.log(error)
       }})
@@ -191,6 +205,9 @@ export class AdminComponent implements OnInit{
     }
     }
 
+    getImg(): void{
+
+    }
 
   }
 
