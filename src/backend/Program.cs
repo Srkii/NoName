@@ -1,6 +1,7 @@
 using backend.Extensions;
 using backend.Interfaces;
 using backend.Services;
+using backend.SignalR;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
-
+builder.Services.AddSignalR();
 builder.Services.AddTransient<IEmailSender,EmailService>();
 
 var app = builder.Build();
@@ -18,11 +19,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 // app.UseHttpsRedirection(); verovatno nam ne treba trenutno
 
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200"));
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<NotificationsHub>("/hubs/notifications");
 
 app.Run();

@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
 import { AppUser } from '../../Entities/AppUser';
+import { NotificationsService } from '../../_services/notifications.service';
 
 @Component({
   selector: 'app-nav',
@@ -10,7 +11,7 @@ import { AppUser } from '../../Entities/AppUser';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService) {}
+  constructor(private router: Router,private userInfo:UserinfoService,private notifications:NotificationsService) {}
   ngOnInit(): void {
     this.isAdmin()
     this.getUser()
@@ -28,6 +29,7 @@ export class NavComponent implements OnInit {
       localStorage.removeItem('role');
 
       // Navigate to the login page
+      this.notifications.stopHubConnection();
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('redirect failed:', error);
@@ -50,7 +52,7 @@ export class NavComponent implements OnInit {
       },error:(error)=>{
         console.log(error)
       }
-      
+
     })
   }
 

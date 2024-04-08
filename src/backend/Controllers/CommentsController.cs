@@ -4,21 +4,24 @@ using backend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using backend.SignalR;
 namespace backend.Controllers
 {
     public class CommentsController:BaseApiController
     {
         private readonly DataContext _context;
-        public CommentsController(DataContext context)
+        private readonly NotificationsHub _notifications;
+        public CommentsController(DataContext context,NotificationsHub notifications)
         {
             _context = context;
+            _notifications = notifications;
         }
 
         [HttpPost("postComment")] // /api/comments/postComment
         public async Task<IActionResult> PostComment(CommentDto commentDto)
         {
             //doraditi: treba da proveri dal task postoji pa onda da post komentar. ako ne postoji vraca BadRequest sa opisom greske
+            var task = await _context.ProjectTasks.FindAsync(commentDto.TaskId);
             var comment = new Comment
             {
                 TaskId = commentDto.TaskId,

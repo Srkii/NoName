@@ -12,12 +12,14 @@ namespace backend.Controllers
         private readonly ITokenService _tokenService;
         private readonly IPhotoService _photoService;
         private readonly IUploadService _uploadService;
-        public FileUploadController(DataContext context, ITokenService ts,IPhotoService ps,IUploadService us)
+        private readonly IHubContext<NotificationsHub> _hubContext;
+        public FileUploadController(DataContext context, ITokenService ts,IPhotoService ps,IUploadService us,IHubContext<NotificationsHub> hc)
         {
             _context = context;
             _tokenService = ts;
             _photoService = ps;
             _uploadService = us;
+            _hubContext = hc;
         }
 
         [HttpPost("uploadpfp/{id}")] // /api/FileUpload
@@ -56,7 +58,6 @@ namespace backend.Controllers
             
             _context.Attachments.Add(attachment);
             await _context.SaveChangesAsync();
-
             return Ok(attachment);
         }
         // [HttpGet("files/{filename}")]

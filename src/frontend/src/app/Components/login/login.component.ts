@@ -3,6 +3,7 @@ import { LoginService } from '../../_services/login.service';
 import { AppUser } from '../../Entities/AppUser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NotificationsService } from '../../_services/notifications.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,10 @@ export class LoginComponent implements OnInit {
     Password: '',
   };
 
-  constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) {}
+  constructor(private loginService: LoginService,
+    private router: Router,
+    private toastr: ToastrService,
+    private notifications:NotificationsService) {}
 
   ngOnInit(): void {}
 
@@ -25,6 +29,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
+        this.notifications.createHubConnection(this.newUser);
         if(localStorage.getItem('role')=='0')
         {
           this.router.navigate(['/admin']);
