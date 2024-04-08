@@ -94,6 +94,16 @@ td {
   /* padding-left: 20px; */
   font-size: 12px;
 }
+tr:last-child {
+  border-bottom: none;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+table:last-child{
+  border-bottom: none;
+}
+
 #name {
   font-size: 14px;
   font-weight: bold;
@@ -101,6 +111,7 @@ td {
 p {
   text-align: center;
   padding: 2px;
+  margin-bottom: 2%;
   border-radius: 8px;
   font-weight: 600;
 }

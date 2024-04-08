@@ -27,22 +27,22 @@
           class="filter"
           type="text"
           placeholder="Search Project"
-          [(ngModel)]="ProjectName"
-          (input)="fillterProjects();  fillterProjects1()"
+          [(ngModel)]="projectName"
+          (input)="filterProjects(); "
         />
         <input
           class="filter"
           type="text"
           placeholder="Search Project Owner"
         />
-        <select class="filter" name="status" id="status" [(ngModel)]="selectedStatus" (change)="fillterProjects(); fillterProjects1()">
+        <select class="filter" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterProjects();">
           <option value="" selected>Select Status</option>
           <option value="PROPOSED">PROPOSED</option>
           <option value="INPROGRESS">IN PROGRESS</option>
           <option value="COMPLETED">COMPLETED</option>
           <option value="ARCHIVED">ARCHIVED</option>
         </select>
-        <select class="filter" name="priority" id="priority" [(ngModel)]="selectedPriority" (change)="fillterProjects();  fillterProjects1()">
+        <select class="filter" name="priority" id="priority" [(ngModel)]="selectedPriority" (change)="filterProjects(); ">
           <option value="" selected>Select Priority</option>
           <option value="LOW">LOW</option>
           <option value="MEDIUM">MEDIUM</option>
@@ -53,9 +53,9 @@
         class="filter"
           name="date"
           id="date"
-          [(ngModel)]="StartDateFilter"
+          [(ngModel)]="startDateFilter"
           (change)="
-            handleStartDateChange($event); fillterProjects();  fillterProjects1()
+            handleStartDateChange($event); filterProjects(); 
           "
         >
           <option value="" selected>Filter by start date</option>
@@ -74,8 +74,8 @@
         class="filter"
           name="date1"
           id="date1"
-          [(ngModel)]="EndDateFilter"
-          (change)="handleEndDateChange($event); fillterProjects();  fillterProjects1()"
+          [(ngModel)]="endDateFilter"
+          (change)="handleEndDateChange($event); filterProjects(); "
         >
           <option value="" selected>Filter by end date</option>
           <option value="Today1">Today</option>

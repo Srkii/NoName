@@ -13,12 +13,18 @@ import { identifierName } from '@angular/compiler';
 export class MyProjectsComponent implements OnInit {
   all_projects:number=0;
   projects: Project[] = [];
-  filteredProjects: Project[] | undefined;
+  filteredProjects: number=0;
   pageSize: number = 5;
   currentPage: number = 1;
   totalPages: number = 0;
   originalProjects: Project[] = [];
   totalPagesArray: number[] = [];
+  
+  selectedStatus: string = '';
+  selectedPriority: string = '';
+  projectName: string = '';
+  startDateFilter: string = '';
+  endDateFilter: string = '';
 
 
   constructor(
@@ -32,18 +38,58 @@ export class MyProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
-    const id = localStorage.getItem('id');
-    this.myProjectsService.GetUsersProjectsCount(id).subscribe((count:number)=>{
-      this.all_projects=count;
+    const userId = localStorage.getItem('id');
+    this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
+      this.all_projects = count;
     });
-    this.myProjectsService.getUsersProjectsByPage(id, this.currentPage, this.pageSize)
-  .subscribe((projects: Project[]) => {
-    this.projects = projects;
-    this.originalProjects = [...this.projects];
-    this.totalPages = Math.ceil(this.all_projects / this.pageSize);
-    this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
-    this.spinner.hide();
-});
+    this.myProjectsService.filterAndPaginateProjects(
+      this.projectName,
+      this.selectedStatus,
+      this.selectedPriority,
+      this.endDateFilter,
+      this.startDateFilter,
+      userId,
+      this.currentPage,
+      this.pageSize
+    ).subscribe((projects: Project[]) => {
+      this.projects = projects;
+      this.totalPages = Math.ceil(this.all_projects / this.pageSize);
+      this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
+      this.spinner.hide();
+    });
+  }
+
+  loadProjects(userId: any): void {
+    this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
+      this.all_projects = count;
+    });
+    this.myProjectsService.filterAndPaginateProjects(
+      this.projectName,
+      this.selectedStatus,
+      this.selectedPriority,
+      this.endDateFilter,
+      this.startDateFilter,
+      userId,
+      this.currentPage,
+      this.pageSize
+    ).subscribe((projects: Project[]) => {
+      this.projects = projects;
+      this.spinner.hide();
+    });
+    this.myProjectsService.CountFilteredProjects( this.projectName,
+      this.selectedStatus,
+      this.selectedPriority,
+      this.endDateFilter,
+      this.startDateFilter,
+      userId,
+      this.currentPage,
+      this.pageSize
+    ).subscribe((filteredProjects: number) => {
+      this.filteredProjects=filteredProjects;
+      this.totalPages = Math.ceil(this.filteredProjects / this.pageSize);
+      this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
+      this.spinner.hide();
+    });
   }
 
   getStatusString(status: ProjectStatus): string {
@@ -74,11 +120,7 @@ export class MyProjectsComponent implements OnInit {
     }
   }
 
-  selectedStatus: string = '';
-  selectedPriority: string = '';
-  ProjectName: string = '';
-  StartDateFilter: string = '';
-  EndDateFilter: string = '';
+
 
   handleStatusChange(event: any) {
     this.selectedStatus = event.target.value;
@@ -89,110 +131,64 @@ export class MyProjectsComponent implements OnInit {
   }
 
   handleStartDateChange(event: any) {
-    this.StartDateFilter = event.target.value;
+    this.startDateFilter = event.target.value;
   }
 
   handleEndDateChange(event: any) {
-    this.EndDateFilter = event.target.value;
+    this.endDateFilter = event.target.value;
   }
 
   goToProject(id: number) {
     this.router.navigate(['/project', id]);
   }
 
-  fillterProjects(): void {
-    // Convert the input value to lowercase for case-insensitive search
-    const projectName = this.ProjectName.trim();
-    const projectStatus = this.selectedStatus;
-    const projectPriority = this.selectedPriority;
-    const projectStartDate = this.StartDateFilter;
-    const projectEndDate = this.EndDateFilter;
-    if (projectStartDate === '' && projectEndDate === '' && projectPriority === '' && projectStatus === '' && projectName === '') {
-      // If all search queries are empty, reload all projects
-      this.reloadProjects();
-      return;
-    }
-
-  
+  filterProjects(): void {
     this.spinner.show();
+     this.currentPage = 1;
     const id = localStorage.getItem('id');
-    this.currentPage=1;
-    this.myProjectsService.filterProjects(projectName, projectStatus, projectPriority, projectEndDate, projectStartDate, this.currentPage, this.pageSize).subscribe((filteredProjects: Project[]) => {
-      this.projects = filteredProjects;
-      // this.totalPages = Math.ceil(filteredProjects.length / this.pageSize);
-      // this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
-      this.spinner.hide();
-    });
-  }
-  fillterProjects1(): void {
-    // Convert the input value to lowercase for case-insensitive search
-    const projectName = this.ProjectName.trim();
-    const projectStatus = this.selectedStatus;
-    const projectPriority = this.selectedPriority;
-    const projectStartDate = this.StartDateFilter;
-    const projectEndDate = this.EndDateFilter;
-    if (projectStartDate === '' && projectEndDate === '' && projectPriority === '' && projectStatus === '' && projectName === '') {
-      // If all search queries are empty, reload all projects
-      this.reloadProjects();
-      return;
-    }
-
-  
-    this.spinner.show();
-    const id = localStorage.getItem('id');
-    this.myProjectsService.filterProjects(projectName, projectStatus, projectPriority, projectEndDate, projectStartDate, this.currentPage, this.pageSize).subscribe((filteredProjects: Project[]) => {
-      this.projects = filteredProjects;
-      // this.totalPages = Math.ceil(this.all_projects / this.pageSize);
-      // this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
-      this.spinner.hide();
-    });
+    this.loadProjects(id);
   }
 
-  reloadProjects(): void {
-    this.spinner.show();
-    const id = localStorage.getItem('id');
-    this.myProjectsService.GetUsersProjectsCount(id).subscribe((count:number)=>{
-      this.all_projects=count;
-    });
-    this.myProjectsService.getUsersProjectsByPage(id, this.currentPage, this.pageSize)
-  .subscribe((projects: Project[]) => {
-    this.projects = projects;
-    this.originalProjects = [...this.projects];
-    this.totalPages = Math.ceil(this.all_projects / this.pageSize);
-    this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
-    this.spinner.hide();
-});
+  resetFilters(): void {
+    this.projectName = '';
+    this.selectedStatus = '';
+    this.selectedPriority = '';
+    this.startDateFilter = '';
+    this.endDateFilter = '';
+    this.filterProjects();
   }
 
   goToPage(pageNumber: number): void {
     if (pageNumber >= 1 && pageNumber <= this.totalPages) {
       this.currentPage = pageNumber;
-      this.fillterProjects1();
+      const id = localStorage.getItem('id');
+    this.loadProjects(id);
     }
   }
+
   nextPage(): void {
-  if (this.currentPage < this.totalPages) {
-    this.currentPage++;
-    this.fillterProjects1();
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      const id = localStorage.getItem('id');
+    this.loadProjects(id);
+    }
   }
-}
 
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.fillterProjects1();
+      const id = localStorage.getItem('id');
+    this.loadProjects(id);
     }
   }
 
-  changePageSize(event: Event) {
+  changePageSize(event: Event): void {
     const target = event.target as HTMLSelectElement;
-    if(target.value!="")
-    {
+    if (target.value !== '') {
       const pageSize = Number(target.value);
       this.pageSize = pageSize;
+      const id = localStorage.getItem('id');
+    this.loadProjects(id);
     }
-    this.reloadProjects();
   }
-  
-
 }
