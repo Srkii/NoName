@@ -5,7 +5,7 @@
                 <div class="status-name">
                     {{status.name}}
                 </div>
-                <div class="more-options" (click)="openModal(deleteSection)">
+                <div class="more-options" *ngIf="status.name !== 'Proposed' && status.name !== 'InProgress' && status.name !== 'InReview' && status.name !== 'Completed' && status.name !== 'Archived'" (click)="openModal(deleteSection, status.name, status.id)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
                         <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
                       </svg>
@@ -25,11 +25,11 @@
         </div>
     </div>
     <div class="new-items">
-        <div class="new-item" (click)="openModal(newTask)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+        <div class="new-item" (click)="openSimpleModal(newTask)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
           </svg>Add New Task
         </div>
-        <div class="new-item" (click)="openModal(newSection)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+        <div class="new-item" (click)="openSimpleModal(newSection)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
           </svg>Add New Section
         </div>
@@ -69,27 +69,22 @@
 
 <ng-template #deleteSection>
     <div class="modal-header">
-      <h4 class="modal-title pull-left">Delete section?</h4>
+      <h4 class="modal-title pull-left">Delete section</h4>
       <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
         <span aria-hidden="true" class="visually-hidden">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <div class="mb-3">This action will delete your section. Please choose where you want to move your tasks:</div>
+      <div class="mb-3">This action will delete the <b>{{currentSectionName}}</b> section and move all of its tasks to the <b>Proposed</b> section.</div>
       <div class="mb-3">
-        <select class="form-select">
-            <option *ngFor="let status of taskStatuses" [value]="status.id">{{ status.name }}</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100 mx-auto">Delete Section</button>
+        <button class="btn btn-primary d-grid w-100 mx-auto" (click)="deleteSectionFunction()">Delete Section</button>
       </div>
     </div>
 </ng-template>
 
 <ng-template #newSection>
     <div class="modal-header">
-        <h4 class="modal-title pull-left">Add New Section?</h4>
+        <h4 class="modal-title pull-left">Add New Section</h4>
         <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
           <span aria-hidden="true" class="visually-hidden">&times;</span>
         </button>

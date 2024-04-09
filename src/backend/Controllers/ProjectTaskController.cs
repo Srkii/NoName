@@ -133,46 +133,43 @@ namespace backend.Controllers
         }
 
 
-      [HttpPut("updateStatus/{taskId}/{statusName}")]
-public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
-{
-    var task = await _context.ProjectTasks
-        .Include(t => t.TskStatus)
-        .FirstOrDefaultAsync(t => t.Id == taskId);
+        [HttpPut("updateStatus/{taskId}/{statusName}")]
+        public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
+        {
+            var task = await _context.ProjectTasks
+                .Include(t => t.TskStatus)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
 
-    if (task == null)
-    {
-        return NotFound();
-    }
+            if (task == null)
+            {
+                return NotFound();
+            }
 
-    var status = await _context.TaskStatuses
-        .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
+            var status = await _context.TaskStatuses
+                .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
 
-    if (status == null)
-    {
-        return NotFound("Status not found.");
-    }
+            if (status == null)
+            {
+                return NotFound("Status not found.");
+            }
 
-    task.TskStatusId = status.Id;
-    await _context.SaveChangesAsync();
+            task.TskStatusId = status.Id;
+            await _context.SaveChangesAsync();
 
-    // Now, after saving changes, fetch the updated task again
-    task = await _context.ProjectTasks
-        .Include(t => t.TskStatus)
-        .FirstOrDefaultAsync(t => t.Id == taskId);
+            // Now, after saving changes, fetch the updated task again
+            task = await _context.ProjectTasks
+                .Include(t => t.TskStatus)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
 
-    // Create a DTO to shape the response
-    var taskDto = new ProjectTaskDto
-    {
-        Id = task.Id,
-        // Add other properties you want to include in the DTO
-    };
+            // Create a DTO to shape the response
+            var taskDto = new ProjectTaskDto
+            {
+                Id = task.Id,
+                // Add other properties you want to include in the DTO
+            };
 
-    return taskDto;
-}
-
-
-
+            return taskDto;
+        }
 
         [AllowAnonymous]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
@@ -320,7 +317,13 @@ public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, st
             }
 
             var inReviewStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "InReview" && ts.ProjectId == taskStatusDto.ProjectId);
-            var newPosition = inReviewStatus != null ? inReviewStatus.Position + 1 : 0; // Assuming positions are 0-indexed
+            var CompletedStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "Completed" && ts.ProjectId == taskStatusDto.ProjectId);
+            var ArchivedStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "Archived" && ts.ProjectId == taskStatusDto.ProjectId);
+            var newPosition = inReviewStatus != null ? inReviewStatus.Position : 0; // Assuming positions are 0-indexed
+            
+            if (inReviewStatus != null) inReviewStatus.Position += 1;
+            if (CompletedStatus != null) CompletedStatus.Position += 1;
+            if (ArchivedStatus != null) ArchivedStatus.Position += 1;
 
             var newTaskStatus = new TskStatus
             {
@@ -335,7 +338,6 @@ public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, st
 
             return Ok(newTaskStatus);
         }
-
 
         [AllowAnonymous]
         [HttpGet("sortTasksByDueDate")]
@@ -372,11 +374,48 @@ public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, st
                     task.Project
                 })
                 .ToListAsync();
-
             return sortedTasks;
         }
 
-    }
+        [HttpDelete("deleteTaskStatus/{TaskStatusId}")] // GET: api/projectTask/deleteTaskStatus/{TaskStatusId}
+        public async Task<IActionResult> DeleteSection(int TaskStatusId)
+        {
+            var statusToDelete = await _context.TaskStatuses.FindAsync(TaskStatusId);
+            if (statusToDelete == null)
+            {
+                return NotFound("Section not found.");
+            }
 
+            var proposedStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "Proposed" && ts.ProjectId == statusToDelete.ProjectId);
+            if (proposedStatus == null)
+            {
+                return NotFound("Proposed status not found in the project.");
+            }
+
+            var tasksToUpdate = await _context.ProjectTasks.Where(t => t.TskStatusId == TaskStatusId).ToListAsync();
+            foreach (var task in tasksToUpdate)
+            {
+                task.TskStatusId = proposedStatus.Id;
+            }
+
+            // brisanje TskStatus (section)
+            _context.TaskStatuses.Remove(statusToDelete);
+            await _context.SaveChangesAsync();
+
+            // sortiranje preostalih statusa
+            var remainingStatuses = await _context.TaskStatuses
+                .Where(ts => ts.ProjectId == statusToDelete.ProjectId)
+                .OrderBy(ts => ts.StatusName == "Proposed" ? 0 : ts.StatusName == "InProgress" ? 1 : ts.StatusName == "InReview" ? int.MaxValue - 2 : ts.StatusName == "Completed" ? int.MaxValue - 1 : ts.StatusName == "Archived" ? int.MaxValue : 2)
+                .ToListAsync();
+
+            for (int i = 0; i < remainingStatuses.Count; i++)
+            {
+                remainingStatuses[i].Position = i;
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Section deleted and tasks updated to Proposed status." });
+        }
+    }
 }
 
