@@ -1,28 +1,36 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
 <div id="container">
-  <div class="col-md-5 mx-2 float-end">
+  <div class="col-md-5 mx-2 float-end" *ngIf="showComponent">
       <div class="card shadow border-0">
         <h4>Create New Project</h4>
         <div class="card-body">
           <form #createProjectForm="ngForm" class="mg-3" (ngSubmit)="CreateProject()" autocomplete="off" id="ProjectCreate">
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Name</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Name" [(ngModel)]="newProject.ProjectName" name="Name">
+              <label for="exampleFormControlInput1" class="form-label">Project Name</label>
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Project Name" [(ngModel)]="newProject.ProjectName" name="Name" [ngClass]="{'is-invalid': buttonClicked && !newProject.ProjectName}">
+              <div *ngIf="buttonClicked && !newProject.ProjectName" class="invalid">Please enter project name.</div>
             </div>
             <div class="mb-3">
               <label for="StartDate" class="form-label">Start Date</label>
-              <input class="form-control" type="date" placeholder="Start Date" [(ngModel)]="newProject.StartDate" name="StartDate">
+              <input class="form-control" type="date" placeholder="Start Date" [(ngModel)]="newProject.StartDate" name="StartDate" [ngClass]="{'is-invalid': buttonClicked && !newProject.StartDate || isInvalidDate()}">
+              <div *ngIf="buttonClicked && !newProject.StartDate" class="invalid">Please enter start date.</div>
+              <div *ngIf="isInvalidDate()" class="invalid">The selected dates are not valid</div>
             </div>
             <div class="mb-3">
               <label for="EndDate" class="form-label">End Date</label>
-              <input class="form-control" type="date" placeholder="End Date" [(ngModel)]="newProject.EndDate" name="EndDate">
+              <input class="form-control" type="date" placeholder="End Date" [(ngModel)]="newProject.EndDate" name="EndDate" [ngClass]="{'is-invalid': buttonClicked && !newProject.EndDate || isInvalidDate()}">
+              <div *ngIf="buttonClicked && !newProject.EndDate" class="invalid">Please enter end date.</div>
+              <div *ngIf="isInvalidDate()" class="invalid">The selected dates are not valid</div>
             </div>
             <div class="mb-3">
               <label for="exampleFormControlTextarea1" class="form-label">Description</label>
               <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="newProject.Description" name="Description"></textarea>
             </div>
             <div class="mb-3">
-              <label id="lbl" for="assignee" class="form-label">Assignees</label>
-              <p-multiSelect [options]="users" [(ngModel)]="selectedUsers" placeholder="Select Assignees" optionLabel="assignees" display="chip" [showClear]="true" id="assignee" name="Assignees"></p-multiSelect>
+              <label id="lbl" for="assignee" class="form-label">Project Members</label>
+              <p-multiSelect [options]="users" [(ngModel)]="selectedUsers" placeholder="Select Project Members" optionLabel="assignees" display="chip" [showClear]="true" id="assignee" name="Assignees"></p-multiSelect>
             </div>
             <div class="col-md">
               <label for="priorityDiv" class="form-label">Priority</label>
@@ -42,7 +50,10 @@
               </div>
             </div>
             <div class="mb-3" id="addProjectBtn">
-              <button class="btn" tabindex="0" aria-controls="DataTables_Table_0" type="submit"><span><i class="bx bx-plus me-0 me-sm-1"></i><span class="d-none d-sm-inline-block">Add Project</span></span></button>
+              <input class="btn btn-primary" tabindex="0" aria-controls="DataTables_Table_0" type="submit" value="Add Project">
+            </div>
+            <div class="mb-3">
+              <i (click)="ToggleProjectCard()" class="fas fa-chevron-right fa-2x"></i>
             </div>
         </form>
         </div>

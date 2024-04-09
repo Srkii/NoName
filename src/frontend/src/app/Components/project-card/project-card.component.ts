@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectCardService } from '../../_services/project-card.service';
 import {CreateProject} from '../../Entities/CreateProject';
-import { Priority, ProjectStatus } from '../../Entities/Project';
 
 @Component({
   selector: 'app-project-card',
@@ -13,11 +12,13 @@ export class ProjectCardComponent {
 
   users: any[] = [];
   selectedUsers: any[] = [];
+  @Output() closeCard = new EventEmitter<void>();
+  showComponent: boolean = true;
+  buttonClicked: boolean = false;
 
   newProject: CreateProject = {
     ProjectName: '',
     Priority: 0,
-    ProjectStatus: ProjectStatus.Proposed,
   }
 
   constructor(
@@ -32,10 +33,18 @@ export class ProjectCardComponent {
   }
 
   CreateProject(): void{
+    this.buttonClicked = true;
+
     if(this.newProject.StartDate == undefined || this.newProject.EndDate == undefined)
     {
       console.log("You must enter a dates for the project")
       return;
+    }
+
+    if(this.newProject.ProjectName == "")
+    {
+      console.log("You must specify project name")
+      return
     }
 
     this.newProject.Priority = +this.newProject.Priority;
@@ -43,7 +52,9 @@ export class ProjectCardComponent {
     this.myProjectCardService.CreateProject(this.newProject).subscribe(
       response => {
         console.log("Project created successfully", response);
-
+        this.showComponent = false;
+        this.buttonClicked = false;
+        this.closeCard.emit();
       },
       error => {
         console.error("Error occurred while creating project", error);
@@ -51,4 +62,15 @@ export class ProjectCardComponent {
     );
   }
 
+  ToggleProjectCard() {
+    this.showComponent = !this.showComponent;
+    this.closeCard.emit();
+  }
+
+  isInvalidDate(): boolean {
+    if(this.newProject.StartDate && this.newProject.EndDate)
+      return this.buttonClicked && (this.buttonClicked && !(this.newProject.StartDate < this.newProject.EndDate));
+    return false;
+  }
+  
 }

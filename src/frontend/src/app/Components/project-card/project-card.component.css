@@ -1,3 +1,14 @@
+#container {
+    position: relative;
+}
+  
+.col-md-5 {
+    position: absolute;
+    top: 0%;
+    right: 0.2%;
+    transition: right 0.5s;
+}
+
 input[type="date"]{
     display: block;
     width: 100%;
@@ -14,23 +25,31 @@ input[type="date"]{
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+input::placeholder {color: #697a8d; }
+
 .col-md div{ margin-bottom: 0; }
+
+.card-body{color: #697a8d;}
 
 :host ::ng-deep .p-multiselect {
   width: 100%;
 }
 
 :host ::ng-deep .p-multiselect-label {
-  width: calc(100% - 2em); /* Oduzimamo padding i ikonu za brisanje */
+  width: calc(100% - 2em); 
 }
 
 label{ margin-right: 1rem; }
 
 h4{
-    color: #212529;
+    color: #697a8d;
     margin-bottom: 0;
     padding: 1rem 0 0 1rem;
     font-weight: 400;
+}
+
+i{
+    color: #a0a6ac;
 }
 
 .btn{
@@ -45,6 +64,20 @@ h4{
     background-color: #5f61e6 !important;
     border-color: #5f61e6 !important;
     transform: translateY(-1px) !important
+}
+
+.is-invalid{
+    border-color: red !important;
+}
+
+.invalid,.invalid-missing-date,.invalid-dates{
+    color: red !important;
+    font-size: small;
+}
+
+input[type="date"].is-invalid {
+    padding-right: 30px;
+    border-color: red !important;
 }
 
 #PriorityChoice{
@@ -71,7 +104,7 @@ h4{
 }
 
 #addProjectBtn{
-    display: flex;
+   display: flex;
    justify-content: right;
    margin-top: 16px;
    margin-bottom: 0;
@@ -82,3 +115,11 @@ h4{
     margin-bottom: 10px;
 }
 
+@media (max-width: 768px) {
+    .col-md-5 {
+      position: relative; 
+      width: 100%; 
+      margin-right: 0;
+      transition: none; 
+    }
+  }

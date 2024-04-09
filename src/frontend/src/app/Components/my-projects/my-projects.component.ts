@@ -11,7 +11,7 @@ import { Route, Router } from '@angular/router';
 })
 export class MyProjectsComponent implements OnInit {
   projects: Project[] = [];
-
+  showProjectCard: boolean = false;
   constructor(
     
     private myProjectsService: MyProjectsService,
@@ -338,5 +338,13 @@ export class MyProjectsComponent implements OnInit {
 
   goToProject(id: number) {
     this.router.navigate(['/project', id]);
+  }
+
+  ToggleProjectCard() {
+    this.showProjectCard = !this.showProjectCard;
+  }
+
+  handleCloseCard(){
+    this.showProjectCard = false;
   }
 }

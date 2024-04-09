@@ -5,6 +5,6 @@ export interface CreateProject {
     Description?: string;
     StartDate?: Date;
     EndDate?: Date;
-    ProjectStatus: ProjectStatus;
+    ProjectStatus?: ProjectStatus;
     Priority: Priority;
 }

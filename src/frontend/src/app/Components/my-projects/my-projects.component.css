@@ -138,3 +138,7 @@ p {
   background-color: #e16a26 !important;
   color: #ffffff !important;
 }
+app-project-card{
+  position: relative;
+  top: -0.8%;
+}
