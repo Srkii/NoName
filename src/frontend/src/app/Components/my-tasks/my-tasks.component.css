@@ -57,7 +57,7 @@ th {
   padding: 5px;
   border-left: none;
   border-right: none;
-  width: 15%;
+  width: 25%; /* Set a fixed width for all th elements */
   padding-left: 10%;
 }
 
@@ -67,10 +67,11 @@ td {
   border-left: none;
   border-right: none;
   font-size: 12px;
+  white-space: nowrap; 
   padding-left: 10%;
-  white-space: nowrap; /* Prevent text wrapping */
-  text-overflow: ellipsis; /* Add ellipsis for overflowed content */
+  text-overflow: ellipsis;
 }
+
 
 tr:last-child {
   border-bottom: none;
@@ -84,8 +85,8 @@ tr:last-child td {
   font-weight: bold;
 }
 
-.red:hover,
-.red.clicked {
+.td_row:hover,
+.td_row.clicked {
   cursor: pointer;
   background-color: #e7e7ff !important;
   color: #5f61e6 !important;
@@ -106,6 +107,7 @@ p {
 .empty-table th {
   border-bottom: none;
 }
+
 
 
 /* .mark:hover {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
 import { Observable } from 'rxjs';
 
@@ -23,17 +23,19 @@ export class MyTasksService {
     );
   }
 
-  GetUserTasks(userId: number): Observable<ProjectTask[]> {
+  GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
   }
 
-  GetProjectTaskById(taskId: number): Observable<ProjectTask> {
+  GetProjectTask(taskId: number): Observable<ProjectTask> {
     return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}`);
   }
   //tico: mirkov updateTaskStatus. Treba da se promeni
-  updateTaskStatus(taskId: number, statusName: string): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${taskId}/${statusName}`, null);
+  updateTaskStatus1(id: number, statusName: string): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`, null);
   }
+  
+  
 
   updateTicoTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/updateTicoStatus/${taskId}`,task );
@@ -47,8 +49,8 @@ export class MyTasksService {
   updateTaskStatusPositions(updatedStatuses: any[]): Observable<any> {
   return this.http.put(`${this.baseUrl}/updateStatusPositions`, updatedStatuses);
   }
-  //tico: duplikat GetUserTasks... Ispraviti gde se koristi
-  GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
+  sortTasksByDueDate(sortOrder: string): Observable<ProjectTask[]> {
+    const url = `${this.baseUrl}/sortTasksByDueDate?sortOrder=${sortOrder}`;
+    return this.http.get<ProjectTask[]>(url);
   }
 }
