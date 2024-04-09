@@ -59,7 +59,7 @@
       class="mark"
       [style.backgroundColor]="task && task.statusName === 'Completed' ? '#3fb94c' : ''"
       [style.boxShadow]="task && task.statusName === 'Completed' ? '0 0 3px #3fb94c' : ''"
-      (click)="toggleTaskCompletion($event, task)"
+      (click)="toggleTaskCompletion(task)"
     >
       {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
     </button>

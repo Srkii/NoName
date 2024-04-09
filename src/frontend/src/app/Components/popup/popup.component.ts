@@ -37,8 +37,7 @@ export class PopupComponent {
     this.getUser();
   }
 
-  toggleTaskCompletion(event: any, task: ProjectTask): void {
-    event.stopPropagation();
+  toggleTaskCompletion(task: ProjectTask): void {
     let newStatus: string;
     
     if (task.statusName === "InProgress" || task.statusName === "InReview") {
@@ -62,6 +61,8 @@ export class PopupComponent {
         console.error('Error updating task status:', error);
       }
     });
+
+    this.taskUpdated.emit(task);
   }
   
   
@@ -101,12 +102,17 @@ export class PopupComponent {
         pop.style.height="100%";
         pop.style.width="95%";
       }
+      if(windowWidth<600)
+        {
+          pop.style.height="100%";
+          pop.style.width="90%";
+        }
       else
       {
         pop.style.top="";
         pop.style.height="";
       }
-      pop.style.width="97.5%";
+      pop.style.width="98%";
       pop.style.padding = '2%';
       back.style.marginRight = '1%';
       full.style.marginRight = '3%';

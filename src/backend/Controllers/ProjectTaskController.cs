@@ -133,43 +133,47 @@ namespace backend.Controllers
         }
 
 
-      [HttpPut("updateStatus/{taskId}/{statusName}")]
-public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
-{
-    var task = await _context.ProjectTasks
-        .Include(t => t.TskStatus)
-        .FirstOrDefaultAsync(t => t.Id == taskId);
-
-    if (task == null)
+    [HttpPut("updateStatus/{taskId}/{statusName}")]
+    public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
     {
-        return NotFound();
+        var task = await _context.ProjectTasks
+            .Include(t => t.TskStatus)
+            .FirstOrDefaultAsync(t => t.Id == taskId);
+
+        if (task == null)
+        {
+            return NotFound();
+        }
+
+        var status = await _context.TaskStatuses
+            .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
+
+        if (status == null)
+        {
+            return NotFound("Status not found.");
+        }
+
+        // Update the task status
+        task.TskStatusId = status.Id;
+
+        // Save changes to the database context
+        await _context.SaveChangesAsync();
+
+        // Fetch the updated task again
+        task = await _context.ProjectTasks
+            .Include(t => t.TskStatus)
+            .FirstOrDefaultAsync(t => t.Id == taskId);
+
+        // Create a DTO to shape the response
+        var taskDto = new ProjectTaskDto
+        {
+            Id = task.Id,
+            // Add other properties you want to include in the DTO
+        };
+
+        return taskDto;
     }
 
-    var status = await _context.TaskStatuses
-        .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
-
-    if (status == null)
-    {
-        return NotFound("Status not found.");
-    }
-
-    task.TskStatusId = status.Id;
-    await _context.SaveChangesAsync();
-
-    // Now, after saving changes, fetch the updated task again
-    task = await _context.ProjectTasks
-        .Include(t => t.TskStatus)
-        .FirstOrDefaultAsync(t => t.Id == taskId);
-
-    // Create a DTO to shape the response
-    var taskDto = new ProjectTaskDto
-    {
-        Id = task.Id,
-        // Add other properties you want to include in the DTO
-    };
-
-    return taskDto;
-}
 
 
 

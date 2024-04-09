@@ -35,6 +35,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 
 export class MyTasksComponent implements OnInit {
+  [x: string]: any;
   tasks: ProjectTask[] = [];
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
@@ -69,6 +70,7 @@ export class MyTasksComponent implements OnInit {
       console.error('User ID is null');
       this.spinner.hide();
     }
+    this.cdr.detectChanges();
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
@@ -119,12 +121,10 @@ export class MyTasksComponent implements OnInit {
   //       }
   //     );
   // }
-  handleTaskUpdate(updatedTask: ProjectTask): void {
+  handleTaskUpdate(updatedTask: ProjectTask) {
     const index = this.tasks.findIndex(task => task.id === updatedTask.id);
     if (index !== -1) {
-      this.tasks[index] = updatedTask; // Update the task in the task list
-      // Optionally, you can reassign the task array to trigger change detection
-      this.tasks = [...this.tasks];
+      this.tasks[index] = updatedTask;
     }
   }
   
