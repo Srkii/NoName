@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using backend.Entities;
+using backend.SignalR;
+using Microsoft.AspNetCore.SignalR;
 namespace backend.Controllers
 {
     public class FileUploadController : BaseApiController
@@ -12,8 +14,8 @@ namespace backend.Controllers
         private readonly ITokenService _tokenService;
         private readonly IPhotoService _photoService;
         private readonly IUploadService _uploadService;
-        private readonly IHubContext<NotificationsHub> _hubContext;
-        public FileUploadController(DataContext context, ITokenService ts,IPhotoService ps,IUploadService us,IHubContext<NotificationsHub> hc)
+        private readonly IHubContext<NotificationsHub,INotificationsHub> _hubContext;
+        public FileUploadController(DataContext context, ITokenService ts,IPhotoService ps,IUploadService us,IHubContext<NotificationsHub,INotificationsHub> hc)
         {
             _context = context;
             _tokenService = ts;
@@ -44,7 +46,7 @@ namespace backend.Controllers
 
             return File(imageBytes,"image/jpeg");
         }
-        [AllowAnonymous]
+
         [HttpPost("uploadfile/{id}")]
         public async Task<ActionResult> UploadFile(int id,IFormFile file){
             if(file==null) return BadRequest("file is null");
@@ -57,6 +59,17 @@ namespace backend.Controllers
             };
             
             _context.Attachments.Add(attachment);
+            await _hubContext.Clients.All.NotifyAttachment();
+            var users = await _context.Users.ToListAsync();
+            foreach(var user in users){
+                _context.Notifications.Add(new Notification{
+                    UserId = user.Id,//ovo ovde posle samo tostring da ga poredim sa onim sto dobijem na hubu iz claim-a
+                    dateTime  = DateTime.UtcNow,
+                    Text = "attachment",
+                    read=false,
+                    appUser = user
+                });
+            } 
             await _context.SaveChangesAsync();
             return Ok(attachment);
         }

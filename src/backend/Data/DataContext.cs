@@ -8,17 +8,17 @@ namespace backend.Data
         public DataContext(DbContextOptions options) : base(options) { }
 
         public DbSet<AppUser> Users { get; set; }
-        public DbSet<Project> Projects {get; set;}
-        public DbSet<ProjectMember> ProjectMembers {get; set;}
-        public DbSet<ProjectTask> ProjectTasks {get; set;}
-        public DbSet<TaskDependency> TaskDependencies {get; set;}
-        public DbSet<Invitation> Invitations {get; set;}
-        public DbSet<UserRequest> UserRequests {get; set;}
-        public DbSet<Attachment> Attachments{get; set;}
-        public DbSet<Comment> Comments {get; set;}
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectMember> ProjectMembers { get; set; }
+        public DbSet<ProjectTask> ProjectTasks { get; set; }
+        public DbSet<TaskDependency> TaskDependencies { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<UserRequest> UserRequests { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<TskStatus> TaskStatuses { get; set; }
         public DbSet<ProjectSection> ProjectSections { get; set; }
-        
+        public DbSet<Notification> Notifications { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectMember>(entity =>
@@ -49,7 +49,7 @@ namespace backend.Data
                 entity.HasOne(pt => pt.ProjectSection)
                     .WithMany(ps => ps.Tasks)
                     .HasForeignKey(pt => pt.ProjectSectionId);
-                
+
                 entity.HasOne(pt => pt.AppUser)
                     .WithMany()
                     .HasForeignKey(pt => pt.AppUserId);

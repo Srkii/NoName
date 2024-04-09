@@ -26,28 +26,14 @@ export class NotificationsService {
       .build();
     this.hubConnection.start().catch(error => console.log(error));
 
-    this.hubConnection.on('UserIsOnline',username =>{
-      console.log("ONLINE : ",username);
-      this.toastr.info(username + " has come online")
-    });//sad samo dodajem redom sta treba da slusa
-    this.hubConnection.on('NewTask', response=>{
-      this.addNotification("There is a new task assigned to you.");
+    this.hubConnection.on('newNotifications',response =>{
+      this.toastr.info("New notifications have arrived");
+      console.log("notifications while you were gone: "+response);
     });
-    this.hubConnection.on('NewProject', response=>{
-      this.addNotification("A new project has been assigned to you.");
-    });
-    this.hubConnection.on('RemovedFromTask', response=>{
-      this.addNotification("You have been removed from a task.");
-    });
-    this.hubConnection.on('RemovedFromProject', response=>{
-      this.addNotification("You have been removed from a project.");
-    });
-    this.hubConnection.on('Comment', response=>{
-      this.addNotification("Someone commented on a task you're on.");
-    });
-    this.hubConnection.on('Attachment', response=>{
-      this.addNotification("Someone uploaded an attachment on a task you're on. "+response);
-    });
+    this.hubConnection.on('NotifyAttachment',response=>{
+      this.toastr.info("A NEW NOTIFICATION HAS ARRIVED");
+      console.log(response);
+    })
   }
 
   stopHubConnection(){

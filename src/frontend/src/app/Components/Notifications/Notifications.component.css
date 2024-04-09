@@ -1,0 +1,7 @@
+.card{
+  font-family: 'Public Sans' sans-serif;
+  width: 250px;
+  height: 250px;
+  border-radius: 8px;
+  background-color: #f5f5f9;
+}
