@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
 import { Observable } from 'rxjs';
 
@@ -10,7 +10,8 @@ import { Observable } from 'rxjs';
 export class MyTasksService {
   private apiUrl = ApiUrl.apiUrl;
   private baseUrl = `${this.apiUrl}/projectTask`;
-
+  sectionDeleted = new EventEmitter<void>();
+  
   constructor(private http: HttpClient) {}
 
   GetProjectTasks(): Observable<ProjectTask[]> {
@@ -52,5 +53,20 @@ export class MyTasksService {
   sortTasksByDueDate(sortOrder: string): Observable<ProjectTask[]> {
     const url = `${this.baseUrl}/sortTasksByDueDate?sortOrder=${sortOrder}`;
     return this.http.get<ProjectTask[]>(url);
+  }
+  // za addNewSection modal
+  addTaskStatus(taskStatus: { statusName: string; projectId: number }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/addTaskStatus`, taskStatus);
+  }
+  // za addNewTask modal
+  createTask(task: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, task);
+  }
+  // za deleteSection modal
+  deleteTaskStatus(taskStatusId: number | null): Observable<any> {
+    if (taskStatusId === null) {
+      throw new Error('Task status ID is null');
+    }
+    return this.http.delete(`${this.baseUrl}/deleteTaskStatus/${taskStatusId}`);
   }
 }
