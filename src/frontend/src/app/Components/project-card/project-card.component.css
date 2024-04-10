@@ -39,6 +39,21 @@ input::placeholder {color: #697a8d; }
   width: calc(100% - 2em); 
 }
 
+:host ::ng-deep .p-multiselect-items{
+    padding: 0 !important;
+}
+
+:host ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
+    background-color: rgb(233, 233, 235) !important;
+    color: #697a8d !important;
+}
+    
+:host ::ng-deep .p-checkbox-box.p-highlight,
+.p-checkbox-box.p-focus {
+    background-color: #697a8d !important;
+    color: #697a8d !important;
+}
+
 label{ margin-right: 1rem; }
 
 h4{
@@ -123,3 +138,44 @@ input[type="date"].is-invalid {
       transition: none; 
     }
   }
+  
+.user-details {
+flex-grow: 1; 
+}
+
+.user-image {
+    width: 3.125rem; 
+    height: 3.125rem;
+    margin-left: 0.3125rem;
+    margin-right: 0.5rem;
+}
+
+.select-wrapper {
+display: flex;
+align-items: center;
+}
+
+.form-select {
+width: 7rem;
+height: 2rem;
+font-size: smaller;
+color: #697a8d;
+float: right;
+}
+
+.user-name,
+.user-lastname {
+font-weight: bold;
+}
+
+.user-item{
+width: 100%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+color: #697a8d; 
+}
+
+.email{
+font-size: smaller;
+}

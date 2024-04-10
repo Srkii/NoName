@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Member } from '../Entities/Member';
 import { Project } from '../Entities/Project';
 import { CreateProject } from '../Entities/CreateProject';
+import { ProjectMember } from '../Entities/ProjectMember';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,9 @@ export class ProjectCardService {
 
   CreateProject(project: CreateProject): Observable<any> {
     return this.http.post<Project>(`${this.projectUrl}`, project, {responseType: 'json'});
+  }
+
+  AddProjectMember(projectMember: ProjectMember):Observable<any>{
+    return this.http.put<ProjectMember>(`${this.projectUrl}/addProjectMember`, projectMember, {responseType: 'json'})
   }
 }

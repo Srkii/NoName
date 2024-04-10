@@ -29,8 +29,26 @@
               <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="newProject.Description" name="Description"></textarea>
             </div>
             <div class="mb-3">
-              <label id="lbl" for="assignee" class="form-label">Project Members</label>
-              <p-multiSelect [options]="users" [(ngModel)]="selectedUsers" placeholder="Select Project Members" optionLabel="assignees" display="chip" [showClear]="true" id="assignee" name="Assignees"></p-multiSelect>
+              <label id="lbl" for="assignees" class="form-label">Project Members</label>
+              <p-multiSelect [options]="users" [(ngModel)]="selectedUsers" placeholder="Select Project Members" optionLabel="name" display="chip" [showClear]="true" id="assignee" name="Assignees">
+                <ng-template let-user pTemplate="item">
+                  <div class="user-item">
+                    <img [src]="user.picUrl" class="user-image">
+                    <div class="user-details">
+                        <div>{{ user.name }}</div>
+                        <div class="email">{{user.email}}</div>
+                    </div>
+                    <div class="select-wrapper">
+                      <select [(ngModel)]="user.projectRole" [ngModelOptions]="{standalone: true}" class="form-select form-select-xs" aria-label="Default select example" (click)="$event.stopPropagation()">
+                        <option value=1>Project Owner</option>
+                        <option value=2>Manager</option>
+                        <option value=3>Participant</option>
+                        <option value=4 selected>Guest</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
             </div>
             <div class="col-md">
               <label for="priorityDiv" class="form-label">Priority</label>
