@@ -1,3 +1,4 @@
+import { Invintation } from './../Entities/Invitation';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { HubUrl } from './../ApiUrl/HubUrl';
 import { Injectable } from '@angular/core';
@@ -10,6 +11,7 @@ import { AppUser } from '../Entities/AppUser';
 export class NotificationsService {
   hubUrl = HubUrl.hubUrl;
   private hubConnection?:HubConnection;
+  _notifs : Notification[] = [];
 
   constructor(private toastr:ToastrService) { }
 
@@ -26,21 +28,34 @@ export class NotificationsService {
       .build();
     this.hubConnection.start().catch(error => console.log(error));
 
-    this.hubConnection.on('newNotifications',(notifications:[Notification]) =>{
+    this.hubConnection.on('newNotifications',response =>{//ovo mi onda u sustini ne treba ako cu ja sa fronta da invokeujem getter za notifikacije
+      console.log(response);
       this.toastr.info("New notifications have arrived");
-      console.log("notifications while you were gone: ");
+    });
+
+    this.hubConnection.on('NotifyAttachment',(notification:Notification)=>{//za svaku sad isto...
+      this.toastr.info("A NEW NOTIFICATION HAS ARRIVED");
+      console.log(notification);
+      this.addNotification(notification);
+    })
+
+    this.hubConnection.on('NotifyComment',(notification:Notification)=>{
+      this.toastr.info("Someone has commented on your task..");
+      console.log(notification);
+      this.addNotification(notification);
+    })
+    this.hubConnection.on('sendNotifications',(notifications:[Notification])=>{
+      this._notifs = notifications;
       console.log(notifications);
     });
-    this.hubConnection.on('NotifyAttachment',response=>{
-      this.toastr.info("A NEW NOTIFICATION HAS ARRIVED");
-      console.log(response);
-    })
   }
-
   stopHubConnection(){
     this.hubConnection?.stop().catch(error => console.log(error));
   }
-  addNotification(text:string){
-    console.log(text);
+  addNotification(notification:Notification){
+    this._notifs.push(notification);
+  }
+  getNotifications(){
+    this.hubConnection?.invoke('invokeGetNotifications');
   }
 }

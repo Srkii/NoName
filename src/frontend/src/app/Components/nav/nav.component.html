@@ -46,7 +46,21 @@
   <!-- Icons on the right remain visible on all screen sizes -->
   <div class="navbar-nav-right d-flex">
     <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg" />
-    <img src="../../../assets/navIcons/bell (1).png" alt="" class="rightImg" />
+    <img src="../../../assets/navIcons/bell (1).png" alt="" class="nav-link dropdown-toggle hide-arrow rightImg"
+    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport" (click)="notifications.getNotifications()"/>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <ng-container *ngFor="let notification of notifications._notifs">
+        <li>
+          <div class="dropdown-item">
+            <div class="d-flex">
+              <div class="flex-grow-1">
+                {{notification.data}}
+              </div>
+            </div>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
     <img src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow rightImg"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
     <ul class="dropdown-menu dropdown-menu-end">

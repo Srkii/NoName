@@ -11,7 +11,7 @@ import { NotificationsService } from '../../_services/notifications.service';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService,private notifications:NotificationsService) {}
+  constructor(private router: Router,private userInfo:UserinfoService,public notifications:NotificationsService) {}
   ngOnInit(): void {
     this.isAdmin()
     this.getUser()

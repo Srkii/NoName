@@ -4,7 +4,8 @@ namespace backend.Interfaces
 {
     public interface INotificationsHub
     {
-        Task newNotifications(List<Notification> notifications);
+        Task newNotifications();
         Task NotifyAttachment();
+        Task sendNotifications(List<Notification> notifications);
     }
 }

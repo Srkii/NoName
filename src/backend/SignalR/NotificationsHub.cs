@@ -27,10 +27,9 @@ namespace backend.SignalR
                 _userConnections[userId] = new HashSet<string>();//ovo ce da proverava da li su useri online, moguce slati notifikacije iz baze
             }
             _userConnections[userId].Add(Context.ConnectionId);
-            if(notifications.Count>0) await Clients.Group(userId).newNotifications(notifications);//salje sve nove notifikacije korisniku na front ukoliko ih ima
+            if(notifications.Count>0) await Clients.Group(userId).newNotifications();//salje sve nove notifikacije korisniku na front ukoliko ih ima
             await base.OnConnectedAsync();
         }
-        
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             var userId = Context.UserIdentifier;
@@ -45,6 +44,12 @@ namespace backend.SignalR
             await base.OnDisconnectedAsync(exception);
         }
 
+        public async Task invokeGetNotifications(){
+            var userId = Context.UserIdentifier;
+            var httpContext = Context.GetHttpContext();
+            var notifications = await _context.Notifications.Where(x=>x.UserId.ToString()==userId && x.read==false).ToListAsync();
+            await Clients.Caller.sendNotifications(notifications);
+        }
     }
 
 }
