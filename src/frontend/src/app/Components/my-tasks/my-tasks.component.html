@@ -1,5 +1,13 @@
+<app-popup
+  class="pop"
+  *ngIf="showPopUp && clickedTask"
+  [task]="clickedTask"
+  (backClicked)="closePopup()"
+  (taskUpdated)="handleTaskUpdate($event)"
+  [@popFromSide]="showPopUp ? 'popFromSide' : ''"
+  
+></app-popup>
 <div class="all">
-  <div id="all1">
     <h5>📬 In Progress</h5>
 
     <table [ngClass]="{ 'empty-table': isTasksEmpty('InProgress') }">
@@ -29,7 +37,7 @@
       <!-- zasto se klasa zove red?? -->
       <ng-container *ngFor="let task of tasks">
         <tr
-          class="red"
+          class="td_row"
           *ngIf="task.statusName=='InProgress'"
           [class.clicked]="clickedTask?.id === task.id"
           (click)="togglePopUp($event, task.id)"
@@ -45,12 +53,10 @@
         </tr>
       </ng-container>
     </table>
-  </div>
 </div>
 <br />
 
 <div class="all">
-  <div id="all1">
     <h5>&#10024; In Review</h5>
 
     <table [ngClass]="{ 'empty-table': isTasksEmpty('InReview') }">
@@ -79,7 +85,7 @@
       </tr>
       <ng-container *ngFor="let task of tasks">
         <tr
-        class="red"
+        class="td_row"
         *ngIf="task.statusName=='InReview'"
         [class.clicked]="clickedTask?.id === task.id"
         (click)="togglePopUp($event, task.id)"
@@ -98,11 +104,9 @@
         </tr>
       </ng-container>
     </table>
-  </div>
 </div>
 <br />
 <div class="all">
-  <div id="all1">
     <h5>🎉 Completed</h5>
 
     <table [ngClass]="{ 'empty-table': isTasksEmpty('Completed') }">
@@ -131,7 +135,7 @@
       </tr>
       <ng-container *ngFor="let task of tasks">
         <tr
-        class="red"
+        class="td_row"
         *ngIf="task.statusName=='Completed'"
         [class.clicked]="clickedTask?.id === task.id"
         (click)="togglePopUp($event, task.id)"
@@ -147,12 +151,4 @@
       </ng-container>
     </table>
   </div>
-</div>
 <br />
-<app-popup
-  *ngIf="showPopUp"
-  [task]="clickedTask"
-  (backClicked)="closePopup()"
-  (taskUpdated)="handleTaskUpdate($event)"
-  [@popFromSide]="showPopUp ? 'popFromSide' : ''"
-></app-popup>
