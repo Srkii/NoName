@@ -10,8 +10,9 @@ import { AppUser } from '../Entities/AppUser';
 })
 export class NotificationsService {
   hubUrl = HubUrl.hubUrl;
+  newNotifications:boolean = false;
   private hubConnection?:HubConnection;
-  _notifs : Notification[] = [];
+  notifications : Notification[] = [];
 
   constructor(private toastr:ToastrService) { }
 
@@ -28,34 +29,28 @@ export class NotificationsService {
       .build();
     this.hubConnection.start().catch(error => console.log(error));
 
-    this.hubConnection.on('newNotifications',response =>{//ovo mi onda u sustini ne treba ako cu ja sa fronta da invokeujem getter za notifikacije
-      console.log(response);
-      this.toastr.info("New notifications have arrived");
+    this.hubConnection.on('newNotifications',() =>{//ovo mi onda u sustini ne treba ako cu ja sa fronta da invokeujem getter za notifikacije
+      this.toastr.info("You have unread notifications!");
+      this.newNotifications = true;
     });
 
-    this.hubConnection.on('NotifyAttachment',(notification:Notification)=>{//za svaku sad isto...
-      this.toastr.info("A NEW NOTIFICATION HAS ARRIVED");
-      console.log(notification);
-      this.addNotification(notification);
+    this.hubConnection.on('Notify',()=>{
+      //dobija info da je notifikacija stigla
+      //stavi crvenu tackicu na zvonce na primer...
+      this.toastr.info("New notification!!");
+      this.newNotifications = true;
     })
-
-    this.hubConnection.on('NotifyComment',(notification:Notification)=>{
-      this.toastr.info("Someone has commented on your task..");
-      console.log(notification);
-      this.addNotification(notification);
-    })
-    this.hubConnection.on('sendNotifications',(notifications:[Notification])=>{
-      this._notifs = notifications;
-      console.log(notifications);
+    this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
+      //ovo preuzima notifikacije sa back-a kad se klikne na zvonce
+      this.notifications = notifications;
+      console.log(notifications);//brisi posle
     });
   }
   stopHubConnection(){
     this.hubConnection?.stop().catch(error => console.log(error));
   }
-  addNotification(notification:Notification){
-    this._notifs.push(notification);
-  }
-  getNotifications(){
-    this.hubConnection?.invoke('invokeGetNotifications');
+  async getNotifications(){
+    //invoke funkcije na back-u kad se klikne na zvonce
+    await this.hubConnection?.invoke('invokeGetNotifications');
   }
 }

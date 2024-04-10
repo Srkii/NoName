@@ -4,8 +4,9 @@ namespace backend.Interfaces
 {
     public interface INotificationsHub
     {
+        Task Notify();//ova je glavna, ova pusta notifikaciju korisnicima....
         Task newNotifications();
-        Task NotifyAttachment();
-        Task sendNotifications(List<Notification> notifications);
+        Task recieveNotifications(List<Notification> notifications);
+        Task InvokeGetNotifications();
     }
 }

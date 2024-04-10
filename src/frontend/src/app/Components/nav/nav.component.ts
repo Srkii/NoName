@@ -11,16 +11,15 @@ import { NotificationsService } from '../../_services/notifications.service';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService,public notifications:NotificationsService) {}
+  constructor(private router: Router,private userInfo:UserinfoService,public notificationService:NotificationsService) {}
   ngOnInit(): void {
     this.isAdmin()
     this.getUser()
   }
   admin!: boolean
   logovan!: boolean
-
   user!:any
-
+  notification_list:Notification[] = [];
   async Logout(): Promise<void> {
     try {
       // Remove token and id from local storage
@@ -29,7 +28,7 @@ export class NavComponent implements OnInit {
       localStorage.removeItem('role');
 
       // Navigate to the login page
-      this.notifications.stopHubConnection();
+      this.notificationService.stopHubConnection();
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('redirect failed:', error);
@@ -55,5 +54,8 @@ export class NavComponent implements OnInit {
 
     })
   }
-
+  async getNotifications(){
+    await this.notificationService.getNotifications();
+    this.notification_list = this.notificationService.notifications;
+  }
 }

@@ -14,9 +14,10 @@ export class FileUploadComponent {
     var file:File = $event.target.files[0];
     var task_id = Number(this.shared.current_task_id);
     var token = localStorage.getItem('token');
+    var user_id = localStorage.getItem('id');//prosledim id posiljaoce
     if(file!=null && this.shared.current_task_id!=null)
     {
-      this.uploadService.UploadFile(task_id,file,token).subscribe({
+      this.uploadService.UploadFile(task_id,user_id,file,token).subscribe({
         next: (response) =>{
           console.log(response);
         },

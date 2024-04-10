@@ -1,7 +1,10 @@
 export interface Notification{
   id: number;
-  userId: number;
+  reciever_id: number;
+  sender_id:string,
   dateTime: Date;
-  text: string;
+  type: number;
   read: boolean;
+  sender_firstname:string;
+  sender_lastname:string;
 }

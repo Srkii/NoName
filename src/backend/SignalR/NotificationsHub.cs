@@ -5,29 +5,34 @@ using Microsoft.EntityFrameworkCore;
 using backend.Entities;
 using backend.Data;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace backend.SignalR
 {
     [Authorize]
     public class NotificationsHub : Hub<INotificationsHub>
     {
-        private readonly IDictionary<string, HashSet<string>> _userConnections = new Dictionary<string, HashSet<string>>();
+        public readonly IDictionary<string, HashSet<string>> _userConnections = new Dictionary<string, HashSet<string>>();
         private readonly DataContext _context;
         public NotificationsHub(DataContext context){
             _context = context;
-         }
+        }
         public override async Task OnConnectedAsync()
         {
-            var userId = Context.UserIdentifier;
+            var userIdClaim = Context.User.FindFirst(ClaimTypes.NameIdentifier);
             var httpContext = Context.GetHttpContext();
+            int userId = Convert.ToInt32(userIdClaim.Value);
             await Groups.AddToGroupAsync(Context.ConnectionId,Context.UserIdentifier);//pravimo grupu za LIVE komunikaciju
-            var notifications = await _context.Notifications.Where(x=>x.UserId.ToString()==userId && x.read==false).ToListAsync();
-            if (!_userConnections.ContainsKey(userId))
+            
+            var notifications = await _context.Notifications.Where(x=>x.reciever_id==userId && x.read==false).ToListAsync();//kako sam ja mogao ovo da uradim wtf
+
+            if (!_userConnections.ContainsKey(userId.ToString()))
             {
-                _userConnections[userId] = new HashSet<string>();//ovo ce da proverava da li su useri online, moguce slati notifikacije iz baze
+                _userConnections[userId.ToString()] = new HashSet<string>();
             }
-            _userConnections[userId].Add(Context.ConnectionId);
-            if(notifications.Count>0) await Clients.Group(userId).newNotifications();//salje sve nove notifikacije korisniku na front ukoliko ih ima
+
+            _userConnections[userId.ToString()].Add(Context.ConnectionId);
+            if(notifications.Count>0) await Clients.Group(userId.ToString()).newNotifications();//salje sve nove notifikacije korisniku na front ukoliko ih ima
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception exception)
@@ -45,10 +50,10 @@ namespace backend.SignalR
         }
 
         public async Task invokeGetNotifications(){
-            var userId = Context.UserIdentifier;
+            var userId = Context.UserIdentifier;//i dalje nzm kako je ovo isto sa id-em u bazi
             var httpContext = Context.GetHttpContext();
-            var notifications = await _context.Notifications.Where(x=>x.UserId.ToString()==userId && x.read==false).ToListAsync();
-            await Clients.Caller.sendNotifications(notifications);
+            var notifications = await _context.Notifications.Where(x=>x.reciever_id.ToString()==userId && x.read==false).ToListAsync();//po id-u primaoca izvlacimo kome ide notif.
+            await Clients.Caller.recieveNotifications(notifications);
         }
     }
 
