@@ -100,14 +100,12 @@ img{
   background-color: #e7e7ff !important;
   color: #5f61e6 !important;
 }
-textarea:hover,
-input:hover {
+textarea:hover{
   outline: none; /* Remove default focus outline */
   border: 1px solid #5f61e6 !important; /* Add custom border */
   box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
 }
-textarea:focus,
-input:focus {
+textarea:focus {
   outline: none; /* Remove default focus outline */
   border: 1px solid #5f61e6 !important; /* Add custom border */
   box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
@@ -130,7 +128,8 @@ input:focus {
 }
 .back:hover,
 .full:hover,
-.file:hover {
+.file:hover,
+.trash:hover {
   cursor: pointer;
 }
 .full {
@@ -202,8 +201,8 @@ input:focus {
 .add_comment:hover{
   filter: brightness(120%);
 }
-#comment_header{
-  margin-bottom: 10px;
+.comment_header{
+  margin-bottom: -10px;
 }
 .fixed-comment-area {
   border-top: 0.5px solid lightgray;
@@ -222,10 +221,24 @@ input:focus {
 .no_comments{
   padding-left: 20px;
 }
-.content{
-  margin-top: -10px;
-  padding: 20px;
-  border:  0.5px solid lightgray;
+.content p{
+  color: #697a8d;
+  font-size: 12px;
+  margin-top: -5px;
+  margin-bottom: 15px;
+  outline: none;
+  border: 0.5px solid lightgray;
   border-radius: 8px;
-  margin-bottom: 10px;
+  padding: 20px;
+  word-wrap: break-word;
+}
+.comment_date{
+  float: right;
+  margin-top: -30px;
+  margin-right: 10px;
+  font-size: 12px;
+  color: #697a8d;
+}
+.trash{
+  margin-left: 15px;
 }

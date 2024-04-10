@@ -19,8 +19,8 @@ export class CommentsService {
   getComments(taskId: number): Observable<any> {
     return this.http.get<Comment[]>(`${this.apiUrl}/getComments/${taskId}`);
   }
-
-  deleteComment(dto: any): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/deleteComment`, { body: dto });
+  deleteComment(commentId: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/deleteComment/${commentId}`);
   }
+  
 }

@@ -185,6 +185,25 @@ export class PopupComponent {
         }
       });
     }
+
   }
+
+  CheckForCommets(task: ProjectTask): boolean {
+    const hasComments = this.comments.some(comment => comment.taskId === task.id);
+    return hasComments;
+  }
+  deleteComment(commentId: number): void {
+    this.commentsService.deleteComment(commentId).subscribe({
+      next: () => {
+        // Remove the deleted comment from the comments array
+        this.comments = this.comments.filter(comment => comment.id !== commentId);
+      },
+      error: (error: any) => {
+        console.error('Error deleting comment:', error);
+      }
+    });
+  }
+  
+  
   
 }

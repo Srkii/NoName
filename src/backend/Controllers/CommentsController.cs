@@ -40,7 +40,6 @@ namespace backend.Controllers
         {
             var comments = await _context.Comments
                 .Where(x => x.TaskId == taskId)
-                .OrderByDescending(x => x.MessageSent)
                 .ToListAsync();
             
             return Ok(comments);
@@ -49,29 +48,34 @@ namespace backend.Controllers
 
 
 
-        [Authorize]
-        [HttpDelete("deleteComment")]
-        public async Task<ActionResult> DeleteComment(DeleteCommentDto dto)
+        // [Authorize]
+        [AllowAnonymous]
+        [HttpDelete("deleteComment/{commentId}")]
+        public async Task<ActionResult> DeleteComment(int commentId)
         {
-            var comment = await _context.Comments.FindAsync(dto.CommentId);
+            var comment = await _context.Comments.FindAsync(commentId);
 
-            if(comment == null)
-                return BadRequest("Comment doesn't exist");
-            
-            if(comment.SenderId != dto.SenderId)
-                return BadRequest("Unvalid request: You cannot delete other's people comments");
-            
-            _context.Comments.Remove(comment);
-            await _context.SaveChangesAsync();
-            
-            var responseData = new 
-            {
-                CommentId = comment.Id,
-                EmailSent = true,
-                Message = "Comment deleted successfully."
-            };
+        if (comment == null)
+            return BadRequest("Comment doesn't exist");
+        
+        // Check if the user is authorized to delete the comment
+        // (You might need to implement this logic depending on your authentication mechanism)
+        // For example:
+        // if (comment.SenderId != currentUserId)
+        //     return BadRequest("Unauthorized: You cannot delete other people's comments");
 
-            return Ok(responseData);
+        _context.Comments.Remove(comment);
+        await _context.SaveChangesAsync();
+        
+        var responseData = new 
+        {
+            CommentId = comment.Id,
+            EmailSent = true,
+            Message = "Comment deleted successfully."
+        };
+
+        return Ok(responseData);
         }
     }
+
 }

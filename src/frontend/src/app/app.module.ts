@@ -24,6 +24,7 @@ import { PopupComponent } from './Components/popup/popup.component';
 import { KanbanComponent } from './Components/kanban/kanban.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GanttComponent } from './Components/gantt/gantt.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { GanttComponent } from './Components/gantt/gantt.component';
       positionClass: 'toast-bottom-right',
     }),
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
-    DragDropModule
+    DragDropModule,
+    ModalModule.forRoot()
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],
