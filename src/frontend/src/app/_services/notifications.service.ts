@@ -26,9 +26,10 @@ export class NotificationsService {
       .build();
     this.hubConnection.start().catch(error => console.log(error));
 
-    this.hubConnection.on('newNotifications',response =>{
+    this.hubConnection.on('newNotifications',(notifications:[Notification]) =>{
       this.toastr.info("New notifications have arrived");
-      console.log("notifications while you were gone: "+response);
+      console.log("notifications while you were gone: ");
+      console.log(notifications);
     });
     this.hubConnection.on('NotifyAttachment',response=>{
       this.toastr.info("A NEW NOTIFICATION HAS ARRIVED");
