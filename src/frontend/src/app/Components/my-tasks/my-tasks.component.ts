@@ -10,7 +10,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 @Component({
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
-  styleUrl: './my-tasks.component.css',
+  styleUrls: ['./my-tasks.component.css'],
   providers: [DatePipe], // Provide DatePipe here
   animations: [
     trigger('popFromSide', [
@@ -35,6 +35,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 
 export class MyTasksComponent implements OnInit {
+  [x: string]: any;
   tasks: ProjectTask[] = [];
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
@@ -69,11 +70,12 @@ export class MyTasksComponent implements OnInit {
       console.error('User ID is null');
       this.spinner.hide();
     }
+    this.cdr.detectChanges();
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
-    const row = document.querySelector('.red') as HTMLElement;
+    const row = document.querySelector('.td_row') as HTMLElement;
     this.myTasksService
       .GetProjectTask(taskId)
       .subscribe((task: ProjectTask) => {
@@ -119,13 +121,25 @@ export class MyTasksComponent implements OnInit {
   //       }
   //     );
   // }
-  handleTaskUpdate(updatedTask: ProjectTask): void {
+  handleTaskUpdate(updatedTask: ProjectTask) {
     const index = this.tasks.findIndex(task => task.id === updatedTask.id);
     if (index !== -1) {
-      this.tasks[index] = updatedTask; // Update the task in the task list
-      // Optionally, you can reassign the task array to trigger change detection
-      this.tasks = [...this.tasks];
+      this.tasks[index] = updatedTask;
     }
+    const userId = localStorage.getItem('id');
+
+    if (userId !== null) {
+    this.myTasksService
+      .GetTasksByUserId(userId)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.tasks = tasks;
+        this.spinner.hide();
+      });
+    } else {
+      console.error('User ID is null');
+      this.spinner.hide();
+    }
+    this.cdr.detectChanges();
   }
   
   sortOrder: 'asc' | 'desc' = 'asc';
