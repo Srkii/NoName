@@ -10,7 +10,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 @Component({
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
-  styleUrl: './my-tasks.component.css',
+  styleUrls: ['./my-tasks.component.css'],
   providers: [DatePipe], // Provide DatePipe here
   animations: [
     trigger('popFromSide', [
@@ -75,7 +75,7 @@ export class MyTasksComponent implements OnInit {
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
-    const row = document.querySelector('.red') as HTMLElement;
+    const row = document.querySelector('.td_row') as HTMLElement;
     this.myTasksService
       .GetProjectTask(taskId)
       .subscribe((task: ProjectTask) => {
@@ -126,6 +126,20 @@ export class MyTasksComponent implements OnInit {
     if (index !== -1) {
       this.tasks[index] = updatedTask;
     }
+    const userId = localStorage.getItem('id');
+
+    if (userId !== null) {
+    this.myTasksService
+      .GetTasksByUserId(userId)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.tasks = tasks;
+        this.spinner.hide();
+      });
+    } else {
+      console.error('User ID is null');
+      this.spinner.hide();
+    }
+    this.cdr.detectChanges();
   }
   
   sortOrder: 'asc' | 'desc' = 'asc';

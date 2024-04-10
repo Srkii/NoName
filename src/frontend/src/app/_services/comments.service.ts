@@ -1,25 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Comment } from '../Entities/Comments';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
+import { Comment } from '../Entities/Comments'; 
+import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentsService {
-  private apiUrl = '/api/comments';
+  private apiUrl = `${ApiUrl.apiUrl}/comments`;
 
   constructor(private http: HttpClient) { }
 
-  postComment(commentDto: Comment): Observable<Comment> {
+  postComment(commentDto: any): Observable<Comment> {
     return this.http.post<Comment>(`${this.apiUrl}/postComment`, commentDto);
   }
 
-  getComments(taskId: number): Observable<Comment[]> {
+  getComments(taskId: number): Observable<any> {
     return this.http.get<Comment[]>(`${this.apiUrl}/getComments/${taskId}`);
   }
 
-  deleteComment(dto: Comment): Observable<any> {
+  deleteComment(dto: any): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/deleteComment`, { body: dto });
   }
 }

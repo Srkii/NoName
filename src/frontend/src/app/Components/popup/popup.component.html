@@ -1,7 +1,8 @@
 <div class="container1">
 
   <div class="col-md-5 mx-2 float-end" id="popUp" *ngIf="task">
-    <svg
+    <div class="scroll">
+      <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
       height="16"
@@ -63,9 +64,30 @@
     >
       {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
     </button>
+    <!-- Existing HTML markup -->
+    <br>
+
     <div class="comments">
-      <p class="header">COMMENTS</p>
-      <textarea class="comment" rows="3" placeholder="Add a comment"></textarea>
+      <p class="header" id="comment_header">Comments</p>
+      <div class="visible_comments">
+        <div *ngFor="let comment of comments">
+          <span class="no_comments" *ngIf="this.task.id!=comment.taskId">No Comments</span>
+          <ng-continer *ngIf="this.task.id===comment.taskId">
+            <p>{{ comment.senderFirstName }} {{ comment.senderLastName }}:</p>
+            <div class="content">
+              <p>{{ comment.content }}</p>
+            </div>
+            <!-- <hr> -->
+          </ng-continer>
+        </div>
+      </div>
+      
     </div>
+    </div>
+    <div class="fixed-comment-area">
+      <textarea class="comment" rows="3" placeholder="Add a comment" #commentInput></textarea>
+      <button class="add_comment" (click)="addComment()">Add Comment</button>
+    </div>
+    
   </div>
 </div>

@@ -4,6 +4,7 @@ using backend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace backend.Controllers
 {
@@ -14,7 +15,8 @@ namespace backend.Controllers
         {
             _context = context;
         }
-
+        
+        [AllowAnonymous]
         [HttpPost("postComment")] // /api/comments/postComment
         public async Task<IActionResult> PostComment(CommentDto commentDto)
         {
@@ -32,13 +34,20 @@ namespace backend.Controllers
             return Ok(comment);
         }
 
-        [HttpGet("getComments/{taskId}")] // /api/comments/getComments
-        public async Task<ActionResult<List<Comment>>> GetComments(int taskId)
+        [AllowAnonymous]
+        [HttpGet("getComments/{taskId}")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int taskId)
         {
-            //doraditi: treba da proveri dal task postoji pa onda da trazi komentar. ako ne postoji vraca BadRequest sa opisom greske
-            var comments = await _context.Comments.Where(x => x.TaskId == taskId).OrderByDescending(x => x.MessageSent).ToListAsync();
-            return comments;
+            var comments = await _context.Comments
+                .Where(x => x.TaskId == taskId)
+                .OrderByDescending(x => x.MessageSent)
+                .ToListAsync();
+            
+            return Ok(comments);
         }
+
+
+
 
         [Authorize]
         [HttpDelete("deleteComment")]
