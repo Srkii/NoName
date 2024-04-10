@@ -1,6 +1,3 @@
-// import { Project } from './project';
-
-import { AppUser } from './AppUser';
 import { Project } from './Project';
 
 export interface ProjectTask {

@@ -12,38 +12,51 @@
   <app-project-card *ngIf="showProjectCard" (closeCard)="handleCloseCard()" (refreshNeeded)="ngOnInit()"></app-project-card>
   <body>
     <div id="all">
-      <div id="all1">
+      <div class="header">
         <h5>All Projects</h5>
+        <div class="page-size-container">
+          <select class="page_size" (change)="changePageSize($event)">
+            <option value="" selected>Select page size</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </div>
+      </div>
         <br />
         <input
+          class="filter"
           type="text"
           placeholder="Search Project"
-          [(ngModel)]="ProjectName"
+          [(ngModel)]="projectName"
+          (input)="filterProjects(); "
         />
         <input
+          class="filter"
           type="text"
           placeholder="Search Project Owner"
-          [(ngModel)]="ProjectName"
         />
-        <select name="status" id="status" [(ngModel)]="selectedStatus">
+        <select class="filter" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterProjects();">
           <option value="" selected>Select Status</option>
           <option value="PROPOSED">PROPOSED</option>
-          <option value="IN PROGRESS">IN PROGRESS</option>
+          <option value="INPROGRESS">IN PROGRESS</option>
           <option value="COMPLETED">COMPLETED</option>
           <option value="ARCHIVED">ARCHIVED</option>
         </select>
-        <select name="priority" id="priority" [(ngModel)]="selectedPriority">
+        <select class="filter" name="priority" id="priority" [(ngModel)]="selectedPriority" (change)="filterProjects(); ">
           <option value="" selected>Select Priority</option>
           <option value="LOW">LOW</option>
           <option value="MEDIUM">MEDIUM</option>
           <option value="HIGH">HIGH</option>
         </select>
+
         <select
+        class="filter"
           name="date"
           id="date"
-          [(ngModel)]="StartDateFilter"
+          [(ngModel)]="startDateFilter"
           (change)="
-            handleStartDateChange($event); sortProjects(StartDateFilter)
+            handleStartDateChange($event); filterProjects(); 
           "
         >
           <option value="" selected>Filter by start date</option>
@@ -59,10 +72,11 @@
         </select>
 
         <select
+        class="filter"
           name="date1"
           id="date1"
-          [(ngModel)]="EndDateFilter"
-          (change)="handleEndDateChange($event); sortProjects1(EndDateFilter)"
+          [(ngModel)]="endDateFilter"
+          (change)="handleEndDateChange($event); filterProjects(); "
         >
           <option value="" selected>Filter by end date</option>
           <option value="Today1">Today</option>
@@ -90,8 +104,9 @@
             <th>START DATE</th>
             <th>END DATE</th>
           </tr>
-          <tr *ngFor="let project of projects" (click)="goToProject(project.id)">
-            <ng-container *ngIf="isProjectVisible(project)">
+          <tr  *ngFor="let project of projects" (click)="goToProject(project.id)">
+            <!-- <ng-container *ngIf="isProjectVisible(project)"> -->
+            <ng-container>
               <td class="project-name">{{ project.projectName }}</td>
               <td>Project owner name here</td>
               <td [ngClass]="getStatusString(project.projectStatus)">
@@ -105,8 +120,32 @@
             </ng-container>
           </tr>
         </table>
-      </div>
     </div>
+    <!-- <div id="pages">
+      <button *ngIf="this.currentPage!=1" class="navigate" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+      <span id="page">{{ currentPage }}</span> 
+      <button *ngIf="currentPage * pageSize < projects.length" class="navigate" (click)="nextPage()" [disabled]="currentPage * pageSize >= projects.length">Next</button>
+    </div> -->
+
+
+
+<div *ngIf="this.filteredProjects>5==true" id="pages">
+  <ul class="pagination">
+    <li class="paginate_buttons previous" [class.disabled]="currentPage === 1">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+    </li>
+    <li class="paginate_button" *ngFor="let pageNumber of totalPagesArray">
+      <button (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
+    </li>
+    <li class="paginate_buttons next" [class.disabled]="currentPage === totalPages">
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+    </li>
+  </ul>
+</div>
+
+
+
+    
     <button class="btn btn-primary btn-sm" (click)="ToggleProjectCard()">+ Add Project</button>
   </body>
 </html>

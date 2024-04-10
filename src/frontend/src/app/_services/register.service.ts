@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { AppUser } from '../Entities/AppUser';
 import { Invintation } from '../Entities/Invitation';
-import { Observable, map } from 'rxjs';
+import { Observable} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

@@ -1,10 +1,10 @@
 import { UploadService } from '../../_services/upload.service';
-import { ChangeDetectionStrategy, Component, Input, input, OnInit, signal } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
-import { AppUser } from '../../Entities/AppUser';
 import { ChangePassword } from '../../Entities/ChangePassword';
 import { NgxSpinnerService } from 'ngx-spinner';
+
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -33,6 +33,7 @@ export class UserInfoComponent implements OnInit {
     this.UserInfo();
     this.spinner.hide();
   }
+  
   UserInfo(){
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token')

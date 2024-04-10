@@ -1,11 +1,6 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
-.button-selectors {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 /* za tablete */
 @media screen and (max-width: 1200px) {
     .button-selectors {
@@ -20,13 +15,18 @@
     }
 }
 .project-heading {
-    text-align: center;
+    /* text-align: center; */
+    padding: 0px !important;
+    margin: 0px !important;
+    
 }
-.card-header {
-    color: black;
-    font-weight: bold;
-    font-size: 40px !important;
+.project-heading > span {
+    /* font-weight: bold; */
+    font-size: 30px !important;
     letter-spacing: -1px;
+    color: #676f79;
+    font-weight: 550;
+    /* line-height: 1.5; */
 }
 /* za telefone */
 @media screen and (max-width: 500px) { 
@@ -51,15 +51,15 @@
     text-decoration: underline;
     font-size: large;
     line-height: 1.5;
-
     svg {
-        margin-right: 8px;
+        margin-right: 4px;
+        
     }
 }
 /* Assignee temp */
 .asgplc {
     svg {
-        margin-right: 8px;
+        margin-right: 4px;
     }
 }
 .text-nowrap {
@@ -94,24 +94,25 @@ thead th{
 } */
 
 .btn-active {
-    background-color: #696cff !important;
+    background-color: #d7d7f8 !important;
+    border: 0px;
 }
 .btn-inactive {
-    background-color: #aeaff3 !important;
-    border-color: #aeaff3 !important;
+    background-color: #e7e7ee !important;
+    border: 0px;
 }
-.card-header {
-    margin-bottom: -10px;
-    color: #697a8d;
-    font-size: 2rem;
-    font-weight: 500;
-    line-height: 1.5;
+.button-selectors {
+    display: flex;
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+    /* margin-bottom: 50px; */
+    margin-top: 10px !important;
 }
 .btn-primary {
-    color: #fff;
-    background-color: #696cff;
+    color: #696cff;
+    /* background-color: #696cff; */
     border-color: #696cff;
-    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
     /* display: inline-flex; */
     /* align-items: center; */
     /* justify-content: center; */
@@ -119,11 +120,12 @@ thead th{
     padding-bottom: 0.75rem;
     font-size: 1rem;
     border-radius: 0.5rem;
-    margin: 25px;
+    margin-right: 25px;
     line-height: 1.45;
-    vertical-align: center;
     width: 300px;
+    text-align: left;
 }
+.btn-primary:focus{ color:#696cff }
 .bg-label-primary {
     background-color: #e7e7ff !important;
     color: #696cff !important;
@@ -174,6 +176,7 @@ thead th{
     border: 0px solid #d9dee3;
     border-radius: 0.5rem;
     padding: 15px;
+    margin-top: 50px;
 }
 .content-wrapper {
     display: flex;

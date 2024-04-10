@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
 import { Observable } from 'rxjs';
 
@@ -9,8 +9,9 @@ import { Observable } from 'rxjs';
 })
 export class MyTasksService {
   private apiUrl = ApiUrl.apiUrl;
-  private baseUrl = `${this.apiUrl}/projectTask`; // corrected base URL
-
+  private baseUrl = `${this.apiUrl}/projectTask`;
+  sectionDeleted = new EventEmitter<void>();
+  
   constructor(private http: HttpClient) {}
 
   GetProjectTasks(): Observable<ProjectTask[]> {
@@ -18,27 +19,54 @@ export class MyTasksService {
   }
 
   GetTasksByProjectId(projectId: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}`);
+    return this.http.get<ProjectTask[]>(
+      `${this.baseUrl}/ByProject/${projectId}`
+    );
   }
 
-  GetUserTasks(userId: number): Observable<ProjectTask[]> {
+  GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
   }
 
-  GetProjectTaskById(taskId: number): Observable<ProjectTask> {
+  GetProjectTask(taskId: number): Observable<ProjectTask> {
     return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}`);
   }
-  updateTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(
-      `${this.baseUrl}/updateStatus/${taskId}`,
-      task
-    );
+  //tico: mirkov updateTaskStatus. Treba da se promeni
+  updateTaskStatus1(id: number, statusName: string): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`, null);
   }
   
+  
+
+  updateTicoTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateTicoStatus/${taskId}`,task );
+  }
+
   //tico kanban ; ne diraj!
   GetTaskStatuses(projectId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/statuses/${projectId}`);
   }
-
-  
+  // za kanban
+  updateTaskStatusPositions(updatedStatuses: any[]): Observable<any> {
+  return this.http.put(`${this.baseUrl}/updateStatusPositions`, updatedStatuses);
+  }
+  sortTasksByDueDate(sortOrder: string): Observable<ProjectTask[]> {
+    const url = `${this.baseUrl}/sortTasksByDueDate?sortOrder=${sortOrder}`;
+    return this.http.get<ProjectTask[]>(url);
+  }
+  // za addNewSection modal
+  addTaskStatus(taskStatus: { statusName: string; projectId: number }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/addTaskStatus`, taskStatus);
+  }
+  // za addNewTask modal
+  createTask(task: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, task);
+  }
+  // za deleteSection modal
+  deleteTaskStatus(taskStatusId: number | null): Observable<any> {
+    if (taskStatusId === null) {
+      throw new Error('Task status ID is null');
+    }
+    return this.http.delete(`${this.baseUrl}/deleteTaskStatus/${taskStatusId}`);
+  }
 }

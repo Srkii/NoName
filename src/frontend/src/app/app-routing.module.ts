@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './Components/register/register.component';
 import { LoginComponent } from './Components/login/login.component';
-import { HomeComponent } from './Components/home/home.component';
 import { UserInfoComponent } from './Components/user-info/user-info.component';
 import { AdminComponent } from './Components/admin/admin.component';
 import { adminGuard } from './_guards/admin.guard';
@@ -11,7 +10,6 @@ import { authGuard } from './_guards/auth.guard';
 import { MyProjectsComponent } from './Components/my-projects/my-projects.component';
 import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.component';
 import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
-// import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 
@@ -27,7 +25,6 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
     children: [
-      { path: 'home', component: HomeComponent },
       { path: 'userinfo', component: UserInfoComponent },
       { path: 'myprojects', component: MyProjectsComponent },
       { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },

@@ -22,7 +22,7 @@ export class ProjectCardService {
   }
 
   CreateProject(project: CreateProject): Observable<any> {
-    return this.http.post<Project>(`${this.projectUrl}`, project, {responseType: 'json'});
+    return this.http.post<Project>(`${this.projectUrl}/Srdjan`, project, {responseType: 'json'});
   }
 
   AddProjectMember(projectMember: ProjectMember):Observable<any>{

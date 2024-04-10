@@ -1,11 +1,107 @@
 <div class="board">
-    <div class="board-wrapper" cdkDropListGroup>
-        <div *ngFor="let status of taskStatuses"  class="board-column" [style.background-color]="status.color">
-            <div class="column-title">{{status.name}}</div>
-            <div class="tasks-container" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" (cdkDropListDropped)="drop($event)">
-                <div *ngFor="let task of tasksBySection[status.name]" class="task" cdkDrag [cdkDragData]="task">
-                    <div class="task-title">{{task.taskName}}</div>
+    <div class="board-wrapper" cdkDropListGroup cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="taskStatuses" (cdkDropListDropped)="dropColumn($event)">
+        <div *ngFor="let status of taskStatuses"  class="card" cdkDrag>
+            <div class="card-header" [style.background-color]="status.color">
+                <div class="status-name">
+                    {{status.name}}
+                </div>
+                <div class="more-options" *ngIf="status.name !== 'Proposed' && status.name !== 'InProgress' && status.name !== 'InReview' && status.name !== 'Completed' && status.name !== 'Archived'" (click)="openModal(deleteSection, status.name, status.id)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                      </svg>
+                </div>
             </div>
+            <div class="card-body" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" (cdkDropListDropped)="drop($event)">
+                <div *ngFor="let task of tasksBySection[status.name]" class="card task" cdkDrag [cdkDragData]="task">
+                    <div class="card-body task-title ">{{task.taskName}}
+                    </div>
+                    <div class="card-footer assignee"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                      </svg>{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="new-items">
+        <div class="new-item" (click)="openSimpleModal(newTask)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>Add New Task
+        </div>
+        <div class="new-item" (click)="openSimpleModal(newSection)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>Add New Section
         </div>
     </div>
 </div>
+<ng-template #newTask>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Add New Task</h4>
+      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form action="" class="mb-3">
+        <div class="mb-1" autocomplete="off">
+            <label for="taskName" class="form-label">Task Name</label>
+            <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName" placeholder="Enter new tasks's name"/> 
+        </div>
+        <div class="mb-1" autocomplete="off">
+            <label for="taskDescription" class="form-label">Task Description</label>
+            <textarea class="form-control" class="form-control" name="taskDescription" [(ngModel)]="newSectionName" placeholder="Enter new tasks's description"></textarea>
+        </div>
+        <div class="mb-1">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" placeholder="Start Date"/>
+        </div>
+        <div class="mb-1">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" placeholder="End Date"/>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary d-grid w-100 mx-auto">Save Task</button>
+    </div>
+</ng-template>
+
+<ng-template #deleteSection>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Delete section</h4>
+      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="mb-3">This action will delete the <b>{{currentSectionName}}</b> section and move all of its tasks to the <b>Proposed</b> section.</div>
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid w-100 mx-auto" (click)="deleteSectionFunction()">Delete Section</button>
+      </div>
+    </div>
+</ng-template>
+
+<ng-template #newSection>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add New Section</h4>
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+          <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+      </div>
+    <div class="modal-body">
+        <form (ngSubmit)="saveSection()" class="mb-3">
+            <div class="mb-3" autocomplete="off">
+                <label for="newSection" class="form-label">Section Name</label>
+                <input type="text" class="form-control" name="newSection" [(ngModel)]="newSectionName" placeholder="Enter new section's name"/> 
+            </div>
+            <div class="mb-3">
+                <label for="sectionColor" class="form-label">Section Color</label>
+                <input type="color" class="form-control" id="sectionColor" name="sectionColor" [(ngModel)]="newSectionColor" required>
+            </div>
+            <div class="mb-3 btn-save-section">
+                <button class="btn btn-primary d-grid w-100 mx-auto" type="submit">Add New Section</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -9,7 +9,10 @@ export const loginGuard: CanActivateFn = (route, state) => {
   if(service.checkToken()===false)
     return true;
   else{
-    router.navigate(['/home']);
+    if(localStorage.getItem('role')==='0')
+         router.navigate(['/admin']);
+    else router.navigate(['/mytasks']);
+
     return false;
   }
 
