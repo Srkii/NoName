@@ -10,7 +10,7 @@ import { AppUser } from '../Entities/AppUser';
 })
 export class NotificationsService {
   hubUrl = HubUrl.hubUrl;
-  newNotifications:boolean = false;
+  newNotifications:boolean = false;//flag koji dopusta izvlacenje novih notifikacija sa backenda -> ukoliko nema novih notifikacija user ne sme da ima pravo da spamuje requestove klikom na zvonce
   private hubConnection?:HubConnection;
   notifications : Notification[] = [];
 
@@ -43,6 +43,7 @@ export class NotificationsService {
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
       //ovo preuzima notifikacije sa back-a kad se klikne na zvonce
       this.notifications = notifications;
+      this.newNotifications = false;
       console.log(notifications);//brisi posle
     });
   }

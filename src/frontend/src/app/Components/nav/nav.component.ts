@@ -1,9 +1,8 @@
 import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
-import { AppUser } from '../../Entities/AppUser';
 import { NotificationsService } from '../../_services/notifications.service';
-
+import { Notification } from '../../Entities/Notification';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -19,7 +18,7 @@ export class NavComponent implements OnInit {
   admin!: boolean
   logovan!: boolean
   user!:any
-  notification_list:Notification[] = [];
+  notification_list:any;
   async Logout(): Promise<void> {
     try {
       // Remove token and id from local storage

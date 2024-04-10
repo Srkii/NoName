@@ -48,15 +48,19 @@
     <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg" />
     <img src="../../../assets/navIcons/bell (1).png" alt="" class="nav-link dropdown-toggle hide-arrow rightImg"
     href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport" (click)="getNotifications()"/>
-    <ul class="dropdown-menu dropdown-menu-end">
-      <ng-container>
-        <li>
+    <ul class="dropdown-menu dropdown-menu-end" style="width: 300px; height: 200px; overflow: scroll; padding: 10px;">
+      <ng-container *ngFor="let notification of notification_list">
+        <li style="font-size: small;">
           <div class="dropdown-item">
             <div class="d-flex">
               <div class="flex-grow-1">
+                {{notification.sender_firstname}} {{notification.type==1?"has uploaded an attachment":notification.type==2?"has left a comment":"todo more options"}}
               </div>
             </div>
           </div>
+        </li>
+        <li>
+          <div class="dropdown-divider"></div>
         </li>
       </ng-container>
     </ul>
