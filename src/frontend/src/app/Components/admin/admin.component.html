@@ -1,7 +1,30 @@
 <div id="all">
   <div id="all1">
-    <h5>Users</h5>
     <br />
+
+    <div class="card-container">
+    <div class="card" [(ngModel)]="selectedRole" (click)="filterUsers()">
+      <div *ngFor="let user of admins">
+        <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+        <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+      </div>
+      <button type="button" class="btn btn-primary" name="admins" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="loadItems()">view admins</button>
+    </div>
+    <div *ngFor="let user of members">
+      <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+      <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+    </div>
+    <div class="card" [(ngModel)]="selectedRole" (click)="filterUsers()">
+      <div *ngFor="let user of projectMangers">
+        <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+        <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+      </div>
+      <button type="button" class="btn btn-primary" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="loadItems()">view members</button>
+    </div>
+    <div class="card" [(ngModel)]="selectedRole" (click)="filterUsers()">
+      <button type="button" class="btn btn-primary" name="project managers" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="loadItems()">view project managers</button>
+    </div>
+    </div>
 
     <div class="invite">
       <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter users's email"/>
@@ -11,14 +34,13 @@
       </div>
     </div>
 
-    <!-- <div class="input-group">
-
-      <input type="number" id="form3Example3" class="form-control" name="email" name="role" [(ngModel)]="invitation.receiver" placeholder="User's email"/>
-
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="Invite()">Invite</button>
-
-    </div> -->
-
+    <label for="pageSize">Items per page:</label>
+    <select [(ngModel)]="pageSize" (ngModelChange)="loadItems()">
+      <!-- <option value='5'>5</option>
+      <option value='10'>10</option>
+      <option value='20'>20</option> -->
+      <option *ngFor="let size of [5, 10, 20, 50]" [ngValue]="size">{{ size }}</option>
+    </select>
     <br />
     <table class="invoice-list-table table">
       <thead>
@@ -51,7 +73,7 @@
           <td  *ngIf="!user.archived">
             <div class="d-flex justify-content-start align-items-center">
               <div class="avatar-wrapper">
-                <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar"></div>
+                <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
                 <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
               </div>
               <div class="d-flex flex-column">
@@ -138,7 +160,26 @@
         </tr>
       </tbody>
     </table>
+    <div class="col-sm-12 col-md-6">
+      <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+        <ul class="pagination">
+          <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
+            <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+            <li class="paginate_button page-item active" *ngFor="let pageNumber of totalusersArray">
+              <button class="btn btn-primary" (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
+            </li>
+
+                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
+                  <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+                </li></ul></div></div>
+
   </div>
+
+
+
+  <!-- <button (click)="previousPage()" [disabled]="pageNumber === 1">Previous</button>
+
+  <button (click)="nextPage()">Next</button> -->
 </div>
 
 <ngx-spinner

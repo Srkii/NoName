@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
 import { AppUser } from '../../Entities/AppUser';
+import { UploadService } from '../../_services/upload.service';
 
 @Component({
   selector: 'app-nav',
@@ -50,7 +51,7 @@ export class NavComponent implements OnInit {
       },error:(error)=>{
         console.log(error)
       }
-      
+
     })
   }
 

@@ -24,7 +24,9 @@ export class AdminComponent implements OnInit{
 
   constructor(private adminService:AdminService,private toastr: ToastrService ,private uploadservice:UploadService,private spinner:NgxSpinnerService){}
   ngOnInit(): void {
-    this.GetAllUsers()
+   this.zaOnInit();
+   this.CountProjects();
+   this.splitByRole();
   }
 
   invitation:RegisterInvitation={
@@ -40,7 +42,7 @@ export class AdminComponent implements OnInit{
   role!: number
 
   selectedRole!: UserRole;
-  roles1 : string =''
+  roles1! : string;
 
   roles: UserRole[] = [UserRole.Admin, UserRole.Member, UserRole.ProjectManager];
 
@@ -54,11 +56,26 @@ export class AdminComponent implements OnInit{
     Email: ''
   }
 
-  flagA:boolean=false
-  flagM:boolean=false
-  flagPM:boolean=false
+  isAdmin: string=''
+  isMember: string=''
+  isProjectManager: string=''
+
+  selectedRolee: string=''
 
   sortOrder: 'asc' | 'desc' = 'asc';
+
+  items: any[] = [];
+  pageNumber: number = 1;
+  pageSize: number = 5;
+  totalPages: number=0;
+  currentPage: number=1;
+  totalusersArray: number[] = [];
+
+  userCount: number=0;
+  filteredUsers: number=0;
+  allUsersCount: number=0;
+
+  userRole: string='';
 
   Invite(): void{
     if(this.invitation)
@@ -109,7 +126,7 @@ export class AdminComponent implements OnInit{
     GetUserRole1(role: string): number{
       switch(role){
         case "Admin":
-          return 0
+          return UserRole.Admin;
         case "Member":
           return UserRole.Member
         case "Project manager":
@@ -118,27 +135,6 @@ export class AdminComponent implements OnInit{
           return UserRole.Member
       }
   }
-
-    SplitByRole(): void{
-      this.allUsers.forEach((user)=>{
-        if(user.role===UserRole.Admin){
-          this.admins.push(user)
-          this.flagA=true
-        }
-        else if(user.role===UserRole.Member)
-        {
-          this.members.push(user)
-          this.flagM=true
-
-        }
-        else if(user.role===UserRole.ProjectManager)
-        {
-          this.projectMangers.push(user)
-          this.flagPM=true
-        }
-
-      })
-    }
 
     ChangeUserRole(id:number): void{
       // this.changeRole.Role=this.GetUserRole(this.role)
@@ -205,8 +201,121 @@ export class AdminComponent implements OnInit{
     }
     }
 
-    getImg(): void{
+    loadItems(): void {
+      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee).subscribe(response => {
+        this.allUsers = response;
+        this.allUsers.forEach(user => {
+          if(user.profilePicUrl!=null) {
+            this.uploadservice.getImage(user.profilePicUrl).subscribe(
+              response=>{
+                const reader=new FileReader();
+              reader.readAsDataURL(response);
+              reader.onloadend=()=>{
+                user.profilePicUrl=reader.result as string;
+              };
+            }
+          )
+        }});
+        this.filteredUsers=this.userCount;
+        this.totalPages= Math.ceil(this.userCount / this.pageSize);
+        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        console.log("nizzz"+this.totalusersArray)
+        console.log(response);
+        this.spinner.hide();
+      });
+    }
 
+    nextPage(): void {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        const id = localStorage.getItem('id');
+      this.loadItems();
+      }
+    }
+
+    previousPage(): void {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        const id = localStorage.getItem('id');
+      this.loadItems();
+      }
+    }
+    goToPage(pageNumber: number): void {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.currentPage = pageNumber;
+        const id = localStorage.getItem('id');
+      this.loadItems();
+      }
+    }
+
+    changePageSize(event: Event): void {
+      const target = event.target as HTMLSelectElement;
+      if (target.value !== '') {
+        const pageSize = Number(target.value);
+        this.pageSize = pageSize;
+        this.loadItems();
+      }
+    }
+
+    filterUsers():void{
+      this.pageNumber=1;
+      this.loadItems();
+    }
+
+    CountProjects(): void{
+      this.adminService.getUsersCount(this.selectedRolee).subscribe(response=>{
+        this.userCount=response;
+        console.log(this.userCount)
+      })
+    }
+
+    zaOnInit(): void{
+      this.adminService.getAllUsers2().subscribe(response=>{
+        this.allUsersCount=response;
+      })
+      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee).subscribe(response => {
+        this.allUsers = response;
+        this.allUsers.forEach(user => {
+          if(user.profilePicUrl!=null) {
+            this.uploadservice.getImage(user.profilePicUrl).subscribe(
+              response=>{
+                const reader=new FileReader();
+              reader.readAsDataURL(response);
+              reader.onloadend=()=>{
+                user.profilePicUrl=reader.result as string;
+              };
+            }
+          )
+        }});
+        this.filteredUsers=this.allUsersCount;
+        this.totalPages= Math.ceil(this.allUsers.length / this.pageSize);
+
+        console.log(this.allUsers.length)
+        console.log("aaaa"+this.totalPages)
+        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        console.log("nizzz"+this.totalusersArray)
+        console.log(response);
+        this.spinner.hide();
+      });
+
+    }
+
+    splitByRole(): void{
+      this.allUsers.forEach(user => {
+        if(user.role===UserRole.Admin)
+        {
+          this.admins.push(user);
+        }
+        if(user.role===UserRole.Member)
+        {
+          this.members.push(user);
+        }
+        if(user.role===UserRole.ProjectManager)
+        {
+          this.projectMangers.push(user);
+        }
+
+      });
     }
 
   }

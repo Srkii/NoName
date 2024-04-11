@@ -73,6 +73,7 @@ p {
   display: flex;
   align-items: baseline;
   width: 30%;
+  margin-left: auto;
 }
 
 .invite input {
@@ -127,6 +128,71 @@ p {
   transform: translateY(-1px) !important;
 }
 .avatar{
+  padding-left: 0px;
   width: 30px;
   height: auto;
+}
+.paginate_button page-item active{
+  background-color: #5f61e6;
+  color: #5f61e6;
+}
+.card{
+  position: static;
+}
+table{
+  margin-bottom: 10px;
+}
+.col-sm-12.col-md-6 {
+  display: flex;
+  justify-content: flex-end; /* This will align the child elements to the right */
+  width: 100%;
+}
+
+.col-sm-12.col-md-6 .dataTables_paginate {
+  width: 100%; /* This ensures the pagination takes up the full width of the container */
+}
+
+.col-sm-12.col-md-6 .dataTables_paginate .pagination {
+  justify-content: flex-end; /* This will align the pagination buttons to the right */
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card {
+  margin-right: 10px;
+}
+
+.card:last-child {
+  margin-right: 0;
+}
+.label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #697a8d;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #5f61e6;
+}
+
+select:hover {
+  border-color: #5f61e6;
+
+}
+select:active{
+  background-color: #5d57c2;
 }

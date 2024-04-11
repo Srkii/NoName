@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Observable, of } from 'rxjs';
@@ -89,5 +89,37 @@ export class AdminService {
     else return of(null);
   }
 
-  //getPhotoByUserId
+  getAllUsers1(pageNumber: number, pageSize: number, role:string|null): Observable<any>{
+
+    var params=new HttpParams();
+
+    if(role){
+      params=params.set('role',role);
+    }
+    if (pageNumber) {
+      params = params.set('currentPage', pageNumber.toString());
+    }
+    if (pageSize) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+
+    return this.httpClient.get<Member[]>(`${this.apiUrl}/users/filtered`,{params:params})
+
+  }
+
+  getUsersCount(role:string|null): Observable<number>
+  {
+    var params=new HttpParams();
+
+    if(role){
+      params=params.set('role',role);
+    }
+
+    return this.httpClient.get<number>(`${this.apiUrl}/users/filteredCount`,{params: params});
+  }
+
+  getAllUsers2():Observable<number>{
+    return this.httpClient.get<number>(`${this.apiUrl}/users/all`);
+  }
+
 }
