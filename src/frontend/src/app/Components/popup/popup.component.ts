@@ -14,8 +14,8 @@ export class PopupComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('commentInput') commentInput!: ElementRef;
   @Input() task: ProjectTask | null = null;
-  @Output() taskUpdated: EventEmitter<ProjectTask> =
-    new EventEmitter<ProjectTask>();
+  @Output() taskUpdated: EventEmitter<void> =
+    new EventEmitter<void>();
   @Output() backClicked: EventEmitter<void> = new EventEmitter<void>();
 
   previousTaskStatus: string="";
@@ -27,7 +27,6 @@ export class PopupComponent {
 
   ngOnInit(): void {
     if (this.task) {
-      // Store the initial task status to revert back if needed
       this.previousTaskStatus = this.task.statusName;
     }
     this.getUser();
@@ -49,38 +48,32 @@ export class PopupComponent {
 
 
   toggleTaskCompletion(task: ProjectTask): void {
-    let newStatus: string;
-    
-    if (task.statusName === "InProgress" || task.statusName === "InReview") {
-      this.previousTaskStatus = task.statusName;
-      newStatus = "Completed";
+    var previousTaskStatus = "";
+    if (task.statusName === 'InProgress' || task.statusName == 'InReview') {
+      previousTaskStatus = task.statusName;
+      task.statusName = 'Completed';
     } else {
-      if (this.previousTaskStatus !== "") {
-        newStatus = this.previousTaskStatus;
-        this.previousTaskStatus = "";
-      } else {
-        newStatus = "InReview";
-      }
+      if(previousTaskStatus!="")
+        task.statusName = previousTaskStatus;
+      else
+        task.statusName = 'InReview';
     }
-    
-    // Update the task status on the server
-    this.myTasksService.updateTaskStatus1(task.id, newStatus).subscribe({
-      next: (updatedTask: ProjectTask) => {
-        this.taskUpdated.emit(updatedTask); // Emit the updated task
+    console.log(task.statusName)
+    this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
+      next: () => {
+        this.taskUpdated.emit();
       },
       error: (error: any) => {
-        console.error('Error updating task status:', error);
+        console.error('Error toggling task completion:', error);
       }
     });
-
-    this.taskUpdated.emit(task);
   }
+    
   
   
   
 
   triggerFileInput(): void {
-    // Programmatically click the hidden file input
     this.fileInput.nativeElement.click();
   }
 
@@ -88,12 +81,11 @@ export class PopupComponent {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
       const file = files[0];
-      // Handle the file processing here
     }
   }
 
   close() {
-    this.backClicked.emit(); // Emit event when back button is clicked
+    this.backClicked.emit();
     this.task = null;
   }
   full() {
