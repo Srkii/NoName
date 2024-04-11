@@ -33,7 +33,7 @@
               <p-multiSelect [options]="users" [(ngModel)]="selectedUsers" placeholder="Select Project Members" optionLabel="name" display="chip" [showClear]="true" id="assignee" name="Assignees">
                 <ng-template let-user pTemplate="item">
                   <div class="user-item">
-                    <img [src]="user.picUrl" class="user-image">
+                    <img [src]="'../../../../../backend/Assets/Images/' + user.picUrl" class="user-image">
                     <div class="user-details">
                         <div>{{ user.name }}</div>
                         <div class="email">{{user.email}}</div>

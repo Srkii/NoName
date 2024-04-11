@@ -35,6 +35,12 @@ input::placeholder {color: #697a8d; }
   width: 100%;
 }
 
+:host ::ng-deep .p-multiselect:hover,:host ::ng-deep .p-multiselect:focus{
+    outline: none;
+    border: 1px solid #5f61e6 !important; 
+    box-shadow: 0 0 3px #5f61e6; 
+}
+
 :host ::ng-deep .p-multiselect-label {
   width: calc(100% - 2em); 
 }
@@ -52,6 +58,14 @@ input::placeholder {color: #697a8d; }
 .p-checkbox-box.p-focus {
     background-color: #697a8d !important;
     color: #697a8d !important;
+}
+
+:host ::ng-deep .p-multiselect-filter:hover,
+:host ::ng-deep .p-multiselect-filter:focus
+{
+    outline: none;
+    border: 1px solid #5f61e6 !important; 
+    box-shadow: 0 0 3px #5f61e6; 
 }
 
 label{ margin-right: 1rem; }
@@ -178,4 +192,10 @@ color: #697a8d;
 
 .email{
 font-size: smaller;
+}
+
+textarea:hover,textarea:focus,input:hover,input:focus{
+    outline: none;
+    border: 1px solid #5f61e6 !important; 
+    box-shadow: 0 0 3px #5f61e6; 
 }
