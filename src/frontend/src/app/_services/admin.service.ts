@@ -107,7 +107,7 @@ export class AdminService {
 
   }
 
-  getUsersCount(role:string|null): Observable<number>
+  getFilterCount(role:string|null): Observable<number>
   {
     var params=new HttpParams();
 

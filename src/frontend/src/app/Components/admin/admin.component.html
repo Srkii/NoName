@@ -2,7 +2,7 @@
   <div id="all1">
     <br />
 
-    <div class="card-container">
+    <!-- <div class="card-container">
     <div class="card" [(ngModel)]="selectedRole" (click)="filterUsers()">
       <div *ngFor="let user of admins">
         <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
@@ -24,7 +24,7 @@
     <div class="card" [(ngModel)]="selectedRole" (click)="filterUsers()">
       <button type="button" class="btn btn-primary" name="project managers" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="loadItems()">view project managers</button>
     </div>
-    </div>
+    </div> -->
 
     <div class="invite">
       <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter users's email"/>
@@ -73,7 +73,7 @@
           <td  *ngIf="!user.archived">
             <div class="d-flex justify-content-start align-items-center">
               <div class="avatar-wrapper">
-                <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+                <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
                 <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
               </div>
               <div class="d-flex flex-column">
