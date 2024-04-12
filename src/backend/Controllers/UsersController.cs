@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
@@ -152,13 +153,10 @@ namespace backend.Controllers
 
     [AllowAnonymous]
     [HttpGet("all")]
-    public async Task<ActionResult<int>> GetAllUsers(int pageSize=0, int currentPage = 0, UserRole? role=null)
+    public async Task<ActionResult<int>> GetAllUsers()
     {
-        var query=_context.Users.AsQueryable();
-
-        var filteredUsers=await query.Skip((currentPage-1)*pageSize).Take(pageSize).ToListAsync();
-
-        return filteredUsers.Count;
+        var users = await _context.Users.ToListAsync();
+        return users.Count;
     }
 
     [AllowAnonymous]
@@ -191,6 +189,20 @@ namespace backend.Controllers
       var filteredUsers=await query.ToListAsync();
 
       return filteredUsers.Count;
+    }
+    [AllowAnonymous]
+    [HttpGet("getByRole")]
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetUserByRole(UserRole? role=null)
+    {
+      var query=_context.Users.AsQueryable();
+
+      if(role!=null)
+      {
+        query=query.Where(u=>u.Role==role);
+      }
+      var filteredUsers=await query.ToListAsync();
+
+      return filteredUsers;
     }
 
   }

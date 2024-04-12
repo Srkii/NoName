@@ -122,4 +122,14 @@ export class AdminService {
     return this.httpClient.get<number>(`${this.apiUrl}/users/all`);
   }
 
+  getAllUsers3(role:string|null):Observable<any>{
+    var params=new HttpParams();
+
+    if(role){
+      params=params.set('role',role);
+    }
+    return this.httpClient.get<Member[]>(`${this.apiUrl}/users/getByRole`,{params: params});
+  }
+
+
 }

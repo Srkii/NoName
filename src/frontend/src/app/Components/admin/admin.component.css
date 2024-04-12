@@ -129,8 +129,8 @@ p {
 }
 .avatar{
   padding-left: 0px;
-  width: 30px;
-  height: auto;
+  width: 35px;
+  height: 35px;
 }
 .paginate_button page-item active{
   background-color: #5f61e6;
@@ -162,10 +162,6 @@ table{
   margin-bottom: 20px;
 }
 
-.card {
-  margin-right: 10px;
-}
-
 .card:last-child {
   margin-right: 0;
 }
@@ -195,4 +191,42 @@ select:hover {
 }
 select:active{
   background-color: #5d57c2;
+}
+.card{
+  --bs-card-border-width: 0px;
+  --bs-card-cap-bg: #ffffff;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  margin-right: 0px;
+  width: 30%;
+}
+.card-title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  margin-left: 15px;
+  margin-right: 15px;
+
+}
+.avatar avatar-sm me-2{
+  padding: 0px;
+  margin-right: 0% !important;
+  width: 35px;
+}
+.me-1{
+  margin-right: .0rem !important;  /* margin-right: .5rem !important; */
+}
+
+.gas{
+  display: flex;
+  padding-right: 0px;
+  /* padding-right: 0px; */
+}
+.btn-primary2{
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  border-width: 0px;
+}
+.d-flex flex-column{
+  margin-left: 5px;
 }

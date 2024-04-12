@@ -24,9 +24,9 @@ export class AdminComponent implements OnInit{
 
   constructor(private adminService:AdminService,private toastr: ToastrService ,private uploadservice:UploadService,private spinner:NgxSpinnerService){}
   ngOnInit(): void {
-   this.zaOnInit();
-   this.CountProjects();
-   this.splitByRole();
+   this.onLoad();
+   this.byRole();
+   this.byRole1();
   }
 
   invitation:RegisterInvitation={
@@ -38,6 +38,10 @@ export class AdminComponent implements OnInit{
   admins: Member[]=[]
   members: Member[]=[]
   projectMangers: Member[]=[]
+
+  numOfAdmins: number=0
+  numOfMembers: number=0;
+  numOfPM: number=0;
 
   role!: number
 
@@ -147,7 +151,7 @@ export class AdminComponent implements OnInit{
         this.adminService.changeUserRole(this.changeRole).subscribe(
           (response)=>{
             console.log(response);
-            this.GetAllUsers();
+            this.loadItems()
           }
 
         )
@@ -162,7 +166,7 @@ export class AdminComponent implements OnInit{
         this.adminService.updateUser(id,this.updateUser).subscribe(
           (response)=>{
             console.log(response)
-            this.GetAllUsers();
+            this.loadItems()
           }
         )
       }
@@ -172,7 +176,7 @@ export class AdminComponent implements OnInit{
       this.adminService.archiveUser(id).subscribe(
         (response)=>{
           console.log(response)
-          this.GetAllUsers();
+          this.loadItems()
         }
       )
 
@@ -211,13 +215,17 @@ export class AdminComponent implements OnInit{
                 const reader=new FileReader();
               reader.readAsDataURL(response);
               reader.onloadend=()=>{
-                user.profilePicUrl=reader.result as string;
+                user.url=reader.result as string;
               };
             }
           )
         }});
-        this.filteredUsers=this.userCount;
-        this.totalPages= Math.ceil(this.userCount / this.pageSize);
+        this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
+          this.filteredUsers=response;
+          console.log("filt"+this.filteredUsers);
+        });
+        // this.filteredUsers=this.userCount;
+        this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
         console.log("nizzz"+this.totalusersArray)
         console.log(response);
@@ -258,39 +266,55 @@ export class AdminComponent implements OnInit{
     }
 
     filterUsers():void{
-      this.pageNumber=1;
+      this.currentPage=1;
       this.loadItems();
     }
 
-    CountProjects(): void{
-      this.adminService.getUsersCount(this.selectedRolee).subscribe(response=>{
-        this.userCount=response;
-        console.log(this.userCount)
-      })
+    // CountProjects(): void{
+    //   this.adminService.getUsersCount(this.selectedRolee).subscribe(response=>{
+    //     this.userCount=response;
+    //     console.log(this.selectedRole+" "+ this.userCount)
+    //     // return this.userCount;
+    //   })
+      // return 0;
+
+    //}
+
+    loadPicture(usersArray:Member[]) : void{
+      usersArray.forEach(user => {
+        if(user.profilePicUrl!=null){
+        this.uploadservice.getImage(user.profilePicUrl).subscribe(
+          { next:(res)=>{
+            console.log(res)
+            const reader=new FileReader();
+            reader.readAsDataURL(res);
+            reader.onloadend=()=>{
+              user.url=reader.result as string;
+          }}
+          ,error:(error)=>{
+            console.log(error);
+          }}
+        )
+      }});
+
     }
 
-    zaOnInit(): void{
+    onLoad(): void{
       this.adminService.getAllUsers2().subscribe(response=>{
         this.allUsersCount=response;
       })
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee).subscribe(response => {
         this.allUsers = response;
-        this.allUsers.forEach(user => {
-          if(user.profilePicUrl!=null) {
-            this.uploadservice.getImage(user.profilePicUrl).subscribe(
-              response=>{
-                const reader=new FileReader();
-              reader.readAsDataURL(response);
-              reader.onloadend=()=>{
-                user.profilePicUrl=reader.result as string;
-              };
-            }
-          )
-        }});
+        this.loadPicture(this.allUsers);
+        this.adminService.getAllUsers2().subscribe(
+          response=>{
+            this.allUsersCount=response;
+          }
+        )
         this.filteredUsers=this.allUsersCount;
-        this.totalPages= Math.ceil(this.allUsers.length / this.pageSize);
+        this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
 
-        console.log(this.allUsers.length)
+        console.log("sss"+this.allUsersCount)
         console.log("aaaa"+this.totalPages)
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
         console.log("nizzz"+this.totalusersArray)
@@ -316,6 +340,34 @@ export class AdminComponent implements OnInit{
         }
 
       });
+
+    }
+
+    byRole():void{
+      this.adminService.getFilterCount("Admin").subscribe(res=>{
+        this.numOfAdmins=res;
+      })
+      this.adminService.getFilterCount("Member").subscribe(res=>{
+        this.numOfMembers=res;
+      })
+      this.adminService.getFilterCount("projectManager").subscribe(res=>{
+        this.numOfPM=res;
+      })
+    }
+
+    byRole1():void{
+      this.adminService.getAllUsers3("Admin").subscribe(res=>{
+        this.admins=res;
+        this.loadPicture(this.admins);
+      })
+      this.adminService.getAllUsers3("Member").subscribe(res=>{
+        this.members=res;
+        this.loadPicture(this.members)
+      })
+      this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
+        this.projectMangers=res;
+        this.loadPicture(this.projectMangers);
+      })
     }
 
   }

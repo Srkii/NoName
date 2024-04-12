@@ -2,29 +2,51 @@
   <div id="all1">
     <br />
 
-    <!-- <div class="card-container">
-    <div class="card" [(ngModel)]="selectedRole" (click)="filterUsers()">
-      <div *ngFor="let user of admins">
-        <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
-        <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+    <div class="card-container">
+    <div class="card" (click)="filterUsers()">
+    <div class="card-title">
+      <label>Total {{numOfAdmins}} admins</label>
+        <div class="gas">
+          <ng-container *ngFor="let user of admins.slice(0, 5)">
+            <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+          </ng-container>
+        </div>
+    </div>
+    <div class="card-body">
+      <button type="button" class="btn btn-primary2" name="admins" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="loadItems()">view admins</button>
+    </div>
+    </div>
+
+    <div class="card" (click)="filterUsers()">
+      <div class="card-title">
+        <label>Total {{numOfMembers}} users</label>
+      <div class="gas">
+      <ng-container *ngFor="let user of members.slice(0, 5)">
+        <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+        <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+      </ng-container>
+    </div>
       </div>
-      <button type="button" class="btn btn-primary" name="admins" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="loadItems()">view admins</button>
+    <div class="card-body">
+      <button type="button" class="btn btn-primary2" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="loadItems()">view members</button>
     </div>
-    <div *ngFor="let user of members">
-      <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
-      <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
     </div>
-    <div class="card" [(ngModel)]="selectedRole" (click)="filterUsers()">
-      <div *ngFor="let user of projectMangers">
-        <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img src="{{user.profilePicUrl}}" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
-        <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+    <div class="card" name="number" (click)="filterUsers()">
+      <div class="card-title">
+        <label>Total {{numOfPM}} users</label>
+        <div class="gas">
+          <ng-container *ngFor="let user of projectMangers.slice(0, 5)">
+            <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+          </ng-container>
+        </div>
       </div>
-      <button type="button" class="btn btn-primary" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="loadItems()">view members</button>
+      <div class="card-body">
+      <button type="button" class="btn btn-primary2" name="projectmanagers" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="loadItems()">view project managers</button>
     </div>
-    <div class="card" [(ngModel)]="selectedRole" (click)="filterUsers()">
-      <button type="button" class="btn btn-primary" name="project managers" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="loadItems()">view project managers</button>
     </div>
-    </div> -->
+    </div>
 
     <div class="invite">
       <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter users's email"/>
