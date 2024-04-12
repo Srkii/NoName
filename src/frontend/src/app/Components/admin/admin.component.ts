@@ -208,27 +208,17 @@ export class AdminComponent implements OnInit{
     loadItems(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee).subscribe(response => {
         this.allUsers = response;
-        this.allUsers.forEach(user => {
-          if(user.profilePicUrl!=null) {
-            this.uploadservice.getImage(user.profilePicUrl).subscribe(
-              response=>{
-                const reader=new FileReader();
-              reader.readAsDataURL(response);
-              reader.onloadend=()=>{
-                user.url=reader.result as string;
-              };
-            }
-          )
-        }});
+        this.loadPicture(this.allUsers);
         this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
           this.filteredUsers=response;
           console.log("filt"+this.filteredUsers);
-        });
-        // this.filteredUsers=this.userCount;
-        this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
+          this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        console.log("Total pages"+this.filteredUsers);
         console.log("nizzz"+this.totalusersArray)
         console.log(response);
+        });
+
         this.spinner.hide();
       });
     }
