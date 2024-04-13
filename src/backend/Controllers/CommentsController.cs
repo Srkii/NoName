@@ -11,11 +11,9 @@ namespace backend.Controllers
     public class CommentsController:BaseApiController
     {
         private readonly DataContext _context;
-        private readonly NotificationsHub _notifications;
-        public CommentsController(DataContext context,NotificationsHub notifications)
+        public CommentsController(DataContext context)
         {
             _context = context;
-            _notifications = notifications;
         }
         
         [AllowAnonymous]
