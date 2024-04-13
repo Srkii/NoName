@@ -1,10 +1,13 @@
 * {
     font-family: 'Public Sans', sans-serif;
 }
-.board-name {
-    font-size: 20px;
-    font-weight: bold;
+/* START opcije za assignee dropdown */
+.chooseAssignee {
+    display: flex;
+    flex-direction: column;
 }
+/* END opcije za assignee dropdown */
+
 
 .board {
     display: flex;

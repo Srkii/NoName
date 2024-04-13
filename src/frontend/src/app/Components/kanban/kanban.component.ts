@@ -5,6 +5,8 @@ import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { MyProjectsService } from '../../_services/my-projects.service';
 
 @Component({
   selector: 'app-kanban',
@@ -32,18 +34,27 @@ export class KanbanComponent implements OnInit{
   newTaskStatusId: number | null = null;
   newTaskProjectSectionId: number | null = null;
 
+
+  users: TaskAssignee[] = [];
+  selectedUser: TaskAssignee | undefined;;
+  filterValue: string | undefined = '';
+
   @Output() sectionChanged = new EventEmitter<boolean>();
 
   constructor(
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private myTasksService: MyTasksService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private myProjectsService: MyProjectsService
   ) {}
 
   ngOnInit() {
     this.spinner.show();
     this.populateTasks();
+    if (this.currentProjectId !== null) {
+      this.getProjectsUsers(this.currentProjectId);
+    }
     this.spinner.hide();
   }
 
@@ -121,7 +132,7 @@ export class KanbanComponent implements OnInit{
       this.GetTaskStatuses();
     });
   }
-  openModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
+  openDeleteStatusModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
     this.currentSectionName = sectionName;
     this.currentSectionId = sectionId;
     this.modalRef = this.modalService.show(
@@ -130,11 +141,16 @@ export class KanbanComponent implements OnInit{
         class: 'modal-sm modal-dialog-centered'
       });
   }
-  openSimpleModal(modal: TemplateRef<void>) {
+  openSimpleModal(modal: TemplateRef<void>, modalSize: string) {
+    let modalClass = '';
+    if(modalSize === 'newSection')
+      modalClass = 'modal-sm modal-dialog-centered';
+    else if (modalSize === 'newTask')
+    modalClass = 'modal-lg modal-dialog-centered';
     this.modalRef = this.modalService.show(
       modal,
       {
-        class: 'modal-sm modal-dialog-centered'
+        class: modalClass
       });
   }
   deleteSectionFunction() {
@@ -192,6 +208,14 @@ export class KanbanComponent implements OnInit{
       },
       error: (error) => console.error('Error creating task:', error)
     });
+  }
+
+  // vraca AppUsers koji su na projektu
+  getProjectsUsers(currentProjectId: number) {
+    this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
+      next: response =>{ this.users = response, console.log(this.users)},
+      error: error => console.log(error)
+    })
   }
 
 }

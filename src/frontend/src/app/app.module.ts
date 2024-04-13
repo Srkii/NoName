@@ -28,6 +28,7 @@ import { ProjectCardComponent } from './Components/project-card/project-card.com
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     HttpClientModule,
     FormsModule,
     CommonModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule,  
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
     }),
@@ -62,7 +63,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     DragDropModule,
     ModalModule.forRoot(),
     MatDatepickerModule,
-    MultiSelectModule
+    MultiSelectModule,
+    DropdownModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],
