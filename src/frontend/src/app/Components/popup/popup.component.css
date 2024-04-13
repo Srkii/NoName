@@ -242,3 +242,7 @@ textarea:focus {
 .trash{
   margin-left: 15px;
 }
+.completed {
+  background-color: #3fb94c;
+  box-shadow: 0 0 3px #3fb94c;
+}

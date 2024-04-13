@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -25,8 +25,8 @@ export class MyProjectsComponent implements OnInit {
   projectName: string = '';
   startDateFilter: string = '';
   endDateFilter: string = '';
-
-
+  
+  showProjectCard: boolean = false;
   constructor(
 
     private myProjectsService: MyProjectsService,
@@ -192,4 +192,19 @@ export class MyProjectsComponent implements OnInit {
     this.loadProjects(id);
     }
   }
-}
+
+  ToggleProjectCard() {
+    this.showProjectCard = !this.showProjectCard;
+  }
+
+  handleCloseCard(){
+    this.showProjectCard = false;
+  }
+
+  
+  handleDocumentClick(event: MouseEvent): void {
+      if (!(event.target as HTMLElement).closest('.proj_card') && !(event.target as HTMLElement).closest('.btn.btn-primary.btn-sm')) {
+        this.handleCloseCard();
+      }
+    }
+  }

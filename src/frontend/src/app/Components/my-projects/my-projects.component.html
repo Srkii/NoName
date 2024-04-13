@@ -9,7 +9,8 @@
     />
     <title>Document</title>
   </head>
-  <body>
+  <app-project-card class="proj_card" *ngIf="showProjectCard" (closeCard)="handleCloseCard()" (refreshNeeded)="ngOnInit()"></app-project-card>
+  <body (click)="handleDocumentClick($event)">
     <div id="all">
       <div class="header">
         <h5>All Projects</h5>
@@ -145,6 +146,7 @@
 
 
     
+    <button class="btn btn-primary btn-sm" (click)="ToggleProjectCard()">+ Add Project</button>
   </body>
 </html>
 <ngx-spinner
@@ -155,3 +157,4 @@
 >
   <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
+

@@ -15,9 +15,63 @@ namespace backend.Controllers
             _context = context;
         }
 
-        // [Authorize(Roles = "ProjectManager")]
         [HttpPost] // POST: api/projects/
+
         public async Task<ActionResult<ProjectDto>> CreateProject(ProjectDto projectDto)
+
+        {
+
+            var project = new Project
+
+            {
+
+                ProjectName = projectDto.ProjectName,
+
+                Description = projectDto.Description,
+
+                StartDate = projectDto.StartDate,
+
+                EndDate = projectDto.EndDate,
+
+                ProjectStatus = projectDto.ProjectStatus,
+
+                Priority = projectDto.Priority
+
+            };
+
+            _context.Projects.Add(project);
+
+            await _context.SaveChangesAsync();
+
+
+
+            // dodavanje inicijalnih statusa
+
+            await AddStarterStatuses(project);
+
+            return new ProjectDto
+
+            {
+
+                ProjectName = project.ProjectName,
+
+                Description = project.Description,
+
+                StartDate = project.StartDate,
+
+                EndDate = project.EndDate,
+
+                ProjectStatus = project.ProjectStatus,
+
+                Priority = project.Priority
+
+            };
+
+        }
+
+        // [Authorize(Roles = "ProjectManager")]
+        [HttpPost("Srdjan")] // POST: api/projects/
+        public async Task<ActionResult<Project>> CreateProject2(ProjectDto projectDto)
         {
             var project = new Project
             {
@@ -33,15 +87,7 @@ namespace backend.Controllers
 
             // dodavanje inicijalnih statusa
             await AddStarterStatuses(project);
-            return new ProjectDto
-            {
-                ProjectName = project.ProjectName,
-                Description = project.Description,
-                StartDate = project.StartDate,
-                EndDate = project.EndDate,
-                ProjectStatus = project.ProjectStatus,
-                Priority = project.Priority
-            };
+            return project;
         }
 
         //metoda za dodavanje inicijalnih statusa pri kreiranju projekta
@@ -140,6 +186,23 @@ namespace backend.Controllers
 
         //     return NoContent();
         // }
+        
+
+        [HttpPut("addProjectMember")] 
+        public async Task<IActionResult> AddProjectMember(ProjectMemberDTO dto)
+        {
+            var projectMember = new ProjectMember 
+            {
+                AppUserId =  dto.AppUserId,
+                ProjectId = dto.ProjectId,
+                ProjectRole = dto.ProjectRole
+            };
+            await _context.ProjectMembers.AddAsync(projectMember);
+            await _context.SaveChangesAsync();
+
+            return Ok(projectMember);
+        }
+        
 
        [HttpGet("filterAndPaginate")]
         public async Task<ActionResult<IEnumerable<Project>>> FilterAndPaginateProjects(

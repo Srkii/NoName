@@ -25,7 +25,7 @@ namespace backend.Controllers
       _tokenService = ts;
     }
 
-    //[AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
+    [AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {
