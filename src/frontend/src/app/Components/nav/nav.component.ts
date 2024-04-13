@@ -50,7 +50,7 @@ export class NavComponent implements OnInit {
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.user=response;
-        if(this.user.profilePicUrl!=null)
+        if(this.user.profilePicUrl!='' && this.user.profilePicUrl!=null)
         {
           this.uploadService.getImage(this.user.profilePicUrl).subscribe(
             { next:(res)=>{

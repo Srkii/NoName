@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
 
 import { AdminService } from '../../_services/admin.service';
 import { RegisterInvitation } from '../../Entities/RegisterInvitation';
@@ -8,6 +8,7 @@ import { UpdateUser } from '../../Entities/UpdateUser';
 import { ToastrService } from 'ngx-toastr';
 import { UploadService } from '../../_services/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -22,11 +23,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class AdminComponent implements OnInit{
 
-  constructor(private adminService:AdminService,private toastr: ToastrService ,private uploadservice:UploadService,private spinner:NgxSpinnerService){}
+  constructor(private adminService: AdminService, private toastr: ToastrService, private uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
+  
   ngOnInit(): void {
    this.onLoad();
-   this.byRole();
-   this.byRole1();
+   this.numbersOfRoles();
+   this.PicturesOfRoles();
   }
 
   invitation:RegisterInvitation={
@@ -43,14 +45,12 @@ export class AdminComponent implements OnInit{
   numOfMembers: number=0;
   numOfPM: number=0;
 
-  role!: number
+  userRole: string='';
 
-  selectedRole!: UserRole;
-  roles1! : string;
-
-  roles: UserRole[] = [UserRole.Admin, UserRole.Member, UserRole.ProjectManager];
-
-  changeRole!: ChangeRole
+  changeRoleOjha: ChangeRole={
+    Id:0,
+    Role: 0
+  }
 
   numberOfRoles!: number
 
@@ -59,16 +59,14 @@ export class AdminComponent implements OnInit{
     LastName: '',
     Email: ''
   }
-
-  isAdmin: string=''
-  isMember: string=''
-  isProjectManager: string=''
+  newFisrtName: string='';
+  newLastName: string='';
+  newEmail: string='';
 
   selectedRolee: string=''
 
   sortOrder: 'asc' | 'desc' = 'asc';
 
-  items: any[] = [];
   pageNumber: number = 1;
   pageSize: number = 5;
   totalPages: number=0;
@@ -79,10 +77,11 @@ export class AdminComponent implements OnInit{
   filteredUsers: number=0;
   allUsersCount: number=0;
 
-  userRole: string='';
-
   searchTerm: string='';
-  lastName: string='';
+
+  modalRef?: BsModalRef;
+
+  curentUserId: number=0
 
   Invite(): void{
     if(this.invitation)
@@ -90,33 +89,12 @@ export class AdminComponent implements OnInit{
       this.adminService.sendInvatation(this.invitation).subscribe(
         (response)=>{
           this.toastr.success(response.message);
-          console.log(response);
         }
       )
     }
     error:()=>{
       console.log("Email is not sent")
     }}
-
-    GetAllUsers(): void{
-      this.adminService.getAllUsers().subscribe({next:(response)=>{
-        this.allUsers=response;
-        this.allUsers.forEach(user => {
-          if(user.profilePicUrl!=null) {
-            this.uploadservice.getImage(user.profilePicUrl).subscribe(
-              response=>{
-                const reader=new FileReader();
-              reader.readAsDataURL(response);
-              reader.onloadend=()=>{
-                user.profilePicUrl=reader.result as string;
-              };
-            }
-          )
-        }});
-      },error:(error)=>{
-        console.log(error)
-      }})
-    }
 
     GetUserRole(role: UserRole): string{
         switch(role){
@@ -130,44 +108,37 @@ export class AdminComponent implements OnInit{
             return ''
         }
     }
-    GetUserRole1(role: string): number{
-      switch(role){
-        case "Admin":
-          return UserRole.Admin;
-        case "Member":
-          return UserRole.Member
-        case "Project manager":
-          return UserRole.ProjectManager
-        default:
-          return UserRole.Member
-      }
-  }
 
     ChangeUserRole(id:number): void{
-      // this.changeRole.Role=this.GetUserRole(this.role)
-      this.changeRole.Id=id;
-      this.changeRole.Role=this.role
-      console.log(this.changeRole.Role)
-      if(this.changeRole)
+      this.changeRoleOjha.Id=id;
+      const ChangeDto={
+        Id:id,
+        Role: parseInt(this.userRole)
+      }
+      if(ChangeDto)
       {
-        console.log(this.changeRole)
-        this.adminService.changeUserRole(this.changeRole).subscribe(
-          (response)=>{
-            console.log(response);
-            this.loadItems()
-          }
+        console.log(ChangeDto)
+        this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
+          this.GetUsers()
+        },error: (error)=>{
+          console.log(error)
+        }}
         )
       }
-      error:()=>{
+      else{
         console.log("Can't change user role")
       }}
 
     UpdateUser(id: number): void{
-      if(this.updateUser){
-        this.adminService.updateUser(id,this.updateUser).subscribe(
+      const updateeUser={
+        Email: this.newEmail,
+        FirstName: this.newFisrtName,
+        LastName: this.newLastName
+      }
+      if(updateeUser){
+        this.adminService.updateUser(id,updateeUser).subscribe(
           (response)=>{
-            console.log(response)
-            this.loadItems()
+            this.GetUsers()
           }
         )
       }
@@ -176,8 +147,7 @@ export class AdminComponent implements OnInit{
     ArchiveUser(id:number): void{
       this.adminService.archiveUser(id).subscribe(
         (response)=>{
-          console.log(response)
-          this.loadItems()
+          this.GetUsers()
         }
       )
 
@@ -206,7 +176,7 @@ export class AdminComponent implements OnInit{
     }
     }
 
-    loadItems(): void {
+    GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
         this.loadPicture(this.allUsers);
@@ -214,7 +184,6 @@ export class AdminComponent implements OnInit{
           this.filteredUsers=response;
           this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-
         });
 
         this.spinner.hide();
@@ -225,7 +194,7 @@ export class AdminComponent implements OnInit{
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
         const id = localStorage.getItem('id');
-      this.loadItems();
+      this.GetUsers();
       }
     }
 
@@ -233,35 +202,26 @@ export class AdminComponent implements OnInit{
       if (this.currentPage > 1) {
         this.currentPage--;
         const id = localStorage.getItem('id');
-      this.loadItems();
+      this.GetUsers();
       }
     }
     goToPage(pageNumber: number): void {
       if (pageNumber >= 1 && pageNumber <= this.totalPages) {
         this.currentPage = pageNumber;
         const id = localStorage.getItem('id');
-      this.loadItems();
-      }
-    }
-
-    changePageSize(event: Event): void {
-      const target = event.target as HTMLSelectElement;
-      if (target.value !== '') {
-        const pageSize = Number(target.value);
-        this.pageSize = pageSize;
-        this.loadItems();
+      this.GetUsers();
       }
     }
 
     filterUsers():void{
       this.currentPage=1;
-      this.loadItems();
+      this.GetUsers();
     }
 
-
+    //metoda za prikaz slike
     loadPicture(usersArray:Member[]) : void{
       usersArray.forEach(user => {
-        if(user.profilePicUrl!=null){
+        if(user.profilePicUrl!='' && user.profilePicUrl!=null){
         this.uploadservice.getImage(user.profilePicUrl).subscribe(
           { next:(res)=>{
             const reader=new FileReader();
@@ -273,7 +233,8 @@ export class AdminComponent implements OnInit{
             console.log(error);
           }}
         )
-      }});
+      }
+    });
 
     }
 
@@ -284,11 +245,6 @@ export class AdminComponent implements OnInit{
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
         this.loadPicture(this.allUsers);
-        // this.adminService.getAllUsers2().subscribe(
-        //   response=>{
-        //     this.allUsersCount=response;
-        //   }
-        // )
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
@@ -297,26 +253,7 @@ export class AdminComponent implements OnInit{
 
     }
 
-    splitByRole(): void{
-      this.allUsers.forEach(user => {
-        if(user.role===UserRole.Admin)
-        {
-          this.admins.push(user);
-        }
-        if(user.role===UserRole.Member)
-        {
-          this.members.push(user);
-        }
-        if(user.role===UserRole.ProjectManager)
-        {
-          this.projectMangers.push(user);
-        }
-
-      });
-
-    }
-
-    byRole():void{
+    numbersOfRoles():void{
       this.adminService.getFilterCount("Admin").subscribe(res=>{
         this.numOfAdmins=res;
       })
@@ -328,7 +265,7 @@ export class AdminComponent implements OnInit{
       })
     }
 
-    byRole1():void{
+    PicturesOfRoles():void{
       this.adminService.getAllUsers3("Admin").subscribe(res=>{
         this.admins=res;
         this.loadPicture(this.admins);
@@ -341,6 +278,16 @@ export class AdminComponent implements OnInit{
         this.projectMangers=res;
         this.loadPicture(this.projectMangers);
       })
+    }
+
+    openModal(modal: TemplateRef<void>, userId: number)
+    {
+      this.curentUserId=userId;
+      this.modalRef = this.modalService.show(
+        modal,
+        {
+          class: 'modal-sm modal-dialog-centered'
+        });
     }
 
   }
