@@ -1,14 +1,14 @@
 import { Invintation } from './../Entities/Invitation';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { HubUrl } from './../ApiUrl/HubUrl';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppUser } from '../Entities/AppUser';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationsService {
+export class NotificationsService{
   hubUrl = HubUrl.hubUrl;
   newNotifications:boolean = false;//flag koji dopusta izvlacenje novih notifikacija sa backenda -> ukoliko nema novih notifikacija user ne sme da ima pravo da spamuje requestove klikom na zvonce
   private hubConnection?:HubConnection;
@@ -16,7 +16,7 @@ export class NotificationsService {
 
   constructor(private toastr:ToastrService) { }
 
-  createHubConnection(user:AppUser){
+  createHubConnection(){
     var token = localStorage.getItem('token');
     this.hubConnection = new HubConnectionBuilder()
 
@@ -24,10 +24,12 @@ export class NotificationsService {
         accessTokenFactory: () => token ? token : ''
       })
 
-      .withAutomaticReconnect()
+      .withAutomaticReconnect([0,3000,5000])
 
       .build();
-    this.hubConnection.start().catch(error => console.log(error));
+    this.hubConnection.start().catch(error =>{
+      console.log(error);
+  });
 
     this.hubConnection.on('newNotifications',() =>{//ovo mi onda u sustini ne treba ako cu ja sa fronta da invokeujem getter za notifikacije
       this.toastr.info("You have unread notifications!");
@@ -54,4 +56,6 @@ export class NotificationsService {
     //invoke funkcije na back-u kad se klikne na zvonce
     await this.hubConnection?.invoke('invokeGetNotifications');
   }
+
+
 }

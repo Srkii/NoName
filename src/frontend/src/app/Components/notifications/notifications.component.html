@@ -1,0 +1,19 @@
+<div class="btn-group">
+  <img src="../../../assets/navIcons/bell (1).png" alt=""
+       class="nav-link dropdown-toggle hide-arrow rightImg"
+       data-bs-toggle="dropdown"
+       aria-expanded="false"
+       (click)="getNotifications()">
+  <div class="dropdown-menu dropdown-menu-end">
+    <span style="padding-left: 15px;">Notifications</span>
+    <div class="dropdown-divider"></div>
+    <span *ngIf="!notification_list">No new notifications...</span>
+    <ul style="overflow: auto; max-height: 120px;">
+      <li *ngFor="let notification of notification_list"><a class="dropdown-item" href="javascript:void(0);">{{notification.sender_first_name}} {{notification.type==1?"uploaded an attachment":"commented on a task"}}</a></li>
+    </ul>
+    <div class="dropdown-divider"></div>
+    <div class="see-all-container">
+      <small style="padding-left: 15px;padding-bottom: 3px;">See all notifications...</small>
+    </div>
+  </div>
+</div>

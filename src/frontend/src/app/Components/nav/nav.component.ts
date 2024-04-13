@@ -14,6 +14,7 @@ export class NavComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin()
     this.getUser()
+    this.notificationService.createHubConnection();
   }
   admin!: boolean
   logovan!: boolean
@@ -53,8 +54,5 @@ export class NavComponent implements OnInit {
 
     })
   }
-  async getNotifications(){
-    await this.notificationService.getNotifications();
-    this.notification_list = this.notificationService.notifications;
-  }
+
 }

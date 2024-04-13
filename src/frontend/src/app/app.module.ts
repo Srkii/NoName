@@ -28,6 +28,7 @@ import { ProjectCardComponent } from './Components/project-card/project-card.com
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { NotificationsComponent } from './Components/notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     FileUploadComponent,
     KanbanComponent,
     GanttComponent,
-    ProjectCardComponent
+    ProjectCardComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

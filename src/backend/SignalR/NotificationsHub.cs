@@ -43,7 +43,7 @@ namespace backend.SignalR
                 connections.Remove(Context.ConnectionId);
                 if (connections.Count == 0)
                 {
-                    _userConnections.Remove(userId);//izbacuje iz liste LIVE usera
+                    _userConnections.Remove(userId.ToString());//izbacuje iz liste LIVE usera
                 }
             }
             await base.OnDisconnectedAsync(exception);

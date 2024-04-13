@@ -17,12 +17,11 @@ namespace backend.Services
             _context = context;
         }
 
-        public async Task TriggerNotification(int task_id,int sender_id,int type){
+        public async Task TriggerNotification(int task_id,int sender_id,NotificationType type){//ova je za task-ove , tj komentare i attachmente, poraditi na semantici...
             
             var Users = await GetUsersForTaskNotification(task_id);
             var sender = await _context.Users.FindAsync(sender_id);
             Users.Remove(sender_id);
-
             for(int i=0;i<Users.Count;i++){
                 Notification notification = new Notification{
                     reciever_id = Users[i],
@@ -32,13 +31,45 @@ namespace backend.Services
                     read=false,
                     sender_first_name = sender.FirstName,
                     sender_last_name = sender.LastName,
+                    task_project_id = task_id
                 };
                 await _context.Notifications.AddAsync(notification);
                 await _hubContext.Clients.Group(Users[i].ToString()).Notify();
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task<List<int>> GetUsersForTaskNotification(int taskId)
+        public async Task TriggerAssignmentNotification(int task_project_id,int sender_Id,NotificationType type){//ovo ce useru da javlja da je assign-ovan na neki task ili projekat
+            //na osnovu tipa assignment-a znacemo da li je projekat ili task
+            //tako ce frontend komponenta znati na koji tab da ide i sta da otvara.
+            List<int> users_list = new List<int>();
+            var sender = await _context.Users.FindAsync(sender_Id);
+            if(type == NotificationType.TaskAssignment){//novi task kreiran
+                var tsk = await _context.ProjectTasks.FindAsync(task_project_id);
+                var users = await _context.Users.FirstOrDefaultAsync(x=>x.Id == tsk.AppUserId);
+                users_list.Add(users.Id);
+            }else if(type == NotificationType.ProjectAssignment){
+                var users = await _context.ProjectMembers.Where(x=> x.ProjectId == task_project_id).Select(x=>x.AppUserId).ToListAsync();
+                users_list.AddRange(users);
+            }
+            users_list.Remove(sender_Id);
+            foreach(int i in users_list){
+                Notification notification = new Notification{
+                    reciever_id = i,
+                    sender_id = sender_Id,
+                    Type = type,
+                    dateTime = DateTime.Now,
+                    read=false,
+                    sender_first_name = sender.FirstName,
+                    sender_last_name = sender.LastName,
+                    task_project_id = task_project_id,//ovo bi kao trebalo da radi idfk..
+                };
+                await _context.Notifications.AddAsync(notification);
+                await _hubContext.Clients.Group(i.ToString()).Notify();
+                await _context.SaveChangesAsync();
+            }
+
+        }
+        public async Task<List<int>> GetUsersForTaskNotification(int taskId)//query za izvlacenje ljudi zainteresovanih za neki task...
         {
             var users = new List<int>();
 
@@ -70,10 +101,3 @@ namespace backend.Services
         }
     }
 }
-/*
-    u sustini ovo ti javi da imas notifikaciju i pojavi ti se crvena tackica na zvoncetu
-    ti kliknes zvonce i ono invoke-uje sa fronta getter za notifikacije
-    koje onda disoplay-uje u onom malom prozorcetu
-    ->to prozorce posle moze da se prosiri u novi ceo component da listas kroz sve redom notifikacije
-    ->a u njemu ce da stoje samo neprocitane
-*/

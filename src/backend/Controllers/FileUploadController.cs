@@ -58,7 +58,7 @@ namespace backend.Controllers
             };
             
             _context.Attachments.Add(attachment);
-            await _notificationService.TriggerNotification(task.Id,user_id,1);//saljem sender-a kako bi njega preskocilo
+            await _notificationService.TriggerNotification(task.Id,user_id,NotificationType.Attachment);
             await _context.SaveChangesAsync();
             return Ok(attachment);
         }
