@@ -1,4 +1,6 @@
-
+* {
+  font-family: 'Public Sans', sans-serif;
+}
 body {
   background-color: #f5f5f9;
   color: #697a8d;
@@ -131,7 +133,7 @@ p {
 }
 .form-label{
   color: #697a8d;
-  font-size: small;
+  
 }
 .btn-primary {
   color: #fff;
@@ -236,7 +238,6 @@ select:active{
 .me-1{
   margin-right: .0rem !important;
 }
-
 .pics{
   display: flex;
   padding-right: 0px;
@@ -302,4 +303,7 @@ select:active{
 .paginate_button1 .btn:focus{
   background-color: #5d57c2;
   color: #ffffff;
+}
+.modal-header{
+  font-family: Roboto, "Helvetica Neue", sans-serif;;
 }

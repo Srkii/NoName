@@ -173,7 +173,7 @@
 
 <ng-template #updateUser>
   <div class="modal-header">
-    <h4>Update user's info</h4>
+    <h5>Update user's info</h5>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
@@ -189,7 +189,7 @@
         <input type="text" id="form3Example3" class="form-control" name="firstName" [(ngModel)]="newFisrtName" placeholder="Enter user's First Nsme"/>
       </div>
       <div class="mb-3">
-        <label for="email" class="form-label">Last Name</label>
+        <label for="last name" class="form-label">Last Name</label>
         <input type="text" id="form3Example3" class="form-control" name="lastName" [(ngModel)]="newLastName" placeholder="Enter user's Last Name"/>
       </div>
       <div class="mb-3">
@@ -211,7 +211,7 @@
     <form >
       <div class="mb-3">
         <label for="text" class="form-label">Are you sure you want to archive this user</label>
-        <label class="form-label">
+        <label for="text" class="form-label">
           This user will no longer be visible</label>
       </div>
       <div class="mb-3">
