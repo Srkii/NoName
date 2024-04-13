@@ -8,8 +8,8 @@
       <label>Total {{numOfAdmins}} admins</label>
         <div class="pics">
           <ng-container *ngFor="let user of admins.slice(0, 5)">
-            <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
-            <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+            <div *ngIf="user.url && !user.archived" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
           </ng-container>
         </div>
     </div>
@@ -24,8 +24,8 @@
         <label>Total {{numOfPM}} project managers</label>
         <div class="pics">
           <ng-container *ngFor="let user of projectMangers.slice(0, 5)">
-            <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
-            <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+            <div *ngIf="user.url && !user.archived" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
           </ng-container>
         </div>
       </div>
@@ -39,8 +39,8 @@
         <label>Total {{numOfMembers}} users</label>
       <div class="pics">
       <ng-container *ngFor="let user of members.slice(0, 5)">
-        <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
-        <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+        <div *ngIf="user.url && !user.archived" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+        <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
       </ng-container>
     </div>
       </div>
@@ -61,7 +61,7 @@
           (input)="filterUsers(); "
         />
 
-      <select class="page_size" [(ngModel)]="pageSize" (ngModelChange)="loadItems()">
+      <select class="page_size" [(ngModel)]="pageSize" (ngModelChange)="filterUsers()">
         <option value="5" selected>Select page size</option>
         <option value="5">5</option>
         <option value="10">10</option>
