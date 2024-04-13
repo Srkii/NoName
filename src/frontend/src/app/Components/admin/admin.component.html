@@ -210,9 +210,9 @@
   <div class="modal-body">
     <form >
       <div class="mb-3">
-        <label for="text" class="form-label">Are you sure you want to archive this user</label>
+        <label for="text" class="form-label">Are you sure you want to archive this user?</label>
         <label for="text" class="form-label">
-          This user will no longer be visible</label>
+          This user will no longer be visible.</label>
       </div>
       <div class="mb-3">
         <button class="btn btn-primary d-grid w-100" type="submit" (click)="ArchiveUser(curentUserId)">Archive user</button>
@@ -230,9 +230,9 @@
   </div>
   <div class="modal-body">
     <form (ngSubmit)="ChangeUserRole(curentUserId)">
-      <div class="mb-3">
-        <label for="email" class="form-label">Select Role</label>
+      <div class="mb-3 selectRole">
         <select name="role" [(ngModel)]="userRole" required>
+          <option value="" selected>Select role</option>
           <option value="0">Admin</option>
           <option value="1">Member</option>
           <option value="2">Project Manager</option>

@@ -131,10 +131,6 @@ p {
   color: #565f6a;
   margin-bottom: 15px;
 }
-.form-label{
-  color: #697a8d;
-  
-}
 .btn-primary {
   color: #fff;
   background-color: #696cff;
@@ -307,3 +303,9 @@ select:active{
 .modal-header{
   font-family: Roboto, "Helvetica Neue", sans-serif;;
 }
+.selectRole {
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  height: 100%; 
+ }
