@@ -288,3 +288,9 @@ select:active{
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
+.clickable-div:active {
+  background-color: #5d57c2; /* Change this to the color you want */
+}
+.clickable-div:focus {
+  background-color: #d0cdff; 
+}
