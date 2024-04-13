@@ -294,3 +294,12 @@ select:active{
 .clickable-div:focus {
   background-color: #d0cdff; 
 }
+.paginate_button1 .btn{
+  margin-left: 3px;
+  margin-right: 3px;
+  border-color: #5d57c2;
+}
+.paginate_button1 .btn:focus{
+  background-color: #5d57c2;
+  color: #ffffff;
+}

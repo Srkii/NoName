@@ -150,8 +150,8 @@
         <ul class="pagination">
           <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
             <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
-            <li class="paginate_button page-item active" *ngFor="let pageNumber of totalusersArray">
-              <button class="btn btn-primary" (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
+            <li class="paginate_button1 page-item active" *ngFor="let pageNumber of totalusersArray">
+              <button class="btn page" (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
             </li>
 
                 <li class="paginate_button page-item next" id="DataTables_Table_0_next">
