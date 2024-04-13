@@ -89,7 +89,7 @@ export class AdminService {
     else return of(null);
   }
 
-  getAllUsers1(pageNumber: number, pageSize: number, role:string|null): Observable<any>{
+  getAllUsers1(pageNumber: number, pageSize: number, role: string|null, searchTerm: string|null): Observable<any>{
 
     var params=new HttpParams();
 
@@ -102,6 +102,11 @@ export class AdminService {
     if (pageSize) {
       params = params.set('pageSize', pageSize.toString());
     }
+
+    if(searchTerm){
+      params=params.set('searchTerm', searchTerm);
+    }
+
 
     return this.httpClient.get<Member[]>(`${this.apiUrl}/users/filtered`,{params:params})
 

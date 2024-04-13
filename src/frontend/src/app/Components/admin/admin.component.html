@@ -3,10 +3,10 @@
     <br />
 
     <div class="card-container">
-    <div class="card" (click)="filterUsers()">
+    <div class="card" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="filterUsers()">
     <div class="card-title">
       <label>Total {{numOfAdmins}} admins</label>
-        <div class="gas">
+        <div class="pics">
           <ng-container *ngFor="let user of admins.slice(0, 5)">
             <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
             <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
@@ -14,28 +14,15 @@
         </div>
     </div>
     <div class="card-body">
-      <button type="button" class="btn btn-primary2" name="admins" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="loadItems()">view admins</button>
+      <h3>Administrator</h3>
     </div>
     </div>
 
-    <div class="card" (click)="filterUsers()">
+
+    <div class="card" name="number" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="filterUsers()">
       <div class="card-title">
-        <label>Total {{numOfMembers}} users</label>
-      <div class="gas">
-      <ng-container *ngFor="let user of members.slice(0, 5)">
-        <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
-        <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
-      </ng-container>
-    </div>
-      </div>
-    <div class="card-body">
-      <button type="button" class="btn btn-primary2" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="loadItems()">view members</button>
-    </div>
-    </div>
-    <div class="card" name="number" (click)="filterUsers()">
-      <div class="card-title">
-        <label>Total {{numOfPM}} users</label>
-        <div class="gas">
+        <label>Total {{numOfPM}} project managers</label>
+        <div class="pics">
           <ng-container *ngFor="let user of projectMangers.slice(0, 5)">
             <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
             <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
@@ -43,26 +30,54 @@
         </div>
       </div>
       <div class="card-body">
-      <button type="button" class="btn btn-primary2" name="projectmanagers" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="loadItems()">view project managers</button>
+        <h3>Project Manager</h3>
     </div>
     </div>
+
+    <div class="card" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="filterUsers()">
+      <div class="card-title">
+        <label>Total {{numOfMembers}} users</label>
+      <div class="pics">
+      <ng-container *ngFor="let user of members.slice(0, 5)">
+        <div *ngIf="user.url" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+        <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+      </ng-container>
+    </div>
+      </div>
+    <div class="card-body">
+      <h3>Member</h3>
+    </div>
+    </div>
+
     </div>
 
     <div class="invite">
-      <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter users's email"/>
+      <div class="leftInvite">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Search users"
+          [(ngModel)]="searchTerm"
+          (input)="filterUsers(); "
+        />
 
-      <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="Invite()">Invite user</button>
-      </div>
+      <select class="page_size" [(ngModel)]="pageSize" (ngModelChange)="loadItems()">
+        <option value="5" selected>Select page size</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
     </div>
 
-    <label for="pageSize">Items per page:</label>
-    <select [(ngModel)]="pageSize" (ngModelChange)="loadItems()">
-      <!-- <option value='5'>5</option>
-      <option value='10'>10</option>
-      <option value='20'>20</option> -->
-      <option *ngFor="let size of [5, 10, 20, 50]" [ngValue]="size">{{ size }}</option>
-    </select>
+
+      <div class="inputEmail">
+        <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter new user's email"/>
+
+        <button class="btn btn-primary d-grid" type="submit" (click)="Invite()">Invite new user</button>
+      </div>
+
+    </div>
+
     <br />
     <table class="invoice-list-table table">
       <thead>
@@ -73,7 +88,7 @@
               width="16"
               height="16"
               fill="currentColor"
-              class="filter"
+
               viewBox="0 0 16 16"
               (click)="sortUsersByName()"
             >

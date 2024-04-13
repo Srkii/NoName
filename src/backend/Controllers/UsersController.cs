@@ -161,7 +161,7 @@ namespace backend.Controllers
 
     [AllowAnonymous]
     [HttpGet("filtered")]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null)
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="")
     {
         var query=_context.Users.AsQueryable();
 
@@ -169,6 +169,13 @@ namespace backend.Controllers
         {
           query = query.Where(u => u.Role == role);
         }
+
+
+        if(!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
+        }
+
 
       
         var filteredUsers=await query.Skip((currentPage-1)*pageSize).Take(pageSize).ToListAsync();

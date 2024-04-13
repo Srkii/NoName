@@ -26,7 +26,7 @@ table {
   border-collapse: collapse;
   /* padding: 6px; */
   /* margin-left: -20px; */
-  margin-bottom: -20px;
+  margin-bottom: 10px;
   margin-top: 10px;
   width: 100%;
   /* margin-left: 20px; */
@@ -45,17 +45,22 @@ th {
   font-size: 14px;
   border: 1.5px solid lightgray;
   font-weight: 700; /* thinner text */
-  padding: 5px;
+  padding-left: 5px;
   border-left: none;
   border-right: none;
-  color: #565f6a;
+  color: #697a8d;
 }
 td {
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
   font-size: 12px;
+  color: #697a8d;
+}
+td{
   color: #697a8d;
 }
 #name {
@@ -71,20 +76,33 @@ p {
 
 .invite {
   display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+}
+.inputEmail{
+  display: flex;
   align-items: baseline;
   width: 30%;
-  margin-left: auto;
+  margin-right: 0px !important;
+
+  justify-content: space-between;
 }
 
-.invite input {
-  flex: 1;
-  margin-right: 10px;
+.inputEmail input {
   width: 60%;
 }
-.invite btn{
+.inputEmail btn{
   flex: 1;
-  margin-right: 10px;
+
 }
+.leftInvite{
+  display: flex;
+  width: 40%;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
 
 #button-addon2{
   background-color: #5d57c2;
@@ -139,21 +157,19 @@ p {
 .card{
   position: static;
 }
-table{
-  margin-bottom: 10px;
-}
+
 .col-sm-12.col-md-6 {
   display: flex;
-  justify-content: flex-end; /* This will align the child elements to the right */
+  justify-content: flex-end;
   width: 100%;
 }
 
 .col-sm-12.col-md-6 .dataTables_paginate {
-  width: 100%; /* This ensures the pagination takes up the full width of the container */
+  width: 100%;
 }
 
 .col-sm-12.col-md-6 .dataTables_paginate .pagination {
-  justify-content: flex-end; /* This will align the pagination buttons to the right */
+  justify-content: flex-end;
 }
 
 .card-container {
@@ -162,9 +178,6 @@ table{
   margin-bottom: 20px;
 }
 
-.card:last-child {
-  margin-right: 0;
-}
 .label {
   font-weight: bold;
   margin-right: 10px;
@@ -198,6 +211,7 @@ select:active{
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   margin-right: 0px;
   width: 30%;
+  color: #697a8d;
 }
 .card-title{
   display: flex;
@@ -208,16 +222,21 @@ select:active{
   margin-right: 15px;
 
 }
+.card:hover{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
+}
 .avatar avatar-sm me-2{
   padding: 0px;
   margin-right: 0% !important;
   width: 35px;
 }
 .me-1{
-  margin-right: .0rem !important;  /* margin-right: .5rem !important; */
+  margin-right: .0rem !important;
 }
 
-.gas{
+.pics{
   display: flex;
   padding-right: 0px;
   /* padding-right: 0px; */
@@ -229,4 +248,43 @@ select:active{
 }
 .d-flex flex-column{
   margin-left: 5px;
+}
+.filter{
+  color: #697a8d;
+  font-size: 12px;
+  border: 0.5px solid lightgray;
+  border-radius: 8px;
+  padding: 6px;
+  margin-left: 5%;
+  margin-bottom: 1%;
+  width: 60%;
+}
+.form-control{
+  width: 50%;
+}
+.form-control:hover {
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
+}
+.form-control:focus {
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
+}
+.page_size {
+  color: #5e6165;
+  border: 0.5px solid lightgray;
+  border-radius: 5px;
+  padding: 6px;
+  width: 40%;
+  height: 37px;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+}
+.page_size:hover{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
 }

@@ -81,6 +81,9 @@ export class AdminComponent implements OnInit{
 
   userRole: string='';
 
+  searchTerm: string='';
+  lastName: string='';
+
   Invite(): void{
     if(this.invitation)
     {
@@ -153,9 +156,7 @@ export class AdminComponent implements OnInit{
             console.log(response);
             this.loadItems()
           }
-
         )
-
       }
       error:()=>{
         console.log("Can't change user role")
@@ -206,17 +207,14 @@ export class AdminComponent implements OnInit{
     }
 
     loadItems(): void {
-      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee).subscribe(response => {
+      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
         this.loadPicture(this.allUsers);
         this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
           this.filteredUsers=response;
-          console.log("filt"+this.filteredUsers);
           this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-        console.log("Total pages"+this.filteredUsers);
-        console.log("nizzz"+this.totalusersArray)
-        console.log(response);
+
         });
 
         this.spinner.hide();
@@ -260,22 +258,12 @@ export class AdminComponent implements OnInit{
       this.loadItems();
     }
 
-    // CountProjects(): void{
-    //   this.adminService.getUsersCount(this.selectedRolee).subscribe(response=>{
-    //     this.userCount=response;
-    //     console.log(this.selectedRole+" "+ this.userCount)
-    //     // return this.userCount;
-    //   })
-      // return 0;
-
-    //}
 
     loadPicture(usersArray:Member[]) : void{
       usersArray.forEach(user => {
         if(user.profilePicUrl!=null){
         this.uploadservice.getImage(user.profilePicUrl).subscribe(
           { next:(res)=>{
-            console.log(res)
             const reader=new FileReader();
             reader.readAsDataURL(res);
             reader.onloadend=()=>{
@@ -293,22 +281,17 @@ export class AdminComponent implements OnInit{
       this.adminService.getAllUsers2().subscribe(response=>{
         this.allUsersCount=response;
       })
-      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee).subscribe(response => {
+      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
         this.loadPicture(this.allUsers);
-        this.adminService.getAllUsers2().subscribe(
-          response=>{
-            this.allUsersCount=response;
-          }
-        )
+        // this.adminService.getAllUsers2().subscribe(
+        //   response=>{
+        //     this.allUsersCount=response;
+        //   }
+        // )
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
-
-        console.log("sss"+this.allUsersCount)
-        console.log("aaaa"+this.totalPages)
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-        console.log("nizzz"+this.totalusersArray)
-        console.log(response);
         this.spinner.hide();
       });
 
