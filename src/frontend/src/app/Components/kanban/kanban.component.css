@@ -1,14 +1,6 @@
 * {
     font-family: 'Public Sans', sans-serif;
 }
-/* START opcije za assignee dropdown */
-.chooseAssignee {
-    display: flex;
-    flex-direction: column;
-}
-/* END opcije za assignee dropdown */
-
-
 .board {
     display: flex;
     flex-direction: column;
@@ -18,12 +10,119 @@
     min-height: 0;
 }
 
+/* primeng dropdown  */
+.chooseAssignee {
+    display: flex;
+    flex-direction: column;
+}
+.user-item-image img{
+    width: 20px !important;
+    height: 20px !important;
+}
+.user-item {
+    display: flex;
+}
 .board-wrapper {
     display: flex;
     flex-grow: 1;
     overflow-x: auto;
     flex-wrap: nowrap;
 }
+
+.user-item-image {
+    margin-right: 5px !important;
+}
+.user-item img {
+    height: 25px !important;
+    width: 25px !important;
+}
+::ng-deep .p-inputwrapper-focus {
+    outline: none;
+    border: 0px solid #5f61e6 !important; 
+    box-shadow: none;
+}
+
+::ng-deep .p-dropdown {
+    width: 100%;
+    font-family: 'Public Sans', sans-serif;
+    border-radius: 0.5rem !important;
+}
+
+
+/* ::ng-deep .p-dropdown:focus {
+    border: 1px solid #5f61e6 !important; 
+    border-radius: 0.5 rem !important;
+} */
+::ng-deep .p-dropdown-label {
+    width: calc(100% - 2em);
+    font-family: 'Public Sans', sans-serif; 
+}
+
+::ng-deep .p-dropdown-items{
+    padding: 0 !important;
+    margin-bottom: 0px !important;
+    font-family: 'Public Sans', sans-serif;
+}
+::ng-deep .p-inputwrapper-focus {
+    outline: none;
+    border: 1px solid #5f61e6 !important; 
+    border-radius: 0.5rem !important;
+    border-collapse: collapse;
+    box-shadow: none;
+}
+
+
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    background-color: #fff !important;
+    color: #697a8d !important;
+    font-family: 'Public Sans', sans-serif;
+}
+::ng-deep .p-dropdown-header {
+    background-color: #fff;
+    padding: 0px;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-top-left-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem !important;
+}
+::ng-deep .p-dropdown-filter {
+    background-color: #fff;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-top-left-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem !important;
+}
+::ng-deep .p-dropdown-label {
+    border-radius: 0.5rem;
+}
+::ng-deep .p-dropdown-filter-container,
+::ng-deep .p-dropdown-header,
+::ng-deep .p-dropdown-panel,
+::ng-deep .p-component
+::ng-deep .p-overlay,
+::ng-deep .p-content 
+{
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-top-left-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem !important;
+}   
+::ng-deep .p-checkbox-box.p-highlight,
+.p-checkbox-box.p-focus {
+    background-color: #697a8d !important;
+    color: #697a8d !important;
+    font-family: 'Public Sans', sans-serif;
+}
+
+::ng-deep .p-dropdown-filter:hover,
+::ng-deep .p-dropdown-filter:focus
+{
+    outline: none;
+    border: 1px solid #5f61e6 !important;
+    box-shadow: none;
+    font-family: 'Public Sans', sans-serif;
+}
+/* primeng dropdown */
 
 /* scrollbar ukoliko ima previse sekcija za statuse */
 .board-wrapper::-webkit-scrollbar {

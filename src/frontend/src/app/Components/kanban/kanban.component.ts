@@ -7,6 +7,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { MyProjectsService } from '../../_services/my-projects.service';
+import { UploadService } from '../../_services/upload.service';
 
 @Component({
   selector: 'app-kanban',
@@ -46,7 +47,8 @@ export class KanbanComponent implements OnInit{
     private spinner: NgxSpinnerService,
     private myTasksService: MyTasksService,
     private modalService: BsModalService,
-    private myProjectsService: MyProjectsService
+    private myProjectsService: MyProjectsService,
+    private uploadservice: UploadService
   ) {}
 
   ngOnInit() {
@@ -213,9 +215,38 @@ export class KanbanComponent implements OnInit{
   // vraca AppUsers koji su na projektu
   getProjectsUsers(currentProjectId: number) {
     this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
-      next: response =>{ this.users = response, console.log(this.users)},
+      next: response => {
+        this.users = response,
+        this.loadPicture(this.users);
+        console.log(this.users);
+      },
       error: error => console.log(error)
-    })
+    });
+  }
+
+  // za uzimanje slike. mora ovako za sad...
+  loadPicture(usersArray: TaskAssignee[]) : void{
+    usersArray.forEach(user => {
+      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+      this.uploadservice.getImage(user.profilePicUrl).subscribe(
+        { next: (res) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(res);
+          reader.onloadend = ()=> {
+            user.pictureUrl=reader.result as string;
+            console.log("uspesno")
+            console.log(res)
+        }}
+        ,error:(error)=>{
+          console.log(error);
+          }}
+        )
+      }
+    });
+  }
+
+  createProject() {
+    
   }
 
 }
