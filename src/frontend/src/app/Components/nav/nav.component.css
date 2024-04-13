@@ -23,11 +23,11 @@ body {
   padding-bottom: 0px !important;
 }
 
-.navbar-nav-right img {
-  width: 30px;
-  height: auto;
-  padding-right: 7px;
-}
+/* .navbar-nav-right img {
+  width: 35px;
+  height: 35px;
+
+} */
 
 .navbar-nav-right {
   display: flex;
@@ -70,19 +70,23 @@ body {
 }
 
 .avatar {
-  display: block;
+  display: flex;
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
-.avatar img {
-  display: block;
-  width: 75%;
-  height: 75%;
+.dropImg {
+
+  width: 10%;
+  height: 10%;
   object-fit: cover;
   padding-left: 0%;
-  padding-right: 10px;
+  padding-right: 5px;
+}
+.dropImg1{
+  width: 40px;
+  height: 40px;
 }
 
 .dropdown-item{
@@ -103,10 +107,14 @@ body {
 }
 .rightImg {
   width: 30px;
-    height: 30px;
-    margin-right: 10px;
+  height: 30px;
   /* height: 30px !important;
   margin-right: 10px;*/
+}
+.rightImg2{
+  width: 23px;
+  height: 23px;
+  margin-right: 7px;
 }
 .logoImg{
   width: 60px;
@@ -158,7 +166,8 @@ body {
 .avatar avatar-online {
   margin-left: 10px;
   z-index: 1;
-  height: 23px !important;
+  height: 30px !important;
+  width: 30px !important;
 }
 
 .my-avatar .avatar-content{
@@ -169,8 +178,8 @@ body {
   align-items: center;
 }
 .avatar1{
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
 }
 .hide-arrow::after {
   display: none;
@@ -178,4 +187,8 @@ body {
 .rightDrop{
   margin-left: 5px;
   margin-right: 3px;
+}
+.avatar rounded-circle shadow-4-strong{
+  width: 35px;
+  height: 35px;
 }

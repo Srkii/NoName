@@ -98,7 +98,7 @@ p {
 }
 .leftInvite{
   display: flex;
-  width: 40%;
+  width: 50%;
   justify-content: space-between;
   align-items: baseline;
 }
@@ -226,6 +226,7 @@ select:active{
   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
+  /* background-color: #6b6caf; */
 }
 .avatar avatar-sm me-2{
   padding: 0px;
@@ -259,9 +260,7 @@ select:active{
   margin-bottom: 1%;
   width: 60%;
 }
-.form-control{
-  width: 50%;
-}
+
 .form-control:hover {
   outline: none;
   border: 1px solid #5f61e6 !important;
@@ -282,6 +281,7 @@ select:active{
   padding: .375rem .75rem;
   font-size: 1rem;
   font-weight: 400;
+  margin-left: 10px;
 }
 .page_size:hover{
   outline: none;

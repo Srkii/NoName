@@ -11,7 +11,7 @@ import { UploadService } from '../../_services/upload.service';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService) {}
+  constructor(private router: Router,private userInfo:UserinfoService, private uploadService:UploadService) {}
   ngOnInit(): void {
     this.isAdmin()
     this.getUser()
@@ -20,6 +20,8 @@ export class NavComponent implements OnInit {
   logovan!: boolean
 
   user!:any
+
+  imgFlag: boolean=false;
 
   async Logout(): Promise<void> {
     try {
@@ -48,8 +50,19 @@ export class NavComponent implements OnInit {
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.user=response;
-      },error:(error)=>{
-        console.log(error)
+        if(this.user.profilePicUrl!=null)
+        {
+          this.uploadService.getImage(this.user.profilePicUrl).subscribe(
+            { next:(res)=>{
+              const reader=new FileReader();
+              reader.readAsDataURL(res);
+              reader.onloadend=()=>{
+                this.user.url=reader.result as string;
+                this.imgFlag=true;
+            }}
+
+        })
+      }
       }
 
     })
