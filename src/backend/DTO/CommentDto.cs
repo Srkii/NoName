@@ -4,7 +4,7 @@
     {
         public int TaskId {get; set;}
         public string Content {get; set;}
-        public int SenderId;
+        public int SenderId{get;set;}
         public string SenderFirstName {get; set;}
         public string SenderLastName {get; set;}
     }

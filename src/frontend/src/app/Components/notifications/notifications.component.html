@@ -9,7 +9,7 @@
     <div class="dropdown-divider"></div>
     <span *ngIf="!notification_list">No new notifications...</span>
     <ul style="overflow: auto; max-height: 120px;">
-      <li *ngFor="let notification of notification_list"><a class="dropdown-item" href="javascript:void(0);">{{notification.sender_first_name}} {{notification.type==1?"uploaded an attachment":"commented on a task"}}</a></li>
+      <li *ngFor="let notification of notification_list"><a class="dropdown-item" href="javascript:void(0);">{{notification.sender_first_name}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}</a></li>
     </ul>
     <div class="dropdown-divider"></div>
     <div class="see-all-container">

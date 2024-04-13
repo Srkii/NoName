@@ -4,16 +4,17 @@ using backend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using backend.SignalR;
+using backend.Interfaces;
 namespace backend.Controllers
 {
     public class CommentsController:BaseApiController
     {
         private readonly DataContext _context;
-        public CommentsController(DataContext context)
+        INotificationService _notificationService;
+        public CommentsController(DataContext context,INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
         
         [AllowAnonymous]
@@ -31,6 +32,7 @@ namespace backend.Controllers
                 SenderLastName = commentDto.SenderLastName
             };
             _context.Comments.Add(comment);
+            await _notificationService.TriggerNotification(commentDto.TaskId,commentDto.SenderId,NotificationType.Comment);
             await _context.SaveChangesAsync();
             return Ok(comment);
         }
