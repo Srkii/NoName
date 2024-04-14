@@ -109,10 +109,10 @@ p {
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* To evenly space the elements */
+  justify-content: space-between; 
 }
 .page-size-container {
-  margin-left: 10px; /* Adjust margin between header and select */
+  margin-left: 10px; 
 }
 
 .page_size {
@@ -121,9 +121,12 @@ p {
   border: 0.5px solid lightgray;
   border-radius: 8px;
   padding: 6px;
-  width: 100%; /* Adjust width as needed */
+  width: 100%; 
 }
-.page_size:hover, .page_size:focus{
+.page_size:hover{
   outline: none;
   border: 1px solid #5f61e6 !important;
+}
+.page_size:focus{
+  outline: none;
 }

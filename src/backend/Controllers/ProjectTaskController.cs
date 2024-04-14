@@ -353,8 +353,8 @@ namespace backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("sortTasksByDueDate")]
-        public async Task<ActionResult<IEnumerable<object>>> SortTasksByDueDate(string sortOrder)
+        [HttpGet("sortTasksByDueDate/{userId}")]
+        public async Task<ActionResult<IEnumerable<object>>> SortTasksByDueDate(int userId,string sortOrder)
         {
             var query = _context.ProjectTasks.AsQueryable();
             // Apply sorting based on the sortBy parameter
@@ -370,7 +370,7 @@ namespace backend.Controllers
                     break;
             }
 
-            var sortedTasks = await query
+            var sortedTasks = await query.Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview")
                 .Select(task => new
                 {
                     task.Id,

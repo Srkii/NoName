@@ -122,11 +122,9 @@ export class MyTasksComponent implements OnInit {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
 
     this.spinner.show();
-    this.myTasksService.sortTasksByDueDate(this.sortOrder)
+    this.myTasksService.sortTasksByDueDate(this.userId,this.sortOrder)
       .subscribe({
         next: (sortedTasks: ProjectTask[]) => {
-          this.new_tasks = sortedTasks;
-          this.soon_tasks = sortedTasks;
           this.closed_tasks = sortedTasks;
           this.spinner.hide();
         },

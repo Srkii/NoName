@@ -187,13 +187,12 @@ p {
 }
 .paginate_buttons button:disabled{
   border: none;
-  color: #ccc; /* Change text color to gray */
-  background-color: #eee; /* Change background color to light gray */
-  border-color: #ccc; /* Change border color to gray */
-  cursor: not-allowed; /* Change cursor to not-allowed */
+  color: #ccc; 
+  background-color: #eee; 
+  border-color: #ccc; 
+  cursor: not-allowed; 
 }
 
-/* Style for active (current) page button */
 .paginate_button button.active,
 .paginate_buttons button.active {
   background-color: #5f61e6; 
@@ -202,11 +201,11 @@ p {
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* To evenly space the elements */
+  justify-content: space-between; 
 }
 
 .page-size-container {
-  margin-left: 10px; /* Adjust margin between header and select */
+  margin-left: 10px; 
 }
 
 .page_size {
@@ -215,7 +214,7 @@ p {
   border: 0.5px solid lightgray;
   border-radius: 8px;
   padding: 6px;
-  width: 100%; /* Adjust width as needed */
+  width: 100%; 
 }
 .page_size:hover, .page_size:focus{
   outline: none;

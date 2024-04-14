@@ -51,12 +51,12 @@
         <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly></textarea>
     <br /><br />
     <button
-      *ngIf="this.task.projectRole=='0'"
+      *ngIf="this.task.projectRole!='4'"
       class="mark"
-      [ngClass]="{ 'completed': task && task.statusName === 'Completed' }"
+      [ngClass]="{ 'completed': task && task.statusName === 'InReview' }"
       (click)="toggleTaskCompletion(task)"
     >
-      {{ task && task.statusName === 'Completed' ? "Re-open issue" : "Close issue" }}
+      {{ task && task.statusName === 'InReview' ? "Re-open issue" : "Close issue" }}
     </button>
     <br>
 

@@ -49,14 +49,14 @@ export class PopupComponent {
 
   toggleTaskCompletion(task: ProjectTask): void {
     var previousTaskStatus = "";
-    if (task.statusName === 'InProgress' || task.statusName == 'InReview') {
+    if (task.statusName === 'InProgress' || task.statusName == 'Proposed') {
       previousTaskStatus = task.statusName;
-      task.statusName = 'Completed';
+      task.statusName = 'InReview';
     } else {
       if(previousTaskStatus!="")
         task.statusName = previousTaskStatus;
       else
-        task.statusName = 'InReview';
+        task.statusName = 'InProgress';
     }
     console.log(task.statusName)
     this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
