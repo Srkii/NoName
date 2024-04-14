@@ -35,8 +35,9 @@ namespace backend.Controllers
                         .Where(ts => ts.ProjectId == taskDto.ProjectId && ts.Position == 0)
                         .Select(ts => ts.Id)
                         .FirstOrDefault(),
-                ProjectSectionId = taskDto.ProjectSectionId,
-                DateCreated = DateTime.Now // postavlja vreme i datum kad je task kreiran
+                // ProjectSectionId = taskDto.ProjectSectionId,
+                DateCreated = DateTime.Now, // postavlja vreme i datum kad je task kreiran
+                AppUserId = taskDto.AppUserId
             };
 
             _context.ProjectTasks.Add(task);

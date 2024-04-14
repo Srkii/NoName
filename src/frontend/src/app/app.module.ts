@@ -28,7 +28,7 @@ import { ProjectCardComponent } from './Components/project-card/project-card.com
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { DropdownModule } from 'primeng/dropdown';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -47,7 +47,7 @@ import { DropdownModule } from 'primeng/dropdown';
     FileUploadComponent,
     KanbanComponent,
     GanttComponent,
-    ProjectCardComponent
+    ProjectCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,7 +64,7 @@ import { DropdownModule } from 'primeng/dropdown';
     ModalModule.forRoot(),
     MatDatepickerModule,
     MultiSelectModule,
-    DropdownModule
+    NgSelectModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

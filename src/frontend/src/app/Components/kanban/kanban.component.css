@@ -71,60 +71,36 @@
     box-shadow: none;
 }
 
-
-::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
-    background-color: #fff !important;
-    color: #697a8d !important;
-    font-family: 'Public Sans', sans-serif;
-}
-::ng-deep .p-dropdown-header {
-    background-color: #fff;
-    padding: 0px;
-    border-bottom-left-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;
-    border-top-left-radius: 0.5rem !important;
-    border-top-right-radius: 0.5rem !important;
-}
-::ng-deep .p-dropdown-filter {
-    background-color: #fff;
-    border-bottom-left-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;
-    border-top-left-radius: 0.5rem !important;
-    border-top-right-radius: 0.5rem !important;
-}
-::ng-deep .p-dropdown-label {
-    border-radius: 0.5rem;
-}
-::ng-deep .p-dropdown-filter-container,
-::ng-deep .p-dropdown-header,
-::ng-deep .p-dropdown-panel,
-::ng-deep .p-component
-::ng-deep .p-overlay,
-::ng-deep .p-content 
-{
-    border-bottom-left-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;
-    border-top-left-radius: 0.5rem !important;
-    border-top-right-radius: 0.5rem !important;
-}   
-::ng-deep .p-checkbox-box.p-highlight,
-.p-checkbox-box.p-focus {
-    background-color: #697a8d !important;
-    color: #697a8d !important;
-    font-family: 'Public Sans', sans-serif;
+.ng-select.asigneeDropdown ::ng-deep .ng-select-container{
+    border-radius: 0.5rem !important;
 }
 
-::ng-deep .p-dropdown-filter:hover,
-::ng-deep .p-dropdown-filter:focus
-{
-    outline: none;
+::ng-deep .ng-select-focused {
+    box-shadow: none;
+}
+::ng-deep .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
     border: 1px solid #5f61e6 !important;
     box-shadow: none;
-    font-family: 'Public Sans', sans-serif;
 }
-/* primeng dropdown */
+::ng-deep .ng-select.ng-select-focused > .ng-select-container {
+    border: 1px solid #5f61e6 !important;
+    box-shadow: none;
+}
 
-/* scrollbar ukoliko ima previse sekcija za statuse */
+::ng-deep .ng-option-marked {
+    background-color: #F5F5F9 !important;
+}
+::ng-deep .ng-option-selected {
+    background-color: #a8a9f0 !important;
+}
+::ng-deep .ng-dropdown-panel {
+    background-color: #9a9cec !important;
+    border-top: 0px !important;
+}
+.btn-save-task {
+    margin-top: 15px;
+}
+
 .board-wrapper::-webkit-scrollbar {
     background-color: #F5F5F9;
     width: 16px;

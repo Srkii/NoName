@@ -43,7 +43,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <form class="mb-3">
+      <form class="mb-3" (ngSubmit)="saveTask()">
         <div class="mb-1" autocomplete="off">
             <label for="taskName" class="form-label">Task Name</label>
             <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName" placeholder="Enter new tasks's name"/> 
@@ -61,34 +61,22 @@
             <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" placeholder="End Date"/>
         </div>
         <div class="mb-1 chooseAssignee" autocomplete="off">
-          <label for="assignee" class="form-label">Assignee</label>
-          <p-dropdown [options]="users" [(ngModel)]="selectedUser" name="selectedUser" optionLabel="firstName" [filter]="true" filterBy="firstName,lastName"  styleClass="w-20rem" placeholder="Select Assignee">
-            <ng-template let-user pTemplate="item">
-              <div class="user-item">
-                <div class="user-item-image">
-                  <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong">
-                </div>
-                <div class="user-details">
-                    <div>{{ user.firstName }} {{user.lastName}}</div>
-                </div>
-              </div>
+          <label for="assignee2" class="form-label">Assignee</label>
+          <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
+            <ng-template ng-option-tmp let-user="item" let-index="index">
+              <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              {{ user.fullName }}
             </ng-template>
-            <ng-template let-user pTemplate="selectedItem">
-              <div class="user-item">
-                <div class="user-item-image">
-                  <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong">
-                </div>
-                <div class="user-details">
-                  <div>{{ user.firstName }} {{ user.lastName }}</div>
-                </div>
-              </div>
+            <ng-template ng-label-tmp let-item="item">
+                <img [src]="item.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                {{ item.fullName }}
             </ng-template>
-          </p-dropdown>
-      </div>
+          </ng-select>
+        </div>
+        <div class="btn-save-task">
+          <button class="btn btn-primary d-grid w-50 mx-auto">Save Task</button>
+        </div>
       </form>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary d-grid w-50 mx-auto">Save Task</button>
     </div>
 </ng-template>
 

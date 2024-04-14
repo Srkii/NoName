@@ -8,6 +8,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { UploadService } from '../../_services/upload.service';
+import { NewTask } from '../../Entities/NewTask';
 
 @Component({
   selector: 'app-kanban',
@@ -194,14 +195,13 @@ export class KanbanComponent implements OnInit{
   }
 
   saveTask() {
-    const task = {
+    const task: NewTask = {
       TaskName: this.newTaskName,
       Description: this.newTaskDescription,
-      StartDate: this.newTaskStartDate,
-      EndDate: this.newTaskEndDate,
-      TskStatusId: this.newTaskStatusId,
-      ProjectSectionId: this.newTaskProjectSectionId,
-      ProjectId: this.currentProjectId
+      StartDate: this.newTaskStartDate || new Date(),
+      EndDate: this.newTaskEndDate || new Date(),
+      ProjectId: this.currentProjectId || 0,
+      AppUserId: this.selectedUser?.appUserId || 0
     };
     this.myTasksService.createTask(task).subscribe({
       next: (response) => {
@@ -217,8 +217,10 @@ export class KanbanComponent implements OnInit{
     this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
       next: response => {
         this.users = response,
+        this.users.forEach(user => {
+          user.fullName = user.firstName + ' ' + user.lastName;
+        });
         this.loadPicture(this.users);
-        console.log(this.users);
       },
       error: error => console.log(error)
     });
@@ -234,19 +236,12 @@ export class KanbanComponent implements OnInit{
           reader.readAsDataURL(res);
           reader.onloadend = ()=> {
             user.pictureUrl=reader.result as string;
-            console.log("uspesno")
-            console.log(res)
-        }}
-        ,error:(error)=>{
+        }},
+        error:(error) => {
           console.log(error);
           }}
         )
       }
     });
   }
-
-  createProject() {
-    
-  }
-
 }
