@@ -8,5 +8,7 @@ namespace backend.Interfaces
         Task newNotifications();
         Task recieveNotifications(List<Notification> notifications);
         Task InvokeGetNotifications();
+        Task InvokeGetAllNotifications();
+        Task recieveAllNotifications(List<Notification> notifications);
     }
 }

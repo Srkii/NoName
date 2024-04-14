@@ -1,5 +1,7 @@
 /* navbar.css */
-
+*{
+  font-family: 'Public Sans',sans-serif !important;
+}
 .navbar-nav-right img {
   width: 30px;
   height: auto;
@@ -23,7 +25,6 @@
   padding-left: 2px;
 }
 .dropdown-item{
-  font-family: "Public Sans", sans-serif;
   font-size: 14px;
   color: #697a8d;
 }
@@ -62,4 +63,43 @@ li{
 }
 .see-all-container:hover{
   background-color: rgb(245, 245, 245);
+}
+.modal-ul{
+  list-style: none;
+  padding: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.modal{
+  color: #697a8d;
+  width: 800px;
+  min-height: 350px;
+  margin: 0;
+}
+.modal-footer{
+  display: flex;
+  justify-content: space-between;
+}
+.modal-body{
+  height: 300px;
+  overflow: auto;
+}
+.notification-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+}
+.notification-item:hover{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a box shadow effect on hover */
+}
+label{
+  width: 100%;
+}
+input{
+  margin-right: 15px;
+}
+.unread-notification{
+  list-style-type: circle;
 }

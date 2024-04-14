@@ -1,3 +1,4 @@
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -29,7 +30,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NotificationsComponent } from './Components/notifications/notifications.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +48,7 @@ import { NotificationsComponent } from './Components/notifications/notifications
     KanbanComponent,
     GanttComponent,
     ProjectCardComponent,
-    NotificationsComponent
+    NotificationsComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,7 +64,8 @@ import { NotificationsComponent } from './Components/notifications/notifications
     DragDropModule,
     ModalModule.forRoot(),
     MatDatepickerModule,
-    MultiSelectModule
+    MultiSelectModule,
+    MatDialogModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

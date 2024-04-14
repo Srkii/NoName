@@ -9,11 +9,41 @@
     <div class="dropdown-divider"></div>
     <span *ngIf="!notification_list">No new notifications...</span>
     <ul style="overflow: auto; max-height: 120px;">
-      <li *ngFor="let notification of notification_list"><a class="dropdown-item" href="javascript:void(0);">{{notification.sender_first_name}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}</a></li>
+      <li *ngFor="let notification of notification_list">
+        <a class="dropdown-item" href="javascript:void(0);">
+          {{notification.sender_first_name}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
+        </a>
+      </li>
     </ul>
     <div class="dropdown-divider"></div>
-    <div class="see-all-container">
+    <div class="see-all-container" (click)="see_all_notifications(AllNotifications)">
       <small style="padding-left: 15px;padding-bottom: 3px;">See all notifications...</small>
     </div>
   </div>
 </div>
+
+<ng-template #AllNotifications>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">All Notifications</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalref?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul class="modal-ul">
+      <li *ngFor="let notification of notifications" class="notification-item" [ngClass]="{'unread-notification':!notification.read}">
+        <label for="notifinput" class="list-group-item" style="pointer-events:none">
+          {{notification.sender_first_name}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
+        </label>
+        <input name="notifinput" class="form-check-input" type="checkbox" [checked]="markedNotifications.includes(notification.id)" (change)="toList(notification.id)">
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary d-grid" (click)="selectAllNotifications()">
+      {{ areAllNotificationsSelected() ? 'Deselect All' : 'Select All' }}
+    </button>
+    <button class="btn btn-primary d-grid" type="submit" (click)="this.notificationService.read_notifications(this.markedNotifications)">Mark as read</button>
+  </div>
+
+</ng-template>

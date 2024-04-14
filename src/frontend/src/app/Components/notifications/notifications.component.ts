@@ -1,26 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NotificationsService } from '../../_services/notifications.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
+import { withDebugTracing } from '@angular/router';
+
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
-  styleUrl: './notifications.component.css'
+  styleUrls: ['./notifications.component.css']
 })
-export class NotificationsComponent implements OnInit{
+export class NotificationsComponent {
   public notification_list:any = [];
-  constructor (private notificationService:NotificationsService,private spinner:NgxSpinnerService ){}
-  ngOnInit(): void {
-    this.spinner.show();
-  }
-  async getNotifications(){//kupimo notifikacije
-    await this.notificationService.getNotifications();
+  notifications:any;
+  markedNotifications: any[] = [];
+  modalref?:BsModalRef;
+  constructor (
+    public notificationService:NotificationsService,
+    private modalService:BsModalService
+  ){}
+  async getNotifications(){
+    await this.notificationService.getNotifications();//ovde smanjim da uzima manje notifikacija, tipa da uzme 10 najskorijih neprocitanih notifikacija
     this.notification_list = this.notificationService.notifications;
   }
-
-  read_notification(){
-    //saljem request bazi da stavi notifikaciji read=true
+  see_all_notifications(modal:TemplateRef<void>){
+    this.handleNotificationDisplay();
+    this.modalref = this.modalService.show(
+      modal,
+      {
+        class:'modal-fade modal-lg modal-dialog-centered',
+      }
+    )
   }
-  follow_link(){
-    //dodati notifikaciji task_id ili project_id da zna na sta da ide, na osnovu toga otvaramo popup za task ako treba ili za projekat koji je dodat
+  async handleNotificationDisplay(){
+    await this.notificationService.getAllNotifications();
+    this.notifications =  this.notificationService.allNotifications;
+    console.log(this.notifications);
+  }
+  selectAllNotifications() {
+    if (this.areAllNotificationsSelected()) {
+      this.markedNotifications = [];
+    } else {
+      this.markedNotifications = this.notifications.map((notification:any) => notification.id);
+    }
+  }
+
+  areAllNotificationsSelected(): boolean {
+    return this.notifications && this.markedNotifications.length === this.notifications.length;
+  }
+
+  toList(notificationId: any) {
+    if (this.markedNotifications.includes(notificationId)) {
+      this.markedNotifications = this.markedNotifications.filter(id => id !== notificationId);
+    } else {
+      this.markedNotifications.push(notificationId);
+    }
   }
 }

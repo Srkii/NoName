@@ -22,9 +22,9 @@ namespace backend.SignalR
             var userIdClaim = Context.User.FindFirst(ClaimTypes.NameIdentifier);
             var httpContext = Context.GetHttpContext();
             int userId = Convert.ToInt32(userIdClaim.Value);
-            await Groups.AddToGroupAsync(Context.ConnectionId,Context.UserIdentifier);//pravimo grupu za LIVE komunikaciju
+            await Groups.AddToGroupAsync(Context.ConnectionId,Context.UserIdentifier);
             
-            var notifications = await _context.Notifications.Where(x=>x.reciever_id==userId && x.read==false).ToListAsync();//kako sam ja mogao ovo da uradim wtf
+            var notifications = await _context.Notifications.Where(x=>x.reciever_id==userId && x.read==false).ToListAsync();
 
             if (!_userConnections.ContainsKey(userId.ToString()))
             {
@@ -32,7 +32,7 @@ namespace backend.SignalR
             }
 
             _userConnections[userId.ToString()].Add(Context.ConnectionId);
-            if(notifications.Count>0) await Clients.Group(userId.ToString()).newNotifications();//salje sve nove notifikacije korisniku na front ukoliko ih ima
+            if(notifications.Count>0) await Clients.Group(userId.ToString()).newNotifications();
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception exception)
@@ -43,17 +43,31 @@ namespace backend.SignalR
                 connections.Remove(Context.ConnectionId);
                 if (connections.Count == 0)
                 {
-                    _userConnections.Remove(userId.ToString());//izbacuje iz liste LIVE usera
+                    _userConnections.Remove(userId.ToString());
                 }
             }
             await base.OnDisconnectedAsync(exception);
         }
 
         public async Task invokeGetNotifications(){
-            var userId = Context.UserIdentifier;//i dalje nzm kako je ovo isto sa id-em u bazi
-            var httpContext = Context.GetHttpContext();
-            var notifications = await _context.Notifications.Where(x=>x.reciever_id.ToString()==userId && x.read==false).ToListAsync();//po id-u primaoca izvlacimo kome ide notif.
+            var userId = Context.UserIdentifier;
+
+            var notifications = await _context.Notifications
+            .Where(x=>x.reciever_id.ToString()==userId && x.read==false)
+            .OrderByDescending(x=>x.dateTime)
+            .Take(10)
+            .ToListAsync();
             await Clients.Caller.recieveNotifications(notifications);
+        }
+        public async Task invokeGetAllNotifications(){
+            var userId = Context.UserIdentifier;
+
+            var notifications = await _context.Notifications
+            .Where(x=>x.reciever_id.ToString()==userId)
+            .OrderByDescending(x=>x.dateTime)
+            .ToListAsync();
+
+            await Clients.Caller.recieveAllNotifications(notifications);
         }
     }
 
