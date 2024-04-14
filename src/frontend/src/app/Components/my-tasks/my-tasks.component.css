@@ -15,18 +15,18 @@ body {
 
 .all {
   margin-top: 30px;
-  margin: auto; /* Center the div horizontally */
+  margin: auto; 
   padding: 20px;
   width: 85%;
-  min-height: 10vh; /* Set a minimum height */
+  min-height: 10vh; 
   background-color: #ffffff;
   color: #697a8d;
   border: solid 1px #d9dee3;
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  overflow-y: hidden; /* Hide the vertical scrollbar */
-  overflow-x: auto; /* Hide the vertical scrollbar */
-  box-sizing: border-box; /* Include padding and border in the total width and height */
+  overflow-y: hidden; 
+  overflow-x: auto; 
+  box-sizing: border-box; 
 }
 
 table {
@@ -34,12 +34,9 @@ table {
   font-size: 12px;
   border: 1px solid lightgray;
   border-collapse: collapse;
-  /* padding: 6px; */
-  /* margin-left: -20px; */
   margin-bottom: -20px;
   margin-top: 10px;
   width: 100%;
-  /* margin-left: 20px; */
   border-left: none;
   border-bottom: none;
   border-right: none;
@@ -53,11 +50,11 @@ table {
 th {
   font-size: 14px;
   border: 1.5px solid lightgray;
-  font-weight: 700; /* thinner text */
+  font-weight: 700; 
   padding: 5px;
   border-left: none;
   border-right: none;
-  width: 25%; /* Set a fixed width for all th elements */
+  width: 25%; 
   padding-left: 10%;
 }
 
@@ -110,16 +107,3 @@ p {
 
 
 
-/* .mark:hover {
-  cursor: pointer;
-  box-shadow: 0 0 3px #5f61e6;
-  filter: brightness(120%);
-}
-.mark:focus {
-  background-color: #3fb94c;
-  box-shadow: 0 0 3px #3fb94c;
-}
-.checked-button {
-  background-color: #3fb94c;
-  box-shadow: 0 0 3px #3fb94c;
-} */

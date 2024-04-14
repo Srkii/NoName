@@ -1,23 +1,80 @@
 <div id="all">
   <div id="all1">
-    <h5>Users</h5>
     <br />
-
-    <div class="invite">
-      <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter users's email"/>
-
-      <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="Invite()">Invite user</button>
-      </div>
+    <div class="card-container">
+    <div class="card clickable-div" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="filterUsers()">
+    <div class="card-title">
+      <label>Total {{numOfAdmins}} admins</label>
+        <div class="pics">
+          <ng-container *ngFor="let user of admins.slice(0, 5)">
+            <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+          </ng-container>
+        </div>
+    </div>
+    <div class="card-body">
+      <h3>Administrator</h3>
+    </div>
     </div>
 
-    <!-- <div class="input-group">
+    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="filterUsers()">
+      <div class="card-title">
+        <label>Total {{numOfPM}} project managers</label>
+        <div class="pics">
+          <div *ngIf="projectMangers">
+          <ng-container *ngFor="let user of projectMangers.slice(0, 5)">
+            <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user?.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+          </ng-container>
+        </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>Project Manager</h3>
+    </div>
+    </div>
 
-      <input type="number" id="form3Example3" class="form-control" name="email" name="role" [(ngModel)]="invitation.receiver" placeholder="User's email"/>
+    <div class="card clickable-div" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="filterUsers()">
+      <div class="card-title">
+        <label>Total {{numOfMembers}} users</label>
+      <div class="pics">
 
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="Invite()">Invite</button>
+      <ng-container *ngFor="let user of members.slice(0, 5)">
+        <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user?.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+        <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+      </ng-container>
+    </div>
+      </div>
+    <div class="card-body">
+      <h3>Member</h3>
+    </div>
+    </div>
 
-    </div> -->
+    </div>
+
+    <div class="invite">
+      <div class="leftInvite">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Search users"
+          [(ngModel)]="searchTerm"
+          (input)="filterUsers(); "
+        />
+
+      <select class="page_size" [(ngModel)]="pageSize" (ngModelChange)="filterUsers()">
+        <option value="5" selected>Select page size</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+
+      <div class="inputEmail">
+        <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter new user's email"/>
+        <button class="btn btn-primary d-grid" type="submit" (click)="Invite()">Invite new user</button>
+      </div>
+    </div>
 
     <br />
     <table class="invoice-list-table table">
@@ -29,7 +86,7 @@
               width="16"
               height="16"
               fill="currentColor"
-              class="filter"
+
               viewBox="0 0 16 16"
               (click)="sortUsersByName()"
             >
@@ -51,7 +108,8 @@
           <td  *ngIf="!user.archived">
             <div class="d-flex justify-content-start align-items-center">
               <div class="avatar-wrapper">
-                <div class="avatar avatar-sm me-2"><img src="../../../assets/navIcons/user (4).png" alt="Avatar" class="avatar"></div>
+                <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+                <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
               </div>
               <div class="d-flex flex-column">
                 <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
@@ -63,71 +121,20 @@
           <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
           <td  *ngIf="!user.archived">
             <div class="d-flex align-items-center">
-              <!-- <img src="../../../assets/navIcons/edit.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
-                 href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"> -->
-                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-up nav-link dropdown-toggle hide-arrow" id="tableIcon"
-                 href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" viewBox="0 0 16 16">
+                 <svg xmlns="http://www.w3.org/2000/svg" (click)="openModal(updateUser,user.id)" width="16" height="16" fill="currentColor" class="bi bi-person-up" id="tableIcon"
+                   viewBox="0 0 16 16">
                   <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
                   <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                </svg>
-                 <div class="dropdown-menu pop">
+            </svg>
 
-                  <div class="update">
-                    <span class="span-dropdown-item">Update user</span>
-                      <form (ngSubmit)="UpdateUser(user.id)">
-                        <div class="mb-3">
-                          <label for="email" class="form-label">Email</label>
-                          <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="updateUser.Email" placeholder="Enter user's email"/>
-                        </div>
-                        <div class="mb-3">
-                          <label for="fisrt name" class="form-label">Fisrt Name</label>
-                          <input type="text" id="form3Example3" class="form-control" name="firstName" [(ngModel)]="updateUser.FirstName" placeholder="Enter user's First Nsme"/>
-                        </div>
-                        <div class="mb-3">
-                          <label for="email" class="form-label">Last Name</label>
-                          <input type="text" id="form3Example3" class="form-control" name="lastName" [(ngModel)]="updateUser.LastName" placeholder="Enter user Last Name"/>
-                        </div>
-                        <div class="mb-3">
-                          <button class="btn btn-primary d-grid w-100" type="submit">Update</button>
-                        </div>
-
-                    </form>
-                  </div>
-
-              </div>
-
-                <!-- <img src="../../../assets/navIcons/delete.png" (click)="ArchiveUser(user.id)" id="tableIcon" aria-expanded="false"> -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square nav-link dropdown-toggle hide-arrow" id="tableIcon"
-                  href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" (click)="openModal(changeRole,user.id)" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" id="tableIcon"
+                 viewBox="0 0 16 16">
                   <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                 </svg>
-                <!-- <img src="../../../assets/navIcons/more.png" class="nav-link dropdown-toggle hide-arrow" id="tableIcon"
-                  href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"> -->
 
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <div class="update">
-                    <span class="span-dropdown-item">Change user role</span>
-                    <form >
-
-                    <div class="mb-3">
-                      <label for="email" class="form-label">Role</label>
-                      <input  id="form3Example3" class="form-control" name="email" name="role" [(ngModel)]="role" placeholder="User's role"/>
-                      <!-- <select [(ngModel)]="role">
-                        <option value=0>Admin</option>
-                        <option value=1>Member</option>
-                        <option value=2>Project Manager</option>
-                        <option *ngFor="let role of roles" [value]="role" >{{role}}</option>
-                      </select> -->
-                    </div>
-                    <div class="mb-<3">
-                      <button class="btn btn-primary d-grid w-100" type="submit">Change</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" (click)="ArchiveUser(user.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" (click)="openModal(archiveUser,user.id)" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" class="bi bi-pencil-square" id="tableIcon"
+              aria-expanded="false">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
               </svg>
@@ -137,6 +144,21 @@
         </tr>
       </tbody>
     </table>
+    
+    <div class="col-sm-12 col-md-6" *ngIf="filteredUsers>5">
+      <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+        <ul class="pagination">
+          <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
+            <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+            <li class="paginate_button1 page-item active" *ngFor="let pageNumber of totalusersArray">
+              <button class="btn page" (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
+            </li>
+
+                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
+                  <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+                </li></ul>
+      </div></div>
+
   </div>
 </div>
 
@@ -148,3 +170,77 @@
 >
   <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
+
+<ng-template #updateUser>
+  <div class="modal-header">
+    <h5>Update user's info</h5>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="UpdateUser(curentUserId)">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="newEmail" placeholder="Enter user's email"/>
+      </div>
+      <div class="mb-3">
+        <label for="fisrt name" class="form-label">Fisrt Name</label>
+        <input type="text" id="form3Example3" class="form-control" name="firstName" [(ngModel)]="newFisrtName" placeholder="Enter user's First Nsme"/>
+      </div>
+      <div class="mb-3">
+        <label for="last name" class="form-label">Last Name</label>
+        <input type="text" id="form3Example3" class="form-control" name="lastName" [(ngModel)]="newLastName" placeholder="Enter user's Last Name"/>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid w-100" type="submit">Update</button>
+      </div>
+
+  </form>
+  </div>
+</ng-template>
+
+<ng-template #archiveUser>
+  <div class="modal-header">
+    <h4>Archive user</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form >
+      <div class="mb-3">
+        <label for="text" class="form-label">Are you sure you want to archive this user?</label>
+        <label for="text" class="form-label">
+          This user will no longer be visible.</label>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="ArchiveUser(curentUserId)">Archive user</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #changeRole>
+  <div class="modal-header">
+    <h4>Change user's role</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="ChangeUserRole(curentUserId)">
+      <div class="mb-3 selectRole">
+        <select name="role" [(ngModel)]="userRole" required>
+          <option value="" selected>Select role</option>
+          <option value="0">Admin</option>
+          <option value="1">Member</option>
+          <option value="2">Project Manager</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid w-100" type="submit">Change</button>
+      </div>
+    </form>
+  </div>
+</ng-template>

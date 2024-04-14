@@ -49,21 +49,15 @@
     </p>
       <p class="header">Description</p>
         <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly></textarea>
-    <!-- <input
-      class="description"
-      type="text"
-      [value]="task.description"
-      readonly
-    /> -->
     <br /><br />
     <button
+      *ngIf="this.task.projectRole!='0'"
       class="mark"
       [ngClass]="{ 'completed': task && task.statusName === 'Completed' }"
       (click)="toggleTaskCompletion(task)"
     >
-      {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
+      {{ task && task.statusName === 'Completed' ? "Re-open issue" : "Close issue" }}
     </button>
-    <!-- Existing HTML markup -->
     <br>
 
     <div class="comments">
@@ -82,7 +76,6 @@
             <div class="content">
                 <p>{{ comment.content }}</p>
             </div>
-            <!-- <hr> -->
           </ng-continer>
         </div>
       </div>

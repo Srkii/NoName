@@ -27,9 +27,9 @@ export class MyTasksService {
   GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
   }
-
-  GetProjectTask(taskId: number): Observable<ProjectTask> {
-    return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}`);
+  
+  GetProjectTask(taskId: number, userId: any): Observable<ProjectTask> {
+    return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}/${userId}`);
   }
   //tico: mirkov updateTaskStatus. Treba da se promeni
   updateTaskStatus1(id: number, statusName: string): Observable<ProjectTask> {
@@ -68,5 +68,12 @@ export class MyTasksService {
       throw new Error('Task status ID is null');
     }
     return this.http.delete(`${this.baseUrl}/deleteTaskStatus/${taskStatusId}`);
+  }
+
+  GetNewTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count1/${count}`);
+  }
+  GetSoonTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count2/${count}`);
   }
 }

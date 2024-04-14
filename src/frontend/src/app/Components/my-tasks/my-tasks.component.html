@@ -8,9 +8,9 @@
   
 ></app-popup>
 <div class="all">
-    <h5>📬 In Progress</h5>
+    <h5>📬 New Issues</h5>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty('InProgress') }">
+    <table [ngClass]="{ 'empty-table': isNewTasksEmpty() }">
 
       <tr>
         <th>Task Name</th>
@@ -34,10 +34,9 @@
           </svg>
         </th>
       </tr>
-      <ng-container *ngFor="let task of tasks">
+      <ng-container *ngFor="let task of new_tasks">
         <tr
           class="td_row"
-          *ngIf="task.statusName=='InProgress'"
           [class.clicked]="clickedTask?.id === task.id"
           (click)="togglePopUp($event, task.id)"
         >
@@ -56,9 +55,9 @@
 <br />
 
 <div class="all">
-    <h5>&#10024; In Review</h5>
+    <h5>&#10024; Due Soon</h5>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty('InReview') }">
+    <table [ngClass]="{ 'empty-table': isSoonTasksEmpty() }">
 
       <tr>
         <th>Task Name</th>
@@ -82,7 +81,7 @@
           </svg>
         </th>
       </tr>
-      <ng-container *ngFor="let task of tasks">
+      <ng-container *ngFor="let task of new_tasks">
         <tr
         class="td_row"
         *ngIf="task.statusName=='InReview'"
@@ -106,7 +105,7 @@
 </div>
 <br />
 <div class="all">
-    <h5>🎉 Completed</h5>
+    <h5>🎉 Closed Tasks</h5>
 
     <table [ngClass]="{ 'empty-table': isTasksEmpty('Completed') }">
 
@@ -132,7 +131,7 @@
           </svg>
         </th>
       </tr>
-      <ng-container *ngFor="let task of tasks">
+      <ng-container *ngFor="let task of new_tasks">
         <tr
         class="td_row"
         *ngIf="task.statusName=='Completed'"

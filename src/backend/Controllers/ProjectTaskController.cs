@@ -68,8 +68,8 @@ namespace backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{id}")] // GET: api/projectTask/2
-        public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
+        [HttpGet("{task_id}/{userId}")] // GET: api/projectTask/2
+        public async Task<ActionResult<ProjectTask>> GetProjectTask(int task_id,int userId)
         {
             var task = await _context.ProjectTasks
             .Select(task => new
@@ -83,9 +83,13 @@ namespace backend.Controllers
                 task.TskStatus.StatusName,
                 task.TskStatus.Color,
                 task.ProjectSection.SectionName,
-                task.Project
+                task.Project,
+                 ProjectRole = _context.ProjectMembers
+                                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                                        .Select(member => member.ProjectRole)
+                                        .FirstOrDefault()
             })
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstOrDefaultAsync(t => t.Id == task_id);
 
             if (task == null)
             {
@@ -111,9 +115,12 @@ namespace backend.Controllers
                                           task.TskStatus.StatusName,
                                           task.TskStatus.Color,
                                           task.ProjectSection.SectionName,
-                                          task.Project
-
-                                      })
+                                          task.Project,
+                                        ProjectRole = _context.ProjectMembers
+                                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                                        .Select(member => member.ProjectRole)
+                                        .FirstOrDefault()
+                                    })
                                       .ToListAsync();
             return Ok(tasks);
         }
@@ -373,6 +380,7 @@ namespace backend.Controllers
                     task.AppUser.FirstName,
                     task.AppUser.LastName,
                     task.Project
+                    
                 })
                 .ToListAsync();
             return sortedTasks;
@@ -417,6 +425,68 @@ namespace backend.Controllers
 
             return Ok(new { message = "Section deleted and tasks updated to Proposed status." });
         }
+        [AllowAnonymous]
+        [HttpGet("user/{userId}/count1/{count}")]
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetNewTasksByUserId(int userId, int count)
+        {
+            var tasks = await _context.ProjectTasks
+                .Where(task => task.AppUserId == userId)
+                .Take(count)
+                .OrderByDescending(task => task.DateCreated) // Order by DateCreated in descending order
+                .Select(task => new
+                {
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.Project,
+                    ProjectRole = _context.ProjectMembers
+                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                        .Select(member => member.ProjectRole)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+            
+
+            return Ok(tasks);
+        }
+        [AllowAnonymous]
+        [HttpGet("user/{userId}/count2/{count}")]
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetSoonTasksByUserId(int userId, int count)
+        {
+            var tasks = await _context.ProjectTasks
+                .Where(task => task.AppUserId == userId)
+                .Take(count)
+                .OrderBy(task => task.EndDate) // Order by DateCreated in descending order
+                .Select(task => new
+                {
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.Project,
+                    ProjectRole = _context.ProjectMembers
+                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                        .Select(member => member.ProjectRole)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+            
+
+            return Ok(tasks);
+        }
     }
+
+
 }
 

@@ -21,7 +21,7 @@ export class PopupComponent {
   previousTaskStatus: string="";
   fullscreen: boolean = false;
   user!:any;
-  comments: Comment[] = []; // Array to store comments
+  comments: Comment[] = []; 
 
   constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService) {}
 
@@ -100,7 +100,6 @@ export class PopupComponent {
     if (!this.fullscreen) {
       if(windowWidth<800)
       {
-        // pop.style.top="0";
         pop.style.height="100%";
         pop.style.width="95%";
       }
@@ -156,21 +155,17 @@ export class PopupComponent {
         id: -1,
         taskId: this.task!.id,
         content: content,
-        senderId: this.user.id, // Assuming user is logged in and you have access to user info
+        senderId: this.user.id,
         senderFirstName: this.user.firstName,
         senderLastName: this.user.lastName,
-        messageSent: new Date() // Set the messageSent property to the current date
+        messageSent: new Date() 
       };
   
       this.commentsService.postComment(commentDto).subscribe({
         next: (comment: Comment) => {
-          // Replace temporary id with the actual id returned from the server
           commentDto.id = comment.id;
-          // Add the newly added comment to the comments list
           this.comments.push(commentDto);
-          // Clear the textarea
           this.commentInput.nativeElement.value = '';
-          // Reset textarea height
         },
         error: (error: any) => {
           console.error('Error adding comment:', error);
@@ -187,7 +182,6 @@ export class PopupComponent {
   deleteComment(commentId: number): void {
     this.commentsService.deleteComment(commentId).subscribe({
       next: () => {
-        // Remove the deleted comment from the comments array
         this.comments = this.comments.filter(comment => comment.id !== commentId);
       },
       error: (error: any) => {

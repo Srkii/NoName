@@ -11,7 +11,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrls: ['./my-tasks.component.css'],
-  providers: [DatePipe], // Provide DatePipe here
+  providers: [DatePipe], 
   animations: [
     trigger('popFromSide', [
       transition(':enter', [
@@ -36,7 +36,9 @@ import { trigger, transition, style, animate } from '@angular/animations';
 
 export class MyTasksComponent implements OnInit {
   [x: string]: any;
-  tasks: ProjectTask[] = [];
+  new_tasks: ProjectTask[] = [];
+  soon_tasks: ProjectTask[] = [];
+  closed_tasks: ProjectTask[] = [];
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
@@ -56,28 +58,15 @@ export class MyTasksComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.spinner.show();
-    const userId = localStorage.getItem('id');
-
-    if (userId !== null) {
-    this.myTasksService
-      .GetTasksByUserId(userId)
-      .subscribe((tasks: ProjectTask[]) => {
-        this.tasks = tasks;
-        this.spinner.hide();
-      });
-    } else {
-      console.error('User ID is null');
-      this.spinner.hide();
-    }
-    this.cdr.detectChanges();
+    this.loadTasks();
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
+    var userId=localStorage.getItem('id');
     const row = document.querySelector('.td_row') as HTMLElement;
     this.myTasksService
-      .GetProjectTask(taskId)
+      .GetProjectTask(taskId,userId)
       .subscribe((task: ProjectTask) => {
         if (
           this.clickedTask &&
@@ -98,24 +87,40 @@ export class MyTasksComponent implements OnInit {
 
 
   loadTasks(): void {
+    this.spinner.show();
     const userId = localStorage.getItem('id');
-    if (userId) {
-      this.myTasksService.GetTasksByUserId(userId).subscribe((tasks: ProjectTask[]) => {
-        this.tasks = tasks;
+
+    if (userId !== null) {
+    this.myTasksService
+      .GetNewTasksByUserId(userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.new_tasks = tasks;
+        this.spinner.hide();
       });
+    this.myTasksService
+      .GetSoonTasksByUserId(userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.soon_tasks = tasks;
+        this.spinner.hide();
+      });
+    } else {
+      console.error('User ID is null');
+      this.spinner.hide();
     }
+    this.cdr.detectChanges();
   }
   
   sortOrder: 'asc' | 'desc' = 'asc';
 
   sortTasks() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; // Update sortOrder based on the current value
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
 
     this.spinner.show();
     this.myTasksService.sortTasksByDueDate(this.sortOrder)
       .subscribe({
         next: (sortedTasks: ProjectTask[]) => {
-          this.tasks = sortedTasks;
+          this.new_tasks = sortedTasks;
+          this.soon_tasks = sortedTasks;
           this.spinner.hide();
         },
         error: (error: any) => {
@@ -135,7 +140,13 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
+  isNewTasksEmpty(): boolean {
+    return this.new_tasks.length === 0;
+  }
+  isSoonTasksEmpty(): boolean {
+    return this.soon_tasks.length === 0;
+  }
   isTasksEmpty(status: string): boolean {
-    return this.tasks.filter(task => task.statusName === status).length === 0;
+    return this.new_tasks.filter(task => task.statusName === status).length === 0;
   }
 }

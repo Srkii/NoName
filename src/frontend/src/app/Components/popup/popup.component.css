@@ -1,25 +1,6 @@
 * {
   font-family: "Public Sans", sans-serif;
 }
-/* .pop {
-  padding: 15px;
-  position: fixed;
-  bottom: 0; 
-  right: 10px; 
-  width: 40%;
-  height: 89%;
-  background-color: #ffffff;
-  color: #697a8d;
-  border-color: solid #d9dee3;
-  border-width: 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  overflow: auto;
-  z-index: 999; 
-  font-weight: 600;
-  font-size: 12px;
-  overflow: hidden;
-} */
 @media (max-width: 1200px) {
   .pop {
     left: 10px;
@@ -53,22 +34,22 @@
   border-radius: 8px;
   background-color: #d9dee3;
   border: none;
-  width: 200px; /* Set a specific width */
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflowing text */
-  text-overflow: ellipsis; /* Display an ellipsis (...) when text overflows */
+  width: 200px; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
 }
 
 #assignee {
-  display: inline-block; /* Make the image and text stay on the same line */
-  vertical-align: middle; /* Align elements vertically */
-  margin-left: 15px; /* Adjust margin as needed */
-  margin-right: 10px; /* Adjust margin as needed */
+  display: inline-block; 
+  vertical-align: middle; 
+  margin-left: 15px; 
+  margin-right: 10px; 
 }
 
 #username {
   display: inline-block;
-  margin-left: 5px; /* Adjust margin as needed */
+  margin-left: 5px; 
   font-size: 13px;
 }
 
@@ -92,7 +73,7 @@ img{
   border: 0.5px solid lightgray;
   border-radius: 8px;
   padding: 6px;
-  margin-left: 5%; /* Add margin-bottom for the gap */
+  margin-left: 5%; 
   margin-bottom: 1%;
 }
 .form-control[type="file"]:not(:disabled):not([readonly]):hover {
@@ -101,14 +82,14 @@ img{
   color: #5f61e6 !important;
 }
 textarea:hover{
-  outline: none; /* Remove default focus outline */
-  border: 1px solid #5f61e6 !important; /* Add custom border */
-  box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
+  outline: none; 
+  border: 1px solid #5f61e6 !important; 
+  box-shadow: 0 0 3px #5f61e6; 
 }
 textarea:focus {
-  outline: none; /* Remove default focus outline */
-  border: 1px solid #5f61e6 !important; /* Add custom border */
-  box-shadow: 0 0 3px #5f61e6; /* Add glow effect */
+  outline: none; 
+  border: 1px solid #5f61e6 !important; 
+  box-shadow: 0 0 3px #5f61e6; 
 }
 .mark {
   padding: 5px;
@@ -121,7 +102,7 @@ textarea:focus {
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   float: right;
 }
-/*file upload icon*/
+
 .file {
   float: right;
   margin-right: 5%;
@@ -176,7 +157,6 @@ textarea:focus {
   resize: none;
 }
 .comments {
-  /* padding: 10px; */
   color: #697a8d;
   border-radius: 8px;
   width: 100%;
