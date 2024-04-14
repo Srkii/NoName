@@ -500,6 +500,22 @@ namespace backend.Controllers
         }
 
 
+        // vraca sve AppUser koji su na projektu (tj imaju odgovarajuci ProjectMember entry)
+        [HttpGet("GetUsersByProjectId/{projectId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsersByProjectId(int projectId)
+        {
+            var users = await _context.ProjectMembers
+                .Where(pm => pm.ProjectId == projectId)
+                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName, pm.AppUser.ProfilePicUrl })
+                .ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound("No users found for the given project ID.");
+            }
+
+            return Ok(users);
+        }
     }
 }
 

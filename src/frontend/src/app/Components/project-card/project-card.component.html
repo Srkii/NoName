@@ -6,7 +6,7 @@
       <div class="card shadow border-0">
         <h4>Create New Project</h4>
         <div class="card-body">
-          <form #createProjectForm="ngForm" class="mg-3" (ngSubmit)="CreateProject()" autocomplete="off" id="ProjectCreate">
+          <form #createProjectForm="ngForm" class="mb-3" (ngSubmit)="CreateProject()" autocomplete="off" id="ProjectCreate">
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Project Name</label>
               <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Project Name" [(ngModel)]="newProject.ProjectName" name="Name" [ngClass]="{'is-invalid': buttonClicked && !newProject.ProjectName}">

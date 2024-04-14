@@ -31,8 +31,15 @@ input::placeholder {color: #697a8d; }
 
 .card-body{color: #697a8d;}
 
+:host ::ng-deep .p-inputwrapper-focus {
+    outline: none;
+    border: 0px solid #5f61e6 !important; 
+    box-shadow: 0 0 3px #5f61e6;
+}
+
 :host ::ng-deep .p-multiselect {
   width: 100%;
+  font-family: 'Public Sans', sans-serif;
 }
 
 :host ::ng-deep .p-multiselect:hover,:host ::ng-deep .p-multiselect:focus{
@@ -42,22 +49,27 @@ input::placeholder {color: #697a8d; }
 }
 
 :host ::ng-deep .p-multiselect-label {
-  width: calc(100% - 2em); 
+  width: calc(100% - 2em);
+  font-family: 'Public Sans', sans-serif;
 }
 
 :host ::ng-deep .p-multiselect-items{
     padding: 0 !important;
+    margin-bottom: 0px !important;
+    font-family: 'Public Sans', sans-serif;
 }
 
 :host ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
     background-color: rgb(233, 233, 235) !important;
     color: #697a8d !important;
+    font-family: 'Public Sans', sans-serif;
 }
     
 :host ::ng-deep .p-checkbox-box.p-highlight,
 .p-checkbox-box.p-focus {
     background-color: #697a8d !important;
     color: #697a8d !important;
+    font-family: 'Public Sans', sans-serif;
 }
 
 :host ::ng-deep .p-multiselect-filter:hover,
@@ -65,7 +77,19 @@ input::placeholder {color: #697a8d; }
 {
     outline: none;
     border: 1px solid #5f61e6 !important; 
-    box-shadow: 0 0 3px #5f61e6; 
+    box-shadow: 0 0 3px #5f61e6;
+    font-family: 'Public Sans', sans-serif;
+}
+
+.select-wrapper .form-select:hover {
+    outline: none;
+    border: 0px solid #5f61e6 !important; 
+    box-shadow: 0 0 3px #5f61e6;
+}
+.select-wrapper .form-select:focus {
+    outline: none;
+    border: 0px solid #5f61e6 !important; 
+    box-shadow: 0 0 3px #5f61e6;
 }
 
 label{ margin-right: 1rem; }

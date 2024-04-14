@@ -7,6 +7,7 @@
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public DateTime DateCreated { get; set; }
         public int TskStatusId { get; set; } // foreign key
         public TskStatus TskStatus { get; set; } // navigation
         public int ProjectId { get; set; } // foreign key
