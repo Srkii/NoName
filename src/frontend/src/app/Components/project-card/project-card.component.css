@@ -9,6 +9,13 @@
     transition: right 0.5s;
 }
 
+.project-header{
+    background-color:#fff;
+    border-bottom: 0px;
+    color:#697a8d;
+    font-size: 1.4rem;
+}
+
 input[type="date"]{
     display: block;
     width: 100%;
@@ -64,7 +71,21 @@ input::placeholder {color: #697a8d; }
     color: #697a8d !important;
     font-family: 'Public Sans', sans-serif;
 }
-    
+
+:host ::ng-deep .p-multiselect-filter-container{
+    display: flex;
+    justify-content: center;
+}
+
+:host ::ng-deep .p-icon.p-multiselect-filter-icon{
+    right: 5rem;
+}
+
+:host ::ng-deep .p-multiselect-filter-container .p-inputtext{
+    width: 70% !important;
+    margin-left: 1.875rem;
+}
+
 :host ::ng-deep .p-checkbox-box.p-highlight,
 .p-checkbox-box.p-focus {
     background-color: #697a8d !important;
@@ -90,6 +111,10 @@ input::placeholder {color: #697a8d; }
     outline: none;
     border: 0px solid #5f61e6 !important; 
     box-shadow: 0 0 3px #5f61e6;
+}
+
+:host ::ng-deep .p-multiselect-token.ng-star-inserted{
+    color: #697a8d;
 }
 
 label{ margin-right: 1rem; }
@@ -123,9 +148,16 @@ i{
     border-color: red !important;
 }
 
+.invalid {
+    height: 0;
+    overflow: visible;
+    margin-bottom: 0;
+    transition: height 0.3s ease;
+}
+
 .invalid,.invalid-missing-date,.invalid-dates{
     color: red !important;
-    font-size: small;
+    font-size: 0.7rem;
 }
 
 input[type="date"].is-invalid {
@@ -138,19 +170,23 @@ input[type="date"].is-invalid {
     align-items: center;
 }
 
-#customRadio1{
-    background-color: #71dd37;
-    border-color: #71dd37;
-    box-shadow: 0 2px 4px 0 rgba(113,221,55,.4);
+.form-check-input:hover,.form-check-input:checked:hover,.form-check-input:checked{
+    border: none !important;
 }
 
-#customRadio2{
+.low{
+    background-color: #71dd37;
+    border-color: #71dd37;
+    box-shadow: 2px 2px 4px 2px rgba(113,221,55,.4);
+}
+
+.medium{
     background-color: #ffab00;
     border-color: #ffab00;
     box-shadow: 0 2px 4px 0 rgba(255,171,0,.4);
 }
 
-#customRadio3{
+.high{
     background-color: #ff3e1d;
     border-color: #ff3e1d;
     box-shadow: 0 2px 4px 0 rgba(255,62,29,.4);
@@ -158,7 +194,8 @@ input[type="date"].is-invalid {
 
 #addProjectBtn{
    display: flex;
-   justify-content: right;
+   justify-content: space-between;
+   align-items: center;
    margin-top: 16px;
    margin-bottom: 0;
 }

@@ -4,6 +4,7 @@ namespace backend.DTO
 {
     public class ProjectDto
     {
+        public int AppUserId { get; set; }
         public string ProjectName { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
