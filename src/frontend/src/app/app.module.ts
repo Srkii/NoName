@@ -28,6 +28,10 @@ import { ProjectCardComponent } from './Components/project-card/project-card.com
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { AvatarModule } from 'ngx-avatars';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+
+const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
 
 @NgModule({
   declarations: [
@@ -62,7 +66,12 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     DragDropModule,
     ModalModule.forRoot(),
     MatDatepickerModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ModalModule.forRoot(),
+    AvatarModule.forRoot({
+      colors: avatarColors
+    }),
+    ButtonsModule.forRoot()
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

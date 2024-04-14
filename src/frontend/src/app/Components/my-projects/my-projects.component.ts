@@ -19,7 +19,7 @@ export class MyProjectsComponent implements OnInit {
   totalPages: number = 0;
   originalProjects: Project[] = [];
   totalPagesArray: number[] = [];
-  
+
   selectedStatus: string = '';
   selectedPriority: string = '';
   projectName: string = '';
@@ -28,12 +28,12 @@ export class MyProjectsComponent implements OnInit {
   
   showProjectCard: boolean = false;
   constructor(
-    
+
     private myProjectsService: MyProjectsService,
-   
+
     private spinner: NgxSpinnerService,
     private router: Router
-  
+
   ) {}
 
   ngOnInit(): void {

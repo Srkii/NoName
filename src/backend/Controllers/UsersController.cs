@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
@@ -149,5 +150,67 @@ namespace backend.Controllers
 
       return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
     }
+
+    [AllowAnonymous]
+    [HttpGet("all")]
+    public async Task<ActionResult<int>> GetAllUsers()
+    {
+        var users = await _context.Users.ToListAsync();
+        return users.Count;
+    }
+
+    [AllowAnonymous]
+    [HttpGet("filtered")]
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="")
+    {
+        var query=_context.Users.AsQueryable();
+
+        if(role!=null)
+        {
+          query = query.Where(u => u.Role == role);
+        }
+
+
+        if(!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
+        }
+
+
+      
+        var filteredUsers=await query.Skip((currentPage-1)*pageSize).Take(pageSize).ToListAsync();
+
+        return filteredUsers;
+    }
+    [AllowAnonymous]
+    [HttpGet("filteredCount")]
+    public async Task<ActionResult<int>> CountFilteredProjects(UserRole? role=null)
+    {
+      var query=_context.Users.AsQueryable();
+
+      if(role!=null)
+      {
+        query=query.Where(u=>u.Role==role);
+      }
+
+      var filteredUsers=await query.ToListAsync();
+
+      return filteredUsers.Count;
+    }
+    [AllowAnonymous]
+    [HttpGet("getByRole")]
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetUserByRole(UserRole? role=null)
+    {
+      var query=_context.Users.AsQueryable();
+
+      if(role!=null)
+      {
+        query=query.Where(u=>u.Role==role);
+      }
+      var filteredUsers=await query.ToListAsync();
+
+      return filteredUsers;
+    }
+
   }
 }
