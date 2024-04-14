@@ -1,6 +1,11 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
+.ganntTest {
+    margin-top: 50px;
+    overflow: visible !important;
+    height: 600px;
+}
 /* za tablete */
 @media screen and (max-width: 1200px) {
     .button-selectors {
@@ -159,7 +164,7 @@ thead th{
     flex: 1 1 auto;
     flex-direction: column;
     justify-content: space-between;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 }
 .card {
     background-clip: padding-box;
@@ -177,14 +182,6 @@ thead th{
     border-radius: 0.5rem;
     padding: 15px;
     margin-top: 50px;
-}
-.content-wrapper {
-    display: flex;
-    align-items: stretch;
-    flex: 1 1 auto;
-    flex-direction: column;
-    justify-content: space-between;
-    box-sizing: border-box;
 }
 /* .table {
     border: 1px solid black;
