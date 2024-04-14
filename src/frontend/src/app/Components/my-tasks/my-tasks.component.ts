@@ -44,6 +44,8 @@ export class MyTasksComponent implements OnInit {
   task!: ProjectTask;
   TaskStatus: any;
   static showPopUp: boolean;
+  userId=localStorage.getItem('id');
+
 
   constructor(
     private myTasksService: MyTasksService,
@@ -63,10 +65,9 @@ export class MyTasksComponent implements OnInit {
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
-    var userId=localStorage.getItem('id');
     const row = document.querySelector('.td_row') as HTMLElement;
     this.myTasksService
-      .GetProjectTask(taskId,userId)
+      .GetProjectTask(taskId,this.userId)
       .subscribe((task: ProjectTask) => {
         if (
           this.clickedTask &&
@@ -88,19 +89,24 @@ export class MyTasksComponent implements OnInit {
 
   loadTasks(): void {
     this.spinner.show();
-    const userId = localStorage.getItem('id');
 
-    if (userId !== null) {
+    if (this.userId !== null) {
     this.myTasksService
-      .GetNewTasksByUserId(userId,5)
+      .GetNewTasksByUserId(this.userId,5)
       .subscribe((tasks: ProjectTask[]) => {
         this.new_tasks = tasks;
         this.spinner.hide();
       });
     this.myTasksService
-      .GetSoonTasksByUserId(userId,5)
+      .GetSoonTasksByUserId(this.userId,5)
       .subscribe((tasks: ProjectTask[]) => {
         this.soon_tasks = tasks;
+        this.spinner.hide();
+      });
+    this.myTasksService
+      .GetClosedTasksByUserId(this.userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.closed_tasks = tasks;
         this.spinner.hide();
       });
     } else {
@@ -121,6 +127,7 @@ export class MyTasksComponent implements OnInit {
         next: (sortedTasks: ProjectTask[]) => {
           this.new_tasks = sortedTasks;
           this.soon_tasks = sortedTasks;
+          this.closed_tasks = sortedTasks;
           this.spinner.hide();
         },
         error: (error: any) => {
@@ -146,7 +153,47 @@ export class MyTasksComponent implements OnInit {
   isSoonTasksEmpty(): boolean {
     return this.soon_tasks.length === 0;
   }
-  isTasksEmpty(status: string): boolean {
-    return this.new_tasks.filter(task => task.statusName === status).length === 0;
+  isClosedTasksEmpty(): boolean {
+    return this.closed_tasks.length === 0;
+  }
+
+  LoadNewTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+    this.myTasksService
+      .GetNewTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.new_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
+  }
+  LoadSoonTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+      this.myTasksService
+      .GetSoonTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.soon_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
+  }
+  LoadClosedTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+      this.myTasksService
+      .GetClosedTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.closed_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
   }
 }

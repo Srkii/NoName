@@ -30,9 +30,11 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AvatarModule } from 'ngx-avatars';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
-import { DropdownModule } from 'primeng/dropdown';
+
 
 @NgModule({
   declarations: [
@@ -51,7 +53,7 @@ import { DropdownModule } from 'primeng/dropdown';
     FileUploadComponent,
     KanbanComponent,
     GanttComponent,
-    ProjectCardComponent
+    ProjectCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,8 +70,7 @@ import { DropdownModule } from 'primeng/dropdown';
     ModalModule.forRoot(),
     MatDatepickerModule,
     MultiSelectModule,
-    DropdownModule,
-    ModalModule.forRoot(),
+    NgSelectModule,
     AvatarModule.forRoot({
       colors: avatarColors
     }),

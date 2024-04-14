@@ -106,4 +106,24 @@ p {
 }
 
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* To evenly space the elements */
+}
+.page-size-container {
+  margin-left: 10px; /* Adjust margin between header and select */
+}
 
+.page_size {
+  color: #697a8d;
+  font-size: 12px;
+  border: 0.5px solid lightgray;
+  border-radius: 8px;
+  padding: 6px;
+  width: 100%; /* Adjust width as needed */
+}
+.page_size:hover, .page_size:focus{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+}

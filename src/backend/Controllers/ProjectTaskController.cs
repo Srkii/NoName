@@ -35,14 +35,15 @@ namespace backend.Controllers
                         .Where(ts => ts.ProjectId == taskDto.ProjectId && ts.Position == 0)
                         .Select(ts => ts.Id)
                         .FirstOrDefault(),
-                ProjectSectionId = taskDto.ProjectSectionId,
-                DateCreated = DateTime.Now // postavlja vreme i datum kad je task kreiran
+                // ProjectSectionId = taskDto.ProjectSectionId,
+                DateCreated = DateTime.Now, // postavlja vreme i datum kad je task kreiran
+                AppUserId = taskDto.AppUserId
             };
 
             _context.ProjectTasks.Add(task);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
+            return Ok(task);
         }
 
         [AllowAnonymous]
@@ -239,6 +240,8 @@ namespace backend.Controllers
             return Ok(taskDep);
         }
 
+        [AllowAnonymous]
+        [HttpPost("AddTaskAssignee")]
         public async Task<ActionResult<ProjectTask>> AddTaskAssignee(int taskId, int userId, int projectId)
         {
             var isMember = await _context.ProjectMembers.AnyAsync(pm => pm.AppUserId == userId && pm.ProjectId == projectId);
@@ -259,6 +262,8 @@ namespace backend.Controllers
             return Ok(task);
         }
 
+        [AllowAnonymous]
+        [HttpGet("RoleCheck")]
         public async Task<bool> RoleCheck(int userId, int projectId)
         {
             var roles = new List<ProjectRole> { ProjectRole.ProjectOwner, ProjectRole.Manager };
@@ -430,7 +435,8 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetNewTasksByUserId(int userId, int count)
         {
             var tasks = await _context.ProjectTasks
-                .Where(task => task.AppUserId == userId)
+                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
+                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived")
                 .Take(count)
                 .OrderByDescending(task => task.DateCreated) // Order by DateCreated in descending order
                 .Select(task => new
@@ -460,9 +466,39 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetSoonTasksByUserId(int userId, int count)
         {
             var tasks = await _context.ProjectTasks
-                .Where(task => task.AppUserId == userId)
+                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
+                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived")
                 .Take(count)
                 .OrderBy(task => task.EndDate) // Order by DateCreated in descending order
+                .Select(task => new
+                {
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.Project,
+                    ProjectRole = _context.ProjectMembers
+                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                        .Select(member => member.ProjectRole)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+            
+
+            return Ok(tasks);
+        }
+        [AllowAnonymous]
+        [HttpGet("user/{userId}/count3/{count}")]
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetClosedTasksByUserId(int userId, int count)
+        {
+            var tasks = await _context.ProjectTasks
+                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview")
+                .Take(count)
                 .Select(task => new
                 {
                     task.Id,

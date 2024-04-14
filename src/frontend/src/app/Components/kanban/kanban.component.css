@@ -1,14 +1,6 @@
 * {
     font-family: 'Public Sans', sans-serif;
 }
-/* START opcije za assignee dropdown */
-.chooseAssignee {
-    display: flex;
-    flex-direction: column;
-}
-/* END opcije za assignee dropdown */
-
-
 .board {
     display: flex;
     flex-direction: column;
@@ -18,6 +10,18 @@
     min-height: 0;
 }
 
+/* primeng dropdown  */
+.chooseAssignee {
+    display: flex;
+    flex-direction: column;
+}
+.user-item-image img{
+    width: 20px !important;
+    height: 20px !important;
+}
+.user-item {
+    display: flex;
+}
 .board-wrapper {
     display: flex;
     flex-grow: 1;
@@ -25,7 +29,82 @@
     flex-wrap: nowrap;
 }
 
-/* scrollbar ukoliko ima previse sekcija za statuse */
+.user-item-image {
+    margin-right: 5px !important;
+}
+.user-item img {
+    height: 25px !important;
+    width: 25px !important;
+}
+::ng-deep .p-inputwrapper-focus {
+    outline: none;
+    border: 0px solid #5f61e6 !important; 
+    box-shadow: none;
+}
+.ngAvtr {
+    font-family: 'Public Sans', sans-serif;
+}
+::ng-deep .p-dropdown {
+    width: 100%;
+    font-family: 'Public Sans', sans-serif;
+    border-radius: 0.5rem !important;
+}
+
+
+/* ::ng-deep .p-dropdown:focus {
+    border: 1px solid #5f61e6 !important; 
+    border-radius: 0.5 rem !important;
+} */
+::ng-deep .p-dropdown-label {
+    width: calc(100% - 2em);
+    font-family: 'Public Sans', sans-serif; 
+}
+
+::ng-deep .p-dropdown-items{
+    padding: 0 !important;
+    margin-bottom: 0px !important;
+    font-family: 'Public Sans', sans-serif;
+}
+::ng-deep .p-inputwrapper-focus {
+    outline: none;
+    border: 1px solid #5f61e6 !important; 
+    border-radius: 0.5rem !important;
+    border-collapse: collapse;
+    box-shadow: none;
+}
+.nameAvatar {
+    margin-right: 5px !important;
+}
+.ng-select.asigneeDropdown ::ng-deep .ng-select-container{
+    border-radius: 0.5rem !important;
+}
+
+::ng-deep .ng-select-focused {
+    box-shadow: none;
+}
+::ng-deep .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+    border: 1px solid #5f61e6 !important;
+    box-shadow: none;
+}
+::ng-deep .ng-select.ng-select-focused > .ng-select-container {
+    border: 1px solid #5f61e6 !important;
+    box-shadow: none;
+}
+
+::ng-deep .ng-option-marked {
+    background-color: #F5F5F9 !important;
+}
+::ng-deep .ng-option-selected {
+    background-color: #a8a9f0 !important;
+}
+::ng-deep .ng-dropdown-panel {
+    background-color: #9a9cec !important;
+    border-top: 0px !important;
+}
+.btn-save-task {
+    margin-top: 15px;
+}
+
 .board-wrapper::-webkit-scrollbar {
     background-color: #F5F5F9;
     width: 16px;

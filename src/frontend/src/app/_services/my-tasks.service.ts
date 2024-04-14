@@ -76,4 +76,7 @@ export class MyTasksService {
   GetSoonTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count2/${count}`);
   }
+  GetClosedTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count3/${count}`);
+  }
 }

@@ -8,8 +8,17 @@
   
 ></app-popup>
 <div class="all">
+  <div class="header">
     <h5>📬 New Issues</h5>
-
+    <div class="page-size-container">
+      <select class="page_size" (change)="LoadNewTasks($event)">
+        <option value="5" selected>Show tasks</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+      </select>
+    </div>
+  </div>
     <table [ngClass]="{ 'empty-table': isNewTasksEmpty() }">
 
       <tr>
@@ -55,7 +64,17 @@
 <br />
 
 <div class="all">
+  <div class="header">
     <h5>&#10024; Due Soon</h5>
+    <div class="page-size-container">
+      <select class="page_size" (change)="LoadSoonTasks($event)">
+        <option value="5" selected>Show tasks</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+      </select>
+    </div>
+  </div>
 
     <table [ngClass]="{ 'empty-table': isSoonTasksEmpty() }">
 
@@ -81,10 +100,9 @@
           </svg>
         </th>
       </tr>
-      <ng-container *ngFor="let task of new_tasks">
+      <ng-container *ngFor="let task of soon_tasks">
         <tr
         class="td_row"
-        *ngIf="task.statusName=='InReview'"
         [class.clicked]="clickedTask?.id === task.id"
         (click)="togglePopUp($event, task.id)"
       >
@@ -105,9 +123,19 @@
 </div>
 <br />
 <div class="all">
+  <div class="header">
     <h5>🎉 Closed Tasks</h5>
+    <div class="page-size-container">
+      <select class="page_size" (change)="LoadClosedTasks($event)">
+        <option value="5" selected>Show tasks</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+      </select>
+    </div>
+  </div>
 
-    <table [ngClass]="{ 'empty-table': isTasksEmpty('Completed') }">
+    <table [ngClass]="{ 'empty-table': isClosedTasksEmpty() }">
 
       <tr>
         <th>Task Name</th>
@@ -131,10 +159,9 @@
           </svg>
         </th>
       </tr>
-      <ng-container *ngFor="let task of new_tasks">
+      <ng-container *ngFor="let task of closed_tasks">
         <tr
         class="td_row"
-        *ngIf="task.statusName=='Completed'"
         [class.clicked]="clickedTask?.id === task.id"
         (click)="togglePopUp($event, task.id)"
       >
