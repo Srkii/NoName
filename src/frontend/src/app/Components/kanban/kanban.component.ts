@@ -162,8 +162,7 @@ export class KanbanComponent implements OnInit{
       return;
     }
     this.myTasksService.deleteTaskStatus(this.currentSectionId).subscribe({
-      next: (response) => {
-        console.log('Section deleted:', response);
+      next: () => {
         this.modalRef?.hide();
         this.sectionChanged.emit(true);
         this.populateTasks();
@@ -182,8 +181,7 @@ export class KanbanComponent implements OnInit{
       color: this.newSectionColor
     };
     this.myTasksService.addTaskStatus(taskStatus).subscribe({
-      next: (response) => {
-        console.log('Task status added:', response);
+      next: () => {
         this.modalRef?.hide(); // za skrivanje modala
         this.newSectionName = '';
         this.newSectionColor = '#ffffff';
@@ -204,9 +202,10 @@ export class KanbanComponent implements OnInit{
       AppUserId: this.selectedUser?.appUserId || 0
     };
     this.myTasksService.createTask(task).subscribe({
-      next: (response) => {
-        console.log('Task created:', response);
-        this.modalRef?.hide();
+      next: () => {
+        this.modalRef?.hide()
+        this.sectionChanged.emit(true);
+        this.populateTasks();
       },
       error: (error) => console.error('Error creating task:', error)
     });

@@ -43,7 +43,7 @@ namespace backend.Controllers
             _context.ProjectTasks.Add(task);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
+            return Ok(task);
         }
 
         [AllowAnonymous]
@@ -233,6 +233,8 @@ namespace backend.Controllers
             return Ok(taskDep);
         }
 
+        [AllowAnonymous]
+        [HttpPost("AddTaskAssignee")]
         public async Task<ActionResult<ProjectTask>> AddTaskAssignee(int taskId, int userId, int projectId)
         {
             var isMember = await _context.ProjectMembers.AnyAsync(pm => pm.AppUserId == userId && pm.ProjectId == projectId);
@@ -253,6 +255,8 @@ namespace backend.Controllers
             return Ok(task);
         }
 
+        [AllowAnonymous]
+        [HttpGet("RoleCheck")]
         public async Task<bool> RoleCheck(int userId, int projectId)
         {
             var roles = new List<ProjectRole> { ProjectRole.ProjectOwner, ProjectRole.Manager };

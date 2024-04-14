@@ -1,6 +1,7 @@
 * {
   font-family: 'Public Sans', sans-serif !important;
 }
+
 html {
   background-color: #f5f5f9;
 }
@@ -216,8 +217,7 @@ p {
   padding: 6px;
   width: 100%; /* Adjust width as needed */
 }
-.page_size:hover{
+.page_size:hover, .page_size:focus{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
 }

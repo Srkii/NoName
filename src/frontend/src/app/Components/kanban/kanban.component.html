@@ -50,7 +50,7 @@
         </div>
         <div class="mb-1" autocomplete="off">
             <label for="taskDescription" class="form-label">Task Description</label>
-            <textarea class="form-control" class="form-control" name="taskDescription" [(ngModel)]="newSectionName" placeholder="Enter new tasks's description"></textarea>
+            <textarea class="form-control" class="form-control" name="taskDescription" [(ngModel)]="newTaskDescription" placeholder="Enter new tasks's description"></textarea>
         </div>
         <div class="mb-1">
             <label for="startDate" class="form-label">Start Date</label>
@@ -64,12 +64,30 @@
           <label for="assignee2" class="form-label">Assignee</label>
           <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
             <ng-template ng-option-tmp let-user="item" let-index="index">
-              <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
-              {{ user.fullName }}
+              <div style="display: flex; align-items: center;">
+                <div *ngIf="user.profilePicUrl" class="nameAvatar">
+                  <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                </div>
+                <div *ngIf="!user.profilePicUrl" class="nameAvatar">
+                  <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+                </div>
+                <div>
+                  {{ user.fullName }}
+                </div>
+            </div>
             </ng-template>
             <ng-template ng-label-tmp let-item="item">
-                <img [src]="item.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
-                {{ item.fullName }}
+              <div style="display: flex; align-items: center;">
+                <div *ngIf="item.profilePicUrl" class="nameAvatar">
+                  <img [src]="item.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                </div>
+                <div *ngIf="!item.profilePicUrl" class="nameAvatar">
+                  <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
+                </div>
+                <div>
+                  {{ item.fullName }}
+                </div>
+              </div>
             </ng-template>
           </ng-select>
         </div>

@@ -41,7 +41,9 @@
     border: 0px solid #5f61e6 !important; 
     box-shadow: none;
 }
-
+.ngAvtr {
+    font-family: 'Public Sans', sans-serif;
+}
 ::ng-deep .p-dropdown {
     width: 100%;
     font-family: 'Public Sans', sans-serif;
@@ -70,7 +72,9 @@
     border-collapse: collapse;
     box-shadow: none;
 }
-
+.nameAvatar {
+    margin-right: 5px !important;
+}
 .ng-select.asigneeDropdown ::ng-deep .ng-select-container{
     border-radius: 0.5rem !important;
 }
