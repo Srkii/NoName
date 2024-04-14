@@ -7,4 +7,5 @@ export interface CreateProject {
     EndDate?: Date;
     ProjectStatus?: ProjectStatus;
     Priority: Priority;
+    AppUserId?: Int16Array;
 }

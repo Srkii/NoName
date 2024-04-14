@@ -129,7 +129,7 @@
 
 
 
-<div *ngIf="this.filteredProjects>5==true" id="pages">
+<div *ngIf="this.filteredProjects>5" id="pages">
   <ul class="pagination">
     <li class="paginate_buttons previous" [class.disabled]="currentPage === 1">
       <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
