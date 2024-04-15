@@ -65,4 +65,9 @@ export class GanttComponent implements OnInit{
     //   })
     //   .subscribe((items) => {});
   }
+
+  selectView(type: GanttViewType) {
+    this.viewType = type;
+    this.selectedViewType = type;
+}
 }
