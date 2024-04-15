@@ -33,6 +33,7 @@ import { AvatarModule } from 'ngx-avatars';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NotificationsComponent } from './Components/notifications/notifications.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
@@ -76,7 +77,8 @@ const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1
     AvatarModule.forRoot({
       colors: avatarColors
     }),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    ImageCropperModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

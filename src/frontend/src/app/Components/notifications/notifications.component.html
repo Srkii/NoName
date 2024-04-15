@@ -43,7 +43,7 @@
     <button class="btn btn-primary d-grid" (click)="selectAllNotifications()">
       {{ areAllNotificationsSelected() ? 'Deselect All' : 'Select All' }}
     </button>
-    <button class="btn btn-primary d-grid" type="submit" (click)="this.notificationService.read_notifications(this.markedNotifications)">Mark as read</button>
+    <button class="btn btn-primary d-grid" type="submit" (click)="read_notifications()">Mark as read</button>
   </div>
 
 </ng-template>

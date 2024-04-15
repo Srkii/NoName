@@ -53,4 +53,7 @@ export class NotificationsComponent {
       this.markedNotifications.push(notificationId);
     }
   }
+  read_notifications(){
+    this.notificationService.read_notifications(this.markedNotifications);
+  }
 }

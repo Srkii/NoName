@@ -27,9 +27,7 @@ namespace backend.Services
                     reciever_id = Users[i],
                     sender_id = sender_id,
                     task_id=task_id,
-                    Task = task,
-                    Type = type,//1 attachment, 2 comment, 3 novi task, 4 novi projekat, 5 interakcija sa taskom
-                    Sender=sender,
+                    Type = type,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
                     dateTime = DateTime.Now,
                     read=false,
                 };
@@ -53,7 +51,7 @@ namespace backend.Services
                     Notification notification = new Notification{
                         reciever_id = i,
                         sender_id = sender_Id,
-                        Sender=sender,
+                        task_id = task_project_id,
                         Type = type,
                         dateTime = DateTime.Now,
                         read=false,
@@ -67,31 +65,19 @@ namespace backend.Services
                 users_list.Remove(sender_Id);
                 var project = await _context.Projects.FirstOrDefaultAsync(x => x.Id == task_project_id);
                 foreach(int i in users_list){
-                Notification notification = new Notification{
-                    reciever_id = i,
-                    sender_id = sender_Id,
-                    project_id=task_project_id,
-                    Project = project,
-                    Sender=sender,
-                    Type = type,
-                    dateTime = DateTime.Now,
-                    read=false,
-                };
-                await _context.Notifications.AddAsync(notification);
-                await _hubContext.Clients.Group(i.ToString()).Notify();
-            }
-            }
-            foreach(int i in users_list){
-                Notification notification = new Notification{
-                    reciever_id = i,
-                    sender_id = sender_Id,
-                    Sender=sender,
-                    Type = type,
-                    dateTime = DateTime.Now,
-                    read=false,
-                };
-                await _context.Notifications.AddAsync(notification);
-                await _hubContext.Clients.Group(i.ToString()).Notify();
+                    Notification notification = new Notification{
+                        reciever_id = i,
+                        sender_id = sender_Id,
+                        project_id=task_project_id,
+                        Project = project,
+                        Sender=sender,
+                        Type = type,
+                        dateTime = DateTime.Now,
+                        read=false,
+                    };
+                    await _context.Notifications.AddAsync(notification);
+                    await _hubContext.Clients.Group(i.ToString()).Notify();
+                }
             }
             await _context.SaveChangesAsync();
 

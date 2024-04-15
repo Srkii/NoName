@@ -15,7 +15,6 @@ export class NavComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin()
     this.getUser()
-    this.notificationService.createHubConnection();
   }
   admin!: boolean
   logovan!: boolean
@@ -48,25 +47,21 @@ export class NavComponent implements OnInit {
 
   getUser(): void{
     var id=localStorage.getItem('id')
-    this.userInfo.getUserInfo2(id).subscribe({
-      next:(response)=>{
-        this.user=response;
-        if(this.user.profilePicUrl!='' && this.user.profilePicUrl!=null)
-        {
-          this.uploadService.getImage(this.user.profilePicUrl).subscribe(
-            { next:(res)=>{
-              const reader=new FileReader();
-              reader.readAsDataURL(res);
-              reader.onloadend=()=>{
-                this.user.url=reader.result as string;
-                this.imgFlag=true;
-            }}
-
-        })
-      }
-      }
-
-    })
+    if(id){
+      this.userInfo.getUserInfo2(id).subscribe({
+        next:(response)=>{
+          this.user=response;
+          if(this.user.profilePicUrl!=null &&  this.user.profilePicUrl!='')
+          {
+            this.uploadService.getImage(this.user.profilePicUrl).subscribe(
+            url =>{
+              this.user.url = url;
+            })
+          }
+          this.notificationService.createHubConnection();
+        }
+      })
+    }
   }
 
 }
