@@ -4,3 +4,4 @@ src/backend/app.db-wal
 src/backend/Data/Migrations
 src/backend/app.sqbpro
 src/backend/Assets/Images/
+src/backend/wwwroot/

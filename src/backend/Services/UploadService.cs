@@ -4,7 +4,8 @@ namespace backend.Services
 {
     public class UploadService : IUploadService
     {
-        public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Attachments";
+        // public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Attachments";
+        public readonly string _path = Directory.GetCurrentDirectory()+"/Assets/Attachments";
         public string AddFile(IFormFile file)
         {
             if(file.Length>0){

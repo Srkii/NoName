@@ -66,7 +66,7 @@
             <ng-template ng-option-tmp let-user="item" let-index="index">
               <div style="display: flex; align-items: center;">
                 <div *ngIf="user.profilePicUrl" class="nameAvatar">
-                  <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                  <img [src]="'C:/Users/tico/Desktop/softverskoTihomir/access-denied/src/backend/Assets/Images/'+user.profilePicUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
                 </div>
                 <div *ngIf="!user.profilePicUrl" class="nameAvatar">
                   <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
