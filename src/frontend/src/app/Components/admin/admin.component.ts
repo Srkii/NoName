@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
 
 import { AdminService } from '../../_services/admin.service';
 import { RegisterInvitation } from '../../Entities/RegisterInvitation';
@@ -6,6 +6,9 @@ import { Member, UserRole } from '../../Entities/Member';
 import { ChangeRole } from '../../Entities/ChangeRole';
 import { UpdateUser } from '../../Entities/UpdateUser';
 import { ToastrService } from 'ngx-toastr';
+import { UploadService } from '../../_services/upload.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -20,9 +23,12 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AdminComponent implements OnInit{
 
-  constructor(private adminService:AdminService,private toastr: ToastrService ){}
+  constructor(private adminService: AdminService, private toastr: ToastrService, private uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
+  
   ngOnInit(): void {
-    this.GetAllUsers()
+   this.onLoad();
+   this.numbersOfRoles();
+   this.PicturesOfRoles();
   }
 
   invitation:RegisterInvitation={
@@ -35,14 +41,16 @@ export class AdminComponent implements OnInit{
   members: Member[]=[]
   projectMangers: Member[]=[]
 
-  role!: number
+  numOfAdmins: number=0
+  numOfMembers: number=0;
+  numOfPM: number=0;
 
-  selectedRole!: UserRole;
-  roles1 : string =''
+  userRole: string='';
 
-  roles: UserRole[] = [UserRole.Admin, UserRole.Member, UserRole.ProjectManager];
-
-  changeRole!: ChangeRole
+  changeRoleOjha: ChangeRole={
+    Id:0,
+    Role: 0
+  }
 
   numberOfRoles!: number
 
@@ -51,12 +59,29 @@ export class AdminComponent implements OnInit{
     LastName: '',
     Email: ''
   }
+  newFisrtName: string='';
+  newLastName: string='';
+  newEmail: string='';
 
-  flagA:boolean=false
-  flagM:boolean=false
-  flagPM:boolean=false
+  selectedRolee: string=''
 
   sortOrder: 'asc' | 'desc' = 'asc';
+
+  pageNumber: number = 1;
+  pageSize: number = 5;
+  totalPages: number=0;
+  currentPage: number=1;
+  totalusersArray: number[] = [];
+
+  userCount: number=0;
+  filteredUsers: number=0;
+  allUsersCount: number=0;
+
+  searchTerm: string='';
+
+  modalRef?: BsModalRef;
+
+  curentUserId: number=0
 
   Invite(): void{
     if(this.invitation)
@@ -64,21 +89,12 @@ export class AdminComponent implements OnInit{
       this.adminService.sendInvatation(this.invitation).subscribe(
         (response)=>{
           this.toastr.success(response.message);
-          console.log(response);
         }
       )
     }
     error:()=>{
       console.log("Email is not sent")
     }}
-
-    GetAllUsers(): void{
-      this.adminService.getAllUsers().subscribe({next:(response)=>{
-        this.allUsers=response
-      },error:(error)=>{
-        console.log(error)
-      }})
-    }
 
     GetUserRole(role: UserRole): string{
         switch(role){
@@ -92,67 +108,37 @@ export class AdminComponent implements OnInit{
             return ''
         }
     }
-    GetUserRole1(role: string): number{
-      switch(role){
-        case "Admin":
-          return 0
-        case "Member":
-          return UserRole.Member
-        case "Project manager":
-          return UserRole.ProjectManager
-        default:
-          return UserRole.Member
-      }
-  }
-
-    SplitByRole(): void{
-      this.allUsers.forEach((user)=>{
-        if(user.role===UserRole.Admin){
-          this.admins.push(user)
-          this.flagA=true
-        }
-        else if(user.role===UserRole.Member)
-        {
-          this.members.push(user)
-          this.flagM=true
-
-        }
-        else if(user.role===UserRole.ProjectManager)
-        {
-          this.projectMangers.push(user)
-          this.flagPM=true
-        }
-
-      })
-    }
 
     ChangeUserRole(id:number): void{
-      // this.changeRole.Role=this.GetUserRole(this.role)
-      this.changeRole.Id=id;
-      this.changeRole.Role=this.role
-      console.log(this.changeRole.Role)
-      if(this.changeRole)
-      {
-        console.log(this.changeRole)
-        this.adminService.changeUserRole(this.changeRole).subscribe(
-          (response)=>{
-            console.log(response);
-            this.GetAllUsers();
-          }
-
-        )
-
+      this.changeRoleOjha.Id=id;
+      const ChangeDto={
+        Id:id,
+        Role: parseInt(this.userRole)
       }
-      error:()=>{
+      if(ChangeDto)
+      {
+        console.log(ChangeDto)
+        this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
+          this.GetUsers()
+        },error: (error)=>{
+          console.log(error)
+        }}
+        )
+      }
+      else{
         console.log("Can't change user role")
       }}
 
     UpdateUser(id: number): void{
-      if(this.updateUser){
-        this.adminService.updateUser(id,this.updateUser).subscribe(
+      const updateeUser={
+        Email: this.newEmail,
+        FirstName: this.newFisrtName,
+        LastName: this.newLastName
+      }
+      if(updateeUser){
+        this.adminService.updateUser(id,updateeUser).subscribe(
           (response)=>{
-            console.log(response)
-            this.GetAllUsers();
+            this.GetUsers()
           }
         )
       }
@@ -161,8 +147,7 @@ export class AdminComponent implements OnInit{
     ArchiveUser(id:number): void{
       this.adminService.archiveUser(id).subscribe(
         (response)=>{
-          console.log(response)
-          this.GetAllUsers();
+          this.GetUsers()
         }
       )
 
@@ -191,6 +176,119 @@ export class AdminComponent implements OnInit{
     }
     }
 
+    GetUsers(): void {
+      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
+        this.allUsers = response;
+        this.loadPicture(this.allUsers);
+        this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
+          this.filteredUsers=response;
+          this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
+        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        });
+
+        this.spinner.hide();
+      });
+    }
+
+    nextPage(): void {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        const id = localStorage.getItem('id');
+      this.GetUsers();
+      }
+    }
+
+    previousPage(): void {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        const id = localStorage.getItem('id');
+      this.GetUsers();
+      }
+    }
+    goToPage(pageNumber: number): void {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.currentPage = pageNumber;
+        const id = localStorage.getItem('id');
+      this.GetUsers();
+      }
+    }
+
+    filterUsers():void{
+      this.currentPage=1;
+      this.GetUsers();
+    }
+
+    //metoda za prikaz slike
+    loadPicture(usersArray:Member[]) : void{
+      usersArray.forEach(user => {
+        if(user.profilePicUrl!='' && user.profilePicUrl!=null){
+        this.uploadservice.getImage(user.profilePicUrl).subscribe(
+          { next:(res)=>{
+            const reader=new FileReader();
+            reader.readAsDataURL(res);
+            reader.onloadend=()=>{
+              user.url=reader.result as string;
+          }}
+          ,error:(error)=>{
+            console.log(error);
+          }}
+        )
+      }
+    });
+
+    }
+
+    onLoad(): void{
+      this.adminService.getAllUsers2().subscribe(response=>{
+        this.allUsersCount=response;
+      })
+      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
+        this.allUsers = response;
+        this.loadPicture(this.allUsers);
+        this.filteredUsers=this.allUsersCount;
+        this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
+        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        this.spinner.hide();
+      });
+
+    }
+
+    numbersOfRoles():void{
+      this.adminService.getFilterCount("Admin").subscribe(res=>{
+        this.numOfAdmins=res;
+      })
+      this.adminService.getFilterCount("Member").subscribe(res=>{
+        this.numOfMembers=res;
+      })
+      this.adminService.getFilterCount("projectManager").subscribe(res=>{
+        this.numOfPM=res;
+      })
+    }
+
+    PicturesOfRoles():void{
+      this.adminService.getAllUsers3("Admin").subscribe(res=>{
+        this.admins=res;
+        this.loadPicture(this.admins);
+      })
+      this.adminService.getAllUsers3("Member").subscribe(res=>{
+        this.members=res;
+        this.loadPicture(this.members)
+      })
+      this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
+        this.projectMangers=res;
+        this.loadPicture(this.projectMangers);
+      })
+    }
+
+    openModal(modal: TemplateRef<void>, userId: number)
+    {
+      this.curentUserId=userId;
+      this.modalRef = this.modalService.show(
+        modal,
+        {
+          class: 'modal-sm modal-dialog-centered'
+        });
+    }
 
   }
 

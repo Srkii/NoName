@@ -31,7 +31,7 @@
   </div>
   <div class="modal-body">
     <ul class="modal-ul">
-      <li *ngFor="let notification of notifications" class="notification-item" [ngClass]="{'unread-notification':!notification.read}">
+      <li *ngFor="let notification of notifications" class="notification-item">
         <label for="notifinput" class="list-group-item" style="pointer-events:none">
           {{notification.sender.firstName}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}} {{notification.project_id!=null?notification.project.projectName:notification.task_id!=null?notification.task.taskName:""}} <small style="font-size: 10px; font-weight:lighter; margin-left: 30px;">{{notification.read?"read":"unread"}}</small>
         </label>

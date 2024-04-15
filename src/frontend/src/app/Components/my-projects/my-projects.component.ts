@@ -19,7 +19,7 @@ export class MyProjectsComponent implements OnInit {
   totalPages: number = 0;
   originalProjects: Project[] = [];
   totalPagesArray: number[] = [];
-  
+
   selectedStatus: string = '';
   selectedPriority: string = '';
   projectName: string = '';
@@ -28,12 +28,12 @@ export class MyProjectsComponent implements OnInit {
   
   showProjectCard: boolean = false;
   constructor(
-    
+
     private myProjectsService: MyProjectsService,
-   
+
     private spinner: NgxSpinnerService,
     private router: Router
-  
+
   ) {}
 
   ngOnInit(): void {
@@ -61,9 +61,10 @@ export class MyProjectsComponent implements OnInit {
   }
 
   loadProjects(userId: any): void {
-    this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
-      this.all_projects = count;
-    });
+    this.spinner.show();
+    // this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
+    //   this.all_projects = count;
+    // });
     this.myProjectsService.filterAndPaginateProjects(
       this.projectName,
       this.selectedStatus,
@@ -201,10 +202,10 @@ export class MyProjectsComponent implements OnInit {
     this.showProjectCard = false;
   }
 
-  
+  @HostListener('document:click', ['$event'])
   handleDocumentClick(event: MouseEvent): void {
       if (!(event.target as HTMLElement).closest('.proj_card') && !(event.target as HTMLElement).closest('.btn.btn-primary.btn-sm')) {
         this.handleCloseCard();
       }
-    }
   }
+}

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Observable, of } from 'rxjs';
@@ -59,7 +59,7 @@ export class AdminService {
 
       return this.httpClient.put<Member>(`${this.apiUrl}/users/updateUser/${id}`,user,{headers:httpHeader})
     }
-    else return of(null); 
+    else return of(null);
   }
 
   //ArchiveUser
@@ -69,7 +69,7 @@ export class AdminService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` 
+        'Authorization': `Bearer ${token}`
       })
     };
 
@@ -86,8 +86,55 @@ export class AdminService {
 
       return this.httpClient.post<ChangeRole>(`${this.apiUrl}/users/changeUserRole`,response,{headers:httpHeader})
     }
-    else return of(null); 
+    else return of(null);
   }
 
-  //getPhotoByUserId
+  getAllUsers1(pageNumber: number, pageSize: number, role: string|null, searchTerm: string|null): Observable<any>{
+
+    var params=new HttpParams();
+
+    if(role){
+      params=params.set('role',role);
+    }
+    if (pageNumber) {
+      params = params.set('currentPage', pageNumber.toString());
+    }
+    if (pageSize) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+
+    if(searchTerm){
+      params=params.set('searchTerm', searchTerm);
+    }
+
+
+    return this.httpClient.get<Member[]>(`${this.apiUrl}/users/filtered`,{params:params})
+
+  }
+
+  getFilterCount(role:string|null): Observable<number>
+  {
+    var params=new HttpParams();
+
+    if(role){
+      params=params.set('role',role);
+    }
+
+    return this.httpClient.get<number>(`${this.apiUrl}/users/filteredCount`,{params: params});
+  }
+
+  getAllUsers2():Observable<number>{
+    return this.httpClient.get<number>(`${this.apiUrl}/users/all`);
+  }
+
+  getAllUsers3(role:string|null):Observable<any>{
+    var params=new HttpParams();
+
+    if(role){
+      params=params.set('role',role);
+    }
+    return this.httpClient.get<Member[]>(`${this.apiUrl}/users/getByRole`,{params: params});
+  }
+
+
 }

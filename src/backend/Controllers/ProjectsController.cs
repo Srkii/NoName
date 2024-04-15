@@ -15,74 +15,29 @@ namespace backend.Controllers
             _context = context;
         }
 
+        // [Authorize(Roles = "ProjectManager")]
         [HttpPost] // POST: api/projects/
-
-        public async Task<ActionResult<ProjectDto>> CreateProject(ProjectDto projectDto)
-
+        public async Task<ActionResult<Project>> CreateProject(ProjectDto projectDto)
         {
-
             var project = new Project
-
             {
-
                 ProjectName = projectDto.ProjectName,
-
                 Description = projectDto.Description,
-
                 StartDate = projectDto.StartDate,
-
                 EndDate = projectDto.EndDate,
-
                 ProjectStatus = projectDto.ProjectStatus,
-
                 Priority = projectDto.Priority
-
             };
-
-            _context.Projects.Add(project);
-
+            await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
 
-
-
-            // dodavanje inicijalnih statusa
-
-            await AddStarterStatuses(project);
-
-            return new ProjectDto
-
+            var ProjectCreator = new ProjectMember
             {
-
-                ProjectName = project.ProjectName,
-
-                Description = project.Description,
-
-                StartDate = project.StartDate,
-
-                EndDate = project.EndDate,
-
-                ProjectStatus = project.ProjectStatus,
-
-                Priority = project.Priority
-
+                AppUserId = projectDto.AppUserId,
+                ProjectId = project.Id,
+                ProjectRole = ProjectRole.ProjectManager
             };
-
-        }
-
-        // [Authorize(Roles = "ProjectManager")]
-        [HttpPost("Srdjan")] // POST: api/projects/
-        public async Task<ActionResult<Project>> CreateProject2(ProjectDto projectDto)
-        {
-            var project = new Project
-            {
-                ProjectName = projectDto.ProjectName,
-                Description = projectDto.Description,
-                StartDate = projectDto.StartDate,
-                EndDate = projectDto.EndDate,
-                ProjectStatus = projectDto.ProjectStatus,
-                Priority = projectDto.Priority
-            };
-            _context.Projects.Add(project);
+            await _context.ProjectMembers.AddAsync(ProjectCreator);
             await _context.SaveChangesAsync();
 
             // dodavanje inicijalnih statusa
@@ -499,7 +454,29 @@ namespace backend.Controllers
             return projects.Count;
         }
 
+        [HttpGet("getProjectByName/{projectName}")]
+        public async Task<ActionResult<int>> GetProjectByName(string projectName)
+        {
+            var project = await _context.Projects.FirstOrDefaultAsync(project => project.ProjectName.ToLower() == projectName.ToLower());
+            return Ok(project);
+        }
 
+        // vraca sve AppUser koji su na projektu (tj imaju odgovarajuci ProjectMember entry)
+        [HttpGet("GetUsersByProjectId/{projectId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsersByProjectId(int projectId)
+        {
+            var users = await _context.ProjectMembers
+                .Where(pm => pm.ProjectId == projectId)
+                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName, pm.AppUser.ProfilePicUrl })
+                .ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound("No users found for the given project ID.");
+            }
+
+            return Ok(users);
+        }
     }
 }
 

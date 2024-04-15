@@ -23,24 +23,20 @@ body {
   padding-bottom: 0px !important;
 }
 
-.navbar-nav-right img {
-  width: 30px;
-  height: auto;
-  padding-right: 7px;
-}
+/* .navbar-nav-right img {
+  width: 35px;
+  height: 35px;
 
-/* .navbar-nav-right {
-  display: flex;
-  align-items: center;
 } */
 
-.navbar-nav-right img {
-  margin-left: 15px;
+.navbar-nav-right {
+  display: flex;
+  align-items: center;
 }
 
-.tabs-to-dropdown a:hover {
+/* .tabs-to-dropdown a:hover {
   color: #413561;
-}
+} */
 
 .tabs-to-dropdown a:hover::after {
   transform: scaleX(1);
@@ -53,11 +49,17 @@ body {
 .navbar-collapse{
   margin-left:  20px;
 }
+.flex-grow-1{
+  margin-left: 5px;
+  margin-right: 0px;
+}
 .dropdown-menu .firstDrop{
   text-align: justify;
   padding-top: 6px;
   list-style: none;
   background-color: #ffffff;
+  z-index: 1000;
+  position: absolute;
 }
 .dropdown-menu .firstDrop .nav-item{
   padding-top: 5px;
@@ -67,23 +69,24 @@ body {
   background-color: #413561;
 }
 
-.imgRight{
-  padding-left: 2px;
-}
 .avatar {
-  display: block;
+  display: flex;
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
-.avatar img {
-  display: block;
-  width: 75%;
-  height: 75%;
+.dropImg {
+
+  width: 10%;
+  height: 10%;
   object-fit: cover;
   padding-left: 0%;
-  padding-right: 10px;
+  padding-right: 5px;
+}
+.dropImg1{
+  width: 40px;
+  height: 40px;
 }
 
 .dropdown-item{
@@ -102,14 +105,25 @@ body {
   border-color: #f5f5f9;
   border-radius: 8px;
 }
-.rightImg{
+.rightImg {
   width: 30px;
+  height: 30px;
+  /* height: 30px !important;
+  margin-right: 10px;*/
+}
+.rightImg2{
+  width: 23px;
+  height: 23px;
+  margin-right: 7px;
 }
 .logoImg{
   width: 60px;
   padding-top: 0%;
   padding-bottom: 0%;
   margin: 0px !important;
+}
+.dropdown-menu-end{
+  --bs-dropdown-link-active-bg: #f4f3f3;
 }
  @media only screen and (min-width: 768px){
 
@@ -120,6 +134,13 @@ body {
     display: block
   }
 }
+/*za telefone*/
+@media screen and (max-width: 500px) {
+  .dropdown-menu-end
+    {
+      z-index: 100;
+    }
+}
 .dropdown-menu-responsive a:hover {
   background-color: #ff0000; /* Change this to the color you want */
   color: #413561;
@@ -127,13 +148,13 @@ body {
 
 .active-link-text {
   text-decoration: underline;
-  color: #7308ee;
+  color: #705ab8;
   text-underline-offset: 30px;
 
 }
 
 .dropdown-menu-responsive .nav-item:active{
-  background-color: #bc9fde;
+  background-color: #c5c5c5;
 }
 
 @media (min-width: 768px) {
@@ -142,4 +163,32 @@ body {
     color: #413561;
   }
 }
+.avatar avatar-online {
+  margin-left: 10px;
+  z-index: 1;
+  height: 30px !important;
+  width: 30px !important;
+}
 
+.my-avatar .avatar-content{
+  height: 20px !important;
+}
+.navbar-nav-right d-flex{
+  display: flex;
+  align-items: center;
+}
+.avatar1{
+  width: 35px;
+  height: 35px;
+}
+.hide-arrow::after {
+  display: none;
+}
+.rightDrop{
+  margin-left: 5px;
+  margin-right: 3px;
+}
+.avatar rounded-circle shadow-4-strong{
+  width: 35px;
+  height: 35px;
+}

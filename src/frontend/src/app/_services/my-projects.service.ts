@@ -106,5 +106,11 @@ export class MyProjectsService {
     return this.http.get<number>(`${this.baseUrl}/getUsersProjectsCount/${id}`);
   }
 
+  // vraca korisnike koji su na datom projektu
+  getUsersByProjectId(projectId: number): Observable<any> {
+    if(projectId === null) 
+      throw new Error('ProjetId is null.');
+    return this.http.get(`${this.baseUrl}/GetUsersByProjectId/${projectId}`)
+  }
 }
 

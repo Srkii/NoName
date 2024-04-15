@@ -17,12 +17,16 @@ export class ProjectCardService {
 
   constructor(private http: HttpClient) { }
 
-  GetUsers(): Observable<Member[]> {
-    return this.http.get<Member[]>(this.userUrl);
+  GetAvailableUsers(projectCreatorId: number): Observable<Member[]> {
+    return this.http.get<Member[]>(`${this.userUrl}/availableUsers/${projectCreatorId}`);
+  }
+
+  ProjectNameExists(projectName: string): Observable<Project> {
+    return this.http.get<Project>(`${this.projectUrl}/getProjectByName/${projectName}`);
   }
 
   CreateProject(project: CreateProject): Observable<any> {
-    return this.http.post<Project>(`${this.projectUrl}/Srdjan`, project, {responseType: 'json'});
+    return this.http.post<Project>(`${this.projectUrl}`, project, {responseType: 'json'});
   }
 
   AddProjectMember(projectMember: ProjectMember):Observable<any>{

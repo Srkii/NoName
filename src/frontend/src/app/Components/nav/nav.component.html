@@ -35,6 +35,12 @@
           <li class="nav-item" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
             <a class="nav-link" routerLink="/mytasks">My Tasks</a>
           </li>
+          <!-- <li class="nav-item" *ngIf="" routerLinkActive="active-link-text">
+            <a class="nav-link" routerLink="/mytasks">My Profile</a>
+          </li>
+          <li class="nav-item" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
+            <a class="nav-link" routerLink="/mytasks">My Tasks</a>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -45,16 +51,22 @@
 
   <!-- Icons on the right remain visible on all screen sizes -->
   <div class="navbar-nav-right d-flex">
-    <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg" />
-    <app-notifications></app-notifications>
-    <img src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow rightImg"
+    <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg2" />
+    <img src="../../../assets/navIcons/bell (1).png" alt="" class="rightImg2" />
+
+    <ngx-avatars *ngIf="!user?.url" size="30" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
+      href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
+      <img *ngIf="user?.url" [src]="user.url" alt="Avatar" class="rightImg nav-link rounded-circle shadow-4-strong dropdown-toggle hide-arrow"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
-    <ul class="dropdown-menu dropdown-menu-end">
-      <li>
+
+      <ul class="dropdown-menu dropdown-menu-end">
+      <li class="rightDrop">
         <div class="dropdown-item">
           <div class="d-flex">
             <div class="avatar avatar-online">
-              <img src="../../../assets/navIcons/user (4).png" alt="" >
+              <ngx-avatars *ngIf="!imgFlag" size="45" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+              <img *ngIf="imgFlag" [src]="user.url" alt="Avatar" class="dropImg1 rounded-circle shadow-4-strong">
+
             </div>
             <div class="flex-grow-1">
               <span class="fw-medium d-block">{{user?.firstName}} {{user?.lastName}}</span>
@@ -66,13 +78,13 @@
       <li>
         <div class="dropdown-divider"></div>
       </li>
-      <li>
+      <li class="rightDrop">
         <a class="dropdown-item" routerLink="/userinfo">
           <img src="../../../assets/navIcons/user (5).png" alt="" class="dropImg">
           <span class="align-middle">My Profile</span>
         </a>
       </li>
-      <li>
+      <li class="rightDrop">
         <a class="dropdown-item" (click)="Logout()">
           <img src="../../../assets/navIcons/power.png" alt="" class="dropImg">
           <span class="align-middle">Logout</span>

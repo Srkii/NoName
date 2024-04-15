@@ -5,6 +5,10 @@ import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { MyProjectsService } from '../../_services/my-projects.service';
+import { UploadService } from '../../_services/upload.service';
+import { NewTask } from '../../Entities/NewTask';
 
 @Component({
   selector: 'app-kanban',
@@ -32,18 +36,28 @@ export class KanbanComponent implements OnInit{
   newTaskStatusId: number | null = null;
   newTaskProjectSectionId: number | null = null;
 
+
+  users: TaskAssignee[] = [];
+  selectedUser: TaskAssignee | undefined;;
+  filterValue: string | undefined = '';
+
   @Output() sectionChanged = new EventEmitter<boolean>();
 
   constructor(
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private myTasksService: MyTasksService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private myProjectsService: MyProjectsService,
+    private uploadservice: UploadService
   ) {}
 
   ngOnInit() {
     this.spinner.show();
     this.populateTasks();
+    if (this.currentProjectId !== null) {
+      this.getProjectsUsers(this.currentProjectId);
+    }
     this.spinner.hide();
   }
 
@@ -121,7 +135,7 @@ export class KanbanComponent implements OnInit{
       this.GetTaskStatuses();
     });
   }
-  openModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
+  openDeleteStatusModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
     this.currentSectionName = sectionName;
     this.currentSectionId = sectionId;
     this.modalRef = this.modalService.show(
@@ -130,11 +144,16 @@ export class KanbanComponent implements OnInit{
         class: 'modal-sm modal-dialog-centered'
       });
   }
-  openSimpleModal(modal: TemplateRef<void>) {
+  openSimpleModal(modal: TemplateRef<void>, modalSize: string) {
+    let modalClass = '';
+    if(modalSize === 'newSection')
+      modalClass = 'modal-sm modal-dialog-centered';
+    else if (modalSize === 'newTask')
+    modalClass = 'modal-lg modal-dialog-centered';
     this.modalRef = this.modalService.show(
       modal,
       {
-        class: 'modal-sm modal-dialog-centered'
+        class: modalClass
       });
   }
   deleteSectionFunction() {
@@ -143,8 +162,7 @@ export class KanbanComponent implements OnInit{
       return;
     }
     this.myTasksService.deleteTaskStatus(this.currentSectionId).subscribe({
-      next: (response) => {
-        console.log('Section deleted:', response);
+      next: () => {
         this.modalRef?.hide();
         this.sectionChanged.emit(true);
         this.populateTasks();
@@ -163,8 +181,7 @@ export class KanbanComponent implements OnInit{
       color: this.newSectionColor
     };
     this.myTasksService.addTaskStatus(taskStatus).subscribe({
-      next: (response) => {
-        console.log('Task status added:', response);
+      next: () => {
         this.modalRef?.hide(); // za skrivanje modala
         this.newSectionName = '';
         this.newSectionColor = '#ffffff';
@@ -176,22 +193,54 @@ export class KanbanComponent implements OnInit{
   }
 
   saveTask() {
-    const task = {
+    const task: NewTask = {
       TaskName: this.newTaskName,
       Description: this.newTaskDescription,
-      StartDate: this.newTaskStartDate,
-      EndDate: this.newTaskEndDate,
-      TskStatusId: this.newTaskStatusId,
-      ProjectSectionId: this.newTaskProjectSectionId,
-      ProjectId: this.currentProjectId
+      StartDate: this.newTaskStartDate || new Date(),
+      EndDate: this.newTaskEndDate || new Date(),
+      ProjectId: this.currentProjectId || 0,
+      AppUserId: this.selectedUser?.appUserId || 0
     };
     this.myTasksService.createTask(task).subscribe({
-      next: (response) => {
-        console.log('Task created:', response);
-        this.modalRef?.hide();
+      next: () => {
+        this.modalRef?.hide()
+        this.sectionChanged.emit(true);
+        this.populateTasks();
       },
       error: (error) => console.error('Error creating task:', error)
     });
   }
 
+  // vraca AppUsers koji su na projektu
+  getProjectsUsers(currentProjectId: number) {
+    this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
+      next: response => {
+        this.users = response,
+        this.users.forEach(user => {
+          user.fullName = user.firstName + ' ' + user.lastName;
+        });
+        this.loadPicture(this.users);
+      },
+      error: error => console.log(error)
+    });
+  }
+
+  // za uzimanje slike. mora ovako za sad...
+  loadPicture(usersArray: TaskAssignee[]) : void{
+    usersArray.forEach(user => {
+      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+      this.uploadservice.getImage(user.profilePicUrl).subscribe(
+        { next: (res) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(res);
+          reader.onloadend = ()=> {
+            user.pictureUrl=reader.result as string;
+        }},
+        error:(error) => {
+          console.log(error);
+          }}
+        )
+      }
+    });
+  }
 }
