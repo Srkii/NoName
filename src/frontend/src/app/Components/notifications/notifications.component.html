@@ -7,7 +7,7 @@
   <div class="dropdown-menu dropdown-menu-end">
     <span style="padding-left: 15px;">Notifications</span>
     <div class="dropdown-divider"></div>
-    <small style="padding: 5px; font-size: 13px; margin-left: 10px;" *ngIf="notification_list">No new notifications...</small>
+    <small style="padding: 5px; font-size: 13px; margin-left: 10px;" *ngIf="notification_list==null">No new notifications...</small>
     <ul style="overflow: auto; max-height: 120px;">
       <li *ngFor="let notification of notification_list">
         <a class="dropdown-item" href="javascript:void(0);">
