@@ -6,6 +6,7 @@ using backend.Entities;
 using backend.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using backend.DTO;
 
 namespace backend.SignalR
 {
@@ -55,6 +56,22 @@ namespace backend.SignalR
             var notifications = await _context.Notifications
             .Where(x=>x.reciever_id.ToString()==userId && x.read==false)
             .OrderByDescending(x=>x.dateTime)
+            .Select(notification => new NotificationDto
+            {
+                Id = notification.Id,
+                task_id = notification.task_id,
+                Task = notification.Task,
+                project_id = notification.project_id,
+                Project = notification.Project,
+                reciever_id = notification.reciever_id,
+                Reciever = notification.Reciever,
+                sender_id = notification.sender_id,
+                Sender = notification.Sender,
+                dateTime = notification.dateTime,
+                Type = notification.Type,
+                read = notification.read
+
+            })
             .Take(10)
             .ToListAsync();
             await Clients.Caller.recieveNotifications(notifications);
@@ -65,9 +82,31 @@ namespace backend.SignalR
             var notifications = await _context.Notifications
             .Where(x=>x.reciever_id.ToString()==userId)
             .OrderByDescending(x=>x.dateTime)
+            .Select(notification => new NotificationDto{
+                Id = notification.Id,
+                task_id = notification.task_id,
+                Task = notification.Task,
+                project_id = notification.project_id,
+                Project = notification.Project,
+                reciever_id = notification.reciever_id,
+                Reciever = notification.Reciever,
+                sender_id = notification.sender_id,
+                Sender = notification.Sender,
+                dateTime = notification.dateTime,
+                Type = notification.Type,
+                read = notification.read
+            })
             .ToListAsync();
 
             await Clients.Caller.recieveAllNotifications(notifications);
+        }
+
+        public async Task readNotifications(List<int> notifications){
+            foreach(int i in notifications){
+                var _notif = await _context.Notifications.FirstOrDefaultAsync(x=>x.Id == i);
+                _notif.read=true;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 

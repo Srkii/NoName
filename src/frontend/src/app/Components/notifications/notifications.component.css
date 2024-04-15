@@ -96,10 +96,9 @@ li{
 }
 label{
   width: 100%;
+  justify-content: space-between;
 }
 input{
   margin-right: 15px;
 }
-.unread-notification{
-  list-style-type: circle;
-}
+

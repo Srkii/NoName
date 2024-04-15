@@ -20,13 +20,14 @@ export class NotificationsComponent {
   async getNotifications(){
     await this.notificationService.getNotifications();//ovde smanjim da uzima manje notifikacija, tipa da uzme 10 najskorijih neprocitanih notifikacija
     this.notification_list = this.notificationService.notifications;
+    console.log(this.notification_list);
   }
   see_all_notifications(modal:TemplateRef<void>){
     this.handleNotificationDisplay();
     this.modalref = this.modalService.show(
       modal,
       {
-        class:'modal-fade modal-lg modal-dialog-centered',
+        class:'modal-fade modal-lg modal-dialog-centered w-500',
       }
     )
   }

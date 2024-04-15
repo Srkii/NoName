@@ -7,11 +7,11 @@
   <div class="dropdown-menu dropdown-menu-end">
     <span style="padding-left: 15px;">Notifications</span>
     <div class="dropdown-divider"></div>
-    <span *ngIf="!notification_list">No new notifications...</span>
+    <small style="padding: 5px; font-size: 13px; margin-left: 10px;" *ngIf="notification_list">No new notifications...</small>
     <ul style="overflow: auto; max-height: 120px;">
       <li *ngFor="let notification of notification_list">
         <a class="dropdown-item" href="javascript:void(0);">
-          {{notification.sender_first_name}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
+          {{notification.sender.firstName}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
         </a>
       </li>
     </ul>
@@ -33,7 +33,7 @@
     <ul class="modal-ul">
       <li *ngFor="let notification of notifications" class="notification-item" [ngClass]="{'unread-notification':!notification.read}">
         <label for="notifinput" class="list-group-item" style="pointer-events:none">
-          {{notification.sender_first_name}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
+          {{notification.sender.firstName}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}} {{notification.project_id!=null?notification.project.projectName:notification.task_id!=null?notification.task.taskName:""}} <small style="font-size: 10px; font-weight:lighter; margin-left: 30px;">{{notification.read?"read":"unread"}}</small>
         </label>
         <input name="notifinput" class="form-check-input" type="checkbox" [checked]="markedNotifications.includes(notification.id)" (change)="toList(notification.id)">
       </li>

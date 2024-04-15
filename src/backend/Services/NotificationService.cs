@@ -19,8 +19,8 @@ namespace backend.Services
         public async Task TriggerNotification(int task_id,int sender_id,NotificationType type){//ova je za task-ove , tj komentare i attachmente, poraditi na semantici...
             
             var Users = await GetUsersForTaskNotification(task_id, sender_id);
-            var sender = await _context.Users.FindAsync(sender_id);
-            var task = await _context.ProjectTasks.FindAsync(task_id);
+            var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == sender_id);
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
             Users.Remove(sender_id);
             for(int i=0;i<Users.Count;i++){
                 Notification notification = new Notification{
@@ -42,9 +42,9 @@ namespace backend.Services
             //na osnovu tipa assignment-a znacemo da li je projekat ili task
             //tako ce frontend komponenta znati na koji tab da ide i sta da otvara.
             List<int> users_list = new List<int>();
-            var sender = await _context.Users.FindAsync(sender_Id);
+            var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == sender_Id);
             if(type == NotificationType.TaskAssignment){//novi task kreiran
-                var tsk = await _context.ProjectTasks.FindAsync(task_project_id);
+                var tsk = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id == task_project_id);
                 var user = await _context.Users.FirstOrDefaultAsync(x=>x.Id == tsk.AppUserId);
                 users_list.Add(user.Id);//task assignee
                 users_list.Remove(sender_Id);
