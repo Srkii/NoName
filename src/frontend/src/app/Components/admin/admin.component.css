@@ -308,4 +308,24 @@ select:active{
   justify-content: center; 
   align-items: center; 
   height: 100%; 
- }
+}
+
+/*izgled kartica za telefone*/
+@media screen and (max-width: 500px) {
+  .card .pics{
+    display: none;
+  }
+  .card .card-body{
+    padding-left: 0px;
+  }
+  .card .card-title{
+    margin-left: 2px;
+  }
+  .card .card-body h3{
+    font-size: 12px;
+    display: inline-block;
+   
+  }
+}
+
+
