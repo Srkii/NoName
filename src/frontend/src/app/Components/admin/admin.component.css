@@ -328,4 +328,34 @@ select:active{
   }
 }
 
+/*Galaxy fold*/
+@media screen and (max-width: 653px) {
+  .card .pics{
+    display: none;
+  }
+  .card .card-body{
+    padding-left: 2px;
+  }
+  .card .card-title{
+    margin-left: 2px;
+    font-size: 12px;
+  }
+  .card .card-body h3{
+    font-size: 8px;
+    display: inline-block;
+   
+  }
+}
+
+/*za tablete*/
+@media screen and (min-width: 768px) and (max-width: 1024px)
+{
+  .card .card-body h3{
+    font-size: 18px;
+    display: inline-block;
+   
+  }
+}
+
+
 
