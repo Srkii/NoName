@@ -69,6 +69,31 @@ namespace backend.Data
                 // task ne moze da zavisi sam od sebe
                 entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId"));
             });
+
+            modelBuilder.Entity<Attachment>(entity =>{
+                entity.HasOne(a => a.Task)
+                    .WithMany()
+                    .HasForeignKey(a=>a.task_id);
+                entity.HasOne(a => a.Sender)
+                    .WithMany()
+                    .HasForeignKey(a => a.sender_id);
+            });
+
+            modelBuilder.Entity<Notification>(entity => {
+                entity.HasKey(n => n.Id);
+                entity.HasOne(n => n.Task)
+                    .WithMany()
+                    .HasForeignKey(n => n.task_id);
+                entity.HasOne(n => n.Project)
+                    .WithMany()
+                    .HasForeignKey(n => n.project_id);
+                entity.HasOne(n => n.Sender)
+                    .WithMany()
+                    .HasForeignKey(n => n.sender_id);
+                entity.HasOne(n => n.Reciever)
+                    .WithMany()
+                    .HasForeignKey(n => n.reciever_id);
+            });
         }
     }
 }
