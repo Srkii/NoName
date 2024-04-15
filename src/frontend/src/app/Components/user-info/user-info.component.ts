@@ -50,7 +50,7 @@ export class UserInfoComponent implements OnInit {
           console.log(response);
           if(response.profilePicUrl!=null)
           {
-            this.uploadService.getImage(response.profilePicUrl)
+            this.uploadService.getProfileImage(response.profilePicUrl)
               .subscribe(url => {
                 this.url = url;
               })
