@@ -30,10 +30,9 @@ namespace backend.Controllers
             
             if(user.ProfilePicUrl!=null){
                 _photoService.DeletePhoto(user.ProfilePicUrl);
-                user.ProfilePicUrl = _photoService.AddPhoto(image);
-            }else{
-                user.ProfilePicUrl = _photoService.AddPhoto(image);
             }
+            user.ProfilePicUrl = _photoService.AddPhoto(image);
+        
             await _context.SaveChangesAsync();
             return Ok(user);
         }

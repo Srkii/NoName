@@ -18,8 +18,10 @@ export class UploadService {
     return this.httpClient.post<any>(`https://localhost:5001/api/FileUpload/uploadpfp/${id}`,formData,{headers:httpheader});//saljem sliku na back
   }
   getImage(filename:string){
-    return this.httpClient.get(`https://localhost:5001/api/FileUpload/images/${filename}`,{responseType:'blob'})
-    .pipe(
+    var result =  this.httpClient.get(`https://localhost:5001/api/FileUpload/images/${filename}`,{responseType:'blob'})
+    console.log(result);
+
+    return result.pipe(
       map((blob:Blob) => URL.createObjectURL(blob))
     );
   }
