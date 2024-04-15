@@ -157,13 +157,18 @@ textarea:focus {
   resize: none;
 }
 .comments {
+  margin-top: 20px;
   color: #697a8d;
   border-radius: 8px;
   width: 100%;
   overflow-y: auto;
 }
-
-
+.visible_comments{
+  margin-top: -5px;
+  border: 0.5px solid lightgray;
+  border-radius: 8px;
+  padding: 10px;
+}
 .add_comment{
   padding: 5px;
   padding-right: 10px;
@@ -177,12 +182,27 @@ textarea:focus {
   margin-bottom: 10px;
   margin-right: 10px;
 }
+.edit_comment{
+  padding: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  border: none;
+  background-color: #3fb94c;
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  float: right;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
 .mark:hover,
-.add_comment:hover{
+.add_comment:hover,
+.edit_comment:hover{
   filter: brightness(120%);
 }
 .comment_header{
   margin-bottom: -10px;
+  margin-left: -10px;
 }
 .fixed-comment-area {
   border-top: 0.5px solid lightgray;
@@ -207,19 +227,20 @@ textarea:focus {
   margin-top: -5px;
   margin-bottom: 15px;
   outline: none;
-  border: 0.5px solid lightgray;
-  border-radius: 8px;
   padding: 20px;
+  padding-left: 30px;
+  border-radius: 8px;
   word-wrap: break-word;
 }
 .comment_date{
   float: right;
-  margin-top: -30px;
+  margin-top: -40px;
   margin-right: 10px;
   font-size: 12px;
   color: #697a8d;
 }
 .trash{
+  margin-top: -5px;
   margin-left: 15px;
 }
 .completed {
@@ -244,7 +265,10 @@ textarea:focus {
 .taskDueDate:hover,
 .taskDueDate:focus,
 #taskOriginProject:hover,
-#taskOriginProject:focus{
+#taskOriginProject:focus,
+.content p:focus,
+.content p:hover
+{
   outline: 1px solid #5f61e6 !important; 
   box-shadow: 0 0 3px #5f61e6; 
 }

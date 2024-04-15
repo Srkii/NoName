@@ -32,19 +32,22 @@ export class PopupComponent {
   comments: Comment[] = []; 
   users: TaskAssignee[] = [];
   userId=localStorage.getItem('id');
-  projects: Project[] = [];
   selectedUser: TaskAssignee | undefined;
   selectedProject: any;
+  showButton: boolean=false;
+  editCommet_id: number=-1;
+
 
   constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    private uploadservice: UploadService){}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
+
       this.selectedProject = this.task.project;
       this.getUser();
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
-      this.getUserProjects(this.userId);
+      document.addEventListener('click', this.documentClick.bind(this));
     }
   }
   // ngOnInit(): void {
@@ -193,7 +196,7 @@ export class PopupComponent {
         senderId: this.user.id,
         senderFirstName: this.user.firstName,
         senderLastName: this.user.lastName,
-        messageSent: new Date() 
+        messageSent:  new Date 
       };
   
       this.commentsService.postComment(commentDto).subscribe({
@@ -255,14 +258,6 @@ export class PopupComponent {
     });
   }
 
-  getUserProjects(userId: any) {
-    this.myProjectsService.getUsersProjects(userId).subscribe({
-      next: response => {
-        this.projects = response;
-      },
-      error: error => console.log(error)
-    });
-  }
 
   updateTaskInfo(task: ProjectTask): void {
     const dto: ChangeTaskInfo = {
@@ -271,16 +266,19 @@ export class PopupComponent {
       description: task.description,
       projectId: this.selectedProject.id,
       appUserId: this.selectedUser?.appUserId,
-      dueDate: task.endDate // Assuming endDate is the dueDate in the model
+      dueDate: task.endDate 
     };
 
     this.myTasksService.changeTaskInfo(dto).subscribe({
       next: (updatedTask: ProjectTask) => {
-        // Update task with the response from the server if needed
+        console.log(this.task);
         this.task = updatedTask;
+        console.log(task.projectRole);
 
-        // Emit event or handle any other logic
         this.taskUpdated.emit();
+        console.log(updatedTask)
+
+        this.cdr.detectChanges();
       },
       error: (error: any) => {
         console.error('Error updating task information:', error);
@@ -289,19 +287,55 @@ export class PopupComponent {
   }
 
   updateTaskDueDate(event:Event): void {
-    // Convert the string date to a Date object
     const dueDateString = (event.target as HTMLInputElement).value;
     const dueDate = new Date(dueDateString);
 
-    // Update the task's endDate property
     if (this.task) {
       this.task.endDate = dueDate;
 
-      // Call the method to update task information
       this.updateTaskInfo(this.task);
     }
   }
 
+  ShowEdit(comment:Comment):void{
+    this.commentInput.nativeElement.value = comment.content;
+    this.showButton=true;
+    this.editCommet_id=comment.id;
+  }
+
+  editContent(): void {
+    const editedContent = this.commentInput.nativeElement.value.trim();
+    console.log(typeof(editedContent))
+      
+  
+    this.commentsService.updateComment(this.editCommet_id, editedContent).subscribe({
+        next: () => {
+          this.showButton = false;
+          this.commentInput.nativeElement.value = "";
+          this.fetchComments();
+        },
+        error: (error: any) => {
+          console.error('Error updating comment:', error);
+        }
+      });
+  }
+
+  CancelEdit():void{
+    this.showButton=false;
+    this.commentInput.nativeElement.value = "";
+  }
+
+  documentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!(target.closest('.content') || target === this.commentInput.nativeElement)) {
+      this.showButton = false;
+      this.commentInput.nativeElement.value = "";
+      this.editCommet_id = -1;
+    }
+  }
+  
+
+  
 
 
   

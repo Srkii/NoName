@@ -471,7 +471,7 @@ namespace backend.Controllers
                 .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
                 && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived")
                 .Take(count)
-                .OrderBy(task => task.EndDate) // Order by DateCreated in descending order
+                .OrderByDescending(task => DateTime.Compare(task.EndDate, DateTime.Now))
                 .Select(task => new
                 {
                     task.Id,

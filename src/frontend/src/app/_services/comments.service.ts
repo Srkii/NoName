@@ -22,5 +22,12 @@ export class CommentsService {
   deleteComment(commentId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/deleteComment/${commentId}`);
   }
+  updateComment(commentId: number, content: string): Observable<Comment> {
+    // Construct the URL with commentId and content as route parameters
+    const url = `${this.apiUrl}/updateComment/${commentId}/${content}`;
+
+    // Make a PUT request to update the comment
+    return this.http.put<Comment>(url, null);
+  }
   
 }

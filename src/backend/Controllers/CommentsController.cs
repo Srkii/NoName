@@ -76,6 +76,39 @@ namespace backend.Controllers
 
         return Ok(responseData);
         }
+
+        [AllowAnonymous]
+        [HttpPut("updateComment/{commentId}/{content}")]
+        public async Task<IActionResult> UpdateComment(int commentId, string content)
+        {
+            // Find the comment in the database by its ID
+            var comment = await _context.Comments.FindAsync(commentId);
+
+            // Check if the comment exists
+            if (comment == null)
+            {
+                return NotFound("Comment not found");
+            }
+
+            // Update the content and message sent date of the comment
+            comment.Content = content;
+            comment.MessageSent = DateTime.UtcNow.AddHours(2); // Update the message sent date
+
+            // Save the changes to the database
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Handle concurrency conflicts, if necessary
+                throw; // You can customize this behavior as per your requirements
+            }
+
+            // Return a success response with the updated comment
+            return Ok(comment);
+    }   
+
     }
 
 }
