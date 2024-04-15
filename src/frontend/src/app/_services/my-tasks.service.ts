@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { HttpClient} from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
+import { ChangeTaskInfo } from '../Entities/ChangeTaskInfo';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -79,4 +80,8 @@ export class MyTasksService {
   GetClosedTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count3/${count}`);
   }
+  changeTaskInfo(dto: ChangeTaskInfo): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskInfo`, dto);
+  }
+
 }

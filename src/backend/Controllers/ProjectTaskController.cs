@@ -184,8 +184,8 @@ namespace backend.Controllers
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
         public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
         {
-            if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
-                return Unauthorized("Unvalid role");
+            // if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
+            //     return Unauthorized("Unvalid role");
 
             var task = await _context.ProjectTasks.FindAsync(dto.Id);
 
@@ -194,7 +194,9 @@ namespace backend.Controllers
 
             if (dto.TaskName != null) task.TaskName = dto.TaskName;
             if (dto.Description != null && dto.Description != "") task.Description = dto.Description;
-            // if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
+            if (dto.DueDate != null) task.EndDate = (DateTime)dto.DueDate;
+            if (dto.ProjectId!=0) task.ProjectId = dto.ProjectId;
+            if (dto.AppUserId!=0) task.AppUserId = dto.AppUserId;
 
             await _context.SaveChangesAsync();
 

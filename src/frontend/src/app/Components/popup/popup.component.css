@@ -18,7 +18,7 @@
   text-align: left;
   margin-right: 20px;
   margin-bottom: 3%;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 #popupDueDate {
@@ -225,4 +225,74 @@ textarea:focus {
 .completed {
   background-color: #3fb94c;
   box-shadow: 0 0 3px #3fb94c;
+}
+
+.taskName{
+  margin-top: 1px;
+  margin-left: 1px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  color: #697a8d;
+  border-radius: 8px;
+  padding-left: 10px;
+}
+.taskName:hover,
+.taskName:focus,
+.taskDueDate:hover,
+.taskDueDate:focus,
+#taskOriginProject:hover,
+#taskOriginProject:focus{
+  outline: 1px solid #5f61e6 !important; 
+  box-shadow: 0 0 3px #5f61e6; 
+}
+.taskDueDate{
+  margin-top: -6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  color: #697a8d;
+  border-radius: 8px;
+  padding-left: 10px;
+}
+#taskOriginProject{
+  margin-left: 20px;
+  font-size: 16px;
+  color: #697a8d;
+  background-color: #d9dee3;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  width: 300px; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
+}
+.mb-1{
+  display: flex;
+  align-items: center;
+}
+.form-label{
+  font-size: 16px;
+  margin-right: 20px;
+}
+.asigneeDropdown{
+  outline: none;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 60%;
+}
+.projectDropdown{
+  outline: none;
+  margin-top: -5px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 60%;
 }

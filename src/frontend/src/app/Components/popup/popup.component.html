@@ -32,23 +32,72 @@
       />
     </svg>
     <app-file-upload></app-file-upload>
-    <h6 id="popupTaskName">{{ task.taskName }}</h6>
+    <!-- <h6 id="popupTaskName">{{ task.taskName }}</h6> -->
+    <input class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)">
     <br />
-    <p class="header">
+    <!-- <p class="header">
       Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
-    </p>
-    <p class="header">
+    </p> -->
+    <div style="display: flex">
+      <p class="header">Due Date</p>
+      <input class="taskDueDate" type="text" placeholder="{{task.endDate|date}}" onfocus="this.type='date'" onblur="this.type='text|date'" [value]="task.endDate | date" (blur)="updateTaskDueDate($event)">
+    </div>
+    <!-- <p class="header">
       Origin Project
       <span id="popupOriginProject">{{
          task.project ? task.project.projectName : "No Project" 
       }}</span>
-    </p>
-    <p class="header">Assignee
+    </p> -->
+    <div class="mb-1 chooseProject" autocomplete="off">
+      <label for="projectDropdown" class="form-label">Select Project</label>
+      <ng-select class="projectDropdown" [items]="projects" [(ngModel)]="selectedProject" name="project" bindLabel="projectName" placeholder="Select Project" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)">
+        <ng-template ng-option-tmp let-project="item" let-index="index">
+          {{ project.projectName }}
+        </ng-template>
+        <ng-template ng-label-tmp let-item="item">
+          {{ item.projectName }}
+        </ng-template>
+      </ng-select>
+    </div>
+    
+    <!-- <p class="header">Assignee
     <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
-    </p>
+    </p> -->
+    <div class="mb-1 chooseAssignee" autocomplete="off">
+      <label for="assignee2" class="form-label">Assignee</label>
+      <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)">
+        <ng-template ng-option-tmp let-user="item" let-index="index">
+          <div style="display: flex; align-items: center;">
+            <div *ngIf="user.profilePicUrl" class="nameAvatar">
+              <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+            </div>
+            <div *ngIf="!user.profilePicUrl" class="nameAvatar">
+              <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+            </div>
+            <div>
+              {{ user.fullName }}
+            </div>
+        </div>
+        </ng-template>
+        <ng-template ng-label-tmp let-item="item">
+          <div style="display: flex; align-items: center;">
+            <div *ngIf="item.profilePicUrl" class="nameAvatar">
+              <img [src]="item.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+            </div>
+            <div *ngIf="!item.profilePicUrl" class="nameAvatar">
+              <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
+            </div>
+            <div>
+              {{ item.fullName }}
+            </div>
+          </div>
+        </ng-template>
+      </ng-select>
+      </div>
       <p class="header">Description</p>
-        <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly></textarea>
+        <!-- <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly></textarea> -->
+        <textarea class="description" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)"></textarea>
     <br /><br />
     <button
       *ngIf="this.task.projectRole!='4'"

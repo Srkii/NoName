@@ -1,9 +1,17 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { CommentsService } from '../../_services/comments.service'; // Import CommentsService
 import { Comment } from '../../Entities/Comments'; // Import Comment model
+import { DatePipe, formatDate } from '@angular/common';
+import { AppUser } from '../../Entities/AppUser';
+import { MyProjectsService } from '../../_services/my-projects.service';
+import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { Project } from '../../Entities/Project';
+import { coerceStringArray } from '@angular/cdk/coercion';
+import { UploadService } from '../../_services/upload.service';
+import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
 
 @Component({
   selector: 'app-popup',
@@ -22,16 +30,34 @@ export class PopupComponent {
   fullscreen: boolean = false;
   user!:any;
   comments: Comment[] = []; 
+  users: TaskAssignee[] = [];
+  userId=localStorage.getItem('id');
+  projects: Project[] = [];
+  selectedUser: TaskAssignee | undefined;
+  selectedProject: any;
 
-  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService) {}
+  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    private uploadservice: UploadService){}
 
-  ngOnInit(): void {
-    if (this.task) {
-      this.previousTaskStatus = this.task.statusName;
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('task' in changes && this.task) {
+      this.selectedProject = this.task.project;
+      this.getUser();
+      this.fetchComments();
+      this.getProjectsUsers(this.task.projectId);
+      this.getUserProjects(this.userId);
     }
-    this.getUser();
-    this.fetchComments();
   }
+  // ngOnInit(): void {
+  //   if (this.task) {
+  //     this.previousTaskStatus = this.task.statusName;
+  //     this.selectedProject=this.task.project;
+  //     this.getUser();
+  //     this.fetchComments();
+  //     this.getProjectsUsers(this.task?.projectId);
+  //     this.getUserProjects(this.userId);
+  //   }
+      
+  // }
 
   fetchComments(): void {
     if (this.task && this.task.id) {
@@ -141,6 +167,15 @@ export class PopupComponent {
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.user=response;
+        this.user.fullName = this.user.firstName + ' ' + this.user.lastName;
+        this.selectedUser=this.user;
+        if (this.selectedUser) {
+          this.selectedUser.appUserId = this.user.id;
+          this.selectedUser.lastName = this.user.lastName;
+          this.selectedUser.firstName = this.user.firstName;
+          this.selectedUser.fullName = this.user.fullName;
+          this.selectedUser.profilePicUrl = this.user.profilePicUrl;
+        }
       },error:(error)=>{
         console.log(error)
       }
@@ -189,7 +224,86 @@ export class PopupComponent {
       }
     });
   }
-  
+  getProjectsUsers(currentProjectId: any) {
+    this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
+      next: response => {
+        this.users = response,
+        this.users.forEach(user => {
+          user.fullName = user.firstName + ' ' + user.lastName;
+          this.loadPicture(this.users);
+        });
+      },
+      error: error => console.log(error)
+    });
+  }
+
+  loadPicture(usersArray: TaskAssignee[]) : void{
+    usersArray.forEach(user => {
+      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+      this.uploadservice.getImage(user.profilePicUrl).subscribe(
+        { next: (res) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(res);
+          reader.onloadend = ()=> {
+            user.pictureUrl=reader.result as string;
+        }},
+        error:(error) => {
+          console.log(error);
+          }}
+        )
+      }
+    });
+  }
+
+  getUserProjects(userId: any) {
+    this.myProjectsService.getUsersProjects(userId).subscribe({
+      next: response => {
+        this.projects = response;
+      },
+      error: error => console.log(error)
+    });
+  }
+
+  updateTaskInfo(task: ProjectTask): void {
+    const dto: ChangeTaskInfo = {
+      id: task.id,
+      taskName: task.taskName,
+      description: task.description,
+      projectId: this.selectedProject.id,
+      appUserId: this.selectedUser?.appUserId,
+      dueDate: task.endDate // Assuming endDate is the dueDate in the model
+    };
+
+    this.myTasksService.changeTaskInfo(dto).subscribe({
+      next: (updatedTask: ProjectTask) => {
+        // Update task with the response from the server if needed
+        this.task = updatedTask;
+
+        // Emit event or handle any other logic
+        this.taskUpdated.emit();
+      },
+      error: (error: any) => {
+        console.error('Error updating task information:', error);
+      }
+    });
+  }
+
+  updateTaskDueDate(event:Event): void {
+    // Convert the string date to a Date object
+    const dueDateString = (event.target as HTMLInputElement).value;
+    const dueDate = new Date(dueDateString);
+
+    // Update the task's endDate property
+    if (this.task) {
+      this.task.endDate = dueDate;
+
+      // Call the method to update task information
+      this.updateTaskInfo(this.task);
+    }
+  }
+
+
+
   
   
 }
