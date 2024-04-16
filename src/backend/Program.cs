@@ -18,11 +18,19 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 // app.UseHttpsRedirection(); verovatno nam ne treba trenutno
 
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+// za koriscenje statickih fajlova
+// app.UseDefaultFiles();
+// app.UseStaticFiles();
+// za koriscenje statickih fajlova
+
 app.MapControllers();
+
+// za koriscenje statickih fajlova
+// app.MapFallbackToController("Index", "Fallback");
 
 app.Run();

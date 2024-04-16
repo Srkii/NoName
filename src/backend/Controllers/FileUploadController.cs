@@ -37,7 +37,8 @@ namespace backend.Controllers
         }
         [HttpGet("images/{filename}")]
         public FileContentResult GetImage(string filename){
-            string path = Directory.GetCurrentDirectory()+"\\Assets\\Images\\"+filename;
+            // string path = Directory.GetCurrentDirectory()+"\\Assets\\Images\\"+filename;
+            string path = Directory.GetCurrentDirectory()+"/Assets/Images/"+filename;
             var imageBytes = System.IO.File.ReadAllBytes(path);
 
             return File(imageBytes,"image/jpeg");
