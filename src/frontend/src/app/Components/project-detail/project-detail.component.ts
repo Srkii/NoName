@@ -7,6 +7,7 @@ import { ProjectTask} from '../../Entities/ProjectTask';
 import { NgxSpinnerService } from "ngx-spinner";
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { UpdateProject } from '../../Entities/UpdateProject';
 
 @Component({
   selector: 'app-project-detail',
@@ -20,8 +21,10 @@ export class ProjectDetailComponent implements OnInit {
   modalRef?: BsModalRef;
   groupedTasks: { [key: string]: any } = {};
 
+  update: UpdateProject = {};
   users: SelectedUser[] = [];
   selectedUsers: SelectedUser[] = [];
+  userId: number = -1;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +40,7 @@ export class ProjectDetailComponent implements OnInit {
 
   getProjectInfo() {
     this.spinner.show();
+    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
     const projectId = this.route.snapshot.paramMap.get('id');
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
@@ -46,8 +50,7 @@ export class ProjectDetailComponent implements OnInit {
           this.groupedTasks = this.groupTasksBySection(tasks);
         });
 
-        var userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
-        this.myProjectsService.GetAvailableUsers(userId).subscribe(users => {
+        this.myProjectsService.GetAvailableUsers(this.userId).subscribe(users => {
           this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, id: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: 4}));
         });
         this.spinner.hide();
@@ -100,12 +103,18 @@ export class ProjectDetailComponent implements OnInit {
         class: "modal modal-dialog-centered"
       });
 
-    const projectInfoModal = document.getElementById("projectInfo");
-    let daysLeft = document.getElementById("daysLeft")
-    let startDate = document.getElementById("startDate") as HTMLInputElement
-    let endDate = document.getElementById("endDate") as HTMLInputElement
     let projectStatus = document.getElementById("projectStatus") as HTMLSelectElement
     let projectPrioriy = document.getElementById("projectPriority") as HTMLSelectElement
+    let endDate = document.getElementById("endDate") as HTMLInputElement
+    let startDate = document.getElementById("startDate") as HTMLInputElement
+    
+    this.update.appUserId = this.userId;
+    this.update.projectName = this.project?.projectName;
+    this.update.description = this.project?.description;
+    this.update.startDate = this.project?.startDate;
+    this.update.endDate = this.project?.endDate;
+    this.update.priority = this.project?.priority;
+    this.update.projectStatus = this.project?.projectStatus;
 
     if(this.project)
     {
@@ -131,11 +140,19 @@ export class ProjectDetailComponent implements OnInit {
       }
     }
   }
-  closeProjectInfo(){
-    const projectInfoModal = document.getElementById("projectInfo");
-    if(projectInfoModal!=null)
+
+  updateProject()
+  {
+    let endDate = document.getElementById("endDate") as HTMLInputElement
+    this.update.endDate = new Date(endDate.value)
+    if(this.update.priority && this.update.projectStatus)
     {
-      projectInfoModal.style.display = 'none';
+      this.update.priority = +this.update.priority
+      this.update.projectStatus = +this.update.projectStatus
     }
+    this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
+      console.log(updatedProject)
+    })
   }
+
 }

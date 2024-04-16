@@ -92,10 +92,10 @@ namespace backend.Controllers
         }
 
         // [Authorize(Roles = "ProjectManager")]
-        [HttpPut("{id}")] // PUT: api/projects/3
-        public async Task<IActionResult> UpdateProject(int id, ProjectDto projectDto)
+        [HttpPut("updateProject")] // PUT: api/projects/updateProject
+        public async Task<ActionResult<Project>> UpdateProject(ProjectDto projectDto)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.FindAsync(projectDto.AppUserId);
             if (project == null)
             {
                 return NotFound();
@@ -112,12 +112,12 @@ namespace backend.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) when (!ProjectExists(id))
+            catch (DbUpdateConcurrencyException) when (!ProjectExists(projectDto.AppUserId))
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return project;
         }
 
         private bool ProjectExists(int id)

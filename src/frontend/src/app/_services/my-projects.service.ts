@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Project } from '../Entities/Project';
 import { Member } from '../Entities/Member';
+import { UpdateProject } from '../Entities/UpdateProject';
 
 
 @Injectable({
@@ -116,6 +117,10 @@ export class MyProjectsService {
 
   GetAvailableUsers(projectCreatorId: number): Observable<Member[]> {
     return this.http.get<Member[]>(`${this.apiUrl}/users/availableUsers/${projectCreatorId}`);
+  }
+
+  UpdateProject(update: UpdateProject): Observable<Project> {
+    return this.http.put<Project>(`${this.baseUrl}/updateProject`, update, {responseType: 'json'});
   }
 }
 
