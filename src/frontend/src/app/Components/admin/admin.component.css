@@ -310,7 +310,7 @@ select:active{
   height: 100%; 
 }
 
-/*izgled kartica za telefone*/
+/*izgled za telefone*/
 @media screen and (max-width: 500px) {
   .card .pics{
     display: none;
@@ -322,10 +322,30 @@ select:active{
     margin-left: 2px;
   }
   .card .card-body h3{
-    font-size: 12px;
+    font-size: 18px;
     display: inline-block;
-   
   }
+
+  .invite {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .leftInvite {
+    margin-bottom: 10px; /* Add space below the search and select */
+    width: 100%;
+  }
+
+  .inputEmail {
+    width: 100%;
+    margin-top: 10px; /* Add space above the email input and button */
+  }
+
+  .inputEmail btn btn-primary{
+    display: inline-block;
+  }
+  
+
 }
 
 /*Galaxy fold*/
@@ -341,7 +361,7 @@ select:active{
     font-size: 12px;
   }
   .card .card-body h3{
-    font-size: 8px;
+    font-size: 12px;
     display: inline-block;
    
   }
@@ -353,7 +373,18 @@ select:active{
   .card .card-body h3{
     font-size: 18px;
     display: inline-block;
-   
+  }
+
+  .inputEmail{
+    width: auto;
+    margin-left: 15px;
+  }
+  .leftInvite{
+    justify-content: baseline;
+    
+  }
+  .leftInvite .page_size{
+    margin-left: 5px;
   }
 }
 
