@@ -1,27 +1,20 @@
 import { HttpClient} from '@angular/common/http';
-import { AfterViewInit, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-  GanttBarClickEvent,
-  GanttBaselineItem,
   GanttDragEvent,
   GanttItem,
-  GanttLineClickEvent,
-  GanttLinkDragEvent,
   GanttSelectedEvent,
   GanttTableDragDroppedEvent,
   GanttTableDragEndedEvent,
-  GanttTableDragEnterPredicateContext,
   GanttTableDragStartedEvent,
-  GanttToolbarOptions,
   GanttView,
   GanttViewType,
   NgxGanttComponent,
   GanttGroup,
   GanttDate
 } from '@worktile/gantt';
-import { finalize, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { random, randomItems } from './helper';
+// import { finalize, of } from 'rxjs';
+// import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-gantt',
@@ -39,11 +32,17 @@ export class GanttComponent implements OnInit{
   views = [ { name: 'Hour', value: GanttViewType.hour }, { name: 'Day', value: GanttViewType.day }, { name: 'Week', value: GanttViewType.week },
             { name: 'Month',value: GanttViewType.month }, { name: 'Quarter', value: GanttViewType.quarter }, { name: 'Year', value: GanttViewType.year } ];
   
+  @ViewChild('gantt') ganttComponent!: NgxGanttComponent;
   viewType: GanttViewType = GanttViewType.month;
   selectedViewType: GanttViewType = GanttViewType.month;
   isBaselineChecked = false;
   isShowToolbarChecked = true;
   loading = false;
+
+  toolbarOptions = {
+    viewTypes: [GanttViewType.day, GanttViewType.week, GanttViewType.month]
+  };
+
 
   items: GanttItem[] = [ //koristi unix time. moram da napravim neku konverziju kad ispisujem. ok GantDate ima koverziju
     { id: '000000', group_id: '000000', title: 'Task 0', start: 1711125075, end: 1715717075, expandable: true },
@@ -56,18 +55,54 @@ export class GanttComponent implements OnInit{
     { id: '000001', title: 'Group-1' }
   ];
   
-  
+  viewOptions = {
+    dateFormat: {
+      year: `yyyy`,
+      yearQuarter: `QQQ 'of' yyyy`,
+      yearMonth: `LLLL yyyy'(week' w ')'`,
+      month: 'LLLL',
+      week : 'ww'
+    }
+  };
 
-  dragEnded($event: GanttDragEvent) {
-    // this.http.put(`/api/item/${$event.item.id}`, {
-    //     start: $event.item.start,
-    //     end: $event.item.end
-    //   })
-    //   .subscribe((items) => {});
+  goToToday() {
+    this.ganttComponent.scrollToToday();
   }
+  
+  dragEnded($event: GanttDragEvent) { }
+
+  linkDragEnded(event: any){
+    console.log(event);
+  }
+
+  dragMoved(event: any) { }
 
   selectView(type: GanttViewType) {
     this.viewType = type;
     this.selectedViewType = type;
-}
+  }
+
+  viewChange(event: GanttView) { //promena prikaza
+      this.selectedViewType = event.viewType;
+  }
+
+  selectedChange(event: GanttSelectedEvent) {
+    event.current && this.ganttComponent.scrollToDate(Number(event.current?.start));
+    console.log('Selected item changed', event);
+  }
+
+  onDragDropped(event: GanttTableDragDroppedEvent) { }
+
+  onDragStarted(event: GanttTableDragStartedEvent) { }
+
+  onDragEnded(event: GanttTableDragEndedEvent) { }
+
+  lineClick(event: any) {
+    console.log('Clicked on line', event);
+    this.openAddTaskToLinkDialog(event.source.id,event.target.id)
+  }
+
+  openAddTaskToLinkDialog(first_task : number,second_task : number): void { }
+
+  barClick(event: any) { }
 }
