@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Project } from '../Entities/Project';
+import { Member } from '../Entities/Member';
 
 
 @Injectable({
@@ -111,6 +112,10 @@ export class MyProjectsService {
     if(projectId === null) 
       throw new Error('ProjetId is null.');
     return this.http.get(`${this.baseUrl}/GetUsersByProjectId/${projectId}`)
+  }
+
+  GetAvailableUsers(projectCreatorId: number): Observable<Member[]> {
+    return this.http.get<Member[]>(`${this.apiUrl}/users/availableUsers/${projectCreatorId}`);
   }
 }
 

@@ -23,7 +23,6 @@ export class ProjectCardComponent {
   projectNameExists: boolean = false;
 
   projectMembers: ProjectMember[] = [];
-  selectedRoles: ProjectRole[] = [];
   roles: string[] = ["Project Owner","Manager","Participant","Guest"];
 
   creatorId: number | any
@@ -48,6 +47,8 @@ export class ProjectCardComponent {
   async CreateProject(): Promise<void>{
     this.projectNameExists = false;
     this.buttonClicked = true;
+
+    console.log(this.selectedUsers);
 
     if(await this.ProjectNameExists(this.newProject.ProjectName))
     {

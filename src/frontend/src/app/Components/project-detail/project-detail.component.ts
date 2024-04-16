@@ -1,10 +1,12 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
-import { Project } from '../../Entities/Project';
+import { Priority, Project, ProjectStatus } from '../../Entities/Project';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectTask} from '../../Entities/ProjectTask';
 import { NgxSpinnerService } from "ngx-spinner";
+import { SelectedUser } from '../../Entities/SelectedUser';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-project-detail',
@@ -15,13 +17,18 @@ export class ProjectDetailComponent implements OnInit {
   project: Project | undefined;
   projectTasks: ProjectTask[] = [];
   viewMode: string = 'table';
+  modalRef?: BsModalRef;
   groupedTasks: { [key: string]: any } = {};
+
+  users: SelectedUser[] = [];
+  selectedUsers: SelectedUser[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private myProjectsService: MyProjectsService,
     private myTasksService: MyTasksService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private modalService: BsModalService,
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +44,11 @@ export class ProjectDetailComponent implements OnInit {
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
           this.projectTasks = tasks;
           this.groupedTasks = this.groupTasksBySection(tasks);
+        });
+
+        var userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
+        this.myProjectsService.GetAvailableUsers(userId).subscribe(users => {
+          this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, id: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: 4}));
         });
         this.spinner.hide();
       });
@@ -80,5 +92,50 @@ export class ProjectDetailComponent implements OnInit {
   changeToGant() {
     this.getProjectInfo();
     this.viewMode = 'gantt';
+  }
+  openProjectInfo(modal: TemplateRef<void>){
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: "modal modal-dialog-centered"
+      });
+
+    const projectInfoModal = document.getElementById("projectInfo");
+    let daysLeft = document.getElementById("daysLeft")
+    let startDate = document.getElementById("startDate") as HTMLInputElement
+    let endDate = document.getElementById("endDate") as HTMLInputElement
+    let projectStatus = document.getElementById("projectStatus") as HTMLSelectElement
+    let projectPrioriy = document.getElementById("projectPriority") as HTMLSelectElement
+
+    if(this.project)
+    {
+      startDate.value = new Date(this.project?.startDate).toISOString().split('T')[0]
+      endDate.value = new Date(this.project?.endDate).toISOString().split('T')[0]
+    }
+
+    if(this.project && projectStatus && projectPrioriy)
+    {
+      var status = +this.project.projectStatus;
+      for (let option of Array.from(projectStatus.options)) {
+        if (option.value === status.toString()) {
+          option.selected = true;
+          break;
+        }
+      }
+      var priority = +this.project.priority;
+      for (let option of Array.from(projectPrioriy.options)) {
+        if (option.value === priority.toString()) {
+          option.selected = true;
+          break;
+        }
+      }
+    }
+  }
+  closeProjectInfo(){
+    const projectInfoModal = document.getElementById("projectInfo");
+    if(projectInfoModal!=null)
+    {
+      projectInfoModal.style.display = 'none';
+    }
   }
 }
