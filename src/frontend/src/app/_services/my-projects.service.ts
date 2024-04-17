@@ -115,8 +115,8 @@ export class MyProjectsService {
     return this.http.get(`${this.baseUrl}/GetUsersByProjectId/${projectId}`)
   }
 
-  GetAvailableUsers(projectCreatorId: number): Observable<Member[]> {
-    return this.http.get<Member[]>(`${this.apiUrl}/users/availableUsers/${projectCreatorId}`);
+  GetAddableUsers(projectCreatorId: number): Observable<Member[]> {
+    return this.http.get<Member[]>(`${this.baseUrl}/GetAddableUsers/${projectCreatorId}`);
   }
 
   UpdateProject(update: UpdateProject): Observable<Project> {

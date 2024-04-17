@@ -467,8 +467,24 @@ namespace backend.Controllers
         {
             var users = await _context.ProjectMembers
                 .Where(pm => pm.ProjectId == projectId)
-                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName, pm.AppUser.ProfilePicUrl })
+                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName,pm.AppUser.Email, pm.AppUser.ProfilePicUrl, pm.ProjectRole })
                 .ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound("No users found for the given project ID.");
+            }
+
+            return Ok(users);
+        }
+
+        [HttpGet("GetAddableUsers/{projectId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAddableUsers(int projectId)
+        {
+            var users = await _context.Users
+            .Where(user => !_context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId) && user.Role != UserRole.Admin)
+            .Select(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl })
+            .ToListAsync();
 
             if (users == null)
             {

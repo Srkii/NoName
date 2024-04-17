@@ -65,47 +65,53 @@
       </div>
 </div>
 
-<ng-template #projectInfo>
+<ng-template class="modal-lg" #projectInfo>
   <div class="modal-container">
     <div class="modal-header">
       <input class="form-control titleInp" id="projectName" [(ngModel)]="update.projectName">
     </div>
     <div class="modal-body">
-        <div class="mb-3 left">
-          <h5>Details</h5>
-          <dl class="row mb-0">
-            <dt class="col-4 fw-normal">Status</dt>
-            <dd class="col-6 text">
-              <select id="projectStatus" class="sel" [(ngModel)]="update.projectStatus">
-                <option value=0>Proposed</option>
-                <option value=1>InProgress</option>
-                <option value=2>Completed</option>
-                <option value=3>Archived</option>
-              </select>
-            </dd>
-          </dl>
-          <dl class="row mb-0">
-            <dt class="col-4 fw-normal">Start date</dt>
-            <dd class="col-6 text"><input type="date" id="startDate" class="dates" disabled></dd>
-          </dl>
-          <dl class="row mb-0">
-            <dt class="col-4 fw-normal" >End date</dt>
-            <dd class="col-6 text"><input type="date" id="endDate" class="dates"></dd>
-          </dl>
-          <dl class="row mb-0">
-            <dt class="col-4 fw-normal">Priority</dt>
-            <dd class="col-6 text">
-              <select name="" id="projectPriority" class="sel" [(ngModel)]="update.priority">
-                <option value=0>Low</option>
-                <option value=1>Medium</option>
-                <option value=2>High</option>
-              </select>
-            </dd>
-          </dl>
+      <div class="d-flex flex-row">
+          <div class="mb-3 left">
+            <h5>Details</h5>
+            <dl class="row mb-0">
+              <dt class="col-4 fw-normal">Status</dt>
+              <dd class="col-6 text">
+                <select id="projectStatus" class="sel" [(ngModel)]="update.projectStatus">
+                  <option value=0>Proposed</option>
+                  <option value=1>InProgress</option>
+                  <option value=2>Completed</option>
+                  <option value=3>Archived</option>
+                </select>
+              </dd>
+            </dl>
+            <dl class="row mb-0">
+              <dt class="col-4 fw-normal">Start date</dt>
+              <dd class="col-6 text"><input type="date" id="startDate" class="dates" [ngModel]="formattedStartDate" (ngModelChange)="update.startDate=$event" disabled></dd>
+            </dl>
+            <dl class="row mb-0">
+              <dt class="col-4 fw-normal" >End date</dt>
+              <dd class="col-6 text"><input type="date" id="endDate" class="dates" [ngModel]="formattedEndDate" (ngModelChange)="update.endDate=$event"></dd>
+            </dl>
+            <dl class="row mb-0">
+              <dt class="col-4 fw-normal">Priority</dt>
+              <dd class="col-6 text">
+                <select name="" id="projectPriority" class="sel" [(ngModel)]="update.priority">
+                  <option value=0>Low</option>
+                  <option value=1>Medium</option>
+                  <option value=2>High</option>
+                </select>
+              </dd>
+            </dl>
+        </div>
+        <div class="mb-3 right1">
+          <h5>Description</h5>
+          <textarea class="form-control description" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="update.description" name="Description"></textarea>
+        </div>
         </div>
         <div class="mb-3">
           <h5>Add project members</h5>
-            <ng-select [items]="users" [(ngModel)]="selectedUsers" bindLabel="name" placeholder="Select Project Members" optionLabel="name" id="assignee" name="Assignees" [multiple]="true" (click)="$event.stopPropagation()">
+            <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" bindLabel="name" placeholder="Select Project Members" optionLabel="name" id="assignee" name="Assignees" [multiple]="true" (click)="$event.stopPropagation()">
               <ng-template ng-option-tmp let-user="item">
                 <div class="user-detail">
                   <div *ngIf="user.profilePicUrl" class="nameAvatar">
@@ -117,7 +123,7 @@
                     <div style="margin-left: 0.4rem;">{{ user.name }}</div>
                   </div>
                   <div (click)="$event.stopPropagation()">
-                    <select (mousedown)="$event.stopPropagation()" [(ngModel)]="user.projectRole" [ngModelOptions]="{standalone: true}" class="form-select form-select-sm">
+                    <select (mousedown)="$event.stopPropagation()" [(ngModel)]="user.projectRole" [ngModelOptions]="{standalone: true}" class="assignee">
                       <option value=1>Project Owner</option>
                       <option value=2>Manager</option>
                       <option value=3>Participant</option>
@@ -141,20 +147,26 @@
           <div style="overflow-y: auto;">
             <table class="table table-sm t2" id="table">
               <tbody>
-                <tr *ngFor="let user of users">
+                <tr *ngFor="let user of usersOnProject; let i = index">
+                  <td>
+                    {{i+1}}.
+                  </td>
                   <td>
                     <span *ngIf="user.profilePicUrl" class="ng-value-label"><img [src]="user.profilePicUrl">{{ user.name }}</span>
                     <span *ngIf="!user.profilePicUrl" class="ng-value-label"><ngx-avatars size="26" bgColor="#5d57c2" [name]="user.name" value="75%"></ngx-avatars>{{ user.name }}</span>
                   </td>
-                  <td>
-                    <select class="assignee">
+                  <td style="text-align: right;">
+                    <select *ngIf="userId != user.appUserId" class="assignee">
                       <option value=1>Project Owner</option>
                       <option value=2>Manager</option>
                       <option value=3>Participant</option>
                       <option value=4 selected>Guest</option>
                     </select>
                   </td>
-                  <td><span>×</span></td>
+                  <td style="text-align: center;">
+                    <span *ngIf="userId != user.appUserId">×</span>
+                    <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
+                  </td>
                 </tr>
               </tbody>
             </table>

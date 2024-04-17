@@ -40,15 +40,13 @@ export class ProjectCardComponent {
   ngOnInit(): void {
     this.creatorId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
     this.myProjectCardService.GetAvailableUsers(this.creatorId).subscribe(users => {
-      this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, id: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: 4}));
+      this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
     });
   }
 
   async CreateProject(): Promise<void>{
     this.projectNameExists = false;
     this.buttonClicked = true;
-
-    console.log(this.selectedUsers);
 
     if(await this.ProjectNameExists(this.newProject.ProjectName))
     {
@@ -81,7 +79,7 @@ export class ProjectCardComponent {
     this.myProjectCardService.CreateProject(this.newProject).subscribe({
       next: response => {
         console.log("Project created successfully", response);
-        var projectMembers = this.selectedUsers.map<ProjectMember>(user => ({ AppUserId: user.id, ProjectId: response.id, ProjectRole: user.projectRole = +user.projectRole}));
+        var projectMembers = this.selectedUsers.map<ProjectMember>(user => ({ AppUserId: user.appUserId, ProjectId: response.id, ProjectRole: user.projectRole = +user.projectRole}));
         this.AddAssigness(projectMembers);
       },
       error: error => {

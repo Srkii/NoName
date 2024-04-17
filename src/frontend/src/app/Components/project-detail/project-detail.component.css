@@ -260,6 +260,7 @@ thead th{
     display: inline-flex !important;
     align-items: center !important;
     font-family: 'Public Sans', sans-serif;
+    color: #697a8d;
 }
 
 .ng-value-label img, .ng-value-label ngx-avatars{
@@ -270,6 +271,7 @@ thead th{
     display: flex;
     justify-content: space-between;
     font-family: 'Public Sans', sans-serif;
+    color: #697a8d;
 }
 
 :host::ng-deep .ng-option-marked{
@@ -333,7 +335,11 @@ thead th{
 }
 
 .right1{
-    width: 25rem;
+    width: 30rem;
+}
+
+.right1 textarea{
+    height: 75%;
 }
 
 .t2{
@@ -369,9 +375,9 @@ thead th{
     float: right;
 }
 
-.assignee option:hover{
+/* .assignee option{
     background-color: lightgray;
-}
+} */
 
 .titleInp{
     font-size: 1.5em;
@@ -387,5 +393,9 @@ thead th{
 }
 
 .modal-container{
+    color: #676f79;
+}
+
+.description{
     color: #676f79;
 }

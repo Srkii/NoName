@@ -1,7 +1,7 @@
 import { ProjectRole } from "./ProjectMember";
 
 export interface SelectedUser {
-    id:number,
+    appUserId:number,
     name: string,
     email: string,
     projectRole: ProjectRole,
