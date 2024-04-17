@@ -82,9 +82,8 @@ body {
 }
 
 .dropImg {
-
-  width: 10%;
-  height: 10%;
+  width: 15%;
+  height: 15%;
   object-fit: cover;
   padding-left: 0%;
   padding-right: 5px;
@@ -183,8 +182,11 @@ body {
   align-items: center;
 }
 .avatar1{
-  width: 35px;
-  height: 35px;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-bottom: 2px;
+  width: 30px;
+  height: 30px;
 }
 .hide-arrow::after {
   display: none;
