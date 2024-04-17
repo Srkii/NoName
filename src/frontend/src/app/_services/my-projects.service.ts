@@ -3,6 +3,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Project } from '../Entities/Project';
+import { Member } from '../Entities/Member';
+import { UpdateProject } from '../Entities/UpdateProject';
+import { ProjectMember } from '../Entities/ProjectMember';
 
 
 @Injectable({
@@ -111,6 +114,26 @@ export class MyProjectsService {
     if(projectId === null) 
       throw new Error('ProjetId is null.');
     return this.http.get(`${this.baseUrl}/GetUsersByProjectId/${projectId}`)
+  }
+
+  GetAddableUsers(projectCreatorId: number): Observable<Member[]> {
+    return this.http.get<Member[]>(`${this.baseUrl}/GetAddableUsers/${projectCreatorId}`);
+  }
+
+  UpdateProject(update: UpdateProject): Observable<Project> {
+    return this.http.put<Project>(`${this.baseUrl}/updateProject`, update, {responseType: 'json'});
+  }
+
+  AddProjectMember(projectMember: ProjectMember):Observable<any>{
+    return this.http.put<ProjectMember>(`${this.baseUrl}/addProjectMember`, projectMember, {responseType: 'json'})
+  }
+
+  DeleteProjectMember(projectId: number,userId: number):Observable<any>{
+    return this.http.delete<ProjectMember>(`${this.baseUrl}/DeleteProjectMember/${projectId}/${userId}`)
+  }
+
+  UpdateUsersProjectRole(member: ProjectMember):Observable<any>{
+    return this.http.post<ProjectMember>(`${this.baseUrl}/UpdateUsersProjectRole`, member, {responseType: 'json'})
   }
 }
 

@@ -1,7 +1,11 @@
 <div class="content-wrapper">
   <div class="container-xxl flex-grow-1 container-p-y">
     <div *ngIf="project">
-      <div class="project-heading"><span>{{ project.projectName }}</span></div>
+      <div class="project-heading">
+        <span>{{ project.projectName }}</span>
+        <input *ngIf="userRole == 4 || userRole == 3 || userRole == 0" type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Info">
+        <input *ngIf="userRole == 1 || userRole == 2" type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Edit">
+      </div>
       <div class="button-selectors">
         <button class="btn btn-primary btn-lg" [ngClass]="{'btn-active': viewMode === 'table', 'btn-inactive': viewMode !== 'table'}" (click)="changeToTable()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
           <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
@@ -63,6 +67,115 @@
       <div *ngIf="viewMode === 'gantt'" class="ganntTest">
         <app-gantt></app-gantt>
       </div>
+      </div>
+
+<ng-template class="modal-lg" #projectInfo>
+  <div class="modal-container">
+    <div class="modal-header">
+      <input class="form-control titleInp" id="projectName" [(ngModel)]="update.projectName" (blur)="updateProject()" [disabled]="userRole == 4 || userRole == 3">
+      <button type="button" class="close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="d-flex flex-row">
+          <div class="mb-3 left">
+            <h5>Details</h5>
+            <dl class="row mb-0">
+              <dt class="col-4 fw-normal">Status</dt>
+              <dd class="col-6 text">
+                <select id="projectStatus" class="sel" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3">
+                  <option value=0>Proposed</option>
+                  <option value=1>InProgress</option>
+                  <option value=2>Completed</option>
+                  <option value=3>Archived</option>
+                </select>
+              </dd>
+            </dl>
+            <dl class="row mb-0">
+              <dt class="col-4 fw-normal">Start date</dt>
+              <dd class="col-6 text"><input type="date" id="startDate" class="dates" [ngModel]="formattedStartDate" (ngModelChange)="update.startDate=$event"  disabled></dd>
+            </dl>
+            <dl class="row mb-0">
+              <dt class="col-4 fw-normal" >End date</dt>
+              <dd class="col-6 text"><input type="date" id="endDate" class="dates" [ngModel]="formattedEndDate" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3"></dd>
+            </dl>
+            <dl class="row mb-0">
+              <dt class="col-4 fw-normal">Priority</dt>
+              <dd class="col-6 text">
+                <select name="" id="projectPriority" class="sel" [(ngModel)]="update.priority" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3">
+                  <option value=0>Low</option>
+                  <option value=1>Medium</option>
+                  <option value=2>High</option>
+                </select>
+              </dd>
+            </dl>
+        </div>
+        <div class="mb-3 right1">
+          <h5>Description</h5>
+          <textarea class="form-control description" id="desc" rows="3" [(ngModel)]="update.description" name="Description" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3"></textarea>
+        </div>
+        </div>
+        <div *ngIf="userRole==1 || userRole == 0" class="mb-3">
+          <h5>Add project members</h5>
+            <ng-select [items]="addableUsers" [(ngModel)]="selectedUser" (change)="addProjectMember()" bindLabel="name" placeholder="Select Project Members" optionLabel="name" id="assignee" name="Assignees" (click)="$event.stopPropagation()">
+              <ng-template ng-option-tmp let-user="item">
+                <div class="user-detail">
+                  <div *ngIf="user.profilePic" class="nameAvatar">
+                    <img [src]="user.profilePic" class="avatar rounded-circle shadow-4-strong" height="25" width="25">
+                    <div style="margin-left: 0.4rem;">{{ user.name }}</div>
+                  </div>
+                  <div *ngIf="!user.profilePic" class="nameAvatar">
+                    <ngx-avatars size="25" bgColor="#5d57c2" [name]="user.name" value="75%"></ngx-avatars>
+                    <div style="margin-left: 0.4rem;">{{ user.name }}</div>
+                  </div>
+                  <div (click)="$event.stopPropagation()">
+                    <select (mousedown)="$event.stopPropagation()" [(ngModel)]="user.projectRole" [ngModelOptions]="{standalone: true}" class="assignee">
+                      <option value=1>Project Owner</option>
+                      <option value=2>Manager</option>
+                      <option value=3>Participant</option>
+                      <option value=4 selected>Guest</option>
+                    </select>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+        </div>
+        <div class="mb-3">
+          <div class="d-flex flex-row justify-content-between align-items-center">
+            <h5 style="margin-bottom: 0;">Assigned to project</h5>
+            <input type="text" class="form-control form-control-sm search" placeholder="Search by username..." [(ngModel)]="searchTerm" (input)="filterUsers()">
+          </div>
+          <div style="max-height: 5rem; overflow-y: auto;">
+            <table class="table table-sm t2" id="table">
+              <tbody>
+                <tr *ngIf="filteredUsers.length == 0"><td>No results</td></tr>
+                <tr *ngFor="let user of filteredUsers; let i = index">
+                  <td>
+                    {{i+1}}.
+                  </td>
+                  <td>
+                    <span *ngIf="user.profilePic" class="ng-value-label"><img class="avatar rounded-circle shadow-4-strong" height="25" width="25" [src]="user.profilePic">{{ user.name }}</span>
+                    <span *ngIf="!user.profilePic" class="ng-value-label"><ngx-avatars size="26" bgColor="#5d57c2" [name]="user.name"></ngx-avatars>{{ user.name }}</span>
+                  </td>
+                  <td style="text-align: right;">
+                    <select *ngIf="userId != user.appUserId" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 4 || userRole == 3">
+                      <option value=1>Project Owner</option>
+                      <option value=2>Manager</option>
+                      <option value=3>Participant</option>
+                      <option value=4 selected>Guest</option>
+                    </select>
+                  </td>
+                  <td style="text-align: center;">
+                    <span class="deleteMember" *ngIf="userId != user.appUserId && userRole != 2" (click)="deleteAssigne(user.appUserId)">×</span>
+                    <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
     </div>
   </div>
+</ng-template>
 </div>

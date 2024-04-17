@@ -92,10 +92,10 @@ namespace backend.Controllers
         }
 
         // [Authorize(Roles = "ProjectManager")]
-        [HttpPut("{id}")] // PUT: api/projects/3
-        public async Task<IActionResult> UpdateProject(int id, ProjectDto projectDto)
+        [HttpPut("updateProject")] // PUT: api/projects/updateProject
+        public async Task<ActionResult<Project>> UpdateProject(ProjectDto projectDto)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.FindAsync(projectDto.AppUserId);
             if (project == null)
             {
                 return NotFound();
@@ -112,12 +112,12 @@ namespace backend.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) when (!ProjectExists(id))
+            catch (DbUpdateConcurrencyException) when (!ProjectExists(projectDto.AppUserId))
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return project;
         }
 
         private bool ProjectExists(int id)
@@ -467,7 +467,7 @@ namespace backend.Controllers
         {
             var users = await _context.ProjectMembers
                 .Where(pm => pm.ProjectId == projectId)
-                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName, pm.AppUser.ProfilePicUrl })
+                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName,pm.AppUser.Email, pm.AppUser.ProfilePicUrl, pm.ProjectRole })
                 .ToListAsync();
 
             if (users == null)
@@ -476,6 +476,50 @@ namespace backend.Controllers
             }
 
             return Ok(users);
+        }
+
+        [HttpGet("GetAddableUsers/{projectId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAddableUsers(int projectId)
+        {
+            var users = await _context.Users
+            .Where(user => !_context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId) && user.Role != UserRole.Admin)
+            .Select(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl })
+            .ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound("No users found for the given project ID.");
+            }
+
+            return Ok(users);
+        }
+
+        [HttpDelete("DeleteProjectMember/{projectId}/{userId}")]
+        public async Task<ActionResult> DeleteProjectMember(int projectId,int userId)
+        {
+            var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == projectId && member.AppUserId == userId);
+            if(projectMember != null)
+            {
+                _context.ProjectMembers.Remove(projectMember);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+                
+            return NotFound();
+        }
+
+        [HttpPost("UpdateUsersProjectRole")]
+        public async Task<ActionResult> UpdateUsersProjectRole(ProjectMemberDTO dto)
+        {
+            var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == dto.ProjectId && member.AppUserId == dto.AppUserId);
+            if(projectMember != null)
+            {
+                projectMember.ProjectRole = dto.ProjectRole;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+                
+            return NotFound();
         }
     }
 }
