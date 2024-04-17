@@ -109,10 +109,10 @@ export class PopupComponent {
       }
     });
   }
-    
-  
-  
-  
+
+
+
+
 
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
@@ -137,6 +137,7 @@ export class PopupComponent {
     const file = document.querySelector('.file') as HTMLElement;
     const comments = document.querySelector('.comments') as HTMLElement;
     const description = document.querySelector('.description') as HTMLElement;
+    const taskDueDate= document.querySelector('.taskDueDate') as HTMLElement;
     const windowWidth= window.innerWidth;
     if (!this.fullscreen) {
       if(windowWidth<800)
@@ -162,6 +163,7 @@ export class PopupComponent {
       description.style.marginTop = '-3%';
       comments.style.marginTop = '0%';
       comments.style.width = '100%';
+      taskDueDate.style.padding="0";
       this.fullscreen = true;
     } else {
       pop.style.top="";
@@ -174,6 +176,7 @@ export class PopupComponent {
       comments.style.marginTop = '';
       description.style.marginTop = '';
       comments.style.marginTop = '';
+      taskDueDate.style.padding="";
       this.fullscreen = false;
     }
   }
@@ -194,7 +197,7 @@ export class PopupComponent {
       },error:(error)=>{
         console.log(error)
       }
-      
+
     })
   }
 
@@ -210,7 +213,7 @@ export class PopupComponent {
         senderLastName: this.user.lastName,
         messageSent:  new Date 
       };
-  
+
       this.commentsService.postComment(commentDto).subscribe({
         next: (comment: Comment) => {
           commentDto.id = comment.id;
@@ -260,15 +263,9 @@ export class PopupComponent {
     usersArray.forEach(user => {
       if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
       this.uploadservice.getImage(user.profilePicUrl).subscribe(
-        { next: (res) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(res);
-          reader.onloadend = ()=> {
-            user.pictureUrl=reader.result as string;
-        }},
-        error:(error) => {
-          console.log(error);
-          }}
+        url=>{
+          user.pictureUrl=url;
+        }
         )
       }
     });

@@ -1,0 +1,25 @@
+* {
+    font-family: 'Public Sans', sans-serif;
+}
+.btn-sm {
+    border-color: #e7e7ee !important;
+}
+.btn:hover, btn-outline-secondary:hover, btn-sm:hover {
+    background-color: #e7e7ee !important;
+    color: #696cff;
+}
+.active {
+    background-color: #d7d7f8 !important;
+    color: #696cff;
+}
+.mt-4 {
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+}
+.row {
+    padding-left: 0px !important;
+}
+
+.btn, btn-outline-secondary, btn-sm {
+    background-color: #fff;
+}
