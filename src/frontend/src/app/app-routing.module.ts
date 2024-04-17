@@ -12,6 +12,7 @@ import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.compon
 import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
 import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
+import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'forgotpass', component: ForgotPassComponent, canActivate: [loginGuard] },
   { path: 'forgotreset', component: ForgotResetComponent, canActivate: [loginGuard] },
   { path: 'project/:id', component: ProjectDetailComponent},
+  { path: 'landing', component: LandingPageComponent},
   {
     path: '',
     runGuardsAndResolvers: 'always',

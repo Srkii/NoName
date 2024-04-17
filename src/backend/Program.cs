@@ -30,7 +30,7 @@ app.UseAuthorization();
 
 // za koriscenje statickih fajlova
 // app.UseDefaultFiles();
-// app.UseStaticFiles();
+// app.UseStaticFiles(); /
 // za koriscenje statickih fajlova
 
 app.MapControllers();

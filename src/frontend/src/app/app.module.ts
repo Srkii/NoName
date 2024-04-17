@@ -34,7 +34,8 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NotificationsComponent } from './Components/notifications/notifications.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
-
+import { NgxGanttModule } from '@worktile/gantt';
+import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 
 const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
 
@@ -57,6 +58,7 @@ const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1
     GanttComponent,
     ProjectCardComponent,
     NotificationsComponent,
+    LandingPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,6 +81,7 @@ const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1
     }),
     ButtonsModule.forRoot(),
     ImageCropperModule,
+    NgxGanttModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

@@ -15,6 +15,6 @@ export class AppComponent implements OnInit{
   }
 
   isLoginOrRegisterPage(): boolean {
-    return this.router.url === '/login' || this.router.url.startsWith('/register') || this.router.url === '/forgotpass' || this.router.url.startsWith('/forgotreset') ;
+    return this.router.url === '/login' || this.router.url.startsWith('/landing') || this.router.url.startsWith('/register') || this.router.url === '/forgotpass' || this.router.url.startsWith('/forgotreset') ;
   }
 }
