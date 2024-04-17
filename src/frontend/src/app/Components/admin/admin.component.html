@@ -4,7 +4,7 @@
     <div class="card-container">
     <div class="card clickable-div" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="filterUsers()">
     <div class="card-title">
-      <label>Total {{numOfAdmins}} admins</label>
+      <label>Total {{numOfAdmins}} administrators</label>
         <div class="pics">
           <ng-container *ngFor="let user of admins.slice(0,4)">
             <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
@@ -22,7 +22,7 @@
         <label>Total {{numOfPM}} project managers</label>
         <div class="pics">
           <div *ngIf="projectMangers">
-          <ng-container *ngFor="let user of projectMangers.slice(0,4)">
+          <ng-container *ngFor="let user of projectMangers.slice(0,1)">
             <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user?.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
             <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
           </ng-container>
@@ -36,7 +36,7 @@
 
     <div class="card clickable-div" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="filterUsers()">
       <div class="card-title">
-        <label>Total {{numOfMembers}} users</label>
+        <label>Total {{numOfMembers}} members</label>
       <div class="pics">
 
       <ng-container *ngFor="let user of members.slice(0,4)">
@@ -109,7 +109,7 @@
             <div class="d-flex justify-content-start align-items-center">
               <div class="avatar-wrapper">
                 <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img [src]="user.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
-                <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
+                <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
               </div>
               <div class="d-flex flex-column">
                 <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
