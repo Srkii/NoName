@@ -11,5 +11,6 @@ export interface ProjectTask {
   projectId: number;
   firstName?: string;
   lastName?: string;
-  project: Project; //cemu ovo sluzi?
+  project: Project;
+  projectRole?: string;
 }

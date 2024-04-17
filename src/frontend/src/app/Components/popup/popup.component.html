@@ -32,38 +32,71 @@
       />
     </svg>
     <app-file-upload></app-file-upload>
-    <h6 id="popupTaskName">{{ task.taskName }}</h6>
+    <h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  id="popupTaskName">{{ task.taskName }}</h6>
+    <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1'">
     <br />
-    <p class="header">
+    <p class="header" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >
       Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
     </p>
-    <p class="header">
+    <div style="display: flex" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
+      <p class="header">Due Date</p>
+      <input class="taskDueDate" type="text" placeholder="{{task.endDate|date}}" onfocus="this.type='date'" onblur="this.type='text|date'" [value]="task.endDate | date" (blur)="updateTaskDueDate($event)">
+    </div>
+    <p class="header" >
       Origin Project
       <span id="popupOriginProject">{{
-         task.project ? task.project.projectName : "No Project" 
+         this.selectedProject.projectName
       }}</span>
     </p>
-    <p class="header">Assignee
-    <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
+   
+    
+    <p class="header" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee
+      <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
     </p>
+    <div class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
+      <label for="assignee2" class="form-label">Assignee</label>
+      <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)">
+        <ng-template ng-option-tmp let-user="item" let-index="index">
+          <div style="display: flex; align-items: center;">
+            <div *ngIf="user.profilePicUrl" class="nameAvatar">
+              <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+            </div>
+            <div *ngIf="!user.profilePicUrl" class="nameAvatar">
+              <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+            </div>
+            <div>
+              {{ user.fullName }}
+            </div>
+        </div>
+        </ng-template>
+        <ng-template ng-label-tmp let-item="item">
+          <div style="display: flex; align-items: center;">
+            <div *ngIf="item.profilePicUrl" class="nameAvatar">
+              <img [src]="item.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+            </div>
+            <div *ngIf="!item.profilePicUrl" class="nameAvatar">
+              <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
+            </div>
+            <div>
+              {{ item.fullName }}
+            </div>
+          </div>
+        </ng-template>
+      </ng-select>
+      </div>
       <p class="header">Description</p>
-        <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly></textarea>
-    <!-- <input
-      class="description"
-      type="text"
-      [value]="task.description"
-      readonly
-    /> -->
+        <textarea class="description1" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
+        <textarea class="description" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"></textarea>
     <br /><br />
     <button
+      *ngIf="this.task.projectRole!='4'"
       class="mark"
-      [ngClass]="{ 'completed': task && task.statusName === 'Completed' }"
+      [ngClass]="{ 'completed': task && task.statusName === 'InReview' }"
       (click)="toggleTaskCompletion(task)"
     >
-      {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
+      {{ task && task.statusName === 'InReview' ? "Re-open issue" : "Close issue" }}
     </button>
-    <!-- Existing HTML markup -->
     <br>
 
     <div class="comments">
@@ -79,19 +112,19 @@
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
               </svg></span>
-            <div class="content">
+            <div class="content" (click)="ShowEdit(comment)">
                 <p>{{ comment.content }}</p>
             </div>
-            <!-- <hr> -->
           </ng-continer>
+          <hr>
         </div>
       </div>
-      
     </div>
     </div>
     <div class="fixed-comment-area">
       <textarea class="comment" rows="3" placeholder="Add a comment" #commentInput></textarea>
-      <button class="add_comment" (click)="addComment()">Add Comment</button>
+      <button *ngIf="!this.showButton" class="add_comment" (click)="addComment()">Add Comment</button>
+      <button *ngIf="this.showButton" class="edit_comment" (click)="editContent()">Edit Comment</button>
     </div>
     
   </div>
