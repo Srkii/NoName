@@ -2,10 +2,14 @@ import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDe
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
-import { CommentsService } from '../../_services/comments.service'; 
-import { Comment } from '../../Entities/Comments'; 
+import { CommentsService } from '../../_services/comments.service'; // Import CommentsService
+import { Comment } from '../../Entities/Comments'; // Import Comment model
+import { DatePipe, formatDate } from '@angular/common';
+import { AppUser } from '../../Entities/AppUser';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { Project } from '../../Entities/Project';
+import { coerceStringArray } from '@angular/cdk/coercion';
 import { UploadService } from '../../_services/upload.service';
 import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
 
@@ -32,6 +36,7 @@ export class PopupComponent {
   selectedProject: any;
   showButton: boolean=false;
   editCommet_id: number=-1;
+  // projectRole: number = -1;
 
 
   constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    private uploadservice: UploadService){}
@@ -41,13 +46,19 @@ export class PopupComponent {
 
       if (this.task.projectRole === undefined || this.task.projectRole === null) {
         console.error('Task does not have projectRole property');
+        // Handle the error or set a default projectRole
+        // For example:
+        // this.task.projectRole = -1; // Set a default value
       } else {
+        // Task is valid, proceed with your logic
+        // Example:
         console.log('Task object is valid:', this.task);
       }
       this.selectedProject = this.task.project;
       this.getUser();
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
+      document.addEventListener('click', this.documentClick.bind(this));
     }
   }
   // ngOnInit(): void {
@@ -280,8 +291,12 @@ export class PopupComponent {
         this.task = updatedTask;
         this.task.projectRole=rola;
 
+        console.log(task.projectRole);
+        console.log(this.task);
+        console.log(updatedTask);
 
         this.taskUpdated.emit();
+        console.log(updatedTask.projectRole)
 
         this.cdr.detectChanges();
       },
@@ -289,6 +304,19 @@ export class PopupComponent {
         console.error('Error updating task information:', error);
       }
     });
+    if(this.task)
+      {
+        if ( this.task.projectRole === undefined || this.task.projectRole === null) {
+          console.error('Task does not have projectRole property');
+          // Handle the error or set a default projectRole
+          // For example:
+          // this.task.projectRole = -1; // Set a default value
+        } else {
+          // Task is valid, proceed with your logic
+          // Example:
+          console.log('Task object is valid:', this.task);
+        }
+      }
   }
 
   updateTaskDueDate(event:Event): void {
@@ -329,6 +357,17 @@ export class PopupComponent {
     this.showButton=false;
     this.commentInput.nativeElement.value = "";
   }
+
+  documentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!(target.closest('.content') || target === this.commentInput.nativeElement)) {
+      this.showButton = false;
+      this.commentInput.nativeElement.value = "";
+      this.editCommet_id = -1;
+    }
+  }
+  
+
   
 
 
