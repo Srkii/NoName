@@ -14,7 +14,9 @@ export class NavComponent implements OnInit {
   constructor(private router: Router,private userInfo:UserinfoService, private uploadService:UploadService,public notificationService:NotificationsService) {}
   ngOnInit(): void {
     this.isAdmin()
-    this.getUser()
+    if(localStorage.getItem('token')) { // proveri dal token postoji
+      this.getUser();
+    }
   }
   admin!: boolean
   logovan!: boolean

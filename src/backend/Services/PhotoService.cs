@@ -8,7 +8,8 @@ namespace backend.Services
     public class PhotoService : IPhotoService
     {
     
-        public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Images";
+        // public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Images";
+        public readonly string _path = Directory.GetCurrentDirectory()+"/Assets/Images";
 
         public string AddPhoto(IFormFile file)
         {
@@ -27,8 +28,7 @@ namespace backend.Services
 
         public void DeletePhoto(string url)
         {
-            string path_check=_path+"\\"+url;
-            string avatar_check = _path+"\\"+"AVATAR_"+url;
+            string path_check=_path+"/"+url;
             if (File.Exists(path_check))
             {
                 File.Delete(path_check);
