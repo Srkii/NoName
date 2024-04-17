@@ -48,7 +48,7 @@ table {
   }
 }
 th {
-  font-size: 14px;
+  font-size: 16px;
   border: 1.5px solid lightgray;
   font-weight: 700; 
   padding: 5px;
@@ -63,7 +63,7 @@ td {
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
-  font-size: 12px;
+  font-size: 14px;
   white-space: nowrap; 
   padding-left: 10%;
   text-overflow: ellipsis;
@@ -78,22 +78,21 @@ tr:last-child td {
 }
 
 .name {
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 16px;
 }
 
 .td_row:hover,
 .td_row.clicked {
   cursor: pointer;
-  background-color: #e7e7ff !important;
+  /* background-color: #e7e7ff !important; */
   color: #5f61e6 !important;
+  font-weight: 600;
 }
 
 p {
   text-align: center;
   padding: 5px;
   border-radius: 8px;
-  font-weight: 600;
 }
 .filter {
   margin-left: 2%;

@@ -88,7 +88,7 @@
           </td>
 
           <td>{{task.sectionName? task.sectionName: "No section"}}</td>
-          <td>{{ task.endDate | date }}</td>
+          <td [ngStyle]="{'color': isOverdue(task.endDate) ? 'red' : ''}">{{ task.endDate | date }}</td>
         </tr>
       </ng-container>
     </table>

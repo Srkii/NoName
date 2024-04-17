@@ -57,7 +57,8 @@ img{
   width: 30px;
   height: auto;
 }
-.description{
+.description,
+.description1{
   color: #697a8d;
   font-size: 12px;
   outline: none;
@@ -81,12 +82,14 @@ img{
   background-color: #e7e7ff !important;
   color: #5f61e6 !important;
 }
-textarea:hover{
+.comment:hover,
+.description:hover{
   outline: none; 
   border: 1px solid #5f61e6 !important; 
   box-shadow: 0 0 3px #5f61e6; 
 }
-textarea:focus {
+.comment:hover,
+.description:hover{
   outline: none; 
   border: 1px solid #5f61e6 !important; 
   box-shadow: 0 0 3px #5f61e6; 
@@ -190,7 +193,7 @@ textarea:focus {
   background-color: #3fb94c;
   color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  box-shadow: 0 5px 8px 0 rgba(67, 89, 113, 0.12);
   float: right;
   margin-bottom: 10px;
   margin-right: 10px;
@@ -225,9 +228,9 @@ textarea:focus {
   color: #697a8d;
   font-size: 12px;
   margin-top: -5px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   outline: none;
-  padding: 20px;
+  padding: 10px;
   padding-left: 30px;
   border-radius: 8px;
   word-wrap: break-word;
@@ -242,6 +245,9 @@ textarea:focus {
 .trash{
   margin-top: -5px;
   margin-left: 15px;
+}
+.trash:hover{
+  color:  red;
 }
 .completed {
   background-color: #3fb94c;
@@ -319,4 +325,13 @@ textarea:focus {
   border-radius: 8px;
   font-size: 14px;
   width: 60%;
+}
+
+.nameAvatar {
+  margin-right: 5px !important;
+}
+
+.nameAvatar img {
+  height: 25px !important;
+  width: 25px !important;
 }

@@ -2,14 +2,10 @@ import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDe
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
-import { CommentsService } from '../../_services/comments.service'; // Import CommentsService
-import { Comment } from '../../Entities/Comments'; // Import Comment model
-import { DatePipe, formatDate } from '@angular/common';
-import { AppUser } from '../../Entities/AppUser';
+import { CommentsService } from '../../_services/comments.service'; 
+import { Comment } from '../../Entities/Comments'; 
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
-import { Project } from '../../Entities/Project';
-import { coerceStringArray } from '@angular/cdk/coercion';
 import { UploadService } from '../../_services/upload.service';
 import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
 
@@ -43,11 +39,15 @@ export class PopupComponent {
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
 
+      if (this.task.projectRole === undefined || this.task.projectRole === null) {
+        console.error('Task does not have projectRole property');
+      } else {
+        console.log('Task object is valid:', this.task);
+      }
       this.selectedProject = this.task.project;
       this.getUser();
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
-      document.addEventListener('click', this.documentClick.bind(this));
     }
   }
   // ngOnInit(): void {
@@ -67,6 +67,7 @@ export class PopupComponent {
       this.commentsService.getComments(this.task.id).subscribe({
         next: (comments: Comment[]) => {
           this.comments = comments;
+          
         },
         error: (error: any) => {
           console.error('Error fetching comments:', error);
@@ -218,14 +219,18 @@ export class PopupComponent {
     return hasComments;
   }
   deleteComment(commentId: number): void {
-    this.commentsService.deleteComment(commentId).subscribe({
-      next: () => {
-        this.comments = this.comments.filter(comment => comment.id !== commentId);
-      },
-      error: (error: any) => {
-        console.error('Error deleting comment:', error);
-      }
-    });
+    const isConfirmed = confirm("Are you sure you want to delete this comment?");
+    if (isConfirmed) {
+      // If confirmed, proceed with deletion
+      this.commentsService.deleteComment(commentId).subscribe({
+        next: () => {
+          this.comments = this.comments.filter(comment => comment.id !== commentId);
+        },
+        error: (error: any) => {
+          console.error('Error deleting comment:', error);
+        }
+      });
+    }
   }
   getProjectsUsers(currentProjectId: any) {
     this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
@@ -271,12 +276,12 @@ export class PopupComponent {
 
     this.myTasksService.changeTaskInfo(dto).subscribe({
       next: (updatedTask: ProjectTask) => {
-        console.log(this.task);
+        let rola=this.task?.projectRole;
         this.task = updatedTask;
-        console.log(task.projectRole);
+        this.task.projectRole=rola;
+
 
         this.taskUpdated.emit();
-        console.log(updatedTask)
 
         this.cdr.detectChanges();
       },
@@ -324,17 +329,6 @@ export class PopupComponent {
     this.showButton=false;
     this.commentInput.nativeElement.value = "";
   }
-
-  documentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-    if (!(target.closest('.content') || target === this.commentInput.nativeElement)) {
-      this.showButton = false;
-      this.commentInput.nativeElement.value = "";
-      this.editCommet_id = -1;
-    }
-  }
-  
-
   
 
 

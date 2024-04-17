@@ -95,6 +95,7 @@ export class MyTasksComponent implements OnInit {
       .GetNewTasksByUserId(this.userId,5)
       .subscribe((tasks: ProjectTask[]) => {
         this.new_tasks = tasks;
+        console.log(this.new_tasks[0]);
         this.spinner.hide();
       });
     this.myTasksService
@@ -194,4 +195,11 @@ export class MyTasksComponent implements OnInit {
       });
     }
   }
+
+  isOverdue(endDate: Date): boolean {
+    const now = new Date().getTime(); // Convert to timestamp
+    const endDateTimestamp = new Date(endDate).getTime(); // Convert to timestamp
+    return endDateTimestamp <= now; // Check if endDate is less than now
+  }
+  
 }

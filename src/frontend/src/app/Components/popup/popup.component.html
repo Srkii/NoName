@@ -33,7 +33,7 @@
     </svg>
     <app-file-upload></app-file-upload>
     <h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  id="popupTaskName">{{ task.taskName }}</h6>
-    <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
+    <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1'">
     <br />
     <p class="header" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >
       Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
@@ -86,7 +86,7 @@
       </ng-select>
       </div>
       <p class="header">Description</p>
-        <textarea class="description" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
+        <textarea class="description1" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
         <textarea class="description" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"></textarea>
     <br /><br />
     <button
