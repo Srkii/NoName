@@ -83,6 +83,8 @@ export class AdminComponent implements OnInit{
 
   curentUserId: number=0
 
+  currentId=localStorage.getItem('id');
+
   Invite(): void{
     if(this.invitation)
     {
@@ -282,6 +284,20 @@ export class AdminComponent implements OnInit{
         {
           class: 'modal-sm modal-dialog-centered'
         });
+    }
+
+    noFilter():void
+    {
+      this.selectedRolee='';
+      this.onLoad();
+    }
+
+    currentUser(id:number):boolean{
+      var id1=id.toString();
+      if(this.currentId===id1)
+        return false
+      else return true
+      
     }
 
   }

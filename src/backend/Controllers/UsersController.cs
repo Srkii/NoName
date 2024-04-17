@@ -39,14 +39,6 @@ namespace backend.Controllers
       return await _context.Users.FindAsync(id);
     }
 
-    [AllowAnonymous]
-    [HttpGet("availableUsers/{projectCreatorId}")]
-    public async Task<ActionResult<AppUser>> GetAvailableUsers(int projectCreatorId)
-    {
-      var availableUsers = await _context.Users.Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin).ToListAsync();
-      return  Ok(availableUsers);
-    }
-
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser/{id}")] // /api/users/updateUser
     public async Task<ActionResult<UserDto>> UpdateUser(int id, [FromBody] UpdateUserDto data)
@@ -163,8 +155,12 @@ namespace backend.Controllers
     [HttpGet("all")]
     public async Task<ActionResult<int>> GetAllUsers()
     {
-        var users = await _context.Users.ToListAsync();
-        return users.Count;
+        var query=_context.Users.AsQueryable();
+        query = query.Where(u => u.Archived == false);
+
+        var Users=await query.ToListAsync();
+
+        return Users.Count;
     }
 
     [AllowAnonymous]
@@ -186,7 +182,6 @@ namespace backend.Controllers
         }
 
 
-      
         var filteredUsers=await query.Skip((currentPage-1)*pageSize).Take(pageSize).ToListAsync();
 
         return filteredUsers;
