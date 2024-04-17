@@ -47,7 +47,7 @@ export class AdminComponent implements OnInit{
 
   userRole: string='';
 
-  changeRoleOjha: ChangeRole={
+  changeRole: ChangeRole={
     Id:0,
     Role: 0
   }
@@ -110,7 +110,7 @@ export class AdminComponent implements OnInit{
     }
 
     ChangeUserRole(id:number): void{
-      this.changeRoleOjha.Id=id;
+      this.changeRole.Id=id;
       const ChangeDto={
         Id:id,
         Role: parseInt(this.userRole)

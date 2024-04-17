@@ -163,7 +163,8 @@ namespace backend.Controllers
     [HttpGet("filtered")]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="")
     {
-        var query=_context.Users.AsQueryable();
+        var query = _context.Users.AsQueryable();
+        query = query.Where(u => u.Archived == false);
 
         if(role!=null)
         {
@@ -187,11 +188,13 @@ namespace backend.Controllers
     public async Task<ActionResult<int>> CountFilteredProjects(UserRole? role=null)
     {
       var query=_context.Users.AsQueryable();
+      query = query.Where(u => u.Archived == false);
 
       if(role!=null)
       {
         query=query.Where(u=>u.Role==role);
       }
+      
 
       var filteredUsers=await query.ToListAsync();
 
@@ -202,6 +205,7 @@ namespace backend.Controllers
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUserByRole(UserRole? role=null)
     {
       var query=_context.Users.AsQueryable();
+      query = query.Where(u => u.Archived == false);
 
       if(role!=null)
       {

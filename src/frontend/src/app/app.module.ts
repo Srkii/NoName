@@ -31,7 +31,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AvatarModule } from 'ngx-avatars';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
-const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
+// const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
 
 @NgModule({
   declarations: [
@@ -69,7 +69,7 @@ const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1
     MultiSelectModule,
     ModalModule.forRoot(),
     AvatarModule.forRoot({
-      colors: avatarColors
+      // colors: avatarColors
     }),
     ButtonsModule.forRoot()
   ],
