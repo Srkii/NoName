@@ -37,7 +37,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxGanttModule } from '@worktile/gantt';
 import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 
-const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
+const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
 
 @NgModule({
   declarations: [

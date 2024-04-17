@@ -206,6 +206,7 @@ select:active{
 .card{
   --bs-card-border-width: 0px;
   --bs-card-cap-bg: #ffffff;
+  /* --bs-card-border-color: var(--bs-border-color-translucent); */
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   margin-right: 0px;
   width: 30%;
@@ -286,7 +287,10 @@ select:active{
   box-shadow: 0 0 3px #5f61e6;
 }
 .clickable-div:active {
-  background-color: #5d57c2; /* Change this to the color you want */
+  background-color: #5d57c2; 
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
 }
 .clickable-div:focus {
   background-color: #d0cdff; 
@@ -308,4 +312,89 @@ select:active{
   justify-content: center; 
   align-items: center; 
   height: 100%; 
- }
+}
+
+/*izgled za telefone*/
+@media screen and (max-width: 500px) {
+  .card .pics{
+    display: none;
+  }
+  .card .card-body{
+    padding-left: 0px;
+  }
+  .card .card-title{
+    margin-left: 2px;
+  }
+  .card .card-body h3{
+    font-size: 18px;
+    display: inline-block;
+  }
+
+  .invite {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .leftInvite {
+    margin-bottom: 10px; /* Add space below the search and select */
+    width: 100%;
+  }
+
+  .inputEmail {
+    width: 100%;
+    margin-top: 10px; /* Add space above the email input and button */
+  }
+
+  .inputEmail btn btn-primary{
+    display: inline-block;
+  }
+  
+
+}
+
+/*Galaxy fold*/
+@media screen and (max-width: 653px) {
+  .card .pics{
+    display: none;
+  }
+  .card .card-body{
+    padding-left: 2px;
+  }
+  .card .card-title{
+    margin-left: 2px;
+    font-size: 12px;
+  }
+  .card .card-body h3{
+    font-size: 12px;
+    display: inline-block;
+   
+  }
+}
+
+/*za tablete*/
+@media screen and (min-width: 768px) and (max-width: 1024px)
+{
+  .card .card-body h3{
+    font-size: 18px;
+    display: inline-block;
+  }
+
+  .inputEmail{
+    width: auto;
+    margin-left: 15px;
+  }
+  .leftInvite{
+    justify-content: baseline;
+    
+  }
+  .leftInvite .page_size{
+    margin-left: 5px;
+  }
+  .card .pics{
+    display: none;
+  }
+}
+.noFilt{
+  margin-right: 5px;
+  margin-bottom: 25px;
+}
