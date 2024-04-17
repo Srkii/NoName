@@ -364,6 +364,10 @@ thead th{
     width: 12rem;
 }
 
+.search:focus{
+    box-shadow: none;
+}
+
 .assignee{
     width: auto;
     border: none ;
@@ -389,7 +393,7 @@ thead th{
 }
 
 .titleInp:focus {
-    border-color: #696cff !important;
+    box-shadow: none;
 }
 
 .modal-container{
@@ -398,4 +402,35 @@ thead th{
 
 .description{
     color: #676f79;
+}
+
+.deleteMember{
+    cursor: pointer;
+}
+.close{
+    border: none;
+    background-color: white
+}
+
+:disabled {
+    opacity: 1;
+    background-color: white;
+}
+
+select:disabled {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+}
+
+textarea:disabled {
+    border: none;
+    padding-left: 0;
+    resize: none;
+}
+
+textarea:focus{
+    border-color: #696cff !important;
+    box-shadow: none;
 }

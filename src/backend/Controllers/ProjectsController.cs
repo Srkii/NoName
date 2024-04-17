@@ -493,6 +493,34 @@ namespace backend.Controllers
 
             return Ok(users);
         }
+
+        [HttpDelete("DeleteProjectMember/{projectId}/{userId}")]
+        public async Task<ActionResult> DeleteProjectMember(int projectId,int userId)
+        {
+            var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == projectId && member.AppUserId == userId);
+            if(projectMember != null)
+            {
+                _context.ProjectMembers.Remove(projectMember);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+                
+            return NotFound();
+        }
+
+        [HttpPost("UpdateUsersProjectRole")]
+        public async Task<ActionResult> UpdateUsersProjectRole(ProjectMemberDTO dto)
+        {
+            var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == dto.ProjectId && member.AppUserId == dto.AppUserId);
+            if(projectMember != null)
+            {
+                projectMember.ProjectRole = dto.ProjectRole;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+                
+            return NotFound();
+        }
     }
 }
 
