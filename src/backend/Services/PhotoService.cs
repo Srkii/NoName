@@ -9,7 +9,7 @@ namespace backend.Services
     {
     
         // public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Images";
-        public readonly string _path = Directory.GetCurrentDirectory()+"/Assets/Images";
+        public readonly string _path =Path.Combine(Directory.GetCurrentDirectory(),"Assets","Images");
 
         public string AddPhoto(IFormFile file)
         {
@@ -28,7 +28,8 @@ namespace backend.Services
 
         public void DeletePhoto(string url)
         {
-            string path_check=_path+"/"+url;
+            string path_check=Path.Combine(_path,url);
+            string avatar_check = Path.Combine(_path,"AVATAR_"+url);
             if (File.Exists(path_check))
             {
                 File.Delete(path_check);
