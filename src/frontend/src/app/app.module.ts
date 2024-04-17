@@ -1,3 +1,4 @@
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +31,11 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AvatarModule } from 'ngx-avatars';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NotificationsComponent } from './Components/notifications/notifications.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { NgxGanttModule } from '@worktile/gantt';
+import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 
 const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
 
@@ -50,7 +56,9 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     FileUploadComponent,
     KanbanComponent,
     GanttComponent,
-    ProjectCardComponent
+    ProjectCardComponent,
+    NotificationsComponent,
+    LandingPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,11 +75,13 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     ModalModule.forRoot(),
     MatDatepickerModule,
     MultiSelectModule,
-    ModalModule.forRoot(),
+    NgSelectModule,
     AvatarModule.forRoot({
       colors: avatarColors
     }),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    ImageCropperModule,
+    NgxGanttModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

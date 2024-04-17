@@ -12,6 +12,7 @@ export class UserinfoService {
   constructor(private readonly httpClient:HttpClient) {}
 
   private apiUrl=ApiUrl.apiUrl;
+  private baseUrl = `${this.apiUrl}/users/changePassword`;
 
   getUserInfo(id:any,token:any){
     var httpheaders = new HttpHeaders({
@@ -21,7 +22,7 @@ export class UserinfoService {
   }
   //tico: koristi apiUrl ako si ga vec importovao
   updateUserInfo(token: any, id:number, data:ChangePassword):Observable<any>{
-    const url = `https://localhost:5001/api/users/changePassword/${id}`;
+    const url = `${this.baseUrl}/${id}`;
     console.log("Xd");
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${token}`)
