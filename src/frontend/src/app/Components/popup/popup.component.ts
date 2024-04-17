@@ -1,9 +1,17 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { CommentsService } from '../../_services/comments.service'; // Import CommentsService
 import { Comment } from '../../Entities/Comments'; // Import Comment model
+import { DatePipe, formatDate } from '@angular/common';
+import { AppUser } from '../../Entities/AppUser';
+import { MyProjectsService } from '../../_services/my-projects.service';
+import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { Project } from '../../Entities/Project';
+import { coerceStringArray } from '@angular/cdk/coercion';
+import { UploadService } from '../../_services/upload.service';
+import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
 
 @Component({
   selector: 'app-popup',
@@ -21,23 +29,56 @@ export class PopupComponent {
   previousTaskStatus: string="";
   fullscreen: boolean = false;
   user!:any;
-  comments: Comment[] = []; // Array to store comments
+  comments: Comment[] = []; 
+  users: TaskAssignee[] = [];
+  userId=localStorage.getItem('id');
+  selectedUser: TaskAssignee | undefined;
+  selectedProject: any;
+  showButton: boolean=false;
+  editCommet_id: number=-1;
+  // projectRole: number = -1;
 
-  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService) {}
 
-  ngOnInit(): void {
-    if (this.task) {
-      this.previousTaskStatus = this.task.statusName;
+  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    private uploadservice: UploadService){}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('task' in changes && this.task) {
+
+      if (this.task.projectRole === undefined || this.task.projectRole === null) {
+        console.error('Task does not have projectRole property');
+        // Handle the error or set a default projectRole
+        // For example:
+        // this.task.projectRole = -1; // Set a default value
+      } else {
+        // Task is valid, proceed with your logic
+        // Example:
+        console.log('Task object is valid:', this.task);
+      }
+      this.selectedProject = this.task.project;
+      this.getUser();
+      this.fetchComments();
+      this.getProjectsUsers(this.task.projectId);
+      document.addEventListener('click', this.documentClick.bind(this));
     }
-    this.getUser();
-    this.fetchComments();
   }
+  // ngOnInit(): void {
+  //   if (this.task) {
+  //     this.previousTaskStatus = this.task.statusName;
+  //     this.selectedProject=this.task.project;
+  //     this.getUser();
+  //     this.fetchComments();
+  //     this.getProjectsUsers(this.task?.projectId);
+  //     this.getUserProjects(this.userId);
+  //   }
+      
+  // }
 
   fetchComments(): void {
     if (this.task && this.task.id) {
       this.commentsService.getComments(this.task.id).subscribe({
         next: (comments: Comment[]) => {
           this.comments = comments;
+          
         },
         error: (error: any) => {
           console.error('Error fetching comments:', error);
@@ -49,14 +90,14 @@ export class PopupComponent {
 
   toggleTaskCompletion(task: ProjectTask): void {
     var previousTaskStatus = "";
-    if (task.statusName === 'InProgress' || task.statusName == 'InReview') {
+    if (task.statusName === 'InProgress' || task.statusName == 'Proposed') {
       previousTaskStatus = task.statusName;
-      task.statusName = 'Completed';
+      task.statusName = 'InReview';
     } else {
       if(previousTaskStatus!="")
         task.statusName = previousTaskStatus;
       else
-        task.statusName = 'InReview';
+        task.statusName = 'InProgress';
     }
     console.log(task.statusName)
     this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
@@ -96,11 +137,11 @@ export class PopupComponent {
     const file = document.querySelector('.file') as HTMLElement;
     const comments = document.querySelector('.comments') as HTMLElement;
     const description = document.querySelector('.description') as HTMLElement;
+    const taskDueDate= document.querySelector('.taskDueDate') as HTMLElement;
     const windowWidth= window.innerWidth;
     if (!this.fullscreen) {
       if(windowWidth<800)
       {
-        // pop.style.top="0";
         pop.style.height="100%";
         pop.style.width="95%";
       }
@@ -122,6 +163,7 @@ export class PopupComponent {
       description.style.marginTop = '-3%';
       comments.style.marginTop = '0%';
       comments.style.width = '100%';
+      taskDueDate.style.padding="0";
       this.fullscreen = true;
     } else {
       pop.style.top="";
@@ -134,6 +176,7 @@ export class PopupComponent {
       comments.style.marginTop = '';
       description.style.marginTop = '';
       comments.style.marginTop = '';
+      taskDueDate.style.padding="";
       this.fullscreen = false;
     }
   }
@@ -142,6 +185,15 @@ export class PopupComponent {
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.user=response;
+        this.user.fullName = this.user.firstName + ' ' + this.user.lastName;
+        this.selectedUser=this.user;
+        if (this.selectedUser) {
+          this.selectedUser.appUserId = this.user.id;
+          this.selectedUser.lastName = this.user.lastName;
+          this.selectedUser.firstName = this.user.firstName;
+          this.selectedUser.fullName = this.user.fullName;
+          this.selectedUser.profilePicUrl = this.user.profilePicUrl;
+        }
       },error:(error)=>{
         console.log(error)
       }
@@ -156,21 +208,17 @@ export class PopupComponent {
         id: -1,
         taskId: this.task!.id,
         content: content,
-        senderId: this.user.id, // Assuming user is logged in and you have access to user info
+        senderId: this.user.id,
         senderFirstName: this.user.firstName,
         senderLastName: this.user.lastName,
-        messageSent: new Date() // Set the messageSent property to the current date
+        messageSent:  new Date 
       };
 
       this.commentsService.postComment(commentDto).subscribe({
         next: (comment: Comment) => {
-          // Replace temporary id with the actual id returned from the server
           commentDto.id = comment.id;
-          // Add the newly added comment to the comments list
           this.comments.push(commentDto);
-          // Clear the textarea
           this.commentInput.nativeElement.value = '';
-          // Reset textarea height
         },
         error: (error: any) => {
           console.error('Error adding comment:', error);
@@ -185,17 +233,141 @@ export class PopupComponent {
     return hasComments;
   }
   deleteComment(commentId: number): void {
-    this.commentsService.deleteComment(commentId).subscribe({
-      next: () => {
-        // Remove the deleted comment from the comments array
-        this.comments = this.comments.filter(comment => comment.id !== commentId);
+    const isConfirmed = confirm("Are you sure you want to delete this comment?");
+    if (isConfirmed) {
+      // If confirmed, proceed with deletion
+      this.commentsService.deleteComment(commentId).subscribe({
+        next: () => {
+          this.comments = this.comments.filter(comment => comment.id !== commentId);
+        },
+        error: (error: any) => {
+          console.error('Error deleting comment:', error);
+        }
+      });
+    }
+  }
+  getProjectsUsers(currentProjectId: any) {
+    this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
+      next: response => {
+        this.users = response,
+        this.users.forEach(user => {
+          user.fullName = user.firstName + ' ' + user.lastName;
+          this.loadPicture(this.users);
+        });
       },
-      error: (error: any) => {
-        console.error('Error deleting comment:', error);
+      error: error => console.log(error)
+    });
+  }
+
+  loadPicture(usersArray: TaskAssignee[]) : void{
+    usersArray.forEach(user => {
+      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+      this.uploadservice.getImage(user.profilePicUrl).subscribe(
+        url=>{
+          user.pictureUrl=url;
+        }
+        )
       }
     });
   }
 
 
+  updateTaskInfo(task: ProjectTask): void {
+    const dto: ChangeTaskInfo = {
+      id: task.id,
+      taskName: task.taskName,
+      description: task.description,
+      projectId: this.selectedProject.id,
+      appUserId: this.selectedUser?.appUserId,
+      dueDate: task.endDate 
+    };
 
+    this.myTasksService.changeTaskInfo(dto).subscribe({
+      next: (updatedTask: ProjectTask) => {
+        let rola=this.task?.projectRole;
+        this.task = updatedTask;
+        this.task.projectRole=rola;
+
+        console.log(task.projectRole);
+        console.log(this.task);
+        console.log(updatedTask);
+
+        this.taskUpdated.emit();
+        console.log(updatedTask.projectRole)
+
+        this.cdr.detectChanges();
+      },
+      error: (error: any) => {
+        console.error('Error updating task information:', error);
+      }
+    });
+    if(this.task)
+      {
+        if ( this.task.projectRole === undefined || this.task.projectRole === null) {
+          console.error('Task does not have projectRole property');
+          // Handle the error or set a default projectRole
+          // For example:
+          // this.task.projectRole = -1; // Set a default value
+        } else {
+          // Task is valid, proceed with your logic
+          // Example:
+          console.log('Task object is valid:', this.task);
+        }
+      }
+  }
+
+  updateTaskDueDate(event:Event): void {
+    const dueDateString = (event.target as HTMLInputElement).value;
+    const dueDate = new Date(dueDateString);
+
+    if (this.task) {
+      this.task.endDate = dueDate;
+
+      this.updateTaskInfo(this.task);
+    }
+  }
+
+  ShowEdit(comment:Comment):void{
+    this.commentInput.nativeElement.value = comment.content;
+    this.showButton=true;
+    this.editCommet_id=comment.id;
+  }
+
+  editContent(): void {
+    const editedContent = this.commentInput.nativeElement.value.trim();
+    console.log(typeof(editedContent))
+      
+  
+    this.commentsService.updateComment(this.editCommet_id, editedContent).subscribe({
+        next: () => {
+          this.showButton = false;
+          this.commentInput.nativeElement.value = "";
+          this.fetchComments();
+        },
+        error: (error: any) => {
+          console.error('Error updating comment:', error);
+        }
+      });
+  }
+
+  CancelEdit():void{
+    this.showButton=false;
+    this.commentInput.nativeElement.value = "";
+  }
+
+  documentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!(target.closest('.content') || target === this.commentInput.nativeElement)) {
+      this.showButton = false;
+      this.commentInput.nativeElement.value = "";
+      this.editCommet_id = -1;
+    }
+  }
+  
+
+  
+
+
+  
+  
 }
