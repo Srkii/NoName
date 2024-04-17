@@ -17,6 +17,8 @@ namespace backend.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IUploadService, UploadService>();
+            services.AddScoped<INotificationService,NotificationService>();
+            services.AddSignalR();
             return services;
         }
     }

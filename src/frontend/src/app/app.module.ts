@@ -1,3 +1,4 @@
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -31,10 +32,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AvatarModule } from 'ngx-avatars';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NotificationsComponent } from './Components/notifications/notifications.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
-
 
 @NgModule({
   declarations: [
@@ -54,6 +56,7 @@ const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1
     KanbanComponent,
     GanttComponent,
     ProjectCardComponent,
+    NotificationsComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,7 @@ const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1
     HttpClientModule,
     FormsModule,
     CommonModule,
-    BrowserAnimationsModule,  
+    BrowserAnimationsModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
     }),
@@ -74,7 +77,8 @@ const avatarColors = ["#623ddb", "#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1
     AvatarModule.forRoot({
       colors: avatarColors
     }),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    ImageCropperModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideAnimationsAsync()],

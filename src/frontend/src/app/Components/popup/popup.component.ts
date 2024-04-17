@@ -68,10 +68,10 @@ export class PopupComponent {
       }
     });
   }
-    
-  
-  
-  
+
+
+
+
 
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
@@ -145,7 +145,7 @@ export class PopupComponent {
       },error:(error)=>{
         console.log(error)
       }
-      
+
     })
   }
 
@@ -161,7 +161,7 @@ export class PopupComponent {
         senderLastName: this.user.lastName,
         messageSent: new Date() // Set the messageSent property to the current date
       };
-  
+
       this.commentsService.postComment(commentDto).subscribe({
         next: (comment: Comment) => {
           // Replace temporary id with the actual id returned from the server
@@ -195,7 +195,7 @@ export class PopupComponent {
       }
     });
   }
-  
-  
-  
+
+
+
 }

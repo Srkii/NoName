@@ -1,9 +1,9 @@
 import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
-import { AppUser } from '../../Entities/AppUser';
+import { NotificationsService } from '../../_services/notifications.service';
+import { Notification } from '../../Entities/Notification';
 import { UploadService } from '../../_services/upload.service';
-
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -11,7 +11,7 @@ import { UploadService } from '../../_services/upload.service';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService, private uploadService:UploadService) {}
+  constructor(private router: Router,private userInfo:UserinfoService, private uploadService:UploadService,public notificationService:NotificationsService) {}
   ngOnInit(): void {
     this.isAdmin()
     if(localStorage.getItem('token')) { // proveri dal token postoji
@@ -20,11 +20,10 @@ export class NavComponent implements OnInit {
   }
   admin!: boolean
   logovan!: boolean
-
   user!:any
 
   imgFlag: boolean=false;
-
+  notification_list:any;
   async Logout(): Promise<void> {
     try {
       // Remove token and id from local storage
@@ -33,6 +32,7 @@ export class NavComponent implements OnInit {
       localStorage.removeItem('role');
 
       // Navigate to the login page
+      this.notificationService.stopHubConnection();
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('redirect failed:', error);
@@ -49,25 +49,21 @@ export class NavComponent implements OnInit {
 
   getUser(): void{
     var id=localStorage.getItem('id')
-    this.userInfo.getUserInfo2(id).subscribe({
-      next:(response)=>{
-        this.user=response;
-        if(this.user.profilePicUrl!='' && this.user.profilePicUrl!=null)
-        {
-          this.uploadService.getImage(this.user.profilePicUrl).subscribe(
-            { next:(res)=>{
-              const reader=new FileReader();
-              reader.readAsDataURL(res);
-              reader.onloadend=()=>{
-                this.user.url=reader.result as string;
-                this.imgFlag=true;
-            }}
-
-        })
-      }
-      }
-
-    })
+    if(id){
+      this.userInfo.getUserInfo2(id).subscribe({
+        next:(response)=>{
+          this.user=response;
+          if(this.user.profilePicUrl!=null &&  this.user.profilePicUrl!='')
+          {
+            this.uploadService.getImage(this.user.profilePicUrl).subscribe(
+            url =>{
+              this.user.url = url;
+            })
+          }
+          this.notificationService.createHubConnection();
+        }
+      })
+    }
   }
 
 }

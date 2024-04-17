@@ -1,8 +1,10 @@
+*{
+  font-family: 'Public Sans', sans-serif;
+}
 body{
   width: 55%;
   margin: auto;
   background-color: #f5f5f9;
-  font-family: 'Public Sans', sans-serif;
 }
 h5{
   font-size: 18px;
@@ -172,4 +174,8 @@ label{
   font-size: 16px;
   font-weight: 600;
   line-height: 180%;
+}
+.modal-footer{
+  align-items: center;
+  margin: 0;
 }
