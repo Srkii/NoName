@@ -24,7 +24,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class AdminComponent implements OnInit{
 
   constructor(private adminService: AdminService, private toastr: ToastrService, private uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
-  
+
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
@@ -222,17 +222,11 @@ export class AdminComponent implements OnInit{
     loadPicture(usersArray:Member[]) : void{
       usersArray.forEach(user => {
         if(user.profilePicUrl!='' && user.profilePicUrl!=null){
-        this.uploadservice.getImage(user.profilePicUrl).subscribe(
-          { next:(res)=>{
-            const reader=new FileReader();
-            reader.readAsDataURL(res);
-            reader.onloadend=()=>{
-              user.url=reader.result as string;
-          }}
-          ,error:(error)=>{
-            console.log(error);
-          }}
-        )
+          this.uploadservice.getImage(user.profilePicUrl).subscribe(
+            url => {
+              user.url = url;
+            }
+          )
       }
     });
 

@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <div class="new-items">
@@ -46,7 +46,7 @@
       <form class="mb-3" (ngSubmit)="saveTask()">
         <div class="mb-1" autocomplete="off">
             <label for="taskName" class="form-label">Task Name</label>
-            <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName" placeholder="Enter new tasks's name"/> 
+            <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName" placeholder="Enter new tasks's name"/>
         </div>
         <div class="mb-1" autocomplete="off">
             <label for="taskDescription" class="form-label">Task Description</label>
@@ -66,7 +66,7 @@
             <ng-template ng-option-tmp let-user="item" let-index="index">
               <div style="display: flex; align-items: center;">
                 <div *ngIf="user.profilePicUrl" class="nameAvatar">
-                  <img [src]="'C:/Users/tico/Desktop/softverskoTihomir/access-denied/src/backend/Assets/Images/'+user.profilePicUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                  <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
                 </div>
                 <div *ngIf="!user.profilePicUrl" class="nameAvatar">
                   <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
@@ -124,7 +124,7 @@
         <form (ngSubmit)="saveSection()" class="mb-3">
             <div class="mb-3" autocomplete="off">
                 <label for="newSection" class="form-label">Section Name</label>
-                <input type="text" class="form-control" name="newSection" [(ngModel)]="newSectionName" placeholder="Enter new section's name"/> 
+                <input type="text" class="form-control" name="newSection" [(ngModel)]="newSectionName" placeholder="Enter new section's name"/>
             </div>
             <div class="mb-3">
                 <label for="sectionColor" class="form-label">Section Color</label>

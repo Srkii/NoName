@@ -24,7 +24,7 @@ export class KanbanComponent implements OnInit{
   newSectionName: string = '';
   currentProjectId: number | null = null;
   newSectionColor: string = '#ffffff'; // default boja
-  
+
   // Section koji ce biti obrisan
   currentSectionName: string = '';
   currentSectionId: number | null = null;
@@ -81,7 +81,7 @@ export class KanbanComponent implements OnInit{
       });
     }
   }
-  
+
   groupTasksByStatus() {
     this.tasksBySection = this.tasks.reduce((acc, task) => {
       const statusName = task.statusName;
@@ -117,7 +117,7 @@ export class KanbanComponent implements OnInit{
       if (task && newStatus) {
         task.taskStatusId = newStatus.id;
         this.myTasksService.updateTicoTaskStatus(task.id, task).subscribe();
-      }                        
+      }
     }
   }
 
@@ -230,15 +230,9 @@ export class KanbanComponent implements OnInit{
     usersArray.forEach(user => {
       if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
       this.uploadservice.getImage(user.profilePicUrl).subscribe(
-        { next: (res) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(res);
-          reader.onloadend = ()=> {
-            user.pictureUrl=reader.result as string;
-        }},
-        error:(error) => {
-          console.log(error);
-          }}
+        url => {
+          user.pictureUrl = url;
+        }
         )
       }
     });

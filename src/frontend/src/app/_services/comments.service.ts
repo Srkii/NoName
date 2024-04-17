@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Comment } from '../Entities/Comments'; 
+import { Comment } from '../Entities/Comments';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
@@ -13,6 +13,7 @@ export class CommentsService {
   constructor(private http: HttpClient) { }
 
   postComment(commentDto: any): Observable<Comment> {
+    console.log("DATA",commentDto);
     return this.http.post<Comment>(`${this.apiUrl}/postComment`, commentDto);
   }
 
@@ -22,5 +23,5 @@ export class CommentsService {
   deleteComment(commentId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/deleteComment/${commentId}`);
   }
-  
+
 }

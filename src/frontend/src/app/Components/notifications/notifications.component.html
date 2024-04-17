@@ -1,0 +1,49 @@
+<div class="btn-group">
+  <img src="../../../assets/navIcons/bell (1).png" alt=""
+       class="nav-link dropdown-toggle hide-arrow rightImg"
+       data-bs-toggle="dropdown"
+       aria-expanded="false"
+       (click)="getNotifications()">
+  <div class="dropdown-menu dropdown-menu-end">
+    <span style="padding-left: 15px;">Notifications</span>
+    <div class="dropdown-divider"></div>
+    <small style="padding: 5px; font-size: 13px; margin-left: 10px;" *ngIf="notification_list==null">No new notifications...</small>
+    <ul style="overflow: auto; max-height: 120px;">
+      <li *ngFor="let notification of notification_list">
+        <a class="dropdown-item" href="javascript:void(0);">
+          {{notification.sender.firstName}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
+        </a>
+      </li>
+    </ul>
+    <div class="dropdown-divider"></div>
+    <div class="see-all-container" (click)="see_all_notifications(AllNotifications)">
+      <small style="padding-left: 15px;padding-bottom: 3px;">See all notifications...</small>
+    </div>
+  </div>
+</div>
+
+<ng-template #AllNotifications>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">All Notifications</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalref?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul class="modal-ul">
+      <li *ngFor="let notification of notifications" class="notification-item">
+        <label for="notifinput" class="list-group-item" style="pointer-events:none">
+          {{notification.sender.firstName}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}} {{notification.project_id!=null?notification.project.projectName:notification.task_id!=null?notification.task.taskName:""}} <small style="font-size: 10px; font-weight:lighter; margin-left: 30px;">{{notification.read?"read":"unread"}}</small>
+        </label>
+        <input name="notifinput" class="form-check-input" type="checkbox" [checked]="markedNotifications.includes(notification.id)" (change)="toList(notification.id)">
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary d-grid" (click)="selectAllNotifications()">
+      {{ areAllNotificationsSelected() ? 'Deselect All' : 'Select All' }}
+    </button>
+    <button class="btn btn-primary d-grid" type="submit" (click)="read_notifications()">Mark as read</button>
+  </div>
+
+</ng-template>
