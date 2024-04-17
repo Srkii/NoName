@@ -11,6 +11,7 @@ import { UpdateProject } from '../../Entities/UpdateProject';
 import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { Member } from '../../Entities/Member';
+import { UploadService } from '../../_services/upload.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -39,7 +40,8 @@ export class ProjectDetailComponent implements OnInit {
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private uploadservice: UploadService
   ) {}
 
   get formattedEndDate() {
@@ -78,13 +80,14 @@ export class ProjectDetailComponent implements OnInit {
       this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole}));
       this.filteredUsers = this.usersOnProject;
       this.userRole = this.usersOnProject.find(x => x.appUserId == this.userId)?.projectRole;
-      console.log(this.userRole)
+      this.loadPicture(this.usersOnProject)
     });
   }
 
   loadAddableUsers(){
     this.myProjectsService.GetAddableUsers(this.project.id).subscribe((users: any[]) => {
       this.addableUsers = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
+      this.loadPicture(this.addableUsers)
     });
   }
 
@@ -221,6 +224,18 @@ export class ProjectDetailComponent implements OnInit {
     else {
       this.filteredUsers = this.usersOnProject;
     }
+  }
+
+  loadPicture(usersArray: SelectedUser[]) : void{
+    usersArray.forEach(user => {
+      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ 
+      this.uploadservice.getImage(user.profilePicUrl).subscribe(
+        url => {
+          user.profilePic = url;
+        }
+        )
+      }
+    });
   }
 
 }

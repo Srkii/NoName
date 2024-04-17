@@ -4,6 +4,8 @@ import { ProjectCardService } from '../../_services/project-card.service';
 import { CreateProject } from '../../Entities/CreateProject';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { SelectedUser } from '../../Entities/SelectedUser';
+import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { UploadService } from '../../_services/upload.service';
 
 @Component({
   selector: 'app-project-card',
@@ -34,14 +36,17 @@ export class ProjectCardComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private myProjectCardService: ProjectCardService
+    private myProjectCardService: ProjectCardService,
+    private uploadservice: UploadService
   ) {}
 
   ngOnInit(): void {
     this.creatorId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
     this.myProjectCardService.GetAvailableUsers(this.creatorId).subscribe(users => {
       this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
+      this.loadPicture(this.users);
     });
+    
   }
 
   async CreateProject(): Promise<void>{
@@ -130,6 +135,18 @@ export class ProjectCardComponent {
     if(this.newProject.StartDate && this.newProject.EndDate)
       return this.buttonClicked && !(this.newProject.StartDate < this.newProject.EndDate);
     return false;
+  }
+
+  loadPicture(usersArray: SelectedUser[]) : void{
+    usersArray.forEach(user => {
+      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+      this.uploadservice.getImage(user.profilePicUrl).subscribe(
+        url => {
+          user.profilePic = url;
+        }
+        )
+      }
+    });
   }
   
 }

@@ -4,7 +4,7 @@ namespace backend.Services
 {
     public class UploadService : IUploadService
     {
-        public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Attachments";
+        public readonly string _path = Path.Combine(Directory.GetCurrentDirectory(),"Assets","Attachments");
         public string AddFile(IFormFile file)
         {
             if(file.Length>0){
@@ -20,9 +20,10 @@ namespace backend.Services
 
         public void DeleteFile(string url)
         {
-            if (File.Exists(url))
+            string path_check = Path.Combine(_path,url);
+            if (File.Exists(path_check))
             {
-                File.Delete(url);
+                File.Delete(path_check);
             }
         }
     }

@@ -5,5 +5,6 @@ export interface SelectedUser {
     name: string,
     email: string,
     projectRole: ProjectRole,
-    profilePicUrl: string
+    profilePicUrl: string,
+    profilePic?: string
 }

@@ -24,7 +24,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class AdminComponent implements OnInit{
 
   constructor(private adminService: AdminService, private toastr: ToastrService, private uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
-  
+
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
@@ -47,7 +47,7 @@ export class AdminComponent implements OnInit{
 
   userRole: string='';
 
-  changeRoleOjha: ChangeRole={
+  changeRole: ChangeRole={
     Id:0,
     Role: 0
   }
@@ -83,6 +83,8 @@ export class AdminComponent implements OnInit{
 
   curentUserId: number=0
 
+  currentId=localStorage.getItem('id');
+
   Invite(): void{
     if(this.invitation)
     {
@@ -110,7 +112,7 @@ export class AdminComponent implements OnInit{
     }
 
     ChangeUserRole(id:number): void{
-      this.changeRoleOjha.Id=id;
+      this.changeRole.Id=id;
       const ChangeDto={
         Id:id,
         Role: parseInt(this.userRole)
@@ -222,17 +224,11 @@ export class AdminComponent implements OnInit{
     loadPicture(usersArray:Member[]) : void{
       usersArray.forEach(user => {
         if(user.profilePicUrl!='' && user.profilePicUrl!=null){
-        this.uploadservice.getImage(user.profilePicUrl).subscribe(
-          { next:(res)=>{
-            const reader=new FileReader();
-            reader.readAsDataURL(res);
-            reader.onloadend=()=>{
-              user.url=reader.result as string;
-          }}
-          ,error:(error)=>{
-            console.log(error);
-          }}
-        )
+          this.uploadservice.getImage(user.profilePicUrl).subscribe(
+            url => {
+              user.url = url;
+            }
+          )
       }
     });
 
@@ -288,6 +284,20 @@ export class AdminComponent implements OnInit{
         {
           class: 'modal-sm modal-dialog-centered'
         });
+    }
+
+    noFilter():void
+    {
+      this.selectedRolee='';
+      this.onLoad();
+    }
+
+    currentUser(id:number):boolean{
+      var id1=id.toString();
+      if(this.currentId===id1)
+        return false
+      else return true
+      
     }
 
   }

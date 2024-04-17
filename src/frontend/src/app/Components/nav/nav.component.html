@@ -52,11 +52,11 @@
   <!-- Icons on the right remain visible on all screen sizes -->
   <div class="navbar-nav-right d-flex">
     <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg2" />
-    <img src="../../../assets/navIcons/bell (1).png" alt="" class="rightImg2" />
+    <app-notifications></app-notifications>
 
     <ngx-avatars *ngIf="!user?.url" size="30" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
-      <img *ngIf="user?.url" [src]="user.url" alt="Avatar" class="rightImg nav-link rounded-circle shadow-4-strong dropdown-toggle hide-arrow"
+      <img *ngIf="user?.url" [src]="user.url" alt="Avatar" class="rightImg nav-link rounded-circle shadow-4-strong dropdown-toggle hide-arrow avatar1"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
 
       <ul class="dropdown-menu dropdown-menu-end">

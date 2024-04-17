@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Comment } from '../Entities/Comments'; 
+import { Comment } from '../Entities/Comments';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
@@ -13,6 +13,7 @@ export class CommentsService {
   constructor(private http: HttpClient) { }
 
   postComment(commentDto: any): Observable<Comment> {
+    console.log("DATA",commentDto);
     return this.http.post<Comment>(`${this.apiUrl}/postComment`, commentDto);
   }
 
@@ -22,5 +23,12 @@ export class CommentsService {
   deleteComment(commentId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/deleteComment/${commentId}`);
   }
-  
+  updateComment(commentId: number, content: string): Observable<Comment> {
+    // Construct the URL with commentId and content as route parameters
+    const url = `${this.apiUrl}/updateComment/${commentId}/${content}`;
+
+    // Make a PUT request to update the comment
+    return this.http.put<Comment>(url, null);
+  }
+
 }

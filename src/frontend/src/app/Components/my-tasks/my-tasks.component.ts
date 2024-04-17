@@ -11,7 +11,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrls: ['./my-tasks.component.css'],
-  providers: [DatePipe], // Provide DatePipe here
+  providers: [DatePipe], 
   animations: [
     trigger('popFromSide', [
       transition(':enter', [
@@ -36,12 +36,16 @@ import { trigger, transition, style, animate } from '@angular/animations';
 
 export class MyTasksComponent implements OnInit {
   [x: string]: any;
-  tasks: ProjectTask[] = [];
+  new_tasks: ProjectTask[] = [];
+  soon_tasks: ProjectTask[] = [];
+  closed_tasks: ProjectTask[] = [];
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
   TaskStatus: any;
   static showPopUp: boolean;
+  userId=localStorage.getItem('id');
+
 
   constructor(
     private myTasksService: MyTasksService,
@@ -56,28 +60,14 @@ export class MyTasksComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.spinner.show();
-    const userId = localStorage.getItem('id');
-
-    if (userId !== null) {
-    this.myTasksService
-      .GetTasksByUserId(userId)
-      .subscribe((tasks: ProjectTask[]) => {
-        this.tasks = tasks;
-        this.spinner.hide();
-      });
-    } else {
-      console.error('User ID is null');
-      this.spinner.hide();
-    }
-    this.cdr.detectChanges();
+    this.loadTasks();
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
     const row = document.querySelector('.td_row') as HTMLElement;
     this.myTasksService
-      .GetProjectTask(taskId)
+      .GetProjectTask(taskId,this.userId)
       .subscribe((task: ProjectTask) => {
         if (
           this.clickedTask &&
@@ -98,24 +88,45 @@ export class MyTasksComponent implements OnInit {
 
 
   loadTasks(): void {
-    const userId = localStorage.getItem('id');
-    if (userId) {
-      this.myTasksService.GetTasksByUserId(userId).subscribe((tasks: ProjectTask[]) => {
-        this.tasks = tasks;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+    this.myTasksService
+      .GetNewTasksByUserId(this.userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.new_tasks = tasks;
+        console.log(this.new_tasks[0]);
+        this.spinner.hide();
       });
+    this.myTasksService
+      .GetSoonTasksByUserId(this.userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.soon_tasks = tasks;
+        this.spinner.hide();
+      });
+    this.myTasksService
+      .GetClosedTasksByUserId(this.userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.closed_tasks = tasks;
+        this.spinner.hide();
+      });
+    } else {
+      console.error('User ID is null');
+      this.spinner.hide();
     }
+    this.cdr.detectChanges();
   }
   
   sortOrder: 'asc' | 'desc' = 'asc';
 
   sortTasks() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; // Update sortOrder based on the current value
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
 
     this.spinner.show();
-    this.myTasksService.sortTasksByDueDate(this.sortOrder)
+    this.myTasksService.sortTasksByDueDate(this.userId,this.sortOrder)
       .subscribe({
         next: (sortedTasks: ProjectTask[]) => {
-          this.tasks = sortedTasks;
+          this.closed_tasks = sortedTasks;
           this.spinner.hide();
         },
         error: (error: any) => {
@@ -135,7 +146,60 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
-  isTasksEmpty(status: string): boolean {
-    return this.tasks.filter(task => task.statusName === status).length === 0;
+  isNewTasksEmpty(): boolean {
+    return this.new_tasks.length === 0;
   }
+  isSoonTasksEmpty(): boolean {
+    return this.soon_tasks.length === 0;
+  }
+  isClosedTasksEmpty(): boolean {
+    return this.closed_tasks.length === 0;
+  }
+
+  LoadNewTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+    this.myTasksService
+      .GetNewTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.new_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
+  }
+  LoadSoonTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+      this.myTasksService
+      .GetSoonTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.soon_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
+  }
+  LoadClosedTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+      this.myTasksService
+      .GetClosedTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.closed_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
+  }
+
+  isOverdue(endDate: Date): boolean {
+    const now = new Date().getTime(); // Convert to timestamp
+    const endDateTimestamp = new Date(endDate).getTime(); // Convert to timestamp
+    return endDateTimestamp <= now; // Check if endDate is less than now
+  }
+  
 }

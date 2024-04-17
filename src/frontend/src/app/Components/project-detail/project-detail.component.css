@@ -1,6 +1,13 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
+.ganntTest {
+    margin-top: 50px;
+    overflow: visible !important;
+    height: 600px;
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+}
 /* za tablete */
 @media screen and (max-width: 1200px) {
     .button-selectors {
@@ -95,11 +102,19 @@ thead th{
 
 .btn-active {
     background-color: #d7d7f8 !important;
+    border: 1px solid #d8d8e0;
     border: 0px;
+    font-weight: 400;
+    /* border: 1px solid #E7E7EE !important; */
 }
 .btn-inactive {
     background-color: #e7e7ee !important;
+    /* background-color: #fff!important; */
+    border: 1px solid #d8d8e0;
     border: 0px;
+    font-weight: 400;
+    /* background-color: #F5F5F9 !important; */
+    border: 1px solid #E7E7EE !important;
 }
 .button-selectors {
     display: flex;
@@ -112,7 +127,7 @@ thead th{
     color: #696cff;
     /* background-color: #696cff; */
     border-color: #696cff;
-    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+    /* box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12); */
     /* display: inline-flex; */
     /* align-items: center; */
     /* justify-content: center; */
@@ -122,8 +137,8 @@ thead th{
     border-radius: 0.5rem;
     margin-right: 25px;
     line-height: 1.45;
-    width: 300px;
-    text-align: left;
+    width: 200px;
+    text-align: center;
 }
 .btn-primary:focus{ color:#696cff }
 .bg-label-primary {
@@ -147,10 +162,11 @@ thead th{
     border-radius: 0.5rem;
 }
 .btn-primary svg {
-    margin-right: 8px;
+    margin-right: 5px;
+    padding-bottom: 2px;
 }
 .btn-primary .btn-text {
-    margin-left: 8px;
+    margin-left: 0px;
 }
 
 .content-wrapper {
@@ -159,7 +175,7 @@ thead th{
     flex: 1 1 auto;
     flex-direction: column;
     justify-content: space-between;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 }
 .card {
     background-clip: padding-box;
@@ -177,14 +193,6 @@ thead th{
     border-radius: 0.5rem;
     padding: 15px;
     margin-top: 50px;
-}
-.content-wrapper {
-    display: flex;
-    align-items: stretch;
-    flex: 1 1 auto;
-    flex-direction: column;
-    justify-content: space-between;
-    box-sizing: border-box;
 }
 /* .table {
     border: 1px solid black;

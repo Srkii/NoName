@@ -1,10 +1,12 @@
 import { UploadService } from '../../_services/upload.service';
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, TemplateRef} from '@angular/core';
 import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { ChangePassword } from '../../Entities/ChangePassword';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -23,7 +25,11 @@ export class UserInfoComponent implements OnInit {
     CurrentPassword:""
   }
 
-  constructor(private userinfoService: UserinfoService, private router: Router,private uploadservice:UploadService, private spinner:NgxSpinnerService) {}
+  constructor(private userinfoService: UserinfoService,
+    private uploadService:UploadService,
+    private spinner:NgxSpinnerService,
+    private modalService:BsModalService
+    ) {}
   visibility_change(type:string,div:any){
     if(div!=null) div.style.display = type;
   }
@@ -33,7 +39,7 @@ export class UserInfoComponent implements OnInit {
     this.UserInfo();
     this.spinner.hide();
   }
-  
+
   UserInfo(){
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token')
@@ -44,17 +50,10 @@ export class UserInfoComponent implements OnInit {
           console.log(response);
           if(response.profilePicUrl!=null)
           {
-            this.uploadservice.getImage(response.profilePicUrl)
-            .subscribe(response => {
-              const reader = new FileReader();
-              reader.readAsDataURL(response);
-              reader.onloadend = () =>{
-                this.url = reader.result as string;
-              };
-            },
-            error=>{
-              console.error("Error loading image",error);
-            });
+            this.uploadService.getProfileImage(response.profilePicUrl)
+              .subscribe(url => {
+                this.url = url;
+              })
           }
           if(this.userInfo.role == 2){
             this.role="Project manager";
@@ -100,30 +99,56 @@ export class UserInfoComponent implements OnInit {
     });
   }
 
+  imgChangeEvt: any = '';
+  cropImgPreview: any = '';
+  imageName: any = '';
+  modalRef?:BsModalRef;
 
-  imageSelected(event:any){
-    const imageData:File = event.target.files[0];
-
-    if(imageData != null){
-      if(imageData && imageData.type.startsWith('image/')){
-        var id = Number(localStorage.getItem('id'));
-        var token = localStorage.getItem('token');
-        this.uploadservice.UploadImage(id,imageData,token).subscribe({
-          next: (response) => {
-            console.log("RESPONSE",response);
-            location.reload();
-          },
-          error: (error) =>{
-            console.log(error);
-          }
-        });
-      }
-      else{
-        console.log("file uploaded is not an image.");
-      }
-    }
-    else{
-      console.log("no image data.");
-    }
+  onImageSelected(event: any,modal:TemplateRef<void>): void {
+      this.imgChangeEvt = event;
+      this.imageName = event.target.files[0].name.split('.')[0];
+      console.log(this.imageName);
+      this.modalRef = this.modalService.show(
+        modal,
+        {
+          class:'modal-face modal-sm modal-dialog-centered',
+        }
+      )
   }
+  cropImg(event: ImageCroppedEvent) {
+    this.cropImgPreview = event.blob;
+  }
+
+  imgLoad() {
+      // display cropper tool
+  }
+
+  initCropper() {
+      // init cropper
+  }
+
+  imgFailed() {
+      // error msg\
+      console.log("crop failed...");
+  }
+  uploadCroppedImage(){
+    var id = localStorage.getItem('id');
+    var token = localStorage.getItem('token');
+    var imageFile =  new File([this.cropImgPreview],id+"-"+this.imageName+'-userimg.png',{type: 'image/png'});
+    console.log(imageFile);
+    this.uploadService.UploadImage(id,imageFile,token).subscribe({
+      next: (response) => {
+        console.log('Image uploaded successfully', response);
+      },
+      error: (error) => {
+        console.error('Error uploading image', error);
+      }
+    });
+    this.modalRef?.hide();
+    setTimeout(() => {
+      location.reload();
+    },2000);
+
+  }
+
 }

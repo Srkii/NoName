@@ -4,16 +4,17 @@ using backend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-
+using backend.Interfaces;
 namespace backend.Controllers
 {
     public class CommentsController:BaseApiController
     {
         private readonly DataContext _context;
-        public CommentsController(DataContext context)
+        INotificationService _notificationService;
+        public CommentsController(DataContext context,INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
         
         [AllowAnonymous]
@@ -21,6 +22,7 @@ namespace backend.Controllers
         public async Task<IActionResult> PostComment(CommentDto commentDto)
         {
             //doraditi: treba da proveri dal task postoji pa onda da post komentar. ako ne postoji vraca BadRequest sa opisom greske
+            var task = await _context.ProjectTasks.FindAsync(commentDto.TaskId);
             var comment = new Comment
             {
                 TaskId = commentDto.TaskId,
@@ -30,6 +32,7 @@ namespace backend.Controllers
                 SenderLastName = commentDto.SenderLastName
             };
             _context.Comments.Add(comment);
+            await _notificationService.TriggerNotification(commentDto.TaskId,commentDto.SenderId,NotificationType.Comment);
             await _context.SaveChangesAsync();
             return Ok(comment);
         }
@@ -76,6 +79,39 @@ namespace backend.Controllers
 
         return Ok(responseData);
         }
+
+        [AllowAnonymous]
+        [HttpPut("updateComment/{commentId}/{content}")]
+        public async Task<IActionResult> UpdateComment(int commentId, string content)
+        {
+            // Find the comment in the database by its ID
+            var comment = await _context.Comments.FindAsync(commentId);
+
+            // Check if the comment exists
+            if (comment == null)
+            {
+                return NotFound("Comment not found");
+            }
+
+            // Update the content and message sent date of the comment
+            comment.Content = content;
+            comment.MessageSent = DateTime.UtcNow.AddHours(2); // Update the message sent date
+
+            // Save the changes to the database
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Handle concurrency conflicts, if necessary
+                throw; // You can customize this behavior as per your requirements
+            }
+
+            // Return a success response with the updated comment
+            return Ok(comment);
+    }   
+
     }
 
 }
