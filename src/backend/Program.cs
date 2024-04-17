@@ -18,8 +18,12 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 // app.UseHttpsRedirection(); verovatno nam ne treba trenutno
-
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+var allowedOrigins = new[] {"http://localhost:4200","http://softeng.pmf.kg.ac.rs:10101"};
+app.UseCors(builder => builder
+.SetIsOriginAllowed(origin => allowedOrigins.Contains(origin) || origin.StartsWith("http://localhost:"))
+.AllowAnyHeader()
+.AllowAnyMethod()
+.AllowCredentials());
 
 app.UseAuthentication();
 app.UseAuthorization();
