@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Project } from '../Entities/Project';
 import { Member } from '../Entities/Member';
 import { UpdateProject } from '../Entities/UpdateProject';
 import { ProjectMember } from '../Entities/ProjectMember';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MyProjectsService {
-  private apiUrl = ApiUrl.apiUrl;
+  private apiUrl = environment.apiUrl;
   private baseUrl = `${this.apiUrl}/projects`; // corrected base URL
 
   constructor(private http: HttpClient) {}

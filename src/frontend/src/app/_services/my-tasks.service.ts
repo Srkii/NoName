@@ -1,15 +1,15 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { HttpClient} from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
 import { ChangeTaskInfo } from '../Entities/ChangeTaskInfo';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MyTasksService {
-  private apiUrl = ApiUrl.apiUrl;
+  private apiUrl = environment.apiUrl;
   private baseUrl = `${this.apiUrl}/projectTask`;
   sectionDeleted = new EventEmitter<void>();
   

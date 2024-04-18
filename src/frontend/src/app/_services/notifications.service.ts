@@ -1,13 +1,13 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
-import { HubUrl } from './../ApiUrl/HubUrl';
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { Injectable} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationsService{
-  hubUrl = HubUrl.hubUrl;
+  hubUrl = environment.hubUrl;
   newNotifications:boolean = false;//flag koji dopusta izvlacenje novih notifikacija sa backenda -> ukoliko nema novih notifikacija user ne sme da ima pravo da spamuje requestove klikom na zvonce
   private hubConnection?:HubConnection;
   notifications : Notification[] = [];

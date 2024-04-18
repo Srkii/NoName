@@ -1,14 +1,14 @@
-import { ApiUrl } from '../ApiUrl/ApiUrl'
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
   constructor(private readonly httpClient:HttpClient) { }
-  private apiUrl = ApiUrl.apiUrl;
+  private apiUrl = environment.apiUrl;
   private baseUrl = `${this.apiUrl}/FileUpload`;
   UploadImage(id:any,imageData:File,token:any){
     const formData = new FormData();
