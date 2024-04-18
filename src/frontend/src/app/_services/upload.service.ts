@@ -22,14 +22,14 @@ export class UploadService {
     return this.httpClient.post<any>(`${this.baseUrl}/uploadpfp/${id}`,formData,{headers:httpheader});//saljem sliku na back
   }
   getImage(filename:string){
-    var result =  this.httpClient.get(`https://localhost:5001/api/FileUpload/images/${"AVATAR_"+filename}`,{responseType:'blob'})
+    var result =  this.httpClient.get(`${this.apiUrl}/FileUpload/images/${"AVATAR_"+filename}`,{responseType:'blob'})
 
     return result.pipe(
       map((blob:Blob) => URL.createObjectURL(blob))
     );
   }
   getProfileImage(filename:string){
-    var result =  this.httpClient.get(`https://localhost:5001/api/FileUpload/images/${filename}`,{responseType:'blob'})
+    var result =  this.httpClient.get(`${this.apiUrl}/FileUpload/images/${filename}`,{responseType:'blob'})
 
     return result.pipe(
       map((blob:Blob) => URL.createObjectURL(blob))
@@ -44,6 +44,6 @@ export class UploadService {
       "Authorization": `Bearer ${token}`
     });
 
-    return this.httpClient.post<any>(`https://localhost:5001/api/FileUpload/uploadfile/${id}`,formData,{headers:httpheader});
+    return this.httpClient.post<any>(`${this.apiUrl}/FileUpload/uploadfile/${id}`,formData,{headers:httpheader});
   }
 }
