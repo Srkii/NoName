@@ -29,14 +29,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // za koriscenje statickih fajlova
-// app.UseDefaultFiles();
-// app.UseStaticFiles(); /
+app.UseDefaultFiles();
+app.UseStaticFiles();
 // za koriscenje statickih fajlova
 
 app.MapControllers();
 app.MapHub<NotificationsHub>("/hubs/notifications");
 
 // za koriscenje statickih fajlova
-// app.MapFallbackToController("Index", "Fallback");
+app.MapFallbackToController("Index", "Fallback");
 
 app.Run();

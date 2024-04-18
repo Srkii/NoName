@@ -6,6 +6,7 @@ import { Member } from '../Entities/Member';
 import { UpdateProject } from '../Entities/UpdateProject';
 import { ProjectMember } from '../Entities/ProjectMember';
 import { environment } from '../../environments/environment';
+import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root',
