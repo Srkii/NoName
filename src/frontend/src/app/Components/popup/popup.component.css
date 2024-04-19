@@ -159,6 +159,19 @@ img{
   word-wrap: break-word;
   resize: none;
 }
+.edit_content{
+  color: #697a8d;
+  font-size: 12px;
+  outline: none;
+  border: 0.5px solid lightgray;
+  border-radius: 8px;
+  padding: 5px;
+  width: 100%;
+  margin-top: 5px;
+  word-wrap: break-word;
+  resize: none;
+  margin-bottom: 5px;
+}
 .comments {
   margin-top: 20px;
   color: #697a8d;
@@ -172,7 +185,9 @@ img{
   border-radius: 8px;
   padding: 10px;
 }
-.add_comment{
+.add_comment,
+.save_edit,
+.cancel_edit{
   padding: 5px;
   padding-right: 10px;
   padding-left: 10px;
@@ -184,6 +199,9 @@ img{
   float: right;
   margin-bottom: 10px;
   margin-right: 10px;
+}
+.save_edit{
+  background-color: #3fb94c;
 }
 .edit_comment{
   padding: 5px;
@@ -200,7 +218,10 @@ img{
 }
 .mark:hover,
 .add_comment:hover,
-.edit_comment:hover{
+.edit_comment:hover,
+.save_edit:hover,
+.cancel_edit:hover
+{
   filter: brightness(120%);
 }
 .comment_header{
@@ -224,6 +245,7 @@ img{
 .no_comments{
   padding-left: 20px;
 }
+
 .content p{
   color: #697a8d;
   font-size: 12px;
@@ -242,12 +264,13 @@ img{
   font-size: 12px;
   color: #697a8d;
 }
-.trash{
+.edit{
   margin-top: -5px;
   margin-left: 15px;
 }
-.trash:hover{
-  color:  red;
+.edit:hover{
+  color:  #3fb94c;
+  cursor: pointer;
 }
 .completed {
   background-color: #3fb94c;
@@ -271,9 +294,7 @@ img{
 .taskDueDate:hover,
 .taskDueDate:focus,
 #taskOriginProject:hover,
-#taskOriginProject:focus,
-.content p:focus,
-.content p:hover
+#taskOriginProject:focus
 {
   outline: 1px solid #5f61e6 !important; 
   box-shadow: 0 0 3px #5f61e6; 

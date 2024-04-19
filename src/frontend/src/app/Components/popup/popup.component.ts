@@ -34,9 +34,6 @@ export class PopupComponent {
   userId=localStorage.getItem('id');
   selectedUser: TaskAssignee | undefined;
   selectedProject: any;
-  showButton: boolean=false;
-  editCommet_id: number=-1;
-  // projectRole: number = -1;
 
 
   constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    private uploadservice: UploadService){}
@@ -58,7 +55,6 @@ export class PopupComponent {
       this.getUser();
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
-      document.addEventListener('click', this.documentClick.bind(this));
     }
   }
   // ngOnInit(): void {
@@ -327,42 +323,50 @@ export class PopupComponent {
     }
   }
 
-  ShowEdit(comment:Comment):void{
-    this.commentInput.nativeElement.value = comment.content;
-    this.showButton=true;
-    this.editCommet_id=comment.id;
+  ShowEdit(comment_id:number):void{
+      const edit=document.getElementById("edit_content"+comment_id) as HTMLElement;
+      const save=document.getElementById("save_edit"+comment_id) as HTMLElement;
+      const cancel=document.getElementById("cancel_edit"+comment_id) as HTMLElement;
+      const content=document.getElementById("comment_content"+comment_id) as HTMLElement;
+      content.style.display="none";
+      edit.style.display='block';
+      save.style.display='block';
+      cancel.style.display='block';
   }
-
-  editContent(): void {
-    const editedContent = this.commentInput.nativeElement.value.trim();
-    console.log(typeof(editedContent))
-      
   
-    this.commentsService.updateComment(this.editCommet_id, editedContent).subscribe({
+  editContent(comment_id:number): void {
+    
+    const edit=document.getElementById("edit_content"+comment_id) as HTMLTextAreaElement;
+    
+    if(edit)
+      {
+      this.commentsService.updateComment(comment_id, edit.value).subscribe({
         next: () => {
-          this.showButton = false;
-          this.commentInput.nativeElement.value = "";
           this.fetchComments();
         },
         error: (error: any) => {
           console.error('Error updating comment:', error);
         }
       });
-  }
-
-  CancelEdit():void{
-    this.showButton=false;
-    this.commentInput.nativeElement.value = "";
-  }
-
-  documentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-    if (!(target.closest('.content') || target === this.commentInput.nativeElement)) {
-      this.showButton = false;
-      this.commentInput.nativeElement.value = "";
-      this.editCommet_id = -1;
     }
+      
+  
   }
+
+  CancelEdit(comment_id:number):void{
+    const edit=document.getElementById("edit_content"+comment_id) as HTMLElement;
+    const save=document.getElementById("save_edit"+comment_id) as HTMLElement;
+    const cancel=document.getElementById("cancel_edit"+comment_id) as HTMLElement;
+    const content=document.getElementById("comment_content"+comment_id) as HTMLElement;
+    
+    content.style.display="block";
+    edit.style.display="none";
+    save.style.display='none';
+    cancel.style.display='none';
+    console.log(edit);
+  }
+
+
   
 
   
