@@ -6,4 +6,5 @@ export interface Comment {
   senderId: number;
   senderFirstName: string;
   senderLastName: string;
+  edited: boolean;
 }

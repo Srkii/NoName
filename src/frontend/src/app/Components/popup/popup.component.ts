@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges, inject } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
@@ -12,6 +12,7 @@ import { Project } from '../../Entities/Project';
 import { coerceStringArray } from '@angular/cdk/coercion';
 import { UploadService } from '../../_services/upload.service';
 import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-popup',
@@ -25,6 +26,7 @@ export class PopupComponent {
   @Output() taskUpdated: EventEmitter<void> =
     new EventEmitter<void>();
   @Output() backClicked: EventEmitter<void> = new EventEmitter<void>();
+  @Output() projectClicked: EventEmitter<number> = new EventEmitter<number>();
 
   previousTaskStatus: string="";
   fullscreen: boolean = false;
@@ -34,9 +36,10 @@ export class PopupComponent {
   userId=localStorage.getItem('id');
   selectedUser: TaskAssignee | undefined;
   selectedProject: any;
+  
 
 
-  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    private uploadservice: UploadService){}
+  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    private uploadservice: UploadService, private router: Router){}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
@@ -55,6 +58,7 @@ export class PopupComponent {
       this.getUser();
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
+      
     }
   }
   // ngOnInit(): void {
@@ -130,10 +134,9 @@ export class PopupComponent {
     const pop=document.querySelector(".col-md-5") as HTMLElement;
     const back = document.querySelector('.back') as HTMLElement;
     const full = document.querySelector('.full') as HTMLElement;
+    const exit_full = document.querySelector('.exit_full') as HTMLElement;
     const file = document.querySelector('.file') as HTMLElement;
     const comments = document.querySelector('.comments') as HTMLElement;
-    const description = document.querySelector('.description') as HTMLElement;
-    const taskDueDate= document.querySelector('.taskDueDate') as HTMLElement;
     const windowWidth= window.innerWidth;
     if (!this.fullscreen) {
       if(windowWidth<800)
@@ -154,26 +157,26 @@ export class PopupComponent {
       pop.style.width="98%";
       pop.style.padding = '2%';
       back.style.marginRight = '1%';
-      full.style.marginRight = '3%';
+      exit_full.style.marginRight = '3%';
+      exit_full.style.display = 'block';
+      full.style.display = 'none';
       file.style.marginRight = '3%';
-      description.style.marginTop = '-3%';
       comments.style.marginTop = '0%';
       comments.style.width = '100%';
-      taskDueDate.style.padding="0";
-      this.fullscreen = true;
+      this.fullscreen = !this.fullscreen;
     } else {
       pop.style.top="";
       pop.style.height="";
       pop.style.width = '';
       pop.style.padding = '';
       back.style.marginRight = '';
-      full.style.marginRight = '';
+      exit_full.style.marginRight = '';
+      exit_full.style.display = 'none';
+      full.style.display = '';
       file.style.marginRight = '';
       comments.style.marginTop = '';
-      description.style.marginTop = '';
       comments.style.marginTop = '';
-      taskDueDate.style.padding="";
-      this.fullscreen = false;
+      this.fullscreen = !this.fullscreen;
     }
   }
   getUser(): void{
@@ -207,7 +210,8 @@ export class PopupComponent {
         senderId: this.user.id,
         senderFirstName: this.user.firstName,
         senderLastName: this.user.lastName,
-        messageSent:  new Date 
+        messageSent:  new Date,
+        edited:false
       };
 
       this.commentsService.postComment(commentDto).subscribe({
@@ -215,6 +219,12 @@ export class PopupComponent {
           commentDto.id = comment.id;
           this.comments.push(commentDto);
           this.commentInput.nativeElement.value = '';
+
+          // Use setTimeout to ensure that the scroll occurs after the new comment has been rendered
+        setTimeout(() => {
+          this.scrollToBottom();
+        });
+
         },
         error: (error: any) => {
           console.error('Error adding comment:', error);
@@ -222,6 +232,12 @@ export class PopupComponent {
       });
     }
 
+  }
+  scrollToBottom(): void {
+    const commentsDiv = document.querySelector('.scroll');
+    if (commentsDiv) {
+      commentsDiv.scrollTop = commentsDiv.scrollHeight;
+    }
   }
 
   CheckForCommets(task: ProjectTask): boolean {
@@ -284,12 +300,8 @@ export class PopupComponent {
         this.task = updatedTask;
         this.task.projectRole=rola;
 
-        console.log(task.projectRole);
-        console.log(this.task);
-        console.log(updatedTask);
 
         this.taskUpdated.emit();
-        console.log(updatedTask.projectRole)
 
         this.cdr.detectChanges();
       },
@@ -301,12 +313,7 @@ export class PopupComponent {
       {
         if ( this.task.projectRole === undefined || this.task.projectRole === null) {
           console.error('Task does not have projectRole property');
-          // Handle the error or set a default projectRole
-          // For example:
-          // this.task.projectRole = -1; // Set a default value
         } else {
-          // Task is valid, proceed with your logic
-          // Example:
           console.log('Task object is valid:', this.task);
         }
       }
@@ -338,11 +345,12 @@ export class PopupComponent {
     
     const edit=document.getElementById("edit_content"+comment_id) as HTMLTextAreaElement;
     
+    
     if(edit)
       {
-      this.commentsService.updateComment(comment_id, edit.value).subscribe({
-        next: () => {
-          this.fetchComments();
+        this.commentsService.updateComment(comment_id, edit.value).subscribe({
+          next: () => {
+            this.fetchComments();
         },
         error: (error: any) => {
           console.error('Error updating comment:', error);
@@ -366,12 +374,17 @@ export class PopupComponent {
     console.log(edit);
   }
 
+  goToProject(project: Project): void {
+    this.router.navigate(['/project', project.id]);
+  }
+
+
+
+}  
+
 
   
 
   
 
 
-  
-  
-}

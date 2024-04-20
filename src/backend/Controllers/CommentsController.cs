@@ -95,6 +95,7 @@ namespace backend.Controllers
 
             // Update the content and message sent date of the comment
             comment.Content = content;
+            comment.Edited=true;
             comment.MessageSent = DateTime.UtcNow.AddHours(2); // Update the message sent date
 
             // Save the changes to the database

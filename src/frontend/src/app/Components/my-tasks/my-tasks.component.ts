@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from '../../_services/shared.service';
@@ -51,7 +51,8 @@ export class MyTasksComponent implements OnInit {
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
     private shared: SharedService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   closePopup() {
@@ -61,6 +62,7 @@ export class MyTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTasks();
+
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
@@ -201,5 +203,6 @@ export class MyTasksComponent implements OnInit {
     const endDateTimestamp = new Date(endDate).getTime(); // Convert to timestamp
     return endDateTimestamp <= now; // Check if endDate is less than now
   }
+
   
 }
