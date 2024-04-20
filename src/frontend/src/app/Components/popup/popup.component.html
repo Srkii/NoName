@@ -73,7 +73,7 @@
         <ng-template ng-label-tmp let-item="item">
           <div style="display: flex; align-items: center;">
             <div *ngIf="item.profilePicUrl" class="nameAvatar">
-              <img [src]="item.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
             </div>
             <div *ngIf="!item.profilePicUrl" class="nameAvatar">
               <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
