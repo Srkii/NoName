@@ -11,7 +11,7 @@ import { UploadService } from '../../_services/upload.service';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService, private uploadService:UploadService,public notificationService:NotificationsService) {}
+  constructor(private router: Router,private userInfo:UserinfoService, public uploadService:UploadService,public notificationService:NotificationsService) {}
   ngOnInit(): void {
     this.isAdmin()
     if(localStorage.getItem('token')) { // proveri dal token postoji
@@ -53,14 +53,6 @@ export class NavComponent implements OnInit {
       this.userInfo.getUserInfo2(id).subscribe({
         next:(response)=>{
           this.user=response;
-          if(this.user.profilePicUrl!=null &&  this.user.profilePicUrl!='')
-          {
-            this.uploadService.getImage(this.user.profilePicUrl).subscribe(
-            url =>{
-              this.user.url = url;
-            })
-          }
-          this.notificationService.createHubConnection();
         }
       })
     }

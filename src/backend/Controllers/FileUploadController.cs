@@ -36,13 +36,29 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok(user);
         }
-        [HttpGet("images/{filename}")]
+         [HttpGet("images/{filename}")]
         public FileContentResult GetImage(string filename){
             // string path = Directory.GetCurrentDirectory()+"\\Assets\\Images\\"+filename;
             string path = Path.Combine(Directory.GetCurrentDirectory(),"Assets","Images",filename);
             var imageBytes = System.IO.File.ReadAllBytes(path);
-
-            return File(imageBytes,"image/jpeg");
+            string mimetype = GetMimeType(filename);
+            return File(imageBytes,mimetype);
+        }
+        public string GetMimeType(string fileName){
+            string extension = Path.GetExtension(fileName).ToLowerInvariant();
+            switch (extension)
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+                case ".png":
+                    return "image/png";
+                case ".gif":
+                    return "image/gif";
+                // Add more mappings here if needed
+                default:
+                    return "application/octet-stream"; // Fallback if the file type is not recognized
+            }
         }
 
         [HttpPost("uploadfile/{id}")]

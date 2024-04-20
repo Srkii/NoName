@@ -49,7 +49,7 @@ export class KanbanComponent implements OnInit{
     private myTasksService: MyTasksService,
     private modalService: BsModalService,
     private myProjectsService: MyProjectsService,
-    private uploadservice: UploadService
+    public uploadservice: UploadService
   ) {}
 
   ngOnInit() {
@@ -219,22 +219,22 @@ export class KanbanComponent implements OnInit{
         this.users.forEach(user => {
           user.fullName = user.firstName + ' ' + user.lastName;
         });
-        this.loadPicture(this.users);
+        //this.loadPicture(this.users);
       },
       error: error => console.log(error)
     });
   }
 
   // za uzimanje slike. mora ovako za sad...
-  loadPicture(usersArray: TaskAssignee[]) : void{
-    usersArray.forEach(user => {
-      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
-      this.uploadservice.getImage(user.profilePicUrl).subscribe(
-        url => {
-          user.pictureUrl = url;
-        }
-        )
-      }
-    });
-  }
+  // loadPicture(usersArray: TaskAssignee[]) : void{
+  //   usersArray.forEach(user => {
+  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
+  //       url => {
+  //         user.pictureUrl = url;
+  //       }
+  //       )
+  //     }
+  //   });
+  // }
 }

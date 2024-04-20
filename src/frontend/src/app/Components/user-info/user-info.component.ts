@@ -1,12 +1,11 @@
+import { ApiUrl } from './../../ApiUrl/ApiUrl';
 import { UploadService } from '../../_services/upload.service';
 import { Component, OnInit, TemplateRef} from '@angular/core';
-import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { ChangePassword } from '../../Entities/ChangePassword';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
-import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -25,8 +24,9 @@ export class UserInfoComponent implements OnInit {
     CurrentPassword:""
   }
 
-  constructor(private userinfoService: UserinfoService,
-    private uploadService:UploadService,
+  constructor(
+    private userinfoService: UserinfoService,
+    public uploadService:UploadService,
     private spinner:NgxSpinnerService,
     private modalService:BsModalService
     ) {}
@@ -48,13 +48,6 @@ export class UserInfoComponent implements OnInit {
         next: (response) =>{
           this.userInfo = response;
           console.log(response);
-          if(response.profilePicUrl!=null)
-          {
-            this.uploadService.getProfileImage(response.profilePicUrl)
-              .subscribe(url => {
-                this.url = url;
-              })
-          }
           if(this.userInfo.role == 2){
             this.role="Project manager";
           }else if(this.userInfo.role == 1){

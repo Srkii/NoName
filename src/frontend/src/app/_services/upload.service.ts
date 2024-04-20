@@ -21,19 +21,11 @@ export class UploadService {
     //tico: koristi apiUrl ako si ga vec importovao
     return this.httpClient.post<any>(`${this.baseUrl}/uploadpfp/${id}`,formData,{headers:httpheader});//saljem sliku na back
   }
-  getImage(filename:string){
-    var result =  this.httpClient.get(`${this.apiUrl}/FileUpload/images/${"AVATAR_"+filename}`,{responseType:'blob'})
-
-    return result.pipe(
-      map((blob:Blob) => URL.createObjectURL(blob))
-    );
+  getImage(filename:string){//ova vraca avatare
+    return `${ApiUrl.imageUrl}AVATAR_${filename}`;
   }
   getProfileImage(filename:string){
-    var result =  this.httpClient.get(`${this.apiUrl}/FileUpload/images/${filename}`,{responseType:'blob'})
-
-    return result.pipe(
-      map((blob:Blob) => URL.createObjectURL(blob))
-    );
+    return `${ApiUrl.imageUrl}${filename}`;
   }
 
   UploadFile(id:any,user_id:any,file:File,token:any){

@@ -16,7 +16,7 @@
         d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"
       />
     </svg>
-  
+
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
@@ -48,8 +48,8 @@
          this.selectedProject.projectName
       }}</span>
     </p>
-   
-    
+
+
     <p class="header" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee
       <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
@@ -60,7 +60,7 @@
         <ng-template ng-option-tmp let-user="item" let-index="index">
           <div style="display: flex; align-items: center;">
             <div *ngIf="user.profilePicUrl" class="nameAvatar">
-              <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
             </div>
             <div *ngIf="!user.profilePicUrl" class="nameAvatar">
               <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
@@ -126,6 +126,6 @@
       <button *ngIf="!this.showButton" class="add_comment" (click)="addComment()">Add Comment</button>
       <button *ngIf="this.showButton" class="edit_comment" (click)="editContent()">Edit Comment</button>
     </div>
-    
+
   </div>
 </div>
