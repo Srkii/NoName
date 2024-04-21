@@ -143,5 +143,4 @@ export class UserInfoComponent implements OnInit {
     },2000);
 
   }
-
 }

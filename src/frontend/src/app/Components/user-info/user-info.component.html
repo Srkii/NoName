@@ -1,79 +1,77 @@
-<body>
-  <div class="container-xxl">
-    <div class="card" style="padding: 3%;">
-      <div class="d-flex align-items-start align-items-sm-center">
-        <div id="account_banner">
-          <div id="photo_wrap">
-            <img *ngIf="userInfo?.profilePicUrl" id="profile_photo"[src]="uploadService.getProfileImage(userInfo.profilePicUrl)" (click)="inputClick.click()">
-            <img *ngIf="!userInfo?.profilePicUrl" id="profile_photo" src="../../../assets/profile_photo_placeholders/change_photo.jpg" (click)="inputClick.click()">
 
-            <img id="overlay_photo"src="../../../assets/profile_photo_placeholders/change_photo.jpg" (click)="inputClick.click()">
-          </div>
-          <div class="fullname">
-            <span id="rolename">{{role}}</span><br>
-            <span id="full_name">{{userInfo?.firstName}} {{userInfo?.lastName}}</span>
-          </div>
-          <input #inputClick type="file" style="display: none;" (change)="onImageSelected($event,cropperModal)" accept="image/*">
+<div class="container-xxl">
+  <div class="card" style="padding: 3%;">
+    <div class="d-flex align-items-start align-items-sm-center">
+      <div id="account_banner">
+        <div id="photo_wrap">
+          <img *ngIf="userInfo?.profilePicUrl" id="profile_photo"[src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
+          <ngx-avatars *ngIf="!userInfo?.profilePicUrl" size="130" bgColor="#5d57c2" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
+          <img class="overlay" src="../../../assets/profile_photo_placeholders/change_photo.jpg">
         </div>
-        <div id="user_info" *ngIf="userInfo">
-          <h5>Details</h5>
-          <div>
-            First name: {{userInfo?.firstName}}<br>
-            Last name: {{userInfo?.lastName}}<br>
-            Email: {{userInfo?.email}}<br>
-            Role: {{role}}<br>
-          </div>
+        <div class="fullname">
+          <span id="rolename">{{role}}</span><br>
+          <span id="full_name">{{userInfo?.firstName}} {{userInfo?.lastName}}</span>
         </div>
-        <div id="clear"></div>
+        <input #inputClick type="file" style="display: none;" (change)="onImageSelected($event,cropperModal)" accept="image/*">
+      </div>
+      <div id="user_info" *ngIf="userInfo">
+        <h5>Details</h5>
+        <div>
+          First name: {{userInfo?.firstName}}<br>
+          Last name: {{userInfo?.lastName}}<br>
+          Email: {{userInfo?.email}}<br>
+          Role: {{role}}<br>
+        </div>
+      </div>
+      <div id="clear"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top: 2%; padding: 3%;">
+    <h5>Change Password</h5>
+    <div id="alert_div">
+      <div id="warning_div">
+        Ensure that these requirements are met:<br>
+        Minimum 8 characters long , one uppercase letter and symbol.
+      </div>
+      <div id="success_div">
+        Password changed successfully!
       </div>
     </div>
-    <div class="card" style="margin-top: 2%; padding: 3%;">
-      <h5>Change Password</h5>
-      <div id="alert_div">
-        <div id="warning_div">
-          Ensure that these requirements are met:<br>
-          Minimum 8 characters long , one uppercase letter and symbol.
-        </div>
-        <div id="success_div">
-          Password changed successfully!
-        </div>
+    <div id="inputs">
+      <div class="mb-3 form-password-toggle">
+        <div class="d-flex justify-content-between">
+          <label class="form-label" for="password">Current Password</label>
       </div>
-      <div id="inputs">
-        <div class="mb-3 form-password-toggle">
-          <div class="d-flex justify-content-between">
-            <label class="form-label" for="password">Current Password</label>
-        </div>
-            <div class="input-group input-group-merge">
-              <input type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
-            </div>
-        </div>
-        <div class="mb-3 form-password-toggle">
-          <div class="d-flex justify-content-between">
-            <label class="form-label" for="password">New Password</label>
-        </div>
-            <div class="input-group input-group-merge">
-              <input type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
-            </div>
-        </div>
-        <div class="mb-3 form-password-toggle">
-          <div class="d-flex justify-content-between">
-            <label class="form-label" for="password">Confirm New Password</label>
-        </div>
-            <div class="input-group input-group-merge">
-              <input type="password" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
-              confirmpass !== newData.NewPassword &&
-              confirmpass !== ''"
-              placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
-            </div>
-        </div>
-        <!-- Submit button -->
-        <div class="mb-3">
-          <button class="btn btn-primary d-grid" type="submit" [disabled]="!passwordMatch()" (click)="apply_changes()">Change Password</button>
-        </div>
+          <div class="input-group input-group-merge">
+            <input type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+          </div>
+      </div>
+      <div class="mb-3 form-password-toggle">
+        <div class="d-flex justify-content-between">
+          <label class="form-label" for="password">New Password</label>
+      </div>
+          <div class="input-group input-group-merge">
+            <input type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+          </div>
+      </div>
+      <div class="mb-3 form-password-toggle">
+        <div class="d-flex justify-content-between">
+          <label class="form-label" for="password">Confirm New Password</label>
+      </div>
+          <div class="input-group input-group-merge">
+            <input type="password" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
+            confirmpass !== newData.NewPassword &&
+            confirmpass !== ''"
+            placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+          </div>
+      </div>
+      <!-- Submit button -->
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid" type="submit" [disabled]="!passwordMatch()" (click)="apply_changes()">Change Password</button>
       </div>
     </div>
   </div>
-</body>
+</div>
 <ng-template #cropperModal style="text-align:center;">
   <div class="modal-header">
     <h5 class="modal-title pull-left">Please crop your photo</h5>
