@@ -10,6 +10,7 @@ import { ApiUrl } from '../ApiUrl/ApiUrl';
 export class UploadService {
   constructor(private readonly httpClient:HttpClient) { }
   private apiUrl = environment.apiUrl;
+  private fileurl = environment.fileurl;
   private baseUrl = `${this.apiUrl}/FileUpload`;
   UploadImage(id:any,imageData:File,token:any){
     const formData = new FormData();
@@ -37,5 +38,19 @@ export class UploadService {
     });
 
     return this.httpClient.post<any>(`${this.apiUrl}/FileUpload/uploadfile/${id}`,formData,{headers:httpheader});
+  }
+  removePfp(id:any,token:any){
+    var httpheader = new HttpHeaders({
+      "Authorization": `Bearer ${token}`
+    });
+    return this.httpClient.delete<any>(`${this.apiUrl}/FileUpload/removepfp/${id}`,{headers:httpheader});
+  }
+
+  downloadFile(fileUrl:string){
+    const token = localStorage.getItem('token');
+    var httpheader = new HttpHeaders({
+      "Authorization": `Bearer ${token}`
+    });
+    return this.httpClient.get(`${this.fileurl}${fileUrl}`, { responseType: 'blob',headers:httpheader});
   }
 }

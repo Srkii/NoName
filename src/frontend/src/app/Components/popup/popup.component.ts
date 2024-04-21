@@ -367,7 +367,14 @@ export class PopupComponent {
 
 
 
-
+  downloadFile(fileUrl: any): void {
+    this.uploadservice.downloadFile(fileUrl).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        window.open(url, '_blank');
+      }
+    );
+  }
 
 
 }

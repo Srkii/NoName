@@ -1,4 +1,3 @@
-
 <div class="container-xxl">
   <div class="card" style="padding: 3%;">
     <div class="d-flex align-items-start align-items-sm-center">
@@ -6,7 +5,18 @@
         <div id="photo_wrap">
           <img *ngIf="userInfo?.profilePicUrl" id="profile_photo"[src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
           <ngx-avatars *ngIf="!userInfo?.profilePicUrl" size="130" bgColor="#5d57c2" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
-          <img class="overlay" src="../../../assets/profile_photo_placeholders/change_photo.jpg">
+          <img
+            class="overlay"
+            src="../../../assets/profile_photo_placeholders/change_photo.jpg"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="userInfo?.profilePicUrl==null">View</button></li>
+            <li><button class="dropdown-item" (click)="inputClick.click()">Change</button></li>
+            <li><button class="dropdown-item" (click)="removeImageModal(removalModal)" [disabled]="userInfo?.profilePicUrl==null">Remove</button></li>
+          </ul>
         </div>
         <div class="fullname">
           <span id="rolename">{{role}}</span><br>
@@ -94,5 +104,29 @@
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary d-grid w-100" (click)="uploadCroppedImage()"> Confirm</button>
+  </div>
+</ng-template>
+
+<ng-template #removalModal class="modal-nody" style="padding:0;">
+  <div class="card">
+    <div class="card-header"><h4>Do you want to remove the profile picture?</h4></div>
+    <div class="card-body" style="align-items: center; display: flex; gap: 5px;">
+      <button class="btn btn-primary d-grid w-50"(click)="this.removeImage()">Remove</button>
+      <button class="btn btn-primary d-grid w-50" (click)="removeModalRef?.hide()">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #viewModal class="modal-body" style="padding:0">
+  <div class="modal-header">
+    <h5 class="modal-title">Profile Picture</h5>
+  </div>
+  <div class="modal-body">
+    
+    <img *ngIf="userInfo.profilePicUrl" [src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
+    <!-- saljem request da bi prikazao sliku u full kvalitetu... -->
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary d-grid w-100" (click)="viewModalRef?.hide()">Close</button>
   </div>
 </ng-template>
