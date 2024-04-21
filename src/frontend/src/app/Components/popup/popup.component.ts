@@ -13,6 +13,7 @@ import { coerceStringArray } from '@angular/cdk/coercion';
 import { UploadService } from '../../_services/upload.service';
 import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
 import { NavigationExtras, Router } from '@angular/router';
+import { TaskDependency } from '../../Entities/TaskDependency';
 
 @Component({
   selector: 'app-popup',
@@ -33,9 +34,12 @@ export class PopupComponent {
   user!:any;
   comments: Comment[] = []; 
   users: TaskAssignee[] = [];
-  userId=localStorage.getItem('id');
+  userId=localStorage.getItem('id')|| "";
   selectedUser: TaskAssignee | undefined;
   selectedProject: any;
+  appUserId=parseInt(this.userId);
+  tasks: ProjectTask[]=[];
+  selectedTasks: number[]=[];
   
 
 
@@ -58,6 +62,7 @@ export class PopupComponent {
       this.getUser();
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
+      this.getAllTasks();
       
     }
   }
@@ -378,7 +383,48 @@ export class PopupComponent {
     this.router.navigate(['/project', project.id]);
   }
 
+  getAllTasks():void{
+    this.myTasksService.GetTasksByUserId(this.userId).subscribe((tasks: ProjectTask[]) => {
+      this.tasks= tasks.filter(task => task.id !== this.task?.id);;
+    });
+  }
+  // getFilteredTasks(): ProjectTask[] {
+  //   // Check if this.task is not null
+  //   if (this.task) {
+  //       // Filter tasks array to exclude the current task
+  //       return this.tasks.filter(task => task.id !== this.task?.id);
+  //   } else {
+  //       // If this.task is null, return an empty array
+  //       return [];
+  //   }
+// }
 
+  
+  
+
+  addTaskDependency(): void {
+    // Iterate over each selected task
+    this.selectedTasks.forEach(selectedTask => {
+      if (this.task) {
+        console.log(selectedTask)
+        const dto: TaskDependency = {
+          taskId: this.task.id,
+          dependencyTaskId: selectedTask
+        };
+  
+        this.myTasksService.addTaskDependency(dto).subscribe(
+          (response: TaskDependency) => {
+            console.log('Task dependency added:', response);
+          },
+          (error: any) => {
+            console.error('Error adding task dependency:', error);
+          }
+        );
+      }
+    });
+  }
+  
+  
 
 }  
 

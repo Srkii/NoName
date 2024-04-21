@@ -118,6 +118,8 @@ export class MyTasksComponent implements OnInit {
     }
     this.cdr.detectChanges();
   }
+
+  
   
   sortOrder: 'asc' | 'desc' = 'asc';
 
@@ -199,8 +201,8 @@ export class MyTasksComponent implements OnInit {
   }
 
   isOverdue(endDate: Date): boolean {
-    const now = new Date().getTime(); // Convert to timestamp
-    const endDateTimestamp = new Date(endDate).getTime(); // Convert to timestamp
+    const now = new Date().getTime(); 
+    const endDateTimestamp = new Date(endDate).getTime(); 
     return endDateTimestamp <= now; // Check if endDate is less than now
   }
 

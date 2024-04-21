@@ -224,11 +224,11 @@ namespace backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPut("addTaskDependency")] // GET: api/projectTask/addTaskDependency
-        public async Task<ActionResult<ProjectTask>> AddTaskDependency(TaskDependencyDto dto)
+        [HttpPost("addTaskDependency")] // GET: api/projectTask/addTaskDependency
+        public async Task<ActionResult<TaskDependency>> AddTaskDependency(TaskDependencyDto dto)
         {
-            if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
-                return Unauthorized("Unvalid role");
+            // if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
+            //     return Unauthorized("Unvalid role");
 
             var taskDep = new TaskDependency
             {
@@ -236,7 +236,7 @@ namespace backend.Controllers
                 DependencyTaskId = dto.DependencyTaskId
             };
 
-            await _context.TaskDependencies.AddAsync(taskDep);
+            _context.TaskDependencies.Add(taskDep);
             await _context.SaveChangesAsync();
             //komentar
             return Ok(taskDep);

@@ -272,7 +272,7 @@ img{
 }
 .edit{
   margin-top: -5px;
-  margin-left: 15px;
+  margin-left: 5px;
 }
 .edit:hover{
   color:  #5f61e6; 
@@ -374,4 +374,13 @@ img{
 }
 .break{
   margin-top: 43px;
+}
+
+.fixed-comment-area textarea[disabled] {
+  pointer-events: none; 
+  opacity: 0.6;
+}
+
+.fixed-comment-area textarea[disabled]:hover {
+  cursor: not-allowed;
 }

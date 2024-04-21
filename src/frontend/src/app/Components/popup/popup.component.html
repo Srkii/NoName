@@ -91,9 +91,24 @@
       </ng-select>
       </div>
       <p style=" font-size: 14px; margin-bottom: 5px;">Description</p>
-        <textarea class="description1" rows="31" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
+        <textarea class="description1" rows="1" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
         <textarea class="description" rows="1" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"></textarea>
-    <br /><br />
+      <p style="font-size: 14px; margin-bottom: 5px">Dependency</p>
+      <ng-select [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" placeholder="Select Project Tasks" class="task_select" bindValue="id" style="border-radius: 8px; z-index: 0;" name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="addTaskDependency()">
+        <ng-template ng-option-tmp let-task="item">
+          <div class="user-detail" >
+            <div class="nameAvatar">
+              <div style="margin-left: 0.4rem;">{{ task.taskName }}</div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+          <span class="ng-value-label">{{ item.taskName }}</span>
+          <div class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</div>
+        </ng-template>
+      </ng-select>
+      
+    <br />
     <button
       *ngIf="this.task.projectRole!='4'"
       class="mark"
@@ -112,11 +127,15 @@
           <ng-continer *ngIf="this.task.id===comment.taskId">
             <p> <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
               href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"> {{ comment?.senderFirstName }} {{ comment?.senderLastName }}</p>
-            <span class="comment_date">{{ comment?.messageSent  | date:'MMM d, y, h:mm a' }} <span *ngIf="comment.edited" style="margin-right: -10px; ">(edited)</span>
-              <svg (click)="ShowEdit(comment.id)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="edit" viewBox="0 0 16 16">
+            <span class="comment_date">{{ comment?.messageSent  | date:'MMM d, y, h:mm a' }} <span *ngIf="comment.edited" >(edited)</span>
+            <ng-continer *ngIf="this.task.projectRole!='4'">
+              <svg *ngIf="this.comment.senderId==this.appUserId"  
+              (click)="ShowEdit(comment.id)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="edit" viewBox="0 0 16 16">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-              </svg></span>
+              </svg>
+            </ng-continer>
+            </span>
             <div class="content">
                 <p id="comment_content{{comment.id}}" >{{ comment.content }}</p>
                 <textarea class="edit_content" id="edit_content{{comment.id}}" style="display: none;" rows="3">{{ comment.content }}</textarea>
@@ -130,8 +149,8 @@
     </div>
     </div>
     <div class="fixed-comment-area">
-      <textarea class="comment" rows="3" placeholder="Add a comment" #commentInput></textarea>
-      <button class="add_comment" (click)="addComment()">Add Comment</button>
+      <textarea [disabled]="task.projectRole == '4'" class="comment" rows="3" placeholder="Add a comment" #commentInput></textarea>
+      <button *ngIf="this.task.projectRole!='4'" class="add_comment" (click)="addComment()">Add Comment</button>
     </div>
     
   </div>

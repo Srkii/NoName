@@ -5,6 +5,7 @@ import { ChangeTaskInfo } from '../Entities/ChangeTaskInfo';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
+import { TaskDependency } from '../Entities/TaskDependency';
 
 @Injectable({
   providedIn: 'root',
@@ -83,6 +84,10 @@ export class MyTasksService {
   }
   changeTaskInfo(dto: ChangeTaskInfo): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskInfo`, dto);
+  }
+
+  addTaskDependency(dto: TaskDependency): Observable<any> {
+    return this.http.post(`${this.baseUrl}/addTaskDependency`, dto);
   }
 
 }
