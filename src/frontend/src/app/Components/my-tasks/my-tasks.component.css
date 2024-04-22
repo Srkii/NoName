@@ -65,8 +65,9 @@ td {
   border-right: none;
   font-size: 14px;
   white-space: nowrap; 
-  padding-left: 10%;
+  padding-left: 4%;
   text-overflow: ellipsis;
+  text-align: center;
 }
 
 

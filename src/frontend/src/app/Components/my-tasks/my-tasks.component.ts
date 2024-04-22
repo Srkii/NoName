@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from '../../_services/shared.service';
@@ -51,7 +51,8 @@ export class MyTasksComponent implements OnInit {
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
     private shared: SharedService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   closePopup() {
@@ -61,6 +62,7 @@ export class MyTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTasks();
+
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
@@ -95,7 +97,6 @@ export class MyTasksComponent implements OnInit {
       .GetNewTasksByUserId(this.userId,5)
       .subscribe((tasks: ProjectTask[]) => {
         this.new_tasks = tasks;
-        console.log(this.new_tasks[0]);
         this.spinner.hide();
       });
     this.myTasksService
@@ -116,6 +117,8 @@ export class MyTasksComponent implements OnInit {
     }
     this.cdr.detectChanges();
   }
+
+  
   
   sortOrder: 'asc' | 'desc' = 'asc';
 
@@ -197,9 +200,10 @@ export class MyTasksComponent implements OnInit {
   }
 
   isOverdue(endDate: Date): boolean {
-    const now = new Date().getTime(); // Convert to timestamp
-    const endDateTimestamp = new Date(endDate).getTime(); // Convert to timestamp
+    const now = new Date().getTime(); 
+    const endDateTimestamp = new Date(endDate).getTime(); 
     return endDateTimestamp <= now; // Check if endDate is less than now
   }
+
   
 }

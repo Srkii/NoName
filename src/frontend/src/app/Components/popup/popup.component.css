@@ -6,6 +6,7 @@
     left: 10px;
     width: 96.5%;
   }
+
 }
 
 #popupTaskName {
@@ -38,6 +39,10 @@
   white-space: nowrap; 
   overflow: hidden; 
   text-overflow: ellipsis;
+}
+#popupOriginProject:hover{
+  cursor: pointer;
+  filter: brightness(90%);
 }
 
 #assignee {
@@ -113,10 +118,12 @@ img{
 .back:hover,
 .full:hover,
 .file:hover,
-.trash:hover {
+.trash:hover,
+.exit_full:hover {
   cursor: pointer;
 }
-.full {
+.full,
+.exit_full{
   float: right;
   margin-right: 5%;
 }
@@ -159,12 +166,26 @@ img{
   word-wrap: break-word;
   resize: none;
 }
+.edit_content{
+  color: #697a8d;
+  font-size: 12px;
+  outline: none;
+  border: 0.5px solid lightgray;
+  border-radius: 8px;
+  padding: 5px;
+  width: 100%;
+  margin-top: 5px;
+  word-wrap: break-word;
+  resize: none;
+  margin-bottom: 5px;
+}
 .comments {
   margin-top: 20px;
   color: #697a8d;
   border-radius: 8px;
   width: 100%;
   overflow-y: auto;
+  overflow-x: auto;
 }
 .visible_comments{
   margin-top: -5px;
@@ -172,7 +193,9 @@ img{
   border-radius: 8px;
   padding: 10px;
 }
-.add_comment{
+.add_comment,
+.save_edit,
+.cancel_edit{
   padding: 5px;
   padding-right: 10px;
   padding-left: 10px;
@@ -184,6 +207,9 @@ img{
   float: right;
   margin-bottom: 10px;
   margin-right: 10px;
+}
+.save_edit{
+  background-color: #3fb94c;
 }
 .edit_comment{
   padding: 5px;
@@ -200,7 +226,10 @@ img{
 }
 .mark:hover,
 .add_comment:hover,
-.edit_comment:hover{
+.edit_comment:hover,
+.save_edit:hover,
+.cancel_edit:hover
+{
   filter: brightness(120%);
 }
 .comment_header{
@@ -224,6 +253,7 @@ img{
 .no_comments{
   padding-left: 20px;
 }
+
 .content p{
   color: #697a8d;
   font-size: 12px;
@@ -238,22 +268,26 @@ img{
 .comment_date{
   float: right;
   margin-top: -40px;
-  margin-right: 10px;
+  margin-right: 5px;
   font-size: 12px;
   color: #697a8d;
 }
-.trash{
+.edit{
   margin-top: -5px;
-  margin-left: 15px;
+  margin-left: 5px;
 }
-.trash:hover{
-  color:  red;
+.edit:hover{
+  color:  #5f61e6; 
+  cursor: pointer;
 }
 .completed {
   background-color: #3fb94c;
   box-shadow: 0 0 3px #3fb94c;
 }
-
+/* .taskName-container {
+  display: flex;
+  align-items: center;
+} */
 .taskName{
   margin-top: 1px;
   margin-left: 1px;
@@ -265,20 +299,25 @@ img{
   color: #697a8d;
   border-radius: 8px;
   padding-left: 10px;
+  padding-right: 10px;
+  width: 70%;
+
 }
 .taskName:hover,
 .taskName:focus,
-.taskDueDate:hover,
-.taskDueDate:focus,
+.taskDueDate input:hover,
+.taskDueDate input:focus,
 #taskOriginProject:hover,
-#taskOriginProject:focus,
-.content p:focus,
-.content p:hover
+#taskOriginProject:focus
 {
   outline: 1px solid #5f61e6 !important; 
   box-shadow: 0 0 3px #5f61e6; 
 }
 .taskDueDate{
+  display: flex;
+  height: 35px;
+}
+.taskDueDate input{
   margin-top: -6px;
   margin-bottom: 10px;
   font-size: 14px;
@@ -334,4 +373,22 @@ img{
 .nameAvatar img {
   height: 25px !important;
   width: 25px !important;
+}
+.break{
+  margin-top: 43px;
+}
+
+.fixed-comment-area textarea[disabled] {
+  pointer-events: none; 
+  opacity: 0.6;
+}
+
+.fixed-comment-area textarea[disabled]:hover {
+  cursor: not-allowed;
+}
+
+.mark.disabled {
+  /* Add your custom styles here */
+  opacity: 0.5; /* Example: reduce opacity when button is disabled */
+  background-color: red;
 }
