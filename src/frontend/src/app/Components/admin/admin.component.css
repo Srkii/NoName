@@ -206,8 +206,8 @@ select:active{
 .card{
   --bs-card-border-width: 0px;
   --bs-card-cap-bg: #ffffff;
-  /* --bs-card-border-color: var(--bs-border-color-translucent); */
-  /* box-shadow:  rgba(67, 89, 113, 0.12); */
+  --bs-card-border-color: var(--bs-border-color-translucent); 
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   margin-right: 0px;
   width: 30%;
   color: #697a8d;
@@ -284,6 +284,16 @@ select:active{
   margin-left: 10px;
 }
 .page_size:hover{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
+}
+.clickable-div:hover::before{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow:  #5f61e6;
+}
+.clickable-div:focus-visible{
   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;

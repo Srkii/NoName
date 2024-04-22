@@ -85,6 +85,8 @@ export class AdminComponent implements OnInit{
 
   currentId=localStorage.getItem('id');
 
+  isFilterActive: boolean=true;
+
   Invite(): void{
     if(this.invitation)
     {
@@ -299,6 +301,19 @@ export class AdminComponent implements OnInit{
       else return true
       
     }
+
+    toogleFilter(): void{
+      if(this.isFilterActive)
+      {
+        this.filterUsers();
+      }
+      else{
+        this.noFilter();
+      }
+      this.isFilterActive=!this.isFilterActive;
+    }
+
+    
 
   }
 
