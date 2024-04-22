@@ -56,7 +56,7 @@
                     </div>
                   </ng-template>
                   <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                    <span *ngIf="item.profilePicUrl" class="ng-value-label"><img [src]="item.profilePicUrl"> {{item.name}}</span>
+                    <span *ngIf="item.profilePicUrl" class="ng-value-label"><img class="avatar rounded-circle shadow-4-strong"  height="25" width="25"  [src]="item.profilePic"> {{item.name}}</span>
                     <span *ngIf="!item.profilePicUrl" class="ng-value-label"><ngx-avatars size="21" bgColor="#5d57c2" [name]="item.name" value="75%"></ngx-avatars>{{item.name}}</span>
                     <div class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</div>
                   </ng-template>

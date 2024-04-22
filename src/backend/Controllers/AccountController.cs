@@ -1,11 +1,16 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
 using backend.DTO;
 using backend.Entities;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using SixLabors.ImageSharp;
 
 namespace backend.Controllers
 {
@@ -13,11 +18,13 @@ namespace backend.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(DataContext context,ITokenService tokenService)
+        public AccountController(DataContext context,ITokenService tokenService,IConfiguration configuration)
         {
             _context = context;
             _tokenService = tokenService;
+            _configuration = configuration;
         }
 
         [HttpPost("register")] // POST: api/account/register
@@ -135,6 +142,37 @@ namespace backend.Controllers
             {
                 entity.IsUsed = true;
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<ActionResult<bool>> ValidateTokenAsync(string token)
+        {
+            var secretKey = _configuration["TokenKey"];
+            var key = Encoding.UTF8.GetBytes(secretKey);
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key)
+            };
+
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+
+                var userEmailClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userEmailClaim);
+
+                if(user != null) return true;
+                return false;
+            }
+            catch (Exception)
+            {
+                return false; 
             }
         }
     }

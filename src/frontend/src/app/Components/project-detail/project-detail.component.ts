@@ -136,6 +136,7 @@ export class ProjectDetailComponent implements OnInit {
       {
         class: "modal modal-lg modal-dialog-centered"
       });
+      this.update.projectId = this.project.id;
       this.update.appUserId = this.userId;
       this.update.projectName = this.project.projectName;
       this.update.description = this.project.description;
