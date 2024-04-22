@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SixLabors.ImageSharp;
+
 
 namespace backend.Controllers
 {
@@ -145,35 +145,16 @@ namespace backend.Controllers
             }
         }
 
-        public async Task<ActionResult<bool>> ValidateTokenAsync(string token)
+        [HttpGet("validToken/{token}")] // /api/account/validToken
+        [Authorize]
+        public async Task<ActionResult<bool>> IsTokenValidAsync(string token)
         {
-            var secretKey = _configuration["TokenKey"];
-            var key = Encoding.UTF8.GetBytes(secretKey);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jsonToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+            var userEmailClaim = jsonToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userEmailClaim);
 
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key)
-            };
-
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
-
-                var userEmailClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userEmailClaim);
-
-                if(user != null) return true;
-                return false;
-            }
-            catch (Exception)
-            {
-                return false; 
-            }
+            return user != null;
         }
     }
 }
