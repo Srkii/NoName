@@ -88,17 +88,18 @@ export class AdminComponent implements OnInit{
   isFilterActive: boolean=true;
 
   Invite(): void{
+    this.spinner.show();
     if(this.invitation)
     {
       this.adminService.sendInvatation(this.invitation).subscribe(
         (response)=>{
           this.toastr.success(response.message);
+          this.spinner.hide();
         }
       )
     }
-    error:()=>{
-      console.log("Email is not sent")
-    }}
+
+    }
 
     GetUserRole(role: UserRole): string{
         switch(role){
