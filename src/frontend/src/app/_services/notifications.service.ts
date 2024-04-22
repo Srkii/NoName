@@ -1,8 +1,7 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from '../../environments/environment';
-import { Injectable} from '@angular/core';
+import { ComponentRef, Injectable} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +10,11 @@ export class NotificationsService{
   hubUrl = environment.hubUrl;
   newNotifications:boolean = false;//flag koji dopusta izvlacenje novih notifikacija sa backenda -> ukoliko nema novih notifikacija user ne sme da ima pravo da spamuje requestove klikom na zvonce
   private hubConnection?:HubConnection;
+
+
   notifications : Notification[] = [];
   allNotifications:Notification[] = [];
+
 
   constructor(
     private toastr:ToastrService,//mogu opet preko hub-a da uzimam notifikacije i ne bakcem se sa httpclientom ura!
@@ -34,14 +36,15 @@ export class NotificationsService{
   });
 
     this.hubConnection.on('newNotifications',() =>{//ovo mi onda u sustini ne treba ako cu ja sa fronta da invokeujem getter za notifikacije
-      this.toastr.info("You have unread notifications!");
+      this.toastr.success("You have unread notifications!");
       this.newNotifications = true;
     });
 
-    this.hubConnection.on('Notify',()=>{
-      //dobija info da je notifikacija stigla
-      //stavi crvenu tackicu na zvonce na primer...
-      this.toastr.info("New notification!!");
+    this.hubConnection.on('Notify',(notification:any)=>{
+      //sad dobija celiu novu notifikaciju da je prikaze u donjem desnom cosku
+      console.log(notification);
+      this.notifications.push(notification);
+      this.allNotifications.push(notification);
       this.newNotifications = true;
     })
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
@@ -72,5 +75,16 @@ export class NotificationsService{
   follow_link(){
     //dodati notifikaciji task_id ili project_id da zna na sta da ide, na osnovu toga otvaramo popup za task ako treba ili za projekat koji je dodat
   }
-
+  getNotificationType(type:any):string{
+    switch(type){
+      case 0:
+        return "uploaded an attachment";
+      case 1:
+        return "commented on a task";
+      case 2:
+        return "assigned you to a task";
+      default:
+        return "assigned you to a project";
+    }
+  }
 }

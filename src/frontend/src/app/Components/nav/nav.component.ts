@@ -16,6 +16,7 @@ export class NavComponent implements OnInit {
     this.isAdmin()
     if(localStorage.getItem('token')) { // proveri dal token postoji
       this.getUser();
+      this.notificationService.createHubConnection();
     }
   }
   admin!: boolean
