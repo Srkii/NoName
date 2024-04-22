@@ -10,6 +10,7 @@ import { ApiUrl } from '../ApiUrl/ApiUrl';
 export class UploadService {
   constructor(private readonly httpClient:HttpClient) { }
   private apiUrl = environment.apiUrl;
+  private fileurl = environment.fileurl;
   private baseUrl = `${this.apiUrl}/FileUpload`;
   UploadImage(id:any,imageData:File,token:any){
     const formData = new FormData();
@@ -21,19 +22,11 @@ export class UploadService {
     //tico: koristi apiUrl ako si ga vec importovao
     return this.httpClient.post<any>(`${this.baseUrl}/uploadpfp/${id}`,formData,{headers:httpheader});//saljem sliku na back
   }
-  getImage(filename:string){
-    var result =  this.httpClient.get(`${this.apiUrl}/FileUpload/images/${"AVATAR_"+filename}`,{responseType:'blob'})
-
-    return result.pipe(
-      map((blob:Blob) => URL.createObjectURL(blob))
-    );
+  getImage(filename:string){//ova vraca avatare
+    return `${ApiUrl.imageUrl}AVATAR_${filename}`;
   }
   getProfileImage(filename:string){
-    var result =  this.httpClient.get(`${this.apiUrl}/FileUpload/images/${filename}`,{responseType:'blob'})
-
-    return result.pipe(
-      map((blob:Blob) => URL.createObjectURL(blob))
-    );
+    return `${ApiUrl.imageUrl}${filename}`;
   }
 
   UploadFile(id:any,user_id:any,file:File,token:any){
@@ -45,5 +38,19 @@ export class UploadService {
     });
 
     return this.httpClient.post<any>(`${this.apiUrl}/FileUpload/uploadfile/${id}`,formData,{headers:httpheader});
+  }
+  removePfp(id:any,token:any){
+    var httpheader = new HttpHeaders({
+      "Authorization": `Bearer ${token}`
+    });
+    return this.httpClient.delete<any>(`${this.apiUrl}/FileUpload/removepfp/${id}`,{headers:httpheader});
+  }
+
+  downloadFile(fileUrl:string){
+    const token = localStorage.getItem('token');
+    var httpheader = new HttpHeaders({
+      "Authorization": `Bearer ${token}`
+    });
+    return this.httpClient.get(`${this.fileurl}${fileUrl}`, { responseType: 'blob',headers:httpheader});
   }
 }

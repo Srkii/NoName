@@ -85,20 +85,28 @@ li{
   height: 300px;
   overflow: auto;
 }
-.notification-item{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px;
-}
-.notification-item:hover{
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a box shadow effect on hover */
-}
-label{
+
+.notifications-table{
   width: 100%;
-  justify-content: space-between;
 }
-input{
-  margin-right: 15px;
+.notifications-table td{
+  padding: 5px;
+  width: fit-content;
+}
+.notifications-table tr:hover{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+.indicator{
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  left: 60%;
+  bottom: 60%;
+  background-color: brown;
+  border-radius: 50%;
+}
+.notif-count{
+  font-weight: 700;
+  color: white;
+}

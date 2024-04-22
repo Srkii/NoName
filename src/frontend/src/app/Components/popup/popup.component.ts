@@ -29,7 +29,7 @@ export class PopupComponent {
   previousTaskStatus: string="";
   fullscreen: boolean = false;
   user!:any;
-  comments: Comment[] = []; 
+  comments: Comment[] = [];
   users: TaskAssignee[] = [];
   userId=localStorage.getItem('id');
   selectedUser: TaskAssignee | undefined;
@@ -39,7 +39,7 @@ export class PopupComponent {
   // projectRole: number = -1;
 
 
-  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    private uploadservice: UploadService){}
+  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    public uploadservice: UploadService){}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
@@ -70,7 +70,7 @@ export class PopupComponent {
   //     this.getProjectsUsers(this.task?.projectId);
   //     this.getUserProjects(this.userId);
   //   }
-      
+
   // }
 
   fetchComments(): void {
@@ -78,7 +78,7 @@ export class PopupComponent {
       this.commentsService.getComments(this.task.id).subscribe({
         next: (comments: Comment[]) => {
           this.comments = comments;
-          
+
         },
         error: (error: any) => {
           console.error('Error fetching comments:', error);
@@ -211,7 +211,7 @@ export class PopupComponent {
         senderId: this.user.id,
         senderFirstName: this.user.firstName,
         senderLastName: this.user.lastName,
-        messageSent:  new Date 
+        messageSent:  new Date
       };
 
       this.commentsService.postComment(commentDto).subscribe({
@@ -252,24 +252,24 @@ export class PopupComponent {
         this.users = response,
         this.users.forEach(user => {
           user.fullName = user.firstName + ' ' + user.lastName;
-          this.loadPicture(this.users);
+          //this.loadPicture(this.users);
         });
       },
       error: error => console.log(error)
     });
   }
 
-  loadPicture(usersArray: TaskAssignee[]) : void{
-    usersArray.forEach(user => {
-      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
-      this.uploadservice.getImage(user.profilePicUrl).subscribe(
-        url=>{
-          user.pictureUrl=url;
-        }
-        )
-      }
-    });
-  }
+  // loadPicture(usersArray: TaskAssignee[]) : void{
+  //   usersArray.forEach(user => {
+  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
+  //       url=>{
+  //         user.pictureUrl=url;
+  //       }
+  //       )
+  //     }
+  //   });
+  // }
 
 
   updateTaskInfo(task: ProjectTask): void {
@@ -279,7 +279,7 @@ export class PopupComponent {
       description: task.description,
       projectId: this.selectedProject.id,
       appUserId: this.selectedUser?.appUserId,
-      dueDate: task.endDate 
+      dueDate: task.endDate
     };
 
     this.myTasksService.changeTaskInfo(dto).subscribe({
@@ -336,8 +336,8 @@ export class PopupComponent {
   editContent(): void {
     const editedContent = this.commentInput.nativeElement.value.trim();
     console.log(typeof(editedContent))
-      
-  
+
+
     this.commentsService.updateComment(this.editCommet_id, editedContent).subscribe({
         next: () => {
           this.showButton = false;
@@ -363,11 +363,18 @@ export class PopupComponent {
       this.editCommet_id = -1;
     }
   }
-  
-
-  
 
 
-  
-  
+
+
+  downloadFile(fileUrl: any): void {
+    this.uploadservice.downloadFile(fileUrl).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        window.open(url, '_blank');
+      }
+    );
+  }
+
+
 }

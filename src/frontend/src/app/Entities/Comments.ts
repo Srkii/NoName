@@ -6,4 +6,6 @@ export interface Comment {
   senderId: number;
   senderFirstName: string;
   senderLastName: string;
+  fileUrl?: string;
 }
+
