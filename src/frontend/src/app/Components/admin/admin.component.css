@@ -211,6 +211,7 @@ select:active{
   margin-right: 0px;
   width: 30%;
   color: #697a8d;
+  .move {cursor: move;}
 }
 .card-title{
   display: flex;
@@ -225,6 +226,7 @@ select:active{
   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow:  #5f61e6;
+  cursor: default;
   /* background-color: #6b6caf; */
 }
 .avatar avatar-sm me-2{
