@@ -86,8 +86,16 @@ export class MyTasksService {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskInfo`, dto);
   }
 
-  addTaskDependency(dto: TaskDependency): Observable<any> {
-    return this.http.post(`${this.baseUrl}/addTaskDependency`, dto);
+  addTaskDependencies(dtos: TaskDependency[]): Observable<any> {
+    return this.http.post(`${this.baseUrl}/addTaskDependency`, dtos);
   }
+  
+  deleteTaskDependency(dto: TaskDependency): Observable<any> {
+    return this.http.post(`${this.baseUrl}/deleteTaskDependency`, dto);
+  }
+  GetAllTasksDependencies():Observable<TaskDependency[]>{
+    return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`);
+  }
+  
 
 }

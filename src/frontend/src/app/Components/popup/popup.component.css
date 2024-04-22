@@ -384,3 +384,9 @@ img{
 .fixed-comment-area textarea[disabled]:hover {
   cursor: not-allowed;
 }
+
+.mark.disabled {
+  /* Add your custom styles here */
+  opacity: 0.5; /* Example: reduce opacity when button is disabled */
+  background-color: red;
+}

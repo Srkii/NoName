@@ -97,7 +97,6 @@ export class MyTasksComponent implements OnInit {
       .GetNewTasksByUserId(this.userId,5)
       .subscribe((tasks: ProjectTask[]) => {
         this.new_tasks = tasks;
-        console.log(this.new_tasks[0]);
         this.spinner.hide();
       });
     this.myTasksService

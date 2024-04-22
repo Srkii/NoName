@@ -94,7 +94,7 @@
         <textarea class="description1" rows="1" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
         <textarea class="description" rows="1" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"></textarea>
       <p style="font-size: 14px; margin-bottom: 5px">Dependency</p>
-      <ng-select [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" placeholder="Select Project Tasks" class="task_select" bindValue="id" style="border-radius: 8px; z-index: 0;" name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="addTaskDependency()">
+      <ng-select [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" placeholder="Select Project Tasks" class="task_select" bindValue="id" style="border-radius: 8px; z-index: 0;" name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.deletedTask==false? addTaskDependency():this.deletedTask=false;">
         <ng-template ng-option-tmp let-task="item">
           <div class="user-detail" >
             <div class="nameAvatar">
@@ -104,7 +104,7 @@
         </ng-template>
         <ng-template ng-label-tmp let-item="item" let-clear="clear">
           <span class="ng-value-label">{{ item.taskName }}</span>
-          <div class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</div>
+          <div class="ng-value-icon right" (click)="clear(item); deleteTaskDependency(item);"  aria-hidden="true">×</div>
         </ng-template>
       </ng-select>
       
@@ -112,6 +112,7 @@
     <button
       *ngIf="this.task.projectRole!='4'"
       class="mark"
+      [ngStyle]="{ 'pointer-events': this.DisableCloseTask()==false ? 'none' : 'auto', 'opacity': this.DisableCloseTask()==false ? 0.5 : 1 }"
       [ngClass]="{ 'completed': task && task.statusName === 'InReview' }"
       (click)="toggleTaskCompletion(task)"
     >

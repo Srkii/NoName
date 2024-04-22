@@ -14,6 +14,8 @@ import { UploadService } from '../../_services/upload.service';
 import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
 import { NavigationExtras, Router } from '@angular/router';
 import { TaskDependency } from '../../Entities/TaskDependency';
+import { ThisReceiver, TmplAstIdleDeferredTrigger } from '@angular/compiler';
+import { addSeconds } from 'date-fns';
 
 @Component({
   selector: 'app-popup',
@@ -40,6 +42,8 @@ export class PopupComponent {
   appUserId=parseInt(this.userId);
   tasks: ProjectTask[]=[];
   selectedTasks: number[]=[];
+  deletedTask:boolean=false;
+  allDependencies:TaskDependency[]=[];
   
 
 
@@ -47,22 +51,42 @@ export class PopupComponent {
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
+      
+      // const dependencies : number[] = []
+
+      // if (this.task.dependencies) {
+      //   for (const [key, value] of Object.entries(this.task.dependencies)) {
+      //     for (const [key1, value1] of Object.entries(value)) {
+      //       if(key1 == "dependencyTaskId")
+      //         {
+      //           dependencies.push(Number(value1))
+      //         }
+      //     }
+      //   }
+      // } else {
+      //   console.log("this.task.dependencies is undefined");
+      // }
+      if (Array.isArray(this.task.dependencies)) {
+        this.selectedTasks = [...this.task.dependencies];
+      } else {
+        this.selectedTasks = [];
+      }
+      
+
+      
+
 
       if (this.task.projectRole === undefined || this.task.projectRole === null) {
         console.error('Task does not have projectRole property');
-        // Handle the error or set a default projectRole
-        // For example:
-        // this.task.projectRole = -1; // Set a default value
       } else {
-        // Task is valid, proceed with your logic
-        // Example:
-        console.log('Task object is valid:', this.task);
       }
       this.selectedProject = this.task.project;
       this.getUser();
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
       this.getAllTasks();
+      this.getAllTasksDependencies();
+
       
     }
   }
@@ -95,7 +119,7 @@ export class PopupComponent {
 
   toggleTaskCompletion(task: ProjectTask): void {
     var previousTaskStatus = "";
-    if (task.statusName === 'InProgress' || task.statusName == 'Proposed') {
+    if (task.statusName != 'InReview') {
       previousTaskStatus = task.statusName;
       task.statusName = 'InReview';
     } else {
@@ -104,9 +128,26 @@ export class PopupComponent {
       else
         task.statusName = 'InProgress';
     }
-    console.log(task.statusName)
+    
+      
     this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
       next: () => {
+        this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
+            const closed_deps:TaskDependency[]=deps.filter(dep=>dep.dependencyTaskId==this.task?.id);
+            closed_deps.forEach(closed => {
+              const deleteDto: TaskDependency = {
+                taskId: closed.taskId,
+                dependencyTaskId: task.id
+              };
+        
+              this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
+                console.log('Dependency deleted successfully');
+              }, (error: any) => {
+                console.error('Error deleting dependency:', error);
+              });
+        });
+          
+        });
         this.taskUpdated.emit();
       },
       error: (error: any) => {
@@ -314,14 +355,6 @@ export class PopupComponent {
         console.error('Error updating task information:', error);
       }
     });
-    if(this.task)
-      {
-        if ( this.task.projectRole === undefined || this.task.projectRole === null) {
-          console.error('Task does not have projectRole property');
-        } else {
-          console.log('Task object is valid:', this.task);
-        }
-      }
   }
 
   updateTaskDueDate(event:Event): void {
@@ -383,46 +416,119 @@ export class PopupComponent {
     this.router.navigate(['/project', project.id]);
   }
 
-  getAllTasks():void{
+  getAllTasks(): void {
     this.myTasksService.GetTasksByUserId(this.userId).subscribe((tasks: ProjectTask[]) => {
-      this.tasks= tasks.filter(task => task.id !== this.task?.id);;
+      this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
+        // Get the IDs of all tasks that are dependencies of the current task, including indirect dependencies
+        const dependentTaskIds = this.getAllDependentTaskIds(this.task?.id, deps);
+        
+        // Filter out tasks that are dependent on the current task, its dependencies, or itself
+        this.tasks = tasks.filter(task => {
+          if (dependentTaskIds.includes(task.id) || task.id === this.task?.id) {
+            return false; // Exclude tasks that are dependent on the current task or its dependencies, or the task itself
+          }
+          // Exclude tasks that have their own ID in the dependency chain
+          const taskDependencyChain = this.getAllDependentTaskIds(task.id, deps);
+          return !taskDependencyChain.includes(task.id);
+        });
+      });
     });
   }
-  // getFilteredTasks(): ProjectTask[] {
-  //   // Check if this.task is not null
-  //   if (this.task) {
-  //       // Filter tasks array to exclude the current task
-  //       return this.tasks.filter(task => task.id !== this.task?.id);
-  //   } else {
-  //       // If this.task is null, return an empty array
-  //       return [];
-  //   }
-// }
-
+  
+  getAllDependentTaskIds(taskId: any, dependencies: TaskDependency[]): number[] {
+    const dependentTaskIds: number[] = [];
+  
+    // Find dependencies of the current task
+    const directDependencies = dependencies.filter(dep => dep.dependencyTaskId === taskId);
+    
+    // Recursively check dependencies of each dependency
+    directDependencies.forEach(dep => {
+      dependentTaskIds.push(dep.taskId); // Add direct dependency task ID
+      dependentTaskIds.push(...this.getAllDependentTaskIds(dep.taskId, dependencies)); // Recursively find dependencies
+    });
+  
+    return dependentTaskIds;
+  }
   
   
+  
+  getAllTasksDependencies():void{
+  }
 
   addTaskDependency(): void {
-    // Iterate over each selected task
-    this.selectedTasks.forEach(selectedTask => {
-      if (this.task) {
-        console.log(selectedTask)
-        const dto: TaskDependency = {
-          taskId: this.task.id,
-          dependencyTaskId: selectedTask
-        };
+    if (!this.task) {
+      console.error('Task is null');
+      return;
+    }
   
-        this.myTasksService.addTaskDependency(dto).subscribe(
-          (response: TaskDependency) => {
-            console.log('Task dependency added:', response);
-          },
-          (error: any) => {
-            console.error('Error adding task dependency:', error);
-          }
-        );
-      }
+    const dtos: TaskDependency[] = [];
+    this.deletedTask = false;
+  
+    this.selectedTasks.forEach(selectedTask => {
+      if(this.task)
+        {
+          const dto: TaskDependency= {
+            taskId: this.task.id,
+            dependencyTaskId: selectedTask 
+        }
+        dtos.push(dto);
+      };
     });
+  
+    if (dtos.length === 0) {
+      return;
+    }
+  
+    this.myTasksService.addTaskDependencies(dtos).subscribe(
+      () => {
+        console.log('Task dependencies added successfully');
+      },
+      (error: any) => {
+        console.error('Error adding task dependencies:', error);
+      }
+    );
   }
+  
+  deleteTaskDependency(item:ProjectTask): void {
+
+      if (!this.task) {
+        console.error('Error: task is null.');
+        return;
+      }
+      this.deletedTask=true;
+      const dto: TaskDependency = {
+        taskId: this.task.id,
+        dependencyTaskId: item.id
+      };
+
+      this.myTasksService.deleteTaskDependency(dto).subscribe(
+        (response: TaskDependency) => {
+          console.log('Task dependency added:', response);
+        },
+        (error: any) => {
+          console.error('Error adding task dependency:', error);
+        }
+      );
+  }
+
+  DisableCloseTask():boolean{
+    if(this.task)
+      {
+        if (Array.isArray(this.task.dependencies))
+          {    
+            if(this.task.dependencies.length==0)
+              {
+                return true;
+              }
+            else
+            {
+              return false;
+            }
+          }
+      }
+      return false;
+  }
+
   
   
 
