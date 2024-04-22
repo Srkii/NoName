@@ -1,14 +1,14 @@
 <div class="board">
     <div class="board-wrapper" cdkDropListGroup cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="taskStatuses" (cdkDropListDropped)="dropColumn($event)">
-        <div *ngFor="let status of taskStatuses"  class="card" cdkDrag>
+        <div *ngFor="let status of taskStatuses"  class="card draggable" cdkDrag>
             <div class="card-header" [style.background-color]="status.color">
                 <div class="status-name">
                     {{status.name}}
                 </div>
                 <div class="more-options" *ngIf="status.name !== 'Proposed' && status.name !== 'InProgress' && status.name !== 'InReview' && status.name !== 'Completed' && status.name !== 'Archived'" (click)="openDeleteStatusModal(deleteSection, status.name, status.id)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                      </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                  </svg>
                 </div>
             </div>
             <div class="card-body" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" (cdkDropListDropped)="drop($event)">
@@ -33,6 +33,10 @@
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
           </svg>Add New Section
         </div>
+        <div class="archTasks" (click)="openArchivedTasksModal(archivedTasks)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+        </svg>View Archieved Tasks
+      </div>
     </div>
 </div>
 <ng-template #newTask>
@@ -135,4 +139,20 @@
             </div>
         </form>
     </div>
+</ng-template>
+<ng-template #archivedTasks>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Archived Tasks</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <ul>
+          <li *ngFor="let task of tasksBySection['Archived']">{{ task.taskName }}</li>
+      </ul>
+      <div class="mb-3 btn-save-section">
+        <button class="btn btn-primary d-grid w-100 mx-auto" type="submit">Remove from Archieved</button>
+    </div>
+  </div>
 </ng-template>

@@ -237,4 +237,8 @@ export class KanbanComponent implements OnInit{
       }
     });
   }
+
+  openArchivedTasksModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
 }
