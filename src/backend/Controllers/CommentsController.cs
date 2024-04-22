@@ -37,16 +37,36 @@ namespace backend.Controllers
             return Ok(comment);
         }
 
-        [AllowAnonymous]
-        [HttpGet("getComments/{taskId}")]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int taskId)
-        {
-            var comments = await _context.Comments
-                .Where(x => x.TaskId == taskId)
-                .ToListAsync();
-            
-            return Ok(comments);
-        }
+    [AllowAnonymous]
+    [HttpGet("getComments/{taskId}")]
+    public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments(int taskId)
+    {
+        var comments = await _context.Comments
+            .Where(x => x.TaskId == taskId)
+            .Join(
+                _context.Users,
+                comment => comment.SenderId,
+                user => user.Id,
+                (comment, user) => new CommentDto
+                {
+                    Id=comment.Id,
+                    TaskId = comment.TaskId,
+                    Content = comment.Content,
+                    MessageSent=comment.MessageSent,
+                    SenderId = comment.SenderId,
+                    SenderFirstName = comment.SenderFirstName,
+                    SenderLastName = comment.SenderLastName,
+                     FileUrl =comment.FileUrl,
+                    AppUserPicUrl = user.ProfilePicUrl,
+                    Edited=comment.Edited
+                }
+            )
+            .ToListAsync();
+        
+        return Ok(comments);
+    }
+
+
 
 
 

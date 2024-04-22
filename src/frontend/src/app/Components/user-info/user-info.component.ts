@@ -1,12 +1,11 @@
+import { ApiUrl } from './../../ApiUrl/ApiUrl';
 import { UploadService } from '../../_services/upload.service';
 import { Component, OnInit, TemplateRef} from '@angular/core';
-import { Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { ChangePassword } from '../../Entities/ChangePassword';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
-import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -18,27 +17,30 @@ export class UserInfoComponent implements OnInit {
   public newpas="";
   public confirmpass="";
   public role:any;
-  public profilePic:any;
-  public defaulturl="../../../assets/profile_photo_placeholders/1234.png";
-  public url="../../../assets/profile_photo_placeholders/1234.png";
+
+  isDropdownOpen = false;
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
   newData: ChangePassword = {
     CurrentPassword:""
   }
 
-  constructor(private userinfoService: UserinfoService,
-    private uploadService:UploadService,
+  constructor(
+    private userinfoService: UserinfoService,
+    public uploadService:UploadService,
     private spinner:NgxSpinnerService,
     private modalService:BsModalService
     ) {}
-  visibility_change(type:string,div:any){
-    if(div!=null) div.style.display = type;
-  }
 
   ngOnInit(){
     this.spinner.show();
     this.UserInfo();
     this.spinner.hide();
   }
+
+
 
   UserInfo(){
     const id = localStorage.getItem('id');
@@ -48,13 +50,6 @@ export class UserInfoComponent implements OnInit {
         next: (response) =>{
           this.userInfo = response;
           console.log(response);
-          if(response.profilePicUrl!=null)
-          {
-            this.uploadService.getProfileImage(response.profilePicUrl)
-              .subscribe(url => {
-                this.url = url;
-              })
-          }
           if(this.userInfo.role == 2){
             this.role="Project manager";
           }else if(this.userInfo.role == 1){
@@ -75,7 +70,6 @@ export class UserInfoComponent implements OnInit {
   }
 
   apply_changes(){
-    console.log("applying changes...");
     var id= Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
     this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
@@ -103,11 +97,11 @@ export class UserInfoComponent implements OnInit {
   cropImgPreview: any = '';
   imageName: any = '';
   modalRef?:BsModalRef;
-
+  removeModalRef?:BsModalRef;
+  viewModalRef?:BsModalRef;
   onImageSelected(event: any,modal:TemplateRef<void>): void {
       this.imgChangeEvt = event;
       this.imageName = event.target.files[0].name.split('.')[0];
-      console.log(this.imageName);
       this.modalRef = this.modalService.show(
         modal,
         {
@@ -135,20 +129,52 @@ export class UserInfoComponent implements OnInit {
     var id = localStorage.getItem('id');
     var token = localStorage.getItem('token');
     var imageFile =  new File([this.cropImgPreview],id+"-"+this.imageName+'-userimg.png',{type: 'image/png'});
-    console.log(imageFile);
     this.uploadService.UploadImage(id,imageFile,token).subscribe({
       next: (response) => {
         console.log('Image uploaded successfully', response);
+        this.spinner.show();
+        setTimeout(() => {
+          this.spinner.hide();
+        }, 2000);
+        location.reload();
       },
       error: (error) => {
         console.error('Error uploading image', error);
       }
     });
-    this.modalRef?.hide();
-    setTimeout(() => {
-      location.reload();
-    },2000);
 
   }
-
+  removeImageModal(modal:TemplateRef<void>):void{
+    this.removeModalRef = this.modalService.show(
+      modal,
+      {
+        class:'modal-face modal-sm modal-dialog-centered',
+      }
+    )
+  }
+  viewImageModal(modal:TemplateRef<void>):void{
+    this.viewModalRef = this.modalService.show(
+      modal,
+      {
+        class:'modal-face modal-sm modal-dialog-centered',
+      }
+    )
+  }
+  removeImage(){
+    this.removeModalRef?.hide();
+    var id = localStorage.getItem('id');
+    var token = localStorage.getItem('token');
+    this.uploadService.removePfp(id,token).subscribe({
+      next: (response) => {
+        this.spinner.show();
+        setTimeout(() => {
+          this.spinner.hide();
+        }, 2000);
+        location.reload();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
 }

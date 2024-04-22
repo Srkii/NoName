@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.DTO;
 using backend.Entities;
 using backend.Interfaces;
 using backend.SignalR;
@@ -32,7 +33,16 @@ namespace backend.Services
                     read=false,
                 };
                 await _context.Notifications.AddAsync(notification);
-                await _hubContext.Clients.Group(Users[i].ToString()).Notify();
+                await _hubContext.Clients.Group(Users[i].ToString())
+                    .Notify(
+                         new NotificationDto{
+                            Task = notification.Task,
+                            Project = notification.Project,
+                            Sender = notification.Sender,
+                            dateTime = notification.dateTime,
+                            Type = notification.Type,
+                            read = notification.read
+                         });
                 await _context.SaveChangesAsync();
             }
         }
@@ -57,7 +67,16 @@ namespace backend.Services
                         read=false,
                     };
                     await _context.Notifications.AddAsync(notification);
-                    await _hubContext.Clients.Group(i.ToString()).Notify();
+                    await _hubContext.Clients.Group(i.ToString())
+                    .Notify(
+                         new NotificationDto{
+                            Task = notification.Task,
+                            Project = notification.Project,
+                            Sender = notification.Sender,
+                            dateTime = notification.dateTime,
+                            Type = notification.Type,
+                            read = notification.read
+                         });
                 }
             }else if(type == NotificationType.ProjectAssignment){//novi projekat
                 var users = await _context.ProjectMembers.Where(x=> x.ProjectId == task_project_id).Select(x=>x.AppUserId).ToListAsync();
@@ -76,7 +95,16 @@ namespace backend.Services
                         read=false,
                     };
                     await _context.Notifications.AddAsync(notification);
-                    await _hubContext.Clients.Group(i.ToString()).Notify();
+                    await _hubContext.Clients.Group(i.ToString())
+                    .Notify(
+                         new NotificationDto{
+                            Task = notification.Task,
+                            Project = notification.Project,
+                            Sender = notification.Sender,
+                            dateTime = notification.dateTime,
+                            Type = notification.Type,
+                            read = notification.read
+                         });
                 }
             }
             await _context.SaveChangesAsync();

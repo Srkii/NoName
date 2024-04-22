@@ -6,6 +6,7 @@
     left: 10px;
     width: 96.5%;
   }
+
 }
 
 #popupTaskName {
@@ -184,6 +185,7 @@ img{
   border-radius: 8px;
   width: 100%;
   overflow-y: auto;
+  overflow-x: auto;
 }
 .visible_comments{
   margin-top: -5px;

@@ -16,7 +16,7 @@
         d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"
       />
     </svg>
-  
+
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
@@ -35,7 +35,7 @@
       xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="exit_full" viewBox="0 0 16 16">
       <path d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5m5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5M0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5m10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0z"/>
     </svg>
-    <app-file-upload></app-file-upload>
+
     <!-- <div class="taskName-container"></div> -->
     <h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  id="popupTaskName">{{ task.taskName }}</h6>
     <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1'">
@@ -53,11 +53,11 @@
          this.selectedProject.projectName
       }}</span>
     </p>
-   
-    
-    <p style=" font-size: 14px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee
-      <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
-      href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
+
+
+    <p style=" font-size: 14px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee 
+      <ngx-avatars  id="assignee" *ngIf="!user.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user.firstName+ ' ' + user.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars> 
+      <img id="assignee" *ngIf="user.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
     </p>
     <div class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
       <label style=" font-size: 16px;" for="assignee2" class="form-label">Assignee</label>
@@ -65,7 +65,7 @@
         <ng-template ng-option-tmp let-user="item" let-index="index">
           <div style="display: flex; align-items: center;">
             <div *ngIf="user.profilePicUrl" class="nameAvatar">
-              <img [src]="user.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
             </div>
             <div *ngIf="!user.profilePicUrl" class="nameAvatar">
               <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
@@ -78,7 +78,7 @@
         <ng-template ng-label-tmp let-item="item">
           <div style="display: flex; align-items: center;">
             <div *ngIf="item.profilePicUrl" class="nameAvatar">
-              <img [src]="item.pictureUrl" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
             </div>
             <div *ngIf="!item.profilePicUrl" class="nameAvatar">
               <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
@@ -126,8 +126,8 @@
         <span class="no_comments" *ngIf="!CheckForCommets(task)">No Comments</span>
         <div *ngFor="let comment of comments">
           <ng-continer *ngIf="this.task.id===comment.taskId">
-            <p> <img id="assignee" src="../../../assets/navIcons/user (4).png" class="nav-link dropdown-toggle hide-arrow"
-              href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"> {{ comment?.senderFirstName }} {{ comment?.senderLastName }}</p>
+            <p> <ngx-avatars  id="assignee" *ngIf="!comment.appUserPicUrl" size="30" bgColor="#5d57c2" [name]="comment.senderFirstName + ' ' + comment.senderLastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars> 
+              <img *ngIf="comment.appUserPicUrl" id="assignee" [src]="this.uploadservice.getImage(comment.appUserPicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"> {{ comment?.senderFirstName }} {{ comment?.senderLastName }}</p>
             <span class="comment_date">{{ comment?.messageSent  | date:'MMM d, y, h:mm a' }} <span *ngIf="comment.edited" >(edited)</span>
             <ng-continer *ngIf="this.task.projectRole!='4'">
               <svg *ngIf="this.comment.senderId==this.appUserId"  
@@ -138,7 +138,18 @@
             </ng-continer>
             </span>
             <div class="content">
-                <p id="comment_content{{comment.id}}" >{{ comment.content }}</p>
+                <p  id="comment_content{{comment.id}}" >{{ comment.content }}</p>
+                <label style="padding-left: 20px;" *ngIf="comment?.fileUrl" for="fileurl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                    <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                  </svg>
+                </label>
+                <a style="padding-left: 3px; padding-right: 3px;" name="fileurl" *ngIf="comment?.fileUrl" (click)="downloadFile(comment.fileUrl)">{{ comment?.fileUrl }}</a>
+                <svg  *ngIf="comment?.fileUrl"  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                </svg>
                 <textarea class="edit_content" id="edit_content{{comment.id}}" style="display: none;" rows="3">{{ comment.content }}</textarea>
                 <button class="save_edit" id="save_edit{{comment.id}}" style="display: none;" (click)="editContent(comment.id)">Save Changes</button>
                 <button class="cancel_edit" id="cancel_edit{{comment.id}}" style="display: none;" (click)="CancelEdit(comment.id)">Cancel</button>
@@ -152,7 +163,8 @@
     <div class="fixed-comment-area">
       <textarea [disabled]="task.projectRole == '4'" class="comment" rows="3" placeholder="Add a comment" #commentInput></textarea>
       <button *ngIf="this.task.projectRole!='4'" class="add_comment" (click)="addComment()">Add Comment</button>
+      <app-file-upload></app-file-upload>
     </div>
-    
+
   </div>
 </div>
