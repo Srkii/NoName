@@ -132,13 +132,13 @@
 <div *ngIf="this.filteredProjects>5" id="pages">
   <ul class="pagination">
     <li class="paginate_buttons previous" [class.disabled]="currentPage === 1">
-      <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+      <button (click)="prevPage()" [disabled]="currentPage === 1">&laquo;</button>
     </li>
     <li class="paginate_button" *ngFor="let pageNumber of totalPagesArray">
       <button (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
     </li>
     <li class="paginate_buttons next" [class.disabled]="currentPage === totalPages">
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">&raquo;</button>
     </li>
   </ul>
 </div>

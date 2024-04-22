@@ -1,5 +1,6 @@
 ﻿namespace backend.Entities;
 #nullable enable
+#nullable enable
 public class Comment
 {
     public int Id {get; set;}
