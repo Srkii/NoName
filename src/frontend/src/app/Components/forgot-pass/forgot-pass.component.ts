@@ -40,4 +40,8 @@ export class ForgotPassComponent implements OnInit{
       }
     })
   }
+
+  disableRightClick(event: MouseEvent): void {
+    event.preventDefault();
+  }
 }

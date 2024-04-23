@@ -52,4 +52,8 @@ export class LoginComponent implements OnInit {
       },
     });
   }
+
+  disableRightClick(event: MouseEvent): void {
+    event.preventDefault();
+  }
 }
