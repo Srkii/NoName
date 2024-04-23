@@ -63,6 +63,8 @@ namespace backend.Controllers
         [HttpPost("login")] // POST: api/account/login
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
+            if(loginDto == null) return Unauthorized("Please enter your credentials.");
+            
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if(user == null) return Unauthorized("Account with this e-mail doesn't exists.");

@@ -10,24 +10,24 @@ import { ApiUrl } from '../ApiUrl/ApiUrl';
   providedIn: 'root'
 })
 export class MailresetService {
-  private resetPUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl;
   
   constructor(private http: HttpClient) { }
   
   sendResetLink(email: MailReset): Observable<any> {
-    return this.http.post(`${this.resetPUrl}/email/sendRecovery`, email, {
+    return this.http.post(`${this.apiUrl}/email/sendRecovery`, email, {
       responseType: 'json'
     });
   }
 
   getEmailByToken(token: string): Observable<ResetRequest> {
     return this.http.get<ResetRequest>(
-      `${this.resetPUrl}/account/token/${token}`
+      `${this.apiUrl}/account/token/${token}`
     );
   }
 
   resetPassword(resetRequest: ResetRequest): Observable<any> {
-    return this.http.post(`${this.resetPUrl}/account/resetPassword`, resetRequest, {
+    return this.http.post(`${this.apiUrl}/account/resetPassword`, resetRequest, {
       responseType: 'json',
     });
   }
