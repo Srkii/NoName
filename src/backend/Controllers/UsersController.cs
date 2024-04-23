@@ -219,5 +219,17 @@ namespace backend.Controllers
       return filteredUsers;
     }
 
+    [HttpGet("getArchived")]
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetArchivedUsers()
+    {
+      var query = _context.Users.AsQueryable();
+      query = query.Where(u => u.Archived == true);
+
+      var archUsers=await query.ToListAsync();
+      return archUsers;
+
+    }
+
+
   }
 }
