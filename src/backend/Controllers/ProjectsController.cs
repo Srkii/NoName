@@ -95,7 +95,7 @@ namespace backend.Controllers
         [HttpPut("updateProject")] // PUT: api/projects/updateProject
         public async Task<ActionResult<Project>> UpdateProject(ProjectDto projectDto)
         {
-            var project = await _context.Projects.FindAsync(projectDto.AppUserId);
+            var project = await _context.Projects.FindAsync(projectDto.ProjectId);
             if (project == null)
             {
                 return NotFound();
