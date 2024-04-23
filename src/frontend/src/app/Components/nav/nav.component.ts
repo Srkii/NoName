@@ -1,9 +1,10 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from '../../_services/notifications.service';
 import { Notification } from '../../Entities/Notification';
 import { UploadService } from '../../_services/upload.service';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -11,12 +12,13 @@ import { UploadService } from '../../_services/upload.service';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService, private uploadService:UploadService,public notificationService:NotificationsService) {}
+  constructor(private router: Router,private userInfo:UserinfoService, private uploadService:UploadService,public notificationService:NotificationsService,private activatedRoute:ActivatedRoute) {}
   ngOnInit(): void {
     this.isAdmin()
     if(localStorage.getItem('token')) { // proveri dal token postoji
       this.getUser();
     }
+    this.changePage();
   }
   admin!: boolean
   logovan!: boolean
@@ -24,6 +26,9 @@ export class NavComponent implements OnInit {
 
   imgFlag: boolean=false;
   notification_list:any;
+
+  isMyProjectsActive: boolean = false;
+
   async Logout(): Promise<void> {
     try {
       // Remove token and id from local storage
@@ -64,6 +69,14 @@ export class NavComponent implements OnInit {
         }
       })
     }
+  }
+
+  changePage():void{
+    this.router.events.pipe(
+      filter(event=>event instanceof NavigationEnd)
+    ).subscribe(()=>{
+      this.isMyProjectsActive=this.activatedRoute.snapshot.firstChild?.routeConfig?.path === 'project/:id';
+    })
   }
 
 }

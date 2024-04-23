@@ -9,7 +9,7 @@
         <li class="nav-item active" *ngIf="isAdmin()">
           <a class="nav-link" routerLink="/admin">Manage Users</a>
         </li>
-        <li class="nav-item active" *ngIf="!isAdmin()">
+        <li class="nav-item active" *ngIf="!isAdmin()" [class.active]="isMyProjectsActive">
           <a class="nav-link" routerLink="/myprojects">My Projects</a>
         </li>
         <li class="nav-item" *ngIf="!isAdmin()">
@@ -29,7 +29,7 @@
           <li class="nav-item active" *ngIf="isAdmin()" routerLinkActive="active-link-text">
             <a class="nav-link" routerLink="/admin">Manage Users</a>
           </li>
-          <li class="nav-item active" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
+          <li class="nav-item active" *ngIf="!isAdmin()" routerLinkActive="active-link-text" [class.active]="isMyProjectsActive">
             <a class="nav-link" routerLink="/myprojects">My Projects</a>
           </li>
           <li class="nav-item" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
@@ -64,9 +64,11 @@
         <div class="dropdown-item">
           <div class="d-flex">
             <div class="avatar avatar-online">
-              <ngx-avatars *ngIf="!imgFlag" size="45" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
-              <img *ngIf="imgFlag" [src]="user.url" alt="Avatar" class="dropImg1 rounded-circle shadow-4-strong">
-
+              <ngx-avatars *ngIf="!user?.url" size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
+              href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
+              <img *ngIf="user?.url" [src]="user.url" alt="Avatar" class="rightImg nav-link rounded-circle shadow-4-strong dropdown-toggle hide-arrow avatar1"
+              href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+        
             </div>
             <div class="flex-grow-1">
               <span class="fw-medium d-block">{{user?.firstName}} {{user?.lastName}}</span>
