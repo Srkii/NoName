@@ -39,7 +39,10 @@ export class MyTasksService {
     return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`, null);
   }
   
-  
+  // kada pomeram taskove iz archived saljem listu zbog boljih performansi
+  UpdateArchTasksToCompleted(taskIds: number[]): Observable<any> {
+    return this.http.put(`${this.baseUrl}/UpdateArchTasksToCompleted`, taskIds);
+  }
 
   updateTicoTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/updateTicoStatus/${taskId}`,task );

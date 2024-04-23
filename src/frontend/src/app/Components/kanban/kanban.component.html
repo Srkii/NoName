@@ -1,23 +1,28 @@
 <div class="board">
     <div class="board-wrapper" cdkDropListGroup cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="taskStatuses" (cdkDropListDropped)="dropColumn($event)">
-        <div *ngFor="let status of taskStatuses"  class="card" cdkDrag>
+        <div *ngFor="let status of taskStatuses"  class="card draggable" cdkDrag>
             <div class="card-header" [style.background-color]="status.color">
                 <div class="status-name">
                     {{status.name}}
                 </div>
-                <div class="more-options" *ngIf="status.name !== 'Proposed' && status.name !== 'InProgress' && status.name !== 'InReview' && status.name !== 'Completed' && status.name !== 'Archived'" (click)="openDeleteStatusModal(deleteSection, status.name, status.id)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                      </svg>
+                <div class="more-options" *ngIf="status.name !== 'Proposed' && status.name !== 'InProgress' && status.name !== 'InReview' && status.name !== 'Completed' && status.name !== 'Archived'" (click)="openDeleteStatusModal(deleteBoard, status.name, status.id)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                  </svg>
                 </div>
             </div>
             <div class="card-body" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" (cdkDropListDropped)="drop($event)">
-                <div *ngFor="let task of tasksBySection[status.name]" class="card task" cdkDrag [cdkDragData]="task">
+                <div *ngFor="let task of tasksBySection[status.name]" class="card task draggable" cdkDrag [cdkDragData]="task">
                     <div class="card-body task-title ">{{task.taskName}}
                     </div>
-                    <div class="card-footer assignee"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-                      </svg>{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}
+                    <div class="card-footer assignee" style="display: flex; align-items: center;">
+                      <div *ngIf="task.profilePicUrl" class="nameAvatar boardAvatar">
+                        <img [src]="uploadservice.getImage(task.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                      </div>
+                      <div *ngIf="!task.profilePicUrl" class="nameAvatar boardAvatar">
+                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName" value="75%"></ngx-avatars>
+                      </div>
+                      {{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}
                     </div>
                 </div>
             </div>
@@ -29,10 +34,14 @@
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
           </svg>Add New Task
         </div>
-        <div class="new-item" (click)="openSimpleModal(newSection, 'newSection')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+        <div class="new-item" (click)="openSimpleModal(newBoard, 'newBoard')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-          </svg>Add New Section
+          </svg>Add New Board
         </div>
+        <div class="archTasks" (click)="openSimpleModal(archivedTasks, 'archivedTasks')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+        </svg>View Archieved Tasks
+      </div>
     </div>
 </div>
 <ng-template #newTask>
@@ -74,7 +83,7 @@
                 <div>
                   {{ user.fullName }}
                 </div>
-            </div>
+              </div>
             </ng-template>
             <ng-template ng-label-tmp let-item="item">
               <div style="display: flex; align-items: center;">
@@ -98,30 +107,30 @@
     </div>
 </ng-template>
 
-<ng-template #deleteSection>
+<ng-template #deleteBoard>
     <div class="modal-header">
-      <h4 class="modal-title pull-left">Delete section</h4>
+      <h4 class="modal-title pull-left">Delete Board</h4>
       <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
         <span aria-hidden="true" class="visually-hidden">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <div class="mb-3">This action will delete the <b>{{currentSectionName}}</b> section and move all of its tasks to the <b>Proposed</b> section.</div>
+      <div class="mb-3">This action will delete the <b>{{currentSectionName}}</b> Board and move all of its tasks to the <b>Proposed</b> Board.</div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100 mx-auto" (click)="deleteSectionFunction()">Delete Section</button>
+        <button class="btn btn-primary d-grid w-100 mx-auto" (click)="deleteBoardFunction()">Delete Board</button>
       </div>
     </div>
 </ng-template>
 
-<ng-template #newSection>
+<ng-template #newBoard>
     <div class="modal-header">
-        <h4 class="modal-title pull-left">Add New Section</h4>
+        <h4 class="modal-title pull-left">Add New Board</h4>
         <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
           <span aria-hidden="true" class="visually-hidden">&times;</span>
         </button>
       </div>
     <div class="modal-body">
-        <form (ngSubmit)="saveSection()" class="mb-3">
+        <form (ngSubmit)="saveNewBoard()" class="mb-3">
             <div class="mb-3" autocomplete="off">
                 <label for="newSection" class="form-label">Section Name</label>
                 <input type="text" class="form-control" name="newSection" [(ngModel)]="newSectionName" placeholder="Enter new section's name"/>
@@ -131,8 +140,50 @@
                 <input type="color" class="form-control" id="sectionColor" name="sectionColor" [(ngModel)]="newSectionColor" required>
             </div>
             <div class="mb-3 btn-save-section">
-                <button class="btn btn-primary d-grid w-100 mx-auto" type="submit">Add New Section</button>
+                <button class="btn btn-primary d-grid w-100 mx-auto" type="submit">Add New Board</button>
             </div>
         </form>
     </div>
+</ng-template>
+<ng-template #archivedTasks>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Archived Tasks</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="tasksBySection['Archived'] && tasksBySection['Archived'].length > 0; else noArchivedTasks">
+    <div class="table-responsive text-nowrap">
+      <tr>
+        <th>Task Name</th>
+        <th>Assignee</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let task of tasksBySection['Archived']" class="archTable">
+        <td class="tdName">{{task.taskName}}</td>
+        <td class="tdAssignee">
+          <div style="display: flex; align-items: center;">
+            <div *ngIf="task.profilePicUrl" class="nameAvatar boardAvatar">
+              <img [src]="uploadservice.getImage(task.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+            </div>
+            <div *ngIf="!task.profilePicUrl" class="nameAvatar boardAvatar">
+              <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName" value="75%"></ngx-avatars>
+            </div>
+            {{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}
+          </div>
+        </td>
+        <td class="tdDate">{{task.startDate | date}}</td>
+        <td class="tdDate">{{task.endDate | date}}</td>
+        <td class="tdCheck"><input type="checkbox" style="align-items:center;" [(ngModel)]="task.selected" name="task{{task.id}}"></td>
+      </tr>
+    </div>
+    <div class="mb-3 archBtn">
+      <button class="btn btn-primary d-grid w-50 mx-auto" type="button" (click)="removeFromArchived()">Remove from Archived</button>
+    </div>
+  </div>
+  <ng-template #noArchivedTasks>
+    <div class="text-center noArch">There are currently no archived tasks on this project.</div>
+  </ng-template>
 </ng-template>
