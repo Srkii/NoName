@@ -158,6 +158,7 @@ export class KanbanComponent implements OnInit{
       {
         class: modalClass
       });
+    this.tasksBySection['Archived'].forEach(task => task.selected = false); // resetuj task.selection chekbox u remove arch tasks
   }
   deleteBoardFunction() {
     if (this.currentSectionId === null) {
@@ -236,7 +237,6 @@ export class KanbanComponent implements OnInit{
         this.modalRef?.hide();
         this.populateTasks(); // ucitavam promene
         this.spinner.hide(); // skloni spinner
-        this.tasksBySection['Archived'].forEach(task => task.selected = false); // resetuj task.selection
       },
       error: (error) => {
         console.error('Error updating tasks status:', error);

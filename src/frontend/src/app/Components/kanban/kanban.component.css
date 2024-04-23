@@ -278,6 +278,10 @@
     margin-top: 20px;
     margin-bottom: 0px !important;
 }
+/* menjam checkbox selected boju */
+input[type='checkbox'] {
+    accent-color: #696cff;
+}
 .btn-primary {
     color: #fff;
     background-color: #696cff;
@@ -340,4 +344,8 @@
 }
 .tdCheck {
     width: 10% !important;
+}
+.noArch {
+    margin: 15px !important;
+    font-size: 20px;
 }

@@ -152,7 +152,7 @@
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" *ngIf="tasksBySection['Archived'] && tasksBySection['Archived'].length > 0; else noArchivedTasks">
     <div class="table-responsive text-nowrap">
       <tr>
         <th>Task Name</th>
@@ -183,4 +183,7 @@
       <button class="btn btn-primary d-grid w-50 mx-auto" type="button" (click)="removeFromArchived()">Remove from Archived</button>
     </div>
   </div>
+  <ng-template #noArchivedTasks>
+    <div class="text-center noArch">There are currently no archived tasks on this project.</div>
+  </ng-template>
 </ng-template>
