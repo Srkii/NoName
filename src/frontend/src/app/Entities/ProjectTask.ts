@@ -1,4 +1,5 @@
 import { Project } from './Project';
+import { TaskDependency } from './TaskDependency';
 
 export interface ProjectTask {
   id: number;
@@ -13,4 +14,5 @@ export interface ProjectTask {
   lastName?: string;
   project: Project;
   projectRole?: string;
+  dependencies?:TaskDependency
 }

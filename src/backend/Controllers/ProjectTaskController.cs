@@ -4,6 +4,7 @@ using backend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyModel;
 
 namespace backend.Controllers
 {
@@ -85,6 +86,7 @@ namespace backend.Controllers
                 task.TskStatus.Color,
                 task.ProjectSection.SectionName,
                 task.Project,
+                Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
                  ProjectRole = _context.ProjectMembers
                                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                                         .Select(member => member.ProjectRole)
@@ -117,6 +119,7 @@ namespace backend.Controllers
                                           task.TskStatus.Color,
                                           task.ProjectSection.SectionName,
                                           task.Project,
+                                           Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
                                         ProjectRole = _context.ProjectMembers
                                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                                         .Select(member => member.ProjectRole)
@@ -174,7 +177,15 @@ namespace backend.Controllers
             var taskDto = new ProjectTaskDto
             {
                 Id = task.Id,
-                // Add other properties you want to include in the DTO
+                TaskName = task.TaskName,
+                Description = task.Description,
+                StartDate = task.StartDate,
+                EndDate = task.EndDate,
+                TaskStatusId = task.TskStatusId,
+                AppUserId = (int)task.AppUserId,
+                ProjectId = task.ProjectId,
+                ProjectSectionId = task.ProjectSectionId
+                
             };
 
             return taskDto;
@@ -224,23 +235,73 @@ namespace backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPut("addTaskDependency")] // GET: api/projectTask/addTaskDependency
-        public async Task<ActionResult<ProjectTask>> AddTaskDependency(TaskDependencyDto dto)
+        [HttpPost("addTaskDependency")] // GET: api/projectTask/addTaskDependency
+        public async Task<ActionResult<TaskDependency>> AddTaskDependency(List<TaskDependencyDto> dtos)
         {
-            if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
-                return Unauthorized("Unvalid role");
-
-            var taskDep = new TaskDependency
+            // if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
+            //     return Unauthorized("Unvalid role");
+            foreach (var dto in dtos)
             {
-                TaskId = dto.TaskId,
-                DependencyTaskId = dto.DependencyTaskId
-            };
+                var existingDependency = await _context.TaskDependencies
+                .AnyAsync(dep => dep.TaskId == dto.TaskId && dep.DependencyTaskId == dto.DependencyTaskId);
 
-            await _context.TaskDependencies.AddAsync(taskDep);
-            await _context.SaveChangesAsync();
+                if (existingDependency)
+                {
+                    // If the dependency already exists, update it
+                    var existing = await _context.TaskDependencies.FirstOrDefaultAsync(dep => dep.TaskId == dto.TaskId);
+                    existing.TaskId = dto.TaskId;
+                    existing.DependencyTaskId = dto.DependencyTaskId;
+                }
+                else
+                {
+                    // If the dependency doesn't exist, add a new one
+                    var newDependency = new TaskDependency
+                    {
+                        TaskId = dto.TaskId,
+                        DependencyTaskId = dto.DependencyTaskId
+                    };
+
+                    _context.TaskDependencies.Add(newDependency);
+                }
+
+                await _context.SaveChangesAsync();
+            }
             //komentar
-            return Ok(taskDep);
+            return Ok(); // Return success
         }
+
+        [AllowAnonymous]
+        [HttpPost("deleteTaskDependency")] // POST: api/projectTask/deleteTaskDependency
+        public async Task<ActionResult> DeleteTaskDependency(TaskDependencyDto dto)
+        {
+            // if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
+            //     return Unauthorized("Unvalid role");
+
+            // Find the task dependency to delete
+            var dependencyToDelete = await _context.TaskDependencies
+                .FirstOrDefaultAsync(dep => dep.TaskId == dto.TaskId && dep.DependencyTaskId == dto.DependencyTaskId);
+
+            if (dependencyToDelete != null)
+            {
+                // If the dependency exists, remove it from the context
+                _context.TaskDependencies.Remove(dependencyToDelete);
+                await _context.SaveChangesAsync();
+                return Ok(); // Return success
+            }
+            else
+            {
+                return NotFound(); // Return not found if the dependency doesn't exist
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("getAllTasksDependencies")]
+        public async Task<ActionResult<IEnumerable<TaskDependency>>> GetAllTasksDependencies()
+        {
+            var tasks = await _context.TaskDependencies.ToListAsync();
+            return Ok(tasks);
+        }
+
 
         [AllowAnonymous]
         [HttpPost("AddTaskAssignee")]
@@ -263,6 +324,8 @@ namespace backend.Controllers
 
             return Ok(task);
         }
+
+
 
         [AllowAnonymous]
         [HttpGet("RoleCheck")]

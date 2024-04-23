@@ -41,7 +41,7 @@ export class ProjectDetailComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
     private datePipe: DatePipe,
-    private uploadservice: UploadService
+    public uploadservice: UploadService
   ) {}
 
   get formattedEndDate() {
@@ -59,7 +59,7 @@ export class ProjectDetailComponent implements OnInit {
   getProjectInfo() {
     this.spinner.show();
     this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
-  
+
     const projectId = this.route.snapshot.paramMap.get('id');
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
@@ -80,14 +80,14 @@ export class ProjectDetailComponent implements OnInit {
       this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole}));
       this.filteredUsers = this.usersOnProject;
       this.userRole = this.usersOnProject.find(x => x.appUserId == this.userId)?.projectRole;
-      this.loadPicture(this.usersOnProject)
+      //this.loadPicture(this.usersOnProject)
     });
   }
 
   loadAddableUsers(){
     this.myProjectsService.GetAddableUsers(this.project.id).subscribe((users: any[]) => {
       this.addableUsers = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
-      this.loadPicture(this.addableUsers)
+      //this.loadPicture(this.addableUsers)
     });
   }
 
@@ -159,7 +159,7 @@ export class ProjectDetailComponent implements OnInit {
             this.update.priority = +this.update.priority;
             this.update.projectStatus = +this.update.projectStatus;
           }
-      
+
           this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
             console.log(updatedProject)
             this.getProjectInfo()
@@ -178,7 +178,7 @@ export class ProjectDetailComponent implements OnInit {
           ProjectId: this.project.id,
           ProjectRole: +this.selectedUser.projectRole
         }
-        
+
         this.myProjectsService.AddProjectMember(projectMember).subscribe(response => {
           this.loadAddableUsers()
           this.loadProjectMembers()
@@ -208,7 +208,7 @@ export class ProjectDetailComponent implements OnInit {
         ProjectId: this.project.id,
         ProjectRole: +user.projectRole
       }
-  
+
       this.myProjectsService.UpdateUsersProjectRole(projectMember).subscribe(update => {
         console.log("User role changed successfully")
       })
@@ -216,9 +216,9 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   filterUsers() {
-    if (this.searchTerm.trim() !== '') 
+    if (this.searchTerm.trim() !== '')
     {
-      this.filteredUsers = this.usersOnProject.filter(user => 
+      this.filteredUsers = this.usersOnProject.filter(user =>
         user.name.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
@@ -227,16 +227,16 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-  loadPicture(usersArray: SelectedUser[]) : void{
-    usersArray.forEach(user => {
-      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ 
-      this.uploadservice.getImage(user.profilePicUrl).subscribe(
-        url => {
-          user.profilePic = url;
-        }
-        )
-      }
-    });
-  }
+  // loadPicture(usersArray: SelectedUser[]) : void{
+  //   usersArray.forEach(user => {
+  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){
+  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
+  //       url => {
+  //         user.profilePic = url;
+  //       }
+  //       )
+  //     }
+  //   });
+  // }
 
 }

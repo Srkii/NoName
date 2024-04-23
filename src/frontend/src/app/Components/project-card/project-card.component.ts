@@ -37,16 +37,16 @@ export class ProjectCardComponent {
   constructor(
     private route: ActivatedRoute,
     private myProjectCardService: ProjectCardService,
-    private uploadservice: UploadService
+    public uploadservice: UploadService
   ) {}
 
   ngOnInit(): void {
     this.creatorId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
     this.myProjectCardService.GetAvailableUsers(this.creatorId).subscribe(users => {
       this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
-      this.loadPicture(this.users);
+      //this.loadPicture(this.users);
     });
-    
+
   }
 
   async CreateProject(): Promise<void>{
@@ -108,7 +108,7 @@ export class ProjectCardComponent {
   }
 
   async AddAssigness(projectMembers: ProjectMember[]){
-    try 
+    try
     {
       for (let member of projectMembers)
       {
@@ -119,8 +119,8 @@ export class ProjectCardComponent {
       this.buttonClicked = false;
       this.refreshNeeded.emit();
       this.closeCard.emit();
-    } 
-    catch (error) 
+    }
+    catch (error)
     {
       console.error("Error occurred while adding project member", error);
     }
@@ -137,16 +137,16 @@ export class ProjectCardComponent {
     return false;
   }
 
-  loadPicture(usersArray: SelectedUser[]) : void{
-    usersArray.forEach(user => {
-      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
-      this.uploadservice.getImage(user.profilePicUrl).subscribe(
-        url => {
-          user.profilePic = url;
-        }
-        )
-      }
-    });
-  }
-  
+  // loadPicture(usersArray: SelectedUser[]) : void{
+  //   usersArray.forEach(user => {
+  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
+  //       url => {
+  //         user.profilePic = url;
+  //       }
+  //       )
+  //     }
+  //   });
+  // }
+
 }
