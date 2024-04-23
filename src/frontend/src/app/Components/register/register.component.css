@@ -81,7 +81,7 @@ a {
   right: 160px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1590px) {
   .personimage {
     display: none;
   }

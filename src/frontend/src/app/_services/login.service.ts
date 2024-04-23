@@ -3,13 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { AppUser } from '../Entities/AppUser';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
-
+import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toastr: ToastrService) { }
 
   private apiUrl = environment.apiUrl + '/account';
 
