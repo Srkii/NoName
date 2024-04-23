@@ -7,5 +7,7 @@ export interface Comment {
   senderFirstName: string;
   senderLastName: string;
   fileUrl?: string;
+  edited: boolean;
+  appUserPicUrl?:any;
 }
 

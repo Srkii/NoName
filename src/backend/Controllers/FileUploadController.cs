@@ -119,7 +119,7 @@ namespace backend.Controllers
                 SenderId = user_id,
                 SenderFirstName = sender.FirstName,
                 SenderLastName = sender.LastName,
-                Content = "Uploaded an attachment",
+                Content = "",
                 FileUrl = filename
             };
             _context.Attachments.Add(attachment);
