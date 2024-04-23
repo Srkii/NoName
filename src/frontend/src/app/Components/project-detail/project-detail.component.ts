@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { Member } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
+import { style } from '@angular/animations';
 
 @Component({
   selector: 'app-project-detail',
@@ -80,6 +81,7 @@ export class ProjectDetailComponent implements OnInit {
       this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole}));
       this.filteredUsers = this.usersOnProject;
       this.userRole = this.usersOnProject.find(x => x.appUserId == this.userId)?.projectRole;
+      console.log(this.userRole)
       //this.loadPicture(this.usersOnProject)
     });
   }
@@ -134,8 +136,9 @@ export class ProjectDetailComponent implements OnInit {
     this.modalRef = this.modalService.show(
       modal,
       {
-        class: "modal modal-lg modal-dialog-centered"
-      });
+        class: "modal modal-lg modal-dialog-centered projectInfoModal",
+      }
+    );
       this.update.projectId = this.project.id;
       this.update.appUserId = this.userId;
       this.update.projectName = this.project.projectName;
@@ -227,16 +230,43 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-  // loadPicture(usersArray: SelectedUser[]) : void{
-  //   usersArray.forEach(user => {
-  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){
-  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
-  //       url => {
-  //         user.profilePic = url;
-  //       }
-  //       )
-  //     }
-  //   });
-  // }
+  getPriorityClass() {
+    switch (this.update.priority) {
+        case Priority.Low:
+            return "LOW"
+        case Priority.Medium:
+            return "MEDIUM"
+        case Priority.High:
+            return "HIGH"
+        default:
+            return "DEFAULT"
+    }
+  }
+
+  getStatusClass(){
+    switch (this.update.projectStatus) {
+      case ProjectStatus.Archived:
+          return "ARCHIVED"
+      case ProjectStatus.InProgress:
+          return "INPROGRESS"
+      case ProjectStatus.Proposed:
+          return "PROPOSED"
+      case ProjectStatus.Completed:
+          return "COMPLETED"
+      default:
+          return "DEFAULT"
+    }
+  }
+
+  enableNameChange(){
+    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
+    changeNameInp.disabled = false;
+    changeNameInp.focus();
+  }
+
+  disableNameChange(){
+    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
+    changeNameInp.disabled = true;
+  }
 
 }

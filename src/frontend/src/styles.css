@@ -29,3 +29,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding-top: 5px;
   padding-bottom: 1px;
 }
+.projectInfoModal{
+  height: 20rem;
+}
+
+

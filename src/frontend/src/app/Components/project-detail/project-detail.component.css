@@ -208,97 +208,93 @@ thead th{
   border-bottom: none;
 } */
 
-[contenteditable] {
-    outline: 0px solid transparent;
-    border: none;
-}
-
-.dates::placeholder {
-    color: transparent !important;
-}
-
-.dates{
+.editName{
     width: 100%;
+    padding: 0 !important;
+    border: none !important;
+}
+.pancil{
+    color: #676f79;
+    padding: 0.4rem !important;
+    margin-right: 0.2rem;
+    cursor: pointer;
+}
+.dates::placeholder {color: transparent !important;}
+.endDate{
+    width: 7.2rem;
     background-color: transparent;
     border: none;
     color: #676f79;
 }
-
-.dates:focus {
+.endDate:focus {
     outline: none;
     border: none;
 }
-
-.sel{
+.startDate{width: 6.79rem;}
+.selectElements{
+    border-radius: 10px;
     color: #676f79;
     border: none;
+    text-align: center;
+    padding: 0.1rem;
 }
-
-.sel:focus{
+.selectElements:focus{
     outline: none;
     border: none;
 }
-
+.selectElements:disabled{
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+}
+.project-heading{
+    display: inline-flex;
+    align-items: center;
+}
 .btn-outline-info{
-    /* margin-top: 0.3rem; */
     padding-top: 0;
     padding-bottom: 0;
     color: #696cff;
     border-color: #696cff;
     margin-left: 0.5rem;
 }
-
 .btn-outline-info:focus,.btn-outline-info:hover{
     background-color: #696cff;
     color: white;
 }
-
-.project-heading{
-    display: inline-flex;
-    align-items: center;
-}
-
+/* -------- */
 .nameAvatar {
     display: inline-flex;
     align-items: center;
     font-family: 'Public Sans', sans-serif;
 }
-
 .ng-value-label{
     display: inline-flex !important;
     align-items: center !important;
     font-family: 'Public Sans', sans-serif;
     color: #697a8d;
 }
-
 .ng-value-label img, .ng-value-label ngx-avatars{
     margin-right: 0.2rem !important;
 }
-
 .user-detail{
     display: flex;
     justify-content: space-between;
     font-family: 'Public Sans', sans-serif;
     color: #697a8d;
 }
-
 :host::ng-deep .ng-option-marked{
     background-color: #F5F5F9 !important;
 }
-
 :host::ng-deep .ng-option-selected{
     background-color: #a8a9f0 !important;
 }
-
 :host::ng-deep .ng-option-marked{
     background-color: #9a9cec !important;
     border-top: 0px !important;
 }
-
 .ng-value-label.ng-star-inserted{
     padding-left: 3px !important;
 }
-
 .ng-value-icon{
     position: relative;
     top: 0.055rem;
@@ -307,78 +303,55 @@ thead th{
     border-left: none !important;
     padding-left: 0 !important;
 }
-
 .ng-value-icon:hover{
     background-color: transparent !important;
 }
-
 :host::ng-deep .ng-value{
     display: inline-flex !important;
     align-items: center !important;
     border-radius: 15px !important;
 }
-
 :host::ng-deep .ng-clear .ng-clear-wrapper{
     display: flex !important;
     align-items: center;
 }
-
 :host::ng-deep .ng-clear-wrapper{
     top:0.1rem;
     display: flex !important;
     align-items: center;
 }
-
 :host::ng-deep .ng-select.ng-select-opened > .ng-select-container{
     border-color: #696cff !important;
 }
-
 :host::ng-deep .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container{
     border-color: #696cff !important;
 }
-
-.left{
-    width: 17rem;
-    margin-right: 0;
-}
-
-.right1{
-    width: 30rem;
-}
-
-.right1 textarea{
-    height: 75%;
-}
-
+/* ----- */
 .t2{
     margin-top: 0.5rem;
 }
-
 .t2 td{
     width: auto;
     vertical-align: middle;
     color: #676f79;
 }
-
-.col-4.fw-normal{
-    color: #676f79;
+.t2 p{
+    text-align: right;
+    margin-bottom: 0;
+    font-size: smaller;
+    color: #697a8d;
+    padding-right: 0.3rem;
 }
-
-.seperator{
-    margin-bottom: 0 !important;
-}
-
 .search{
-    width: 12rem;
+    text-align: center;
+    border-radius: 0%;
 }
-
 .search:focus{
     box-shadow: none;
 }
-
 .assignee{
     width: auto;
-    border: none ;
+    border-color: #d7d7f8 ;
     outline: none;
     color: #697a8d;
     padding-top: 0.2rem;
@@ -386,59 +359,126 @@ thead th{
     font-size: smaller;
     float: right;
 }
-
-/* .assignee option{
-    background-color: lightgray;
-} */
-
 .titleInp{
     font-size: 1.5em;
     font-weight: 400;
-    width: 25rem;
     border: none;
     padding-left: 0;
+    padding-right: 0;
     color: #676f79;
 }
-
 .titleInp:focus {
     box-shadow: none;
 }
-
-.modal-container{
-    color: #676f79;
-}
-
-.description{
-    color: #676f79;
-}
-
-.deleteMember{
-    cursor: pointer;
-}
+.modal-container{color: #676f79;}
+.deleteMember{cursor: pointer;}
 .close{
     border: none;
     background-color: white
 }
-
 :disabled {
     opacity: 1;
     background-color: white;
+    border: none;
 }
-
 select:disabled {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     background-image: none;
 }
-
+textarea{
+    color: #697a8d;
+    border-radius: 0;
+    border: none; 
+    border-top: 1px solid;
+    border-color: #dcdbdb;
+}
 textarea:disabled {
-    border: none;
-    padding-left: 0;
+    border-top: 1px solid #dcdbdb;
     resize: none;
 }
-
 textarea:focus{
-    border-color: #696cff !important;
+    border-color: transparent;
+    outline: 0.05rem solid #95999d;
     box-shadow: none;
+    color: #697a8d;
+}
+.details{
+    box-shadow: 0px 0px 2px #676f79;
+    border-radius: 3px;
+}
+.details h5{
+    border-bottom: 1px solid  #dcdbdb;
+    padding-left: 0.7rem;
+}
+.info{
+    padding: 0 0.7rem 0.5rem 0.7rem;
+}
+.info label{
+    font-weight: 600;
+    color: #676f79;
+    margin-right: 0.5rem;
+}
+.info dl{
+    justify-content: center;
+}
+.description{
+    padding: 0;
+    box-shadow: 0px 0px 2px #676f79;
+    border-radius: 3px;
+}
+.description h5{
+    padding-left: 0.7rem;
+    margin-bottom: 0;
+}
+.members{
+    width: 31rem;
+    margin-left: 1rem;
+    box-shadow: 0px 0px 2px #676f79;
+    border-radius: 3px;
+}
+.members-info{
+    padding: 0 0.7rem 0 0.7rem;
+    margin-bottom: 0 !important;
+}
+.members h5{
+    padding-left: 0.7rem;
+    margin-bottom: 0;  
+}
+.COMPLETED{
+    background-color: #e8fadf !important;
+    color: #71dd37 !important;
+}
+.PROPOSED{
+    background-color: #d7f5fc !important;
+    color: #03c3ec !important;
+}
+.ARCHIVED{
+    background-color: #fff2d6 !important;
+    color: #ffab00 !important;
+}
+.INPROGRESS{
+    background-color: #e7e7ff !important;
+    color: #696cff !important;
+}
+.DEFAULT_STAT{
+    background-color: white;
+    color: #697a8d;
+}
+.LOW{
+    background-color: #d7f5fc !important;
+    color: #03c3ec !important;
+}
+.MEDIUM{
+    background-color: #fce4d7 !important;
+    color: #e88932 !important;
+}
+.HIGH{
+    background-color: #e16a26 !important;
+    color: #ffffff !important;
+}
+.DEFAULT_PRI{
+    background-color: white;
+    color: #697a8d;
 }
