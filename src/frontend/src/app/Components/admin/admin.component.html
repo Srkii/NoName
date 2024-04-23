@@ -115,11 +115,11 @@
               </div>
               <div class="d-flex flex-column">
                 <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
-                <small class="text-truncate text-muted">{{user.email}}</small>
+                <span class="text-truncate text-muted">{{user.email}}</span>
               </div>
             </div>
           </td>
-          <td  *ngIf="!user.archived">{{GetUserRole(user.role)}}</td>
+          <td  *ngIf="!user.archived"> <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>
           <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
           <td  *ngIf="!user.archived">
             <div class="d-flex align-items-center">

@@ -59,11 +59,12 @@ td {
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
-  font-size: 12px;
+  font-size: 16px;
   color: #697a8d;
 }
-td{
-  color: #697a8d;
+.text-body {
+  --bs-text-opacity:#697a8d ;
+  color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
 }
 #name {
   font-size: 14px;
