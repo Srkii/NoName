@@ -78,8 +78,7 @@ li{
   margin: 0;
 }
 .modal-footer{
-  display: flex;
-  justify-content: space-between;
+  align-content: end;
 }
 .modal-body{
   height: 300px;

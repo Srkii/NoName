@@ -55,8 +55,8 @@
     </p>
 
 
-    <p style=" font-size: 14px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee 
-      <ngx-avatars  id="assignee" *ngIf="!user.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user.firstName+ ' ' + user.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars> 
+    <p style=" font-size: 14px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee
+      <ngx-avatars  id="assignee" *ngIf="!user.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user.firstName+ ' ' + user.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
       <img id="assignee" *ngIf="user.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
     </p>
     <div class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
@@ -107,7 +107,7 @@
           <div class="ng-value-icon right" (click)="clear(item); deleteTaskDependency(item);"  aria-hidden="true">×</div>
         </ng-template>
       </ng-select>
-      
+
     <br />
     <button
       *ngIf="this.task.projectRole!='4'"
@@ -126,11 +126,11 @@
         <span class="no_comments" *ngIf="!CheckForCommets(task)">No Comments</span>
         <div *ngFor="let comment of comments">
           <ng-continer *ngIf="this.task.id===comment.taskId">
-            <p> <ngx-avatars  id="assignee" *ngIf="!comment.appUserPicUrl" size="30" bgColor="#5d57c2" [name]="comment.senderFirstName + ' ' + comment.senderLastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars> 
+            <p> <ngx-avatars  id="assignee" *ngIf="!comment.appUserPicUrl" size="30" bgColor="#5d57c2" [name]="comment.senderFirstName + ' ' + comment.senderLastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
               <img *ngIf="comment.appUserPicUrl" id="assignee" [src]="this.uploadservice.getImage(comment.appUserPicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"> {{ comment?.senderFirstName }} {{ comment?.senderLastName }}</p>
             <span class="comment_date">{{ comment?.messageSent  | date:'MMM d, y, h:mm a' }} <span *ngIf="comment.edited" >(edited)</span>
             <ng-continer *ngIf="this.task.projectRole!='4'">
-              <svg *ngIf="this.comment.senderId==this.appUserId"  
+              <svg *ngIf="this.comment.senderId==this.appUserId"
               (click)="ShowEdit(comment.id)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="edit" viewBox="0 0 16 16">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
@@ -139,17 +139,15 @@
             </span>
             <div class="content">
                 <p  id="comment_content{{comment.id}}" >{{ comment.content }}</p>
-                <label style="padding-left: 20px;" *ngIf="comment?.fileUrl" for="fileurl">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                <div class="file-download-container" *ngIf="comment?.fileUrl" (click)="downloadFile(comment.fileUrl)">
+                  <svg name="fileurl" xmlns="http://www.w3.org/2000/svg" width="25" height="30" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
                     <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
                     <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
                   </svg>
-                </label>
-                <a style="padding-left: 3px; padding-right: 3px;" name="fileurl" *ngIf="comment?.fileUrl" (click)="downloadFile(comment.fileUrl)">{{ comment?.fileUrl }}</a>
-                <svg  *ngIf="comment?.fileUrl"  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                </svg>
+                  <label style="padding-left: 20px;" for="fileurl">
+                    <a style="padding-left: 3px; padding-right: 3px;" >{{ comment?.fileUrl }}</a>
+                  </label>
+                </div>
                 <textarea class="edit_content" id="edit_content{{comment.id}}" style="display: none;" rows="3">{{ comment.content }}</textarea>
                 <button class="save_edit" id="save_edit{{comment.id}}" style="display: none;" (click)="editContent(comment.id)">Save Changes</button>
                 <button class="cancel_edit" id="cancel_edit{{comment.id}}" style="display: none;" (click)="CancelEdit(comment.id)">Cancel</button>
