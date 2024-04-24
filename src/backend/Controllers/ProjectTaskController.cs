@@ -354,6 +354,7 @@ namespace backend.Controllers
                     task.ProjectSection.SectionName,
                     task.AppUser.FirstName,
                     task.AppUser.LastName,
+                    task.AppUser.ProfilePicUrl
                 })
                 .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
@@ -586,8 +587,33 @@ namespace backend.Controllers
 
             return Ok(tasks);
         }
+
+        // kada pomeram taskove iz archived saljem listu zbog boljih performansi
+        [HttpPut("UpdateArchTasksToCompleted")]
+        public async Task<IActionResult> UpdateTasksToCompleted([FromBody] List<int> taskIds)
+        {
+            var completedStatusId = await _context.TaskStatuses
+                .Where(s => s.StatusName == "Completed")
+                .Select(s => s.Id)
+                .FirstOrDefaultAsync();
+
+            if (completedStatusId == 0)
+            {
+                return NotFound("Completed status not found.");
+            }
+
+            var tasksToUpdate = await _context.ProjectTasks
+                .Where(t => taskIds.Contains(t.Id))
+                .ToListAsync();
+
+            foreach (var task in tasksToUpdate)
+            {
+                task.TskStatusId = completedStatusId;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Tasks updated to Completed status." });
+        }
     }
-
-
 }
-

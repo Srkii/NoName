@@ -80,16 +80,33 @@ width: 75px;
 height: auto;
 }
 .personimage img {
-width: 400px;
-height: auto;
-position: absolute;
-top: 200px;
-right: 200px;
+    width: 400px;
+    height: auto;
+    position: absolute;
+    top: 250px;
+    right: 250px;
 }
-@media (max-width: 1200px) {
+/* skloni .personimage za rezoluciju manju od 1000px */
+@media (max-width: 1000px) {
     .personimage {
       display: none;
     }
+}
+@media (min-width: 1000px) and (max-width: 1230px) {
+.personimage img {
+    height: auto;
+    position: absolute;
+    top: 250px;
+    right: -50px;
+}
+}
+@media (min-width: 1230px) and (max-width: 1600px) {
+.personimage img {
+    height: auto;
+    position: absolute;
+    top: 250px;
+    right: 100px;
+}
 }
 .authentication-wrapper {
 display: flex;

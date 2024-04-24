@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MailReset } from '../../Entities/MailReset';
 import { MailresetService } from '../../_services/mailreset.service';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-forgot-pass',
   templateUrl: './forgot-pass.component.html',
@@ -12,7 +14,7 @@ export class ForgotPassComponent implements OnInit{
     Receiver: ''
   };
   emailSent: boolean = false;
-  constructor(private mailreset: MailresetService) { }
+  constructor(private mailreset: MailresetService, private toastr: ToastrService) { }
 
   ngOnInit(): void { }
 
@@ -22,7 +24,24 @@ export class ForgotPassComponent implements OnInit{
         console.log(response);
         this.emailSent = true;
       },
-      error: error => { console.log(error); }
+      error: error => {
+        let errorMessage = '';
+        console.log(error);
+        if (error.error.errors) {
+          for (const key in error.error.errors) {
+            if (error.error.errors.hasOwnProperty(key)) {
+              errorMessage += error.error.errors[key].join(' ') + ' ';
+            }
+          }
+          this.toastr.error(errorMessage.trim());
+        } else {
+          this.toastr.error(error.error)
+        }
+      }
     })
+  }
+
+  disableRightClick(event: MouseEvent): void {
+    event.preventDefault();
   }
 }

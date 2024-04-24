@@ -68,6 +68,7 @@ export class ProjectDetailComponent implements OnInit {
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
           this.projectTasks = tasks;
           this.groupedTasks = this.groupTasksBySection(tasks);
+          console.log(this.groupedTasks)
         });
         this.loadProjectMembers();
         this.loadAddableUsers();
@@ -160,6 +161,7 @@ export class ProjectDetailComponent implements OnInit {
 
   updateProject()
   {
+    this.spinner.show()
     if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
     {
       if(this.update.projectName !== this.project.projectName || this.update.projectStatus!=this.project.projectStatus ||
@@ -175,6 +177,7 @@ export class ProjectDetailComponent implements OnInit {
           this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
             console.log(updatedProject)
             this.getProjectInfo()
+            this.spinner.hide()
           })
       }
     }
@@ -182,6 +185,7 @@ export class ProjectDetailComponent implements OnInit {
 
   addProjectMembers()
   {
+    this.spinner.show()
     if(this.userRole == 1 || this.userRole == 0)
     {
       var projectMembers = this.selectedUsers.map<ProjectMember>(user => ({ AppUserId: user.appUserId, ProjectId: this.project.id, ProjectRole: user.projectRole = +user.projectRole}));
@@ -190,11 +194,13 @@ export class ProjectDetailComponent implements OnInit {
         this.loadAddableUsers()
         this.loadProjectMembers()
         this.selectedUsers = [] 
+        this.spinner.hide()
       })
     }
   }
 
   deleteAssigne(userId: number){
+    this.spinner.show()
     if(this.userRole == 0 || this.userRole == 1)
     {
       this.myProjectsService.DeleteProjectMember(this.project.id,userId).subscribe(updatedProject => {
@@ -202,11 +208,13 @@ export class ProjectDetailComponent implements OnInit {
         this.loadProjectMembers()
         this.loadAddableUsers()
         this.searchTerm = ''
+        this.spinner.hide()
       })
     }
   }
 
   updateUsersRole(user: SelectedUser){
+    this.spinner.show();
     if(this.userRole == 0 || this.userRole == 1 || this.userRole == 2)
     {
       var projectMember : ProjectMember = {
@@ -217,6 +225,7 @@ export class ProjectDetailComponent implements OnInit {
 
       this.myProjectsService.UpdateUsersProjectRole(projectMember).subscribe(update => {
         console.log("User role changed successfully")
+        this.spinner.hide()
       })
     }
   }

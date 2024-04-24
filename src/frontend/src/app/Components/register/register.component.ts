@@ -84,4 +84,8 @@ export class RegisterComponent implements OnInit {
   passwordMatch(): boolean {
     return this.newUser.Password === this.confirmPassword;
   }
+
+  disableRightClick(event: MouseEvent): void {
+    event.preventDefault();
+  }
 }

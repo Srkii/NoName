@@ -14,5 +14,7 @@ export interface ProjectTask {
   lastName?: string;
   project: Project;
   projectRole?: string;
-  dependencies?:TaskDependency
+  dependencies?:TaskDependency;
+  profilePicUrl?: string;
+  selected?: boolean;
 }
