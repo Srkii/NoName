@@ -119,11 +119,13 @@ img{
 .full:hover,
 .file:hover,
 .trash:hover,
-.exit_full:hover {
+.exit_full:hover{
   cursor: pointer;
+  color: #5f61e6;
 }
 .full,
-.exit_full{
+.exit_full,
+.trash{
   float: right;
   margin-right: 5%;
 }
@@ -280,14 +282,22 @@ img{
   color:  #5f61e6; 
   cursor: pointer;
 }
+.closed,
 .completed {
   background-color: #3fb94c;
   box-shadow: 0 0 3px #3fb94c;
 }
-/* .taskName-container {
-  display: flex;
-  align-items: center;
-} */
+.cant_close{
+  background-color: #3fb94c;
+  box-shadow: 0 0 3px #3fb94c;
+  display: none;
+}
+.not_closed{
+  display: none;
+}
+.not_completed{
+  display: block;
+}
 .taskName{
   margin-top: 1px;
   margin-left: 1px;
@@ -391,4 +401,27 @@ img{
   /* Add your custom styles here */
   opacity: 0.5; /* Example: reduce opacity when button is disabled */
   background-color: red;
+}
+
+.modal-container{
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.delete_task,
+.cancel_task{
+  background-color: rgb(255, 50, 50);
+  padding: 10px;
+  outline: none;
+  border: none;
+  color: #ffffff;
+  border-radius: 8px;
+}
+.cancel_task{
+  background-color: #697a8d;
+}
+.delete_task:hover,
+.cancel_task:hover
+{
+  filter: brightness(120%);
 }

@@ -37,7 +37,7 @@
           <td class="name">
             {{ task.taskName }}
           </td>
-          <td class="projectname">
+          <td class="projectname" (click)="this.goToProject(task.project)">
             {{ task.project ? task.project.projectName : "No Project" }}
           </td>
           <td>{{task.sectionName? task.sectionName: "No section"}}</td>
@@ -82,7 +82,7 @@
             {{ task.taskName }}
           </td>
 
-          <td>
+          <td class="projectname" (click)="this.goToProject(task.project)">
             {{ task.project ? task.project.projectName : "No Project" }}
           </td>
 
@@ -139,7 +139,7 @@
           <td class="name">
             {{ task.taskName }}
           </td>
-          <td>{{ task.project ? task.project.projectName : 'No Project' }}</td>
+          <td class="projectname"  (click)="this.goToProject(task.project)">{{ task.project ? task.project.projectName : 'No Project' }}</td>
 
           <td>{{task.sectionName? task.sectionName: "No section"}}</td>
           <td>{{ task.endDate | date }}</td>

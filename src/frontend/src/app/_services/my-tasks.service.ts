@@ -99,6 +99,11 @@ export class MyTasksService {
   GetAllTasksDependencies():Observable<TaskDependency[]>{
     return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`);
   }
+
+  deleteTask(taskId: number): Observable<any> {
+    const url = `${this.baseUrl}/deleteTask/${taskId}`;
+    return this.http.delete(url);
+  }
   
 
 }

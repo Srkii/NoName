@@ -57,8 +57,8 @@ namespace backend.Controllers
                     SenderFirstName = comment.SenderFirstName,
                     SenderLastName = comment.SenderLastName,
                      FileUrl =comment.FileUrl,
+                     Edited=comment.Edited,
                     AppUserPicUrl = user.ProfilePicUrl,
-                    Edited=comment.Edited
                 }
             )
             .ToListAsync();

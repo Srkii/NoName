@@ -615,5 +615,43 @@ namespace backend.Controllers
 
             return Ok(new { message = "Tasks updated to Completed status." });
         }
+
+        [HttpDelete("deleteTask/{taskId}")]
+        public async Task<IActionResult> DeleteTask(int taskId)
+        {
+            var task = await _context.ProjectTasks.FindAsync(taskId);
+
+            if (task == null)
+            {
+                return NotFound("Task not found.");
+            }
+
+            // Delete task dependencies
+            var taskDependencies = _context.TaskDependencies.Where(dep => dep.TaskId == taskId || dep.DependencyTaskId == taskId);
+            _context.TaskDependencies.RemoveRange(taskDependencies);
+
+            // Delete comments associated with the task
+            var comments = _context.Comments.Where(c => c.TaskId == taskId);
+            _context.Comments.RemoveRange(comments);
+
+            // Delete attachments associated with the task
+            var attachments = _context.Attachments.Where(a => a.task_id == taskId);
+            _context.Attachments.RemoveRange(attachments);
+
+            // Set notifications related to the task to null
+            var notifications = _context.Notifications.Where(n => n.task_id == taskId);
+            foreach (var notification in notifications)
+            {
+                notification.task_id = null;
+            }
+
+            _context.ProjectTasks.Remove(task);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Task and related data deleted successfully." });
+        }   
+    
     }
+    
 }

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges, inject, TemplateRef } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
@@ -16,6 +16,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { TaskDependency } from '../../Entities/TaskDependency';
 import { ThisReceiver, TmplAstIdleDeferredTrigger } from '@angular/compiler';
 import { addSeconds } from 'date-fns';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-popup',
@@ -42,12 +43,20 @@ export class PopupComponent {
   appUserId=parseInt(this.userId);
   tasks: ProjectTask[]=[];
   selectedTasks: number[]=[];
-  deletedTask:boolean=false;
   allDependencies:TaskDependency[]=[];
+  modalRef?: BsModalRef;
   
 
 
-  constructor(private myTasksService: MyTasksService,private cdr: ChangeDetectorRef,private userInfo:UserinfoService,  private commentsService: CommentsService,private myProjectsService: MyProjectsService,    public uploadservice: UploadService, private router: Router){}
+  constructor(private myTasksService: MyTasksService,
+              private cdr: ChangeDetectorRef,
+              private userInfo:UserinfoService,  
+              private commentsService: CommentsService,
+              private myProjectsService: MyProjectsService,    
+              public uploadservice: UploadService, 
+              private router: Router,
+              private modalService: BsModalService,
+            ){}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
@@ -85,7 +94,6 @@ export class PopupComponent {
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
       this.getAllTasks();
-      this.getAllTasksDependencies();
       
     }
   }
@@ -107,8 +115,6 @@ export class PopupComponent {
       this.commentsService.getComments(this.task.id).subscribe({
         next: (comments: Comment[]) => {
           this.comments = comments;
-          console.log(this.comments[0]);
-
         },
         error: (error: any) => {
           console.error('Error fetching comments:', error);
@@ -118,7 +124,7 @@ export class PopupComponent {
   }
 
 
-  toggleTaskCompletion(task: ProjectTask): void {
+  closeTask(task: ProjectTask): void {
     var previousTaskStatus = "";
     if (task.statusName != 'InReview') {
       previousTaskStatus = task.statusName;
@@ -150,6 +156,7 @@ export class PopupComponent {
           
         });
         this.taskUpdated.emit();
+        
       },
       error: (error: any) => {
         console.error('Error toggling task completion:', error);
@@ -157,6 +164,84 @@ export class PopupComponent {
     });
   }
 
+  toggleTaskCompletion(task: ProjectTask): void {
+    var previousTaskStatus = "";
+    if (task.statusName == 'InReview') {
+      previousTaskStatus = task.statusName;
+      task.statusName = 'Completed';
+    } else {
+      if(previousTaskStatus!="")
+        task.statusName = previousTaskStatus;
+      else
+        task.statusName = 'InReview';
+    }
+    
+      
+    this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
+      next: () => {
+        this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
+            const closed_deps:TaskDependency[]=deps.filter(dep=>dep.dependencyTaskId==this.task?.id);
+            closed_deps.forEach(closed => {
+              const deleteDto: TaskDependency = {
+                taskId: closed.taskId,
+                dependencyTaskId: task.id
+              };
+        
+              this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
+                console.log('Dependency deleted successfully');
+              }, (error: any) => {
+                console.error('Error deleting dependency:', error);
+              });
+        });
+          
+        });
+        this.taskUpdated.emit();
+        
+      },
+      error: (error: any) => {
+        console.error('Error toggling task completion:', error);
+      }
+    });
+  }
+  ArchiveTasks(task: ProjectTask): void {
+    var previousTaskStatus = "";
+    if (task.statusName != 'Archived') {
+      previousTaskStatus = task.statusName;
+      task.statusName = 'Archived';
+    } else {
+      if(previousTaskStatus!="")
+        task.statusName = previousTaskStatus;
+      else
+        task.statusName = 'InProgress';
+    }
+    
+      
+    this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
+      next: () => {
+        this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
+            const closed_deps:TaskDependency[]=deps.filter(dep=>dep.dependencyTaskId==this.task?.id);
+            closed_deps.forEach(closed => {
+              const deleteDto: TaskDependency = {
+                taskId: closed.taskId,
+                dependencyTaskId: task.id
+              };
+        
+              this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
+                console.log('Dependency deleted successfully');
+              }, (error: any) => {
+                console.error('Error deleting dependency:', error);
+              });
+        });
+          
+        });
+        this.taskUpdated.emit();
+        
+      },
+      error: (error: any) => {
+        console.error('Error toggling task completion:', error);
+      }
+    });
+  }
 
 
 
@@ -260,6 +345,9 @@ export class PopupComponent {
         messageSent:  new Date,
         edited:false,
       };
+      console.log("fjowfje");
+      console.log(commentDto);
+
 
       this.commentsService.postComment(commentDto).subscribe({
         next: (comment: Comment) => {
@@ -311,36 +399,11 @@ export class PopupComponent {
         this.users = response,
         this.users.forEach(user => {
           user.fullName = user.firstName + ' ' + user.lastName;
-          //this.loadPicture(this.users);
-          //this.loadPicture(this.users);
         });
       },
       error: error => console.log(error)
     });
   }
-
-  // loadPicture(usersArray: TaskAssignee[]) : void{
-  //   usersArray.forEach(user => {
-  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
-  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
-  //       url=>{
-  //         user.pictureUrl=url;
-  //       }
-  //       )
-  //     }
-  //   });
-  // }
-  // loadPicture(usersArray: TaskAssignee[]) : void{
-  //   usersArray.forEach(user => {
-  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
-  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
-  //       url=>{
-  //         user.pictureUrl=url;
-  //       }
-  //       )
-  //     }
-  //   });
-  // }
 
 
   updateTaskInfo(task: ProjectTask): void {
@@ -465,9 +528,7 @@ export class PopupComponent {
   
   
   
-  getAllTasksDependencies():void{
-  }
-
+  
   addTaskDependency(): void {
     if (!this.task) {
       console.error('Task is null');
@@ -475,7 +536,6 @@ export class PopupComponent {
     }
   
     const dtos: TaskDependency[] = [];
-    this.deletedTask = false;
   
     this.selectedTasks.forEach(selectedTask => {
       if(this.task)
@@ -508,15 +568,16 @@ export class PopupComponent {
         console.error('Error: task is null.');
         return;
       }
-      this.deletedTask=true;
       const dto: TaskDependency = {
         taskId: this.task.id,
         dependencyTaskId: item.id
       };
+      
+
 
       this.myTasksService.deleteTaskDependency(dto).subscribe(
         (response: TaskDependency) => {
-          console.log('Task dependency added:', response);
+          console.log('Task dependency deleted:');
         },
         (error: any) => {
           console.error('Error adding task dependency:', error);
@@ -524,12 +585,10 @@ export class PopupComponent {
       );
   }
 
-  DisableCloseTask():boolean{
-    if(this.task)
-      {
-        if (Array.isArray(this.task.dependencies))
+  DisableCloseTask(task:ProjectTask):boolean{
+        if (Array.isArray(task.dependencies))
           {    
-            if(this.task.dependencies.length==0)
+            if(task.dependencies.length==0)
               {
                 return true;
               }
@@ -537,7 +596,6 @@ export class PopupComponent {
             {
               return false;
             }
-          }
       }
       return false;
   }
@@ -551,7 +609,35 @@ export class PopupComponent {
     );
   }
 
-  
+  openDeleteModal(modal: TemplateRef<void>){
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: "modal modal modal-dialog-centered"
+      });
+    
+  }
+
+  closeDeleteModal() {
+    if(this.modalRef)
+      {
+        this.modalRef.hide();
+      }
+  }
+
+  deleteTask(taskId: number): void {
+
+    this.myTasksService.deleteTask(taskId).subscribe({
+      next: (response) => {
+        console.log('Task deleted successfully:', response);
+        this.taskUpdated.emit();
+        this.backClicked.emit();
+      },
+      error: (error) => {
+        console.error('Error deleting task:', error);
+      }
+    });
+  }
   
 
 }  

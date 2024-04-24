@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from '../../_services/shared.service';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { Project } from '../../Entities/Project';
 
 @Component({
   selector: 'app-my-tasks',
@@ -203,6 +204,11 @@ export class MyTasksComponent implements OnInit {
     const now = new Date().getTime(); 
     const endDateTimestamp = new Date(endDate).getTime(); 
     return endDateTimestamp <= now; // Check if endDate is less than now
+  }
+
+  
+  goToProject(project: Project): void {
+    this.router.navigate(['/project', project.id]);
   }
 
   
