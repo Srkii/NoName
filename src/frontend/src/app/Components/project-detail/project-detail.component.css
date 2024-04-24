@@ -261,7 +261,6 @@ thead th{
     background-color: #696cff;
     color: white;
 }
-/* -------- */
 .nameAvatar {
     display: inline-flex;
     align-items: center;
@@ -282,49 +281,21 @@ thead th{
     font-family: 'Public Sans', sans-serif;
     color: #697a8d;
 }
-:host::ng-deep .ng-option-marked{
-    background-color: #F5F5F9 !important;
-}
-:host::ng-deep .ng-option-selected{
-    background-color: #a8a9f0 !important;
-}
-:host::ng-deep .ng-option-marked{
-    background-color: #9a9cec !important;
-    border-top: 0px !important;
+.ng-value{
+    border-radius: 15px !important;
 }
 .ng-value-label.ng-star-inserted{
     padding-left: 3px !important;
 }
 .ng-value-icon{
     position: relative;
-    top: 0.055rem;
-    display: inline-flex !important;
-    align-items: center;
+    top: 0.15rem;
+    height: 1.5rem;
     border-left: none !important;
     padding-left: 0 !important;
 }
 .ng-value-icon:hover{
     background-color: transparent !important;
-}
-:host::ng-deep .ng-value{
-    display: inline-flex !important;
-    align-items: center !important;
-    border-radius: 15px !important;
-}
-:host::ng-deep .ng-clear .ng-clear-wrapper{
-    display: flex !important;
-    align-items: center;
-}
-:host::ng-deep .ng-clear-wrapper{
-    top:0.1rem;
-    display: flex !important;
-    align-items: center;
-}
-:host::ng-deep .ng-select.ng-select-opened > .ng-select-container{
-    border-color: #696cff !important;
-}
-:host::ng-deep .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container{
-    border-color: #696cff !important;
 }
 /* ----- */
 .t2{
@@ -341,23 +312,6 @@ thead th{
     font-size: smaller;
     color: #697a8d;
     padding-right: 0.3rem;
-}
-.search{
-    text-align: center;
-    border-radius: 0%;
-}
-.search:focus{
-    box-shadow: none;
-}
-.assignee{
-    width: auto;
-    border-color: #d7d7f8 ;
-    outline: none;
-    color: #697a8d;
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
-    font-size: smaller;
-    float: right;
 }
 .titleInp{
     font-size: 1.5em;
@@ -432,20 +386,6 @@ textarea:focus{
     padding-left: 0.7rem;
     margin-bottom: 0;
 }
-.members{
-    width: 31rem;
-    margin-left: 1rem;
-    box-shadow: 0px 0px 2px #676f79;
-    border-radius: 3px;
-}
-.members-info{
-    padding: 0 0.7rem 0 0.7rem;
-    margin-bottom: 0 !important;
-}
-.members h5{
-    padding-left: 0.7rem;
-    margin-bottom: 0;  
-}
 .COMPLETED{
     background-color: #e8fadf !important;
     color: #71dd37 !important;
@@ -481,4 +421,56 @@ textarea:focus{
 .DEFAULT_PRI{
     background-color: white;
     color: #697a8d;
+}
+
+/* Member Managment */
+
+.new-item {
+    margin: 10px !important;
+    margin-left: 30px !important;
+    cursor: pointer;
+    width: 180px;
+    border-radius: 0.3rem;
+    border-bottom: 2px solid #D7D7F8;
+}
+.new-item:hover {
+    border-bottom: 2px solid #696cff;
+}
+.members{
+    box-shadow: 0px 0px 2px #676f79;
+    border-radius: 3px;
+}
+.members-info{
+    padding: 0 0.7rem 0 0.7rem;
+    margin-bottom: 0 !important;
+}
+.members h5{
+    padding-left: 0.7rem;
+    margin-bottom: 0;  
+}
+.search{
+    text-align: center;
+    border-radius: 0%;
+    border-left: none;
+    border-right: none;
+}
+.search:focus{
+    box-shadow: none;
+    outline: none;
+    border-color: #696cff;
+}
+.assignee{
+    width: auto;
+    border-color: #d7d7f8 ;
+    outline: none;
+    color: #697a8d;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    font-size: smaller;
+    float: right;
+}
+.add{
+    margin-left: 23.2rem;
+    margin-top: 5px;
+    padding: 2px;
 }

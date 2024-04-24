@@ -27,7 +27,7 @@ export class ProjectDetailComponent implements OnInit {
   groupedTasks: { [key: string]: any } = {};
 
   update: UpdateProject = {};
-  selectedUser: SelectedUser | undefined;
+  selectedUsers: SelectedUser[] = [];
   usersOnProject: SelectedUser[] = [];
   addableUsers: SelectedUser[] = [];
   filteredUsers: SelectedUser[] = [];
@@ -149,6 +149,15 @@ export class ProjectDetailComponent implements OnInit {
       this.update.projectStatus = this.project.projectStatus;
   }
 
+  openMemberManagment(modal: TemplateRef<void>){
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: "modal modal-md modal-dialog-centered MemberManagmentModel",
+      }
+    );
+  }
+
   updateProject()
   {
     if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
@@ -171,23 +180,17 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-  addProjectMember()
+  addProjectMembers()
   {
     if(this.userRole == 1 || this.userRole == 0)
     {
-      if(this.selectedUser !== undefined ){
-        var projectMember : ProjectMember = {
-          AppUserId: this.selectedUser.appUserId,
-          ProjectId: this.project.id,
-          ProjectRole: +this.selectedUser.projectRole
-        }
+      var projectMembers = this.selectedUsers.map<ProjectMember>(user => ({ AppUserId: user.appUserId, ProjectId: this.project.id, ProjectRole: user.projectRole = +user.projectRole}));
 
-        this.myProjectsService.AddProjectMember(projectMember).subscribe(response => {
-          this.loadAddableUsers()
-          this.loadProjectMembers()
-          this.selectedUser = undefined
-        })
-      }
+      this.myProjectsService.AddProjectMembers(projectMembers).subscribe(response => {
+        this.loadAddableUsers()
+        this.loadProjectMembers()
+        this.selectedUsers = [] 
+      })
     }
   }
 
