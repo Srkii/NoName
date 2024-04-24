@@ -91,18 +91,26 @@ export class GanttComponent implements OnInit{
   }
 
   dragEnded($event: GanttDragEvent) {
-    //ovo te zanima gde si ga spustio, posto ovo skroz menja start i end date
-    console.log("taskdrag-> ",$event.item);
-    // bukv moze odma da se salju podaci na gotovo za promenjene datume
-    //ovo radi istu stvar kad samo mrdas jednu stranu task-a u ganttu
+    if ($event?.item.start !== undefined && $event.item.end!==undefined) {
+
+      const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
+      const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
+
+      this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
+      .subscribe((response: any) => {
+        // console.log(response);
+      });
+    }
   }
 
   linkDragEnded(event: any){
-    console.log("linkdrag->", event);
+    // console.log("linkdrag->", event);
     let taskDependency:TaskDependency={
-      taskId:event.source.id,
-      dependencyTaskId:event.target.Id
+      taskId:Number(event.source.id),
+      dependencyTaskId:Number(event.target.id)
     }
+    let arr:TaskDependency[] = [taskDependency];
+    this.myTasksService.addTaskDependencies(arr).subscribe((response)=>{});
   }
 
   dragMoved(event: any) {
@@ -143,8 +151,8 @@ export class GanttComponent implements OnInit{
     this.currentProjectId = projectId? +projectId:null;
     await this.getProjectSections();
     await this.getProjectTasks();
-    console.log("SECTIONS",this.groups);
-    console.log("TASKS",this.items);
+    // console.log("SECTIONS",this.groups);
+    // console.log("TASKS",this.items);
   }
   getProjectSections(){
     if(this.currentProjectId){
@@ -166,19 +174,24 @@ export class GanttComponent implements OnInit{
 
           var dependencies:GanttLink[] = [];
 
-          this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:any)=>{
-            dependencies = depencency_array;
-          })
+          this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:TaskDependency[])=>{
 
+            depencency_array.forEach((dep:TaskDependency) => {
+              dependencies.push({
+                type: 1,
+                link: String(dep.dependencyTaskId)
+              });
+            });
+          })
           let item:GanttItem={
             id: String(t.id),
             group_id :t.projectSectionId? String(t.projectSectionId):'',
             title:t.taskName,
-            start : this.convertToUnixTimestamp(t.startDate),
-            end : this.convertToUnixTimestamp(t.endDate),
-            links : dependencies,
-            expandable:true,
-            linkable:true
+            start: this.convertToUnixTimestamp(t.startDate),
+            end: this.convertToUnixTimestamp(t.endDate),
+            links: dependencies,
+            expandable: true,
+            linkable: true
           }
           this.items.push(item);
         })
@@ -188,5 +201,9 @@ export class GanttComponent implements OnInit{
   convertToUnixTimestamp(dateString: string): number {
     const date = new Date(dateString);
     return Math.floor(date.getTime() / 1000);
+  }
+  convertToStandardTimeStamp(unixTime:number) : string{
+    const date = new Date(unixTime*1000);
+    return date.toLocaleDateString();
   }
 }

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { TaskDependency } from '../Entities/TaskDependency';
+import { DateTimeDto } from '../Entities/DateTimeDto';
 
 @Injectable({
   providedIn: 'root',
@@ -100,8 +101,14 @@ export class MyTasksService {
     return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`);
   }
 
-  GetTaskDependencies(id:any){
-    return this.http.get<TaskDependency>(`${this.baseUrl}/getTaskDependencies/${id}`);
+  GetTaskDependencies(id:any):Observable<TaskDependency[]>{
+    return this.http.get<TaskDependency[]>(`${this.baseUrl}/getTaskDependencies/${id}`);
   }
-
+  UpdateTimeGantt(id:any,startDate:Date,endDate:Date){
+    var newDatetime:DateTimeDto = {
+      StartDate:startDate,
+      EndDate:endDate,
+    }
+    return this.http.post<any>(`${this.baseUrl}/timeUpdateGantt/${id}`,newDatetime);
+  }
 }

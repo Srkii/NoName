@@ -620,5 +620,15 @@ namespace backend.Controllers
 
             return Ok(new { message = "Tasks updated to Completed status." });
         }
+        [AllowAnonymous]    
+        [HttpPost("timeUpdateGantt/{id}")]
+        public async Task<ActionResult> UpdateTaskTimeGantt(int id, DateTimeDto newDateTime){
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == id);
+            task.StartDate = newDateTime.StartDate;
+            task.EndDate = newDateTime.EndDate;
+
+            await _context.SaveChangesAsync();
+            return Ok(task);
+        }
     }
 }
