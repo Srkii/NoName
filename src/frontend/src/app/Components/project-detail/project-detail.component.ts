@@ -67,6 +67,7 @@ export class ProjectDetailComponent implements OnInit {
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
           this.projectTasks = tasks;
           this.groupedTasks = this.groupTasksBySection(tasks);
+          console.log(this.groupedTasks)
         });
         this.loadProjectMembers();
         this.loadAddableUsers();
