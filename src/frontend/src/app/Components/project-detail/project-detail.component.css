@@ -251,6 +251,7 @@ thead th{
     align-items: center;
 }
 .btn-outline-info{
+    height: 2rem;
     padding-top: 0;
     padding-bottom: 0;
     color: #696cff;
@@ -261,58 +262,7 @@ thead th{
     background-color: #696cff;
     color: white;
 }
-.nameAvatar {
-    display: inline-flex;
-    align-items: center;
-    font-family: 'Public Sans', sans-serif;
-}
-.ng-value-label{
-    display: inline-flex !important;
-    align-items: center !important;
-    font-family: 'Public Sans', sans-serif;
-    color: #697a8d;
-}
-.ng-value-label img, .ng-value-label ngx-avatars{
-    margin-right: 0.2rem !important;
-}
-.user-detail{
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Public Sans', sans-serif;
-    color: #697a8d;
-}
-.ng-value{
-    border-radius: 15px !important;
-}
-.ng-value-label.ng-star-inserted{
-    padding-left: 3px !important;
-}
-.ng-value-icon{
-    position: relative;
-    top: 0.15rem;
-    height: 1.5rem;
-    border-left: none !important;
-    padding-left: 0 !important;
-}
-.ng-value-icon:hover{
-    background-color: transparent !important;
-}
 /* ----- */
-.t2{
-    margin-top: 0.5rem;
-}
-.t2 td{
-    width: auto;
-    vertical-align: middle;
-    color: #676f79;
-}
-.t2 p{
-    text-align: right;
-    margin-bottom: 0;
-    font-size: smaller;
-    color: #697a8d;
-    padding-right: 0.3rem;
-}
 .titleInp{
     font-size: 1.5em;
     font-weight: 400;
@@ -340,11 +290,11 @@ select:disabled {
     -moz-appearance: none;
     appearance: none;
     background-image: none;
+    padding:0;
 }
 textarea{
     color: #697a8d;
     border-radius: 0;
-    border: none; 
     border-top: 1px solid;
     border-color: #dcdbdb;
 }
@@ -353,18 +303,14 @@ textarea:disabled {
     resize: none;
 }
 textarea:focus{
-    border-color: transparent;
-    outline: 0.05rem solid #95999d;
     box-shadow: none;
+    border-color: #696cff;
     color: #697a8d;
-}
-.details{
-    box-shadow: 0px 0px 2px #676f79;
-    border-radius: 3px;
 }
 .details h5{
     border-bottom: 1px solid  #dcdbdb;
     padding-left: 0.7rem;
+    padding-bottom: 0.2rem;
 }
 .info{
     padding: 0 0.7rem 0.5rem 0.7rem;
@@ -377,14 +323,9 @@ textarea:focus{
 .info dl{
     justify-content: center;
 }
-.description{
-    padding: 0;
-    box-shadow: 0px 0px 2px #676f79;
-    border-radius: 3px;
-}
 .description h5{
     padding-left: 0.7rem;
-    margin-bottom: 0;
+    margin-bottom: 0.2rem;
 }
 .COMPLETED{
     background-color: #e8fadf !important;
@@ -425,34 +366,26 @@ textarea:focus{
 
 /* Member Managment */
 
+.modal-header h4{
+    margin-bottom: 0.3125rem;
+}
 .new-item {
     margin: 10px !important;
     margin-left: 30px !important;
     cursor: pointer;
-    width: 180px;
+    width: 10rem;
     border-radius: 0.3rem;
     border-bottom: 2px solid #D7D7F8;
 }
 .new-item:hover {
     border-bottom: 2px solid #696cff;
 }
-.members{
-    box-shadow: 0px 0px 2px #676f79;
-    border-radius: 3px;
-}
-.members-info{
-    padding: 0 0.7rem 0 0.7rem;
-    margin-bottom: 0 !important;
-}
 .members h5{
-    padding-left: 0.7rem;
-    margin-bottom: 0;  
+    padding-bottom: 0.2rem;  
 }
 .search{
     text-align: center;
     border-radius: 0%;
-    border-left: none;
-    border-right: none;
 }
 .search:focus{
     box-shadow: none;
@@ -470,7 +403,69 @@ textarea:focus{
     float: right;
 }
 .add{
-    margin-left: 23.2rem;
-    margin-top: 5px;
-    padding: 2px;
+    padding: 0.2rem;
+    color: white;
+    background-color: #696cff;
+    border: none;
+    margin-bottom: 0.5rem;
+}
+.add:hover{
+    background-color: #4d50f8;
+}
+.addmembers h5{
+    padding-bottom: 0.2rem;
+}
+.t2{
+    margin-top: 0.5rem;
+    border-left: 1px solid inherit;
+    border-right: 1px solid inherit;
+}
+.t2 td{
+    width: auto;
+    vertical-align: middle;
+    color: #676f79;
+}
+.t2 p{
+    text-align: right;
+    margin-bottom: 0;
+    font-size: smaller;
+    color: #697a8d;
+    padding-right: 0.3rem;
+}
+.nameAvatar {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Public Sans', sans-serif;
+}
+.ng-value-label{
+    display: inline-flex !important;
+    align-items: center !important;
+    font-family: 'Public Sans', sans-serif;
+    color: #697a8d;
+}
+.ng-value-label img, .ng-value-label ngx-avatars{
+    margin-right: 0.2rem !important;
+}
+.user-detail{
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Public Sans', sans-serif;
+    color: #697a8d;
+}
+.ng-value-container{
+    padding-left: 2px !important;
+    padding-top: 2px !important;
+}
+.ng-value-label.ng-star-inserted{
+    padding-left: 3px !important;
+}
+.ng-value-icon{
+    border-left: none !important;
+    padding-left: 0 !important;
+}
+.ng-value-icon:hover{
+    background-color: transparent !important;
+}
+:host::ng-deep .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container{
+    border-color: #696cff !important;
 }
