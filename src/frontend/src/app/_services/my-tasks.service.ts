@@ -14,7 +14,7 @@ export class MyTasksService {
   private apiUrl = environment.apiUrl;
   private baseUrl = `${this.apiUrl}/projectTask`;
   sectionDeleted = new EventEmitter<void>();
-  
+
   constructor(private http: HttpClient) {}
 
   GetProjectTasks(): Observable<ProjectTask[]> {
@@ -30,7 +30,7 @@ export class MyTasksService {
   GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`);
   }
-  
+
   GetProjectTask(taskId: number, userId: any): Observable<ProjectTask> {
     return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}/${userId}`);
   }
@@ -38,7 +38,7 @@ export class MyTasksService {
   updateTaskStatus1(id: number, statusName: string): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`, null);
   }
-  
+
   // kada pomeram taskove iz archived saljem listu zbog boljih performansi
   UpdateArchTasksToCompleted(taskIds: number[]): Observable<any> {
     return this.http.put(`${this.baseUrl}/UpdateArchTasksToCompleted`, taskIds);
@@ -92,13 +92,16 @@ export class MyTasksService {
   addTaskDependencies(dtos: TaskDependency[]): Observable<any> {
     return this.http.post(`${this.baseUrl}/addTaskDependency`, dtos);
   }
-  
+
   deleteTaskDependency(dto: TaskDependency): Observable<any> {
     return this.http.post(`${this.baseUrl}/deleteTaskDependency`, dto);
   }
   GetAllTasksDependencies():Observable<TaskDependency[]>{
     return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`);
   }
-  
+
+  GetTaskDependencies(id:any){
+    return this.http.get<TaskDependency>(`${this.baseUrl}/getTaskDependencies/${id}`);
+  }
 
 }

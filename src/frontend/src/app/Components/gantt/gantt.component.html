@@ -10,7 +10,7 @@
       </div>
       <div class="col-12">
           <div class="table-responsive" style="height: 70vh;">
-              <ngx-gantt #gantt [items]="items" [groups]="groups" [viewType]="viewType" [draggable]="true" [linkable]="true" [selectable]="true" [multiple]="true"
+              <ngx-gantt #gantt *ngIf="data_loaded" [items]="items" [groups]="groups" [viewType]="viewType" [draggable]="true" [linkable]="true" [selectable]="true" [multiple]="true"
                     [viewOptions]="viewOptions" [toolbarOptions]="toolbarOptions" [loading]="loading" [virtualScrollEnabled]="true" (barClick)="barClick($event)" (viewChange)="viewChange($event)"
                     (lineClick)="lineClick($event)" (dragMoved)="dragMoved($event)" (dragEnded)="dragEnded($event)" (selectedChange)="selectedChange($event)" (linkDragEnded)="linkDragEnded($event)">
                   <ngx-gantt-table [draggable]="true" (dragDropped)="onDragDropped($event)" (dragStarted)="onDragStarted($event)" (dragEnded)="onDragEnded($event)">

@@ -301,7 +301,11 @@ namespace backend.Controllers
             var tasks = await _context.TaskDependencies.ToListAsync();
             return Ok(tasks);
         }
-
+        [AllowAnonymous]
+        [HttpGet("getTaskDependencies/{id}")]
+        public async Task<ActionResult<IEnumerable<TaskDependency>>> GetTaskDependencies(int id){
+            return await _context.TaskDependencies.Where(x => x.TaskId == id).ToListAsync();
+        }
 
         [AllowAnonymous]
         [HttpPost("AddTaskAssignee")]
@@ -354,7 +358,8 @@ namespace backend.Controllers
                     task.ProjectSection.SectionName,
                     task.AppUser.FirstName,
                     task.AppUser.LastName,
-                    task.AppUser.ProfilePicUrl
+                    task.AppUser.ProfilePicUrl,
+                    task.ProjectSectionId
                 })
                 .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
