@@ -229,7 +229,7 @@
 </ng-template>
 
 <ng-template #changeRole>
-  <div class="modal-header">
+  <div class="modal-header archy">
     <h4>Change user's role</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
@@ -253,36 +253,19 @@
 </ng-template>
 
 <ng-template #archivedUsers>
-  <div class="modal-header">
-    <h4 class="modal-title pull-left">Archived users</h4>
+  <div class="modal-header text-center">
+    <h4 class="modal-title text-center">Archived users</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <div class="table-responsive text-nowrap">
-    <thead>
+ 
+    <div class="modal-body" *ngIf="archived_users.length>0; else noArchivedUsers">
+    <table class="invoice-list-table table">
+      <thead>
       <tr>
-        <th>User
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-
-            viewBox="0 0 16 16"
-            (click)="sortUsersByName()"
-          >
-          <path
-          fill-rule="evenodd"
-          d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"
-        />
-      </svg>
-
-        </th>
-
+        <th>User</th>
         <th>Role </th>
-        <!-- <th>WorkLoad</th> -->
         <th>Actions</th>
       </tr>
     </thead>
@@ -292,10 +275,10 @@
           <div class="d-flex justify-content-start align-items-center">
             <div class="avatar-wrapper">
               <div *ngIf="user.profilePicUrl" class="nameAvatar boardAvatar">
-                <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="35" width="35"/>
               </div>
               <div *ngIf="!user.profilePicUrl" class="nameAvatar boardAvatar">
-                <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+                <ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
               </div>
             </div>
             <div class="d-flex flex-column">
@@ -313,10 +296,14 @@
         </td>
       </tr>
     </tbody>
-  </div>
+  
+</table>
+<div class="mb-3 text-center">
+  <button class="btn btn-primary d-grid w-50 mx-auto" type="submit" (click)="removeFromArchived()" >Remove from Archieved</button>
 </div>
-<div class="modal-footer"></div>
-<div class="mb-3">
-  <button class="btn btn-primary d-grid w-100" type="submit" (click)="removeFromArchived()" >Remove from Archieved</button>
 </div>
+
+</ng-template>
+<ng-template #noArchivedUsers>
+  <div class="text-center noArch">There are currently no archived members.</div>
 </ng-template>

@@ -345,6 +345,15 @@ select:active{
 .archUsers:hover {
   border-bottom: 2px solid #696cff;
 }
+.table-responsive text-nowrap{
+  width: 100%;
+  margin: 5px;
+}
+.archy{
+  --bs-modal-header-border-width:0px;
+  --bs-modal-header-border-color: #ffffff;
+  border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
+}
 
 /*izgled za telefone*/
 @media screen and (max-width: 500px) {

@@ -201,6 +201,7 @@ export class AdminComponent implements OnInit{
 
         this.spinner.hide();
       });
+      this.getArchivedUsers();
     }
 
     nextPage(): void {
@@ -255,6 +256,7 @@ export class AdminComponent implements OnInit{
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
         this.spinner.hide();
       });
+      
 
     }
 
@@ -299,7 +301,7 @@ export class AdminComponent implements OnInit{
       this.modalRef = this.modalService.show(
         modal,
         {
-          class: 'modal-sm modal-dialog-centered'
+          class: 'modal-lg modal-dialog-centered'
         });
     }
 
@@ -335,6 +337,7 @@ export class AdminComponent implements OnInit{
         console.log(error);
       }
     })
+
     }
 
     putInArray(id:number): void{
@@ -345,11 +348,12 @@ export class AdminComponent implements OnInit{
     }
 
     removeFromArchived() : void{
-  
-    
+      
       this.adminService.removeFromArchieve(this.archivedIds).subscribe({
         next:(res)=>{
           console.log(this.archivedIds);
+          this.onLoad();
+          this.getArchivedUsers();
         }
       })
     }
