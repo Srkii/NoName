@@ -51,6 +51,7 @@ th {
   border-left: none;
   border-right: none;
   color: #697a8d;
+  cursor: default;
 }
 td {
   padding-top: 10px;
@@ -61,6 +62,7 @@ td {
   border-right: none;
   font-size: 16px;
   color: #697a8d;
+  cursor: default;
 }
 .text-body {
   --bs-text-opacity:#697a8d ;
@@ -99,7 +101,7 @@ p {
   flex: 1;
 
 }
-.leftInvite{
+.leftInvite {
   display: flex;
   width: 50%;
   justify-content: space-between;
@@ -332,6 +334,16 @@ select:active{
   justify-content: center; 
   align-items: center; 
   height: 100%; 
+}
+.archUsers{
+  /* margin: 10px !important; */
+  cursor: default;
+  width: 185px;
+  border-radius: 0.3rem;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+}
+.archUsers:hover {
+  border-bottom: 2px solid #696cff;
 }
 
 /*izgled za telefone*/

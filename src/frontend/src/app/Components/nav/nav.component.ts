@@ -19,7 +19,7 @@ export class NavComponent implements OnInit {
       this.getUser();
       this.notificationService.createHubConnection();
     }
-    this.changePage();
+    
   }
   admin!: boolean
   logovan!: boolean
@@ -64,12 +64,6 @@ export class NavComponent implements OnInit {
     }
   }
 
-  changePage():void{
-    this.router.events.pipe(
-      filter(event=>event instanceof NavigationEnd)
-    ).subscribe(()=>{
-      this.isMyProjectsActive=this.activatedRoute.snapshot.firstChild?.routeConfig?.path === 'project/:id';
-    })
-  }
+
 
 }
