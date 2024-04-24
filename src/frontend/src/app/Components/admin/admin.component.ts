@@ -90,6 +90,11 @@ export class AdminComponent implements OnInit{
 
   archived_users: Member[]=[];
 
+  archivedIds:number[]=[];
+  archId: boolean=false;
+
+  archMembers: { [key: string]: Member[] } = {};
+
   Invite(): void{
     this.spinner.show();
     if(this.invitation)
@@ -330,6 +335,23 @@ export class AdminComponent implements OnInit{
         console.log(error);
       }
     })
+    }
+
+    putInArray(id:number): void{
+      console.log(id)
+      // var id1= parseInt(id);
+      this.archivedIds.push(id);
+      console.log(this.archivedIds);
+    }
+
+    removeFromArchived() : void{
+  
+    
+      this.adminService.removeFromArchieve(this.archivedIds).subscribe({
+        next:(res)=>{
+          console.log(this.archivedIds);
+        }
+      })
     }
 
   }

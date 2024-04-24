@@ -308,8 +308,7 @@
         <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
         <td >
           <div class="d-flex align-items-center">
-            <input type="checkbox" style="align-items:center;" [(ngModel)]="user.id" name="user{{user.id}}">
-
+            <input type="checkbox" style="align-items:center;" (change)="putInArray(user.id)" [(ngModel)]="!user.archived" >
           </div>
         </td>
       </tr>
@@ -318,6 +317,6 @@
 </div>
 <div class="modal-footer"></div>
 <div class="mb-3">
-  <button class="btn btn-primary d-grid w-100" type="submit">Remove from Archieved</button>
+  <button class="btn btn-primary d-grid w-100" type="submit" (click)="removeFromArchived()" >Remove from Archieved</button>
 </div>
 </ng-template>

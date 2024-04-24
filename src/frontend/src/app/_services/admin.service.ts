@@ -139,5 +139,9 @@ export class AdminService {
     return this.httpClient.get<Member[]>(`${this.apiUrl}/users/getArchived`);
   }
 
+  removeFromArchieve(usersIds:number[]):Observable<any>{
+    return this.httpClient.put<Member[]>(`${this.apiUrl}/users/removeFromArch`,usersIds)
+  }
+
 
 }

@@ -240,6 +240,31 @@ namespace backend.Controllers
 
     }
 
+    [AllowAnonymous]
+    [HttpPut("removeFromArch")]   //api/users/setAsArchived/1
+    public async Task<IActionResult> RemoveArch([FromBody] List<int> userIds)
+    {
+      // var archieved=await _context.Users.Where(u => u.Archived==true)
+      // .Select(u=>u.Id)
+      // .FirstOrDefaultAsync();
+
+      // if (archieved ==0 )
+      // {
+      //    return NotFound("Completed status not found.");
+      // }
+      
+      var usersToUpdate=await _context.Users.Where(u=> userIds.Contains(u.Id))
+        .ToListAsync();
+
+      foreach (var user in usersToUpdate)
+      {
+        user.Archived=false;
+      }
+
+      await _context.SaveChangesAsync();
+
+      return Ok(new { message = "Tasks updated to Completed status." });
+    }
 
   }
 }
