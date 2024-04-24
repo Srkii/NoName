@@ -136,5 +136,9 @@ export class AdminService {
     return this.httpClient.get<Member[]>(`${this.apiUrl}/users/getByRole`,{params: params});
   }
 
+  getArchivedUsers():Observable<any>{
+    return this.httpClient.get<Member[]>(`${this.apiUrl}/users/getArchived`);
+  }
+
 
 }

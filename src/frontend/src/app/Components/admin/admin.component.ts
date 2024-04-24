@@ -29,6 +29,7 @@ export class AdminComponent implements OnInit{
    this.onLoad();
    this.numbersOfRoles();
    this.PicturesOfRoles();
+   this.getArchivedUsers();
   }
 
   invitation:RegisterInvitation={
@@ -86,6 +87,8 @@ export class AdminComponent implements OnInit{
   currentId=localStorage.getItem('id');
 
   isFilterActive: boolean=true;
+
+  archived_users: Member[]=[];
 
   Invite(): void{
     this.spinner.show();
@@ -289,6 +292,14 @@ export class AdminComponent implements OnInit{
         });
     }
 
+    openModal1(modal: TemplateRef<void>){
+      this.modalRef = this.modalService.show(
+        modal,
+        {
+          class: 'modal-sm modal-dialog-centered'
+        });
+    }
+
     noFilter():void
     {
       this.selectedRolee='';
@@ -314,7 +325,14 @@ export class AdminComponent implements OnInit{
       this.isFilterActive=!this.isFilterActive;
     }
 
-    
+    getArchivedUsers(): void{
+      this.adminService.getArchivedUsers().subscribe({next:(res)=>{
+        this.archived_users=res;
+      },error:(error)=>{
+        console.log(error);
+      }
+    })
+    }
 
   }
 

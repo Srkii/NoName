@@ -219,6 +219,7 @@ namespace backend.Controllers
       return filteredUsers;
     }
 
+    [AllowAnonymous]
     [HttpGet("getArchived")]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetArchivedUsers()
     {
