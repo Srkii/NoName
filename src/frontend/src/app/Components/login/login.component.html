@@ -21,7 +21,7 @@
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
                   <label class="form-label" for="password">Password</label>
-                  <a routerLink="/forgotpass">
+                  <a routerLink="/forgotpass" tabindex="-1">
                     <small>Forgot Password?</small>
                   </a> 
               </div>
@@ -37,9 +37,10 @@
           </div>
         </div>
       </div>
+      <div class="personimage">
+        <img src="../../../assets/_images/loginImage.png" alt="loginImage" (contextmenu)="disableRightClick($event)">
+      </div>
     </div>
-    <div class="personimage">
-      <img src="../../../assets/_images/person1.png" alt="">
-    </div>
+    
   </div>  
 </body>

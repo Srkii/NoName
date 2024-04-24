@@ -4,6 +4,8 @@ import { ProjectCardService } from '../../_services/project-card.service';
 import { CreateProject } from '../../Entities/CreateProject';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { SelectedUser } from '../../Entities/SelectedUser';
+import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { UploadService } from '../../_services/upload.service';
 
 @Component({
   selector: 'app-project-card',
@@ -23,7 +25,6 @@ export class ProjectCardComponent {
   projectNameExists: boolean = false;
 
   projectMembers: ProjectMember[] = [];
-  selectedRoles: ProjectRole[] = [];
   roles: string[] = ["Project Owner","Manager","Participant","Guest"];
 
   creatorId: number | any
@@ -35,14 +36,17 @@ export class ProjectCardComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private myProjectCardService: ProjectCardService
+    private myProjectCardService: ProjectCardService,
+    public uploadservice: UploadService
   ) {}
 
   ngOnInit(): void {
     this.creatorId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
     this.myProjectCardService.GetAvailableUsers(this.creatorId).subscribe(users => {
-      this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, id: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: 4}));
+      this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
+      //this.loadPicture(this.users);
     });
+
   }
 
   async CreateProject(): Promise<void>{
@@ -80,7 +84,7 @@ export class ProjectCardComponent {
     this.myProjectCardService.CreateProject(this.newProject).subscribe({
       next: response => {
         console.log("Project created successfully", response);
-        var projectMembers = this.selectedUsers.map<ProjectMember>(user => ({ AppUserId: user.id, ProjectId: response.id, ProjectRole: user.projectRole = +user.projectRole}));
+        var projectMembers = this.selectedUsers.map<ProjectMember>(user => ({ AppUserId: user.appUserId, ProjectId: response.id, ProjectRole: user.projectRole = +user.projectRole}));
         this.AddAssigness(projectMembers);
       },
       error: error => {
@@ -104,7 +108,7 @@ export class ProjectCardComponent {
   }
 
   async AddAssigness(projectMembers: ProjectMember[]){
-    try 
+    try
     {
       for (let member of projectMembers)
       {
@@ -115,8 +119,8 @@ export class ProjectCardComponent {
       this.buttonClicked = false;
       this.refreshNeeded.emit();
       this.closeCard.emit();
-    } 
-    catch (error) 
+    }
+    catch (error)
     {
       console.error("Error occurred while adding project member", error);
     }
@@ -132,5 +136,17 @@ export class ProjectCardComponent {
       return this.buttonClicked && !(this.newProject.StartDate < this.newProject.EndDate);
     return false;
   }
-  
+
+  // loadPicture(usersArray: SelectedUser[]) : void{
+  //   usersArray.forEach(user => {
+  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
+  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
+  //       url => {
+  //         user.profilePic = url;
+  //       }
+  //       )
+  //     }
+  //   });
+  // }
+
 }

@@ -39,6 +39,15 @@ namespace backend.Controllers
       return await _context.Users.FindAsync(id);
     }
 
+    [AllowAnonymous]
+    [HttpGet("availableUsers/{projectCreatorId}")]
+    public async Task<ActionResult<AppUser>> GetAvailableUsers(int projectCreatorId)
+    {
+      var availableUsers = await _context.Users.Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin).ToListAsync();
+      return  Ok(availableUsers);
+    }
+
+
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser/{id}")] // /api/users/updateUser
     public async Task<ActionResult<UserDto>> UpdateUser(int id, [FromBody] UpdateUserDto data)

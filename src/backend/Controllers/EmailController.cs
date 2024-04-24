@@ -54,6 +54,17 @@ namespace backend.Controllers
         [HttpPost("sendRecovery")]
         public async Task<IActionResult> SendRecoveryEmail(EmailDto emailDto)
         {
+            if (string.IsNullOrWhiteSpace(emailDto.Receiver))
+            {
+                return BadRequest("Email address is required.");
+            }
+            
+            var userExists = _context.Users.Any(u => u.Email == emailDto.Receiver);
+            if (!userExists)
+            {
+                return Unauthorized("Account with this e-mail doesn't exist.");
+            }
+
             var request = new UserRequest{
                 Email = emailDto.Receiver,
                 Token = Guid.NewGuid().ToString(),

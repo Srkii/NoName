@@ -10,6 +10,8 @@ import { MyProjectsService } from '../../_services/my-projects.service';
 import { UploadService } from '../../_services/upload.service';
 import { NewTask } from '../../Entities/NewTask';
 
+import { forkJoin } from 'rxjs';
+
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
@@ -35,7 +37,7 @@ export class KanbanComponent implements OnInit{
   newTaskEndDate: Date | null = null;
   newTaskStatusId: number | null = null;
   newTaskProjectSectionId: number | null = null;
-
+  selectedArchivedTasks: any[] = [];
 
   users: TaskAssignee[] = [];
   selectedUser: TaskAssignee | undefined;;
@@ -49,7 +51,7 @@ export class KanbanComponent implements OnInit{
     private myTasksService: MyTasksService,
     private modalService: BsModalService,
     private myProjectsService: MyProjectsService,
-    private uploadservice: UploadService
+    public uploadservice: UploadService
   ) {}
 
   ngOnInit() {
@@ -96,6 +98,7 @@ export class KanbanComponent implements OnInit{
         this.tasksBySection[status.name] = [];
       }
     });
+    console.log(this.tasksBySection);
   }
 
   drop(event: CdkDragDrop<ProjectTask[]>) {
@@ -146,17 +149,18 @@ export class KanbanComponent implements OnInit{
   }
   openSimpleModal(modal: TemplateRef<void>, modalSize: string) {
     let modalClass = '';
-    if(modalSize === 'newSection')
+    if(modalSize === 'newBoard')
       modalClass = 'modal-sm modal-dialog-centered';
-    else if (modalSize === 'newTask')
+    else if (modalSize === 'newTask' || modalSize === 'archivedTasks')
     modalClass = 'modal-lg modal-dialog-centered';
     this.modalRef = this.modalService.show(
       modal,
       {
         class: modalClass
       });
+    this.tasksBySection['Archived'].forEach(task => task.selected = false); // resetuj task.selection chekbox u remove arch tasks
   }
-  deleteSectionFunction() {
+  deleteBoardFunction() {
     if (this.currentSectionId === null) {
       console.error('Section ID is null');
       return;
@@ -170,7 +174,7 @@ export class KanbanComponent implements OnInit{
       error: (error) => console.error('Error deleting section:', error)
     });
   }
-  saveSection() {
+  saveNewBoard() {
     if (this.currentProjectId === null) {
       console.error('Project ID is null');
       return;
@@ -219,21 +223,24 @@ export class KanbanComponent implements OnInit{
         this.users.forEach(user => {
           user.fullName = user.firstName + ' ' + user.lastName;
         });
-        this.loadPicture(this.users);
       },
       error: error => console.log(error)
     });
   }
-
-  // za uzimanje slike. mora ovako za sad...
-  loadPicture(usersArray: TaskAssignee[]) : void{
-    usersArray.forEach(user => {
-      if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
-      this.uploadservice.getImage(user.profilePicUrl).subscribe(
-        url => {
-          user.pictureUrl = url;
-        }
-        )
+  removeFromArchived() {
+    this.spinner.show(); // prikazi spinner
+    const selectedTaskIds = this.tasksBySection['Archived']
+      .filter(task => task.selected)
+      .map(task => task.id);
+    this.myTasksService.UpdateArchTasksToCompleted(selectedTaskIds).subscribe({
+      next: () => {
+        this.modalRef?.hide();
+        this.populateTasks(); // ucitavam promene
+        this.spinner.hide(); // skloni spinner
+      },
+      error: (error) => {
+        console.error('Error updating tasks status:', error);
+        this.spinner.hide(); // skloni spinner cak i ako dodje do greske
       }
     });
   }

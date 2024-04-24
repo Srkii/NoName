@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { Member } from '../Entities/Member';
 import { Project } from '../Entities/Project';
 import { CreateProject } from '../Entities/CreateProject';
 import { ProjectMember } from '../Entities/ProjectMember';
+import { environment } from '../../environments/environment';
+import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectCardService {
-  private apiUrl = ApiUrl.apiUrl;
+  private apiUrl = environment.apiUrl;
   private projectUrl = `${this.apiUrl}/projects`;
   private userUrl = `${this.apiUrl}/users`;
 

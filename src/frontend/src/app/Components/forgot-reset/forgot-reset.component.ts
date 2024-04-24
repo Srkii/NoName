@@ -66,4 +66,8 @@ export class ForgotResetComponent implements OnInit{
   passwordMatch(): boolean {
     return this.newRequest.NewPassword === this.confirmPassword;
   }
+
+  disableRightClick(event: MouseEvent): void {
+    event.preventDefault();
+  }
 }

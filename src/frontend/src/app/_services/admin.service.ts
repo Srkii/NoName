@@ -1,13 +1,12 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { Observable, of } from 'rxjs';
-
 import { Member } from '../Entities/Member';
 import { ChangeRole } from '../Entities/ChangeRole';
 import { UpdateUser } from '../Entities/UpdateUser';
-import { AppUser } from '../Entities/AppUser';
 import { RegisterInvitation } from '../Entities/RegisterInvitation';
+import { environment } from '../../environments/environment';
+import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ export class AdminService {
 
   constructor(private httpClient:HttpClient) { }
 
-  private apiUrl=ApiUrl.apiUrl;
+  private apiUrl=environment.apiUrl;
 
   check():boolean{
     const role=localStorage.getItem('role')

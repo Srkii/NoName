@@ -1,15 +1,17 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { HttpClient} from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
 import { ChangeTaskInfo } from '../Entities/ChangeTaskInfo';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { ApiUrl } from '../ApiUrl/ApiUrl';
+import { TaskDependency } from '../Entities/TaskDependency';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MyTasksService {
-  private apiUrl = ApiUrl.apiUrl;
+  private apiUrl = environment.apiUrl;
   private baseUrl = `${this.apiUrl}/projectTask`;
   sectionDeleted = new EventEmitter<void>();
   
@@ -37,7 +39,10 @@ export class MyTasksService {
     return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`, null);
   }
   
-  
+  // kada pomeram taskove iz archived saljem listu zbog boljih performansi
+  UpdateArchTasksToCompleted(taskIds: number[]): Observable<any> {
+    return this.http.put(`${this.baseUrl}/UpdateArchTasksToCompleted`, taskIds);
+  }
 
   updateTicoTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/updateTicoStatus/${taskId}`,task );
@@ -83,5 +88,17 @@ export class MyTasksService {
   changeTaskInfo(dto: ChangeTaskInfo): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskInfo`, dto);
   }
+
+  addTaskDependencies(dtos: TaskDependency[]): Observable<any> {
+    return this.http.post(`${this.baseUrl}/addTaskDependency`, dtos);
+  }
+  
+  deleteTaskDependency(dto: TaskDependency): Observable<any> {
+    return this.http.post(`${this.baseUrl}/deleteTaskDependency`, dto);
+  }
+  GetAllTasksDependencies():Observable<TaskDependency[]>{
+    return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`);
+  }
+  
 
 }

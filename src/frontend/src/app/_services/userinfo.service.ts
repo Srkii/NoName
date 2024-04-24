@@ -1,9 +1,9 @@
 import { ChangePassword } from '../Entities/ChangePassword';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-
+import { environment } from '../../environments/environment';
+import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ import { Observable, of } from 'rxjs';
 export class UserinfoService {
   constructor(private readonly httpClient:HttpClient) {}
 
-  private apiUrl=ApiUrl.apiUrl;
+  private apiUrl=environment.apiUrl;
   private baseUrl = `${this.apiUrl}/users/changePassword`;
 
   getUserInfo(id:any,token:any){

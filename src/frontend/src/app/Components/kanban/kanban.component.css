@@ -49,8 +49,6 @@
     font-family: 'Public Sans', sans-serif;
     border-radius: 0.5rem !important;
 }
-
-
 /* ::ng-deep .p-dropdown:focus {
     border: 1px solid #5f61e6 !important; 
     border-radius: 0.5 rem !important;
@@ -74,6 +72,9 @@
 }
 .nameAvatar {
     margin-right: 5px !important;
+}
+.boardAvatar {
+    margin-left: 5px !important;
 }
 .ng-select.asigneeDropdown ::ng-deep .ng-select-container{
     border-radius: 0.5rem !important;
@@ -142,6 +143,20 @@
     border-bottom: 2px solid #D7D7F8;
 }
 .new-item:hover {
+    border-bottom: 2px solid #696cff;
+}
+.archTasks {
+    margin: 10px !important;
+    margin-left: 30px !important;
+    cursor: pointer;
+    width: 185px;
+    border-radius: 0.3rem;
+    border-bottom: 2px solid #D7D7F8;
+}
+.new-items svg {
+    margin-right: 5px;
+}
+.archTasks:hover {
     border-bottom: 2px solid #696cff;
 }
 .card {
@@ -227,6 +242,7 @@
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
                 0 8px 10px 1px rgba(0, 0, 0, 0.14),
                 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    cursor: grabbing !important;
 }
   
 .cdk-drag-placeholder {
@@ -235,18 +251,36 @@
   
 .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    cursor: grabbing !important;
 }
 .card-body.cdk-drop-list-dragging .task:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+.cdk-drag-dragging {
+    cursor: grabbing !important;
+}
 
 .board-wrapper.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    cursor: grabbing !important;
+}
+.draggable {
+    cursor: grab;
+}
+.draggable:active {
+    cursor: grabbing !important;
+}
+.draggable:focus {
+    cursor: grabbing !important;
 }
 
 .btn-save-section {
     margin-top: 20px;
     margin-bottom: 0px !important;
+}
+/* menjam checkbox selected boju */
+input[type='checkbox'] {
+    accent-color: #696cff;
 }
 .btn-primary {
     color: #fff;
@@ -292,4 +326,26 @@
 }
 .card-header:hover .more-options {
     display: block; /* Show on hover */
+}
+.archBtn {
+    margin-top: 20px;
+}
+.archTable td, th{
+    border-bottom: 1px solid #d9dee3 !important;
+}
+.tdName {
+    width: 35% !important;
+}
+.tdAssignee {
+    width: 25% !important;
+}
+.tdDate {
+    width: 20% !important;
+}
+.tdCheck {
+    width: 10% !important;
+}
+.noArch {
+    margin: 15px !important;
+    font-size: 20px;
 }

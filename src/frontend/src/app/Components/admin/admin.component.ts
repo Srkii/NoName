@@ -23,7 +23,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 export class AdminComponent implements OnInit{
 
-  constructor(private adminService: AdminService, private toastr: ToastrService, private uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
+  constructor(private adminService: AdminService, private toastr: ToastrService, public uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
 
   ngOnInit(): void {
    this.onLoad();
@@ -187,7 +187,7 @@ export class AdminComponent implements OnInit{
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        this.loadPicture(this.allUsers);
+        //this.loadPicture(this.allUsers);
         this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
           this.filteredUsers=response;
           this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
@@ -227,18 +227,16 @@ export class AdminComponent implements OnInit{
     }
 
     //metoda za prikaz slike
-    loadPicture(usersArray:Member[]) : void{
-      usersArray.forEach(user => {
-        if(user.profilePicUrl!='' && user.profilePicUrl!=null){
-          this.uploadservice.getImage(user.profilePicUrl).subscribe(
-            url => {
-              user.url = url;
-            }
-          )
-      }
-    });
-
-    }
+    // loadPicture(usersArray:Member[]) : void{
+    //   usersArray.forEach(user => {
+    //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){
+    //       this.uploadservice.getImage(user.profilePicUrl).subscribe(
+    //         url => {
+    //           user.url = url;
+    //         }
+    //       )
+    //   }
+    // });
 
     onLoad(): void{
       this.adminService.getAllUsers2().subscribe(response=>{
@@ -246,7 +244,7 @@ export class AdminComponent implements OnInit{
       })
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        this.loadPicture(this.allUsers);
+        //this.loadPicture(this.allUsers);
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
@@ -270,15 +268,15 @@ export class AdminComponent implements OnInit{
     PicturesOfRoles():void{
       this.adminService.getAllUsers3("Admin").subscribe(res=>{
         this.admins=res;
-        this.loadPicture(this.admins);
+        //this.loadPicture(this.admins);
       })
       this.adminService.getAllUsers3("Member").subscribe(res=>{
         this.members=res;
-        this.loadPicture(this.members)
+        //this.loadPicture(this.members)
       })
       this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
         this.projectMangers=res;
-        this.loadPicture(this.projectMangers);
+        //this.loadPicture(this.projectMangers);
       })
     }
 
@@ -311,7 +309,7 @@ export class AdminComponent implements OnInit{
       if(this.currentId===id1)
         return false
       else return true
-      
+
     }
 
     toogleFilter(): void{

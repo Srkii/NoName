@@ -1,11 +1,16 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
 using backend.DTO;
 using backend.Entities;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+
 
 namespace backend.Controllers
 {
@@ -13,11 +18,13 @@ namespace backend.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(DataContext context,ITokenService tokenService)
+        public AccountController(DataContext context,ITokenService tokenService,IConfiguration configuration)
         {
             _context = context;
             _tokenService = tokenService;
+            _configuration = configuration;
         }
 
         [HttpPost("register")] // POST: api/account/register
@@ -56,6 +63,8 @@ namespace backend.Controllers
         [HttpPost("login")] // POST: api/account/login
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
+            if(loginDto == null) return Unauthorized("Please enter your credentials.");
+            
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if(user == null) return Unauthorized("Account with this e-mail doesn't exists.");
@@ -136,6 +145,18 @@ namespace backend.Controllers
                 entity.IsUsed = true;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        [HttpGet("validToken/{token}")] // /api/account/validToken
+        [Authorize]
+        public async Task<ActionResult<bool>> IsTokenValidAsync(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jsonToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+            var userEmailClaim = jsonToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userEmailClaim);
+
+            return user != null;
         }
     }
 }

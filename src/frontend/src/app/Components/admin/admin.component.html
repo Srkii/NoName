@@ -7,7 +7,7 @@
       <label>Total {{numOfAdmins}} administrators</label>
         <div class="pics">
           <ng-container *ngFor="let user of admins.slice(0,4)">
-            <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user?.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
             <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
           </ng-container>
         </div>
@@ -41,7 +41,7 @@
       <div class="pics">
 
       <ng-container *ngFor="let user of members.slice(0,4)">
-        <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user?.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+        <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
         <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
       </ng-container>
     </div>
@@ -110,7 +110,7 @@
           <td  *ngIf="!user.archived">
             <div class="d-flex justify-content-start align-items-center">
               <div class="avatar-wrapper">
-                <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img [src]="user?.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+                <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
                 <div *ngIf="!user.profilePicUrl" class="avatar avatar-sm me-2"><ngx-avatars size="35" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
               </div>
               <div class="d-flex flex-column">
@@ -146,7 +146,7 @@
         </tr>
       </tbody>
     </table>
-    
+
     <div class="col-sm-12 col-md-6" *ngIf="filteredUsers>5" >
       <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
         <ul class="pagination">
