@@ -46,6 +46,7 @@ body {
 .tabs-to-dropdown a:hover::after {
   transform: scaleX(1);
   transform-origin: bottom left;
+  cursor: default;
 }
 
 .navbar-toggler{
@@ -97,6 +98,7 @@ body {
   font-family: "Public Sans", sans-serif;
   color: #697a8d;
   padding-left: 0px;
+  cursor: default;
 
 }
 .align-middle{

@@ -2,7 +2,7 @@
   <div id="all1">
     <br />
     <div class="card-container">
-    <div class="card clickable-div" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="filterUsers()">
+    <div class="card clickable-div" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="toogleFilter()">
     <div class="card-title">
       <label>Total {{numOfAdmins}} administrators</label>
         <div class="pics">
@@ -18,7 +18,7 @@
     </div>
 
 
-    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="filterUsers()">
+    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="toogleFilter()">
       <div class="card-title">
         <label>Total {{numOfPM}} project managers</label>
         <div class="pics">
@@ -35,7 +35,7 @@
     </div>
     </div>
 
-    <div class="card clickable-div" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="filterUsers()">
+    <div class="card clickable-div" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="toogleFilter()">
       <div class="card-title">
         <label>Total {{numOfMembers}} members</label>
       <div class="pics">
@@ -56,11 +56,6 @@
 
     <div class="invite">
       <div class="leftInvite">
-        <div class="noFilt">
-          <svg xmlns="http://www.w3.org/2000/svg" (click)="noFilter()" width="25" height="25" fill="currentColor" class="bi bi-ban" viewBox="0 0 16 16">
-            <path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/>
-          </svg>
-        </div>
         <input
           class="form-control"
           type="text"
@@ -120,11 +115,11 @@
               </div>
               <div class="d-flex flex-column">
                 <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
-                <small class="text-truncate text-muted">{{user.email}}</small>
+                <span class="text-truncate text-muted">{{user.email}}</span>
               </div>
             </div>
           </td>
-          <td  *ngIf="!user.archived">{{GetUserRole(user.role)}}</td>
+          <td  *ngIf="!user.archived"> <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>
           <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
           <td  *ngIf="!user.archived">
             <div class="d-flex align-items-center">
@@ -165,6 +160,11 @@
                   <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
                 </li></ul>
       </div></div>
+
+      <div class="archUsers" (click)="openModal1(archivedUsers)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
+      </svg>View archieved users
+    </div>
 
   </div>
 </div>
@@ -229,7 +229,7 @@
 </ng-template>
 
 <ng-template #changeRole>
-  <div class="modal-header">
+  <div class="modal-header archy">
     <h4>Change user's role</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
@@ -250,4 +250,60 @@
       </div>
     </form>
   </div>
+</ng-template>
+
+<ng-template #archivedUsers>
+  <div class="modal-header text-center">
+    <h4 class="modal-title text-center">Archived users</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+ 
+    <div class="modal-body" *ngIf="archived_users.length>0; else noArchivedUsers">
+    <table class="invoice-list-table table">
+      <thead>
+      <tr>
+        <th>User</th>
+        <th>Role </th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody class="table-border-bottom-0">
+      <tr *ngFor="let user of archived_users" >
+        <td >
+          <div class="d-flex justify-content-start align-items-center">
+            <div class="avatar-wrapper">
+              <div *ngIf="user.profilePicUrl" class="nameAvatar boardAvatar">
+                <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="35" width="35"/>
+              </div>
+              <div *ngIf="!user.profilePicUrl" class="nameAvatar boardAvatar">
+                <ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+              </div>
+            </div>
+            <div class="d-flex flex-column">
+              <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
+              <span class="text-truncate text-muted">{{user.email}}</span>
+            </div>
+          </div>
+        </td>
+        <td  > <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>
+        <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
+        <td >
+          <div class="d-flex align-items-center">
+            <input type="checkbox" style="align-items:center;" (change)="putInArray(user.id)" [(ngModel)]="!user.archived" >
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  
+</table>
+<div class="mb-3 text-center">
+  <button class="btn btn-primary d-grid w-50 mx-auto" type="submit" (click)="removeFromArchived()" >Remove from Archieved</button>
+</div>
+</div>
+
+</ng-template>
+<ng-template #noArchivedUsers>
+  <div class="text-center noArch">There are currently no archived members.</div>
 </ng-template>

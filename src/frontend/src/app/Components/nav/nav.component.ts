@@ -1,9 +1,10 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from '../../_services/notifications.service';
 import { Notification } from '../../Entities/Notification';
 import { UploadService } from '../../_services/upload.service';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -18,6 +19,7 @@ export class NavComponent implements OnInit {
       this.getUser();
       this.notificationService.createHubConnection();
     }
+    
   }
   admin!: boolean
   logovan!: boolean
@@ -25,6 +27,9 @@ export class NavComponent implements OnInit {
 
   imgFlag: boolean=false;
   notification_list:any;
+
+  isMyProjectsActive: boolean = false;
+
   async Logout(): Promise<void> {
     try {
       // Remove token and id from local storage
@@ -58,5 +63,7 @@ export class NavComponent implements OnInit {
       })
     }
   }
+
+
 
 }
