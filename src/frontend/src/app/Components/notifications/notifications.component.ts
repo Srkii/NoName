@@ -62,9 +62,9 @@ export class NotificationsComponent {
     return this.notificationService.getNotificationType(type);
   }
   visitSource(notification:Notification){
-    //poenta ove funkcije je da otvori popup za task/odvede me na info za projekat 
+    //poenta ove funkcije je da otvori popup za task/odvede me na info za projekat
     //nzm kako tacno da odradim to ~maksim
     this.notificationService.follow_link();//sta vec tamo ima da radi...
-      console.log("notification is notificationing");
+    //console.log("notification is notificationing");
   }
 }

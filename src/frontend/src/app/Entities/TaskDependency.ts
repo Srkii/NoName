@@ -1,4 +1,4 @@
 export interface TaskDependency {
-  taskId: number; 
-  dependencyTaskId: number; 
+  taskId: number;
+  dependencyTaskId: number;
 }

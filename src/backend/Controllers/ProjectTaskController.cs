@@ -301,7 +301,11 @@ namespace backend.Controllers
             var tasks = await _context.TaskDependencies.ToListAsync();
             return Ok(tasks);
         }
-
+        [AllowAnonymous]
+        [HttpGet("getTaskDependencies/{id}")]
+        public async Task<ActionResult<IEnumerable<TaskDependency>>> GetTaskDependencies(int id){
+            return await _context.TaskDependencies.Where(x => x.TaskId == id).ToListAsync();
+        }
 
         [AllowAnonymous]
         [HttpPost("AddTaskAssignee")]
@@ -354,7 +358,8 @@ namespace backend.Controllers
                     task.ProjectSection.SectionName,
                     task.AppUser.FirstName,
                     task.AppUser.LastName,
-                    task.AppUser.ProfilePicUrl
+                    task.AppUser.ProfilePicUrl,
+                    task.ProjectSectionId
                 })
                 .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
@@ -614,6 +619,16 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Tasks updated to Completed status." });
+        }
+        [AllowAnonymous]    
+        [HttpPost("timeUpdateGantt/{id}")]
+        public async Task<ActionResult> UpdateTaskTimeGantt(int id, DateTimeDto newDateTime){
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == id);
+            task.StartDate = newDateTime.StartDate;
+            task.EndDate = newDateTime.EndDate;
+
+            await _context.SaveChangesAsync();
+            return Ok(task);
         }
     }
 }

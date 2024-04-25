@@ -4,12 +4,12 @@
       <!-- ako treba brojac notif, made meni isk deluje suvisno... -->
     </div>
   </div>
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="20" 
-    height="20" 
-    fill="currentColor" 
-    class="bi bi-bell" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    fill="currentColor"
+    class="bi bi-bell"
     viewBox="0 0 16 16"
     class="nav-link dropdown-toggle hide-arrow rightImg"
     data-bs-toggle="dropdown"
@@ -20,12 +20,11 @@
   <div class="dropdown-menu dropdown-menu-end">
     <span style="padding-left: 15px;">Notifications</span>
     <div class="dropdown-divider"></div>
-    <small style="padding: 5px; font-size: 13px; margin-left: 10px;" *ngIf="!notification_list">No new notifications...</small>
+    <small style="padding: 5px; font-size: 13px; margin-left: 10px;" *ngIf="notification_list==null">No new notifications...</small>
     <ul style="overflow: auto; max-height: 120px;">
       <li *ngFor="let notification of notification_list" style="display: flex;align-items:center; margin-top: 5px;">
         <img *ngIf="notification.sender?.profilePicUrl" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
-        <ngx-avatars *ngIf="!notification.sender?.profilePicUrl" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
-        href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
+        <ngx-avatars *ngIf="!notification.sender?.profilePicUrl" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
         <a class="dropdown-item" href="javascript:void(0);">
           {{notification.sender.firstName}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
         </a>
@@ -46,24 +45,21 @@
     </button>
   </div>
   <div class="modal-body">
-    <!-- roknem sve lepo u table sa podacima koji mi odgovaraju... -->
+    <input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()">
     <table class="notifications-table">
       <tr *ngFor="let notification of notifications" (click)="visitSource(notification)">
-        <td></td>
-        <td><img class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt=""></td>
-        <td style="margin-left: 0;padding-left: 0; text-align: start;">{{notification.sender.firstName}} {{notification.sender.lastName}}</td>
-        <td>{{getNotificationType(notification.type)}}</td>
-        <td>{{notification.task.taskName}}</td>
+        <td>
+          <ngx-avatars *ngIf="!notification.sender?.profilePicUrl" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
+          <img *ngIf="notification.sender?.profilePicUrl" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
+        </td>
+        <td style="margin-left: 0;padding-left: 0; text-align: start;">{{notification.sender.firstName}} {{notification.sender.lastName}} {{getNotificationType(notification.type)}} {{notification.task.taskName}}</td>
         <td>{{notification.dateTime | date:'yyyy-MM-dd HH:mm'}}</td>
 
-        <td style="z-index:123"><input class="form-check-input" type="checkbox" [checked]="markedNotifications.includes(notification.id)" (change)="toList(notification.id)"></td>
+        <td style="z-index:123"><input class="form-check-input" type="checkbox" [checked]="markedNotifications.includes(notification.id)" (change)="toList(notification.id)" *ngIf="notification.read===false"></td>
       </tr>
     </table>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary d-grid" (click)="selectAllNotifications()">
-      {{ areAllNotificationsSelected() ? 'Deselect All' : 'Select All' }}
-    </button>
     <button class="btn btn-primary d-grid" type="submit" (click)="read_notifications()">Mark as read</button>
   </div>
 </ng-template>
