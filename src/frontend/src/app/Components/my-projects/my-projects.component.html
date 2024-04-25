@@ -14,13 +14,14 @@
     <div id="all">
       <div class="header">
         <h5>All Projects</h5>
-        <div class="page-size-container">
+        <div class="d-flex justify-content-end page-size-container">
           <select class="page_size" (change)="changePageSize($event)">
             <option value="" selected>Select page size</option>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="15">15</option>
           </select>
+          <button *ngIf="userRole==2" class="btn btn-primary btn-sm addProject" (click)="ToggleProjectCard()">+ Add Project</button>
         </div>
       </div>
         <br />
@@ -146,7 +147,7 @@
 
 
     
-    <button class="btn btn-primary btn-sm" (click)="ToggleProjectCard()">+ Add Project</button>
+    
   </body>
 </html>
 <ngx-spinner

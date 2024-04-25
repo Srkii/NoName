@@ -29,6 +29,7 @@ export class AdminComponent implements OnInit{
    this.onLoad();
    this.numbersOfRoles();
    this.PicturesOfRoles();
+   this.getArchivedUsers();
   }
 
   invitation:RegisterInvitation={
@@ -85,18 +86,28 @@ export class AdminComponent implements OnInit{
 
   currentId=localStorage.getItem('id');
 
+  isFilterActive: boolean=true;
+
+  archived_users: Member[]=[];
+
+  archivedIds:number[]=[];
+  archId: boolean=false;
+
+  archMembers: { [key: string]: Member[] } = {};
+
   Invite(): void{
+    this.spinner.show();
     if(this.invitation)
     {
       this.adminService.sendInvatation(this.invitation).subscribe(
         (response)=>{
           this.toastr.success(response.message);
+          this.spinner.hide();
         }
       )
     }
-    error:()=>{
-      console.log("Email is not sent")
-    }}
+
+    }
 
     GetUserRole(role: UserRole): string{
         switch(role){
@@ -190,6 +201,7 @@ export class AdminComponent implements OnInit{
 
         this.spinner.hide();
       });
+      this.getArchivedUsers();
     }
 
     nextPage(): void {
@@ -244,6 +256,7 @@ export class AdminComponent implements OnInit{
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
         this.spinner.hide();
       });
+      
 
     }
 
@@ -284,6 +297,14 @@ export class AdminComponent implements OnInit{
         });
     }
 
+    openModal1(modal: TemplateRef<void>){
+      this.modalRef = this.modalService.show(
+        modal,
+        {
+          class: 'modal-lg modal-dialog-centered'
+        });
+    }
+
     noFilter():void
     {
       this.selectedRolee='';
@@ -296,6 +317,45 @@ export class AdminComponent implements OnInit{
         return false
       else return true
 
+    }
+
+    toogleFilter(): void{
+      if(this.isFilterActive)
+      {
+        this.filterUsers();
+      }
+      else{
+        this.noFilter();
+      }
+      this.isFilterActive=!this.isFilterActive;
+    }
+
+    getArchivedUsers(): void{
+      this.adminService.getArchivedUsers().subscribe({next:(res)=>{
+        this.archived_users=res;
+      },error:(error)=>{
+        console.log(error);
+      }
+    })
+
+    }
+
+    putInArray(id:number): void{
+      console.log(id)
+      // var id1= parseInt(id);
+      this.archivedIds.push(id);
+      console.log(this.archivedIds);
+    }
+
+    removeFromArchived() : void{
+      
+      this.adminService.removeFromArchieve(this.archivedIds).subscribe({
+        next:(res)=>{
+          console.log(this.archivedIds);
+          this.onLoad();
+          this.getArchivedUsers();
+        }
+      })
     }
 
   }

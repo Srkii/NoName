@@ -1,7 +1,8 @@
-﻿using backend.Data;
+using backend.Data;
 using backend.DTO;
 using backend.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -40,6 +41,12 @@ namespace backend.Controllers
             }
 
             return section;
+        }
+
+        [HttpGet("project/{id}")]//nzm nisam kreativan
+        public async Task<ActionResult<IEnumerable<ProjectSection>>> GetSectionsByProject(int id){
+            var sections = await _context.ProjectSections.Where(x => x.ProjectId == id).ToListAsync();
+            return sections;
         }
     }
 }

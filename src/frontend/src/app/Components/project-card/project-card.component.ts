@@ -107,23 +107,17 @@ export class ProjectCardComponent {
     }
   }
 
-  async AddAssigness(projectMembers: ProjectMember[]){
-    try
-    {
-      for (let member of projectMembers)
-      {
-          await this.myProjectCardService.AddProjectMember(member).toPromise();
-          console.log("Project member added successfully");
-      }
+ AddAssigness(projectMembers: ProjectMember[]){
+  
+      this.myProjectCardService.AddProjectMembers(projectMembers).subscribe(response => {
+        console.log("All users added")
+        console.log(response)
+      })
+    
       this.showComponent = false;
       this.buttonClicked = false;
       this.refreshNeeded.emit();
       this.closeCard.emit();
-    }
-    catch (error)
-    {
-      console.error("Error occurred while adding project member", error);
-    }
   }
 
   ToggleProjectCard() {

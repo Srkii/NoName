@@ -3,7 +3,7 @@ import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
-import { identifierName } from '@angular/compiler';
+import { UserRole } from '../../Entities/Member';
 
 @Component({
   selector: 'app-my-projects',
@@ -25,6 +25,7 @@ export class MyProjectsComponent implements OnInit {
   projectName: string = '';
   startDateFilter: string = '';
   endDateFilter: string = '';
+  userRole: UserRole | any;
   
   showProjectCard: boolean = false;
   constructor(
@@ -38,7 +39,8 @@ export class MyProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
-    const userId = localStorage.getItem('id');
+    const userId = localStorage.getItem('id')
+    this.userRole = localStorage.getItem('role')
     this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
       this.all_projects = count;
     });

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from './_services/shared.service';
 import { firstValueFrom } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ export class AppComponent implements OnInit{
 
   constructor(
     private router: Router,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -26,6 +28,7 @@ export class AppComponent implements OnInit{
   }
 
   async isTokenValid(): Promise<void> {
+    this.spinner.show()
     var token = localStorage.getItem("token");
     if (token) {
         var valid = await firstValueFrom(this.sharedService.IsTokenValid(token)) ?? false;
@@ -36,6 +39,7 @@ export class AppComponent implements OnInit{
           localStorage.removeItem('role');
           this.router.navigate(['/login'])
         }
+        this.spinner.hide()
     }
   }
 }

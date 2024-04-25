@@ -35,9 +35,9 @@
   border-radius: 8px;
   background-color: #d9dee3;
   border: none;
-  width: 200px; 
-  white-space: nowrap; 
-  overflow: hidden; 
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 #popupOriginProject:hover{
@@ -46,15 +46,15 @@
 }
 
 #assignee {
-  display: inline-block; 
-  vertical-align: middle; 
-  margin-left: 15px; 
-  margin-right: 10px; 
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 15px;
+  margin-right: 10px;
 }
 
 #username {
   display: inline-block;
-  margin-left: 5px; 
+  margin-left: 5px;
   font-size: 13px;
 }
 
@@ -79,7 +79,7 @@ img{
   border: 0.5px solid lightgray;
   border-radius: 8px;
   padding: 6px;
-  margin-left: 5%; 
+  margin-left: 5%;
   margin-bottom: 1%;
 }
 .form-control[type="file"]:not(:disabled):not([readonly]):hover {
@@ -89,15 +89,15 @@ img{
 }
 .comment:hover,
 .description:hover{
-  outline: none; 
-  border: 1px solid #5f61e6 !important; 
-  box-shadow: 0 0 3px #5f61e6; 
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
 }
 .comment:hover,
 .description:hover{
-  outline: none; 
-  border: 1px solid #5f61e6 !important; 
-  box-shadow: 0 0 3px #5f61e6; 
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
 }
 .mark {
   padding: 5px;
@@ -279,7 +279,7 @@ img{
   margin-left: 5px;
 }
 .edit:hover{
-  color:  #5f61e6; 
+  color:  #5f61e6;
   cursor: pointer;
 }
 .closed,
@@ -320,8 +320,8 @@ img{
 #taskOriginProject:hover,
 #taskOriginProject:focus
 {
-  outline: 1px solid #5f61e6 !important; 
-  box-shadow: 0 0 3px #5f61e6; 
+  outline: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
 }
 .taskDueDate{
   display: flex;
@@ -349,9 +349,9 @@ img{
   border-radius: 8px;
   border: none;
   outline: none;
-  width: 300px; 
-  white-space: nowrap; 
-  overflow: hidden; 
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 .mb-1{
@@ -389,7 +389,7 @@ img{
 }
 
 .fixed-comment-area textarea[disabled] {
-  pointer-events: none; 
+  pointer-events: none;
   opacity: 0.6;
 }
 
@@ -423,4 +423,15 @@ img{
 .cancel_task:hover
 {
   filter: brightness(120%);
+}
+
+.file-download-container{
+  margin-left: 20px;
+  display: flex;
+  width: 50px;
+  border: 1px solid lightgray;
+  overflow: hidden;
+  border-radius: 10px;
+  flex-direction: column;
+  align-items: center;
 }

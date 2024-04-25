@@ -42,7 +42,6 @@ export class NotificationsService{
 
     this.hubConnection.on('Notify',(notification:any)=>{
       //sad dobija celiu novu notifikaciju da je prikaze u donjem desnom cosku
-      console.log(notification);
       this.notifications.push(notification);
       this.allNotifications.push(notification);
       this.newNotifications = true;

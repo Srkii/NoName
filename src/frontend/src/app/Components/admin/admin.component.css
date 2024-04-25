@@ -51,6 +51,7 @@ th {
   border-left: none;
   border-right: none;
   color: #697a8d;
+  cursor: default;
 }
 td {
   padding-top: 10px;
@@ -59,11 +60,13 @@ td {
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
-  font-size: 12px;
+  font-size: 16px;
   color: #697a8d;
+  cursor: default;
 }
-td{
-  color: #697a8d;
+.text-body {
+  --bs-text-opacity:#697a8d ;
+  color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
 }
 #name {
   font-size: 14px;
@@ -98,7 +101,7 @@ p {
   flex: 1;
 
 }
-.leftInvite{
+.leftInvite {
   display: flex;
   width: 50%;
   justify-content: space-between;
@@ -141,7 +144,7 @@ p {
   color: #fff !important;
   background-color: #5f61e6 !important;
   border-color: #5f61e6 !important;
-  transform: translateY(-1px) !important;
+  /* transform: translateY(-1px) !important; */
 }
 .avatar{
   padding-left: 0px;
@@ -206,11 +209,12 @@ select:active{
 .card{
   --bs-card-border-width: 0px;
   --bs-card-cap-bg: #ffffff;
-  /* --bs-card-border-color: var(--bs-border-color-translucent); */
+  --bs-card-border-color: var(--bs-border-color-translucent); 
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   margin-right: 0px;
   width: 30%;
   color: #697a8d;
+  .move {cursor: move;}
 }
 .card-title{
   display: flex;
@@ -224,7 +228,8 @@ select:active{
 .card:hover{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  box-shadow:  #5f61e6;
+  cursor: default;
   /* background-color: #6b6caf; */
 }
 .avatar avatar-sm me-2{
@@ -262,12 +267,12 @@ select:active{
 .form-control:hover {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  box-shadow:  #5f61e6;
 }
 .form-control:focus {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  box-shadow: #5f61e6;
 }
 .page_size {
   color: #5e6165;
@@ -286,8 +291,25 @@ select:active{
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
+
+.clickable-div{
+  border: 1px solid #ffffff !important;
+}
+
+.clickable-div:hover{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow:  #5f61e6;
+  transform: translateY(0);
+  transform: translateX(0);
+}
+.clickable-div:focus-visible{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
+}
 .clickable-div:active {
-  background-color: #5d57c2; 
+  background-color: #d0cdff; 
   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
@@ -312,6 +334,25 @@ select:active{
   justify-content: center; 
   align-items: center; 
   height: 100%; 
+}
+.archUsers{
+  /* margin: 10px !important; */
+  cursor: default;
+  width: 185px;
+  border-radius: 0.3rem;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+}
+.archUsers:hover {
+  border-bottom: 2px solid #696cff;
+}
+.table-responsive text-nowrap{
+  width: 100%;
+  margin: 5px;
+}
+.archy{
+  --bs-modal-header-border-width:0px;
+  --bs-modal-header-border-color: #ffffff;
+  border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
 }
 
 /*izgled za telefone*/

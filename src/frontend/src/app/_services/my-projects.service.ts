@@ -7,6 +7,7 @@ import { UpdateProject } from '../Entities/UpdateProject';
 import { ProjectMember } from '../Entities/ProjectMember';
 import { environment } from '../../environments/environment';
 import { ApiUrl } from '../ApiUrl/ApiUrl';
+import { ProjectSection } from '../Entities/ProjectSection';
 
 @Injectable({
   providedIn: 'root',
@@ -111,7 +112,7 @@ export class MyProjectsService {
 
   // vraca korisnike koji su na datom projektu
   getUsersByProjectId(projectId: number): Observable<any> {
-    if(projectId === null) 
+    if(projectId === null)
       throw new Error('ProjetId is null.');
     return this.http.get(`${this.baseUrl}/GetUsersByProjectId/${projectId}`)
   }
@@ -124,8 +125,8 @@ export class MyProjectsService {
     return this.http.put<Project>(`${this.baseUrl}/updateProject`, update, {responseType: 'json'});
   }
 
-  AddProjectMember(projectMember: ProjectMember):Observable<any>{
-    return this.http.put<ProjectMember>(`${this.baseUrl}/addProjectMember`, projectMember, {responseType: 'json'})
+  AddProjectMembers(projectMember: ProjectMember[]):Observable<any>{
+    return this.http.put<any>(`${this.baseUrl}/addProjectMembers`, projectMember, {responseType: 'json'})
   }
 
   DeleteProjectMember(projectId: number,userId: number):Observable<any>{
@@ -134,6 +135,10 @@ export class MyProjectsService {
 
   UpdateUsersProjectRole(member: ProjectMember):Observable<any>{
     return this.http.post<ProjectMember>(`${this.baseUrl}/UpdateUsersProjectRole`, member, {responseType: 'json'})
+  }
+
+  GetProjectSections(projectId:number):Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}/ProjectSection/project/${projectId}`);
   }
 }
 
