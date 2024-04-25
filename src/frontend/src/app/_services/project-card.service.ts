@@ -30,7 +30,7 @@ export class ProjectCardService {
     return this.http.post<Project>(`${this.projectUrl}`, project, {responseType: 'json'});
   }
 
-  AddProjectMember(projectMember: ProjectMember):Observable<any>{
-    return this.http.put<ProjectMember>(`${this.projectUrl}/addProjectMember`, projectMember, {responseType: 'json'})
+  AddProjectMembers(projectMember: ProjectMember[]):Observable<any>{
+    return this.http.put<any>(`${this.projectUrl}/addProjectMembers`, projectMember, {responseType: 'json'})
   }
 }

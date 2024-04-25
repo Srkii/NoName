@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { Member } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
+import { style } from '@angular/animations';
 
 @Component({
   selector: 'app-project-detail',
@@ -26,7 +27,7 @@ export class ProjectDetailComponent implements OnInit {
   groupedTasks: { [key: string]: any } = {};
 
   update: UpdateProject = {};
-  selectedUser: SelectedUser | undefined;
+  selectedUsers: SelectedUser[] = [];
   usersOnProject: SelectedUser[] = [];
   addableUsers: SelectedUser[] = [];
   filteredUsers: SelectedUser[] = [];
@@ -81,6 +82,7 @@ export class ProjectDetailComponent implements OnInit {
       this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole}));
       this.filteredUsers = this.usersOnProject;
       this.userRole = this.usersOnProject.find(x => x.appUserId == this.userId)?.projectRole;
+      console.log(this.userRole)
       //this.loadPicture(this.usersOnProject)
     });
   }
@@ -135,8 +137,9 @@ export class ProjectDetailComponent implements OnInit {
     this.modalRef = this.modalService.show(
       modal,
       {
-        class: "modal modal-lg modal-dialog-centered"
-      });
+        class: "modal modal-lg modal-dialog-centered projectInfoModal",
+      }
+    );
       this.update.projectId = this.project.id;
       this.update.appUserId = this.userId;
       this.update.projectName = this.project.projectName;
@@ -147,8 +150,18 @@ export class ProjectDetailComponent implements OnInit {
       this.update.projectStatus = this.project.projectStatus;
   }
 
+  openMemberManagment(modal: TemplateRef<void>){
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: "modal modal-md modal-dialog-centered MemberManagmentModel",
+      }
+    );
+  }
+
   updateProject()
   {
+    this.spinner.show()
     if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
     {
       if(this.update.projectName !== this.project.projectName || this.update.projectStatus!=this.project.projectStatus ||
@@ -164,32 +177,30 @@ export class ProjectDetailComponent implements OnInit {
           this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
             console.log(updatedProject)
             this.getProjectInfo()
+            this.spinner.hide()
           })
       }
     }
   }
 
-  addProjectMember()
+  addProjectMembers()
   {
+    this.spinner.show()
     if(this.userRole == 1 || this.userRole == 0)
     {
-      if(this.selectedUser !== undefined ){
-        var projectMember : ProjectMember = {
-          AppUserId: this.selectedUser.appUserId,
-          ProjectId: this.project.id,
-          ProjectRole: +this.selectedUser.projectRole
-        }
+      var projectMembers = this.selectedUsers.map<ProjectMember>(user => ({ AppUserId: user.appUserId, ProjectId: this.project.id, ProjectRole: user.projectRole = +user.projectRole}));
 
-        this.myProjectsService.AddProjectMember(projectMember).subscribe(response => {
-          this.loadAddableUsers()
-          this.loadProjectMembers()
-          this.selectedUser = undefined
-        })
-      }
+      this.myProjectsService.AddProjectMembers(projectMembers).subscribe(response => {
+        this.loadAddableUsers()
+        this.loadProjectMembers()
+        this.selectedUsers = [] 
+        this.spinner.hide()
+      })
     }
   }
 
   deleteAssigne(userId: number){
+    this.spinner.show()
     if(this.userRole == 0 || this.userRole == 1)
     {
       this.myProjectsService.DeleteProjectMember(this.project.id,userId).subscribe(updatedProject => {
@@ -197,11 +208,13 @@ export class ProjectDetailComponent implements OnInit {
         this.loadProjectMembers()
         this.loadAddableUsers()
         this.searchTerm = ''
+        this.spinner.hide()
       })
     }
   }
 
   updateUsersRole(user: SelectedUser){
+    this.spinner.show();
     if(this.userRole == 0 || this.userRole == 1 || this.userRole == 2)
     {
       var projectMember : ProjectMember = {
@@ -212,6 +225,7 @@ export class ProjectDetailComponent implements OnInit {
 
       this.myProjectsService.UpdateUsersProjectRole(projectMember).subscribe(update => {
         console.log("User role changed successfully")
+        this.spinner.hide()
       })
     }
   }
@@ -228,16 +242,43 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-  // loadPicture(usersArray: SelectedUser[]) : void{
-  //   usersArray.forEach(user => {
-  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){
-  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
-  //       url => {
-  //         user.profilePic = url;
-  //       }
-  //       )
-  //     }
-  //   });
-  // }
+  getPriorityClass() {
+    switch (this.update.priority) {
+        case Priority.Low:
+            return "LOW"
+        case Priority.Medium:
+            return "MEDIUM"
+        case Priority.High:
+            return "HIGH"
+        default:
+            return "DEFAULT"
+    }
+  }
+
+  getStatusClass(){
+    switch (this.update.projectStatus) {
+      case ProjectStatus.Archived:
+          return "ARCHIVED"
+      case ProjectStatus.InProgress:
+          return "INPROGRESS"
+      case ProjectStatus.Proposed:
+          return "PROPOSED"
+      case ProjectStatus.Completed:
+          return "COMPLETED"
+      default:
+          return "DEFAULT"
+    }
+  }
+
+  enableNameChange(){
+    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
+    changeNameInp.disabled = false;
+    changeNameInp.focus();
+  }
+
+  disableNameChange(){
+    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
+    changeNameInp.disabled = true;
+  }
 
 }

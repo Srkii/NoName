@@ -143,19 +143,21 @@ namespace backend.Controllers
         // }
         
 
-        [HttpPut("addProjectMember")] 
-        public async Task<IActionResult> AddProjectMember(ProjectMemberDTO dto)
+        [HttpPut("addProjectMembers")] 
+        public async Task<IActionResult> AddProjectMembers(ProjectMemberDTO[] dtos)
         {
-            var projectMember = new ProjectMember 
+            foreach (var dto in dtos)
             {
+                var projectMember = new ProjectMember 
+                {
                 AppUserId =  dto.AppUserId,
                 ProjectId = dto.ProjectId,
                 ProjectRole = dto.ProjectRole
-            };
-            await _context.ProjectMembers.AddAsync(projectMember);
-            await _context.SaveChangesAsync();
-
-            return Ok(projectMember);
+                };
+                await _context.ProjectMembers.AddAsync(projectMember);
+                await _context.SaveChangesAsync();   
+            }
+            return Ok(dtos);
         }
         
 

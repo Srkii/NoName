@@ -205,6 +205,7 @@ p {
 }
 
 .page-size-container {
+  width: 20rem;
   margin-left: 10px; 
 }
 
@@ -214,9 +215,16 @@ p {
   border: 0.5px solid lightgray;
   border-radius: 8px;
   padding: 6px;
-  width: 100%; 
+  width: 8rem; 
 }
 .page_size:hover, .page_size:focus{
   outline: none;
   border: 1px solid #5f61e6 !important;
+}
+
+.addProject{
+  height: 1.7rem;
+  margin-left: 1rem;
+  padding-top: 0;
+  padding-bottom: 0;
 }

@@ -124,8 +124,8 @@ export class MyProjectsService {
     return this.http.put<Project>(`${this.baseUrl}/updateProject`, update, {responseType: 'json'});
   }
 
-  AddProjectMember(projectMember: ProjectMember):Observable<any>{
-    return this.http.put<ProjectMember>(`${this.baseUrl}/addProjectMember`, projectMember, {responseType: 'json'})
+  AddProjectMembers(projectMember: ProjectMember[]):Observable<any>{
+    return this.http.put<any>(`${this.baseUrl}/addProjectMembers`, projectMember, {responseType: 'json'})
   }
 
   DeleteProjectMember(projectId: number,userId: number):Observable<any>{
