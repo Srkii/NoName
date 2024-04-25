@@ -173,9 +173,9 @@ thead th{
     display: flex;
     align-items: stretch;
     flex: 1 1 auto;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: space-between;
-    /* box-sizing: border-box; */
+    box-sizing: border-box;
 }
 .card {
     background-clip: padding-box;
@@ -441,4 +441,12 @@ textarea:disabled {
 textarea:focus{
     border-color: #696cff !important;
     box-shadow: none;
+}
+
+.td_row td:first-child:hover,
+.td_row td:first-child.clicked {
+    cursor: pointer;
+    background-color: #e7e7ff !important;
+    color: #5f61e6 !important;
+    font-weight: 600;
 }

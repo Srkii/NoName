@@ -203,7 +203,7 @@ export class MyTasksComponent implements OnInit {
   isOverdue(endDate: Date): boolean {
     const now = new Date().getTime(); 
     const endDateTimestamp = new Date(endDate).getTime(); 
-    return endDateTimestamp <= now; // Check if endDate is less than now
+    return endDateTimestamp <= now; 
   }
 
   

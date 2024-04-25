@@ -1,6 +1,6 @@
 <div class="container1">
 
-  <div class="col-md-5 mx-2 float-end" id="popUp" *ngIf="task">
+  <div class="col-md-5 mx-2 float-end" id="popUp" *ngIf="task" >
     <div class="scroll">
       <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +146,7 @@
     <button
       *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"   
       class="mark"
-      style="margin-right: 10px;"
+      style="margin-right: 10px; margin-top: -20px;"
       [ngClass]="{ 'completed': this.task && this.task.statusName == 'Completed',
         'not_closed': this.task && this.task.statusName != 'InReview',
         'not_completed': this.task && this.task.statusName == 'Completed'

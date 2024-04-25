@@ -74,6 +74,7 @@ namespace backend.Controllers
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int task_id,int userId)
         {
             var task = await _context.ProjectTasks
+            .Include(t=>t.AppUser)
             .Select(task => new
             {
                 task.Id,
@@ -86,6 +87,7 @@ namespace backend.Controllers
                 task.TskStatus.Color,
                 task.ProjectSection.SectionName,
                 task.Project,
+                AppUser=task.AppUser,
                 Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
                  ProjectRole = _context.ProjectMembers
                                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
@@ -119,6 +121,7 @@ namespace backend.Controllers
                                           task.TskStatus.Color,
                                           task.ProjectSection.SectionName,
                                           task.Project,
+                                           AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
                                            Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
                                         ProjectRole = _context.ProjectMembers
                                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
@@ -517,6 +520,7 @@ namespace backend.Controllers
                     task.TskStatus.Color,
                     task.ProjectSection.SectionName,
                     task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
                     ProjectRole = _context.ProjectMembers
                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                         .Select(member => member.ProjectRole)
@@ -548,6 +552,7 @@ namespace backend.Controllers
                     task.TskStatus.Color,
                     task.ProjectSection.SectionName,
                     task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
                     ProjectRole = _context.ProjectMembers
                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                         .Select(member => member.ProjectRole)
@@ -577,6 +582,7 @@ namespace backend.Controllers
                     task.TskStatus.Color,
                     task.ProjectSection.SectionName,
                     task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
                     ProjectRole = _context.ProjectMembers
                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                         .Select(member => member.ProjectRole)

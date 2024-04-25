@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Output, EventEmitter  } from '@angular/core';
+import { Component, OnInit, TemplateRef, Output, EventEmitter, HostListener, ViewChild, ElementRef, Renderer2  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { MyTasksService } from '../../_services/my-tasks.service';
@@ -11,11 +11,33 @@ import { UploadService } from '../../_services/upload.service';
 import { NewTask } from '../../Entities/NewTask';
 
 import { forkJoin } from 'rxjs';
+import { SharedService } from '../../_services/shared.service';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
-  styleUrl: './kanban.component.css'
+  styleUrl: './kanban.component.css',
+  animations: [
+    trigger('popFromSide', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'translateX(50%)',
+        }),
+        animate('300ms ease-out', style({
+          opacity: 1,
+          transform: 'translateX(0)',
+        })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({
+          opacity: 0,
+          transform: 'translateX(50%)',
+        })),
+      ]),
+    ]),
+  ],
 })
 export class KanbanComponent implements OnInit{
   tasks: any[] = [];
@@ -39,6 +61,11 @@ export class KanbanComponent implements OnInit{
   newTaskProjectSectionId: number | null = null;
   selectedArchivedTasks: any[] = [];
 
+  userId: number = -1;
+  clickedTask: ProjectTask | null = null;
+  showPopUp: boolean = false;
+  task!: ProjectTask;
+
   users: TaskAssignee[] = [];
   selectedUser: TaskAssignee | undefined;;
   filterValue: string | undefined = '';
@@ -51,10 +78,22 @@ export class KanbanComponent implements OnInit{
     private myTasksService: MyTasksService,
     private modalService: BsModalService,
     private myProjectsService: MyProjectsService,
-    public uploadservice: UploadService
+    public uploadservice: UploadService,
+    private shared: SharedService,
   ) {}
 
+
+
   ngOnInit() {
+    this.spinner.show();
+    this.populateTasks();
+    if (this.currentProjectId !== null) {
+      this.getProjectsUsers(this.currentProjectId);
+    }
+    this.spinner.hide();
+  }
+
+  loadTasksAndUsers():void{
     this.spinner.show();
     this.populateTasks();
     if (this.currentProjectId !== null) {
@@ -243,5 +282,40 @@ export class KanbanComponent implements OnInit{
         this.spinner.hide(); // skloni spinner cak i ako dodje do greske
       }
     });
+  }
+
+  togglePopUp(event: MouseEvent, taskId: number): void {
+    event.stopPropagation(); 
+    this.myTasksService
+      .GetProjectTask(taskId,this.userId)
+      .subscribe((task: ProjectTask) => {
+        if (
+          this.clickedTask &&
+          this.clickedTask.id === taskId &&
+          this.showPopUp
+        ) {
+          this.showPopUp = false;
+          this.clickedTask = null;
+          this.shared.current_task_id = null;
+        } else {
+          this.clickedTask = task;
+          this.showPopUp = true;
+          this.shared.current_task_id = this.clickedTask.id;
+        }
+      });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const popUp = document.querySelector('.pop') as HTMLElement;
+    if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
+      this.showPopUp = false;
+      this.clickedTask = null;
+    }
+  }
+
+  closePopup() {
+    this.clickedTask = null; 
+    this.showPopUp = false; 
   }
 }
