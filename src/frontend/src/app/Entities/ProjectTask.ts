@@ -1,4 +1,6 @@
+import { AppUser } from './AppUser';
 import { Project } from './Project';
+import { TaskAssignee } from './TaskAssignee';
 import { TaskDependency } from './TaskDependency';
 
 export interface ProjectTask {
@@ -17,4 +19,6 @@ export interface ProjectTask {
   dependencies?:TaskDependency;
   profilePicUrl?: string;
   selected?: boolean;
+  appUserId?:number;
+  appUser?:TaskAssignee;
 }

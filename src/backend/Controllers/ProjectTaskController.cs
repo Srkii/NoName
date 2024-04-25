@@ -74,6 +74,7 @@ namespace backend.Controllers
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int task_id,int userId)
         {
             var task = await _context.ProjectTasks
+            .Include(t=>t.AppUser)
             .Select(task => new
             {
                 task.Id,
@@ -86,6 +87,7 @@ namespace backend.Controllers
                 task.TskStatus.Color,
                 task.ProjectSection.SectionName,
                 task.Project,
+                AppUser=task.AppUser,
                 Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
                  ProjectRole = _context.ProjectMembers
                                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
@@ -119,6 +121,7 @@ namespace backend.Controllers
                                           task.TskStatus.Color,
                                           task.ProjectSection.SectionName,
                                           task.Project,
+                                           AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
                                            Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
                                         ProjectRole = _context.ProjectMembers
                                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
@@ -522,6 +525,7 @@ namespace backend.Controllers
                     task.TskStatus.Color,
                     task.ProjectSection.SectionName,
                     task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
                     ProjectRole = _context.ProjectMembers
                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                         .Select(member => member.ProjectRole)
@@ -553,6 +557,7 @@ namespace backend.Controllers
                     task.TskStatus.Color,
                     task.ProjectSection.SectionName,
                     task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
                     ProjectRole = _context.ProjectMembers
                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                         .Select(member => member.ProjectRole)
@@ -582,6 +587,7 @@ namespace backend.Controllers
                     task.TskStatus.Color,
                     task.ProjectSection.SectionName,
                     task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
                     ProjectRole = _context.ProjectMembers
                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                         .Select(member => member.ProjectRole)
@@ -630,5 +636,43 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok(task);
         }
+
+        [HttpDelete("deleteTask/{taskId}")]
+        public async Task<IActionResult> DeleteTask(int taskId)
+        {
+            var task = await _context.ProjectTasks.FindAsync(taskId);
+
+            if (task == null)
+            {
+                return NotFound("Task not found.");
+            }
+
+            // Delete task dependencies
+            var taskDependencies = _context.TaskDependencies.Where(dep => dep.TaskId == taskId || dep.DependencyTaskId == taskId);
+            _context.TaskDependencies.RemoveRange(taskDependencies);
+
+            // Delete comments associated with the task
+            var comments = _context.Comments.Where(c => c.TaskId == taskId);
+            _context.Comments.RemoveRange(comments);
+
+            // Delete attachments associated with the task
+            var attachments = _context.Attachments.Where(a => a.task_id == taskId);
+            _context.Attachments.RemoveRange(attachments);
+
+            // Set notifications related to the task to null
+            var notifications = _context.Notifications.Where(n => n.task_id == taskId);
+            foreach (var notification in notifications)
+            {
+                notification.task_id = null;
+            }
+
+            _context.ProjectTasks.Remove(task);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Task and related data deleted successfully." });
+        }   
+    
     }
+    
 }

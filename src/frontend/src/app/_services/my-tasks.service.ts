@@ -101,6 +101,10 @@ export class MyTasksService {
     return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`);
   }
 
+  deleteTask(taskId: number): Observable<any> {
+    const url = `${this.baseUrl}/deleteTask/${taskId}`;
+    return this.http.delete(url);
+  }
   GetTaskDependencies(id:any):Observable<TaskDependency[]>{
     return this.http.get<TaskDependency[]>(`${this.baseUrl}/getTaskDependencies/${id}`);
   }
@@ -111,4 +115,5 @@ export class MyTasksService {
     }
     return this.http.post<any>(`${this.baseUrl}/timeUpdateGantt/${id}`,newDatetime);
   }
+
 }

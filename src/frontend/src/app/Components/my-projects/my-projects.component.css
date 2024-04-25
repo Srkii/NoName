@@ -170,6 +170,13 @@ p {
   border-radius: 8px;
   margin-right: 5px;
 }
+.paginate_buttons button{
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px 4px 10px;
+}
 
 
 .paginate_button button:hover,

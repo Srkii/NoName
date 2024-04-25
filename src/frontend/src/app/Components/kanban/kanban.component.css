@@ -265,7 +265,8 @@
     cursor: grabbing !important;
 }
 .draggable {
-    cursor: grab;
+    /* cursor: grab; */
+    cursor: pointer;
 }
 .draggable:active {
     cursor: grabbing !important;
@@ -349,3 +350,37 @@ input[type='checkbox'] {
     margin: 15px !important;
     font-size: 20px;
 }
+
+
+.card-body-task-title:hover,
+.card-body-task-title.clicked {
+    cursor: pointer;
+    background-color: #e7e7ff !important;
+    color: #5f61e6 !important;
+    font-weight: 600;
+}
+
+.card-body-task-title{
+
+    /* flex-grow: 1; */
+    /* flex-basis: 0; */
+    padding: 15px;
+    margin-top: 0px !important;
+    border-radius: 0.5rem;
+
+}
+.pop_position {
+    height: 100%;
+    width: 41.8%;
+    position: absolute;
+    top: 95px;
+    right: 0;
+    z-index: 999;
+   
+}
+.pop {
+    width: 100% !important;
+}
+:host ::ng-deep .pop .col-md-5 {
+    width: 100%; 
+  }
