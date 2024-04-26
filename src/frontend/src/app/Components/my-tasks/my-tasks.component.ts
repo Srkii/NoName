@@ -211,5 +211,71 @@ export class MyTasksComponent implements OnInit {
     this.router.navigate(['/project', project.id]);
   }
 
+  sortTasksByName(tasks: ProjectTask[]) {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+  
+    tasks.sort((a, b) => {
+      const nameA = a.taskName.toLowerCase();
+      const nameB = b.taskName.toLowerCase();
+  
+      if (nameA < nameB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  sortTasksByProjectName(tasks: ProjectTask[]) {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+  
+    tasks.sort((a, b) => {
+      const nameA = a.project.projectName.toLowerCase();
+      const nameB = b.project.projectName.toLowerCase();
+  
+      if (nameA < nameB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  sortTasksBySectionName(tasks: ProjectTask[]) {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+  
+    tasks.sort((a, b) => {
+      const nameA = a.sectionName.toLowerCase();
+      const nameB = b.sectionName.toLowerCase();
+  
+      if (nameA < nameB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  sortTasksByDueDate(tasks: ProjectTask[]) {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+  
+    tasks.sort((a, b) => {
+      const dateA = new Date(a.endDate);
+      const dateB = new Date(b.endDate);
+  
+      if (dateA < dateB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+      if (dateA > dateB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
+
   
 }

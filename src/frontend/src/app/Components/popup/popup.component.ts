@@ -61,30 +61,12 @@ export class PopupComponent {
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
       
-      // const dependencies : number[] = []
-
-      // if (this.task.dependencies) {
-      //   for (const [key, value] of Object.entries(this.task.dependencies)) {
-      //     for (const [key1, value1] of Object.entries(value)) {
-      //       if(key1 == "dependencyTaskId")
-      //         {
-      //           dependencies.push(Number(value1))
-      //         }
-      //     }
-      //   }
-      // } else {
-      //   console.log("this.task.dependencies is undefined");
-      // }
       if (Array.isArray(this.task.dependencies)) {
         this.selectedTasks = [...this.task.dependencies];
       } else {
         this.selectedTasks = [];
       }
       
-
-      
-
-
       if (this.task.projectRole === undefined || this.task.projectRole === null) {
         console.error('Task does not have projectRole property');
       } else {
@@ -97,18 +79,7 @@ export class PopupComponent {
       
     }
   }
-  // ngOnInit(): void {
-  //   if (this.task) {
-  //     this.previousTaskStatus = this.task.statusName;
-  //     this.selectedProject=this.task.project;
-  //     this.getUser();
-  //     this.fetchComments();
-  //     this.getProjectsUsers(this.task?.projectId);
-  //     this.getUserProjects(this.userId);
-  //   }
 
-
-  // }
 
   fetchComments(): void {
     if (this.task && this.task.id) {
@@ -312,7 +283,7 @@ export class PopupComponent {
     }
   }
   getUser(): void{
-    var id=localStorage.getItem('id')
+    var id=this.task?.appUser?.id;
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.user=response;
@@ -322,7 +293,6 @@ export class PopupComponent {
           this.selectedUser.appUserId = this.user.id;
           this.selectedUser.lastName = this.user.lastName;
           this.selectedUser.firstName = this.user.firstName;
-          this.selectedUser.fullName = this.user.fullName;
           this.selectedUser.profilePicUrl = this.user.profilePicUrl;
         }
       },error:(error)=>{
@@ -493,17 +463,15 @@ export class PopupComponent {
   }
 
   getAllTasks(): void {
-    this.myTasksService.GetTasksByUserId(this.userId).subscribe((tasks: ProjectTask[]) => {
+    if(this.task)
+    this.myTasksService.GetTasksByProjectId(this.task?.projectId).subscribe((tasks: ProjectTask[]) => {
       this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
-        // Get the IDs of all tasks that are dependencies of the current task, including indirect dependencies
         const dependentTaskIds = this.getAllDependentTaskIds(this.task?.id, deps);
         
-        // Filter out tasks that are dependent on the current task, its dependencies, or itself
         this.tasks = tasks.filter(task => {
           if (dependentTaskIds.includes(task.id) || task.id === this.task?.id) {
-            return false; // Exclude tasks that are dependent on the current task or its dependencies, or the task itself
+            return false; 
           }
-          // Exclude tasks that have their own ID in the dependency chain
           const taskDependencyChain = this.getAllDependentTaskIds(task.id, deps);
           return !taskDependencyChain.includes(task.id);
         });
