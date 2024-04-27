@@ -109,12 +109,12 @@
             <!-- <ng-container *ngIf="isProjectVisible(project)"> -->
             <ng-container>
               <td class="project-name">{{ project.projectName }}</td>
-              <td>Project owner name here</td>
+              <td>Project Owner here</td>
               <td [ngClass]="getStatusString(project.projectStatus)">
-                <p>{{ getStatusString(project.projectStatus) }}</p>
+                <p style="margin-left: -50px;">{{ getStatusString(project.projectStatus) }}</p>
               </td>
               <td [ngClass]="getPriorityString(project.priority)">
-                <p>{{ getPriorityString(project.priority) }}</p>
+                <p style="margin-left: -10px;">{{ getPriorityString(project.priority) }}</p>
               </td>
               <td>{{ project.startDate | date }}</td>
               <td>{{ project.endDate | date }}</td>

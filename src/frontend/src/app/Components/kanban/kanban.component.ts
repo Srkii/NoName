@@ -86,12 +86,17 @@ export class KanbanComponent implements OnInit{
 
   ngOnInit() {
     this.spinner.show();
+    this.shared.taskUpdated.subscribe(() => {
+      this.loadTasksAndUsers();  // Reload tasks and users
+    });
     this.populateTasks();
     if (this.currentProjectId !== null) {
       this.getProjectsUsers(this.currentProjectId);
     }
+
     this.spinner.hide();
   }
+
 
   loadTasksAndUsers():void{
     this.spinner.show();
@@ -284,38 +289,9 @@ export class KanbanComponent implements OnInit{
     });
   }
 
-  togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation(); 
-    this.myTasksService
-      .GetProjectTask(taskId,this.userId)
-      .subscribe((task: ProjectTask) => {
-        if (
-          this.clickedTask &&
-          this.clickedTask.id === taskId &&
-          this.showPopUp
-        ) {
-          this.showPopUp = false;
-          this.clickedTask = null;
-          this.shared.current_task_id = null;
-        } else {
-          this.clickedTask = task;
-          this.showPopUp = true;
-          this.shared.current_task_id = this.clickedTask.id;
-        }
-      });
+  onTaskClick(event: MouseEvent, taskId: number) {
+    event.stopPropagation(); // Prevents the event from bubbling up the event chain
+    this.shared.triggerPopup(event, taskId);
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    const popUp = document.querySelector('.pop') as HTMLElement;
-    if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
-      this.showPopUp = false;
-      this.clickedTask = null;
-    }
-  }
-
-  closePopup() {
-    this.clickedTask = null; 
-    this.showPopUp = false; 
-  }
 }

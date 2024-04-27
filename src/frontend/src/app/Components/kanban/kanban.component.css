@@ -369,18 +369,3 @@ input[type='checkbox'] {
     border-radius: 0.5rem;
 
 }
-.pop_position {
-    height: 100%;
-    width: 41.8%;
-    position: absolute;
-    top: 95px;
-    right: 0;
-    z-index: 999;
-   
-}
-.pop {
-    width: 100% !important;
-}
-:host ::ng-deep .pop .col-md-5 {
-    width: 100%; 
-  }

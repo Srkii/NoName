@@ -1,14 +1,4 @@
 <div class="board">
-  <div class="pop_position">
-    <app-popup
-    class="pop"
-      *ngIf="showPopUp && clickedTask"
-      [task]="clickedTask"
-      (backClicked)="closePopup();"
-      (taskUpdated)=" this.loadTasksAndUsers();"
-      [@popFromSide]="showPopUp ? 'popFromSide' : ''"
-    ></app-popup>
-  </div>
     <div class="board-wrapper" cdkDropListGroup cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="taskStatuses" (cdkDropListDropped)="dropColumn($event)">
         <div *ngFor="let status of taskStatuses"  class="card draggable" cdkDrag>
             <div class="card-header" [style.background-color]="status.color">
@@ -24,7 +14,7 @@
             <div class="card-body" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" (cdkDropListDropped)="drop($event)">
                 <!-- <div  -->
                 <div *ngFor="let task of tasksBySection[status.name]"  class="card task draggable" cdkDrag [cdkDragData]="task">
-                    <div [class.clicked]="clickedTask?.id === task.id" (click)="togglePopUp($event, task.id)" class="card-body-task-title ">{{task.taskName}}
+                    <div [class.clicked]="clickedTask?.id === task.id" (click)="onTaskClick($event,task.id)" class="card-body-task-title ">{{task.taskName}}
                     </div>
                     <div class="card-footer assignee" style="display: flex; align-items: center;">
                       <div *ngIf="task.profilePicUrl" class="nameAvatar boardAvatar">

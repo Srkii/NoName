@@ -21,6 +21,7 @@ import {
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
+import { SharedService } from '../../_services/shared.service';
 // import { finalize, of } from 'rxjs';
 // import { delay } from 'rxjs/operators';
 
@@ -34,21 +35,37 @@ export class GanttComponent implements OnInit{
   date = new GanttDate(1713125075).format("yyyy-mm-dd-hh-mm-ss");
   currentProjectId: number | null = null;
   ngOnInit(): void {
+    this.shared.taskUpdated.subscribe(() => { 
+      this.loading = true;
+      this.data_loaded = false;
+      this.items=[];
+      this.groups=[];
+      this.loading = true;
+      this.getGanttData();//kupimo sve podatke za trenutni projekat
+      setTimeout(()=>
+      {
+        this.loading = false;
+        this.data_loaded = true
+      },100);
+    });
+    this.spinner.show();
     this.loading = true;
     console.log(this.date);
     this.getGanttData();//kupimo sve podatke za trenutni projekat
+    this.spinner.hide();
     setTimeout(()=>
     {
       this.loading = false;
       this.data_loaded = true
-    },2000);
+    },100);
   }
   constructor(
     private http: HttpClient,
     private route:ActivatedRoute,
     private spinner:NgxSpinnerService,
     private myTasksService:MyTasksService,
-    private myProjectsService:MyProjectsService
+    private myProjectsService:MyProjectsService,
+    private shared:SharedService
     ) { }
 
   views = [{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
@@ -86,6 +103,10 @@ export class GanttComponent implements OnInit{
     }
   };
 
+  private reloadGanttData() {
+    this.getGanttData(); // Fetch data again
+  }
+
   goToToday() {
     this.ganttComponent.scrollToToday();
   }
@@ -98,6 +119,7 @@ export class GanttComponent implements OnInit{
 
       this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
       .subscribe((response: any) => {
+        this.reloadGanttData();
         // console.log(response);
       });
     }
@@ -146,11 +168,11 @@ export class GanttComponent implements OnInit{
 
   barClick(event: any) {}
 
-  async getGanttData(){
+  getGanttData(){
     const projectId = this.route.snapshot.paramMap.get('id');
     this.currentProjectId = projectId? +projectId:null;
-    await this.getProjectSections();
-    await this.getProjectTasks();
+    this.getProjectSections();
+    this.getProjectTasks();
     // console.log("SECTIONS",this.groups);
     // console.log("TASKS",this.items);
   }
@@ -205,5 +227,10 @@ export class GanttComponent implements OnInit{
   convertToStandardTimeStamp(unixTime:number) : string{
     const date = new Date(unixTime*1000);
     return date.toLocaleDateString();
+  }
+
+  onTaskClick(event: MouseEvent, taskId: number) {
+    event.stopPropagation(); // Prevents the event from bubbling up the event chain
+    this.shared.triggerPopup(event, taskId);
   }
 }

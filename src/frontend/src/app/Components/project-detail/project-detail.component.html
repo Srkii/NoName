@@ -5,7 +5,6 @@
     *ngIf="showPopUp && clickedTask"
     [task]="clickedTask"
     (backClicked)="closePopup();"
-    (taskUpdated)="getProjectInfo()"
     [@popFromSide]="showPopUp ? 'popFromSide' : ''"
   ></app-popup>
   <div class="container-xxl flex-grow-1 container-p-y">

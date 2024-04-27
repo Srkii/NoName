@@ -32,7 +32,9 @@
                       </ngx-gantt-column>
                   </ngx-gantt-table>
                   <ng-template #bar let-item="item">
-                      <span style="color: #fff">&nbsp;&nbsp;{{ item.title }} </span>
+                    <div  class="gantt-bar-content" style="background: rgb(102, 152, 255);" (click)="onTaskClick($event,item.id)">
+                      <span style="color: #fff;">&nbsp;&nbsp;{{ item.title }} </span>
+                      </div>
                   </ng-template>
               </ngx-gantt>
           </div>
