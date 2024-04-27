@@ -5,4 +5,5 @@ export interface ChangeTaskInfo {
     appUserId?: number | null;
     dueDate?: Date | null;
     projectId: number;
+    sectionId:number;
 }

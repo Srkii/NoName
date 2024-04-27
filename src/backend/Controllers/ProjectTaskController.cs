@@ -88,6 +88,7 @@ namespace backend.Controllers
                 task.ProjectSection.SectionName,
                 task.Project,
                 AppUser=task.AppUser,
+                ProjectSection=task.ProjectSection,
                 Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
                  ProjectRole = _context.ProjectMembers
                                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
@@ -211,6 +212,8 @@ namespace backend.Controllers
             if (dto.DueDate != null) task.EndDate = (DateTime)dto.DueDate;
             if (dto.ProjectId!=0) task.ProjectId = dto.ProjectId;
             if (dto.AppUserId!=0) task.AppUserId = dto.AppUserId;
+            if(dto.SectionId!=0) task.ProjectSectionId=dto.SectionId;
+            if(dto.SectionId==0) task.ProjectSectionId=null;
 
             await _context.SaveChangesAsync();
 

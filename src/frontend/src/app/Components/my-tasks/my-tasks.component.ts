@@ -53,7 +53,8 @@ export class MyTasksComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private shared: SharedService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private sharedService:SharedService
   ) {}
 
   closePopup() {
@@ -62,13 +63,15 @@ export class MyTasksComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sharedService.taskUpdated.subscribe(() => {
+      this.loadTasks();  // Reload project info
+    });
     this.loadTasks();
 
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
-    const row = document.querySelector('.td_row') as HTMLElement;
     this.myTasksService
       .GetProjectTask(taskId,this.userId)
       .subscribe((task: ProjectTask) => {
@@ -77,7 +80,6 @@ export class MyTasksComponent implements OnInit {
           this.clickedTask.id === taskId &&
           this.showPopUp
         ) {
-          row.style.backgroundColor = '';
           this.showPopUp = false;
           this.clickedTask = null;
           this.shared.current_task_id = null;

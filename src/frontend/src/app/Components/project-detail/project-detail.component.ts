@@ -79,9 +79,14 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.shared.taskUpdated.subscribe(() => {
+      this.getProjectInfo();  // Reload project info
+    });
     this.getProjectInfo();
+  this.shared.togglePopup$.subscribe(({ event, taskId }) => {
+    this.togglePopUp(event, taskId);
+  });
   }
-
   getProjectInfo() {
     this.spinner.show();
     this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
@@ -93,7 +98,7 @@ export class ProjectDetailComponent implements OnInit {
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
           this.projectTasks = tasks;
           this.groupedTasks = this.groupTasksBySection(tasks);
-          console.log(this.groupedTasks)
+          // console.log(this.groupedTasks)
         });
         this.loadProjectMembers();
         this.loadAddableUsers();
@@ -269,7 +274,6 @@ export class ProjectDetailComponent implements OnInit {
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
-    const row= document.querySelector('.td_row') as HTMLElement;
     this.myTasksService
       .GetProjectTask(taskId,this.userId)
       .subscribe((task: ProjectTask) => {
@@ -278,7 +282,6 @@ export class ProjectDetailComponent implements OnInit {
           this.clickedTask.id === taskId &&
           this.showPopUp
         ) {
-          row.style.backgroundColor = '';
           this.showPopUp = false;
           this.clickedTask = null;
           this.shared.current_task_id = null;
@@ -343,5 +346,7 @@ export class ProjectDetailComponent implements OnInit {
     changeNameInp.disabled = true;
   }
 
+
+  
 
 }

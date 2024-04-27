@@ -17,6 +17,8 @@ import { TaskDependency } from '../../Entities/TaskDependency';
 import { ThisReceiver, TmplAstIdleDeferredTrigger } from '@angular/compiler';
 import { addSeconds } from 'date-fns';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { SharedService } from '../../_services/shared.service';
+import { ProjectSection } from '../../Entities/ProjectSection';
 
 @Component({
   selector: 'app-popup',
@@ -27,8 +29,7 @@ export class PopupComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('commentInput') commentInput!: ElementRef;
   @Input() task: ProjectTask | null = null;
-  @Output() taskUpdated: EventEmitter<void> =
-    new EventEmitter<void>();
+  @Output() taskUpdated: EventEmitter<ProjectTask> = new EventEmitter<ProjectTask>();
   @Output() backClicked: EventEmitter<void> = new EventEmitter<void>();
   @Output() projectClicked: EventEmitter<number> = new EventEmitter<number>();
 
@@ -45,6 +46,8 @@ export class PopupComponent {
   selectedTasks: number[]=[];
   allDependencies:TaskDependency[]=[];
   modalRef?: BsModalRef;
+  sections:ProjectSection[]=[];
+  selectedSection: ProjectSection | undefined;
   
 
 
@@ -56,6 +59,7 @@ export class PopupComponent {
               public uploadservice: UploadService, 
               private router: Router,
               private modalService: BsModalService,
+              private sharedService:SharedService
             ){}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -71,11 +75,14 @@ export class PopupComponent {
         console.error('Task does not have projectRole property');
       } else {
       }
+      console.log(this.task);
       this.selectedProject = this.task.project;
+      this.selectedSection=this.task.projectSection;
       this.getUser();
       this.fetchComments();
       this.getProjectsUsers(this.task.projectId);
       this.getAllTasks();
+      this.getProjectSections();
       
     }
   }
@@ -126,7 +133,7 @@ export class PopupComponent {
         });
           
         });
-        this.taskUpdated.emit();
+        this.sharedService.emitTaskUpdated();
         
       },
       error: (error: any) => {
@@ -166,7 +173,7 @@ export class PopupComponent {
         });
           
         });
-        this.taskUpdated.emit();
+        this.sharedService.emitTaskUpdated();
         
       },
       error: (error: any) => {
@@ -205,7 +212,7 @@ export class PopupComponent {
         });
           
         });
-        this.taskUpdated.emit();
+        this.sharedService.emitTaskUpdated();
         
       },
       error: (error: any) => {
@@ -237,6 +244,7 @@ export class PopupComponent {
     const pop=document.querySelector(".col-md-5") as HTMLElement;
     const back = document.querySelector('.back') as HTMLElement;
     const full = document.querySelector('.full') as HTMLElement;
+    const trash = document.querySelector('.trash') as HTMLElement;
     const exit_full = document.querySelector('.exit_full') as HTMLElement;
     const file = document.querySelector('.file') as HTMLElement;
     const comments = document.querySelector('.comments') as HTMLElement;
@@ -260,7 +268,8 @@ export class PopupComponent {
       pop.style.width="98%";
       pop.style.padding = '2%';
       back.style.marginRight = '1%';
-      exit_full.style.marginRight = '3%';
+      exit_full.style.marginRight = '30px';
+      trash.style.marginRight = '30px';
       exit_full.style.display = 'block';
       full.style.display = 'none';
       file.style.marginRight = '3%';
@@ -274,6 +283,7 @@ export class PopupComponent {
       pop.style.padding = '';
       back.style.marginRight = '';
       exit_full.style.marginRight = '';
+      trash.style.marginRight = '';
       exit_full.style.display = 'none';
       full.style.display = '';
       file.style.marginRight = '';
@@ -383,7 +393,8 @@ export class PopupComponent {
       description: task.description,
       projectId: this.selectedProject.id,
       appUserId: this.selectedUser?.appUserId,
-      dueDate: task.endDate
+      dueDate: task.endDate,
+      sectionId: this.selectedSection ? parseInt(this.selectedSection.id) : 0
     };
 
     this.myTasksService.changeTaskInfo(dto).subscribe({
@@ -393,8 +404,7 @@ export class PopupComponent {
         this.task.projectRole=rola;
 
 
-        this.taskUpdated.emit();
-
+        this.sharedService.emitTaskUpdated();
         this.cdr.detectChanges();
       },
       error: (error: any) => {
@@ -528,6 +538,7 @@ export class PopupComponent {
         console.error('Error adding task dependencies:', error);
       }
     );
+    this.sharedService.emitTaskUpdated();
   }
   
   deleteTaskDependency(item:ProjectTask): void {
@@ -551,6 +562,7 @@ export class PopupComponent {
           console.error('Error adding task dependency:', error);
         }
       );
+      this.sharedService.emitTaskUpdated();
   }
 
   DisableCloseTask(task:ProjectTask):boolean{
@@ -598,7 +610,8 @@ export class PopupComponent {
     this.myTasksService.deleteTask(taskId).subscribe({
       next: (response) => {
         console.log('Task deleted successfully:', response);
-        this.taskUpdated.emit();
+        if(this.task)
+          this.sharedService.emitTaskUpdated();
         this.backClicked.emit();
       },
       error: (error) => {
@@ -606,8 +619,23 @@ export class PopupComponent {
       }
     });
   }
-  
+  getProjectSections(): void {
+    if (this.task) {
+      this.myProjectsService.GetProjectSections(this.task.projectId).subscribe({
+        next: (sections: ProjectSection[]) => {
+          this.sections = sections;
+          console.log(this.sections);
 
+        },
+        error: (error: any) => {
+          console.error('Error fetching project sections:', error);
+        }
+      });
+    }
+  }
+  
+  
+  
 }  
 
 

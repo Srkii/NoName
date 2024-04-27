@@ -1,6 +1,7 @@
 import { AppUser } from './AppUser';
 import { Member } from './Member';
 import { Project } from './Project';
+import { ProjectSection } from './ProjectSection';
 import { TaskAssignee } from './TaskAssignee';
 import { TaskDependency } from './TaskDependency';
 
@@ -22,4 +23,5 @@ export interface ProjectTask {
   selected?: boolean;
   appUserId?:number;
   appUser?:Member;
+  projectSection:ProjectSection
 }

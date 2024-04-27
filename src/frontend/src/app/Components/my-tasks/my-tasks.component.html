@@ -3,7 +3,6 @@
   *ngIf="showPopUp && clickedTask"
   [task]="clickedTask"
   (backClicked)="closePopup();"
-  (taskUpdated)="loadTasks()"
   [@popFromSide]="showPopUp ? 'popFromSide' : ''"
 ></app-popup>
 <div class="all">
