@@ -46,8 +46,8 @@
   </div>
   <div class="modal-body">
     <table class="notifications-table">
-      <tr class="inactive_tr"><td></td><td></td><td></td><td><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" ></td></tr>
-      <tr class="active_tr" *ngFor="let notification of notifications" (click)="visitSource(notification)">
+      <tr class="inactive_tr"><td></td><td></td><td></td><td style="text-align: center;"><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" ></td></tr>
+      <tr class="active_tr" *ngFor="let notification of notifications" (click)="visitSource($event,notification)">
         <td>
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
@@ -55,7 +55,7 @@
         <td style="margin-left: 0;padding-left: 0; text-align: start;">{{notification.sender.firstName}} {{notification.sender.lastName}} {{getNotificationType(notification.type)}} {{notification.task.taskName}}</td>
         <td>{{notification.dateTime | date:'yyyy-MM-dd HH:mm'}}</td>
 
-        <td style="z-index:123"><input class="form-check-input" type="checkbox" [checked]="markedNotifications.includes(notification.id)" (change)="toList(notification.id)" *ngIf="notification.read===false"></td>
+        <td style="z-index:123;text-align: center;"><input class="form-check-input" type="checkbox" [checked]="markedNotifications.includes(notification.id)" (change)="toList(notification.id)" *ngIf="notification.read===false"><i *ngIf="!notification.read===false" style="font-size: small;">read</i></td>
       </tr>
     </table>
   </div>

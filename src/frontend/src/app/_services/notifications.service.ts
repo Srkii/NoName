@@ -71,9 +71,6 @@ export class NotificationsService{
   read_notifications(notificationIds:number[]){
     this.hubConnection?.invoke("readNotifications",notificationIds);
   }
-  follow_link(){
-    //dodati notifikaciji task_id ili project_id da zna na sta da ide, na osnovu toga otvaramo popup za task ako treba ili za projekat koji je dodat
-  }
   getNotificationType(type:any):string{
     switch(type){
       case 0:

@@ -278,6 +278,13 @@ export class MyTasksComponent implements OnInit {
     });
   }
 
-
+  //~maksim
+  openTaskPopup(taskId: number): void {
+    this.myTasksService.GetProjectTask(taskId, this.userId)
+      .subscribe((task: ProjectTask) => {
+        this.clickedTask = task;
+        this.showPopUp = true;
+      });
+  }
   
 }
