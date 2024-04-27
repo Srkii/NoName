@@ -33,6 +33,7 @@ namespace backend.Services
                     read=false,
                 };
                 await _context.Notifications.AddAsync(notification);
+                await _context.SaveChangesAsync();
                 await _hubContext.Clients.Group(Users[i].ToString())
                     .Notify(
                          new NotificationDto{
@@ -43,73 +44,100 @@ namespace backend.Services
                             Type = notification.Type,
                             read = notification.read
                          });
-                await _context.SaveChangesAsync();
             }
         }
-        public async Task TriggerAssignmentNotification(int task_project_id,int sender_Id,NotificationType type){//ovo ce useru da javlja da je assign-ovan na neki task ili projekat
-            //na osnovu tipa assignment-a znacemo da li je projekat ili task
-            //tako ce frontend komponenta znati na koji tab da ide i sta da otvara.
-            List<int> users_list = new List<int>();
-            var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == sender_Id);
-            if(type == NotificationType.TaskAssignment){//novi task kreiran
-                var tsk = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id == task_project_id);
-                var user = await _context.Users.FirstOrDefaultAsync(x=>x.Id == tsk.AppUserId);
-                users_list.Add(user.Id);//task assignee
-                users_list.Remove(sender_Id);
-                var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_project_id);//nadji task
-                foreach(int i in users_list){
-                    Notification notification = new Notification{
-                        reciever_id = i,
-                        sender_id = sender_Id,
-                        task_id = task_project_id,
-                        Type = type,
-                        dateTime = DateTime.Now,
-                        read=false,
-                    };
-                    await _context.Notifications.AddAsync(notification);
-                    await _hubContext.Clients.Group(i.ToString())
-                    .Notify(
-                         new NotificationDto{
-                            Task = notification.Task,
-                            Project = notification.Project,
-                            Sender = notification.Sender,
-                            dateTime = notification.dateTime,
-                            Type = notification.Type,
-                            read = notification.read
-                         });
-                }
-            }else if(type == NotificationType.ProjectAssignment){//novi projekat
-                var users = await _context.ProjectMembers.Where(x=> x.ProjectId == task_project_id).Select(x=>x.AppUserId).ToListAsync();
-                users_list.AddRange(users);//project members
-                users_list.Remove(sender_Id);
-                var project = await _context.Projects.FirstOrDefaultAsync(x => x.Id == task_project_id);
-                foreach(int i in users_list){
-                    Notification notification = new Notification{
-                        reciever_id = i,
-                        sender_id = sender_Id,
-                        project_id=task_project_id,
-                        Project = project,
-                        Sender=sender,
-                        Type = type,
-                        dateTime = DateTime.Now,
-                        read=false,
-                    };
-                    await _context.Notifications.AddAsync(notification);
-                    await _hubContext.Clients.Group(i.ToString())
-                    .Notify(
-                         new NotificationDto{
-                            Task = notification.Task,
-                            Project = notification.Project,
-                            Sender = notification.Sender,
-                            dateTime = notification.dateTime,
-                            Type = notification.Type,
-                            read = notification.read
-                         });
-                }
-            }
-            await _context.SaveChangesAsync();
 
+        public async Task TriggerTaskNotification(int task_id,int sender_Id){
+            //zadatak ove funkcije jeste da posalje notifikaciju korisniku kojem je dodeljen zadatak ili projekat
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
+            var sender = await _context.Users.FirstOrDefaultAsync(x=>x.Id == sender_Id);
+            var reciever = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
+            Notification notification = new Notification{
+                reciever_id = reciever.Id,
+                sender_id = sender.Id,
+                task_id=task_id,
+                Type = NotificationType.TaskAssignment,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
+                dateTime = DateTime.Now,
+                read=false,
+            };
+            await _context.Notifications.AddAsync(notification);
+            await _context.SaveChangesAsync();
+            await _hubContext.Clients.Group(reciever.Id.ToString())
+                    .Notify(
+                         new NotificationDto{
+                            Task = notification.Task,
+                            Project = notification.Project,
+                            Sender = notification.Sender,
+                            dateTime = notification.dateTime,
+                            Type = notification.Type,
+                            read = notification.read
+                         });
         }
+        public async Task TriggerProjectNotification(int project_id,int reciever_id){
+            var project = await _context.Projects.FirstOrDefaultAsync(x=>x.Id == project_id);
+            Notification notification = new Notification{
+                reciever_id = reciever_id,
+                project_id = project_id,
+                Type = NotificationType.ProjectAssignment,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
+                dateTime = DateTime.Now,
+                read=false,
+            };
+            await _context.Notifications.AddAsync(notification);
+            await _context.SaveChangesAsync();
+            await _hubContext.Clients.Group(reciever_id.ToString())
+                    .Notify(
+                         new NotificationDto{
+                            Task = notification.Task,
+                            Project = notification.Project,
+                            Sender = notification.Sender,
+                            dateTime = notification.dateTime,
+                            Type = notification.Type,
+                            read = notification.read
+                         });
+        }
+        //ove dve su wip, kome sve treba da stigne ova informacija????
+        // public async Task TaskDeadlineChanged(int task_id,int sender_id){
+        //     var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
+        //     var sender = await _context.Users.FirstOrDefaultAsync(x=>x.Id == sender_id);
+        //     var reciever = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
+        //     Notification notification = new Notification{
+        //         reciever_id = reciever.Id,
+        //         sender_id = sender.Id,
+        //         task_id = task_id,
+        //         Type = NotificationType.TaskDeadlineChanged,
+        //         dateTime = DateTime.Now,
+        //         read=false,
+        //     };
+        //     await _context.Notifications.AddAsync(notification);
+        //     await _context.SaveChangesAsync();
+        //     await _hubContext.Clients.Group(reciever.Id.ToString())
+        //             .Notify(
+        //                  new NotificationDto{
+        //                     Task = notification.Task,
+        //                     Project = notification.Project,
+        //                     Sender = notification.Sender,
+        //                     dateTime = notification.dateTime,
+        //                     Type = notification.Type,
+        //                     read = notification.read
+        //                  });
+        // }
+        // public async Task ProjectDeadlineChanged(int project_id,int sender_id){
+        //     var project = await _context.Projects.FirstOrDefaultAsync(x=>x.Id == project_id);
+        //     var sender = await _context.Users.FirstOrDefaultAsync(x=>x.Id == sender_id);
+        //     var recievers = await _context.ProjectMembers.Where(x => x.ProjectId == project_id).Select(x=>x.AppUser).ToListAsync();
+        //     foreach(var reciever in recievers){
+        //         if(reciever.Id !=sender_id){
+        //             Notification notification = new Notification{
+        //                 reciever_id = reciever.Id,
+        //                 sender_id = sender_id,
+        //                 project_id = project_id,
+        //                 Type = NotificationType.ProjectDeadlineChanged,
+        //                 dateTime = DateTime.Now,
+        //                 read=false,
+        //             };
+        //         }
+        //     }
+        // }
         public async Task<List<int>> GetUsersForTaskNotification(int taskId, int initiatorId)
         {
             var users = new List<int>();
@@ -119,7 +147,7 @@ namespace backend.Services
 
             // Include all project owners
             var projectOwners = await _context.ProjectMembers
-                .Where(x => x.ProjectId == projectId && x.ProjectRole == ProjectRole.ProjectOwner)
+                .Where(x => x.ProjectId == projectId && (x.ProjectRole == ProjectRole.ProjectOwner || x.ProjectRole == ProjectRole.ProjectManager))
                 .Select(x => x.AppUserId)
                 .ToListAsync();
             users.AddRange(projectOwners);
@@ -146,5 +174,6 @@ namespace backend.Services
 
             return users;
         }
+
     }
 }

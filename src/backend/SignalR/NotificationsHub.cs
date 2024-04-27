@@ -105,8 +105,8 @@ namespace backend.SignalR
             foreach(int i in notifications){
                 var _notif = await _context.Notifications.FirstOrDefaultAsync(x=>x.Id == i);
                 _notif.read=true;
-                await _context.SaveChangesAsync();
             }
+            await _context.SaveChangesAsync();
         }
     }
 

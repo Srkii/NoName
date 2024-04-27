@@ -82,8 +82,25 @@ export class NotificationsService{
         return "commented on a task";
       case 2:
         return "assigned you to a task";
+      case 3:
+        return "You have been assigned to a project";
+      case 4:
+        return "A task deadline has been modified";
+      case 5:
+        return "A project deadline has been modified";
       default:
-        return "assigned you to a project";
+        return "";
+    }
+  }
+  getNotificationText(notification:any):string{
+    switch(notification.type){
+      case 0://attachment
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
+      case 1:
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
+      default:
+        return this.getNotificationType(notification.type);
+
     }
   }
 }

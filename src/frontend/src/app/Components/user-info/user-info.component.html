@@ -14,7 +14,10 @@
           >
           <ul class="dropdown-menu dropdown-menu-end">
             <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="userInfo?.profilePicUrl==null">View</button></li>
-            <li><button class="dropdown-item" (click)="inputClick.click()">Change</button></li>
+            <li><button class="dropdown-item" (click)="inputClick.click()">
+              <span *ngIf="userInfo.profilePicUrl">Change</span>
+              <span *ngIf="!userInfo.profilePicUrl">Upload</span></button>
+            </li>
             <li><button class="dropdown-item" (click)="removeImageModal(removalModal)" [disabled]="userInfo?.profilePicUrl==null">Remove</button></li>
           </ul>
         </div>

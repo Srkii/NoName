@@ -2,6 +2,8 @@
 using backend.Data;
 using backend.DTO;
 using backend.Entities;
+using backend.Interfaces;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +12,11 @@ namespace backend.Controllers
     public class ProjectsController : BaseApiController
     {
         private readonly DataContext _context;
-        public ProjectsController(DataContext context)
+        private readonly INotificationService _notificationService;
+        public ProjectsController(DataContext context,INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         // [Authorize(Roles = "ProjectManager")]
@@ -155,6 +159,7 @@ namespace backend.Controllers
                 ProjectRole = dto.ProjectRole
                 };
                 await _context.ProjectMembers.AddAsync(projectMember);
+                await _notificationService.TriggerProjectNotification(dto.ProjectId,dto.AppUserId);
                 await _context.SaveChangesAsync();   
             }
             return Ok(dtos);

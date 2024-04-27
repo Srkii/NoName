@@ -23,8 +23,8 @@
     <small style="padding: 5px; font-size: 13px; margin-left: 10px;" *ngIf="notification_list==null">No new notifications...</small>
     <ul style="overflow: auto; max-height: 120px;">
       <li *ngFor="let notification of notification_list" style="display: flex;align-items:center; margin-top: 5px;">
-        <img *ngIf="notification.sender?.profilePicUrl" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
-        <ngx-avatars *ngIf="!notification.sender?.profilePicUrl" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
+        <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
+        <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
         <a class="dropdown-item" href="javascript:void(0);">
           {{notification.sender.firstName}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
         </a>
@@ -45,12 +45,12 @@
     </button>
   </div>
   <div class="modal-body">
-    <input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()">
     <table class="notifications-table">
-      <tr *ngFor="let notification of notifications" (click)="visitSource(notification)">
+      <tr class="inactive_tr"><td></td><td></td><td></td><td><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" ></td></tr>
+      <tr class="active_tr" *ngFor="let notification of notifications" (click)="visitSource(notification)">
         <td>
-          <ngx-avatars *ngIf="!notification.sender?.profilePicUrl" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
-          <img *ngIf="notification.sender?.profilePicUrl" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
+          <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
+          <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
         </td>
         <td style="margin-left: 0;padding-left: 0; text-align: start;">{{notification.sender.firstName}} {{notification.sender.lastName}} {{getNotificationType(notification.type)}} {{notification.task.taskName}}</td>
         <td>{{notification.dateTime | date:'yyyy-MM-dd HH:mm'}}</td>
