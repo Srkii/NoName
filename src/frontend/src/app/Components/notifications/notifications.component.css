@@ -27,6 +27,7 @@
 .dropdown-item{
   font-size: 14px;
   color: #697a8d;
+  cursor: pointer;
 }
 .dropdown-menu{
   margin-top: 27px;
@@ -91,6 +92,7 @@ li{
 .notifications-table td{
   padding: 5px;
   width: fit-content;
+  cursor: pointer;
 }
 .notifications-table .active_tr:hover{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);

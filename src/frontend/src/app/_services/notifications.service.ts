@@ -3,6 +3,9 @@ import { environment } from '../../environments/environment';
 import { ComponentRef, Injectable} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CustomToastService } from './custom-toast.service';
+import { SharedService } from './shared.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +22,9 @@ export class NotificationsService{
 
   constructor(
     private toastr:ToastrService,//mogu opet preko hub-a da uzimam notifikacije i ne bakcem se sa httpclientom ura!
-    private customToast:CustomToastService
+    private customToast:CustomToastService,
+    private shared:SharedService,
+    private router:Router
   ) { }
 
   createHubConnection(){
@@ -50,6 +55,7 @@ export class NotificationsService{
       this.customToast.initiate(
         {
           sender:notification.sender,
+          target:notification,
           title:'New Notification!',
           content:this.getNotificationText(notification)
         }
@@ -109,7 +115,27 @@ export class NotificationsService{
 
     }
   }
-  follow_notif(){
-    console.log("bitch am trying");
+
+  async follow_notif(event: MouseEvent, notification: any) {
+    if (notification.task != null) {
+      event.stopPropagation();
+      await this.router.navigate(['/project/' + notification.task.projectId]);
+      setTimeout(()=>{
+        this.shared.triggerPopup(event, notification.task.id);
+      },500);
+    } else if (notification.project != null) {
+      console.log(notification.project);
+      await this.router.navigate(['/project/' + notification.project.id]);
+    }
+  }
+  scrollToComment(taskId: number, commentId?: number) {
+    if (commentId) {
+      setTimeout(() => {
+        const commentElement = document.getElementById(`comment-${commentId}`);
+        if (commentElement) {
+          commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 500); // Adjust timeout as needed to allow for rendering time
+    }
   }
 }

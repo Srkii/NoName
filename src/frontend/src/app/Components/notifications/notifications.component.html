@@ -24,7 +24,7 @@
       <li *ngFor="let notification of notification_list" style="display: flex;align-items:center; margin-top: 5px;">
         <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
         <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
-        <a class="dropdown-item" href="javascript:void(0);">
+        <a class="dropdown-item" (click)="notificationService.follow_notif($event,notification)">
           {{notification.sender.firstName}} {{notification.type==0?"uploaded an attachment":notification.type==1?"commented on a task":notification.type==2?"assigned you a task":"assigned you to a project"}}
         </a>
       </li>
@@ -46,7 +46,7 @@
   <div class="modal-body" *ngIf="this.notification_list.length!=0">
     <table class="notifications-table">
       <tr class="inactive_tr"><td></td><td></td><td></td><td style="text-align: center;"><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" ></td></tr>
-      <tr class="active_tr" *ngFor="let notification of notifications" (click)="notificationService.follow_notif()">
+      <tr class="active_tr" *ngFor="let notification of notifications" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()">
         <td>
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">

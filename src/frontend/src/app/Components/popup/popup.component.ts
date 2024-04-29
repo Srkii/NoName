@@ -315,6 +315,10 @@ export class PopupComponent {
   addComment(): void {
     const content = this.commentInput.nativeElement.value.trim();
     if (content) {
+      //ovde samo treba da izvuces usera koji je trenutno ulogovan u aplikaciju....
+      //a ne assignee-a kao sto je stavljeno ovde ~maksim
+
+      
       const commentDto: Comment = {
         id: -1,
         taskId: this.task!.id,

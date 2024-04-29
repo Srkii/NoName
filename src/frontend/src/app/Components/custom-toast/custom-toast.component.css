@@ -8,28 +8,29 @@
   max-width: 420px;
   word-break: break-word;
   background-color: #ffffff;
-  border: 1px solid #696cff;
   overflow: hidden;
+  cursor: pointer;
 }
-
-
-
+.toast_wrapper:hover{
+  border: 1px solid #696cff;
+}
 .inner_wrapper {
   position: relative;
-  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .toast_title {
   font-size: 14px;
   font-weight: 600;
-  color: #424242;
   margin-bottom: 4px;
 }
 
 .toast_text {
   font-size: 12px;
   font-weight: normal;
-  color: #4b4b4b;
 }
 
 .progress_bar {
@@ -40,21 +41,21 @@
   transition-timing-function: ease-out;
   border-radius: 8px;
 }
-
-.progress_bar.success {
-  background: #46a958;
-}
-
-.error_title {
-  color: #fd3825;
-}
 .flex{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  padding: 16px 22px;
 }
 img{
   width: 40px;
   height: 40px;
+  margin-right: 10px;
+}
+.exit {
+  height: 100%;/* nece nesto nervira me opasno */
+  display: flexbox;
+}
+.btn-close {
+  margin-right: 10px; /* Adds some spacing from the right edge */
 }
