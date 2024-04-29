@@ -63,7 +63,11 @@ li{
   align-items: flex-end; /* Align items at the bottom */
 }
 .see-all-container:hover{
-  background-color: rgb(245, 245, 245);
+  transition: 0.3s ease-in-out;
+  background-color: #696cff;
+  color : #ffffff;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 .modal-ul{
   list-style: none;
@@ -73,7 +77,6 @@ li{
   flex-direction: column;
 }
 .modal{
-  color: #697a8d;
   width: 800px;
   min-height: 350px;
   margin: 0;
@@ -104,10 +107,18 @@ li{
   right: 0%;
   left: 60%;
   bottom: 60%;
-  background-color: brown;
+  background-color: #696cff;
   border-radius: 50%;
 }
 .notif-count{
   font-weight: 700;
   color: white;
+}
+::-webkit-scrollbar{
+  background-color: #ffffff;
+  width: 10px;
+}
+::-webkit-scrollbar-thumb{
+  background-color: lightgray;
+  border-radius: 20px;
 }

@@ -121,21 +121,12 @@ export class NotificationsService{
       event.stopPropagation();
       await this.router.navigate(['/project/' + notification.task.projectId]);
       setTimeout(()=>{
-        this.shared.triggerPopup(event, notification.task.id);
+        this.shared.triggerPopup(event, notification.task.id);  
       },500);
     } else if (notification.project != null) {
       console.log(notification.project);
       await this.router.navigate(['/project/' + notification.project.id]);
     }
-  }
-  scrollToComment(taskId: number, commentId?: number) {
-    if (commentId) {
-      setTimeout(() => {
-        const commentElement = document.getElementById(`comment-${commentId}`);
-        if (commentElement) {
-          commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 500); // Adjust timeout as needed to allow for rendering time
-    }
+    this.read_notifications([notification.id]);
   }
 }
