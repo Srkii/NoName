@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +22,10 @@ export class UploadService {
     return this.httpClient.post<any>(`${this.baseUrl}/uploadpfp/${id}`,formData,{headers:httpheader});//saljem sliku na back
   }
   getImage(filename:string){//ova vraca avatare
-    return `${ApiUrl.imageUrl}AVATAR_${filename}`;
+    return `${environment.imageUrl}AVATAR_${filename}`;
   }
   getProfileImage(filename:string){
-    return `${ApiUrl.imageUrl}${filename}`;
+    return `${environment.imageUrl}${filename}`;
   }
 
   UploadFile(id:any,user_id:any,file:File,token:any){
