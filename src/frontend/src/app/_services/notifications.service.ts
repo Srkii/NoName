@@ -2,6 +2,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from '../../environments/environment';
 import { ComponentRef, Injectable} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { CustomToastService } from './custom-toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class NotificationsService{
 
   constructor(
     private toastr:ToastrService,//mogu opet preko hub-a da uzimam notifikacije i ne bakcem se sa httpclientom ura!
+    private customToast:CustomToastService
   ) { }
 
   createHubConnection(){
@@ -45,6 +47,13 @@ export class NotificationsService{
       this.notifications.push(notification);
       this.allNotifications.push(notification);
       this.newNotifications = true;
+      this.customToast.initiate(
+        {
+          sender:notification.sender,
+          title:'New Notification!',
+          content:this.getNotificationText(notification)
+        }
+      )
     })
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
       this.notifications = notifications;
@@ -74,7 +83,7 @@ export class NotificationsService{
   getNotificationType(type:any):string{
     switch(type){
       case 0:
-        return "uploaded an attachment";
+        return "uploaded an attachment on a task ";
       case 1:
         return "commented on a task";
       case 2:
@@ -92,12 +101,15 @@ export class NotificationsService{
   getNotificationText(notification:any):string{
     switch(notification.type){
       case 0://attachment
-        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
       case 1:
-        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
       default:
         return this.getNotificationType(notification.type);
 
     }
+  }
+  follow_notif(){
+    console.log("bitch am trying");
   }
 }

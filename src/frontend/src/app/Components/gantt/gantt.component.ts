@@ -89,6 +89,7 @@ export class GanttComponent implements OnInit{
     // { id: '000003', group_id: '000001', title: 'Task 3', start: 1713125075, end: 1713729875, expandable: true, linkable: true }
   ];
   groups: GanttGroup[] = [
+    {id:'-1',title:'No Section'}
     // { id: '000000', title: 'Group-0' },
     // { id: '000001', title: 'Group-1' }
   ];
@@ -173,8 +174,8 @@ export class GanttComponent implements OnInit{
     this.currentProjectId = projectId? +projectId:null;
     this.getProjectSections();
     this.getProjectTasks();
-    // console.log("SECTIONS",this.groups);
-    // console.log("TASKS",this.items);
+    console.log("SECTIONS",this.groups);
+    console.log("TASKS",this.items);
   }
   getProjectSections(){
     if(this.currentProjectId){
@@ -207,7 +208,7 @@ export class GanttComponent implements OnInit{
           })
           let item:GanttItem={
             id: String(t.id),
-            group_id :t.projectSectionId? String(t.projectSectionId):'',
+            group_id :t.projectSectionId? String(t.projectSectionId):'-1',
             title:t.taskName,
             start: this.convertToUnixTimestamp(t.startDate),
             end: this.convertToUnixTimestamp(t.endDate),

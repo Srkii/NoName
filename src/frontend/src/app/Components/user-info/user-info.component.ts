@@ -6,6 +6,7 @@ import { ChangePassword } from '../../Entities/ChangePassword';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
+import { CustomToastService } from '../../_services/custom-toast.service';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -31,7 +32,7 @@ export class UserInfoComponent implements OnInit {
     private userinfoService: UserinfoService,
     public uploadService:UploadService,
     private spinner:NgxSpinnerService,
-    private modalService:BsModalService
+    private modalService:BsModalService,
     ) {}
 
   ngOnInit(){
@@ -64,6 +65,7 @@ export class UserInfoComponent implements OnInit {
     }else {
       console.error("Token not found in local storage");
     }
+
   }
   passwordMatch(): boolean {
     return this.newData.NewPassword === this.confirmpass;

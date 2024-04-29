@@ -58,13 +58,10 @@ export class NotificationsComponent {
   }
   read_notifications(){
     this.notificationService.read_notifications(this.markedNotifications);
+    this.handleNotificationDisplay();
   }
+
   getNotificationType(type:any):string{
     return this.notificationService.getNotificationType(type);
-  }
-  visitSource($event:any,notification:any){
-    console.log("BITCH AM TRYING");
-    this.shared.triggerPopup($event,notification.task_id);
-    this.shared.togglePopup$;
   }
 }

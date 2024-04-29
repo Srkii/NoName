@@ -15,8 +15,8 @@
           <ul class="dropdown-menu dropdown-menu-end">
             <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="userInfo?.profilePicUrl==null">View</button></li>
             <li><button class="dropdown-item" (click)="inputClick.click()">
-              <span *ngIf="userInfo.profilePicUrl">Change</span>
-              <span *ngIf="!userInfo.profilePicUrl">Upload</span></button>
+              <span *ngIf="userInfo?.profilePicUrl">Change</span>
+              <span *ngIf="!userInfo?.profilePicUrl">Upload</span></button>
             </li>
             <li><button class="dropdown-item" (click)="removeImageModal(removalModal)" [disabled]="userInfo?.profilePicUrl==null">Remove</button></li>
           </ul>
@@ -84,6 +84,7 @@
       </div>
     </div>
   </div>
+  <app-custom-toast></app-custom-toast>
 </div>
 <ng-template #cropperModal style="text-align:center;">
   <div class="modal-header">

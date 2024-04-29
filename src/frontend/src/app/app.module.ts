@@ -36,6 +36,7 @@ import { NotificationsComponent } from './Components/notifications/notifications
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxGanttModule } from '@worktile/gantt';
 import { LandingPageComponent } from './Components/landing-page/landing-page.component';
+import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
 
 const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
 
@@ -59,6 +60,7 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     ProjectCardComponent,
     NotificationsComponent,
     LandingPageComponent,
+    CustomToastComponent,
   ],
   imports: [
     BrowserModule,

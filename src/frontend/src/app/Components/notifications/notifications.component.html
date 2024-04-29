@@ -20,7 +20,6 @@
   <div class="dropdown-menu dropdown-menu-end">
     <span style="padding-left: 15px;">Notifications</span>
     <div class="dropdown-divider"></div>
-    <small style="padding: 5px; font-size: 13px; margin-left: 10px;" *ngIf="notification_list==null">No new notifications...</small>
     <ul style="overflow: auto; max-height: 120px;">
       <li *ngFor="let notification of notification_list" style="display: flex;align-items:center; margin-top: 5px;">
         <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
@@ -44,10 +43,10 @@
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" *ngIf="this.notification_list.length!=0">
     <table class="notifications-table">
       <tr class="inactive_tr"><td></td><td></td><td></td><td style="text-align: center;"><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" ></td></tr>
-      <tr class="active_tr" *ngFor="let notification of notifications" (click)="visitSource($event,notification)">
+      <tr class="active_tr" *ngFor="let notification of notifications" (click)="notificationService.follow_notif()">
         <td>
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
@@ -59,7 +58,10 @@
       </tr>
     </table>
   </div>
-  <div class="modal-footer">
+  <div class="modal-body" style="align-content: center;height: 100px;" *ngIf="this.notification_list.length===0">
+    <h5 style="text-align: center;">There are no new Notifications...</h5>
+  </div>
+  <div class="modal-footer"*ngIf="this.notification_list.length!=0">
     <button class="btn btn-primary d-grid" type="submit" (click)="read_notifications()">Mark as read</button>
   </div>
 </ng-template>
