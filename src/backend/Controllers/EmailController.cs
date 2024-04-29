@@ -30,7 +30,7 @@ namespace backend.Controllers
             _context.Invitations.Add(invitation);
             await _context.SaveChangesAsync();
             
-            string link = "http://localhost:4200/register?token="+invitation.Token;
+            string link = "http://softeng.pmf.kg.ac.rs:10101/register?token="+invitation.Token;
             string subject = "Invitation to Register on Our Application";
             string message = "Dear User, \n\n" +
                     "We hope this message finds you well. You have been invited to join our community at 'Naziv aplikacije' ! \n" +
@@ -75,7 +75,7 @@ namespace backend.Controllers
             _context.UserRequests.Add(request);
             await _context.SaveChangesAsync();
             
-            string link = "http://localhost:4200/forgotreset?token="+request.Token;
+            string link = "http://softeng.pmf.kg.ac.rs:10101/forgotreset?token="+request.Token;
             string subject = "Forgot password";
             string message = "Dear User, \n\n" +
                     "We received a request to reset the password for your account.\n" +
