@@ -523,6 +523,14 @@ namespace backend.Controllers
                 
             return NotFound();
         }
+
+        [HttpGet("countProgress/{projectId}")]
+        public async Task<ActionResult<int>> countProgress(int projectId)
+        {
+            var projectTasksCount = await _context.ProjectTasks.CountAsync(x => x.ProjectId == projectId && x.TskStatus.StatusName != "Archived");
+            var completedTasksCount = await _context.ProjectTasks.CountAsync(x => x.TskStatus.StatusName == "Completed");
+            return (int)(((double)completedTasksCount/projectTasksCount)*100);
+        }
     }
 }
 

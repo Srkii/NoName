@@ -12,7 +12,7 @@
       <div class="project-heading">
         <span>{{ project.projectName }}</span>
         <input *ngIf="userRole == 4 || userRole == 3" type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Info">
-        <input *ngIf="userRole == 1 || userRole == 2 || userRole == 0" type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Info/Edit">
+        <input *ngIf="userRole == 1 || userRole == 2 || userRole == 0" type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Details">
       </div>
       <div class="button-selectors">
         <button class="btn btn-primary btn-lg" [ngClass]="{'btn-active': viewMode === 'table', 'btn-inactive': viewMode !== 'table'}" (click)="changeToTable()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
