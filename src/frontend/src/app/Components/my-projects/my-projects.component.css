@@ -235,3 +235,14 @@ p {
   padding-top: 0;
   padding-bottom: 0;
 }
+
+.progress-bar{
+  cursor: default;
+  background-color: #696cff;
+  color: transparent;
+  transition: color 0.5s ease;
+}
+
+.progress-bar:hover{
+  color: white;
+}

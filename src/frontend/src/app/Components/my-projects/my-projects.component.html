@@ -101,7 +101,7 @@
             <th>PROJECT NAME</th>
             <th>PROJECT OWNER</th>
             <th>STATUS</th>
-            <th>PRIORITY</th>
+            <th>PROGRESS</th>
             <th>START DATE</th>
             <th>END DATE</th>
           </tr>
@@ -113,8 +113,10 @@
               <td [ngClass]="getStatusString(project.projectStatus)">
                 <p style="margin-left: -50px;">{{ getStatusString(project.projectStatus) }}</p>
               </td>
-              <td [ngClass]="getPriorityString(project.priority)">
-                <p style="margin-left: -10px;">{{ getPriorityString(project.priority) }}</p>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped" role="progressbar" [style.width.%]="project.progress" [attr.aria-valuenow]="project.progress" aria-valuemin="0" aria-valuemax="100">{{project.progress}}%</div>
+                </div>
               </td>
               <td>{{ project.startDate | date }}</td>
               <td>{{ project.endDate | date }}</td>
