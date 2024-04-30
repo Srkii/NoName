@@ -41,8 +41,9 @@ namespace backend.Controllers
                 AppUserId = taskDto.AppUserId
             };
 
-            _context.ProjectTasks.Add(task);
+            await _context.ProjectTasks.AddAsync(task);
             await _context.SaveChangesAsync();
+            await updateProgress(task.ProjectId);
 
             return Ok(task);
         }
@@ -144,6 +145,7 @@ namespace backend.Controllers
             }
             task.TskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
+            await updateProgress(task.ProjectId);
 
             return Ok(task);
         }
@@ -191,6 +193,8 @@ namespace backend.Controllers
                 ProjectSectionId = task.ProjectSectionId
                 
             };
+            
+            await updateProgress(task.ProjectId);
 
             return taskDto;
         }
@@ -624,8 +628,10 @@ namespace backend.Controllers
             {
                 task.TskStatusId = completedStatusId;
             }
-
             await _context.SaveChangesAsync();
+
+            var projectId = tasksToUpdate[0].ProjectId;
+            await updateProgress(projectId);
 
             return Ok(new { message = "Tasks updated to Completed status." });
         }
@@ -669,12 +675,28 @@ namespace backend.Controllers
                 notification.task_id = null;
             }
 
+            var projectId = task.ProjectId;
             _context.ProjectTasks.Remove(task);
 
             await _context.SaveChangesAsync();
+            await updateProgress(projectId);
 
             return Ok(new { message = "Task and related data deleted successfully." });
-        }   
+        }
+
+        [HttpGet("updateProgress/{projectId}")]
+        public async Task<ActionResult> updateProgress(int projectId)
+        {
+            var project = await _context.Projects.FindAsync(projectId);
+            var TasksCount = await _context.ProjectTasks.CountAsync(x => x.ProjectId == projectId && x.TskStatus.StatusName != "Archived");
+            var CompletedTasksCount = await _context.ProjectTasks.CountAsync(x => x.TskStatus.StatusName == "Completed" && x.ProjectId == projectId);
+
+            project.Progress = TasksCount == 0 ? 0 : (int)(((double)CompletedTasksCount/TasksCount)*100);
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Project progress updated");
+        } 
     
     }
     

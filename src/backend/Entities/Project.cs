@@ -21,6 +21,7 @@
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int Progress { get; set; } = 0;
         public ProjectStatus ProjectStatus { get; set; }
         public Priority Priority { get; set; }
     }
