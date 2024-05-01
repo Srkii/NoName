@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDe
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
-import { CommentsService } from '../../_services/comments.service'; // Import CommentsService
-import { Comment } from '../../Entities/Comments'; // Import Comment model
+import { CommentsService } from '../../_services/comments.service'; 
+import { Comment } from '../../Entities/Comments'; 
 import { DatePipe, formatDate } from '@angular/common';
 import { AppUser } from '../../Entities/AppUser';
 import { MyProjectsService } from '../../_services/my-projects.service';
@@ -48,6 +48,7 @@ export class PopupComponent {
   modalRef?: BsModalRef;
   sections:ProjectSection[]=[];
   selectedSection: ProjectSection | undefined;
+  current_user: any;
   
 
 
@@ -314,40 +315,49 @@ export class PopupComponent {
 
   addComment(): void {
     const content = this.commentInput.nativeElement.value.trim();
-    if (content) {
-      const commentDto: Comment = {
-        id: -1,
-        taskId: this.task!.id,
-        content: content,
-        senderId: this.user.id,
-        senderFirstName: this.user.firstName,
-        senderLastName: this.user.lastName,
-        messageSent:  new Date,
-        edited:false,
-      };
-      console.log("fjowfje");
-      console.log(commentDto);
-
-
-      this.commentsService.postComment(commentDto).subscribe({
-        next: (comment: Comment) => {
-          commentDto.id = comment.id;
-          this.comments.push(commentDto);
-          this.commentInput.nativeElement.value = '';
-
-          // Use setTimeout to ensure that the scroll occurs after the new comment has been rendered
-        setTimeout(() => {
-          this.scrollToBottom();
-        });
-
-        },
-        error: (error: any) => {
-          console.error('Error adding comment:', error);
+    var id=localStorage.getItem("id");
+    this.userInfo.getUserInfo2(id).subscribe({
+      next:(response)=>{
+        this.current_user=response;
+        if (content) {
+          const commentDto: Comment = {
+            id: -1,
+            taskId: this.task!.id,
+            content: content,
+            senderId: this.current_user.id,
+            senderFirstName: this.current_user.firstName,
+            senderLastName: this.current_user.lastName,
+            messageSent:  new Date,
+            edited:false,
+          };
+          console.log("fjowfje");
+          console.log(commentDto);
+    
+    
+          this.commentsService.postComment(commentDto).subscribe({
+            next: (comment: Comment) => {
+              commentDto.id = comment.id;
+              this.comments.push(commentDto);
+              this.commentInput.nativeElement.value = '';
+    
+            setTimeout(() => {
+              this.scrollToBottom();
+            });
+    
+            },
+            error: (error: any) => {
+              console.error('Error adding comment:', error);
+            }
+          });
         }
-      });
-    }
+      },error:(error)=>{
+        console.log(error)
+      }
+
+    })
 
   }
+
   scrollToBottom(): void {
     const commentsDiv = document.querySelector('.scroll');
     if (commentsDiv) {
@@ -362,7 +372,6 @@ export class PopupComponent {
   deleteComment(commentId: number): void {
     const isConfirmed = confirm("Are you sure you want to delete this comment?");
     if (isConfirmed) {
-      // If confirmed, proceed with deletion
       this.commentsService.deleteComment(commentId).subscribe({
         next: () => {
           this.comments = this.comments.filter(comment => comment.id !== commentId);
@@ -492,13 +501,11 @@ export class PopupComponent {
   getAllDependentTaskIds(taskId: any, dependencies: TaskDependency[]): number[] {
     const dependentTaskIds: number[] = [];
   
-    // Find dependencies of the current task
     const directDependencies = dependencies.filter(dep => dep.dependencyTaskId === taskId);
     
-    // Recursively check dependencies of each dependency
     directDependencies.forEach(dep => {
-      dependentTaskIds.push(dep.taskId); // Add direct dependency task ID
-      dependentTaskIds.push(...this.getAllDependentTaskIds(dep.taskId, dependencies)); // Recursively find dependencies
+      dependentTaskIds.push(dep.taskId); 
+      dependentTaskIds.push(...this.getAllDependentTaskIds(dep.taskId, dependencies)); 
     });
   
     return dependentTaskIds;

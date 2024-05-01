@@ -290,7 +290,7 @@ export class KanbanComponent implements OnInit{
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    event.stopPropagation(); // Prevents the event from bubbling up the event chain
+    event.stopPropagation(); 
     this.shared.triggerPopup(event, taskId);
   }
 
