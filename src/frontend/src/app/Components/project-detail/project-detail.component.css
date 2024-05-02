@@ -1,10 +1,9 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
-.ganntTest {
+.ganttComponent {
     margin-top: 20px;
     overflow: visible !important;
-    height: 600px;
     margin-left: 0px !important;
     padding-left: 0px !important;
 }

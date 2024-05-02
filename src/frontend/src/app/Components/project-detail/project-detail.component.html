@@ -8,6 +8,9 @@
     [@popFromSide]="showPopUp ? 'popFromSide' : ''"
   ></app-popup>
   <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="actionDiv">
+      s
+    </div>
     <div *ngIf="project">
       <div class="project-heading flex-container">
         <div class="projName">
@@ -114,11 +117,12 @@
       <div *ngIf="viewMode === 'kanban'">
         <app-kanban></app-kanban>
       </div>
-      <div *ngIf="viewMode === 'gantt'" class="ganntTest">
+      <div *ngIf="viewMode === 'gantt'" class="ganttComponent">
         <app-gantt></app-gantt>
       </div>
-      
-      </div>
+   </div>   
+  </div>
+</div>
 
 <ng-template #projectInfo>
   <div class="modal-container">
