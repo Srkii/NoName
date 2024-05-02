@@ -120,8 +120,8 @@ thead th{
     /* display: inline-flex; */
     /* align-items: center; */
     /* justify-content: center; */
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
     font-size: 1rem;
     border-radius: 0.5rem;
     margin-right: 25px;
@@ -477,7 +477,16 @@ textarea:focus{
     justify-content: space-between;
     align-items: center; /* Optional: aligns items vertically in the center */
 }
-
+.mngMembers {
+    margin: 10px !important;
+    cursor: pointer;
+    width: 160px;
+    border-radius: 0.3rem;
+    border-bottom: 2px solid #D7D7F8;
+}
+.mngMembers:hover {
+    border-bottom: 2px solid #696cff;
+}
 .archTasks {
     margin: 10px !important;
     cursor: pointer;
