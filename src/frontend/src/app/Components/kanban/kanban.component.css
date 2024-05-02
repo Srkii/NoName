@@ -369,3 +369,21 @@ input[type='checkbox'] {
     border-radius: 0.5rem;
 
 }
+.newBoard {
+    cursor: pointer;
+    height: 25px;
+}
+/* tooltip boje */
+::ng-deep .p-tooltip .p-tooltip-text {
+    background-color: #696cff;
+    color: #ffffff;
+    font-family: 'Public Sans', sans-serif !important;
+}
+/* tooltip arrow mora ovako */
+::ng-deep .p-tooltip .p-tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-right: 3px solid #696cff;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid transparent;
+}

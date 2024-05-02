@@ -111,13 +111,7 @@ thead th{
     /* background-color: #F5F5F9 !important; */
     border: 1px solid #E7E7EE !important;
 }
-.button-selectors {
-    display: flex;
-    margin-left: 0px !important;
-    padding-left: 0px !important;
-    /* margin-bottom: 50px; */
-    margin-top: 10px !important;
-}
+
 .btn-primary {
     color: #696cff;
     /* background-color: #696cff; */
@@ -483,11 +477,7 @@ textarea:focus{
     justify-content: space-between;
     align-items: center; /* Optional: aligns items vertically in the center */
 }
-.actionLinks {
-    width: auto;
-    display: flex;
-    justify-content: space-between;
-}
+
 .archTasks {
     margin: 10px !important;
     cursor: pointer;
@@ -522,16 +512,23 @@ textarea:focus{
 }
 .button-selectors {
     display: flex;
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+    margin-top: 10px !important;
+    display: flex;
     align-items: center;
 }
 
 .viewButtons {
     flex-shrink: 0; /* Ensures that viewButtons only take up necessary space */
 }
-
 .actionLinks {
-    flex-grow: 1; /* Takes up all remaining space */
+    display: flex;
+    flex-direction: row;  /* Ensures horizontal layout */
+    justify-content: flex-end;
+    flex-grow: 1;
 }
+
 .projInfo button {
     margin-right: 100px !important;
 }

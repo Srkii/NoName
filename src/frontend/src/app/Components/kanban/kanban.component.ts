@@ -14,6 +14,8 @@ import { forkJoin } from 'rxjs';
 import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastrService } from 'ngx-toastr';
+
+
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
