@@ -13,7 +13,7 @@ import { NewTask } from '../../Entities/NewTask';
 import { forkJoin } from 'rxjs';
 import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
@@ -80,6 +80,7 @@ export class KanbanComponent implements OnInit{
     private myProjectsService: MyProjectsService,
     public uploadservice: UploadService,
     private shared: SharedService,
+    private toastr: ToastrService
   ) {}
 
 
@@ -236,7 +237,7 @@ export class KanbanComponent implements OnInit{
         this.sectionChanged.emit(true);
         this.populateTasks();
       },
-      error: (error) => console.error('Error adding task status:', error)
+      error: (error) => this.toastr.error(error.error)
     });
   }
 
