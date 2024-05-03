@@ -523,6 +523,18 @@ namespace backend.Controllers
                 
             return NotFound();
         }
+
+        [HttpGet("GetProjectOwner/{projectId}/{userId}")]
+        public async Task<ActionResult<AppUser>> GetProjectOwner(int projectId,int userId)
+        {
+            var OwnerMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == projectId && member.AppUserId== userId);
+            if(OwnerMember!=null)
+            {
+                var ProjectOwner = await _context.Users.FirstOrDefaultAsync(member => member.Id == userId);
+                return Ok(ProjectOwner);
+            }
+            return NotFound();
+        }
     }
 }
 
