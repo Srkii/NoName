@@ -250,23 +250,7 @@ export class KanbanComponent implements OnInit{
       error: error => console.log(error)
     });
   }
-  removeFromArchived() {
-    this.spinner.show(); // prikazi spinner
-    const selectedTaskIds = this.tasksBySection['Archived']
-      .filter(task => task.selected)
-      .map(task => task.id);
-    this.myTasksService.UpdateArchTasksToCompleted(selectedTaskIds).subscribe({
-      next: () => {
-        this.modalRef?.hide();
-        this.populateTasks(); // ucitavam promene
-        this.spinner.hide(); // skloni spinner
-      },
-      error: (error) => {
-        console.error('Error updating tasks status:', error);
-        this.spinner.hide(); // skloni spinner cak i ako dodje do greske
-      }
-    });
-  }
+  
 
   onTaskClick(event: MouseEvent, taskId: number) {
     event.stopPropagation(); 

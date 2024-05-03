@@ -74,6 +74,9 @@ export class ProjectDetailComponent implements OnInit {
   filterValue: string | undefined = '';
   @Output() taskAdded = new EventEmitter<boolean>();
 
+  // za view archived tasks
+  archivedTasks: ProjectTask[] = [];
+
 
   constructor(
     private route: ActivatedRoute,
@@ -116,6 +119,7 @@ export class ProjectDetailComponent implements OnInit {
         this.project = project;
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
           this.projectTasks = tasks;
+          this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
           this.groupedTasks = this.groupTasksBySection(tasks);
         });
         this.loadProjectMembers();
@@ -376,7 +380,7 @@ export class ProjectDetailComponent implements OnInit {
         this.getProjectInfo();
         this.shared.taskAdded(true);
         
-        // Resetj polja
+        // Resetuj polja
         this.newTaskName = '';
         this.newTaskDescription = '';
         this.newTaskStartDate = null;
@@ -411,4 +415,23 @@ export class ProjectDetailComponent implements OnInit {
       });
   }
 
+
+  removeFromArchived() {
+    this.spinner.show(); // prikazi spinner
+    const selectedTaskIds = this.archivedTasks
+      .filter(task => task.selected)
+      .map(task => task.id);
+    this.myTasksService.UpdateArchTasksToCompleted(selectedTaskIds).subscribe({
+      next: () => {
+        this.modalRef?.hide();
+        this.getProjectInfo();
+        this.shared.taskAdded(true);
+        this.spinner.hide(); // skloni spinner
+      },
+      error: (error) => {
+        console.error('Error updating tasks status:', error);
+        this.spinner.hide(); // skloni spinner cak i ako dodje do greske
+      }
+    });
+  }
 }
