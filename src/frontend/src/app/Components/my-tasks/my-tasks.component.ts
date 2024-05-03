@@ -64,7 +64,7 @@ export class MyTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.sharedService.taskUpdated.subscribe(() => {
-      this.loadTasks();  // Reload project info
+      this.loadTasks();  
     });
     this.loadTasks();
 

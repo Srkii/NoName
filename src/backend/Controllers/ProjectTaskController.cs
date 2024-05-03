@@ -407,7 +407,7 @@ namespace backend.Controllers
         {
             if (await _context.TaskStatuses.AnyAsync(ts => ts.StatusName == taskStatusDto.StatusName && ts.ProjectId == taskStatusDto.ProjectId))
             {
-                return BadRequest("A status with the same name already exists.");
+                return BadRequest("A board with the same name already exists.");
             }
 
             var inReviewStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "InReview" && ts.ProjectId == taskStatusDto.ProjectId);

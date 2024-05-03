@@ -22,8 +22,6 @@ import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { SharedService } from '../../_services/shared.service';
-// import { finalize, of } from 'rxjs';
-// import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-gantt',
@@ -231,7 +229,7 @@ export class GanttComponent implements OnInit{
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    event.stopPropagation(); // Prevents the event from bubbling up the event chain
+    event.stopPropagation(); 
     this.shared.triggerPopup(event, taskId);
   }
 }
