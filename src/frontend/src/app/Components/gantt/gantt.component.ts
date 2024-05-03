@@ -199,12 +199,14 @@ export class GanttComponent implements OnInit{
         })
       })
     }
+    // default sekcija, ukoliko nema svoju
+    this.groups.push({ id: 'no-section', title: 'No Section' });
   }
   getProjectTasks(){//ovo nzm dal moze drugacije jer moram da izvlacim zavisnosti kako bi crtalo one linije uopste..
     if(this.currentProjectId){
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) =>{
         tasks.forEach((t:any) =>{
-          if (t.statusName !== 'Archived') {
+          if (t.statusName !== 'Archived') { // Filter out archived tasks
             var dependencies:GanttLink[] = [];
 
             this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:TaskDependency[])=>{
@@ -218,7 +220,7 @@ export class GanttComponent implements OnInit{
             })
             let item:GanttItem={
               id: String(t.id),
-              group_id :t.projectSectionId? String(t.projectSectionId):'',
+              group_id :t.projectSectionId? String(t.projectSectionId):'no-section', // Assign 'no-section' if there is no section
               title:t.taskName,
               start: this.convertToUnixTimestamp(t.startDate),
               end: this.convertToUnixTimestamp(t.endDate),
