@@ -14,6 +14,8 @@ import { Member } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { NewTask } from '../../Entities/NewTask';
+import { TaskAssignee } from '../../Entities/TaskAssignee';
 
 @Component({
   selector: 'app-project-detail',
@@ -59,6 +61,23 @@ export class ProjectDetailComponent implements OnInit {
   showPopUp: boolean = false;
   task!: ProjectTask;
 
+  // ovo mi treba za add new task
+  newTaskName: string = '';
+  newTaskDescription: string = '';
+  newTaskStartDate: Date | null = null;
+  newTaskEndDate: Date | null = null;
+  newTaskStatusId: number | null = null;
+  newTaskProjectSectionId: number | null = null;
+  currentProjectId: number | null = null;
+  users: TaskAssignee[] = [];
+  selectedUser: TaskAssignee | undefined;;
+  filterValue: string | undefined = '';
+  @Output() taskAdded = new EventEmitter<boolean>();
+
+  // za view archived tasks
+  archivedTasks: ProjectTask[] = [];
+
+
   constructor(
     private route: ActivatedRoute,
     private myProjectsService: MyProjectsService,
@@ -79,12 +98,15 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const projectId = this.route.snapshot.paramMap.get('id');
+    this.currentProjectId = projectId ? +projectId : null;
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
     this.getProjectInfo();
-  this.shared.togglePopup$.subscribe(({ event, taskId }) => {
+    this.shared.togglePopup$.subscribe(({ event, taskId }) => {
     this.togglePopUp(event, taskId);
+
   });
   }
   getProjectInfo() {
@@ -96,8 +118,9 @@ export class ProjectDetailComponent implements OnInit {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
-          this.projectTasks = tasks;
-          this.groupedTasks = this.groupTasksBySection(tasks);
+          this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
+          this.groupedTasks = this.groupTasksBySection(this.projectTasks);
         });
         this.loadProjectMembers();
         this.loadAddableUsers();
@@ -111,8 +134,6 @@ export class ProjectDetailComponent implements OnInit {
       this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole}));
       this.filteredUsers = this.usersOnProject;
       this.userRole = this.usersOnProject.find(x => x.appUserId == this.userId)?.projectRole;
-      console.log(this.userRole)
-      //this.loadPicture(this.usersOnProject)
     });
   }
 
@@ -204,7 +225,6 @@ export class ProjectDetailComponent implements OnInit {
           }
 
           this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
-            console.log(updatedProject)
             this.getProjectInfo()
             this.spinner.hide()
           })
@@ -345,7 +365,73 @@ export class ProjectDetailComponent implements OnInit {
     changeNameInp.disabled = true;
   }
 
+  saveTask() {
+    const task: NewTask = {
+      TaskName: this.newTaskName,
+      Description: this.newTaskDescription,
+      StartDate: this.newTaskStartDate || new Date(),
+      EndDate: this.newTaskEndDate || new Date(),
+      ProjectId: this.currentProjectId || 0,
+      AppUserId: this.selectedUser?.appUserId || 0
+    };
+    this.myTasksService.createTask(task).subscribe({
+      next: () => {
+        this.modalRef?.hide();
+        this.getProjectInfo();
+        this.shared.taskAdded(true);
+        
+        // Resetuj polja
+        this.newTaskName = '';
+        this.newTaskDescription = '';
+        this.newTaskStartDate = null;
+        this.newTaskEndDate = null;
+        this.newTaskStatusId = null;
+        this.newTaskProjectSectionId = null;
+        this.selectedUser = undefined;
+      },
+      error: (error) => console.error('Error creating task:', error)
+    });
+  }
+  // vraca AppUsers koji su na projektu
+  getProjectsUsers(currentProjectId: number) {
+    this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
+      next: response => {
+        this.users = response,
+        this.users.forEach(user => {
+          user.fullName = user.firstName + ' ' + user.lastName;
+        });
+      },
+      error: error => console.log(error)
+    });
+  }
 
-  
+  openNewTaskModal(modal: TemplateRef<void>) {
+    if (this.currentProjectId !== null)
+      this.getProjectsUsers(this.currentProjectId);
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: 'modal-lg modal-dialog-centered'
+      });
+  }
 
+
+  removeFromArchived() {
+    this.spinner.show(); // prikazi spinner
+    const selectedTaskIds = this.archivedTasks
+      .filter(task => task.selected)
+      .map(task => task.id);
+    this.myTasksService.UpdateArchTasksToCompleted(selectedTaskIds).subscribe({
+      next: () => {
+        this.modalRef?.hide();
+        this.getProjectInfo();
+        this.shared.taskAdded(true);
+        this.spinner.hide(); // skloni spinner
+      },
+      error: (error) => {
+        console.error('Error updating tasks status:', error);
+        this.spinner.hide(); // skloni spinner cak i ako dodje do greske
+      }
+    });
+  }
 }

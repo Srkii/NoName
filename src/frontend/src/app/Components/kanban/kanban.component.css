@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    margin-top: 50px;
+    margin-top: 20px;
     min-width: 0;
     min-height: 0;
 }
@@ -242,7 +242,7 @@
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
                 0 8px 10px 1px rgba(0, 0, 0, 0.14),
                 0 3px 14px 2px rgba(0, 0, 0, 0.12);
-    cursor: grabbing !important;
+    cursor: move !important;
 }
   
 .cdk-drag-placeholder {
@@ -251,28 +251,27 @@
   
 .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-    cursor: grabbing !important;
+    cursor: move !important;
 }
 .card-body.cdk-drop-list-dragging .task:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 .cdk-drag-dragging {
-    cursor: grabbing !important;
+    cursor: move !important;
 }
 
 .board-wrapper.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-    cursor: grabbing !important;
+    cursor: move !important;
 }
 .draggable {
-    /* cursor: grab; */
-    cursor: pointer;
+    cursor: move !important;
 }
 .draggable:active {
-    cursor: grabbing !important;
+    cursor: move !important;
 }
 .draggable:focus {
-    cursor: grabbing !important;
+    cursor: move !important;
 }
 
 .btn-save-section {
@@ -328,36 +327,19 @@ input[type='checkbox'] {
 .card-header:hover .more-options {
     display: block; /* Show on hover */
 }
-.archBtn {
-    margin-top: 20px;
-}
-.archTable td, th{
-    border-bottom: 1px solid #d9dee3 !important;
-}
-.tdName {
-    width: 35% !important;
-}
-.tdAssignee {
-    width: 25% !important;
-}
-.tdDate {
-    width: 20% !important;
-}
-.tdCheck {
-    width: 10% !important;
-}
-.noArch {
-    margin: 15px !important;
-    font-size: 20px;
-}
 
+.card-body-task-title {
+    cursor: pointer !important;
+}
 
 .card-body-task-title:hover,
 .card-body-task-title.clicked {
     cursor: pointer;
     background-color: #e7e7ff !important;
     color: #5f61e6 !important;
-    font-weight: 600;
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%;
+    /* font-weight: 600; */
 }
 
 .card-body-task-title{
@@ -368,4 +350,22 @@ input[type='checkbox'] {
     margin-top: 0px !important;
     border-radius: 0.5rem;
 
+}
+.newBoard {
+    cursor: pointer;
+    height: 25px;
+}
+/* tooltip boje */
+::ng-deep .p-tooltip .p-tooltip-text {
+    background-color: #696cff;
+    color: #ffffff;
+    font-family: 'Public Sans', sans-serif !important;
+}
+/* tooltip arrow mora ovako */
+::ng-deep .p-tooltip .p-tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-right: 3px solid #696cff;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid transparent;
 }

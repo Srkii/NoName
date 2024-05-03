@@ -1,10 +1,9 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
-.ganntTest {
-    margin-top: 50px;
+.ganttComponent {
+    margin-top: 20px;
     overflow: visible !important;
-    height: 600px;
     margin-left: 0px !important;
     padding-left: 0px !important;
 }
@@ -27,7 +26,7 @@
     margin: 0px !important;
     
 }
-.project-heading > span {
+.projName > span {
     /* font-weight: bold; */
     font-size: 30px !important;
     letter-spacing: -1px;
@@ -101,6 +100,7 @@ thead th{
     border: 1px solid #d8d8e0;
     border: 0px;
     font-weight: 400;
+    color: #696cff;
     /* border: 1px solid #E7E7EE !important; */
 }
 .btn-inactive {
@@ -109,26 +109,21 @@ thead th{
     border: 1px solid #d8d8e0;
     border: 0px;
     font-weight: 400;
+    color: #696cff;
     /* background-color: #F5F5F9 !important; */
     border: 1px solid #E7E7EE !important;
 }
-.button-selectors {
-    display: flex;
-    margin-left: 0px !important;
-    padding-left: 0px !important;
-    /* margin-bottom: 50px; */
-    margin-top: 10px !important;
-}
+
 .btn-primary {
-    color: #696cff;
-    /* background-color: #696cff; */
+    /* color: #696cff; */
+    background-color: #696cff;
     border-color: #696cff;
     /* box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12); */
     /* display: inline-flex; */
     /* align-items: center; */
     /* justify-content: center; */
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
     font-size: 1rem;
     border-radius: 0.5rem;
     margin-right: 25px;
@@ -188,7 +183,7 @@ thead th{
     border: 0px solid #d9dee3;
     border-radius: 0.5rem;
     padding: 15px;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 /* .table {
     border: 1px solid black;
@@ -367,9 +362,9 @@ textarea:focus{
 }
 .new-item {
     margin: 10px !important;
-    margin-left: 30px !important;
+    margin-left: 10px !important;
     cursor: pointer;
-    width: 10rem;
+    width: auto;
     border-radius: 0.3rem;
     border-bottom: 2px solid #D7D7F8;
 }
@@ -469,7 +464,144 @@ textarea:focus{
 .td_row td:first-child:hover,
 .td_row td:first-child.clicked {
     cursor: pointer;
-    background-color: #e7e7ff !important;
-    color: #5f61e6 !important;
-    font-weight: 600;
+    color: #484ac5 !important;
+    border-bottom: 1px solid #696cff;
+}
+
+.button-selectors .btn-lg {
+    width: 135px !important;
+    margin-right: 5px;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Optional: aligns items vertically in the center */
+}
+.mngMembers {
+    margin: 10px !important;
+    cursor: pointer;
+    width: 160px;
+    border-radius: 0.3rem;
+    border-bottom: 2px solid #D7D7F8;
+}
+.mngMembers:hover {
+    border-bottom: 2px solid #696cff;
+}
+.archTasks {
+    margin: 10px !important;
+    cursor: pointer;
+    width: 185px;
+    border-radius: 0.3rem;
+    border-bottom: 2px solid #D7D7F8;
+}
+.archTasks:hover {
+    border-bottom: 2px solid #696cff;
+}
+.archTasks svg {
+    margin-right: 2px;
+}
+.mngSection svg {
+    margin-right: 2px;
+}
+.mngSection:hover {
+    border-bottom: 2px solid #696cff;
+}
+.addTask {
+    width: 90px !important;
+}
+.addBoard {
+    width: 100px !important;
+}
+.mngSection {
+    margin: 10px !important;
+    cursor: pointer;
+    width: 150px;
+    border-radius: 0.3rem;
+    border-bottom: 2px solid #D7D7F8;
+}
+.button-selectors {
+    display: flex;
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+    margin-top: 10px !important;
+    display: flex;
+    align-items: center;
+}
+
+.viewButtons {
+    flex-shrink: 0; /* Ensures that viewButtons only take up necessary space */
+}
+.actionLinks {
+    display: flex;
+    flex-direction: row;  /* Ensures horizontal layout */
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.projInfo button {
+    margin-right: 100px !important;
+}
+.noArch {
+    margin: 15px !important;
+    font-size: 20px;
+}
+.archBtn {
+    margin-top: 20px;
+}
+
+.archBtn:hover {
+    color: #fff !important;
+    transform: translateY(-1px) !important;
+}
+.btn-save-task {
+    margin-top: 15px;
+}
+.btn-save-task:hover {
+    color: #fff !important;
+    transform: translateY(-1px) !important;
+}
+.archTable td, th{
+    border-bottom: 1px solid #d9dee3 !important;
+    padding: 5px;
+}
+.tdName {
+    width: 35% !important;
+}
+.tdAssignee {
+    width: 25% !important;
+}
+.tdDate {
+    width: 20% !important;
+}
+.tdCheck {
+    width: 10% !important;
+}
+.form-control {
+    display: inline;
+    width: 100%;
+    padding: 0.4375rem 0.875rem;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.53;
+    color: #697a8d;
+    appearance: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d9dee3;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form-control:focus {
+    border-color: #5f61e6 !important;
+    box-shadow: 0 0 2px #5f61e6;
+}
+.avatar .rounded-circle .shadow-4-strong {
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;;
+}
+.nameAvatar img {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    vertical-align: middle !important; /* Aligns the image baseline to the middle */
 }
