@@ -48,7 +48,6 @@ export class GanttComponent implements OnInit{
     });
     this.spinner.show();
     this.loading = true;
-    console.log(this.date);
     this.getGanttData();//kupimo sve podatke za trenutni projekat
     this.spinner.hide();
     setTimeout(()=>
@@ -56,6 +55,24 @@ export class GanttComponent implements OnInit{
       this.loading = false;
       this.data_loaded = true
     },100);
+    
+    // emit kad se doda novi task
+    this.shared.taskAdded$.subscribe(success => {
+      if (success) {
+        console.log("DOdat task na ganttu");
+        this.loading = true;
+        this.data_loaded = false;
+        this.items=[];
+        this.groups=[];
+        this.loading = true;
+        this.getGanttData();
+        setTimeout(()=>
+        {
+          this.loading = false;
+          this.data_loaded = true
+        },100);
+      }
+    });
   }
   constructor(
     private http: HttpClient,
@@ -116,15 +133,13 @@ export class GanttComponent implements OnInit{
       const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
 
       this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
-      .subscribe((response: any) => {
+      .subscribe(() => {
         this.reloadGanttData();
-        // console.log(response);
       });
     }
   }
 
   linkDragEnded(event: any){
-    // console.log("linkdrag->", event);
     let taskDependency:TaskDependency={
       taskId:Number(event.source.id),
       dependencyTaskId:Number(event.target.id)
@@ -171,8 +186,6 @@ export class GanttComponent implements OnInit{
     this.currentProjectId = projectId? +projectId:null;
     this.getProjectSections();
     this.getProjectTasks();
-    // console.log("SECTIONS",this.groups);
-    // console.log("TASKS",this.items);
   }
   getProjectSections(){
     if(this.currentProjectId){

@@ -30,4 +30,10 @@ export class SharedService {
     this.taskUpdated.emit();
   }
 
+  // emit za novi task
+  private taskAddedSource = new Subject<boolean>();
+  taskAdded$ = this.taskAddedSource.asObservable();
+  taskAdded(success: boolean) {
+    this.taskAddedSource.next(success);
+  }
 }

@@ -462,9 +462,8 @@ textarea:focus{
 .td_row td:first-child:hover,
 .td_row td:first-child.clicked {
     cursor: pointer;
-    background-color: #e7e7ff !important;
-    color: #5f61e6 !important;
-    font-weight: 600;
+    color: #484ac5 !important;
+    border-bottom: 1px solid #696cff;
 }
 
 .button-selectors .btn-lg {

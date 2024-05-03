@@ -9,8 +9,6 @@ import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { UploadService } from '../../_services/upload.service';
 import { NewTask } from '../../Entities/NewTask';
-
-import { forkJoin } from 'rxjs';
 import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastrService } from 'ngx-toastr';
@@ -55,12 +53,7 @@ export class KanbanComponent implements OnInit{
   currentSectionName: string = '';
   currentSectionId: number | null = null;
 
-  newTaskName: string = '';
-  newTaskDescription: string = '';
-  newTaskStartDate: Date | null = null;
-  newTaskEndDate: Date | null = null;
-  newTaskStatusId: number | null = null;
-  newTaskProjectSectionId: number | null = null;
+  
   selectedArchivedTasks: any[] = [];
 
   userId: number = -1;
@@ -83,9 +76,7 @@ export class KanbanComponent implements OnInit{
     public uploadservice: UploadService,
     private shared: SharedService,
     private toastr: ToastrService
-  ) {}
-
-
+  ) { }
 
   ngOnInit() {
     this.spinner.show();
@@ -96,10 +87,13 @@ export class KanbanComponent implements OnInit{
     if (this.currentProjectId !== null) {
       this.getProjectsUsers(this.currentProjectId);
     }
-
     this.spinner.hide();
+    this.shared.taskAdded$.subscribe(success => {
+      if (success) {
+          this.populateTasks();  // Reload tasks
+      }
+    });
   }
-
 
   loadTasksAndUsers():void{
     this.spinner.show();
@@ -145,7 +139,6 @@ export class KanbanComponent implements OnInit{
         this.tasksBySection[status.name] = [];
       }
     });
-    console.log(this.tasksBySection);
   }
 
   drop(event: CdkDragDrop<ProjectTask[]>) {
@@ -243,24 +236,7 @@ export class KanbanComponent implements OnInit{
     });
   }
 
-  saveTask() {
-    const task: NewTask = {
-      TaskName: this.newTaskName,
-      Description: this.newTaskDescription,
-      StartDate: this.newTaskStartDate || new Date(),
-      EndDate: this.newTaskEndDate || new Date(),
-      ProjectId: this.currentProjectId || 0,
-      AppUserId: this.selectedUser?.appUserId || 0
-    };
-    this.myTasksService.createTask(task).subscribe({
-      next: () => {
-        this.modalRef?.hide()
-        this.sectionChanged.emit(true);
-        this.populateTasks();
-      },
-      error: (error) => console.error('Error creating task:', error)
-    });
-  }
+  
 
   // vraca AppUsers koji su na projektu
   getProjectsUsers(currentProjectId: number) {

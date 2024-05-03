@@ -41,7 +41,7 @@
             </svg>
             {{ userRole === 3 || userRole === 4? 'Member list' : 'Manage Members' }}
           </div>
-          <div class="new-item addTask"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <div class="new-item addTask" (click)="openNewTaskModal(newTask)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
             </svg>Add Task
           </div>
@@ -245,5 +245,68 @@
       </div>
       </div>
     </div>
+  </div>
+</ng-template>
+
+<ng-template #newTask>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add New Task</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="mb-3" (ngSubmit)="saveTask()">
+      <div class="mb-1" autocomplete="off">
+          <label for="taskName" class="form-label">Task Name</label>
+          <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName" placeholder="Enter new tasks's name"/>
+      </div>
+      <div class="mb-1" autocomplete="off">
+          <label for="taskDescription" class="form-label">Task Description</label>
+          <textarea class="form-control" class="form-control" name="taskDescription" [(ngModel)]="newTaskDescription" placeholder="Enter new tasks's description"></textarea>
+      </div>
+      <div class="mb-1">
+          <label for="startDate" class="form-label">Start Date</label>
+          <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" placeholder="Start Date"/>
+      </div>
+      <div class="mb-1">
+          <label for="endDate" class="form-label">End Date</label>
+          <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" placeholder="End Date"/>
+      </div>
+      <div class="mb-1 chooseAssignee" autocomplete="off">
+        <label for="assignee2" class="form-label">Assignee</label>
+        <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
+          <ng-template ng-option-tmp let-user="item" let-index="index">
+            <div style="display: flex; align-items: center;">
+              <div *ngIf="user.profilePicUrl" class="nameAvatar">
+                <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              </div>
+              <div *ngIf="!user.profilePicUrl" class="nameAvatar">
+                <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+              </div>
+              <div>
+                {{ user.fullName }}
+              </div>
+            </div>
+          </ng-template>
+          <ng-template ng-label-tmp let-item="item">
+            <div style="display: flex; align-items: center;">
+              <div *ngIf="item.profilePicUrl" class="nameAvatar">
+                <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              </div>
+              <div *ngIf="!item.profilePicUrl" class="nameAvatar">
+                <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
+              </div>
+              <div>
+                {{ item.fullName }}
+              </div>
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+      <div class="btn-save-task">
+        <button class="btn btn-primary d-grid w-50 mx-auto">Save Task</button>
+      </div>
+    </form>
   </div>
 </ng-template>
