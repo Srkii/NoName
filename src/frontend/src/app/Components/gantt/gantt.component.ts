@@ -204,29 +204,30 @@ export class GanttComponent implements OnInit{
     if(this.currentProjectId){
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) =>{
         tasks.forEach((t:any) =>{
+          if (t.statusName !== 'Archived') {
+            var dependencies:GanttLink[] = [];
 
-          var dependencies:GanttLink[] = [];
+            this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:TaskDependency[])=>{
 
-          this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:TaskDependency[])=>{
-
-            depencency_array.forEach((dep:TaskDependency) => {
-              dependencies.push({
-                type: 1,
-                link: String(dep.dependencyTaskId)
+              depencency_array.forEach((dep:TaskDependency) => {
+                dependencies.push({
+                  type: 1,
+                  link: String(dep.dependencyTaskId)
+                });
               });
-            });
-          })
-          let item:GanttItem={
-            id: String(t.id),
-            group_id :t.projectSectionId? String(t.projectSectionId):'',
-            title:t.taskName,
-            start: this.convertToUnixTimestamp(t.startDate),
-            end: this.convertToUnixTimestamp(t.endDate),
-            links: dependencies,
-            expandable: true,
-            linkable: true
+            })
+            let item:GanttItem={
+              id: String(t.id),
+              group_id :t.projectSectionId? String(t.projectSectionId):'',
+              title:t.taskName,
+              start: this.convertToUnixTimestamp(t.startDate),
+              end: this.convertToUnixTimestamp(t.endDate),
+              links: dependencies,
+              expandable: true,
+              linkable: true
+            }
+            this.items.push(item);
           }
-          this.items.push(item);
         })
       })
     }

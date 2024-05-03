@@ -85,7 +85,7 @@
                     <td [class.clicked]="clickedTask?.id === task.id"
                     (click)="togglePopUp($event, task.id)">{{ task.taskName }}</td>
                     <td>
-                      <div *ngIf="task.profilePicUrl" class="nameAvatar boardAvatar">
+                      <div *ngIf="task.profilePicUrl">
                         <img [src]="uploadservice.getImage(task.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
                         <span style="margin-left: 5px;">{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}</span>
                       </div>
@@ -308,8 +308,8 @@
           </ng-template>
         </ng-select>
       </div>
-      <div class="btn-save-task">
-        <button class="btn btn-primary d-grid w-50 mx-auto">Save Task</button>
+      <div>
+        <button class="btn btn-primary d-grid w-50 mx-auto btn-save-task">Save Task</button>
       </div>
     </form>
   </div>
@@ -335,11 +335,11 @@
         <td class="tdName">{{task.taskName}}</td>
         <td class="tdAssignee">
           <div style="display: flex; align-items: center;">
-            <div *ngIf="task.profilePicUrl" class="nameAvatar boardAvatar">
+            <div *ngIf="task.profilePicUrl">
               <img [src]="uploadservice.getImage(task.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
             </div>
             <div *ngIf="!task.profilePicUrl" class="nameAvatar boardAvatar">
-              <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName" value="75%"></ngx-avatars>
+              <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
             </div>
             {{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}
           </div>
@@ -349,8 +349,8 @@
         <td class="tdCheck"><input type="checkbox" style="align-items:center;" [(ngModel)]="task.selected" name="task{{task.id}}"></td>
       </tr>
     </div>
-    <div class="mb-3 archBtn">
-      <button class="btn btn-primary d-grid w-50 mx-auto" type="button" (click)="removeFromArchived()">Remove from Archived</button>
+    <div class="mb-3">
+      <button class="btn btn-primary d-grid w-50 mx-auto archBtn" type="button" (click)="removeFromArchived()">Remove from Archived</button>
     </div>
   </div>
   <ng-template #noArchivedTasks>

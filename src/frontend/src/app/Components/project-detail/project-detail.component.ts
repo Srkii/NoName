@@ -118,9 +118,9 @@ export class ProjectDetailComponent implements OnInit {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
-          this.projectTasks = tasks;
+          this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
-          this.groupedTasks = this.groupTasksBySection(tasks);
+          this.groupedTasks = this.groupTasksBySection(this.projectTasks);
         });
         this.loadProjectMembers();
         this.loadAddableUsers();
