@@ -159,7 +159,7 @@ namespace backend.Controllers
                 ProjectRole = dto.ProjectRole
                 };
                 await _context.ProjectMembers.AddAsync(projectMember);
-                await _notificationService.TriggerProjectNotification(dto.ProjectId,dto.AppUserId);
+                //await _notificationService.TriggerProjectNotification(dto.ProjectId,dto.AppUserId);
                 await _context.SaveChangesAsync();   
             }
             return Ok(dtos);
