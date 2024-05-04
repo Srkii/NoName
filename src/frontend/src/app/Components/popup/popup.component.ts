@@ -443,9 +443,11 @@ export class PopupComponent {
   editContent(comment_id:number): void {
     
     const edit=document.getElementById("edit_content"+comment_id) as HTMLTextAreaElement;
+    const original_content=this.comments.find(comment => comment.id === comment_id)?.content;
+
     
     
-    if(edit)
+    if(edit.value!=original_content)
       {
         this.commentsService.updateComment(comment_id, edit.value).subscribe({
           next: () => {
@@ -455,6 +457,10 @@ export class PopupComponent {
           console.error('Error updating comment:', error);
         }
       });
+    }
+    else
+    {
+      this.CancelEdit(comment_id);
     }
       
   
