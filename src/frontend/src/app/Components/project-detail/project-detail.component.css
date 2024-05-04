@@ -384,7 +384,7 @@ textarea:focus{
     border-color: #696cff;
 }
 .assignee{
-    width: auto;
+    width: 7rem;
     border-color: #d7d7f8 ;
     outline: none;
     color: #697a8d;

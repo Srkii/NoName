@@ -230,10 +230,17 @@ p {
 }
 
 .addProject{
-  height: 1.7rem;
+  font-size: smaller;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
   margin-left: 1rem;
-  padding-top: 0;
-  padding-bottom: 0;
+  background-color: #696cff;
+  border-color: #696cff;
+}
+
+.addProject:hover{
+  background-color: #5f61e6 !important;
+  border-color: #5f61e6 !important;
 }
 
 .progress-bar{
