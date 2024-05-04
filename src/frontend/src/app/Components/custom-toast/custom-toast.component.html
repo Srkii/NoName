@@ -7,6 +7,7 @@
   <div class="inner_wrapper">
     <div class="flex" *ngIf="toastService.data" (click)="notificationService.follow_notif($event,toastService.data.target)" (click)="this.toastService.hide()">
       <img *ngIf="toastService.data.sender.profilePicUrl" class="dropImg1 rounded-circle shadow-4-strong"  [src]="uploadService.getImage(toastService.data.sender.profilePicUrl)" alt="">
+      <ngx-avatars  *ngIf="!toastService.data?.sender.profilePicUrl" width="40" height="40" bgColor="#5d57c2" [name]="toastService.data.sender?.firstName + ' ' + toastService.data.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
       <div class="toast_content">
         <h5 class="toast_title">
           {{ toastService.data.title }}

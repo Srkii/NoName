@@ -38,6 +38,7 @@ namespace backend.Services
                     .Notify(
                          new NotificationDto{
                             Task = notification.Task,
+                            Comment = notification.Comment,
                             Project = notification.Project,
                             Sender = notification.Sender,
                             dateTime = notification.dateTime,
@@ -65,6 +66,7 @@ namespace backend.Services
             await _hubContext.Clients.Group(reciever.Id.ToString())
                     .Notify(
                          new NotificationDto{
+                            Comment = notification.Comment,
                             Task = notification.Task,
                             Project = notification.Project,
                             Sender = notification.Sender,
@@ -100,7 +102,7 @@ namespace backend.Services
 
             // Get commenters and attachment uploaders
             var commentersAndUploaders = await _context.Comments.Where(c => c.TaskId == taskId).Select(c => c.SenderId)
-                .Union(_context.Attachments.Where(a => a.task_id == taskId).Select(a => a.sender_id))
+                .Union(_context.Comments.Where(a => a.TaskId == taskId).Select(a => a.SenderId))
                 .ToListAsync();
             users.AddRange(commentersAndUploaders);
 

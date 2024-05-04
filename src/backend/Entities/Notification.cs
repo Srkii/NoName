@@ -12,6 +12,8 @@ namespace backend.Entities
     public class Notification
     {
         public int Id{get;set;}//primary key
+        public int? comment_id{get;set;}
+        public Comment? Comment{get;set;}
         public int? task_id{get;set;}
         public ProjectTask? Task{get;set;}//foreign key
         public int? project_id{get;set;}

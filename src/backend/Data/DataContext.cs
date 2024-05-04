@@ -14,7 +14,6 @@ namespace backend.Data
         public DbSet<TaskDependency> TaskDependencies { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<UserRequest> UserRequests { get; set; }
-        public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<TskStatus> TaskStatuses { get; set; }
         public DbSet<ProjectSection> ProjectSections { get; set; }
@@ -70,15 +69,6 @@ namespace backend.Data
                 entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId"));
             });
 
-            modelBuilder.Entity<Attachment>(entity =>{
-                entity.HasOne(a => a.Task)
-                    .WithMany()
-                    .HasForeignKey(a=>a.task_id);
-                entity.HasOne(a => a.Sender)
-                    .WithMany()
-                    .HasForeignKey(a => a.sender_id);
-            });
-
             modelBuilder.Entity<Notification>(entity => {
                 entity.HasKey(n => n.Id);
                 entity.HasOne(n => n.Task)
@@ -93,6 +83,9 @@ namespace backend.Data
                 entity.HasOne(n => n.Reciever)
                     .WithMany()
                     .HasForeignKey(n => n.reciever_id);
+                entity.HasOne(n=> n.Comment)
+                    .WithMany()
+                    .HasForeignKey(n=>n.comment_id);
             });
         }
     }

@@ -11,7 +11,8 @@ import { SharedService } from '../../_services/shared.service';
 })
 export class NotificationsComponent {
   public notification_list:any = [];
-  notifications:any;
+  notifications:any[] = [];
+  notifications_read:any[] = [];
   markedNotifications: any[] = [];
   modalref?:BsModalRef;
   constructor (
@@ -35,7 +36,15 @@ export class NotificationsComponent {
   }
   async handleNotificationDisplay(){
     await this.notificationService.getAllNotifications();
-    this.notifications =  this.notificationService.allNotifications;
+    this.notifications = [];
+    this.notifications_read = [];//refresh
+    this.notificationService.allNotifications.forEach((n:any) => {
+      if(n.read == false){
+        this.notifications.push(n);
+      }else{
+        this.notifications_read.push(n);
+      }
+    });
   }
   selectAllNotifications() {
     if (this.areAllNotificationsSelected()) {

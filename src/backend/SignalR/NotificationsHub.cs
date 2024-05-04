@@ -59,13 +59,10 @@ namespace backend.SignalR
             .Select(notification => new NotificationDto
             {
                 Id = notification.Id,
-                task_id = notification.task_id,
                 Task = notification.Task,
-                project_id = notification.project_id,
+                Comment = notification.Comment,
                 Project = notification.Project,
-                reciever_id = notification.reciever_id,
                 Reciever = notification.Reciever,
-                sender_id = notification.sender_id,
                 Sender = notification.Sender,
                 dateTime = notification.dateTime,
                 Type = notification.Type,
@@ -84,13 +81,10 @@ namespace backend.SignalR
             .OrderByDescending(x=>x.dateTime)
             .Select(notification => new NotificationDto{
                 Id = notification.Id,
-                task_id = notification.task_id,
                 Task = notification.Task,
-                project_id = notification.project_id,
+                Comment = notification.Comment,
                 Project = notification.Project,
-                reciever_id = notification.reciever_id,
                 Reciever = notification.Reciever,
-                sender_id = notification.sender_id,
                 Sender = notification.Sender,
                 dateTime = notification.dateTime,
                 Type = notification.Type,

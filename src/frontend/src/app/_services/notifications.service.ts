@@ -108,10 +108,10 @@ export class NotificationsService{
     switch(notification.type){
       case 0://attachment
         return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
-      case 1:
+      case 1://comment
         return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
       default:
-        return this.getNotificationType(notification.type);
+        return this.getNotificationType(notification.type);//pravi jos tipova...
 
     }
   }
