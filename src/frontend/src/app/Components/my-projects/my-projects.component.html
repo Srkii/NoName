@@ -21,7 +21,7 @@
             <option value="10">10</option>
             <option value="15">15</option>
           </select>
-          <button *ngIf="userRole==2" class="btn btn-primary btn-sm addProject" (click)="ToggleProjectCard()">+ Add Project</button>
+          <button *ngIf="userRole==2" class="btn btn-primary btn-sm addProject" (click)="ToggleProjectCard()"><span style="margin-right: 0.5rem;">+</span>Add Project</button>
         </div>
       </div>
         <br />
@@ -103,7 +103,24 @@
             <!-- <ng-container *ngIf="isProjectVisible(project)"> -->
             <ng-container>
               <td class="project-name">{{ project.projectName }}</td>
-              <td>Project Owner here</td>
+              <td *ngIf="!projectOwners[project.id]" class="mx-1" style="border: none;">
+                <span class="d-flex align-items-center mx-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                  </svg>Not assigned
+                </span>
+              </td>
+              <td *ngIf="this.projectOwners && this.projectOwners[project.id]">
+                <span *ngIf="projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
+                  <img class="avatar rounded-circle shadow-4-strong mx-1" height="21" width="21" [src]="uploadservice.getImage(projectOwners[project.id]?.profilePicUrl ?? '')">
+                  {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
+                </span>
+                <span *ngIf="!projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
+                  <ngx-avatars class="mx-1" size="21" bgColor="#5d57c2" [name]="projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName" value="75%"></ngx-avatars>
+                  {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
+                </span>
+              </td>
               <td [ngClass]="getStatusString(project.projectStatus)">
                 <p style="margin-left: -50px;">{{ getStatusString(project.projectStatus) }}</p>
               </td>

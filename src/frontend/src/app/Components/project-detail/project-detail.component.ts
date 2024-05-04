@@ -434,4 +434,19 @@ export class ProjectDetailComponent implements OnInit {
       }
     });
   }
+
+  SelectedOwner(user: SelectedUser){
+    if(this.selectedUsers.find(x => x.projectRole == 1 && x.appUserId != user.appUserId)){
+      if(user.projectRole == 1)
+        user.projectRole = 4
+      return true
+    }
+    return false
+  }
+
+  OwnerAlreadyExists(userId: number){
+    if(this.usersOnProject.find(x => x.projectRole == ProjectRole.ProjectOwner && x.appUserId!=userId))
+      return true
+    return false
+  }
 }
