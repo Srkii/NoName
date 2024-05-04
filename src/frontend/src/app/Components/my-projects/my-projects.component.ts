@@ -3,7 +3,8 @@ import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
-import { UserRole } from '../../Entities/Member';
+import { Member, UserRole } from '../../Entities/Member';
+import { UploadService } from '../../_services/upload.service';
 
 @Component({
   selector: 'app-my-projects',
@@ -26,6 +27,7 @@ export class MyProjectsComponent implements OnInit {
   startDateFilter: string = '';
   endDateFilter: string = '';
   userRole: UserRole | any;
+  projectOwners: { [projectId: number]: Member | null } = {};
   
   showProjectCard: boolean = false;
   constructor(
@@ -33,6 +35,7 @@ export class MyProjectsComponent implements OnInit {
     private myProjectsService: MyProjectsService,
 
     private spinner: NgxSpinnerService,
+    public uploadservice: UploadService,
     private router: Router
 
   ) {}
@@ -58,6 +61,7 @@ export class MyProjectsComponent implements OnInit {
       this.filteredProjects=this.all_projects;
       this.totalPages = Math.ceil(this.all_projects / this.pageSize);
       this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
+      this.loadProjectOwners()
       this.spinner.hide();
     });
   }
@@ -94,6 +98,14 @@ export class MyProjectsComponent implements OnInit {
       this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
       this.spinner.hide();
     });
+  }
+
+  loadProjectOwners(){
+    this.projects.forEach(project => {
+      this.myProjectsService.GetProjectOwner(project.id).subscribe((owner: Member) => {
+        this.projectOwners[project.id] = owner
+      })
+   });
   }
 
   getStatusString(status: ProjectStatus): string {

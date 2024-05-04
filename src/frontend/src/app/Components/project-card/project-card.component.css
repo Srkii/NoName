@@ -220,11 +220,12 @@ flex-grow: 1;
 }
 
 .form-select {
-padding-top: 0.2rem;
-padding-bottom: 0.2rem;
-font-size: smaller;
-color: #697a8d;
-float: right;
+    width:  8.6rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    font-size: smaller;
+    color: #697a8d;
+    float: right;
 }
 
 .form-select.form-select-xs:focus {
@@ -235,7 +236,7 @@ float: right;
 
 .user-name,
 .user-lastname {
-font-weight: bold;
+    font-weight: bold;
 }
 
 .email{

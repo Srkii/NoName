@@ -185,7 +185,7 @@
             <button type="button" (click)="addProjectMembers()" class="btn btn-sm btn-secondary add">Add members</button>
           </div>          
           <div class="addInfo">
-            <ng-select [closeOnSelect]="false" [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" id="assignee" name="Assignees" (click)="$event.stopPropagation()">
+            <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" id="assignee" name="Assignees" (click)="$event.stopPropagation()">
               <ng-template ng-option-tmp let-user="item">
                 <div class="user-detail">
                   <div *ngIf="user.profilePicUrl" class="nameAvatar">
@@ -198,7 +198,7 @@
                   </div>
                   <div (click)="$event.stopPropagation()">
                     <select (mousedown)="$event.stopPropagation()" [(ngModel)]="user.projectRole" [ngModelOptions]="{standalone: true}" class="assignee">
-                      <option value=1>Project Owner</option>
+                      <option value=1 *ngIf="!SelectedOwner(user) && !OwnerAlreadyExists(user.appUserId)">Project Owner</option>
                       <option value=2>Manager</option>
                       <option value=3>Participant</option>
                       <option value=4 selected>Guest</option>
@@ -232,7 +232,7 @@
               </td>
               <td style="text-align: right;">
                 <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 4 || userRole == 3 || userId == user.appUserId">
-                  <option value=1>Project Owner</option>
+                  <option value=1 *ngIf="!OwnerAlreadyExists(user.appUserId)">Project Owner</option>
                   <option value=2>Manager</option>
                   <option value=3>Participant</option>
                   <option value=4 selected>Guest</option>

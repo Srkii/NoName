@@ -120,6 +120,15 @@ export class ProjectCardComponent {
       this.closeCard.emit();
   }
 
+  SelectedOwner(user: SelectedUser){
+    if(this.selectedUsers.find(x => x.projectRole == 1 && x.appUserId != user.appUserId)){
+      if(user.projectRole == 1)
+        user.projectRole = 4
+      return true
+    }
+    return false
+  }
+
   ToggleProjectCard() {
     this.showComponent = !this.showComponent;
     this.closeCard.emit();
