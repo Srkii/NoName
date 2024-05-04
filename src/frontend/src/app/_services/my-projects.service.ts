@@ -140,5 +140,9 @@ export class MyProjectsService {
   GetProjectSections(projectId:number):Observable<any>{
     return this.http.get<any>(`${this.apiUrl}/ProjectSection/project/${projectId}`);
   }
+
+  GetProjectOwner(projectId:number):Observable<Member>{
+    return this.http.get<any>(`${this.baseUrl}/GetProjectOwner/${projectId}`);
+  }
 }
 

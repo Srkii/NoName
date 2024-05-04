@@ -47,7 +47,7 @@
                       </div>
                       <div (click)="$event.stopPropagation()">
                         <select (mousedown)="$event.stopPropagation()" [(ngModel)]="user.projectRole" [ngModelOptions]="{standalone: true}" class="form-select form-select-xs">
-                          <option value=1>Project Owner</option>
+                          <option value=1 *ngIf="!SelectedOwner(user)">Project Owner</option>
                           <option value=2>Manager</option>
                           <option value=3>Participant</option>
                           <option value=4 selected>Guest</option>

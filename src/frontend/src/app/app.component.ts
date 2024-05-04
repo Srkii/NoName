@@ -19,7 +19,7 @@ export class AppComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.isTokenValid()
+    // this.isTokenValid()
     this.isLoginOrRegisterPage()
   }
 

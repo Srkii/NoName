@@ -330,10 +330,6 @@ export class PopupComponent {
             messageSent:  new Date,
             edited:false,
           };
-          console.log("fjowfje");
-          console.log(commentDto);
-    
-    
           this.commentsService.postComment(commentDto).subscribe({
             next: (comment: Comment) => {
               commentDto.id = comment.id;
