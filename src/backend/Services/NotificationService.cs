@@ -49,7 +49,7 @@ namespace backend.Services
             }
         }
 
-        public async Task TriggerTaskNotification(int task_id){
+        public async Task TriggerTaskNotification(int task_id,int creator_id){
             //zadatak ove funkcije jeste da posalje notifikaciju korisniku kojem je dodeljen zadatak ili projekat
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
             var reciever = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
@@ -76,8 +76,12 @@ namespace backend.Services
                          });
         }
         public async Task TriggerProjectNotification(int project_id,int reciever_id){
-            var project = _context.Projects.FirstOrDefaultAsync(x=> x.Id == project_id);
-            var user = _context.Users.FirstOrDefaultAsync(x=>x.Id==reciever_id);
+            var project = await _context.Projects.FirstOrDefaultAsync(x => x.Id == project_id);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == reciever_id);
+            if (project == null || user == null)
+            {
+                throw new Exception("Project or User not found");
+            }
             Notification notification = new Notification{
                 reciever_id = user.Id,
                 project_id = project.Id,

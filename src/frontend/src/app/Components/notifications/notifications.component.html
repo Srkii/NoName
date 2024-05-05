@@ -21,21 +21,23 @@
     <span style="padding-left: 15px;">Notifications</span>
     <div class="dropdown-divider"></div>
     <span style="font-size: 14px; margin-left: 15px; margin-top: 5px;margin-bottom: 5px;" *ngIf="notification_list.length==0">No new notifications!</span>
-    <ul style="overflow: auto; max-height: 120px;" *ngIf="notification_list.length!=0">
+    <ul style="overflow: auto; max-height: 150px; margin: 0; width: 330px;" *ngIf="notification_list.length!=0">
       <li *ngFor="let notification of notification_list">
-        <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
-        <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
-        <svg *ngIf="notification.type==2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#696cff" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
-          <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
-          <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
-          <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
-        </svg>
-        <svg *ngIf="notification.type==3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-range" viewBox="0 0 16 16">
-          <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1M1 9h4a1 1 0 0 1 0 2H1z"/>
-          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-        </svg>
+        <div class="photodiv">
+          <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
+          <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
+          <svg *ngIf="notification.type==2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
+            <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
+            <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
+            <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+          </svg>
+          <svg *ngIf="notification.type==3" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-calendar-range" viewBox="0 0 16 16">
+            <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1M1 9h4a1 1 0 0 1 0 2H1z"/>
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+          </svg>
+        </div>
         <a class="dropdown-item" (click)="notificationService.follow_notif($event,notification)">
-         {{notification?.sender?.firstName}} {{notification?.sender?.lastName}} {{notificationService.getNotificationType(notification.type)}}
+          {{notificationService.getNotificationText_small(notification)}}
         </a>
       </li>
     </ul>
@@ -59,9 +61,18 @@
         <td style="text-align: center;"><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0"></td></tr>
       <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td><i>No Unread Notifications...</i></td><td></td><td></td><td ></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications">
-        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="width: 10%;">
+        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="width: 10%; text-align: center;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
+          <svg *ngIf="notification.type==2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
+            <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
+            <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
+            <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+          </svg>
+          <svg *ngIf="notification.type==3" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-calendar-range" viewBox="0 0 16 16">
+            <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1M1 9h4a1 1 0 0 1 0 2H1z"/>
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+          </svg>
         </td>
         <td
           style="margin-left: 0;padding-left: 0; text-align: start;"
@@ -86,9 +97,18 @@
       <tr class="inactive_tr"><td><i>Read</i></td><td></td><td></td><td ></td></tr>
       <tr class="inactive_tr_flag" *ngIf="notifications_read.length==0"><td><i>No Read Notifications...</i></td><td></td><td></td><td ></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications_read">
-        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="width: 10%;">
+        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="width: 10%; text-align: center;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
+          <svg *ngIf="notification.type==2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
+            <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
+            <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
+            <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+          </svg>
+          <svg *ngIf="notification.type==3" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-calendar-range" viewBox="0 0 16 16">
+            <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1M1 9h4a1 1 0 0 1 0 2H1z"/>
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+          </svg>
         </td>
         <td
           style="margin-left: 0;padding-left: 0; text-align: start;"

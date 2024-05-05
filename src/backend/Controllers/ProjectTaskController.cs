@@ -47,7 +47,10 @@ namespace backend.Controllers
             await _context.ProjectTasks.AddAsync(task);
             await _context.SaveChangesAsync();
             await updateProgress(task.ProjectId);
-            await _notificationService.TriggerTaskNotification(task.Id);
+            // ne obavestavamo sami sebe vise o kreaciji task-a
+            if(taskDto.CreatorId!=taskDto.AppUserId){
+                await _notificationService.TriggerTaskNotification(task.Id,taskDto.CreatorId); 
+            }
             return Ok(task);
         }
 

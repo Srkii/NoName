@@ -55,7 +55,7 @@ export class CustomToastComponent{
       this.toastService.data.progressWidth = String(width - 2) ;
       this.progressBar.nativeElement.style.width =
         this.toastService.data.progressWidth + '%';
-    }, 50);
+    }, 70);
   }
 
   stopCountDown() {

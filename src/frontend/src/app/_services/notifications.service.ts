@@ -56,7 +56,7 @@ export class NotificationsService{
         {
           target:notification,
           title:'New Notification!',
-          content:this.getNotificationText(notification)
+          content:this.getNotificationText_small(notification)
         }
       )
     })
@@ -110,9 +110,22 @@ export class NotificationsService{
       case 1://comment
         return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
       case 2:
+        return this.getNotificationType(notification.type)+" "+notification.task.taskName;
+      default:
+        return this.getNotificationType(notification.type)+" "+notification.project.projectName;//pravi jos tipova...
+
+    }
+  }
+  getNotificationText_small(notification:any):string{
+    switch(notification.type){
+      case 0://attachment
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
+      case 1://comment
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
+      case 2:
         return this.getNotificationType(notification.type);
       default:
-        return this.getNotificationType(notification.type);//pravi jos tipova...
+        return this.getNotificationType(notification.type);
 
     }
   }
