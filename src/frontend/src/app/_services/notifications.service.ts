@@ -121,12 +121,11 @@ export class NotificationsService{
       event.stopPropagation();
       await this.router.navigate(['/project/' + notification.task.projectId]);
       setTimeout(()=>{
-        this.shared.triggerPopup(event, notification.task.id);  
+        this.shared.triggerPopup(event, notification.task.id);  //mogu da ga aktiviram ali ne mogu nista dalje da mu uradim xd.
       },500);
     } else if (notification.project != null) {
-      console.log(notification.project);
       await this.router.navigate(['/project/' + notification.project.id]);
     }
-    this.read_notifications([notification.id]);
   }
+
 }

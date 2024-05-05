@@ -19,7 +19,7 @@ export class FileUploadComponent {
     {
       this.uploadService.UploadFile(task_id,user_id,file,token).subscribe({
         next: (response) =>{
-          console.log(response);
+          
         },
         error:(error) =>{
           console.log(error);

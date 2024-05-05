@@ -22,11 +22,11 @@
     <div class="dropdown-divider"></div>
     <span style="font-size: 14px; margin-left: 15px; margin-top: 5px;margin-bottom: 5px;" *ngIf="notification_list.length==0">No new notifications!</span>
     <ul style="overflow: auto; max-height: 120px;" *ngIf="notification_list.length!=0">
-      <li *ngFor="let notification of notification_list" style="display: flex;align-items:center; margin-top: 5px;">
+      <li *ngFor="let notification of notification_list">
         <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
         <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
         <a class="dropdown-item" (click)="notificationService.follow_notif($event,notification)">
-          {{notificationService.getNotificationText(notification)}}
+         {{notification.sender?.firstName}} {{notification.sender?.lastName}} {{notificationService.getNotificationType(notification.type)}}
         </a>
       </li>
     </ul>
@@ -50,7 +50,7 @@
         <td style="text-align: center;"><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0"></td></tr>
       <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td><i>No Unread Notifications...</i></td><td></td><td></td><td ></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications">
-        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="width: 65px;">
+        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="width: 10%;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
         </td>
@@ -77,7 +77,7 @@
       <tr class="inactive_tr"><td><i>Read</i></td><td></td><td></td><td ></td></tr>
       <tr class="inactive_tr_flag" *ngIf="notifications_read.length==0"><td><i>No Read Notifications...</i></td><td></td><td></td><td ></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications_read">
-        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()">
+        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="width: 10%;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
         </td>
@@ -104,6 +104,6 @@
     <h5 style="text-align: center;">There are no available Notifications...</h5>
   </div>
   <div class="modal-footer" *ngIf="this.notifications.length!=0 || this.notifications_read.length!=0">
-    <button class="btn btn-primary d-grid" type="submit" (click)="read_notifications()" [disabled]="notifications.length===0">Mark as read</button>
+    <button class="btn-primary" type="submit" (click)="read_notifications()" [disabled]="notifications.length===0">Mark as read</button>
   </div>
 </ng-template>

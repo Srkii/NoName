@@ -17,7 +17,7 @@ namespace backend.Services
             _context = context;
         }
 
-        public async Task TriggerNotification(int task_id,int sender_id,NotificationType type){//ova je za task-ove , tj komentare i attachmente, poraditi na semantici...
+        public async Task TriggerNotification(int task_id,int sender_id,int comment_id,NotificationType type){//ova je za task-ove , tj komentare i attachmente, poraditi na semantici...
             
             var Users = await GetUsersForTaskNotification(task_id, sender_id);
             var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == sender_id);
@@ -27,6 +27,7 @@ namespace backend.Services
                 Notification notification = new Notification{
                     reciever_id = Users[i],
                     sender_id = sender_id,
+                    comment_id = comment_id,
                     task_id=task_id,
                     Type = type,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
                     dateTime = DateTime.Now,

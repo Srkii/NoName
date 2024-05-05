@@ -119,8 +119,8 @@ namespace backend.Controllers
                     FileUrl = filename
                 };
                 _context.Comments.Add(comment);
-                await _notificationService.TriggerNotification(task.Id,user_id,NotificationType.Attachment);
                 await _context.SaveChangesAsync();
+                await _notificationService.TriggerNotification(task.Id,user_id,comment.Id,NotificationType.Attachment);
                 return Ok(comment);
             }else{
                 return BadRequest("SPECIFIED TASK DOES NOT EXIST");

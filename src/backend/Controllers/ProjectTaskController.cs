@@ -663,11 +663,6 @@ namespace backend.Controllers
             // Delete comments associated with the task
             var comments = _context.Comments.Where(c => c.TaskId == taskId);
             _context.Comments.RemoveRange(comments);
-
-            // Delete attachments associated with the task
-            var attachments = _context.Attachments.Where(a => a.task_id == taskId);
-            _context.Attachments.RemoveRange(attachments);
-
             // Set notifications related to the task to null
             var notifications = _context.Notifications.Where(n => n.task_id == taskId);
             foreach (var notification in notifications)

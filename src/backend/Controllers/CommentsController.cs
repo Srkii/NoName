@@ -32,8 +32,8 @@ namespace backend.Controllers
                 SenderLastName = commentDto.SenderLastName
             };
             _context.Comments.Add(comment);
-            await _notificationService.TriggerNotification(commentDto.TaskId,commentDto.SenderId,NotificationType.Comment);
             await _context.SaveChangesAsync();
+            await _notificationService.TriggerNotification(commentDto.TaskId,commentDto.SenderId,comment.Id,NotificationType.Comment);
             return Ok(comment);
         }
 

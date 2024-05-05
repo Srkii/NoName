@@ -49,6 +49,10 @@ ul{
   margin-bottom: 0;
 }
 li{
+  display: flex;
+  align-items:center; 
+  margin-top: 5px;
+  margin-left: 15px;
   padding: 3px;
 }
 .dropdown-divider{
@@ -121,12 +125,23 @@ td{
   background-color: #696cff;
   border-radius: 50%;
 }
+.btn-primary{
+  padding: 5px;
+  border:1px solid #696cff;
+  color: #697a8d;
+  border-radius: 8px;
+}
+.btn-primary:hover{
+  background-color: #696cff;
+  color: white;
+  transition: 0.5s ease-in-out;
+}
 .notif-count{
   font-weight: 700;
   color: white;
 }
 ::-webkit-scrollbar{
-  background-color: #ffffff;
+  background-color: #f5f5f9;
   width: 10px;
 }
 ::-webkit-scrollbar-thumb{

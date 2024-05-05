@@ -14,7 +14,6 @@ export class CommentsService {
   constructor(private http: HttpClient) { }
 
   postComment(commentDto: any): Observable<Comment> {
-    console.log("DATA",commentDto);
     return this.http.post<Comment>(`${this.apiUrl}/postComment`, commentDto);
   }
 
