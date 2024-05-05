@@ -8,7 +8,6 @@ export enum toastTypes {
 
 export interface ToastData {
   title: string;
-  sender?:any;
   target?:any;
   content: string;
   show?: boolean;

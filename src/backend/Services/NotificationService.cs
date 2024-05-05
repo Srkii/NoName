@@ -49,15 +49,14 @@ namespace backend.Services
             }
         }
 
-        public async Task TriggerTaskNotification(int task_id,int sender_Id){
+        public async Task TriggerTaskNotification(int task_id){
             //zadatak ove funkcije jeste da posalje notifikaciju korisniku kojem je dodeljen zadatak ili projekat
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
-            var sender = await _context.Users.FirstOrDefaultAsync(x=>x.Id == sender_Id);
             var reciever = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
+            if(reciever==null) throw new Exception("THIS BITCH EMPTY");
             Notification notification = new Notification{
                 reciever_id = reciever.Id,
-                sender_id = sender.Id,
-                task_id=task_id,
+                task_id=task.Id,
                 Type = NotificationType.TaskAssignment,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
                 dateTime = DateTime.Now,
                 read=false,
@@ -65,6 +64,30 @@ namespace backend.Services
             await _context.Notifications.AddAsync(notification);
             await _context.SaveChangesAsync();
             await _hubContext.Clients.Group(reciever.Id.ToString())
+                    .Notify(
+                         new NotificationDto{
+                            Comment = notification.Comment,
+                            Task = notification.Task,
+                            Project = notification.Project,
+                            Sender = notification.Sender,
+                            dateTime = notification.dateTime,
+                            Type = notification.Type,
+                            read = notification.read
+                         });
+        }
+        public async Task TriggerProjectNotification(int project_id,int reciever_id){
+            var project = _context.Projects.FirstOrDefaultAsync(x=> x.Id == project_id);
+            var user = _context.Users.FirstOrDefaultAsync(x=>x.Id==reciever_id);
+            Notification notification = new Notification{
+                reciever_id = user.Id,
+                project_id = project.Id,
+                Type=NotificationType.ProjectAssignment,
+                dateTime = DateTime.Now,
+                read=false
+            };
+            await _context.Notifications.AddAsync(notification);
+            await _context.SaveChangesAsync();
+            await _hubContext.Clients.Group(reciever_id.ToString())
                     .Notify(
                          new NotificationDto{
                             Comment = notification.Comment,

@@ -1,6 +1,8 @@
 ﻿using backend.Data;
 using backend.DTO;
 using backend.Entities;
+using backend.Interfaces;
+using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +14,11 @@ namespace backend.Controllers
     public class ProjectTaskController : BaseApiController
     {
         private readonly DataContext _context;
-
-        public ProjectTaskController(DataContext context)
+        private readonly INotificationService _notificationService;
+        public ProjectTaskController(DataContext context,INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         [AllowAnonymous]
@@ -44,7 +47,7 @@ namespace backend.Controllers
             await _context.ProjectTasks.AddAsync(task);
             await _context.SaveChangesAsync();
             await updateProgress(task.ProjectId);
-
+            await _notificationService.TriggerTaskNotification(task.Id);
             return Ok(task);
         }
 

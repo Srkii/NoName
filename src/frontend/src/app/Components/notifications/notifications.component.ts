@@ -45,6 +45,7 @@ export class NotificationsComponent {
         this.notifications_read.push(n);
       }
     });
+    console.log(this.notifications);
   }
   selectAllNotifications() {
     if (this.areAllNotificationsSelected()) {

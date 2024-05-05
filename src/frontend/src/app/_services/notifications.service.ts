@@ -54,7 +54,6 @@ export class NotificationsService{
       this.newNotifications = true;
       this.customToast.initiate(
         {
-          sender:notification.sender,
           target:notification,
           title:'New Notification!',
           content:this.getNotificationText(notification)
@@ -93,7 +92,7 @@ export class NotificationsService{
       case 1:
         return "commented on a task";
       case 2:
-        return "assigned you to a task";
+        return "You have been assigned to a task";
       case 3:
         return "You have been assigned to a project";
       case 4:
@@ -110,6 +109,8 @@ export class NotificationsService{
         return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
       case 1://comment
         return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
+      case 2:
+        return this.getNotificationType(notification.type);
       default:
         return this.getNotificationType(notification.type);//pravi jos tipova...
 

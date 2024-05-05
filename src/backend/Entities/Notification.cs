@@ -20,7 +20,7 @@ namespace backend.Entities
         public Project? Project{get;set;}//foreign key
         public int reciever_id{get;set;}
         public AppUser? Reciever{get;set;}//foreign key
-        public int sender_id{get;set;}
+        public int? sender_id{get;set;}
         public AppUser? Sender{get;set;}//foreign key
         public DateTime dateTime{get;set;}
         public NotificationType Type{get;set;}
