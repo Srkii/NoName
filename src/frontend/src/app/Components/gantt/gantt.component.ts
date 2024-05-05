@@ -41,13 +41,15 @@ export class GanttComponent implements OnInit{
       this.loading = true;
       this.getGanttData();//kupimo sve podatke za trenutni projekat
       setTimeout(()=>
-      {
+        {
         this.loading = false;
         this.data_loaded = true
       },100);
     });
     this.spinner.show();
     this.loading = true;
+    this.items=[];
+    this.groups=[];
     this.getGanttData();//kupimo sve podatke za trenutni projekat
     this.spinner.hide();
     setTimeout(()=>
