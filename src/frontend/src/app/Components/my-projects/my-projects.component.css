@@ -34,9 +34,10 @@ body {
   border: solid 1px #d9dee3;
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  overflow-y: hidden;
-  overflow-x: hidden;
+  /* overflow-y: hidden;
+  overflow-x: hidden; */
   box-sizing: border-box;
+  overflow: visible;
 }
 
 .filter{
@@ -44,11 +45,12 @@ body {
   font-size: 12px;
   border: 0.5px solid lightgray;
   border-radius: 8px;
-  padding: 6px;
+  padding: 10px;
   width: 27%;
-  margin-left: 5%;
+  margin-left: 4.5%;
   margin-bottom: 1%;
 }
+
 .filter:hover {
   outline: none;
   border: 1px solid #5f61e6 !important;
@@ -252,4 +254,74 @@ p {
 
 .progress-bar:hover{
   color: white;
+}
+
+
+p-calendar{
+  position: relative; 
+  /* z-index: 1000;  */
+  font-size: 10px;
+  border-radius: 8px;
+  margin-left: 5%;
+  margin-bottom: 1%;
+}
+:host::ng-deep.p-calendar{
+  width: 27%;
+  margin-bottom: 1%;
+  margin-right: 4.5%;
+}
+:host::ng-deep.p-calendar input{
+  /* color: #697a8d; */
+  
+  font-size: 12px;
+  border-radius: 8px;
+}
+:host::ng-deep.p-calendar input:hover{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
+}
+
+
+:host::ng-deep#pn_id_1_panel {
+  font-size: 14px;
+}
+:host::ng-deep.p-yearpicker,
+:host::ng-deep.p-monthpicker
+{
+  margin-top: -260px;
+}
+:host::ng-deep.p-datepicker-group{
+  min-height: 300px;
+  font-size: 12px;
+  padding: 1px;
+}
+:host::ng-deep.p-datepicker-group table{
+  font-size: 12px;
+}
+:host::ng-deep.p-datepicker-prev,
+:host::ng-deep.p-datepicker-month,
+:host::ng-deep.p-datepicker-year,
+:host::ng-deep.p-datepicker-next {
+  font-size: 14px;
+  margin: 1px;
+  padding: 3px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+:host::ng-deep.p-datepicker-calendar th{
+  font-size: 14px;
+  margin: 1px;
+  margin-left: 2px;
+}
+:host::ng-deep.p-datepicker-calendar td {
+  font-size: 14px;
+  margin: 1px;
+  padding: 3px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+:host::ng-deep.p-datepicker-buttonbar{
+  height: 50px;
 }

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -6,10 +6,11 @@ import { Router } from '@angular/router';
 import { Member, UserRole } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
 
+
 @Component({
   selector: 'app-my-projects',
   templateUrl: './my-projects.component.html',
-  styleUrls: ['./my-projects.component.css'],
+  styleUrls: ['./my-projects.component.css']
 })
 export class MyProjectsComponent implements OnInit {
   all_projects:number=0;
@@ -20,14 +21,15 @@ export class MyProjectsComponent implements OnInit {
   totalPages: number = 0;
   originalProjects: Project[] = [];
   totalPagesArray: number[] = [];
+  rangeDates: Date[] | undefined;
+  
 
   selectedStatus: string = '';
-  selectedPriority: string = '';
-  projectName: string = '';
-  startDateFilter: string = '';
-  endDateFilter: string = '';
   userRole: UserRole | any;
   projectOwners: { [projectId: number]: Member | null } = {};
+  searchText: string='';
+  
+  
   
   showProjectCard: boolean = false;
   constructor(
@@ -36,23 +38,36 @@ export class MyProjectsComponent implements OnInit {
 
     private spinner: NgxSpinnerService,
     public uploadservice: UploadService,
-    private router: Router
+    private router: Router,
+    
 
   ) {}
 
   ngOnInit(): void {
     this.spinner.show();
+
     const userId = localStorage.getItem('id')
-    this.userRole = localStorage.getItem('role')
+    this.userRole = localStorage.getItem('role');
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if(this.rangeDates[0])
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
+      if(this.rangeDates[1])
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
+    
+    }
+
     this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
       this.all_projects = count;
     });
     this.myProjectsService.filterAndPaginateProjects(
-      this.projectName,
+      this.searchText,
       this.selectedStatus,
-      this.selectedPriority,
-      this.endDateFilter,
-      this.startDateFilter,
+      startDate,
+      endDate,
       userId,
       this.currentPage,
       this.pageSize
@@ -61,7 +76,7 @@ export class MyProjectsComponent implements OnInit {
       this.filteredProjects=this.all_projects;
       this.totalPages = Math.ceil(this.all_projects / this.pageSize);
       this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
-      this.loadProjectOwners()
+      this.loadProjectOwners();
       this.spinner.hide();
     });
   }
@@ -71,24 +86,34 @@ export class MyProjectsComponent implements OnInit {
     // this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
     //   this.all_projects = count;
     // });
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if(this.rangeDates[0])
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
+      if(this.rangeDates[1])
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
+    
+  }
     this.myProjectsService.filterAndPaginateProjects(
-      this.projectName,
+      this.searchText,
       this.selectedStatus,
-      this.selectedPriority,
-      this.endDateFilter,
-      this.startDateFilter,
+      startDate,
+      endDate,
       userId,
       this.currentPage,
       this.pageSize
     ).subscribe((projects: Project[]) => {
       this.projects = projects;
+      this.loadProjectOwners();
       this.spinner.hide();
     });
-    this.myProjectsService.CountFilteredProjects( this.projectName,
+    this.myProjectsService.CountFilteredProjects( this.searchText,
       this.selectedStatus,
-      this.selectedPriority,
-      this.endDateFilter,
-      this.startDateFilter,
+      startDate,
+      endDate,
       userId,
       this.currentPage,
       this.pageSize
@@ -142,17 +167,8 @@ export class MyProjectsComponent implements OnInit {
     this.selectedStatus = event.target.value;
   }
 
-  handlePriorityChange(event: any) {
-    this.selectedPriority = event.target.value;
-  }
 
-  handleStartDateChange(event: any) {
-    this.startDateFilter = event.target.value;
-  }
 
-  handleEndDateChange(event: any) {
-    this.endDateFilter = event.target.value;
-  }
 
   goToProject(id: number) {
     this.router.navigate(['/project', id]);
@@ -166,11 +182,8 @@ export class MyProjectsComponent implements OnInit {
   }
 
   resetFilters(): void {
-    this.projectName = '';
+    this.searchText = '';
     this.selectedStatus = '';
-    this.selectedPriority = '';
-    this.startDateFilter = '';
-    this.endDateFilter = '';
     this.filterProjects();
   }
 
@@ -222,4 +235,16 @@ export class MyProjectsComponent implements OnInit {
         this.handleCloseCard();
       }
   }
+
+  handleDateRangeChange(selectedDates: Date[] | undefined) {
+    if (selectedDates && selectedDates.length === 2) {
+      const startDate = selectedDates[0];
+      const endDate = selectedDates[1];
+      console.log('Start Date:', startDate);
+      console.log('Start Date:', this.rangeDates);
+      console.log('End Date:', endDate);
+  }
+}
+  
+  
 }
