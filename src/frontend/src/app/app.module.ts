@@ -37,6 +37,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxGanttModule } from '@worktile/gantt';
 import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 import { TooltipModule } from 'primeng/tooltip';
+import { CalendarModule } from 'primeng/calendar';
 import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
 
 const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
@@ -85,7 +86,8 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     ButtonsModule.forRoot(),
     ImageCropperModule,
     NgxGanttModule,
-    TooltipModule
+    TooltipModule,
+    CalendarModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

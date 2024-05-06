@@ -28,73 +28,30 @@
         <input
           class="filter"
           type="text"
-          placeholder="Search Project"
-          [(ngModel)]="projectName"
+          placeholder="Search by Project Name or Owner"
+          [(ngModel)]="searchText"
           (input)="filterProjects(); "
         />
-        <input
-          class="filter"
-          type="text"
-          placeholder="Search Project Owner"
-        />
         <select class="filter" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterProjects();">
-          <option value="" selected>Select Status</option>
+          <option value="" hidden selected>Select Status</option>
+          <option value="">Select All</option>
           <option value="PROPOSED">PROPOSED</option>
           <option value="INPROGRESS">IN PROGRESS</option>
           <option value="COMPLETED">COMPLETED</option>
           <option value="ARCHIVED">ARCHIVED</option>
         </select>
-        <select class="filter" name="priority" id="priority" [(ngModel)]="selectedPriority" (change)="filterProjects(); ">
-          <option value="" selected>Select Priority</option>
-          <option value="LOW">LOW</option>
-          <option value="MEDIUM">MEDIUM</option>
-          <option value="HIGH">HIGH</option>
-        </select>
 
-        <select
-        class="filter"
-          name="date"
-          id="date"
-          [(ngModel)]="startDateFilter"
-          (change)="
-            handleStartDateChange($event); filterProjects(); 
-          "
-        >
-          <option value="" selected>Filter by start date</option>
-          <option value="Today">Today</option>
-          <option value="Yesterday">Yesterday</option>
-          <option value="Last 7 days">Last 7 days</option>
-          <option value="Last 30 days">Last 30 days</option>
-          <option value="This month">This month</option>
-          <option value="Last month">Last month</option>
-          <option value="This Year">This Year</option>
-          <option value="From highest to lowest">From highest to lowest</option>
-          <option value="From lowest to highest">From lowest to highest</option>
-        </select>
-
-        <select
-        class="filter"
-          name="date1"
-          id="date1"
-          [(ngModel)]="endDateFilter"
-          (change)="handleEndDateChange($event); filterProjects(); "
-        >
-          <option value="" selected>Filter by end date</option>
-          <option value="Today1">Today</option>
-          <option value="Yesterday1">Yesterday</option>
-          <option value="Last 7 days1">Last 7 days</option>
-          <option value="Last 30 days1">Last 30 days</option>
-          <option value="This month1">This month</option>
-          <option value="Last month1">Last month</option>
-          <option value="This Year1">This Year</option>
-          <option value="From highest to lowest1">
-            From highest to lowest
-          </option>
-          <option value="From lowest to highest1">
-            From lowest to highest
-          </option>
-        </select>
-
+   
+          <p-calendar  
+          (onSelect)="filterProjects()"
+          (onClearClick)="filterProjects()"
+              placeholder="Filter by Date"
+              [(ngModel)]="rangeDates" 
+              selectionMode="range" 
+              [readonlyInput]="true"
+              [showButtonBar]="true"
+               />
+            
         <br />
         <table>
           <tr>
