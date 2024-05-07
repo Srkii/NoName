@@ -15,8 +15,8 @@ body {
 }
 .project-name:hover {
   cursor: pointer;
-  background-color: #e7e7ff !important;
-  color: #5f61e6 !important;
+  color: #484ac5 !important;
+  border-bottom: 1px solid #696cff;
 }
 .project-name.clicked {
   cursor: pointer;

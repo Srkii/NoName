@@ -77,17 +77,18 @@ tr:last-child td {
   border-bottom: none;
 }
 
-.name {
-  font-size: 16px;
+.name:hover {
+  cursor: pointer;
+  color: #484ac5 !important;
 }
 
-.td_row:hover,
+/* .td_row:hover,
 .td_row.clicked {
   cursor: pointer;
   /* background-color: #e7e7ff !important; */
-  color: #5f61e6 !important;
-  font-weight: 600;
-}
+  /* color: #5f61e6 !important; */
+  /* font-weight: 600; */
+/* }  */
 
 p {
   text-align: center;
@@ -132,6 +133,6 @@ p {
   outline: none;
 }
 .projectname:hover{
-  background-color: #d9dee3;
-  border-radius: 8px;
+  cursor: pointer;
+  color: #484ac5 !important;
 }
