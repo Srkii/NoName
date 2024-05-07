@@ -196,15 +196,30 @@ select {
 
 select:focus {
   outline: none;
-  border-color: #5f61e6;
+  border: 1px solid #5f61e6 !important;
 }
 
 select:hover {
-  border-color: #5f61e6;
+  border: 1px solid #d0d1f9 !important;
 
 }
 select:active{
-  background-color: #5d57c2;
+  border: 1px solid #5f61e6 !important;
+} 
+select:focus-visible{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6 !important;
+}
+.form-control:focus-visible{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6 !important; 
+}
+.btn:focus-visible{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6 !important;
 }
 .card{
   --bs-card-border-width: 0px;
@@ -288,10 +303,9 @@ select:active{
 }
 .page_size:hover{
   outline: none;
-  border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  border: 1px solid #d0d1f9 !important;
+  box-shadow: 0 0 3px #d0d1f9;
 }
-
 .clickable-div{
   border: 1px solid #ffffff !important;
 }
