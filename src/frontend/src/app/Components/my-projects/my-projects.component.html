@@ -24,35 +24,39 @@
           <button *ngIf="userRole==2" class="btn btn-primary btn-sm addProject" (click)="ToggleProjectCard()"><span style="margin-right: 0.5rem;">+</span>Add Project</button>
         </div>
       </div>
-        <br />
-        <input
-          class="filter"
-          type="text"
-          placeholder="Search by Project Name or Owner"
-          [(ngModel)]="searchText"
-          (input)="filterProjects(); "
-        />
-        <select class="filter" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterProjects();">
-          <option value="" hidden selected>Select Status</option>
-          <option value="">Select All</option>
-          <option value="PROPOSED">PROPOSED</option>
-          <option value="INPROGRESS">IN PROGRESS</option>
-          <option value="COMPLETED">COMPLETED</option>
-          <option value="ARCHIVED">ARCHIVED</option>
-        </select>
-
-   
-          <p-calendar  
-          (onSelect)="filterProjects()"
-          (onClearClick)="filterProjects()"
+        <div class="mFilters">
+          <div class="mInput">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Search by Project Name or Owner"
+              [(ngModel)]="searchText"
+              (input)="filterProjects(); "/>
+          </div>
+          <div class="mSelect">
+            <select class="form-select" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterProjects();">
+              <option value="" hidden selected>Select Status</option>
+              <option value="">Select All</option>
+              <option value="PROPOSED">PROPOSED</option>
+              <option value="INPROGRESS">IN PROGRESS</option>
+              <option value="COMPLETED">COMPLETED</option>
+              <option value="ARCHIVED">ARCHIVED</option>
+            </select>
+          </div>
+          <div class="mCalendar">
+            <p-calendar  [style]="{'width':'100%'}"
+            (onSelect)="filterProjects()"
+            (onClearClick)="filterProjects()"
               placeholder="Filter by Date"
               [(ngModel)]="rangeDates" 
               selectionMode="range" 
               [readonlyInput]="true"
-              [showButtonBar]="true"
-               />
+              [showButtonBar]="true"/>
+          </div>
+   
+          
+        </div>
             
-        <br />
         <table>
           <tr>
             <th>PROJECT NAME</th>
