@@ -245,6 +245,13 @@ export class MyProjectsComponent implements OnInit {
       console.log('End Date:', endDate);
   }
 }
+
+isOverdue(endDate: Date): boolean {
+  const now = new Date().getTime(); 
+  const endDateTimestamp = new Date(endDate).getTime(); 
+  return endDateTimestamp <= now; 
+}
+
   
   
 }

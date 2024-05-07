@@ -55,7 +55,7 @@ th {
   border-left: none;
   border-right: none;
   width: 25%; 
-  padding-left: 10%;
+  /* padding-left: 10%; */
 }
 
 td {
@@ -66,7 +66,7 @@ td {
   font-size: 14px;
   white-space: nowrap; 
   text-overflow: ellipsis;
-  text-align: center;
+  /* text-align: center; */
 }
 
 

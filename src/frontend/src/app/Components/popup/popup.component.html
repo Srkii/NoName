@@ -145,8 +145,8 @@
 
     <br />
     <div style="display: flex; align-items: center;">
-      <label  *ngIf="this.task.projectRole!='4'" style="margin-right: 5px; font-size: 14px;">Archive</label>
-      <input  *ngIf="this.task.projectRole!='4'" type="checkbox"
+      <label  *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'" style="margin-right: 5px; font-size: 14px;">Archive</label>
+      <input  *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'" type="checkbox"
       [checked]="task.statusName=='Archived'"
       (change)="ArchiveTasks(task)">
     </div>

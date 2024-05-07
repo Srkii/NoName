@@ -93,7 +93,7 @@
                 </div>
               </td>
               <td>{{ project.startDate | date }}</td>
-              <td>{{ project.endDate | date }}</td>
+              <td [ngStyle]="{'color': isOverdue(project.endDate) ? 'red' : ''}">{{ project.endDate | date }}</td>
             </ng-container>
           </tr>
         </table>
