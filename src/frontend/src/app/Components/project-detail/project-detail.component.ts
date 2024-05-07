@@ -367,6 +367,7 @@ export class ProjectDetailComponent implements OnInit {
 
   saveTask() {
     const task: NewTask = {
+      CreatorId: Number(localStorage.getItem('id')),//treba mi da ne bih kreatoru slao da je dodelio sam sebi task ~maksim
       TaskName: this.newTaskName,
       Description: this.newTaskDescription,
       StartDate: this.newTaskStartDate || new Date(),
@@ -374,6 +375,7 @@ export class ProjectDetailComponent implements OnInit {
       ProjectId: this.currentProjectId || 0,
       AppUserId: this.selectedUser?.appUserId || 0
     };
+    console.log(task);
     this.myTasksService.createTask(task).subscribe({
       next: () => {
         this.modalRef?.hide();

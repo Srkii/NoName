@@ -15,8 +15,6 @@ export class SharedService {
   togglePopup$ = this.togglePopupSource.asObservable();
   taskUpdated: EventEmitter<void> = new EventEmitter();
   constructor(private http: HttpClient) {}
-  //ovo koristiti za deljene funkcionalnosti i promenljive unutar koda,
-  //bolje nego local storage da postane deponija
 
   IsTokenValid(token: string):Observable<boolean>{
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`)
@@ -29,7 +27,6 @@ export class SharedService {
   emitTaskUpdated() {
     this.taskUpdated.emit();
   }
-
   // emit za novi task
   private taskAddedSource = new Subject<boolean>();
   taskAdded$ = this.taskAddedSource.asObservable();

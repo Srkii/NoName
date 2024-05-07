@@ -1,6 +1,8 @@
 ﻿using backend.Data;
 using backend.DTO;
 using backend.Entities;
+using backend.Interfaces;
+using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +14,11 @@ namespace backend.Controllers
     public class ProjectTaskController : BaseApiController
     {
         private readonly DataContext _context;
-
-        public ProjectTaskController(DataContext context)
+        private readonly INotificationService _notificationService;
+        public ProjectTaskController(DataContext context,INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         [AllowAnonymous]
@@ -44,7 +47,10 @@ namespace backend.Controllers
             await _context.ProjectTasks.AddAsync(task);
             await _context.SaveChangesAsync();
             await updateProgress(task.ProjectId);
-
+            // ne obavestavamo sami sebe vise o kreaciji task-a
+            if(taskDto.CreatorId!=taskDto.AppUserId){
+                await _notificationService.TriggerTaskNotification(task.Id,taskDto.CreatorId); 
+            }
             return Ok(task);
         }
 
@@ -663,11 +669,6 @@ namespace backend.Controllers
             // Delete comments associated with the task
             var comments = _context.Comments.Where(c => c.TaskId == taskId);
             _context.Comments.RemoveRange(comments);
-
-            // Delete attachments associated with the task
-            var attachments = _context.Attachments.Where(a => a.task_id == taskId);
-            _context.Attachments.RemoveRange(attachments);
-
             // Set notifications related to the task to null
             var notifications = _context.Notifications.Where(n => n.task_id == taskId);
             foreach (var notification in notifications)

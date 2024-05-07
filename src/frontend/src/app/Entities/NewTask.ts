@@ -1,4 +1,5 @@
 export interface NewTask {
+    CreatorId: number;
     TaskName: string,
     Description: string,
     StartDate: Date,

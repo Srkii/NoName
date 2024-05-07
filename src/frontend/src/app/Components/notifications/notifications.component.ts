@@ -1,8 +1,8 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NotificationsService } from '../../_services/notifications.service';
 import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
-import { withDebugTracing } from '@angular/router';
 import { UploadService } from '../../_services/upload.service';
+import { SharedService } from '../../_services/shared.service';
 
 @Component({
   selector: 'app-notifications',
@@ -11,13 +11,15 @@ import { UploadService } from '../../_services/upload.service';
 })
 export class NotificationsComponent {
   public notification_list:any = [];
-  notifications:any;
+  notifications:any[] = [];
+  notifications_read:any[] = [];
   markedNotifications: any[] = [];
   modalref?:BsModalRef;
   constructor (
     public notificationService:NotificationsService,
     private modalService:BsModalService,
-    public uploadService:UploadService
+    public uploadService:UploadService,
+    private shared:SharedService
   ){}
   async getNotifications(){
     await this.notificationService.getNotifications();//ovde smanjim da uzima manje notifikacija, tipa da uzme 10 najskorijih neprocitanih notifikacija
@@ -34,7 +36,16 @@ export class NotificationsComponent {
   }
   async handleNotificationDisplay(){
     await this.notificationService.getAllNotifications();
-    this.notifications =  this.notificationService.allNotifications;
+    this.notifications = [];
+    this.notifications_read = [];//refresh
+    this.notificationService.allNotifications.forEach((n:any) => {
+      if(n.read == false){
+        this.notifications.push(n);
+      }else{
+        this.notifications_read.push(n);
+      }
+    });
+    console.log(this.notifications);
   }
   selectAllNotifications() {
     if (this.areAllNotificationsSelected()) {
@@ -57,14 +68,10 @@ export class NotificationsComponent {
   }
   read_notifications(){
     this.notificationService.read_notifications(this.markedNotifications);
+    this.handleNotificationDisplay();
   }
+
   getNotificationType(type:any):string{
     return this.notificationService.getNotificationType(type);
-  }
-  visitSource(notification:Notification){
-    //poenta ove funkcije je da otvori popup za task/odvede me na info za projekat
-    //nzm kako tacno da odradim to ~maksim
-    this.notificationService.follow_link();//sta vec tamo ima da radi...
-    //console.log("notification is notificationing");
   }
 }

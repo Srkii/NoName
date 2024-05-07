@@ -108,25 +108,23 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
             var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == user_id);
             //doraditi: treba da proveri dal task postoji pa onda da upload file. ako ne postoji vraca BadRequest sa opisom greske
-            var filename =  _uploadService.AddFile(file);
-            var attachment = new Attachment{
-                task_id = task.Id,
-                sender_id = user_id,
-                url = filename
-            };
-            var comment = new Comment{
-                TaskId = task.Id,
-                SenderId = user_id,
-                SenderFirstName = sender.FirstName,
-                SenderLastName = sender.LastName,
-                Content = "",
-                FileUrl = filename
-            };
-            _context.Attachments.Add(attachment);
-            _context.Comments.Add(comment);
-            await _notificationService.TriggerNotification(task.Id,user_id,NotificationType.Attachment);
-            await _context.SaveChangesAsync();
-            return Ok(attachment);
+            if(task!=null){
+                var filename =  _uploadService.AddFile(file);
+                var comment = new Comment{
+                    TaskId = task.Id,
+                    SenderId = user_id,
+                    SenderFirstName = sender.FirstName,
+                    SenderLastName = sender.LastName,
+                    Content = "",
+                    FileUrl = filename
+                };
+                _context.Comments.Add(comment);
+                await _context.SaveChangesAsync();
+                await _notificationService.TriggerNotification(task.Id,user_id,comment.Id,NotificationType.Attachment);
+                return Ok(comment);
+            }else{
+                return BadRequest("SPECIFIED TASK DOES NOT EXIST");
+            }
         }
         [HttpGet("files/{filename}")]
         public FileContentResult GetFile(string filename){

@@ -8,14 +8,12 @@ namespace backend.DTO
 {
     public class NotificationDto
     {
+        //doraditi, ne salji celog usera ovako ...~maksim
         public int Id{get;set;}
-        public int? task_id{get;set;}
+        public Comment? Comment{get;set;}
         public ProjectTask? Task{get;set;}
-        public int? project_id{get;set;}
         public Project? Project{get;set;}
-        public int sender_id{get;set;}
         public AppUser? Sender{get;set;}
-        public int reciever_id{get;set;}
         public AppUser? Reciever{get;set;}
         public DateTime dateTime{get;set;}
         public NotificationType Type{get;set;}

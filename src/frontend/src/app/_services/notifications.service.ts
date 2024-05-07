@@ -2,6 +2,10 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from '../../environments/environment';
 import { ComponentRef, Injectable} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { CustomToastService } from './custom-toast.service';
+import { SharedService } from './shared.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +22,9 @@ export class NotificationsService{
 
   constructor(
     private toastr:ToastrService,//mogu opet preko hub-a da uzimam notifikacije i ne bakcem se sa httpclientom ura!
+    private customToast:CustomToastService,
+    private shared:SharedService,
+    private router:Router
   ) { }
 
   createHubConnection(){
@@ -45,6 +52,13 @@ export class NotificationsService{
       this.notifications.push(notification);
       this.allNotifications.push(notification);
       this.newNotifications = true;
+      this.customToast.initiate(
+        {
+          target:notification,
+          title:'New Notification!',
+          content:this.getNotificationText_small(notification)
+        }
+      )
     })
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
       this.notifications = notifications;
@@ -71,19 +85,61 @@ export class NotificationsService{
   read_notifications(notificationIds:number[]){
     this.hubConnection?.invoke("readNotifications",notificationIds);
   }
-  follow_link(){
-    //dodati notifikaciji task_id ili project_id da zna na sta da ide, na osnovu toga otvaramo popup za task ako treba ili za projekat koji je dodat
-  }
   getNotificationType(type:any):string{
     switch(type){
       case 0:
-        return "uploaded an attachment";
+        return "uploaded an attachment on a task ";
       case 1:
         return "commented on a task";
       case 2:
-        return "assigned you to a task";
+        return "You have been assigned to a task";
+      case 3:
+        return "You have been assigned to a project";
+      case 4:
+        return "A task deadline has been modified";
+      case 5:
+        return "A project deadline has been modified";
       default:
-        return "assigned you to a project";
+        return "";
     }
   }
+  getNotificationText(notification:any):string{
+    switch(notification.type){
+      case 0://attachment
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
+      case 1://comment
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
+      case 2:
+        return this.getNotificationType(notification.type)+" "+notification.task.taskName;
+      default:
+        return this.getNotificationType(notification.type)+" "+notification.project.projectName;//pravi jos tipova...
+
+    }
+  }
+  getNotificationText_small(notification:any):string{
+    switch(notification.type){
+      case 0://attachment
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
+      case 1://comment
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
+      case 2:
+        return this.getNotificationType(notification.type);
+      default:
+        return this.getNotificationType(notification.type);
+
+    }
+  }
+
+  async follow_notif(event: MouseEvent, notification: any) {
+    if (notification.task != null) {
+      event.stopPropagation();
+      await this.router.navigate(['/project/' + notification.task.projectId]);
+      setTimeout(()=>{
+        this.shared.triggerPopup(event, notification.task.id);  //mogu da ga aktiviram ali ne mogu nista dalje da mu uradim xd.
+      },500);
+    } else if (notification.project != null) {
+      await this.router.navigate(['/project/' + notification.project.id]);
+    }
+  }
+
 }

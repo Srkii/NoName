@@ -73,8 +73,8 @@
 
 
     <p style=" font-size: 14px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee
-      <ngx-avatars  id="assignee" *ngIf="!user.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user.firstName+ ' ' + user.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
-      <img id="assignee" *ngIf="user.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
+      <ngx-avatars  id="assignee" *ngIf="!user?.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user?.firstName+ ' ' + user?.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
+      <img id="assignee" *ngIf="user?.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
     </p>
     <div class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
       <label style=" font-size: 16px;" for="assignee2" class="form-label">Assignee</label>
