@@ -37,8 +37,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxGanttModule } from '@worktile/gantt';
 import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 import { TooltipModule } from 'primeng/tooltip';
-import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
 import { CalendarModule } from 'primeng/calendar';
+import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
 
 const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
 
