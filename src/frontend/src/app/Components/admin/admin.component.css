@@ -287,7 +287,7 @@ select:focus-visible{
 .form-control:focus {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: #5f61e6;
+  box-shadow: none;
 }
 .page_size {
   color: #5e6165;
