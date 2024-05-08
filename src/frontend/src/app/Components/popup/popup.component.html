@@ -1,7 +1,6 @@
 <div class="container1">
 
-  <div class="col-md-5 mx-2 float-end" id="popUp" *ngIf="task" >
-    <div class="scroll">
+  <div class="col-md-5 mx-2 float-end" id="popUp" *ngIf="task" #containerDiv>
       <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
@@ -17,11 +16,32 @@
       />
     </svg>
 
-    <svg *ngIf="!(this.task.statusName=='Completed' || this.task.statusName=='InReview' || this.task.statusName=='Archived')" (click)="openDeleteModal(ConfimDelete)"
+    <svg  *ngIf="!(this.task.statusName=='Completed' || this.task.statusName=='InReview' || this.task.statusName=='Archived') &&  this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'" (click)="openDeleteModal(ConfimDelete)"
      xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="trash" viewBox="0 0 16 16">
       <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
       <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
     </svg>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="16"
+  height="16"
+  fill="currentColor"
+  class="full"
+  viewBox="0 0 16 16"
+  (click)="full()"
+>
+  <path
+    fill-rule="evenodd"
+    d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"
+  />
+</svg>
+<svg  (click)="full()" style="display: none;"
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="exit_full" viewBox="0 0 16 16">
+<path d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5m5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5M0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5m10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0z"/>
+</svg>
+<h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  id="popupTaskName">{{ task.taskName }}</h6>
+<input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1'">
+    <div class="scroll" [ngClass]="{ 'hide_comment': hide_comment_area(),'show_comment': !hide_comment_area() }" #commentDiv>
 
     <ng-template class="modal" #ConfimDelete>
       <div (click)="$event.stopPropagation();" class="modal-container" style="color: #697a8d; font-weight: bold;">
@@ -35,36 +55,15 @@
        </div>
     </ng-template>
 
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="full"
-      viewBox="0 0 16 16"
-      (click)="full()"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"
-      />
-    </svg>
-    <svg  (click)="full()" style="display: none;"
-      xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="exit_full" viewBox="0 0 16 16">
-      <path d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5m5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5M0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5m10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0z"/>
-    </svg>
 
-    <h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  id="popupTaskName">{{ task.taskName }}</h6>
-    <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1'">
-    <br />
-    <p style=" font-size: 14px; margin-bottom: 5px;   margin-right: 20px; margin-bottom: 10px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >
+    <p style=" font-size: 16px; margin-bottom: 5px;   margin-right: 20px; margin-bottom: 10px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >
       Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
     </p>
     <div class="taskDueDate" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
       <p class="header">Due Date</p>
       <input  type="text" placeholder="{{task.endDate|date}}" onfocus="this.type='date'" onblur="this.type='text|date'" [value]="task.endDate | date" (blur)="updateTaskDueDate($event)">
     </div>
-    <p style=" font-size: 14px; margin-bottom: 5px;   margin-right: 20px; margin-bottom: 10px;">
+    <p style=" font-size: 16px; margin-bottom: 5px; margin-right: 20px; margin-bottom: 10px;">
       Origin Project
       <span id="popupOriginProject"  (click)="goToProject(this.selectedProject)">{{
          this.selectedProject.projectName
@@ -72,7 +71,7 @@
     </p>
 
 
-    <p style=" font-size: 14px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee
+    <p style=" font-size: 16px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee
       <ngx-avatars  id="assignee" *ngIf="!user?.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user?.firstName+ ' ' + user?.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
       <img id="assignee" *ngIf="user?.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
     </p>
@@ -107,11 +106,11 @@
         </ng-template>
       </ng-select>
       </div>
-      <p style=" font-size: 14px; margin-bottom: 5px;">Description</p>
+      <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Description</p>
         <textarea class="description1" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
         <textarea class="description" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"></textarea>
-      <p style="font-size: 14px; margin-bottom: 5px">Dependency</p>
-      <ng-select [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" placeholder="Select Project Tasks" class="task_select" bindValue="id" style="border-radius: 8px; z-index: 1;" name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
+      <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Dependency</p>
+      <ng-select [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" placeholder="Select Project Tasks" class="task_select" bindValue="id" style="border-radius: 8px; z-index: 1; font-size: 16 ; font-weight: 100;  color: #697a8d;" name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
         <ng-template ng-option-tmp let-task="item">
           <div class="user-detail" >
             <div class="nameAvatar">
@@ -125,8 +124,8 @@
         </ng-template>
       </ng-select>
 
-      <p style="font-size: 14px; margin-bottom: 5px">Section</p>
-      <ng-select  class="task_select" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" placeholder="Select Project Section" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)">
+      <p style="font-size: 16px; margin-bottom: 5px; margin-top:10px;">Section</p>
+      <ng-select  class="task_select" style="margin-bottom: 10px; border-radius: 8px; z-index: 0; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" placeholder="Select Project Section" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)">
         <ng-template ng-option-tmp let-section="item" let-index="index">
           <div style="display: flex; align-items: center;">
             <div>
@@ -143,38 +142,39 @@
         </ng-template>
       </ng-select>
 
-    <br />
-    <div style="display: flex; align-items: center;">
-      <label  *ngIf="this.task.projectRole!='4'" style="margin-right: 5px; font-size: 14px;">Archive</label>
-      <input  *ngIf="this.task.projectRole!='4'" type="checkbox"
-      [checked]="task.statusName=='Archived'"
-      (change)="ArchiveTasks(task)">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div  style="display: flex; align-items: center;">
+        <label  *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'" style="margin-right: 5px; font-size: 16px;">Archive</label>
+        <input  *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'" type="checkbox"
+        [checked]="task.statusName=='Archived'"
+        (change)="ArchiveTasks(task)">
+      </div>
+      <div>
+        <button
+          *ngIf="this.task.projectRole!='4'"
+          class="mark" 
+          [ngStyle]="{ 'pointer-events': this.DisableCloseTask(this.task)==false ? 'none' : 'auto', 'opacity': this.DisableCloseTask(this.task)==false ? 0.5 : 1 }"
+          [ngClass]="{ 'closed': task && task.statusName === 'InReview',
+          'cant_close': task && task.statusName == 'Completed',}"
+          (click)="closeTask(task)"
+        >
+          {{ task && (task.statusName === 'InReview' || task.statusName=='Completed') ? "Re-open issue" : "Mark as done" }}
+        </button>
+        <button
+          *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"   
+          class="mark"
+          style="margin-right: 10px; "
+          [ngClass]="{ 'completed': this.task && this.task.statusName == 'Completed',
+            'not_closed': this.task && this.task.statusName != 'InReview',
+            'not_completed': this.task && this.task.statusName == 'Completed'
+         }"
+          [ngStyle]="{ 'pointer-events': this.DisableCloseTask(this.task)==false ? 'none' : 'auto', 'opacity': this.DisableCloseTask(this.task)==false ? 0.5 : 1 }"
+          (click)="toggleTaskCompletion(task)"
+        >
+          {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
+        </button>
+      </div>
     </div>
-    <button
-      *ngIf="this.task.projectRole!='4'"
-      class="mark"
-      style="margin-top: -20px;"
-      [ngStyle]="{ 'pointer-events': this.DisableCloseTask(this.task)==false ? 'none' : 'auto', 'opacity': this.DisableCloseTask(this.task)==false ? 0.5 : 1 }"
-      [ngClass]="{ 'closed': task && task.statusName === 'InReview',
-      'cant_close': task && task.statusName == 'Completed',}"
-      (click)="closeTask(task)"
-    >
-      {{ task && (task.statusName === 'InReview' || task.statusName=='Completed') ? "Re-open issue" : "Mark as done" }}
-    </button>
-    <button
-      *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"   
-      class="mark"
-      style="margin-right: 10px; margin-top: -20px;"
-      [ngClass]="{ 'completed': this.task && this.task.statusName == 'Completed',
-        'not_closed': this.task && this.task.statusName != 'InReview',
-        'not_completed': this.task && this.task.statusName == 'Completed'
-     }"
-      [ngStyle]="{ 'pointer-events': this.DisableCloseTask(this.task)==false ? 'none' : 'auto', 'opacity': this.DisableCloseTask(this.task)==false ? 0.5 : 1 }"
-      (click)="toggleTaskCompletion(task)"
-    >
-      {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
-    </button>
-    <br>
 
     <div class="comments">
       <p class="header" id="comment_header">Comments</p>
@@ -182,7 +182,7 @@
         <span class="no_comments" *ngIf="!CheckForCommets(task)">No Comments</span>
         <div *ngFor="let comment of comments">
           <ng-continer *ngIf="this.task.id===comment.taskId">
-            <p> <ngx-avatars  id="assignee" *ngIf="!comment.appUserPicUrl" size="30" bgColor="#5d57c2" [name]="comment.senderFirstName + ' ' + comment.senderLastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
+            <p style="margin-top: 5px;"> <ngx-avatars  id="assignee" *ngIf="!comment.appUserPicUrl" size="30" bgColor="#5d57c2" [name]="comment.senderFirstName + ' ' + comment.senderLastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
               <img *ngIf="comment.appUserPicUrl" id="assignee" [src]="this.uploadservice.getImage(comment.appUserPicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"> {{ comment?.senderFirstName }} {{ comment?.senderLastName }}</p>
             <span class="comment_date">{{ comment?.messageSent  | date:'MMM d, y, h:mm a' }} <span *ngIf="comment.edited==true" >(edited)</span>
             <ng-continer *ngIf="this.task.projectRole!='4'">
@@ -204,20 +204,23 @@
                     <a style="padding-left: 3px; padding-right: 3px;" >{{ comment?.fileUrl }}</a>
                   </label>
                 </div>
-                <textarea class="edit_content" id="edit_content{{comment.id}}" style="display: none;" rows="3">{{ comment.content }}</textarea>
-                <button class="save_edit" id="save_edit{{comment.id}}" style="display: none;" (click)="editContent(comment.id)">Save Changes</button>
-                <button class="cancel_edit" id="cancel_edit{{comment.id}}" style="display: none;" (click)="CancelEdit(comment.id)">Cancel</button>
+                <div class="m_edit">
+                  <textarea class="edit_content" id="edit_content{{comment.id}}" style="display: none;" rows="3">{{ comment.content }}</textarea>
+                  <button class="save_edit" id="save_edit{{comment.id}}" style="display: none;" (click)="editContent(comment.id)">Save Changes</button>
+                  <button class="cancel_edit" id="cancel_edit{{comment.id}}" style="display: none;" (click)="CancelEdit(comment.id)">Cancel</button>
+                </div>
             </div>
           </ng-continer>
-          <hr class="break">
         </div>
       </div>
     </div>
     </div>
-    <div class="fixed-comment-area">
+    <div *ngIf="this.task.projectRole!='4'" class="fixed-comment-area" #fixedArea>
       <textarea [disabled]="task.projectRole == '4'" class="comment" rows="3" placeholder="Add a comment" #commentInput></textarea>
-      <button *ngIf="this.task.projectRole!='4'" class="add_comment" (click)="addComment()">Add Comment</button>
-      <app-file-upload></app-file-upload>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <app-file-upload style="margin-top: -15px;" *ngIf="this.task.projectRole!='4'"></app-file-upload>
+        <button *ngIf="this.task.projectRole!='4'" class="add_comment" (click)="addComment()">Add Comment</button>
+      </div>
     </div>
 
   </div>

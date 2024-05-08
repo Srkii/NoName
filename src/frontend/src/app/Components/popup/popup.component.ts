@@ -28,6 +28,9 @@ import { ProjectSection } from '../../Entities/ProjectSection';
 export class PopupComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('commentInput') commentInput!: ElementRef;
+  @ViewChild('containerDiv') containerDiv!: ElementRef;
+  @ViewChild('fixedArea') fixedArea!: ElementRef;
+  @ViewChild('commentDiv') commentDiv!: ElementRef;
   @Input() task: ProjectTask | null = null;
   @Output() taskUpdated: EventEmitter<ProjectTask> = new EventEmitter<ProjectTask>();
   @Output() backClicked: EventEmitter<void> = new EventEmitter<void>();
@@ -87,6 +90,19 @@ export class PopupComponent {
       
     }
   }
+
+  ngAfterViewInit() {
+    this.adjustCommentHeight();
+}
+
+  adjustCommentHeight() {
+    const containerHeight = this.containerDiv.nativeElement.offsetHeight;
+    const fixedHeight = this.fixedArea.nativeElement.offsetHeight;
+    console.log(containerHeight);
+    console.log(fixedHeight);
+    const commentHeight = containerHeight - (fixedHeight+55);
+    this.commentDiv.nativeElement.style.height = `${commentHeight}px`;
+}
 
 
   fetchComments(): void {
@@ -266,14 +282,14 @@ export class PopupComponent {
         pop.style.top="";
         pop.style.height="";
       }
-      pop.style.width="98%";
-      pop.style.padding = '2%';
-      back.style.marginRight = '1%';
-      exit_full.style.marginRight = '30px';
-      trash.style.marginRight = '30px';
+      pop.style.width = "calc(100% - 22px)";
+      pop.style.padding = '15px';
+      // back.style.marginRight = '1%';
+      // exit_full.style.marginRight = '30px';
+      // trash.style.marginRight = '30px';
       exit_full.style.display = 'block';
       full.style.display = 'none';
-      file.style.marginRight = '3%';
+      // file.style.marginRight = '3%';
       comments.style.marginTop = '0%';
       comments.style.width = '100%';
       this.fullscreen = !this.fullscreen;
@@ -319,6 +335,12 @@ export class PopupComponent {
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.current_user=response;
+        console.log(this.task?.id);
+        console.log(this.current_user.id);
+        console.log(this.current_user.firstName);
+        console.log(this.current_user.lastName);
+        console.log(content);
+        console.log(new Date);
         if (content) {
           const commentDto: Comment = {
             id: -1,
@@ -642,6 +664,21 @@ export class PopupComponent {
       });
     }
   }
+
+  hide_comment_area():boolean{
+    if(this.task?.projectRole=='4')
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    
+  }
+
+  
+  
   
   
   
