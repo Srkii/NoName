@@ -1,110 +1,78 @@
 <div class="container1">
-
   <div class="col-md-5 mx-2 float-end" id="popUp" *ngIf="task" #containerDiv>
-      <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="back"
-      viewBox="0 0 16 16"
-      (click)="close()"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"
-      />
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="back" viewBox="0 0 16 16" (click)="close()">
+      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"/>
     </svg>
-
-    <svg  *ngIf="!(this.task.statusName=='Completed' || this.task.statusName=='InReview' || this.task.statusName=='Archived') &&  this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'" (click)="openDeleteModal(ConfimDelete)"
-     xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="trash" viewBox="0 0 16 16">
+    <svg  *ngIf="!(this.task.statusName=='Completed' || this.task.statusName=='InReview' || this.task.statusName=='Archived') &&  this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'" (click)="openDeleteModal(ConfimDelete)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="trash" viewBox="0 0 16 16">
       <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
       <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
     </svg>
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="16"
-  height="16"
-  fill="currentColor"
-  class="full"
-  viewBox="0 0 16 16"
-  (click)="full()"
->
-  <path
-    fill-rule="evenodd"
-    d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"
-  />
-</svg>
-<svg  (click)="full()" style="display: none;"
-xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="exit_full" viewBox="0 0 16 16">
-<path d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5m5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5M0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5m10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0z"/>
-</svg>
-<h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  id="popupTaskName">{{ task.taskName }}</h6>
-<input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1'">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="full" viewBox="0 0 16 16" (click)="full()">
+      <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"/>
+    </svg>
+    <svg  (click)="full()" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="exit_full" viewBox="0 0 16 16">
+      <path d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5m5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5M0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5m10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0z"/>
+    </svg>
+    <h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  id="popupTaskName">{{ task.taskName }}</h6>
+    <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1'">
     <div class="scroll" [ngClass]="{ 'hide_comment': hide_comment_area(),'show_comment': !hide_comment_area() }" #commentDiv>
-
-    <ng-template class="modal" #ConfimDelete>
-      <div (click)="$event.stopPropagation();" class="modal-container" style="color: #697a8d; font-weight: bold;">
-          <h1 style="text-align: center;">Delete Task?</h1>
-        <p >You're about to permanently delete this issue, its comments and attachments, and all of its data.</p>
-        <p >If you're not sure, you can resolve or close this issue instead.</p>
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <button class="cancel_task" style="margin-right: 10px;" (click)="$event.stopPropagation(); this.closeDeleteModal()">Cancel</button>
-          <button class="delete_task" style="margin-right: 10px;" (click)="$event.stopPropagation(); this.deleteTask(this.task.id); this.closeDeleteModal();">Delete</button>
-        </div>
-       </div>
-    </ng-template>
-
-
-    <p style=" font-size: 16px; margin-bottom: 5px;   margin-right: 20px; margin-bottom: 10px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >
-      Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
-    </p>
-    <div class="taskDueDate" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
-      <p class="header">Due Date</p>
-      <input  type="text" placeholder="{{task.endDate|date}}" onfocus="this.type='date'" onblur="this.type='text|date'" [value]="task.endDate | date" (blur)="updateTaskDueDate($event)">
-    </div>
-    <p style=" font-size: 16px; margin-bottom: 5px; margin-right: 20px; margin-bottom: 10px;">
-      Origin Project
-      <span id="popupOriginProject"  (click)="goToProject(this.selectedProject)">{{
-         this.selectedProject.projectName
-      }}</span>
-    </p>
-
-
-    <p style=" font-size: 16px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >Assignee
-      <ngx-avatars  id="assignee" *ngIf="!user?.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user?.firstName+ ' ' + user?.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
-      <img id="assignee" *ngIf="user?.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
-    </p>
-    <div class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
-      <label style=" font-size: 16px;" for="assignee2" class="form-label">Assignee</label>
-      <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)">
-        <ng-template ng-option-tmp let-user="item" let-index="index">
-          <div style="display: flex; align-items: center;">
-            <div *ngIf="user.profilePicUrl" class="nameAvatar">
-              <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
-            </div>
-            <div *ngIf="!user.profilePicUrl" class="nameAvatar">
-              <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
-            </div>
-            <div>
-              {{ user.fullName }}
-            </div>
-        </div>
-        </ng-template>
-        <ng-template ng-label-tmp let-item="item">
-          <div style="display: flex; align-items: center;">
-            <div *ngIf="item.profilePicUrl" class="nameAvatar">
-              <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
-            </div>
-            <div *ngIf="!item.profilePicUrl" class="nameAvatar">
-              <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
-            </div>
-            <div>
-              {{ item.fullName }}
-            </div>
+      <ng-template class="modal" #ConfimDelete>
+        <div (click)="$event.stopPropagation();" class="modal-container" style="color: #697a8d; font-weight: bold;">
+            <h1 style="text-align: center;">Delete Task?</h1>
+          <p >You're about to permanently delete this issue, its comments and attachments, and all of its data.</p>
+          <p >If you're not sure, you can resolve or close this issue instead.</p>
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <button class="cancel_task" style="margin-right: 10px;" (click)="$event.stopPropagation(); this.closeDeleteModal()">Cancel</button>
+            <button class="delete_task" style="margin-right: 10px;" (click)="$event.stopPropagation(); this.deleteTask(this.task.id); this.closeDeleteModal();">Delete</button>
           </div>
-        </ng-template>
-      </ng-select>
+        </div>
+      </ng-template>
+      <p style=" font-size: 16px; margin-bottom: 5px;   margin-right: 20px; margin-bottom: 10px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >
+        Due Date <span id="popupDueDate">{{ task.endDate | date }}</span>
+      </p>
+      <div class="taskDueDate" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
+        <div class="mInfoTitle">Due Date</div>
+        <input  type="text" placeholder="{{task.endDate|date}}" onfocus="this.type='date'" onblur="this.type='text|date'" [value]="task.endDate | date" (blur)="updateTaskDueDate($event)">
+      </div>
+      <div class="mOrigin mInfoTitle" style=" font-size: 16px; margin-bottom: 5px; margin-right: 20px; margin-bottom: 10px;">
+        <div class="mInfoTitle">Origin Project</div>
+        <span id="popupOriginProject"  (click)="goToProject(this.selectedProject)">{{ this.selectedProject.projectName }}</span>
+      </div>
+      <div class="mAssignee" style=" font-size: 16px; margin-bottom: 5px;   margin-right: 20px;" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >
+        <div class="mInfoTitle">Assignee</div>
+        <ngx-avatars  id="assignee" *ngIf="!user?.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user?.firstName+ ' ' + user?.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
+        <img id="assignee" *ngIf="user?.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)"class="avatar rounded-circle shadow-4-strong" height="25" width="25"><p id="username">{{user?.firstName}} {{user?.lastName}}</p>
+      </div>
+      <div class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
+        <label style=" font-size: 16px;" for="assignee2" class="form-label">Assignee</label>
+        <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)">
+          <ng-template ng-option-tmp let-user="item" let-index="index">
+            <div style="display: flex; align-items: center;">
+              <div *ngIf="user.profilePicUrl" class="nameAvatar">
+                <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              </div>
+              <div *ngIf="!user.profilePicUrl" class="nameAvatar">
+                <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+              </div>
+              <div>
+                {{ user.fullName }}
+              </div>
+            </div>
+          </ng-template>
+          <ng-template ng-label-tmp let-item="item">
+            <div style="display: flex; align-items: center;">
+              <div *ngIf="item.profilePicUrl" class="nameAvatar">
+                <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+              </div>
+              <div *ngIf="!item.profilePicUrl" class="nameAvatar">
+                <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
+              </div>
+              <div>
+                {{ item.fullName }}
+              </div>
+            </div>
+          </ng-template>
+        </ng-select>
       </div>
       <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Description</p>
         <textarea class="description1" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
@@ -222,6 +190,5 @@ xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" cl
         <button *ngIf="this.task.projectRole!='4'" class="add_comment" (click)="addComment()">Add Comment</button>
       </div>
     </div>
-
   </div>
 </div>

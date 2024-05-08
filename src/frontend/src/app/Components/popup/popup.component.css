@@ -258,7 +258,6 @@ img{
 }
 .show_comment {
   /* height: calc(var(--col-md-5-height) - var(--scroll-height)); */
-  height: calc(100%-400px);
   /* height: 78%; */
   overflow-y: auto;
 }
@@ -476,4 +475,8 @@ img{
 
 .m_edit{
   margin-bottom: 40px;
+}
+
+.mInfoTitle {
+  width: 150px;
 }
