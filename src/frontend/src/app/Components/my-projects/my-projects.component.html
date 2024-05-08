@@ -25,15 +25,15 @@
         </div>
       </div>
         <div class="mFilters">
-          <div class="mInput">
-            <input
+          <div class="filter">
+            <input 
               class="form-control"
               type="text"
               placeholder="Search by Project Name or Owner"
               [(ngModel)]="searchText"
               (input)="filterProjects(); "/>
           </div>
-          <div class="mSelect">
+          <div class="filter">
             <select class="form-select" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterProjects();">
               <option value="" hidden selected>Select Status</option>
               <option value="">Select All</option>
@@ -43,11 +43,11 @@
               <option value="ARCHIVED">ARCHIVED</option>
             </select>
           </div>
-          <div class="mCalendar">
+          <div class="filter">
             <p-calendar  [style]="{'width':'100%'}"
             (onSelect)="filterProjects()"
             (onClearClick)="filterProjects()"
-              placeholder="Filter by Date"
+              placeholder="Filter by Date Range"
               [(ngModel)]="rangeDates" 
               selectionMode="range" 
               [readonlyInput]="true"
