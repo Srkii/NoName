@@ -19,7 +19,7 @@ export class AppComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    // this.isTokenValid()
+    this.isTokenValid()
     this.isLoginOrRegisterPage()
   }
 
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit{
     this.spinner.show()
     var token = localStorage.getItem("token");
     if (token) {
-        var valid = await firstValueFrom(this.sharedService.IsTokenValid(token)) ?? false;
+        var valid = await firstValueFrom(this.sharedService.IsTokenValid(token));
         if(!valid)
         {
           localStorage.removeItem('token');

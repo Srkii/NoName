@@ -148,15 +148,33 @@ namespace backend.Controllers
         }
 
         [HttpGet("validToken/{token}")] // /api/account/validToken
-        [Authorize]
-        public async Task<ActionResult<bool>> IsTokenValidAsync(string token)
+        public async Task<ActionResult<bool>> IsTokenValid(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var jsonToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-            var userEmailClaim = jsonToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userEmailClaim);
 
-            return user != null;
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true, 
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuer = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["TokenKey"])),
+                ClockSkew = TimeSpan.Zero
+            };
+
+            SecurityToken validatedToken;
+
+            try{
+                tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+                var jsonToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+                var userEmailClaim = jsonToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userEmailClaim);
+                return user != null;
+            }
+            catch (SecurityTokenException)
+            {
+                return false;
+            }
         }
     }
 }
