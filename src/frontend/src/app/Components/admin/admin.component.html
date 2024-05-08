@@ -24,7 +24,7 @@
         <div class="pics">
           <div *ngIf="projectMangers">
           <ng-container *ngFor="let user of projectMangers.slice(0,1)">
-            <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user?.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
             <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
           </ng-container>
         </div>
@@ -79,7 +79,8 @@
     </div>
 
     <br />
-    <table class="invoice-list-table table">
+    <div class="table-responsive text-nowrap">
+      <table class="table">
       <thead>
         <tr>
           <th>User
@@ -146,6 +147,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div class="col-sm-12 col-md-6" *ngIf="filteredUsers>5" >
       <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
@@ -246,7 +248,7 @@
         </select>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit">Change</button>
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="modalRef?.hide()" >Change</button>
       </div>
     </form>
   </div>

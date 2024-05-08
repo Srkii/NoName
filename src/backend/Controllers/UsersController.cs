@@ -91,7 +91,7 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     [HttpPost("changeUserRole")]   //api/users/changeUserRole
     public async Task<ActionResult<UserDto>> ChangeUserRole(RoleChangeDTO dto)
     {
