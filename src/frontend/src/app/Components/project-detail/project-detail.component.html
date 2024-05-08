@@ -179,11 +179,8 @@
       </button>
     </div>
     <div class="modal-body">
-      <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers">
-          <div class="d-flex justify-content-between">
-            <h5>Add project members</h5>
-            <button type="button" (click)="addProjectMembers()" class="btn btn-sm btn-secondary add">Add members</button>
-          </div>          
+      <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers"> 
+          <h5>Add project members</h5>
           <div class="addInfo">
             <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" id="assignee" name="Assignees" (click)="$event.stopPropagation()">
               <ng-template ng-option-tmp let-user="item">
@@ -216,6 +213,7 @@
               </div>
               </ng-template>
             </ng-select>
+            <button class="btn btn-primary btn-xs add" style="width: 100%" type="button" (click)="addProjectMembers()">Add members</button> 
         </div>
       </div>
       <div class="mb-3 members">
