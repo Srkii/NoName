@@ -375,7 +375,6 @@ textarea:focus{
     padding-bottom: 0.2rem;  
 }
 .search{
-    text-align: center;
     border-radius: 0%;
 }
 .search:focus{
@@ -394,11 +393,15 @@ textarea:focus{
     float: right;
 }
 .add{
-    padding: 0.2rem;
-    color: white;
+    width: 100%;
     background-color: #696cff;
-    border: none;
-    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    padding: 0.3rem 0 0.3rem 0;
+    margin-bottom: 0.4rem !important;
+    margin-top:  0.7rem !important;
+}
+.add:focus{
+    color: white !important;
 }
 .add:hover{
     background-color: #4d50f8;
@@ -457,9 +460,10 @@ textarea:focus{
 .ng-value-icon:hover{
     background-color: transparent !important;
 }
-:host::ng-deep .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container{
-    border-color: #696cff !important;
-}
+/* .ng-select-focused:not(.ng-select-opened) > .ng-select-container{
+    border-color: #484ac5 !important;
+    outline: none !important;
+} */
 
 .td_row td:first-child:hover,
 .td_row td:first-child.clicked {
