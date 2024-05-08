@@ -10,6 +10,7 @@
     top: 0%;
     right: 0.2%;
     transition: right 0.5s;
+    z-index: 50;
 }
 
 .project-header{

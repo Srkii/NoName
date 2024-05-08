@@ -257,6 +257,20 @@ p {
   color: white;
 }
 
+.progress-label{
+  text-align: center;
+  width: 10.6165625rem;
+  height: 0.9994375rem;
+  color: transparent;
+  position: absolute;
+  left: 53.6%;
+  cursor: default;
+}
+
+.progress-label:hover{
+  transition: color 0.5s ease;
+  color: #697a8d;
+}
 
 
 :host::ng-deep.p-calendar{
