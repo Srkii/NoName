@@ -322,13 +322,13 @@ select:focus-visible{
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
-.clickable-div:active {
-  background-color: #d0cdff; 
-  outline: none;
+.clickable-div:active{
+  background-color: #ffffff; 
+   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
-.clickable-div:focus {
+.clickable-div:focus.clicked {
   background-color: #d0cdff; 
 }
 .paginate_button1 .btn{

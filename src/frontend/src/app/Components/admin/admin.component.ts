@@ -358,5 +358,12 @@ export class AdminComponent implements OnInit{
       })
     }
 
+    isFocused: boolean = false;
+
+    toggleFocus(): void {
+      this.isFocused = !this.isFocused;
+    }
+
+
   }
 
