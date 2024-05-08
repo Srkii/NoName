@@ -93,8 +93,8 @@
               </td>
               <td>
                 <div class="progress">
-                  <div class="progress-bar progress-bar-striped" role="progressbar" [style.width.%]="project.progress" [attr.aria-valuenow]="project.progress" [ngStyle]="{'pointer-events': project.progress <= 15 ? 'none' : 'auto'}" aria-valuemin="0" aria-valuemax="100">{{project.progress}}%</div>
-                  <span *ngIf="project.progress<=15" class="progress-label">{{project.progress}}%</span>
+                  <div class="progress-bar progress-bar-striped" role="progressbar" [style.width.%]="project.progress" [attr.aria-valuenow]="project.progress" [ngClass]="getProgressClass(project.progress)" aria-valuemin="0" aria-valuemax="100">{{project.progress}}%</div>
+                  <span *ngIf="project.progress<=15" class="progress-label" [ngStyle]="{'margin-right': project.progress + 'px'}">{{project.progress}}%</span>
                 </div>
               </td>
               <td>{{ project.startDate | date }}</td>

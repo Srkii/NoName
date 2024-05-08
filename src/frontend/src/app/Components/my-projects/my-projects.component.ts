@@ -252,6 +252,9 @@ isOverdue(endDate: Date): boolean {
   return endDateTimestamp <= now; 
 }
 
+getProgressClass(progress: number): string {
+  return progress <= 15? 'progress-type2' : 'progress-type1';
+}
   
   
 }
