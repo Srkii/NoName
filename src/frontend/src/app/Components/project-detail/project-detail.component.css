@@ -358,7 +358,12 @@ textarea:focus{
 /* Member Managment */
 
 .modal-header h4{
+    color: black;
     margin-bottom: 0.3125rem;
+}
+.btn-close{
+    color: #676f79;
+    box-shadow: none;
 }
 .new-item {
     margin: 10px !important;
@@ -372,7 +377,9 @@ textarea:focus{
     border-bottom: 2px solid #696cff;
 }
 .members h5{
-    padding-bottom: 0.2rem;  
+    font-weight: 400;
+    padding-bottom: 0.2rem;
+    color: #212529;  
 }
 .search{
     border-radius: 0%;
@@ -394,20 +401,27 @@ textarea:focus{
 }
 .add{
     width: 100%;
+    height: auto;
     background-color: #696cff;
     border-radius: 4px;
     padding: 0.3rem 0 0.3rem 0;
     margin-bottom: 0.4rem !important;
-    margin-top:  0.7rem !important;
+    margin-top:  0.8rem !important;
+}
+.add:disabled{
+    border: 0.835px solid #696cff !important;
+    opacity: 70%;
 }
 .add:focus{
     color: white !important;
 }
 .add:hover{
-    background-color: #4d50f8;
+    background-color: #5f61e6;
 }
 .addmembers h5{
+    font-weight: 400;
     padding-bottom: 0.2rem;
+    color: #212529;
 }
 .t2{
     margin-top: 0.5rem;
@@ -447,23 +461,25 @@ textarea:focus{
     color: #697a8d;
 }
 .ng-value-container{
+    display: inline-flex !important;
+    align-items: center;
     padding-left: 2px !important;
     padding-top: 2px !important;
 }
-.ng-value-label.ng-star-inserted{
-    padding-left: 3px !important;
+.ng-value-label{
+    font-size: 14px !important;
+    padding-left: 1px !important;
 }
 .ng-value-icon{
+    position: relative;
+    top: 0.06rem;
     border-left: none !important;
     padding-left: 0 !important;
 }
 .ng-value-icon:hover{
     background-color: transparent !important;
+    color: black;
 }
-/* .ng-select-focused:not(.ng-select-opened) > .ng-select-container{
-    border-color: #484ac5 !important;
-    outline: none !important;
-} */
 
 .td_row td:first-child:hover,
 .td_row td:first-child.clicked {

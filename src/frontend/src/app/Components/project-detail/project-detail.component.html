@@ -174,15 +174,13 @@
   <div class="modal-container">
     <div class="modal-header">
       <h4>Member Management</h4>
-      <button type="button" class="close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+      <button type="button" class="btn-close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
       <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers"> 
           <h5>Add project members</h5>
           <div class="addInfo">
-            <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" id="assignee" name="Assignees" (click)="$event.stopPropagation()">
+            <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" name="Assignees" (click)="$event.stopPropagation()" style="height: 36px;">
               <ng-template ng-option-tmp let-user="item">
                 <div class="user-detail">
                   <div *ngIf="user.profilePicUrl" class="nameAvatar">
@@ -213,7 +211,7 @@
               </div>
               </ng-template>
             </ng-select>
-            <button class="btn btn-primary btn-xs add" style="width: 100%" type="button" (click)="addProjectMembers()">Add members</button> 
+            <button class="btn btn-primary btn-xs add" style="width: 100%" type="button" (click)="addProjectMembers()" [disabled]="this.selectedUsers.length == 0">Add members</button> 
         </div>
       </div>
       <div class="mb-3 members">
