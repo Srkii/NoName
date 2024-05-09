@@ -2,7 +2,7 @@
   <div class="col-md-5 mx-2" id="popUp" *ngIf="task" #containerDiv>
     
     <div class="cardHead">
-      <h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  id="popupTaskName">{{ task.taskName }}</h6>
+      <h6 *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"  class="popupTaskName">{{ task.taskName }}</h6>
       <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1'">
       <div class="cardHeadSvg">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="full" viewBox="0 0 16 16" (click)="full()">
@@ -33,7 +33,7 @@
         </div>
       </ng-template>
       <div class="guestDueDate" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'">
-        <div class="gDDname">Due Date1:</div><div>{{ task.endDate | date }}</div>
+        <div class="gDDname">Due Date:</div><div class="guestDdate">{{ task.endDate | date }}</div>
       </div>
       
       <div class="taskDueDate" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
@@ -49,9 +49,12 @@
         <div id="popupOriginProject" (click)="goToProject(this.selectedProject)"><span class="badge bg-secondary">{{ this.selectedProject.projectName }}</span></div>
       </div>
       <div class="guestAssignee" *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'" >
-        <div class="mInfoTitle">Assignee1:</div>
+        <div class="mInfoTitle">
+          <label for="assignee">Assignee:</label>
+        </div>
         <ngx-avatars  id="assignee" *ngIf="!user?.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user?.firstName+ ' ' + user?.lastName" class="avatar rounded-circle shadow-4-strong" height="25" width="25"></ngx-avatars>
-        <div class="guestAssigneeImage"><img id="assignee" *ngIf="user?.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle" height="25" width="25"><div class="assigneeNameGuest">{{user?.firstName}} {{user?.lastName}}</div></div>
+        <div class="guestAssigneeImage"><img id="assignee" *ngIf="user?.profilePicUrl" [src]="this.uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle" height="25" width="25"></div>
+        <label class="assigneeNameGuest">{{user?.firstName}} {{user?.lastName}}</label>
       </div>
       <div class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'">
         <div class="mInfoTitle">
@@ -90,7 +93,7 @@
         <textarea class="description1" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
         <textarea class="description" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"></textarea>
       <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Dependency</p>
-      <ng-select [disabled]="this.task.projectRole=='4'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" placeholder="Select Project Tasks" class="task_select" bindValue="id" style="border-radius: 8px; z-index: 1; font-size: 16 ; font-weight: 100;  color: #697a8d; display: flex; justify-self: center; align-self: center;" name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
+      <ng-select [disabled]="this.task.projectRole=='4'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" placeholder="Select Project Tasks" class="task_select" bindValue="id" style="border-radius: 8px; z-index: 1; font-size: 16 ; font-weight: 100;  color: #697a8d; " name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
         <ng-template ng-option-tmp let-task="item">
           <div class="user-detail" >
             <div class="nameAvatar">

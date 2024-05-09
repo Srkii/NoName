@@ -74,7 +74,6 @@ export class PopupComponent {
         console.error('Task does not have projectRole property');
       } else {
       }
-      console.log(this.task);
       this.selectedProject = this.task.project;
       this.selectedSection=this.task.projectSection;
       this.getUser();
@@ -91,12 +90,13 @@ export class PopupComponent {
   }
 
   adjustCommentHeight() {
-    const containerHeight = this.containerDiv.nativeElement.offsetHeight;
-    const fixedHeight = this.fixedArea.nativeElement.offsetHeight;
-    console.log(containerHeight);
-    console.log(fixedHeight);
-    const commentHeight = containerHeight - (fixedHeight+60);
-    this.commentDiv.nativeElement.style.height = `${commentHeight}px`;
+    if(this.task?.projectRole!='4')
+    {
+      const containerHeight = this.containerDiv.nativeElement.offsetHeight;
+      const fixedHeight = this.fixedArea.nativeElement.offsetHeight;
+      const commentHeight = containerHeight - (fixedHeight+60);
+      this.commentDiv.nativeElement.style.height = `${commentHeight}px`;
+    }
   }
 
 
@@ -256,7 +256,10 @@ export class PopupComponent {
     const pop=document.querySelector(".col-md-5") as HTMLElement;
     const back = document.querySelector('.back') as HTMLElement;
     const full = document.querySelector('.full') as HTMLElement;
-    const trash = document.querySelector('.trash') as HTMLElement;
+    if(this.task?.projectRole!='4')
+    {
+      const trash = document.querySelector('.trash') as HTMLElement;
+    }
     const exit_full = document.querySelector('.exit_full') as HTMLElement;
     const file = document.querySelector('.file') as HTMLElement;
     const comments = document.querySelector('.comments') as HTMLElement;
@@ -285,7 +288,7 @@ export class PopupComponent {
       exit_full.style.display = 'flex';
       full.style.display = 'none';
       // file.style.marginRight = '3%';
-      comments.style.marginTop = '0%';
+      // comments.style.marginTop = '0%';
       comments.style.width = '100%';
       this.fullscreen = !this.fullscreen;
     } else {
@@ -295,10 +298,9 @@ export class PopupComponent {
       pop.style.padding = '';
       back.style.marginRight = '';
       exit_full.style.marginRight = '';
-      trash.style.marginRight = '';
+      // trash.style.marginRight = '';
       exit_full.style.display = 'none';
       full.style.display = '';
-      file.style.marginRight = '';
       comments.style.marginTop = '';
       comments.style.marginTop = '';
       this.fullscreen = !this.fullscreen;
@@ -485,15 +487,19 @@ export class PopupComponent {
 
   CancelEdit(comment_id:number):void{
     const edit=document.getElementById("edit_content"+comment_id) as HTMLElement;
+    const edit1=document.getElementById("edit_content"+comment_id) as HTMLTextAreaElement;
     const save=document.getElementById("save_edit"+comment_id) as HTMLElement;
     const cancel=document.getElementById("cancel_edit"+comment_id) as HTMLElement;
     const content=document.getElementById("comment_content"+comment_id) as HTMLElement;
-    
+    const original_content=this.comments.find(comment => comment.id === comment_id)?.content;
+
+    if(original_content!=undefined)
+      edit1.value=original_content; 
+
     content.style.display="block";
     edit.style.display="none";
     save.style.display='none';
     cancel.style.display='none';
-    console.log(edit);
   }
 
   goToProject(project: Project): void {
@@ -592,18 +598,18 @@ export class PopupComponent {
   }
 
   DisableCloseTask(task:ProjectTask):boolean{
-        if (Array.isArray(task.dependencies))
-          {    
-            if(task.dependencies.length==0)
-              {
-                return true;
-              }
-            else
+    if (Array.isArray(task.dependencies))
+      {    
+          if(task.dependencies.length==0)
             {
-              return false;
+              return true;
             }
-      }
-      return false;
+          else
+          {
+            return false;
+          }
+        }
+        return false;
   }
 
   downloadFile(fileUrl: any): void {
@@ -650,7 +656,6 @@ export class PopupComponent {
       this.myProjectsService.GetProjectSections(this.task.projectId).subscribe({
         next: (sections: ProjectSection[]) => {
           this.sections = sections;
-          console.log(this.sections);
 
         },
         error: (error: any) => {

@@ -9,10 +9,15 @@
 
 }
 
-#popupTaskName {
-  font-size: 16px;
+.popupTaskName {
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: -5px;
+  color: #697a8d;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  width: 70%;
+  border-bottom: 1px solid #5f61e6;
 }
 
 .header {
@@ -267,7 +272,7 @@ img{
 }
 
 .hide_comment{
-  height: 98%;
+  height: 95%;
   overflow-y: auto;
 }
 .no_comments{
@@ -503,6 +508,7 @@ img{
 }
 .guestAssignee {
   display: flex;
+  align-items: center;
 }
 .guestAssignee img {
   height: 30px;
@@ -511,13 +517,19 @@ img{
 .guestDueDate {
   font-size: 16px;
   display: flex;
+  margin-bottom: 15px;
 }
 .gDDname {
   width: 130px;
+  font-size: 16px;
 }
 .assigneeNameGuest {
   font-size: 16px;
 }
 .guestAssigneeImage {
   display: flex;
+  margin-left: 5px;
+}
+.guestDdate{
+  margin-left: 10px;
 }
