@@ -204,8 +204,8 @@
               <ng-template ng-label-tmp let-item="item" let-clear="clear">
                 <div class="ng-value-container">
                   <div class="ng-value-label">
-                    <img *ngIf="item.profilePicUrl"  class="avatar rounded-circle shadow-4-strong"  height="21" width="21"  [src]="uploadservice.getImage(item.profilePicUrl)"><span *ngIf="item.profilePicUrl">{{item.name}}</span>
-                    <ngx-avatars *ngIf="!item.profilePicUrl" size="21" bgColor="#5d57c2" [name]="item.name" value="75%"></ngx-avatars><span *ngIf="!item.profilePicUrl">{{item.name}}</span>
+                    <span *ngIf="item.profilePicUrl" class="ng-value-label"><img *ngIf="item.profilePicUrl"  class="avatar rounded-circle shadow-4-strong"  height="21" width="21"  [src]="uploadservice.getImage(item.profilePicUrl)">{{item.name}}</span>
+                    <span *ngIf="!item.profilePicUrl" class="ng-value-label d-inline-flex align-items-center"><ngx-avatars *ngIf="!item.profilePicUrl" size="21" bgColor="#5d57c2" [name]="item.name" value="75%"></ngx-avatars>{{item.name}}</span>
                   </div>
                   <div (click)="clear(item)" class="ng-value-icon" aria-hidden="true">×</div>
               </div>
@@ -217,32 +217,37 @@
       <div class="mb-3 members">
         <h5>Project members</h5>
         <input type="text" class="form-control form-control-sm search" placeholder="Search by name..." [(ngModel)]="searchTerm" (input)="filterUsers()">
-      <div class="mb-3 members-info" style="height: 9rem;max-height: 9rem; overflow-y: auto;">
-        <table class="table table-lg t2" id="table">
-          <tbody>
-            <tr *ngIf="filteredUsers.length == 0"><td>No results</td></tr>
-            <tr *ngFor="let user of filteredUsers; let i = index">
-              <td>
-                <span *ngIf="user.profilePicUrl" class="ng-value-label"><img class="avatar rounded-circle shadow-4-strong" height="25" width="25" [src]="uploadservice.getImage(user.profilePicUrl)">{{ user.name }}</span>
-                <span *ngIf="!user.profilePicUrl" class="ng-value-label"><ngx-avatars size="26" bgColor="#5d57c2" [name]="user.name"></ngx-avatars>{{ user.name }}</span>
-              </td>
-              <td style="text-align: right;">
-                <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 4 || userRole == 3 || userId == user.appUserId">
-                  <option value=1 *ngIf="!OwnerAlreadyExists(user.appUserId)">Project Owner</option>
-                  <option value=2>Manager</option>
-                  <option value=3>Participant</option>
-                  <option value=4 selected>Guest</option>
-                </select>
-                <p *ngIf="user.projectRole == 0">Project Manager</p>
-              </td>
-              <td style="text-align: center;">
-                <span class="deleteMember" (click)="deleteAssigne(user.appUserId)" data-toggle="dropdown" *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4">×</span>
-                <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
-              </td> 
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="d-flex tableHeaders">
+          <span>Name</span>
+          <span>Change role</span>
+          <span>Remove member</span>
+        </div>
+        <div class="mb-3 scroll">
+          <table class="table table-lg t2" id="table">
+            <tbody>
+              <tr *ngIf="filteredUsers.length == 0"><td>No results</td></tr>
+              <tr *ngFor="let user of filteredUsers; let i = index">
+                <td>
+                  <span *ngIf="user.profilePicUrl" class="ng-value-label"><img class="avatar rounded-circle shadow-4-strong" height="25" width="25" [src]="uploadservice.getImage(user.profilePicUrl)">{{ user.name }}</span>
+                  <span *ngIf="!user.profilePicUrl" class="ng-value-label d-inline-flex"><ngx-avatars size="25" bgColor="#5d57c2" [name]="user.name"></ngx-avatars>{{ user.name }}</span>
+                </td>
+                <td>
+                  <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 4 || userRole == 3 || userId == user.appUserId">
+                    <option value=1 *ngIf="!OwnerAlreadyExists(user.appUserId)">Project Owner</option>
+                    <option value=2>Manager</option>
+                    <option value=3>Participant</option>
+                    <option value=4 selected>Guest</option>
+                  </select>
+                  <span class="isPM" *ngIf="user.projectRole == 0">Project Manager</span>
+                </td>
+                <td style="text-align: center;">
+                  <span class="deleteMember" (click)="deleteAssigne(user.appUserId)" data-toggle="dropdown" *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4">×</span>
+                  <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
+                </td> 
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
