@@ -202,7 +202,7 @@
         <input type="text" id="form3Example3" class="form-control" name="lastName" [(ngModel)]="newLastName" placeholder="Enter user's Last Name"/>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit">Update</button>
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="modalRef?.hide()">Update</button>
       </div>
 
   </form>
@@ -224,7 +224,7 @@
           This user will no longer be visible.</label>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="ArchiveUser(curentUserId)">Archive user</button>
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="ArchiveUser(curentUserId)" (click)="modalRef?.hide()">Archive user</button>
       </div>
     </form>
   </div>

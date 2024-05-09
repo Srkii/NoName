@@ -96,15 +96,20 @@ export class AdminComponent implements OnInit{
   archMembers: { [key: string]: Member[] } = {};
 
   Invite(): void{
-    this.spinner.show();
-    if(this.invitation)
+   
+    if(this.invitation.receiver!='')
     {
+      this.spinner.show();
       this.adminService.sendInvatation(this.invitation).subscribe(
         (response)=>{
           this.toastr.success(response.message);
           this.spinner.hide();
         }
       )
+    }
+    else{
+      this.toastr.error("Email is not valid");
+      
     }
 
     }
