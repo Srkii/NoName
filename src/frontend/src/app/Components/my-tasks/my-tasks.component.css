@@ -116,7 +116,8 @@ p {
   justify-content: space-between; 
 }
 .page-size-container {
-  margin-left: 10px; 
+  margin-left: 10px;
+  display: flex;
 }
 
 .page_size {
@@ -124,8 +125,13 @@ p {
   font-size: 16px;
   border: 0.5px solid lightgray;
   border-radius: 8px;
-  padding: 6px;
-  width: 100%; 
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  width: 100%;
+  margin-left: 3px;
+  margin-right: 3px;
 }
 .page_size:hover{
   outline: none;
@@ -137,4 +143,7 @@ p {
 .projectname:hover{
   cursor: pointer;
   color: #484ac5 !important;
+}
+.align-middle {
+  vertical-align: middle;
 }

@@ -1,21 +1,16 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges, inject, TemplateRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges, TemplateRef } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { CommentsService } from '../../_services/comments.service'; 
 import { Comment } from '../../Entities/Comments'; 
-import { DatePipe, formatDate } from '@angular/common';
-import { AppUser } from '../../Entities/AppUser';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { Project } from '../../Entities/Project';
-import { coerceStringArray } from '@angular/cdk/coercion';
 import { UploadService } from '../../_services/upload.service';
 import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TaskDependency } from '../../Entities/TaskDependency';
-import { ThisReceiver, TmplAstIdleDeferredTrigger } from '@angular/compiler';
-import { addSeconds } from 'date-fns';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedService } from '../../_services/shared.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
@@ -93,16 +88,16 @@ export class PopupComponent {
 
   ngAfterViewInit() {
     this.adjustCommentHeight();
-}
+  }
 
   adjustCommentHeight() {
     const containerHeight = this.containerDiv.nativeElement.offsetHeight;
     const fixedHeight = this.fixedArea.nativeElement.offsetHeight;
     console.log(containerHeight);
     console.log(fixedHeight);
-    const commentHeight = containerHeight - (fixedHeight+55);
+    const commentHeight = containerHeight - (fixedHeight+60);
     this.commentDiv.nativeElement.style.height = `${commentHeight}px`;
-}
+  }
 
 
   fetchComments(): void {
@@ -287,7 +282,7 @@ export class PopupComponent {
       // back.style.marginRight = '1%';
       // exit_full.style.marginRight = '30px';
       // trash.style.marginRight = '30px';
-      exit_full.style.display = 'block';
+      exit_full.style.display = 'flex';
       full.style.display = 'none';
       // file.style.marginRight = '3%';
       comments.style.marginTop = '0%';
