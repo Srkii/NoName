@@ -331,29 +331,27 @@ img{
   margin-bottom: 10px;
   font-size: 18px;
   font-weight: bold;
-  border: none;
-  outline: none;
   color: #697a8d;
-  
   padding-left: 10px;
   padding-right: 10px;
   width: 70%;
+  border: 1px solid transparent;
   border-bottom: 1px solid #5f61e6;
 }
-.taskName:hover {
+/* sklanja crni outline na inputima; nesto do chrome-a */
+*,*:focus,*:hover{
+  outline:none;
+}
+.taskName:hover, .taskName:focus, .taskName:active {
   border-radius: 8px;
-  border-bottom: none;
+  border: 1px solid #5f61e6 !important;
+  border-color: #5f61e6 !important;
 }
 
-.taskName:hover,
-.taskName:focus,
 .taskDueDate input:hover,
-.taskDueDate input:focus,
-#taskOriginProject:hover,
-#taskOriginProject:focus
+.taskDueDate input:focus
 {
   outline: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
   border-radius: 8px;
 }
 .taskDueDate{
