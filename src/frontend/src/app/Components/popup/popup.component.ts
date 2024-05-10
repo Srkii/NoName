@@ -597,10 +597,10 @@ export class PopupComponent {
       this.sharedService.emitTaskUpdated();
   }
 
-  DisableCloseTask(task:ProjectTask):boolean{
-    if (Array.isArray(task.dependencies))
+  DisableCloseTask():boolean{
+    if (Array.isArray(this.selectedTasks))
       {    
-          if(task.dependencies.length==0)
+          if(this.selectedTasks.length==0)
             {
               return true;
             }

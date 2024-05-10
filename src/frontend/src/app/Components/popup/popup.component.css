@@ -365,12 +365,13 @@ img{
 }
 .taskDueDate input{
   margin-top: -6px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-size: 16px;
   border: none;
   outline: none;
   color: #697a8d;
   border-radius: 8px;
+  padding: 3px;
   padding-left: 10px;
 }
 #taskOriginProject{
