@@ -109,6 +109,7 @@ p {
 }
 
 
+
 #button-addon2{
   background-color: #5d57c2;
   border-color: #5d57c2;
@@ -151,9 +152,10 @@ p {
   width: 35px;
   height: 35px;
 }
-.paginate_button page-item active{
-  background-color: #5f61e6;
-  color: #5f61e6;
+.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
+  background-color: #5d57c2 !important;
+  color: #ccc;
+
 }
 .card{
   position: static;
@@ -200,8 +202,7 @@ select:focus {
 }
 
 select:hover {
-  border: 1px solid #d0d1f9 !important;
-
+  border: 1px solid #5f61e6 !important;
 }
 select:active{
   border: 1px solid #5f61e6 !important;
@@ -303,8 +304,7 @@ select:focus-visible{
 }
 .page_size:hover{
   outline: none;
-  border: 1px solid #d0d1f9 !important;
-  box-shadow: 0 0 3px #d0d1f9;
+  border: 1px solid #5f61e6 !important;
 }
 .clickable-div{
   border: 1px solid #ffffff !important;
@@ -340,6 +340,11 @@ select:focus-visible{
   background-color: #5d57c2;
   color: #ffffff;
 }
+.paginate_button1 .btn .page:active{
+  background-color: #5d57c2 !important;
+  color: #ffffff;
+}
+
 .modal-header{
   font-family: Roboto, "Helvetica Neue", sans-serif;;
 }
@@ -352,12 +357,14 @@ select:focus-visible{
 .archUsers{
   /* margin: 10px !important; */
   cursor: default;
-  width: 185px;
+  width: 225px;
+  height: 30px;
   border-radius: 0.3rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  justify-content: center;
 }
 .archUsers:hover {
-  border-bottom: 2px solid #696cff;
+  border-bottom:2px solid #5d57c2;
 }
 .table-responsive text-nowrap{
   width: 100%;
@@ -403,8 +410,13 @@ select:focus-visible{
   .inputEmail btn btn-primary{
     display: inline-block;
   }
-  
+  .archUsers {
+    width: 225px;;
+  }
 
+  .col-sm-12.col-md-6 .dataTables_paginate {
+    width: 70%;
+  }
 }
 
 /*Galaxy fold*/
@@ -423,6 +435,12 @@ select:focus-visible{
     font-size: 12px;
     display: inline-block;
    
+  }
+  .archUsers{
+    width: 30px;
+  }
+  .col-sm-12.col-md-6 .dataTables_paginate {
+    width: 70%;
   }
 }
 
@@ -447,6 +465,12 @@ select:focus-visible{
   }
   .card .pics{
     display: none;
+  }
+  .archUsers {
+    width: 225px;
+  }
+  .col-sm-12.col-md-6 .dataTables_paginate {
+    width: 70%;
   }
 }
 .noFilt{
