@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Priority, Project, ProjectStatus } from '../../Entities/Project';
@@ -10,7 +10,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UpdateProject } from '../../Entities/UpdateProject';
 import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
-import { Member } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
