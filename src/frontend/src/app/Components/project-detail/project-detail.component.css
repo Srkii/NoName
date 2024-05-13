@@ -437,9 +437,12 @@ textarea:focus{
     border-right: 1px solid inherit;
 }
 .t2 td{
-    width: 10rem;
+    width: 9rem;
     vertical-align: bottom;
     color: #676f79;
+}
+.t2 tr td:first-child{
+    width: 11rem !important;
 }
 .t2 .isPM{
     font-size: smaller;
@@ -457,6 +460,9 @@ textarea:focus{
 .tableHeaders span:last-child{
     text-align: center;
     margin-right: 0;
+}
+.tableHeaders span:first-child{
+    width: 11.5rem !important;
 }
 .tableHeaders span{
     width: 9.6rem;
