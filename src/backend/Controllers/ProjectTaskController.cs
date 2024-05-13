@@ -699,6 +699,14 @@ namespace backend.Controllers
             return Ok("Project progress updated");
         } 
     
+    [HttpGet("getTaskByName/{taskName}")]
+    public async Task<ActionResult<int>> GetTaskByName(string taskName)
+    {
+        var task = await _context.ProjectTasks.FirstOrDefaultAsync(task => task.TaskName.ToLower() == taskName.ToLower());
+        return Ok(task);
     }
+
+    }
+
     
 }

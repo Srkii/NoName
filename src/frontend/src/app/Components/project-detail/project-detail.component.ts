@@ -74,6 +74,9 @@ export class ProjectDetailComponent implements OnInit {
   filterValue: string | undefined = '';
   @Output() taskAdded = new EventEmitter<boolean>();
 
+  buttonClicked: boolean = false;
+  taskNameExists: boolean = false;
+
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
 
@@ -365,7 +368,47 @@ export class ProjectDetailComponent implements OnInit {
     changeNameInp.disabled = true;
   }
 
-  saveTask() {
+  async saveTask() {
+    this.taskNameExists = false;
+    this.buttonClicked = true;
+    
+    if(!this.newTaskName)
+      {
+        console.log("No task name");
+        return;
+    }
+
+    if(await this.TaskNameExists())
+      {
+        this.taskNameExists = true;
+        console.log("Task name already exists")
+        return;
+      }
+  
+      if(this.newTaskStartDate == undefined || this.newTaskEndDate == undefined)
+      {
+        console.log("You must enter a dates for the task")
+        return;
+      }
+  
+      if(this.isInvalidDate())
+      {
+        console.log("Unvalid dates");
+        return;
+      }
+  
+      if(this.newTaskName == undefined)
+      {
+        console.log("You must specify task name")
+        return
+      }
+      if(this.selectedUser==undefined)
+      {
+        console.log("No user selected");
+        return;
+      }
+    
+    this.buttonClicked = false;
     const task: NewTask = {
       CreatorId: Number(localStorage.getItem('id')),//treba mi da ne bih kreatoru slao da je dodelio sam sebi task ~maksim
       TaskName: this.newTaskName,
@@ -451,4 +494,30 @@ export class ProjectDetailComponent implements OnInit {
       return true
     return false
   }
+
+  async TaskNameExists()
+  {
+    try
+    {
+      var task = await this.myTasksService.TaskNameExists(this.newTaskName).toPromise();
+      return task? true : false;
+    }
+    catch(error)
+    {
+      console.error("Error occurred while checking task name", error);
+      return;
+    }
+  }
+  isInvalidDate(): boolean {
+    if(this.newTaskStartDate && this.newTaskEndDate){
+      let startDate = new Date(this.newTaskStartDate);
+      let currentDate = new Date();
+      startDate.setHours(0,0,0,0);
+      currentDate.setHours(0,0,0,0);
+      return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
+    }
+    return false;
+  }
+  
+
 }

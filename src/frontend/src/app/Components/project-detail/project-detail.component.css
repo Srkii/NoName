@@ -657,3 +657,34 @@ textarea:focus{
     padding-bottom: 0 !important;
     vertical-align: middle !important; /* Aligns the image baseline to the middle */
 }
+
+.is-invalid{
+    border-color: red !important;
+}
+
+.invalid {
+    height: 0;
+    overflow: visible;
+    margin-bottom: 0;
+    transition: height 0.3s ease;
+}
+
+.invalid,.invalid-missing-date,.invalid-dates{
+    color: red !important;
+    font-size: 0.7rem;
+}
+
+input[type="date"].is-invalid{
+    padding-right: 30px;
+    border-color: red !important;
+}
+.ng-select-wrapper.is-invalid{
+    outline:0.5px solid  red !important;
+    border-radius: 4px;
+}
+
+  
+.mb-1{
+    padding-bottom: 12px;
+}
+
