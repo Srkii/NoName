@@ -14,10 +14,18 @@
 }
 
 .project-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color:#fff;
     border-bottom: 0px;
     color:#697a8d;
     font-size: 1.4rem;
+}
+
+.back:hover{
+    cursor: pointer;
+    color: #5f61e6;
 }
 
 input[type="date"]{
@@ -163,11 +171,6 @@ input[type="date"].is-invalid {
     border-color: red !important;
 }
 
-#PriorityChoice{
-    display: flex;
-    align-items: center;
-}
-
 .form-check-input:hover,.form-check-input:checked:hover,.form-check-input:checked{
     border: none !important;
 }
@@ -190,9 +193,9 @@ input[type="date"].is-invalid {
     box-shadow: 0 2px 4px 0 rgba(255,62,29,.4);
 }
 
-#addProjectBtn{
+.addProjectBtn{
    display: flex;
-   justify-content: space-between;
+   justify-content: right;
    align-items: center;
    margin-top: 16px;
    margin-bottom: 0;
