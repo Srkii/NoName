@@ -44,9 +44,7 @@ export class ProjectCardComponent {
     this.creatorId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
     this.myProjectCardService.GetAvailableUsers(this.creatorId).subscribe(users => {
       this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
-      //this.loadPicture(this.users);
     });
-
   }
 
   async CreateProject(): Promise<void>{
@@ -135,21 +133,13 @@ export class ProjectCardComponent {
   }
 
   isInvalidDate(): boolean {
-    if(this.newProject.StartDate && this.newProject.EndDate)
-      return this.buttonClicked && !(this.newProject.StartDate < this.newProject.EndDate);
+    if(this.newProject.StartDate && this.newProject.EndDate){
+      let startDate = new Date(this.newProject.StartDate);
+      let currentDate = new Date();
+      startDate.setHours(0,0,0,0);
+      currentDate.setHours(0,0,0,0);
+      return !(this.newProject.StartDate < this.newProject.EndDate && (startDate>=currentDate));
+    }
     return false;
   }
-
-  // loadPicture(usersArray: SelectedUser[]) : void{
-  //   usersArray.forEach(user => {
-  //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){ //ovde je bilo !=null, a treba ovako
-  //     this.uploadservice.getImage(user.profilePicUrl).subscribe(
-  //       url => {
-  //         user.profilePic = url;
-  //       }
-  //       )
-  //     }
-  //   });
-  // }
-
 }
