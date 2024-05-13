@@ -77,7 +77,6 @@ export class ProjectCardComponent {
     }
 
     this.newProject.AppUserId = this.creatorId;
-    this.newProject.Priority = +this.newProject.Priority;
 
     this.myProjectCardService.CreateProject(this.newProject).subscribe({
       next: response => {

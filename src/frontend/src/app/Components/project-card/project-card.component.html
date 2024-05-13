@@ -7,6 +7,9 @@
         <div class="card">
           <div class="card-header project-header">
             Create New Project
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="back" viewBox="0 0 16 16" (click)="ToggleProjectCard()">
+              <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"/>
+            </svg>
           </div>
           <div class="card-body">
             <form #createProjectForm="ngForm" class="mg-3" (ngSubmit)="CreateProject()" autocomplete="off" id="ProjectCreate">
@@ -62,26 +65,8 @@
                   </ng-template>
                 </ng-select>
               </div>
-              <div class="col-md">
-                <label for="priorityDiv" class="form-label">Priority</label>
-                <div id="PriorityChoice">
-                  <div class="form-check">
-                    <input class="form-check-input low" type="radio" value=0 name="Priority" checked>
-                    <label class="form-check-label">Low</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input medium" type="radio" value=1 name="Priority" [(ngModel)]="newProject.Priority">
-                    <label class="form-check-label">Medium</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input high" type="radio" value=2 name="Priority" [(ngModel)]="newProject.Priority">
-                    <label class="form-check-label">High</label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-3" id="addProjectBtn">
-                <i (click)="ToggleProjectCard()" class="fas fa-chevron-right fa-2x"></i>
-                <input class="btn btn-primary" tabindex="0" aria-controls="DataTables_Table_0" type="submit" value="Add Project">
+              <div class="mb-3" class="addProjectBtn">
+                <input class="btn btn-primary" tabindex="0" aria-controls="DataTables_Table_0" type="submit" value="Add Project" style="z-index: 0 !important;">
               </div>
           </form>
           </div>
