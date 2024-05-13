@@ -20,7 +20,8 @@ namespace backend.Controllers
         [HttpPost("sendInvitation")]
         public async Task<IActionResult> SendInvitationEmail(EmailDto emailDto)
         {
-            var invitation = new Invitation{
+            var invitation = new Invitation
+            {
                 Email = emailDto.Receiver,
                 Token = Guid.NewGuid().ToString(),
                 ExpirationDate = DateTime.UtcNow.AddDays(7),
@@ -29,19 +30,15 @@ namespace backend.Controllers
 
             _context.Invitations.Add(invitation);
             await _context.SaveChangesAsync();
-            
-            string link = "http://softeng.pmf.kg.ac.rs:10101/register?token="+invitation.Token;
-            string subject = "Invitation to Register on Our Application";
-            string message = "Dear User, \n\n" +
-                    "We hope this message finds you well. You have been invited to join our community at 'Naziv aplikacije' ! \n" +
-                    "To complete your registration, please follow the link below: \n\n" + link + "\n\n" +
-                    "Best regards, \n" + 
-                    "Access Denied, \n" +
-                    "Naziv Aplikacije";
-            
-            await _emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
 
-            var responseData = new 
+            string filePath = "EmailTemplates/InvitationTemplate.html";
+            string htmlContent = System.IO.File.ReadAllText(filePath);
+            htmlContent = htmlContent.Replace("_blank", "http://softeng.pmf.kg.ac.rs:10101/register?token=" + invitation.Token);
+
+            string subject = "AccDen Register Invitation";
+            await _emailSender.SendEmailAsync(emailDto.Receiver, subject, htmlContent);
+
+            var responseData = new
             {
                 InvitationId = invitation.Id,
                 EmailSent = true,
@@ -59,8 +56,8 @@ namespace backend.Controllers
                 return BadRequest("Email address is required.");
             }
             
-            var userExists = _context.Users.Any(u => u.Email == emailDto.Receiver);
-            if (!userExists)
+            var user = _context.Users.FirstOrDefault(u => u.Email == emailDto.Receiver);
+            if (user == null)
             {
                 return Unauthorized("Account with this e-mail doesn't exist.");
             }
@@ -75,16 +72,13 @@ namespace backend.Controllers
             _context.UserRequests.Add(request);
             await _context.SaveChangesAsync();
             
-            string link = "http://softeng.pmf.kg.ac.rs:10101/forgotreset?token="+request.Token;
-            string subject = "Forgot password";
-            string message = "Dear User, \n\n" +
-                    "We received a request to reset the password for your account.\n" +
-                    "To reset your password, click on the link below: \n\n" + link + "\n\n" +
-                    "Best regards, \n" + 
-                    "Access Denied, \n" +
-                    "Naziv Aplikacije";
+            string filePath = "EmailTemplates/ResetPassTemplate.html";
+            string htmlContent = System.IO.File.ReadAllText(filePath);
+            htmlContent = htmlContent.Replace("_blank", "http://softeng.pmf.kg.ac.rs:10101/forgotreset?token=" + request.Token);
+            htmlContent = htmlContent.Replace("{user}", $"{user.FirstName} {user.LastName}");
             
-            await _emailSender.SendEmailAsync(emailDto.Receiver,subject,message);
+            string subject = "Password Reset";
+            await _emailSender.SendEmailAsync(emailDto.Receiver, subject, htmlContent);
 
             var responseData = new 
             {
