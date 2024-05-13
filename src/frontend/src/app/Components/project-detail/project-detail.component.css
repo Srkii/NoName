@@ -469,8 +469,8 @@ textarea:focus{
 }
 .scroll{
     overflow-y: auto;
-    height: 7rem;
-    max-height: 7rem;
+    height: 8.7rem;
+    max-height: 8.7rem;
 }
 
 .nameAvatar {
