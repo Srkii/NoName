@@ -44,7 +44,7 @@ export class GanttComponent implements OnInit{
         {
         this.loading = false;
         this.data_loaded = true
-      },100);
+      }, 100);
     });
     this.spinner.show();
     this.loading = true;
@@ -56,12 +56,12 @@ export class GanttComponent implements OnInit{
     {
       this.loading = false;
       this.data_loaded = true
-    },100);
+    }, 100);
     
     // emit kad se doda novi task
     this.shared.taskAdded$.subscribe(success => {
       if (success) {
-        console.log("DOdat task na ganttu");
+        console.log("Dodat task na ganttu");
         this.loading = true;
         this.data_loaded = false;
         this.items=[];
@@ -72,8 +72,23 @@ export class GanttComponent implements OnInit{
         {
           this.loading = false;
           this.data_loaded = true
-        },100);
+        }, 100);
       }
+    });
+
+    // emit za novu sekciju
+    this.shared.sectionUpdated.subscribe(() => {
+      this.loading = true;
+        this.data_loaded = false;
+        this.items=[];
+        this.groups=[];
+        this.loading = true;
+        this.getGanttData();
+        setTimeout(()=>
+        {
+          this.loading = false;
+          this.data_loaded = true
+        }, 100);
     });
   }
   constructor(

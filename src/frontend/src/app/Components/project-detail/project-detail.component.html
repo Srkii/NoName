@@ -14,8 +14,7 @@
           <span>{{ project.projectName }}</span>
         </div>
         <div class="projInfo">
-          <input *ngIf="userRole == 4 || userRole == 3" type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Info">
-          <input *ngIf="userRole == 1 || userRole == 2 || userRole == 0" type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Project Details">
+          <input type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Project Details">
         </div>
       </div>
       <div class="button-selectors">
@@ -32,15 +31,15 @@
           </svg>Gantt</button>
         </div>
         <div class="actionLinks">
-          <div class="new-item addTask" (click)="openNewTaskModal(newTask)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="new-item addTask" (click)="openNewTaskModal(newTask)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
             </svg>Add Task
           </div>
-          <div class="archTasks" (click)="openNewTaskModal(archivedTasksModal)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+          <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="archTasks" (click)="openNewTaskModal(archivedTasksModal)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
             </svg>View Archieved Tasks
           </div>
-          <div class="mngSection"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+          <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="mngSection" (click)="openSectionModal(manageSections)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
             </svg>Manage Sections
           </div>
@@ -173,19 +172,14 @@
 <ng-template #memberManagment>
   <div class="modal-container">
     <div class="modal-header">
-      <h4>Member Management</h4>
-      <button type="button" class="close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+      <h4>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Member Management' : 'Member list' }}</h4>
+      <button type="button" class="btn-close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-      <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers">
-          <div class="d-flex justify-content-between">
-            <h5>Add project members</h5>
-            <button type="button" (click)="addProjectMembers()" class="btn btn-sm btn-secondary add">Add members</button>
-          </div>          
+      <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers"> 
+          <h5>Add project members</h5>
           <div class="addInfo">
-            <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" id="assignee" name="Assignees" (click)="$event.stopPropagation()">
+            <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" name="Assignees" (click)="$event.stopPropagation()" style="height: 2rem;">
               <ng-template ng-option-tmp let-user="item">
                 <div class="user-detail">
                   <div *ngIf="user.profilePicUrl" class="nameAvatar">
@@ -209,44 +203,50 @@
               <ng-template ng-label-tmp let-item="item" let-clear="clear">
                 <div class="ng-value-container">
                   <div class="ng-value-label">
-                    <img *ngIf="item.profilePicUrl"  class="avatar rounded-circle shadow-4-strong"  height="21" width="21"  [src]="uploadservice.getImage(item.profilePicUrl)"><span *ngIf="item.profilePicUrl">{{item.name}}</span>
-                    <ngx-avatars *ngIf="!item.profilePicUrl" size="21" bgColor="#5d57c2" [name]="item.name" value="75%"></ngx-avatars><span *ngIf="!item.profilePicUrl">{{item.name}}</span>
+                    <span *ngIf="item.profilePicUrl" class="ng-value-label"><img *ngIf="item.profilePicUrl"  class="avatar rounded-circle shadow-4-strong"  height="21" width="21"  [src]="uploadservice.getImage(item.profilePicUrl)">{{item.name}}</span>
+                    <span *ngIf="!item.profilePicUrl" class="ng-value-label d-inline-flex align-items-center"><ngx-avatars *ngIf="!item.profilePicUrl" size="21" bgColor="#5d57c2" [name]="item.name" value="75%"></ngx-avatars>{{item.name}}</span>
                   </div>
                   <div (click)="clear(item)" class="ng-value-icon" aria-hidden="true">×</div>
               </div>
               </ng-template>
             </ng-select>
+            <button class="btn btn-primary btn-xs add" style="width: 100%" type="button" (click)="addProjectMembers()" [disabled]="this.selectedUsers.length == 0">Add members</button> 
         </div>
       </div>
       <div class="mb-3 members">
         <h5>Project members</h5>
         <input type="text" class="form-control form-control-sm search" placeholder="Search by name..." [(ngModel)]="searchTerm" (input)="filterUsers()">
-      <div class="mb-3 members-info" style="height: 9rem;max-height: 9rem; overflow-y: auto;">
-        <table class="table table-lg t2" id="table">
-          <tbody>
-            <tr *ngIf="filteredUsers.length == 0"><td>No results</td></tr>
-            <tr *ngFor="let user of filteredUsers; let i = index">
-              <td>
-                <span *ngIf="user.profilePicUrl" class="ng-value-label"><img class="avatar rounded-circle shadow-4-strong" height="25" width="25" [src]="uploadservice.getImage(user.profilePicUrl)">{{ user.name }}</span>
-                <span *ngIf="!user.profilePicUrl" class="ng-value-label"><ngx-avatars size="26" bgColor="#5d57c2" [name]="user.name"></ngx-avatars>{{ user.name }}</span>
-              </td>
-              <td style="text-align: right;">
-                <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 4 || userRole == 3 || userId == user.appUserId">
-                  <option value=1 *ngIf="!OwnerAlreadyExists(user.appUserId)">Project Owner</option>
-                  <option value=2>Manager</option>
-                  <option value=3>Participant</option>
-                  <option value=4 selected>Guest</option>
-                </select>
-                <p *ngIf="user.projectRole == 0">Project Manager</p>
-              </td>
-              <td style="text-align: center;">
-                <span class="deleteMember" (click)="deleteAssigne(user.appUserId)" data-toggle="dropdown" *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4">×</span>
-                <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
-              </td> 
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="d-flex tableHeaders">
+          <span>Name</span>
+          <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Change role' : ((userRole === 3 || userRole === 4) ? 'Project role' : '') }}</span>
+          <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Remove member' : ''}}</span>
+        </div>
+        <div class="mb-3 scroll">
+          <table class="table table-lg t2" id="table">
+            <tbody>
+              <tr *ngIf="filteredUsers.length == 0"><td>No results</td></tr>
+              <tr *ngFor="let user of filteredUsers; let i = index">
+                <td>
+                  <span *ngIf="user.profilePicUrl" class="ng-value-label"><img class="avatar rounded-circle shadow-4-strong" height="25" width="25" [src]="uploadservice.getImage(user.profilePicUrl)">{{ user.name }}</span>
+                  <span *ngIf="!user.profilePicUrl" class="ng-value-label d-inline-flex"><ngx-avatars size="25" bgColor="#5d57c2" [name]="user.name"></ngx-avatars>{{ user.name }}</span>
+                </td>
+                <td>
+                  <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 4 || userRole == 3 || userId == user.appUserId">
+                    <option value=1 *ngIf="!OwnerAlreadyExists(user.appUserId)">Project Owner</option>
+                    <option value=2>Manager</option>
+                    <option value=3>Participant</option>
+                    <option value=4 selected>Guest</option>
+                  </select>
+                  <span class="isPM" *ngIf="user.projectRole == 0">Project Manager</span>
+                </td>
+                <td style="text-align: center;">
+                  <span class="deleteMember" (click)="deleteAssigne(user.appUserId)" data-toggle="dropdown" *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4">×</span>
+                  <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
+                </td> 
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -356,4 +356,36 @@
   <ng-template #noArchivedTasks>
     <div class="text-center noArch">There are currently no archived tasks on this project.</div>
   </ng-template>
+</ng-template>
+
+<ng-template #manageSections>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h4>Manage Sections</h4>
+      <button type="button" class="btn-close" (click)="modalRef?.hide()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <div class="createSection">
+        <form (ngSubmit)="createNewSection()">
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Enter new section name" [(ngModel)]="newSectionName" name="sectionName" autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary d-grid w-50 mx-auto">Create Section</button>
+        </form>
+      </div>
+      <div class="tProjectSection">
+        <div *ngIf="projectSections && projectSections.length > 0; else noSections">
+          <div *ngFor="let section of projectSections" class="section-row">
+            <div class="tSection-name">{{ section.sectionName }}</div>
+            <div class="tSection-delete">
+              <button type="button" class="btn btn-danger btn-sm" (click)="deleteSection(+section.id)">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #noSections>
+        <p>No sections found.</p>
+      </ng-template>
+    </div>
+  </div>
 </ng-template>

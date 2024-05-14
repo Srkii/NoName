@@ -1,5 +1,5 @@
 * {
-  font-family: "Public Sans", sans-serif;
+  font-family: "Public Sans", sans-serif !important;
 }
 @media (max-width: 1200px) {
   .pop {
@@ -9,47 +9,55 @@
 
 }
 
-#popupTaskName {
-  font-size: 16px;
+.popupTaskName {
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: -5px;
+  color: #697a8d;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  width: 70%;
+  border-bottom: 1px solid #5f61e6;
 }
 
 .header {
   text-align: left;
   margin-right: 20px;
   margin-bottom: 3%;
-  font-size: 14px;
+  font-size: 16px;
+  width: 150px;
 }
 
 #popupDueDate {
   margin-left: 60px;
   font-size: 14px;
 }
-#popupOriginProject {
-  margin-left: 20px;
-  font-size: 14px;
-  padding: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 8px;
-  background-color: #d9dee3;
-  border: none;
-  width: 200px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.mOrigin {
+  margin-bottom: 5px;
+  font-size: 16px !important;
 }
+/* #popupOriginProject {
+  font-weight: normal !important;
+  margin-left: 15px !important;
+  background-color: #8072cf !important;
+  color: #5322db !important;
+  text-align: center;
+  padding: 2px !important;
+  border-radius: 8px;
+} */
 #popupOriginProject:hover{
   cursor: pointer;
-  filter: brightness(90%);
 }
-
+.badge {
+  font-size: 16px !important;
+  background-color: #5f61e6 !important;
+  font-weight: normal !important;
+}
 #assignee {
   display: inline-block;
   vertical-align: middle;
-  margin-left: 15px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 #username {
@@ -65,7 +73,7 @@ img{
 .description,
 .description1{
   color: #697a8d;
-  font-size: 12px;
+  font-size: 16px;
   outline: none;
   border: 0.5px solid lightgray;
   border-radius: 8px;
@@ -87,6 +95,7 @@ img{
   background-color: #e7e7ff !important;
   color: #5f61e6 !important;
 }
+
 .comment:hover,
 .description:hover{
   outline: none;
@@ -123,16 +132,18 @@ img{
   cursor: pointer;
   color: #5f61e6;
 }
-.full,
-.exit_full,
-.trash{
-  float: right;
-  margin-right: 5%;
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.back {
-  float: right;
-  margin-right: 2%;
+.cardHeadSvg {
+  display: flex;
 }
+.full, .exit_full, .trash, .back {
+  margin-right: 15px;
+}
+
 #container1{
   position: relative;
   height: 80%;
@@ -141,24 +152,26 @@ img{
 .col-md-5 {
   background-color: #ffffff;
   padding: 15px;
-  height: 83%;
+  padding-top: 12px;
+  padding-bottom: 10px;
+  height: 85%;
   position: absolute;
-  right: 0.2%;
+  right: 4px;
   transition: right 0.5s;
   color: #697a8d;
   border-color: solid #d9dee3;
   border-width: 0;
   border-radius: 8px;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  font-weight: 600;
-  font-size: 12px;
-  overflow-y: auto;
+  /* font-weight: 600; */
+  font-size: 14px;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 
 .comment {
   color: #697a8d;
-  font-size: 12px;
+  font-size: 16px;
   outline: none;
   border: 0.5px solid lightgray;
   border-radius: 8px;
@@ -170,7 +183,7 @@ img{
 }
 .edit_content{
   color: #697a8d;
-  font-size: 12px;
+  font-size: 14px;
   outline: none;
   border: 0.5px solid lightgray;
   border-radius: 8px;
@@ -193,7 +206,7 @@ img{
   margin-top: -5px;
   border: 0.5px solid lightgray;
   border-radius: 8px;
-  padding: 10px;
+  padding: 5px;
 }
 .add_comment,
 .save_edit,
@@ -243,27 +256,46 @@ img{
   position: absolute;
   padding-right: 15px;
   padding-left: 15px;
+  width: 100%;
+  height: 140px;
   bottom: 0;
   right: 0;
-  width: 100%;
   background-color: #ffffff;
 }
 .scroll{
-  height: 85%;
+  width: 100%;
+}
+.show_comment {
+  /* height: calc(var(--col-md-5-height) - var(--scroll-height)); */
+  /* height: 78%; */
+  overflow-y: auto;
+}
+
+.hide_comment{
+  height: 95%;
   overflow-y: auto;
 }
 .no_comments{
   padding-left: 20px;
 }
 
+.singleComment {
+  border-bottom: 1px solid lightgray;
+}
+.singleComment:last-child {
+  border-bottom: none;
+}
+/* .content:last-child{
+  border-bottom: none;
+} */
 .content p{
   color: #697a8d;
-  font-size: 12px;
-  margin-top: -5px;
-  margin-bottom: 10px;
+  font-size: 14px;
+  margin-top: 5px;
+  /* margin-bottom: 10px; */
   outline: none;
-  padding: 10px;
-  padding-left: 30px;
+  /* padding: 10px; */
+  padding-left: 20px;
   border-radius: 8px;
   word-wrap: break-word;
 }
@@ -304,38 +336,42 @@ img{
   margin-bottom: 10px;
   font-size: 18px;
   font-weight: bold;
-  border: none;
-  outline: none;
   color: #697a8d;
-  border-radius: 8px;
   padding-left: 10px;
   padding-right: 10px;
   width: 70%;
-
+  border: 1px solid transparent;
+  border-bottom: 1px solid #5f61e6;
 }
-.taskName:hover,
-.taskName:focus,
+/* sklanja crni outline na inputima; nesto do chrome-a */
+*,*:focus,*:hover{
+  outline:none;
+}
+.taskName:hover, .taskName:focus, .taskName:active {
+  border-radius: 8px;
+  border: 1px solid #5f61e6 !important;
+  border-color: #5f61e6 !important;
+}
+
 .taskDueDate input:hover,
-.taskDueDate input:focus,
-#taskOriginProject:hover,
-#taskOriginProject:focus
+.taskDueDate input:focus
 {
   outline: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  border-radius: 8px;
 }
 .taskDueDate{
   display: flex;
-  height: 35px;
+  margin-top: 10px;
 }
 .taskDueDate input{
   margin-top: -6px;
   margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 16px;
   border: none;
   outline: none;
   color: #697a8d;
   border-radius: 8px;
+  padding: 3px;
   padding-left: 10px;
 }
 #taskOriginProject{
@@ -383,9 +419,6 @@ img{
 .nameAvatar img {
   height: 25px !important;
   width: 25px !important;
-}
-.break{
-  margin-top: 43px;
 }
 
 .fixed-comment-area textarea[disabled] {
@@ -454,4 +487,50 @@ img{
 
 .scroll::-webkit-scrollbar-button {
   display:none;
+}
+
+.m_edit{
+  margin-bottom: 40px;
+}
+
+.mInfoTitle {
+  width: 130px;
+  font-size: 16px;
+}
+.mOrigin {
+  display: flex;
+  margin-bottom: 15px;
+}
+.mOrigin span {
+  margin-left: 10px !important;
+}
+.asigneeDropdown {
+  margin-left: 10px !important;
+}
+.guestAssignee {
+  display: flex;
+  align-items: center;
+}
+.guestAssignee img {
+  height: 30px;
+  width: 30px;
+}
+.guestDueDate {
+  font-size: 16px;
+  display: flex;
+  margin-bottom: 15px;
+}
+.gDDname {
+  width: 130px;
+  font-size: 16px;
+}
+.assigneeNameGuest {
+  font-size: 16px;
+}
+.guestAssigneeImage {
+  display: flex;
+  margin-left: 5px;
+}
+.guestDdate{
+  margin-left: 10px;
 }

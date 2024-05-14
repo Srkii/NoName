@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Mail;
-using backend.Entities;
 using backend.Interfaces;
 
 namespace backend.Services
@@ -18,9 +17,12 @@ namespace backend.Services
                 EnableSsl = true,
             };
 
-            return client.SendMailAsync(
-                new MailMessage(from: mail,to: email, subject, message)
-            );
+            var mailMessage = new MailMessage(from: mail, to: email, subject, message)
+            {
+                IsBodyHtml = true
+            };
+
+            return client.SendMailAsync(mailMessage);
         }
     }
 }

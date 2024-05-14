@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Priority, Project, ProjectStatus } from '../../Entities/Project';
@@ -10,12 +10,13 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UpdateProject } from '../../Entities/UpdateProject';
 import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
-import { Member } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NewTask } from '../../Entities/NewTask';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { ProjectSection } from '../../Entities/ProjectSection';
+import { ProjectSectionService } from '../../_services/project-section.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -77,6 +78,9 @@ export class ProjectDetailComponent implements OnInit {
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
 
+  // za section modal
+  projectSections: ProjectSection[] = [];
+  newSectionName: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -86,7 +90,8 @@ export class ProjectDetailComponent implements OnInit {
     private modalService: BsModalService,
     private datePipe: DatePipe,
     public uploadservice: UploadService,
-    private shared: SharedService
+    private shared: SharedService,
+    private projectSectionService: ProjectSectionService
   ) {}
 
   get formattedEndDate() {
@@ -103,6 +108,9 @@ export class ProjectDetailComponent implements OnInit {
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
+    this.shared.sectionUpdated.subscribe(() => {
+      this.getProjectInfo();
+    })
     this.getProjectInfo();
     this.shared.togglePopup$.subscribe(({ event, taskId }) => {
     this.togglePopUp(event, taskId);
@@ -450,5 +458,39 @@ export class ProjectDetailComponent implements OnInit {
     if(this.usersOnProject.find(x => x.projectRole == ProjectRole.ProjectOwner && x.appUserId!=userId))
       return true
     return false
+  }
+
+  openSectionModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-md modal-dialog-centered'
+    });
+    if (this.currentProjectId) {
+      this.projectSectionService.getSectionsByProject(this.currentProjectId)
+        .subscribe(sections => {
+          this.projectSections = sections;
+        });
+    }
+  }
+
+  deleteSection(sectionId: number) {
+    this.projectSectionService.deleteSection(sectionId).subscribe(() => {
+      this.projectSections = this.projectSections.filter(section => Number(section.id) !== sectionId);
+      this.shared.notifySectionUpdate();
+    });
+  }
+
+  createNewSection() {
+    if (this.newSectionName.trim() && this.currentProjectId !== null) {
+      this.projectSectionService.createSection(this.newSectionName, this.currentProjectId).subscribe({
+        next: (section) => {
+          this.projectSections.push(section);
+          this.shared.notifySectionUpdate();
+          this.newSectionName = '';
+        },
+        error: (error) => {
+          console.error('Error creating section:', error);
+        }
+      });
+    }
   }
 }

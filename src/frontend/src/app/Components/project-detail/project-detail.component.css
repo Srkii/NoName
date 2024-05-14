@@ -266,7 +266,17 @@ thead th{
     box-shadow: none;
 }
 .modal-container{color: #676f79;}
-.deleteMember{cursor: pointer;}
+.deleteMember{
+    padding: 0 0.32rem 0 0.32rem;
+    cursor: pointer;
+    background-color: rgb(215, 52, 52);
+    color: white;
+    border-radius: 100rem;
+    transition: background-color 0.3s ease;
+}
+.deleteMember:hover{
+    background-color: rgb(175, 30, 30);
+}
 .close{
     border: none;
     background-color: white
@@ -358,7 +368,12 @@ textarea:focus{
 /* Member Managment */
 
 .modal-header h4{
+    color: black;
     margin-bottom: 0.3125rem;
+}
+.btn-close{
+    color: #676f79;
+    box-shadow: none;
 }
 .new-item {
     margin: 10px !important;
@@ -372,10 +387,11 @@ textarea:focus{
     border-bottom: 2px solid #696cff;
 }
 .members h5{
-    padding-bottom: 0.2rem;  
+    font-weight: 400;
+    padding-bottom: 0.2rem;
+    color: #212529;  
 }
 .search{
-    text-align: center;
     border-radius: 0%;
 }
 .search:focus{
@@ -391,46 +407,79 @@ textarea:focus{
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
     font-size: smaller;
-    float: right;
 }
 .add{
-    padding: 0.2rem;
-    color: white;
+    width: 100%;
+    height: auto;
     background-color: #696cff;
-    border: none;
-    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    padding: 0.3rem 0 0.3rem 0;
+    margin-bottom: 0.4rem !important;
+    margin-top:  0.8rem !important;
+}
+.add:disabled{
+    border: 0.835px solid #696cff !important;
+    opacity: 70%;
+}
+.add:focus{
+    color: white !important;
 }
 .add:hover{
-    background-color: #4d50f8;
+    background-color: #5f61e6;
 }
 .addmembers h5{
+    font-weight: 400;
     padding-bottom: 0.2rem;
+    color: #212529;
 }
 .t2{
-    margin-top: 0.5rem;
     border-left: 1px solid inherit;
     border-right: 1px solid inherit;
 }
 .t2 td{
-    width: auto;
-    vertical-align: middle;
+    width: 9rem;
+    vertical-align: bottom;
     color: #676f79;
 }
-.t2 p{
-    text-align: right;
-    margin-bottom: 0;
+.t2 tr td:first-child{
+    width: 11rem !important;
+}
+.t2 .isPM{
     font-size: smaller;
     color: #697a8d;
     padding-right: 0.3rem;
 }
+.tableHeaders{
+    color: #676f79;
+    font-weight: 600;
+    margin-top: 0.6rem;
+    padding-left: 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #D7D7F8;
+}
+.tableHeaders span:last-child{
+    text-align: center;
+    margin-right: 0;
+}
+.tableHeaders span:first-child{
+    width: 11.5rem !important;
+}
+.tableHeaders span{
+    width: 9.6rem;
+}
+.scroll{
+    overflow-y: auto;
+    height: 8.7rem;
+    max-height: 8.7rem;
+}
+
 .nameAvatar {
     display: inline-flex;
     align-items: center;
     font-family: 'Public Sans', sans-serif;
 }
 .ng-value-label{
-    display: inline-flex !important;
-    align-items: center !important;
+    vertical-align: middle;
     font-family: 'Public Sans', sans-serif;
     color: #697a8d;
 }
@@ -444,21 +493,24 @@ textarea:focus{
     color: #697a8d;
 }
 .ng-value-container{
+    display: inline-flex !important;
+    align-items: center;
     padding-left: 2px !important;
     padding-top: 2px !important;
 }
-.ng-value-label.ng-star-inserted{
-    padding-left: 3px !important;
+.ng-value-label{
+    font-size: 14px !important;
+    padding-left: 1px !important;
 }
 .ng-value-icon{
+    position: relative;
+    top: 0.06rem;
     border-left: none !important;
     padding-left: 0 !important;
 }
 .ng-value-icon:hover{
     background-color: transparent !important;
-}
-:host::ng-deep .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container{
-    border-color: #696cff !important;
+    color: black;
 }
 
 .td_row td:first-child:hover,
@@ -604,4 +656,21 @@ textarea:focus{
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
     vertical-align: middle !important; /* Aligns the image baseline to the middle */
+}
+.tProjectSection {
+    margin-top: 20px;
+}
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tSection-name {
+    flex-grow: 1;
+}
+
+.tSection-delete {
+    flex-basis: auto;
 }
