@@ -1,21 +1,16 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges, inject, TemplateRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges, TemplateRef } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { CommentsService } from '../../_services/comments.service'; 
 import { Comment } from '../../Entities/Comments'; 
-import { DatePipe, formatDate } from '@angular/common';
-import { AppUser } from '../../Entities/AppUser';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { Project } from '../../Entities/Project';
-import { coerceStringArray } from '@angular/cdk/coercion';
 import { UploadService } from '../../_services/upload.service';
 import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TaskDependency } from '../../Entities/TaskDependency';
-import { ThisReceiver, TmplAstIdleDeferredTrigger } from '@angular/compiler';
-import { addSeconds } from 'date-fns';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedService } from '../../_services/shared.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
@@ -28,6 +23,9 @@ import { ProjectSection } from '../../Entities/ProjectSection';
 export class PopupComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('commentInput') commentInput!: ElementRef;
+  @ViewChild('containerDiv') containerDiv!: ElementRef;
+  @ViewChild('fixedArea') fixedArea!: ElementRef;
+  @ViewChild('commentDiv') commentDiv!: ElementRef;
   @Input() task: ProjectTask | null = null;
   @Output() taskUpdated: EventEmitter<ProjectTask> = new EventEmitter<ProjectTask>();
   @Output() backClicked: EventEmitter<void> = new EventEmitter<void>();
@@ -81,7 +79,6 @@ export class PopupComponent {
         console.error('Task does not have projectRole property');
       } else {
       }
-      console.log(this.task);
       this.selectedProject = this.task.project;
       this.selectedSection=this.task.projectSection;
       this.getUser();
@@ -90,6 +87,20 @@ export class PopupComponent {
       this.getAllTasks();
       this.getProjectSections();
       
+    }
+  }
+
+  ngAfterViewInit() {
+    this.adjustCommentHeight();
+  }
+
+  adjustCommentHeight() {
+    if(this.task?.projectRole!='4')
+    {
+      const containerHeight = this.containerDiv.nativeElement.offsetHeight;
+      const fixedHeight = this.fixedArea.nativeElement.offsetHeight;
+      const commentHeight = containerHeight - (fixedHeight+60);
+      this.commentDiv.nativeElement.style.height = `${commentHeight}px`;
     }
   }
 
@@ -251,7 +262,10 @@ export class PopupComponent {
     const pop=document.querySelector(".col-md-5") as HTMLElement;
     const back = document.querySelector('.back') as HTMLElement;
     const full = document.querySelector('.full') as HTMLElement;
-    const trash = document.querySelector('.trash') as HTMLElement;
+    if(this.task?.projectRole!='4')
+    {
+      const trash = document.querySelector('.trash') as HTMLElement;
+    }
     const exit_full = document.querySelector('.exit_full') as HTMLElement;
     const file = document.querySelector('.file') as HTMLElement;
     const comments = document.querySelector('.comments') as HTMLElement;
@@ -272,15 +286,15 @@ export class PopupComponent {
         pop.style.top="";
         pop.style.height="";
       }
-      pop.style.width="98%";
-      pop.style.padding = '2%';
-      back.style.marginRight = '1%';
-      exit_full.style.marginRight = '30px';
-      trash.style.marginRight = '30px';
-      exit_full.style.display = 'block';
+      pop.style.width = "calc(100% - 22px)";
+      pop.style.padding = '15px';
+      // back.style.marginRight = '1%';
+      // exit_full.style.marginRight = '30px';
+      // trash.style.marginRight = '30px';
+      exit_full.style.display = 'flex';
       full.style.display = 'none';
-      file.style.marginRight = '3%';
-      comments.style.marginTop = '0%';
+      // file.style.marginRight = '3%';
+      // comments.style.marginTop = '0%';
       comments.style.width = '100%';
       this.fullscreen = !this.fullscreen;
     } else {
@@ -290,10 +304,9 @@ export class PopupComponent {
       pop.style.padding = '';
       back.style.marginRight = '';
       exit_full.style.marginRight = '';
-      trash.style.marginRight = '';
+      // trash.style.marginRight = '';
       exit_full.style.display = 'none';
       full.style.display = '';
-      file.style.marginRight = '';
       comments.style.marginTop = '';
       comments.style.marginTop = '';
       this.fullscreen = !this.fullscreen;
@@ -325,6 +338,12 @@ export class PopupComponent {
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.current_user=response;
+        console.log(this.task?.id);
+        console.log(this.current_user.id);
+        console.log(this.current_user.firstName);
+        console.log(this.current_user.lastName);
+        console.log(content);
+        console.log(new Date);
         if (content || this.attachment_added) {
           const commentDto: Comment = {
             id: -1,
@@ -478,15 +497,19 @@ export class PopupComponent {
 
   CancelEdit(comment_id:number):void{
     const edit=document.getElementById("edit_content"+comment_id) as HTMLElement;
+    const edit1=document.getElementById("edit_content"+comment_id) as HTMLTextAreaElement;
     const save=document.getElementById("save_edit"+comment_id) as HTMLElement;
     const cancel=document.getElementById("cancel_edit"+comment_id) as HTMLElement;
     const content=document.getElementById("comment_content"+comment_id) as HTMLElement;
-    
+    const original_content=this.comments.find(comment => comment.id === comment_id)?.content;
+
+    if(original_content!=undefined)
+      edit1.value=original_content; 
+
     content.style.display="block";
     edit.style.display="none";
     save.style.display='none';
     cancel.style.display='none';
-    console.log(edit);
   }
 
   goToProject(project: Project): void {
@@ -584,19 +607,19 @@ export class PopupComponent {
       this.sharedService.emitTaskUpdated();
   }
 
-  DisableCloseTask(task:ProjectTask):boolean{
-        if (Array.isArray(task.dependencies))
-          {    
-            if(task.dependencies.length==0)
-              {
-                return true;
-              }
-            else
+  DisableCloseTask():boolean{
+    if (Array.isArray(this.selectedTasks))
+      {    
+          if(this.selectedTasks.length==0)
             {
-              return false;
+              return true;
             }
-      }
-      return false;
+          else
+          {
+            return false;
+          }
+        }
+        return false;
   }
 
   downloadFile(fileUrl: any): void {
@@ -643,7 +666,6 @@ export class PopupComponent {
       this.myProjectsService.GetProjectSections(this.task.projectId).subscribe({
         next: (sections: ProjectSection[]) => {
           this.sections = sections;
-          console.log(this.sections);
 
         },
         error: (error: any) => {
@@ -652,6 +674,21 @@ export class PopupComponent {
       });
     }
   }
+
+  hide_comment_area():boolean{
+    if(this.task?.projectRole=='4')
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    
+  }
+
+  
+  
   //emigrirao sam ovde ~maksim
 
   fileInputHandler($event:any){
