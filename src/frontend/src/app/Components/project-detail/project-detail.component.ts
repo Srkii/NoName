@@ -15,6 +15,8 @@ import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NewTask } from '../../Entities/NewTask';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { ProjectSection } from '../../Entities/ProjectSection';
+import { ProjectSectionService } from '../../_services/project-section.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -76,6 +78,9 @@ export class ProjectDetailComponent implements OnInit {
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
 
+  // za section modal
+  projectSections: ProjectSection[] = [];
+  newSectionName: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -85,7 +90,8 @@ export class ProjectDetailComponent implements OnInit {
     private modalService: BsModalService,
     private datePipe: DatePipe,
     public uploadservice: UploadService,
-    private shared: SharedService
+    private shared: SharedService,
+    private projectSectionService: ProjectSectionService
   ) {}
 
   get formattedEndDate() {
@@ -449,5 +455,37 @@ export class ProjectDetailComponent implements OnInit {
     if(this.usersOnProject.find(x => x.projectRole == ProjectRole.ProjectOwner && x.appUserId!=userId))
       return true
     return false
+  }
+
+  openSectionModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-lg modal-dialog-centered'
+    });
+    if (this.currentProjectId) {
+      this.projectSectionService.getSectionsByProject(this.currentProjectId)
+        .subscribe(sections => {
+          this.projectSections = sections;
+        });
+    }
+  }
+
+  deleteSection(sectionId: number) {
+    this.projectSectionService.deleteSection(sectionId).subscribe(() => {
+      this.projectSections = this.projectSections.filter(section => Number(section.id) !== sectionId);
+    });
+  }
+
+  createNewSection() {
+    if (this.newSectionName.trim() && this.currentProjectId !== null) {
+      this.projectSectionService.createSection(this.newSectionName, this.currentProjectId).subscribe({
+        next: (section) => {
+          this.projectSections.push(section);
+          this.newSectionName = '';
+        },
+        error: (error) => {
+          console.error('Error creating section:', error);
+        }
+      });
+    }
   }
 }
