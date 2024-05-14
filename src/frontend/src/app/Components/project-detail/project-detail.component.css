@@ -658,7 +658,7 @@ select:disabled {
     vertical-align: middle !important; /* Aligns the image baseline to the middle */
 }
 .tProjectSection {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .section-row {
     display: flex;
@@ -673,4 +673,26 @@ select:disabled {
 
 .tSection-delete {
     flex-basis: auto;
+}
+.addSection:disabled{
+    background-color: #696cff !important;
+    border: 0.835px solid #696cff !important;
+    opacity: 70%;
+}
+.addSection:focus{color: white !important;}
+.addSection:hover{background-color: #5f61e6;}
+.SectionTable td{color: #676f79;}
+.createSection h5{color: black;}
+.tProjectSection h5{color: black;}
+
+.noSections{
+    text-align: center;
+    margin-top: 5px;
+    padding-left: 0;
+    border-bottom: 0;
+}
+
+.delSection{
+    text-align: right; 
+    padding-right: 2.8rem;
 }
