@@ -56,10 +56,17 @@ namespace backend.Controllers
                 return NotFound();
             }
 
+            var tasks = await _context.ProjectTasks
+                .Where(t => t.ProjectSectionId == id && t.ProjectId == section.ProjectId)
+                .ToListAsync();
+
+            tasks.ForEach(t => t.ProjectSectionId = null);
+            _context.UpdateRange(tasks);
+
             _context.ProjectSections.Remove(section);
             await _context.SaveChangesAsync();
 
-            return NoContent(); // Successfully deleted
+            return NoContent();
         }
     }
 }

@@ -365,18 +365,24 @@
       <button type="button" class="btn-close" (click)="modalRef?.hide()" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-      <form (ngSubmit)="createNewSection()">
-        <div class="mb-3">
-          <input type="text" class="form-control" placeholder="Enter new section name" [(ngModel)]="newSectionName" name="sectionName">
+      <div class="createSection">
+        <form (ngSubmit)="createNewSection()">
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Enter new section name" [(ngModel)]="newSectionName" name="sectionName" autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary d-grid w-50 mx-auto">Create Section</button>
+        </form>
+      </div>
+      <div class="tProjectSection">
+        <div *ngIf="projectSections && projectSections.length > 0; else noSections">
+          <div *ngFor="let section of projectSections" class="section-row">
+            <div class="tSection-name">{{ section.sectionName }}</div>
+            <div class="tSection-delete">
+              <button type="button" class="btn btn-danger btn-sm" (click)="deleteSection(+section.id)">Delete</button>
+            </div>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary">Create Section</button>
-      </form>
-      <ul *ngIf="projectSections && projectSections.length > 0; else noSections">
-        <li *ngFor="let section of projectSections">
-          {{ section.sectionName }}
-          <button type="button" class="btn btn-danger btn-sm" (click)="deleteSection(+section.id)">Delete</button>
-        </li>
-      </ul>
+      </div>
       <ng-template #noSections>
         <p>No sections found.</p>
       </ng-template>

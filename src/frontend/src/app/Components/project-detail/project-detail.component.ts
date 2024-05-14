@@ -108,6 +108,9 @@ export class ProjectDetailComponent implements OnInit {
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
+    this.shared.sectionUpdated.subscribe(() => {
+      this.getProjectInfo();
+    })
     this.getProjectInfo();
     this.shared.togglePopup$.subscribe(({ event, taskId }) => {
     this.togglePopUp(event, taskId);
@@ -459,7 +462,7 @@ export class ProjectDetailComponent implements OnInit {
 
   openSectionModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {
-      class: 'modal-lg modal-dialog-centered'
+      class: 'modal-md modal-dialog-centered'
     });
     if (this.currentProjectId) {
       this.projectSectionService.getSectionsByProject(this.currentProjectId)
@@ -472,6 +475,7 @@ export class ProjectDetailComponent implements OnInit {
   deleteSection(sectionId: number) {
     this.projectSectionService.deleteSection(sectionId).subscribe(() => {
       this.projectSections = this.projectSections.filter(section => Number(section.id) !== sectionId);
+      this.shared.notifySectionUpdate();
     });
   }
 
@@ -480,6 +484,7 @@ export class ProjectDetailComponent implements OnInit {
       this.projectSectionService.createSection(this.newSectionName, this.currentProjectId).subscribe({
         next: (section) => {
           this.projectSections.push(section);
+          this.shared.notifySectionUpdate();
           this.newSectionName = '';
         },
         error: (error) => {

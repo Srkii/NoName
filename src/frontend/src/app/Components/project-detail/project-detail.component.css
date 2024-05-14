@@ -657,3 +657,20 @@ textarea:focus{
     padding-bottom: 0 !important;
     vertical-align: middle !important; /* Aligns the image baseline to the middle */
 }
+.tProjectSection {
+    margin-top: 20px;
+}
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tSection-name {
+    flex-grow: 1;
+}
+
+.tSection-delete {
+    flex-basis: auto;
+}
