@@ -21,7 +21,7 @@
     <span style="padding-left: 15px;">Notifications</span>
     <div class="dropdown-divider"></div>
     <span style="font-size: 14px; margin-left: 15px; margin-top: 5px;margin-bottom: 5px;" *ngIf="notification_list.length==0">No new notifications!</span>
-    <ul style="overflow: auto; max-height: 150px; margin: 0; width: 330px;" *ngIf="notification_list.length!=0">
+    <ul style="overflow: auto; max-height: 150px; margin: 0; width: 350px;" *ngIf="notification_list.length!=0">
       <li *ngFor="let notification of notification_list">
         <div class="photodiv">
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">

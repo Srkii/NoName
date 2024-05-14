@@ -455,3 +455,13 @@ img{
 .scroll::-webkit-scrollbar-button {
   display:none;
 }
+
+.download-link
+{
+  padding-left: 3px; 
+  padding-right: 3px;
+  color: #696cff;
+}
+.fileUrl:hover{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}

@@ -43,12 +43,11 @@ export class NotificationsService{
   });
 
     this.hubConnection.on('newNotifications',() =>{//ovo mi onda u sustini ne treba ako cu ja sa fronta da invokeujem getter za notifikacije
-      this.toastr.success("You have unread notifications!");
+      //this.toastr.success("You have unread notifications!");
       this.newNotifications = true;
     });
 
     this.hubConnection.on('Notify',(notification:any)=>{
-      //sad dobija celiu novu notifikaciju da je prikaze u donjem desnom cosku
       this.notifications.push(notification);
       this.allNotifications.push(notification);
       this.newNotifications = true;
@@ -88,7 +87,7 @@ export class NotificationsService{
   getNotificationType(type:any):string{
     switch(type){
       case 0:
-        return "uploaded an attachment on a task ";
+        return "uploaded an attachment";
       case 1:
         return "commented on a task";
       case 2:

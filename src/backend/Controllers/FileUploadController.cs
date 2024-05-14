@@ -110,18 +110,18 @@ namespace backend.Controllers
             //doraditi: treba da proveri dal task postoji pa onda da upload file. ako ne postoji vraca BadRequest sa opisom greske
             if(task!=null){
                 var filename =  _uploadService.AddFile(file);
-                var comment = new Comment{
-                    TaskId = task.Id,
-                    SenderId = user_id,
-                    SenderFirstName = sender.FirstName,
-                    SenderLastName = sender.LastName,
-                    Content = "",
-                    FileUrl = filename
-                };
-                _context.Comments.Add(comment);
-                await _context.SaveChangesAsync();
-                await _notificationService.TriggerNotification(task.Id,user_id,comment.Id,NotificationType.Attachment);
-                return Ok(comment);
+                // var comment = new Comment{
+                //     TaskId = task.Id,
+                //     SenderId = user_id,
+                //     SenderFirstName = sender.FirstName,
+                //     SenderLastName = sender.LastName,
+                //     Content = "",
+                //     FileUrl = filename
+                // };
+                // _context.Comments.Add(comment);
+                // await _context.SaveChangesAsync();
+                // await _notificationService.TriggerNotification(task.Id,user_id,comment.Id,NotificationType.Attachment);
+                return Ok();
             }else{
                 return BadRequest("SPECIFIED TASK DOES NOT EXIST");
             }
