@@ -80,7 +80,9 @@ export class ProjectDetailComponent implements OnInit {
 
   // za section modal
   projectSections: ProjectSection[] = [];
+  filteredSections: ProjectSection[] = [];
   newSectionName: string = '';
+  searchSection: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -299,6 +301,18 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
+  filterSections() {
+    if (this.searchSection.trim() !== '')
+    {
+      this.filteredSections = this.projectSections.filter(section =>
+        section.sectionName.toLowerCase().includes(this.searchSection.toLowerCase())
+      );
+    }
+    else {
+      this.filteredSections = this.projectSections;
+    }
+  }
+
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
     this.myTasksService
@@ -468,6 +482,7 @@ export class ProjectDetailComponent implements OnInit {
       this.projectSectionService.getSectionsByProject(this.currentProjectId)
         .subscribe(sections => {
           this.projectSections = sections;
+          this.filteredSections = this.projectSections;
         });
     }
   }
@@ -475,6 +490,7 @@ export class ProjectDetailComponent implements OnInit {
   deleteSection(sectionId: number) {
     this.projectSectionService.deleteSection(sectionId).subscribe(() => {
       this.projectSections = this.projectSections.filter(section => Number(section.id) !== sectionId);
+      this.filteredSections = this.projectSections;
       this.shared.notifySectionUpdate();
     });
   }
