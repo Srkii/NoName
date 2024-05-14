@@ -109,7 +109,6 @@ export class AdminComponent implements OnInit{
     }
     else{
       this.toastr.error("Email is not valid");
-      
     }
 
     }
@@ -353,14 +352,19 @@ export class AdminComponent implements OnInit{
     }
 
     removeFromArchived() : void{
-      
-      this.adminService.removeFromArchieve(this.archivedIds).subscribe({
-        next:(res)=>{
-          console.log(this.archivedIds);
-          this.onLoad();
-          this.getArchivedUsers();
-        }
-      })
+      if(this.archivedIds!=null)
+      {
+        this.adminService.removeFromArchieve(this.archivedIds).subscribe({
+          next:(res)=>{
+            console.log(this.archivedIds);
+            this.onLoad();
+            this.getArchivedUsers();
+          }
+        })
+      }
+      else{
+        this.toastr.error("There is no checked users");
+      }
     }
 
     isFocused: boolean = false;
