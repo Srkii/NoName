@@ -109,6 +109,7 @@ p {
 }
 
 
+
 #button-addon2{
   background-color: #5d57c2;
   border-color: #5d57c2;
@@ -151,9 +152,10 @@ p {
   width: 35px;
   height: 35px;
 }
-.paginate_button page-item active{
-  background-color: #5f61e6;
-  color: #5f61e6;
+.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
+  background-color: #5d57c2 !important;
+  color: #ccc;
+
 }
 .card{
   position: static;
@@ -196,15 +198,29 @@ select {
 
 select:focus {
   outline: none;
-  border-color: #5f61e6;
+  border: 1px solid #5f61e6 !important;
 }
 
 select:hover {
-  border-color: #5f61e6;
-
+  border: 1px solid #5f61e6 !important;
 }
 select:active{
-  background-color: #5d57c2;
+  border: 1px solid #5f61e6 !important;
+} 
+select:focus-visible{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6 !important;
+}
+.form-control:focus-visible{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6 !important; 
+}
+.btn:focus-visible{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6 !important;
 }
 .card{
   --bs-card-border-width: 0px;
@@ -272,7 +288,7 @@ select:active{
 .form-control:focus {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: #5f61e6;
+  box-shadow: none;
 }
 .page_size {
   color: #5e6165;
@@ -289,9 +305,7 @@ select:active{
 .page_size:hover{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
 }
-
 .clickable-div{
   border: 1px solid #ffffff !important;
 }
@@ -308,13 +322,13 @@ select:active{
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
-.clickable-div:active {
-  background-color: #d0cdff; 
-  outline: none;
+.clickable-div:active{
+  background-color: #ffffff; 
+   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
-.clickable-div:focus {
+.clickable-div:focus.clicked {
   background-color: #d0cdff; 
 }
 .paginate_button1 .btn{
@@ -326,6 +340,11 @@ select:active{
   background-color: #5d57c2;
   color: #ffffff;
 }
+.paginate_button1 .btn .page:active{
+  background-color: #5d57c2 !important;
+  color: #ffffff;
+}
+
 .modal-header{
   font-family: Roboto, "Helvetica Neue", sans-serif;;
 }
@@ -338,12 +357,14 @@ select:active{
 .archUsers{
   /* margin: 10px !important; */
   cursor: default;
-  width: 185px;
+  width: 225px;
+  height: 30px;
   border-radius: 0.3rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  justify-content: center;
 }
 .archUsers:hover {
-  border-bottom: 2px solid #696cff;
+  border-bottom:2px solid #5d57c2;
 }
 .table-responsive text-nowrap{
   width: 100%;
@@ -353,6 +374,9 @@ select:active{
   --bs-modal-header-border-width:0px;
   --bs-modal-header-border-color: #ffffff;
   border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
+}
+.btn-primary1{
+  display: none;
 }
 
 /*izgled za telefone*/
@@ -374,23 +398,64 @@ select:active{
   .invite {
     display: flex;
     flex-direction: column;
+    font-size: small;
   }
 
   .leftInvite {
-    margin-bottom: 10px; /* Add space below the search and select */
+    margin-bottom: 10px; 
     width: 100%;
+    font-size: small;
+  }
+  .invite input::placeholder{
+    font-size: small;
   }
 
   .inputEmail {
     width: 100%;
-    margin-top: 10px; /* Add space above the email input and button */
+    margin-top: 10px; 
   }
 
-  .inputEmail btn btn-primary{
+  .inputEmail .btn-primary1{
     display: inline-block;
+    font-size: small;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #696cff;
+    border-color: #696cff;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
   }
-  
+  .inputEmail .btn-primary{
+    display: none;
+  }
+  .col-sm-12{
+    display: inline;
+    flex-direction: row;
+    justify-content: space-between !important;
+    
+  }
+  .page_size option{
+    font-size: small;
+  }
+  .page_size{
+    font-size: small;
+  }
+  .archUsers {
+    margin-top: 5px;
+    align-self: flex-start;
+    width: 50%;
+    padding-top: 3px;
+    padding-left: 5px;
+   
+  }
+  .archUsers .textArch{
+    display: none;
+  }
 
+  .dataTables_paginate {
+    padding-top: 5px;
+    align-self: flex-end;
+    width: 30%;
+  }
 }
 
 /*Galaxy fold*/
@@ -409,6 +474,24 @@ select:active{
     font-size: 12px;
     display: inline-block;
    
+  }
+  .archUsers{
+    width: 30px;
+  }
+  .col-sm-12.col-md-6 .dataTables_paginate {
+    width: 70%;
+  }
+  .inputEmail .btn-primary1{
+    display: inline-block;
+    font-size: small;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #696cff;
+    border-color: #696cff;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+  }
+  .inputEmail .btn-primary{
+    display: none;
   }
 }
 
@@ -432,6 +515,24 @@ select:active{
     margin-left: 5px;
   }
   .card .pics{
+    display: none;
+  }
+  .archUsers {
+    width: 225px;
+  }
+  .col-sm-12.col-md-6 .dataTables_paginate {
+    width: 70%;
+  }
+  .inputEmail .btn-primary1{
+    display: inline-block;
+    font-size: small;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #696cff;
+    border-color: #696cff;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+  }
+  .inputEmail .btn-primary{
     display: none;
   }
 }

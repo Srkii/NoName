@@ -2,7 +2,8 @@
   <div id="all1">
     <br />
     <div class="card-container">
-    <div class="card clickable-div" [(ngModel)]="selectedRolee" btnRadio="admin" (click)="toogleFilter()">
+      
+    <div class="card clickable-div" [(ngModel)]="selectedRolee" [ngClass]="{'clicked': !isFilterActive}" btnRadio="admin" (click)="toogleFilter()">
     <div class="card-title">
       <label>Total {{numOfAdmins}} administrators</label>
         <div class="pics">
@@ -18,13 +19,13 @@
     </div>
 
 
-    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee" btnRadio="projectManager" (click)="toogleFilter()">
+    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee" [ngClass]="{'clicked': !isFilterActive}" btnRadio="projectManager" (click)="toogleFilter()">
       <div class="card-title">
         <label>Total {{numOfPM}} project managers</label>
         <div class="pics">
           <div *ngIf="projectMangers">
           <ng-container *ngFor="let user of projectMangers.slice(0,1)">
-            <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="user?.url" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
+            <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
             <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
           </ng-container>
         </div>
@@ -35,7 +36,7 @@
     </div>
     </div>
 
-    <div class="card clickable-div" name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="toogleFilter()">
+    <div class="card clickable-div " name="members" [(ngModel)]="selectedRolee" [ngClass]="{'clicked': !isFilterActive}" btnRadio="member" (click)="toogleFilter()">
       <div class="card-title">
         <label>Total {{numOfMembers}} members</label>
       <div class="pics">
@@ -75,11 +76,13 @@
       <div class="inputEmail">
         <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="invitation.receiver" placeholder="Enter new user's email"/>
         <button class="btn btn-primary" type="submit" (click)="Invite()">Invite new user</button>
+        <button class="btn btn-primary1" type="submit" (click)="Invite()">Invite user</button>
       </div>
     </div>
 
     <br />
-    <table class="invoice-list-table table">
+    <div class="table-responsive text-nowrap">
+      <table class="table">
       <thead>
         <tr>
           <th>User
@@ -146,9 +149,14 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
-    <div class="col-sm-12 col-md-6" *ngIf="filteredUsers>5" >
-      <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+    <div class="col-sm-12 col-md-6">
+      <div class="archUsers" (click)="openModal1(archivedUsers)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
+      </svg><label class="textArch">View archieved users</label>
+    </div>
+      <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate" *ngIf="filteredUsers>5" >
         <ul class="pagination">
           <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
             <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
@@ -161,10 +169,7 @@
                 </li></ul>
       </div></div>
 
-      <div class="archUsers" (click)="openModal1(archivedUsers)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
-        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
-      </svg>View archieved users
-    </div>
+      
 
   </div>
 </div>
@@ -200,7 +205,7 @@
         <input type="text" id="form3Example3" class="form-control" name="lastName" [(ngModel)]="newLastName" placeholder="Enter user's Last Name"/>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit">Update</button>
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="modalRef?.hide()">Update</button>
       </div>
 
   </form>
@@ -222,7 +227,7 @@
           This user will no longer be visible.</label>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="ArchiveUser(curentUserId)">Archive user</button>
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="ArchiveUser(curentUserId)" (click)="modalRef?.hide()">Archive user</button>
       </div>
     </form>
   </div>
@@ -246,7 +251,7 @@
         </select>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit">Change</button>
+        <button class="btn btn-primary d-grid w-100" type="submit" (click)="modalRef?.hide()" >Change</button>
       </div>
     </form>
   </div>
@@ -261,7 +266,8 @@
   </div>
  
     <div class="modal-body" *ngIf="archived_users.length>0; else noArchivedUsers">
-    <table class="invoice-list-table table">
+      <div class="table-responsive text-nowrap">
+        <table class="table">
       <thead>
       <tr>
         <th>User</th>
@@ -298,12 +304,13 @@
     </tbody>
   
 </table>
+</div>
 <div class="mb-3 text-center">
-  <button class="btn btn-primary d-grid w-50 mx-auto" type="submit" (click)="removeFromArchived()" >Remove from Archieved</button>
+  <button class="btn btn-primary d-grid w-50 mx-auto" type="submit" (click)="removeFromArchived()" (click)="modalRef?.hide()" >Remove from Archieved</button>
 </div>
 </div>
 
 </ng-template>
 <ng-template #noArchivedUsers>
-  <div class="text-center noArch">There are currently no archived members.</div>
+  <div class="text-center noArch">Currently, there are no archived users.</div>
 </ng-template>

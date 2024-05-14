@@ -96,15 +96,19 @@ export class AdminComponent implements OnInit{
   archMembers: { [key: string]: Member[] } = {};
 
   Invite(): void{
-    this.spinner.show();
-    if(this.invitation)
+   
+    if(this.invitation.receiver!='')
     {
+      this.spinner.show();
       this.adminService.sendInvatation(this.invitation).subscribe(
         (response)=>{
           this.toastr.success(response.message);
           this.spinner.hide();
         }
       )
+    }
+    else{
+      this.toastr.error("Email is not valid");
     }
 
     }
@@ -348,15 +352,27 @@ export class AdminComponent implements OnInit{
     }
 
     removeFromArchived() : void{
-      
-      this.adminService.removeFromArchieve(this.archivedIds).subscribe({
-        next:(res)=>{
-          console.log(this.archivedIds);
-          this.onLoad();
-          this.getArchivedUsers();
-        }
-      })
+      if(this.archivedIds!=null)
+      {
+        this.adminService.removeFromArchieve(this.archivedIds).subscribe({
+          next:(res)=>{
+            console.log(this.archivedIds);
+            this.onLoad();
+            this.getArchivedUsers();
+          }
+        })
+      }
+      else{
+        this.toastr.error("There is no checked users");
+      }
     }
+
+    isFocused: boolean = false;
+
+    toggleFocus(): void {
+      this.isFocused = !this.isFocused;
+    }
+
 
   }
 
