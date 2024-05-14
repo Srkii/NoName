@@ -29,7 +29,8 @@ namespace backend.Controllers
                 Content = commentDto.Content,
                 SenderId = commentDto.SenderId,
                 SenderFirstName = commentDto.SenderFirstName,
-                SenderLastName = commentDto.SenderLastName
+                SenderLastName = commentDto.SenderLastName,
+                FileUrl = commentDto.FileUrl
             };
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
@@ -56,8 +57,8 @@ namespace backend.Controllers
                     SenderId = comment.SenderId,
                     SenderFirstName = comment.SenderFirstName,
                     SenderLastName = comment.SenderLastName,
-                     FileUrl =comment.FileUrl,
-                     Edited=comment.Edited,
+                    FileUrl =comment.FileUrl,
+                    Edited=comment.Edited,
                     AppUserPicUrl = user.ProfilePicUrl,
                 }
             )

@@ -48,6 +48,10 @@ export class PopupComponent {
   selectedSection: ProjectSection | undefined;
   current_user: any;
   
+    
+  attachment_name:string = '';
+  attachment_added:boolean = false;
+  file:any;
 
 
   constructor(private myTasksService: MyTasksService,
@@ -58,7 +62,8 @@ export class PopupComponent {
               public uploadservice: UploadService, 
               private router: Router,
               private modalService: BsModalService,
-              private sharedService:SharedService
+              private sharedService:SharedService,
+              private uploadService:UploadService
             ){}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -105,6 +110,7 @@ export class PopupComponent {
       this.commentsService.getComments(this.task.id).subscribe({
         next: (comments: Comment[]) => {
           this.comments = comments;
+          console.log(comments);
         },
         error: (error: any) => {
           console.error('Error fetching comments:', error);
@@ -338,7 +344,7 @@ export class PopupComponent {
         console.log(this.current_user.lastName);
         console.log(content);
         console.log(new Date);
-        if (content) {
+        if (content || this.attachment_added) {
           const commentDto: Comment = {
             id: -1,
             taskId: this.task!.id,
@@ -347,13 +353,17 @@ export class PopupComponent {
             senderFirstName: this.current_user.firstName,
             senderLastName: this.current_user.lastName,
             messageSent:  new Date,
+            fileUrl: this.attachment_name,
             edited:false,
           };
+          console.log("COMM ",commentDto);
           this.commentsService.postComment(commentDto).subscribe({
             next: (comment: Comment) => {
               commentDto.id = comment.id;
               this.comments.push(commentDto);
               this.commentInput.nativeElement.value = '';
+              
+              this.uploadAttachment();
     
             setTimeout(() => {
               this.scrollToBottom();
@@ -679,10 +689,42 @@ export class PopupComponent {
 
   
   
-  
-  
-  
-}  
+  //emigrirao sam ovde ~maksim
+
+  fileInputHandler($event:any){
+    this.file= $event.target.files[0];
+
+    if(this.file!=null && this.sharedService.current_task_id!=null)
+    {
+      this.attachment_name = this.file.name;
+      this.attachment_added = true;
+      console.log("file ready for upload");
+    }
+    else{
+      console.log("no file data");
+    }
+  }
+  uploadAttachment(){
+    var task_id = Number(this.sharedService.current_task_id);
+    var token = localStorage.getItem('token');
+    var user_id = localStorage.getItem('id');//prosledim id posiljaoce
+    this.uploadService.UploadFile(task_id,user_id,this.file,token).subscribe({
+      next: (response) =>{
+        //vise ne treba ovo da radi
+        // console.log(response); 
+        // this.comments.push(response);
+        this.attachment_name = ""
+        this.attachment_added = false;
+      },
+      error:(error) =>{
+        console.log(error);
+      }
+    }); 
+  }
+
+}
+
+
 
 
   
