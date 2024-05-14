@@ -293,23 +293,24 @@ select:disabled {
     background-image: none;
     padding:0;
 }
-textarea{
+.area-desc{
     color: #697a8d;
     border-radius: 0;
     border-top: 1px solid;
     border-color: #dcdbdb;
+    width: 34.5rem !important;
+    height: 20rem !important;
 }
-textarea:disabled {
+.area-desc:disabled {
     border-top: 1px solid #dcdbdb;
     resize: none;
 }
-textarea:focus{
+.area-desc:focus{
     box-shadow: none;
     border-color: #696cff;
     color: #697a8d;
 }
-.details h5{
-    border-bottom: 1px solid  #dcdbdb;
+.heading{
     padding-left: 0.7rem;
     padding-bottom: 0.2rem;
 }
@@ -325,7 +326,6 @@ textarea:focus{
     justify-content: center;
 }
 .description h5{
-    padding-left: 0.7rem;
     margin-bottom: 0.2rem;
 }
 .COMPLETED{
@@ -469,8 +469,8 @@ textarea:focus{
 }
 .scroll{
     overflow-y: auto;
-    height: 8.7rem;
-    max-height: 8.7rem;
+    height: 7.5rem;
+    max-height: 7.5rem;
 }
 
 .nameAvatar {
@@ -608,6 +608,7 @@ textarea:focus{
 }
 .btn-save-task {
     margin-top: 15px;
+    color: #fff !important;
 }
 .btn-save-task:hover {
     color: #fff !important;
@@ -658,6 +659,45 @@ textarea:focus{
     vertical-align: middle !important; /* Aligns the image baseline to the middle */
 }
 .tProjectSection {
+    margin-top: 10px;
+}
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tSection-name {
+    flex-grow: 1;
+}
+
+.tSection-delete {
+    flex-basis: auto;
+}
+.addSection:disabled{
+    background-color: #696cff !important;
+    border: 0.835px solid #696cff !important;
+    opacity: 70%;
+}
+.addSection:focus{color: white !important;}
+.addSection:hover{background-color: #5f61e6;}
+.SectionTable td{color: #676f79;}
+.createSection h5{color: black;}
+.tProjectSection h5{color: black;}
+
+.noSections{
+    text-align: center;
+    margin-top: 5px;
+    padding-left: 0;
+    border-bottom: 0;
+}
+
+.delSection{
+    text-align: right; 
+    padding-right: 2.8rem;
+}
+.tProjectSection {
     margin-top: 20px;
 }
 .section-row {
@@ -674,3 +714,34 @@ textarea:focus{
 .tSection-delete {
     flex-basis: auto;
 }
+
+.is-invalid{
+    border-color: red !important;
+}
+
+.invalid {
+    height: 0;
+    overflow: visible;
+    margin-bottom: 0;
+    transition: height 0.3s ease;
+}
+
+.invalid,.invalid-missing-date,.invalid-dates{
+    color: red !important;
+    font-size: 0.7rem;
+}
+
+input[type="date"].is-invalid{
+    padding-right: 30px;
+    border-color: red !important;
+}
+.ng-select-wrapper.is-invalid{
+    outline:0.5px solid  red !important;
+    border-radius: 4px;
+}
+
+  
+.mb-1{
+    padding-bottom: 12px;
+}
+

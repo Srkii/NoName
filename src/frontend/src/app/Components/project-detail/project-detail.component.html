@@ -54,7 +54,7 @@
           </div>
         </div>
       </div> 
-      <div class="card" *ngIf="viewMode === 'table'">
+      <div class="card" *ngIf="viewMode === 'table'" style="z-index: 0;">
         <div class="table-responsive text-nowrap">
           <table class="table">
             <thead>
@@ -129,11 +129,11 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">
-        <div class="mb-3 mr-2 details">
-          <h5>Details</h5>
-          <div class="d-flex justify-content-between info">
-            <div>
+    <div class="modal-body d-flex">
+        <div class="mb-3 mr-2">
+          <h5 class="heading">Details</h5>
+          <div class="info">
+            <div class="my-2">
               <label for="projectStatus">Status</label>
               <select id="projectStatus" class="selectElements" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3" [ngClass]="getStatusClass()">
                 <option class="DEFAULT_STAT" value=0>Proposed</option>
@@ -142,27 +142,19 @@
                 <option class="DEFAULT_STAT" value=3>Archived</option>
               </select>
             </div>
-            <div>
+            <div class="my-2">
               <label for="startDate">Start date</label>
               <span id="startDate" class="startDate">{{formattedStartDate | date:'MM/dd/yyyy'}}</span>
             </div>
-            <div>
+            <div class="my-2">
               <label for="endDate">End date</label>
               <input type="date" id="endDate" class="endDate" [ngModel]="formattedEndDate" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3">
-            </div>
-            <div>
-              <label for="projectPriority">Priority</label>
-              <select id="projectPriority" class="selectElements" [(ngModel)]="update.priority" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3" [ngClass]="getPriorityClass()">
-                <option class="DEFAULT_PRI" value=0>Low</option>
-                <option class="DEFAULT_PRI" value=1>Medium</option>
-                <option class="DEFAULT_PRI" value=2>High</option>
-              </select>
             </div>
         </div>
         </div>
         <div class="mb-3 description">
           <h5>Description</h5>
-          <textarea class="form-control" id="desc" rows="5" [(ngModel)]="update.description" name="Description" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3"></textarea>
+          <textarea class="form-control area-desc" id="desc" rows="5" [(ngModel)]="update.description" name="Description" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3"></textarea>
         </div>
       </div>
   </div>
@@ -263,7 +255,9 @@
     <form class="mb-3" (ngSubmit)="saveTask()">
       <div class="mb-1" autocomplete="off">
           <label for="taskName" class="form-label">Task Name</label>
-          <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName" placeholder="Enter new tasks's name"/>
+          <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName"  [ngClass]="{'is-invalid': buttonClicked && (!newTaskName || taskNameExists)}" placeholder="Enter new tasks's name"/>
+          <div *ngIf="buttonClicked && !newTaskName && !taskNameExists" class="invalid">Please enter task name.</div>
+          <div *ngIf="buttonClicked && taskNameExists" class="invalid">You already have task with the same name.</div>
       </div>
       <div class="mb-1" autocomplete="off">
           <label for="taskDescription" class="form-label">Task Description</label>
@@ -271,43 +265,71 @@
       </div>
       <div class="mb-1">
           <label for="startDate" class="form-label">Start Date</label>
-          <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" placeholder="Start Date"/>
+          <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskStartDate || isInvalidDate()}"  placeholder="Start Date"/>
+          <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
+          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
       </div>
       <div class="mb-1">
           <label for="endDate" class="form-label">End Date</label>
-          <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" placeholder="End Date"/>
+          <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}" placeholder="End Date"/>
+          <div *ngIf="buttonClicked && !newTaskEndDate" class="invalid">Please enter end date.</div>
+          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
       </div>
       <div class="mb-1 chooseAssignee" autocomplete="off">
         <label for="assignee2" class="form-label">Assignee</label>
-        <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
-          <ng-template ng-option-tmp let-user="item" let-index="index">
-            <div style="display: flex; align-items: center;">
-              <div *ngIf="user.profilePicUrl" class="nameAvatar">
-                <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+        <div class="ng-select-wrapper" [ngClass]="{'is-invalid': buttonClicked && !selectedUser}">
+          <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
+            <ng-template ng-option-tmp let-user="item" let-index="index">
+              <div style="display: flex; align-items: center;">
+                <div *ngIf="user.profilePicUrl" class="nameAvatar">
+                  <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                </div>
+                <div *ngIf="!user.profilePicUrl" class="nameAvatar">
+                  <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+                </div>
+                <div>
+                  {{ user.fullName }}
+                </div>
               </div>
-              <div *ngIf="!user.profilePicUrl" class="nameAvatar">
-                <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <div style="display: flex; align-items: center;">
+                <div *ngIf="item.profilePicUrl" class="nameAvatar">
+                  <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                </div>
+                <div *ngIf="!item.profilePicUrl" class="nameAvatar">
+                  <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
+                </div>
+                <div>
+                  {{ item.fullName }}
+                </div>
               </div>
-              <div>
-                {{ user.fullName }}
-              </div>
-            </div>
-          </ng-template>
-          <ng-template ng-label-tmp let-item="item">
-            <div style="display: flex; align-items: center;">
-              <div *ngIf="item.profilePicUrl" class="nameAvatar">
-                <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
-              </div>
-              <div *ngIf="!item.profilePicUrl" class="nameAvatar">
-                <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
-              </div>
-              <div>
-                {{ item.fullName }}
-              </div>
-            </div>
-          </ng-template>
-        </ng-select>
+            </ng-template>
+          </ng-select>
+        </div>
+        <div *ngIf="buttonClicked && !selectedUser" class="invalid">Please select Assignee.</div>
       </div>
+
+      <div class="mb-1 chooseSection" autocomplete="off">
+        <label  class="form-label">Section</label>
+          <ng-select class="sectionDropdown" [items]="projectSections" [(ngModel)]="selectedSection" name="section"  placeholder="Select Section">
+            <ng-template ng-option-tmp let-section="item" let-index="index">
+              <div style="display: flex; align-items: center;">
+                <div>
+                  {{ section.sectionName }}
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <div style="display: flex; align-items: center;">
+                <div>
+                  {{ item.sectionName }}
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+      </div>
+      
       <div>
         <button class="btn btn-primary d-grid w-50 mx-auto btn-save-task">Save Task</button>
       </div>
@@ -366,26 +388,39 @@
     </div>
     <div class="modal-body">
       <div class="createSection">
+        <h5>Add section</h5>
         <form (ngSubmit)="createNewSection()">
           <div class="mb-3">
             <input type="text" class="form-control" placeholder="Enter new section name" [(ngModel)]="newSectionName" name="sectionName" autocomplete="off">
           </div>
-          <button type="submit" class="btn btn-primary d-grid w-50 mx-auto">Create Section</button>
+          <button type="submit" class="btn btn-primary d-grid w-50 mx-auto addSection" [disabled]="!newSectionName">Create Section</button>
         </form>
       </div>
       <div class="tProjectSection">
-        <div *ngIf="projectSections && projectSections.length > 0; else noSections">
-          <div *ngFor="let section of projectSections" class="section-row">
-            <div class="tSection-name">{{ section.sectionName }}</div>
-            <div class="tSection-delete">
-              <button type="button" class="btn btn-danger btn-sm" (click)="deleteSection(+section.id)">Delete</button>
-            </div>
+        <div style="margin-bottom: 1rem;">
+          <h5>Section list</h5>
+          <input type="text" class="form-control form-control-sm search" placeholder="Search by section name..." [(ngModel)]="searchSection" (input)="filterSections()">
+        </div>
+        <div>
+          <div class="d-flex justify-content-between tableHeaders" style="padding-left: 0;">
+            <span>Name</span>
+            <span style="text-align: right;">Delete section</span>
+          </div>
+          <div class="scroll">
+            <table class="table table-sm SectionTable">
+              <tbody>
+                <tr *ngFor="let section of filteredSections">
+                  <td>{{ section.sectionName }}</td>
+                  <td class="delSection"><span class="deleteMember" (click)="deleteSection(+section.id)" data-toggle="dropdown" *ngIf="userRole != 2 && userRole != 3 && userRole != 4">×</span></td>
+                </tr>
+                <tr *ngIf="filteredSections.length == 0">
+                  <td class="noSections">No sections found</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <ng-template #noSections>
-        <p>No sections found.</p>
-      </ng-template>
     </div>
   </div>
 </ng-template>

@@ -23,13 +23,13 @@
                 <label for="StartDate" class="form-label">Start Date</label>
                 <input class="form-control" type="date" placeholder="Start Date" [(ngModel)]="newProject.StartDate" name="StartDate" [ngClass]="{'is-invalid': buttonClicked && !newProject.StartDate || isInvalidDate()}">
                 <div *ngIf="buttonClicked && !newProject.StartDate" class="invalid">Please enter start date.</div>
-                <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+                <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
               </div>
               <div class="mb-3">
                 <label for="EndDate" class="form-label">End Date</label>
                 <input class="form-control" type="date" placeholder="End Date" [(ngModel)]="newProject.EndDate" name="EndDate" [ngClass]="{'is-invalid': buttonClicked && !newProject.EndDate || isInvalidDate()}">
                 <div *ngIf="buttonClicked && !newProject.EndDate" class="invalid">Please enter end date.</div>
-                <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+                <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
               </div>
               <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Description</label>
