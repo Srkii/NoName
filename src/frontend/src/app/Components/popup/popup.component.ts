@@ -428,7 +428,7 @@ export class PopupComponent {
       projectId: this.selectedProject.id,
       appUserId: this.selectedUser?.appUserId,
       dueDate: task.endDate,
-      sectionId: this.selectedSection ? parseInt(this.selectedSection.id) : 0
+      sectionId: this.selectedSection ? this.selectedSection.id : 0
     };
 
     this.myTasksService.changeTaskInfo(dto).subscribe({

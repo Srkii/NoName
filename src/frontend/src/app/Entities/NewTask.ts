@@ -5,5 +5,6 @@ export interface NewTask {
     StartDate: Date,
     EndDate: Date,
     AppUserId: number,
-    ProjectId: number
+    ProjectId: number,
+    ProjectSectionId: number,
 }

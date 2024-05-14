@@ -255,7 +255,9 @@
     <form class="mb-3" (ngSubmit)="saveTask()">
       <div class="mb-1" autocomplete="off">
           <label for="taskName" class="form-label">Task Name</label>
-          <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName" placeholder="Enter new tasks's name"/>
+          <input type="text" class="form-control" name="taskName" [(ngModel)]="newTaskName"  [ngClass]="{'is-invalid': buttonClicked && (!newTaskName || taskNameExists)}" placeholder="Enter new tasks's name"/>
+          <div *ngIf="buttonClicked && !newTaskName && !taskNameExists" class="invalid">Please enter task name.</div>
+          <div *ngIf="buttonClicked && taskNameExists" class="invalid">You already have task with the same name.</div>
       </div>
       <div class="mb-1" autocomplete="off">
           <label for="taskDescription" class="form-label">Task Description</label>
@@ -263,43 +265,71 @@
       </div>
       <div class="mb-1">
           <label for="startDate" class="form-label">Start Date</label>
-          <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" placeholder="Start Date"/>
+          <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskStartDate || isInvalidDate()}"  placeholder="Start Date"/>
+          <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
+          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
       </div>
       <div class="mb-1">
           <label for="endDate" class="form-label">End Date</label>
-          <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" placeholder="End Date"/>
+          <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}" placeholder="End Date"/>
+          <div *ngIf="buttonClicked && !newTaskEndDate" class="invalid">Please enter end date.</div>
+          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
       </div>
       <div class="mb-1 chooseAssignee" autocomplete="off">
         <label for="assignee2" class="form-label">Assignee</label>
-        <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
-          <ng-template ng-option-tmp let-user="item" let-index="index">
-            <div style="display: flex; align-items: center;">
-              <div *ngIf="user.profilePicUrl" class="nameAvatar">
-                <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+        <div class="ng-select-wrapper" [ngClass]="{'is-invalid': buttonClicked && !selectedUser}">
+          <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
+            <ng-template ng-option-tmp let-user="item" let-index="index">
+              <div style="display: flex; align-items: center;">
+                <div *ngIf="user.profilePicUrl" class="nameAvatar">
+                  <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                </div>
+                <div *ngIf="!user.profilePicUrl" class="nameAvatar">
+                  <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+                </div>
+                <div>
+                  {{ user.fullName }}
+                </div>
               </div>
-              <div *ngIf="!user.profilePicUrl" class="nameAvatar">
-                <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <div style="display: flex; align-items: center;">
+                <div *ngIf="item.profilePicUrl" class="nameAvatar">
+                  <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                </div>
+                <div *ngIf="!item.profilePicUrl" class="nameAvatar">
+                  <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
+                </div>
+                <div>
+                  {{ item.fullName }}
+                </div>
               </div>
-              <div>
-                {{ user.fullName }}
-              </div>
-            </div>
-          </ng-template>
-          <ng-template ng-label-tmp let-item="item">
-            <div style="display: flex; align-items: center;">
-              <div *ngIf="item.profilePicUrl" class="nameAvatar">
-                <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
-              </div>
-              <div *ngIf="!item.profilePicUrl" class="nameAvatar">
-                <ngx-avatars class="ngAvtr" size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
-              </div>
-              <div>
-                {{ item.fullName }}
-              </div>
-            </div>
-          </ng-template>
-        </ng-select>
+            </ng-template>
+          </ng-select>
+        </div>
+        <div *ngIf="buttonClicked && !selectedUser" class="invalid">Please select Assignee.</div>
       </div>
+
+      <div class="mb-1 chooseSection" autocomplete="off">
+        <label  class="form-label">Section</label>
+          <ng-select class="sectionDropdown" [items]="projectSections" [(ngModel)]="selectedSection" name="section"  placeholder="Select Section">
+            <ng-template ng-option-tmp let-section="item" let-index="index">
+              <div style="display: flex; align-items: center;">
+                <div>
+                  {{ section.sectionName }}
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <div style="display: flex; align-items: center;">
+                <div>
+                  {{ item.sectionName }}
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+      </div>
+      
       <div>
         <button class="btn btn-primary d-grid w-50 mx-auto btn-save-task">Save Task</button>
       </div>

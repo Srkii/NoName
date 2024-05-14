@@ -43,7 +43,7 @@ export class NotificationsService{
   });
 
     this.hubConnection.on('newNotifications',() =>{//ovo mi onda u sustini ne treba ako cu ja sa fronta da invokeujem getter za notifikacije
-      // //this.toastr.success("You have unread notifications!");
+      // //// this.toastr.success("You have unread notifications!");
       this.newNotifications = true;
     });
 
