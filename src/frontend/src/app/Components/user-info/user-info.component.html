@@ -1,6 +1,6 @@
 <div class="container-xxl">
   <div class="card" style="padding: 3%;">
-    <div class="d-flex align-items-start align-items-sm-center">
+    <div class="d-flex align-items-start align-items-sm-center tContainer">
       <div id="account_banner">
         <div id="photo_wrap">
           <img *ngIf="userInfo?.profilePicUrl" id="profile_photo"[src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
@@ -22,18 +22,30 @@
           </ul>
         </div>
         <div class="fullname">
-          <span id="rolename">{{role}}</span><br>
-          <span id="full_name">{{userInfo?.firstName}} {{userInfo?.lastName}}</span>
+          <span id="rolename">{{role}}</span>
+          <!-- <span id="full_name">{{userInfo?.firstName}} {{userInfo?.lastName}}</span> -->
         </div>
         <input #inputClick type="file" style="display: none;" (change)="onImageSelected($event,cropperModal)" accept="image/*">
       </div>
       <div id="user_info" *ngIf="userInfo">
-        <h5>Details</h5>
-        <div>
-          First name: {{userInfo?.firstName}}<br>
-          Last name: {{userInfo?.lastName}}<br>
-          Email: {{userInfo?.email}}<br>
-          Role: {{role}}<br>
+        <!-- <h5>Details</h5> -->
+        <div class="tUserInfo">
+          <div class="InfoWrap">
+            <div class="tInfoCategory">First name:</div>
+            <div class="tInfo">{{userInfo?.firstName}}</div>
+          </div>
+          <div class="InfoWrap">
+            <div class="tInfoCategory">Last name:</div>
+            <div class="tInfo">{{userInfo?.lastName}}</div>
+          </div>
+          <div class="InfoWrap">
+            <div class="tInfoCategory">Email:</div>
+            <div class="tInfo">{{userInfo?.email}}</div>
+          </div>
+          <div class="InfoWrap">
+            <div class="tInfoCategory">Role:</div>
+            <div class="tInfo">{{role}}</div>
+          </div>
         </div>
       </div>
       <div id="clear"></div>
@@ -112,7 +124,7 @@
 
 <ng-template #removalModal class="modal-nody" style="padding:0;">
   <div class="card">
-    <div class="card-header"><h4>Do you want to remove the profile picture?</h4></div>
+    <div class="card-header"><h4 style="font-size: 20px;">Remove your profile photo?</h4></div>
     <div class="card-body" style="align-items: center; display: flex; gap: 5px;">
       <button class="btn btn-primary d-grid w-50"(click)="this.removeImage()">Remove</button>
       <button class="btn btn-primary d-grid w-50" (click)="removeModalRef?.hide()">Cancel</button>

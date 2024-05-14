@@ -33,4 +33,11 @@ export class SharedService {
   taskAdded(success: boolean) {
     this.taskAddedSource.next(success);
   }
+
+  // emit za novu sekciju
+  sectionUpdated = new EventEmitter<void>();
+  notifySectionUpdate() {
+    this.sectionUpdated.emit();
+  }
+  
 }
