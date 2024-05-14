@@ -608,6 +608,7 @@ textarea:focus{
 }
 .btn-save-task {
     margin-top: 15px;
+    color: #fff !important;
 }
 .btn-save-task:hover {
     color: #fff !important;
@@ -656,6 +657,23 @@ textarea:focus{
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
     vertical-align: middle !important; /* Aligns the image baseline to the middle */
+}
+.tProjectSection {
+    margin-top: 20px;
+}
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tSection-name {
+    flex-grow: 1;
+}
+
+.tSection-delete {
+    flex-basis: auto;
 }
 
 .is-invalid{

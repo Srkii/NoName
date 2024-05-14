@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Priority, Project, ProjectStatus } from '../../Entities/Project';
@@ -10,12 +10,13 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UpdateProject } from '../../Entities/UpdateProject';
 import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
-import { Member } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NewTask } from '../../Entities/NewTask';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { ProjectSection } from '../../Entities/ProjectSection';
+import { ProjectSectionService } from '../../_services/project-section.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -70,7 +71,8 @@ export class ProjectDetailComponent implements OnInit {
   newTaskProjectSectionId: number | null = null;
   currentProjectId: number | null = null;
   users: TaskAssignee[] = [];
-  selectedUser: TaskAssignee | undefined;;
+  selectedUser: TaskAssignee | undefined;
+  selectedSection: ProjectSection | undefined;
   filterValue: string | undefined = '';
   @Output() taskAdded = new EventEmitter<boolean>();
 
@@ -80,6 +82,9 @@ export class ProjectDetailComponent implements OnInit {
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
 
+  // za section modal
+  projectSections: ProjectSection[] = [];
+  newSectionName: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -89,7 +94,8 @@ export class ProjectDetailComponent implements OnInit {
     private modalService: BsModalService,
     private datePipe: DatePipe,
     public uploadservice: UploadService,
-    private shared: SharedService
+    private shared: SharedService,
+    private projectSectionService: ProjectSectionService
   ) {}
 
   get formattedEndDate() {
@@ -106,6 +112,9 @@ export class ProjectDetailComponent implements OnInit {
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
+    this.shared.sectionUpdated.subscribe(() => {
+      this.getProjectInfo();
+    })
     this.getProjectInfo();
     this.shared.togglePopup$.subscribe(({ event, taskId }) => {
     this.togglePopUp(event, taskId);
@@ -371,9 +380,11 @@ export class ProjectDetailComponent implements OnInit {
   async saveTask() {
     this.taskNameExists = false;
     this.buttonClicked = true;
-    
+    console.log(this.selectedSection);
+
+
     if(!this.newTaskName)
-      {
+    {
         console.log("No task name");
         return;
     }
@@ -384,30 +395,30 @@ export class ProjectDetailComponent implements OnInit {
         console.log("Task name already exists")
         return;
       }
-  
-      if(this.newTaskStartDate == undefined || this.newTaskEndDate == undefined)
-      {
-        console.log("You must enter a dates for the task")
-        return;
-      }
-  
-      if(this.isInvalidDate())
-      {
-        console.log("Unvalid dates");
-        return;
-      }
-  
-      if(this.newTaskName == undefined)
-      {
-        console.log("You must specify task name")
-        return
-      }
-      if(this.selectedUser==undefined)
-      {
-        console.log("No user selected");
-        return;
-      }
-    
+
+    if(this.newTaskStartDate == undefined || this.newTaskEndDate == undefined)
+    {
+      console.log("You must enter a dates for the task")
+      return;
+    }
+
+    if(this.isInvalidDate())
+    {
+      console.log("Unvalid dates");
+      return;
+    }
+
+    if(this.newTaskName == undefined)
+    {
+      console.log("You must specify task name")
+      return
+    }
+    if(this.selectedUser==undefined)
+    {
+      console.log("No user selected");
+      return;
+    }
+      
     this.buttonClicked = false;
     const task: NewTask = {
       CreatorId: Number(localStorage.getItem('id')),//treba mi da ne bih kreatoru slao da je dodelio sam sebi task ~maksim
@@ -416,7 +427,8 @@ export class ProjectDetailComponent implements OnInit {
       StartDate: this.newTaskStartDate || new Date(),
       EndDate: this.newTaskEndDate || new Date(),
       ProjectId: this.currentProjectId || 0,
-      AppUserId: this.selectedUser?.appUserId || 0
+      AppUserId: this.selectedUser?.appUserId || 0,
+      ProjectSectionId: this.selectedSection?.id || 0
     };
     console.log(task);
     this.myTasksService.createTask(task).subscribe({
@@ -433,12 +445,14 @@ export class ProjectDetailComponent implements OnInit {
         this.newTaskStatusId = null;
         this.newTaskProjectSectionId = null;
         this.selectedUser = undefined;
+        this.selectedSection = undefined;
       },
       error: (error) => console.error('Error creating task:', error)
     });
   }
   // vraca AppUsers koji su na projektu
-  getProjectsUsers(currentProjectId: number) {
+  getProjectsUsersAndSections(currentProjectId: number) {
+    const noSection = { id: 0, sectionName: 'No Section', projectId:currentProjectId };
     this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
       next: response => {
         this.users = response,
@@ -448,11 +462,19 @@ export class ProjectDetailComponent implements OnInit {
       },
       error: error => console.log(error)
     });
+    this.projectSectionService.getSectionsByProject(currentProjectId)
+    .subscribe(sections => {
+      this.projectSections = sections;
+      this.projectSections.unshift(noSection);
+    });
+
   }
 
   openNewTaskModal(modal: TemplateRef<void>) {
     if (this.currentProjectId !== null)
-      this.getProjectsUsers(this.currentProjectId);
+    {
+      this.getProjectsUsersAndSections(this.currentProjectId);
+    }
     this.modalRef = this.modalService.show(
       modal,
       {
@@ -495,11 +517,45 @@ export class ProjectDetailComponent implements OnInit {
     return false
   }
 
+  openSectionModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-md modal-dialog-centered'
+    });
+    if (this.currentProjectId) {
+      this.projectSectionService.getSectionsByProject(this.currentProjectId)
+        .subscribe(sections => {
+          this.projectSections = sections;
+        });
+    }
+  }
+
+  deleteSection(sectionId: number) {
+    this.projectSectionService.deleteSection(sectionId).subscribe(() => {
+      this.projectSections = this.projectSections.filter(section => Number(section.id) !== sectionId);
+      this.shared.notifySectionUpdate();
+    });
+  }
+
+  createNewSection() {
+    if (this.newSectionName.trim() && this.currentProjectId !== null) {
+      this.projectSectionService.createSection(this.newSectionName, this.currentProjectId).subscribe({
+        next: (section) => {
+          this.projectSections.push(section);
+          this.shared.notifySectionUpdate();
+          this.newSectionName = '';
+        },
+        error: (error) => {
+          console.error('Error creating section:', error);
+        }
+      });
+    }
+  }
+
   async TaskNameExists()
   {
     try
     {
-      var task = await this.myTasksService.TaskNameExists(this.newTaskName).toPromise();
+      var task = await this.myTasksService.TaskNameExists(this.newTaskName,this.project.id).toPromise();
       return task? true : false;
     }
     catch(error)

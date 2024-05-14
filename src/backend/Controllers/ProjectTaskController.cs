@@ -41,7 +41,8 @@ namespace backend.Controllers
                         .FirstOrDefault(),
                 // ProjectSectionId = taskDto.ProjectSectionId,
                 DateCreated = DateTime.Now, // postavlja vreme i datum kad je task kreiran
-                AppUserId = taskDto.AppUserId
+                AppUserId = taskDto.AppUserId,
+                ProjectSectionId=taskDto.ProjectSectionId!=0 ? taskDto.ProjectSectionId : null,
             };
 
             await _context.ProjectTasks.AddAsync(task);
@@ -699,12 +700,12 @@ namespace backend.Controllers
             return Ok("Project progress updated");
         } 
     
-    [HttpGet("getTaskByName/{taskName}")]
-    public async Task<ActionResult<int>> GetTaskByName(string taskName)
-    {
-        var task = await _context.ProjectTasks.FirstOrDefaultAsync(task => task.TaskName.ToLower() == taskName.ToLower());
-        return Ok(task);
-    }
+        [HttpGet("getTaskByName/{taskName}/{projectId}")]
+        public async Task<ActionResult<int>> GetTaskByName(string taskName,int projectId)
+        {
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(task => task.TaskName.ToLower() == taskName.ToLower() && task.ProjectId==projectId);
+            return Ok(task);
+        }
 
     }
 

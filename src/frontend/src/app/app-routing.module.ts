@@ -16,24 +16,24 @@ import { LandingPageComponent } from './Components/landing-page/landing-page.com
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'register', component: RegisterComponent, canActivate: [loginGuard] },
-  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
-  { path: 'forgotpass', component: ForgotPassComponent, canActivate: [loginGuard] },
-  { path: 'forgotreset', component: ForgotResetComponent, canActivate: [loginGuard] },
-  { path: 'project/:id', component: ProjectDetailComponent},
-  { path: 'landing', component: LandingPageComponent},
+  { path: 'register', component: RegisterComponent, title: 'Register', canActivate: [loginGuard] },
+  { path: 'login', component: LoginComponent, title: 'Login', canActivate: [loginGuard] },
+  { path: 'forgotpass', component: ForgotPassComponent, title: 'Forgot Password', canActivate: [loginGuard] },
+  { path: 'forgotreset', component: ForgotResetComponent, title: 'Reset Password', canActivate: [loginGuard] },
+  { path: 'project/:id', component: ProjectDetailComponent, title: 'Project Details', canActivate: [authGuard] },
+  { path: 'landing', component: LandingPageComponent, title: 'Landing Page' },
   {
     path: '',
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
     children: [
-      { path: 'userinfo', component: UserInfoComponent },
-      { path: 'myprojects', component: MyProjectsComponent },
-      { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },
-      { path: 'mytasks', component: MyTasksComponent}
+      { path: 'userinfo', component: UserInfoComponent, title: 'User Information' },
+      { path: 'myprojects', component: MyProjectsComponent, title: 'My Projects' },
+      { path: 'admin', component: AdminComponent, title: 'Admin Panel', canActivate: [adminGuard] },
+      { path: 'mytasks', component: MyTasksComponent, title: 'My Tasks' }
     ],
   },
-
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({

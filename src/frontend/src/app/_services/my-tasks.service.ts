@@ -117,8 +117,8 @@ export class MyTasksService {
     return this.http.post<any>(`${this.baseUrl}/timeUpdateGantt/${id}`,newDatetime);
   }
 
-  TaskNameExists(taskName: string): Observable<ProjectTask> {
-    return this.http.get<ProjectTask>(`${this.baseUrl}/getTaskByName/${taskName}`);
+  TaskNameExists(taskName: string,projectID:number): Observable<ProjectTask> {
+    return this.http.get<ProjectTask>(`${this.baseUrl}/getTaskByName/${taskName}/${projectID}`);
   }
 
 
