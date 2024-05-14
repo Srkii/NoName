@@ -22,7 +22,7 @@
     </div>
     <div class="scroll" [ngClass]="{ 'hide_comment': hide_comment_area(),'show_comment': !hide_comment_area() }" #commentDiv>
       <ng-template class="modal" #ConfimDelete>
-        <div (click)="$event.stopPropagation();" class="modal-container" style="color: #697a8d; font-weight: bold;">
+        <div (click)="$event.stopPropagation();" class="modal-container" style="color: #697a8d; font-size: 16px;">
             <h1 style="text-align: center;">Delete Task?</h1>
           <p >You're about to permanently delete this issue, its comments and attachments, and all of its data.</p>
           <p >If you're not sure, you can resolve or close this issue instead.</p>
@@ -183,7 +183,7 @@
                   <button class="save_edit" id="save_edit{{comment.id}}" style="display: none;" (click)="editContent(comment.id)">Save Changes</button>
                   <button class="cancel_edit" id="cancel_edit{{comment.id}}" style="display: none;" (click)="CancelEdit(comment.id)">Cancel</button>
                   <label class="fileUrl" style="margin-left: 20px;" for="fileurl" (click)="downloadFile(comment?.fileUrl)" *ngIf="comment?.fileUrl">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-arrow-down" viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-arrow-down msvg-download" viewBox="0 0 16 16">
                       <path d="M8 5a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5A.5.5 0 0 1 8 5"/>
                       <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
                     </svg>
