@@ -293,23 +293,24 @@ select:disabled {
     background-image: none;
     padding:0;
 }
-textarea{
+.area-desc{
     color: #697a8d;
     border-radius: 0;
     border-top: 1px solid;
     border-color: #dcdbdb;
+    width: 34.5rem !important;
+    height: 20rem !important;
 }
-textarea:disabled {
+.area-desc:disabled {
     border-top: 1px solid #dcdbdb;
     resize: none;
 }
-textarea:focus{
+.area-desc:focus{
     box-shadow: none;
     border-color: #696cff;
     color: #697a8d;
 }
-.details h5{
-    border-bottom: 1px solid  #dcdbdb;
+.heading{
     padding-left: 0.7rem;
     padding-bottom: 0.2rem;
 }
@@ -325,7 +326,6 @@ textarea:focus{
     justify-content: center;
 }
 .description h5{
-    padding-left: 0.7rem;
     margin-bottom: 0.2rem;
 }
 .COMPLETED{
@@ -469,8 +469,8 @@ textarea:focus{
 }
 .scroll{
     overflow-y: auto;
-    height: 8.7rem;
-    max-height: 8.7rem;
+    height: 7.5rem;
+    max-height: 7.5rem;
 }
 
 .nameAvatar {
