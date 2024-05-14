@@ -534,3 +534,20 @@ img{
 .guestDdate{
   margin-left: 10px;
 }
+
+
+.download-link
+{
+  padding-left: 3px; 
+  padding-right: 3px;
+  color: #696cff;
+}
+.fileUrl:hover{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.upload_attachment{
+  align-items: start;
+  display: inline;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
