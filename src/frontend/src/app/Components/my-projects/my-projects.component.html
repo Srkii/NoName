@@ -103,12 +103,6 @@
           </tr>
         </table>
     </div>
-    <!-- <div id="pages">
-      <button *ngIf="this.currentPage!=1" class="navigate" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
-      <span id="page">{{ currentPage }}</span> 
-      <button *ngIf="currentPage * pageSize < projects.length" class="navigate" (click)="nextPage()" [disabled]="currentPage * pageSize >= projects.length">Next</button>
-    </div> -->
-
 
 
 <div *ngIf="this.filteredProjects>5" id="pages">

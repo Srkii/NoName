@@ -350,7 +350,7 @@ img{
 .taskName:hover, .taskName:focus, .taskName:active {
   border-radius: 8px;
   border: 1px solid #5f61e6 !important;
-  border-color: #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
 }
 
 .taskDueDate input:hover,
@@ -358,6 +358,7 @@ img{
 {
   outline: 1px solid #5f61e6 !important;
   border-radius: 8px;
+  box-shadow: 0 0 3px #5f61e6;
 }
 .taskDueDate{
   display: flex;

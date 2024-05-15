@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { Member, UserRole } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
+import { switchMap } from 'rxjs';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class MyProjectsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    var all_projects:number=-1;
     this.spinner.show();
 
     const userId = localStorage.getItem('id')
@@ -60,20 +62,24 @@ export class MyProjectsComponent implements OnInit {
     
     }
 
-    this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
-      this.all_projects = count;
-    });
-    this.myProjectsService.filterAndPaginateProjects(
-      this.searchText,
-      this.selectedStatus,
-      startDate,
-      endDate,
-      userId,
-      this.currentPage,
-      this.pageSize
+    this.myProjectsService.GetUsersProjectsCount(userId).pipe(
+      switchMap((count: number) => {
+        this.all_projects = count;
+        return this.myProjectsService.filterAndPaginateProjects(
+          this.searchText,
+          this.selectedStatus,
+          startDate,
+          endDate,
+          userId,
+          this.currentPage,
+          this.pageSize
+        );
+      })
     ).subscribe((projects: Project[]) => {
       this.projects = projects;
-      this.filteredProjects=this.all_projects;
+      this.filteredProjects = this.all_projects;
+      console.log(this.filteredProjects);
+      console.log("A: " + this.all_projects);
       this.totalPages = Math.ceil(this.all_projects / this.pageSize);
       this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
       this.loadProjectOwners();
