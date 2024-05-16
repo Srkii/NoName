@@ -745,3 +745,6 @@ input[type="date"].is-invalid{
     padding-bottom: 12px;
 }
 
+.tAssigneeName {
+    margin-left: 5px;
+}

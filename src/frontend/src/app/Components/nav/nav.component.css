@@ -130,6 +130,8 @@ body {
   padding-bottom: 0%;
   margin: 0px !important;
 }
+.logoImg:hover {
+cursor: pointer;}
 .dropdown-menu-end{
   --bs-dropdown-link-active-bg: #f4f3f3;
 }
