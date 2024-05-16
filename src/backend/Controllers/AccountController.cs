@@ -68,6 +68,7 @@ namespace backend.Controllers
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if(user == null) return Unauthorized("Account with this e-mail doesn't exists.");
+            if(user.Archived) return Unauthorized("Account with this e-mail doesn't exists.");
 
             var hmac = new HMACSHA512(user.PasswordSalt);
 
