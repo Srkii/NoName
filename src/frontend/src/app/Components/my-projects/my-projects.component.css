@@ -182,7 +182,7 @@ p {
 }
 
 
-.paginate_button button:hover,
+.paginate_button button:not(:disabled):hover,
 .paginate_buttons button:not(:disabled):hover{
   cursor: pointer;
   color: #fff !important;
@@ -195,7 +195,8 @@ p {
   border-color: #5f61e6 !important;
   transform: translateY(-1px) !important;
 }
-.paginate_buttons button:disabled{
+.paginate_buttons button:disabled,
+.paginate_button button:disabled{
   border: none;
   color: #ccc; 
   background-color: #eee; 

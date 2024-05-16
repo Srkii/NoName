@@ -2,7 +2,7 @@
 
   <div class="navbar-brand">
     <!-- Logo image will act as a toggle for small screens -->
-    <img src="../../../assets/navIcons/logo.png" class="logoImg d-xl-none dropdown-toggle hide-arrow"
+    <img src="../../../assets/navIcons/logo.png"  class="logoImg d-xl-none dropdown-toggle hide-arrow"
     href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
     <div class="dropdown-menu dropdown-menu-responsive">
       <ul class="firstDrop">
@@ -61,7 +61,7 @@
 
       <ul class="dropdown-menu dropdown-menu-end">
       <li class="rightDrop">
-        <div class="dropdown-item">
+        <div class="dropdown-item" routerLink="/userinfo">
           <div class="d-flex">
             <div class="avatar avatar-online">
               <ngx-avatars *ngIf="!user?.profilePicUrl" size="45" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>

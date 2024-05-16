@@ -220,10 +220,11 @@ export class MyProjectsComponent implements OnInit {
   changePageSize(event: Event): void {
     const target = event.target as HTMLSelectElement;
     if (target.value !== '') {
+      this.currentPage=1;
       const pageSize = Number(target.value);
       this.pageSize = pageSize;
       const id = localStorage.getItem('id');
-    this.loadProjects(id);
+      this.loadProjects(id);
     }
   }
 
@@ -252,15 +253,25 @@ export class MyProjectsComponent implements OnInit {
   }
 }
 
-isOverdue(endDate: Date): boolean {
-  const now = new Date().getTime(); 
-  const endDateTimestamp = new Date(endDate).getTime(); 
-  return endDateTimestamp <= now; 
-}
+  isOverdue(endDate: Date): boolean {
+    const now = new Date().getTime(); 
+    const endDateTimestamp = new Date(endDate).getTime(); 
+    return endDateTimestamp <= now; 
+  }
 
-getProgressClass(progress: number): string {
-  return progress <= 15? 'progress-type2' : 'progress-type1';
-}
-  
-  
+  getProgressClass(progress: number): string {
+    return progress <= 15? 'progress-type2' : 'progress-type1';
+  }
+  getDisplayedPages(): number[] {
+    const maxDisplayedPages = 5;
+    let startPage = Math.max(this.currentPage - Math.floor(maxDisplayedPages / 2), 1);
+    let endPage = Math.min(startPage + maxDisplayedPages - 1, this.totalPages);
+
+    if (startPage > this.totalPages - maxDisplayedPages + 1) {
+        startPage = Math.max(this.totalPages - maxDisplayedPages + 1, 1);
+        endPage = this.totalPages;
+    }
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
 }

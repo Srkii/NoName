@@ -16,7 +16,7 @@
         <h5>All Projects</h5>
         <div class="d-flex justify-content-end page-size-container">
           <select class="page_size" (change)="changePageSize($event)">
-            <option value="" selected>Select page size</option>
+            <option value="" hidden selected>Select page size</option>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="15">15</option>
@@ -105,16 +105,22 @@
     </div>
 
 
-<div *ngIf="this.filteredProjects>5" id="pages">
+<div *ngIf="this.filteredProjects>this.pageSize" id="pages">
   <ul class="pagination">
     <li class="paginate_buttons previous" [class.disabled]="currentPage === 1">
-      <button (click)="prevPage()" [disabled]="currentPage === 1">&laquo;</button>
+      <button (click)="goToPage(1)" [disabled]="currentPage === 1">&laquo;</button>
     </li>
-    <li class="paginate_button" *ngFor="let pageNumber of totalPagesArray">
+    <li class="paginate_button previous" [class.disabled]="currentPage === 1">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">&lt;</button>
+    </li>
+    <li class="paginate_button" *ngFor="let pageNumber of getDisplayedPages()">
       <button (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
     </li>
+    <li class="paginate_button next" [class.disabled]="currentPage === totalPages">
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">&gt;</button>
+    </li>
     <li class="paginate_buttons next" [class.disabled]="currentPage === totalPages">
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages">&raquo;</button>
+      <button  (click)="goToPage(totalPagesArray.length)" [disabled]="currentPage === totalPages">&raquo;</button>
     </li>
   </ul>
 </div>
