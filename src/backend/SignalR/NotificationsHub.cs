@@ -54,7 +54,7 @@ namespace backend.SignalR
             var userId = Context.UserIdentifier;
 
             var notifications = await _context.Notifications
-            .Where(x=>x.reciever_id.ToString()==userId && x.read==false)
+            .Where(x=>x.reciever_id.ToString()==userId)//sad uzima hronoloskim redom notif
             .OrderByDescending(x=>x.dateTime)
             .Select(notification => new NotificationDto
             {

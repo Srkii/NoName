@@ -42,8 +42,7 @@ export class NotificationsService{
       console.log(error);
   });
 
-    this.hubConnection.on('newNotifications',() =>{//ovo mi onda u sustini ne treba ako cu ja sa fronta da invokeujem getter za notifikacije
-      // //// this.toastr.success("You have unread notifications!");
+    this.hubConnection.on('newNotifications',() =>{
       this.newNotifications = true;
     });
 
@@ -61,7 +60,7 @@ export class NotificationsService{
     })
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
       this.notifications = notifications;
-      this.newNotifications = false;
+      //this.newNotifications = false;
     });
 
     this.hubConnection.on('recieveAllNotifications',(notifications:[Notification])=>{
@@ -74,7 +73,7 @@ export class NotificationsService{
   async getNotifications(){
     //invoke funkcije na back-u kad se klikne na zvonce
     if(this.newNotifications){
-      await this.hubConnection?.invoke('invokeGetNotifications');//top 10 najskorijih neprocitanih notif
+      await this.hubConnection?.invoke('invokeGetNotifications');//top 10 najskorijih neprocitanih notif -> OD SADA SAMO NAJSKORIJE, U NOTIF TAB-U IZBACUJE SAD MALO DRUGACIJE..
       this.newNotifications = false;//ucitao nove notifikacije, nema potrebe da opet poziva getter
     }
   }
@@ -134,11 +133,25 @@ export class NotificationsService{
       event.stopPropagation();
       await this.router.navigate(['/project/' + notification.task.projectId]);
       setTimeout(()=>{
-        this.shared.triggerPopup(event, notification.task.id);  //mogu da ga aktiviram ali ne mogu nista dalje da mu uradim xd.
+        this.shared.triggerPopup(event, notification.task.id);  
+        //mogu da ga aktiviram ali ne mogu nista dalje da mu uradim xd.
       },500);
     } else if (notification.project != null) {
       await this.router.navigate(['/project/' + notification.project.id]);
     }
   }
-
+  getType(type:number){
+    switch(type){
+      case 0:
+        return "Attachment";
+      case 1:
+        return "Comment";
+      case 2:
+        return "Task Assignment";
+      case 3:
+        return "Project Assignment";
+      default:
+        return "";
+    }
+  }
 }

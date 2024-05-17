@@ -6,72 +6,27 @@
   height: auto;
   padding-right: 7px;
 }
-
-.dropdown-menu .firstDrop{
-  text-align: justify;
-  padding-top: 10px;
-  list-style: none;
-  background-color: #ffffff;
+/*notification tab*/
+.badge-dot {
+  height: 10px;
+  width: 10px;
+  background-color: #bbb; /* Default color */
+  border-radius: 50%;
+  display: inline-block;
 }
-.dropdown-menu .firstDrop .nav-item{
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-.dropdown-menu .firstDrop .nav-item a::after{
-  background-color: #413561;
+.badge-dot.unread {
+  background-color: #696cff; /* Red color for unread notifications */
 }
 
-.dropdown-item{
-  font-size: 14px;
-  color: #697a8d;
-  cursor: pointer;
+.badge-dot {
+  background-color: transparent; /* Green color for read notifications */
 }
-.dropdown-menu{
-  margin-top: 27px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  backdrop-filter: saturate(200%) blur(6px);
-  color: #697a8d;
-  border-color: #f5f5f9;
-  border-radius: 0.375rem;
-  padding-bottom: 0;
-}
-img{
-  width: 25px;
-  height: 25px;
-  /* object-fit: cover; */
-}
-
-ul{
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 0;
-}
-li{
+.flex-shrink-0 {
   display: flex;
-  align-items:center; 
-  margin-top: 5px;
-  margin-left: 15px;
-  padding: 3px;
+  align-items: center; 
+  justify-content: center; 
 }
-.dropdown-divider{
-  padding: 0;
-  margin: 0;
-}
-.see-all-container {
-  height: 30px;
-  align-content: center;
-  display: flex; /* Use flexbox for layout */
-  align-items: flex-end; /* Align items at the bottom */
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
-}
-.see-all-container:hover{
-  transition: 0.3s ease-in-out;
-  background-color: #696cff;
-  color : #ffffff;
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
-}
+/*tabela sa svim notif vvv*/
 .modal-ul{
   list-style: none;
   padding: 0;
@@ -92,12 +47,15 @@ li{
   overflow: auto;
 }
 
+table,tr,td{
+  border: 1px transparent;
+}
 .notifications-table{
   width: 100%;
 }
 td{
-  padding: 5px;
-  width: fit-content;
+  padding-top: 5px;
+  padding-bottom:5px;
   cursor: pointer;
 }
 .notification-data{
@@ -107,9 +65,7 @@ td{
   padding-left: 0; 
   text-align: start;
 }
-.notifications-table .active_tr{
-  border: 1px transparent;
-}
+
 .notifications-table .active_tr:hover{
   border-bottom : 1px solid #696cff;
 }
@@ -130,7 +86,8 @@ td{
 .btn-primary{
   padding: 5px;
   border:1px solid #696cff;
-  color: #697a8d;
+  background-color: white;
+  color: #696cff;
   border-radius: 0.375rem;
 }
 .btn-primary:hover{
@@ -139,3 +96,7 @@ td{
   transition: 0.5s ease-in-out;
 }
 
+img{
+  width: 25px;
+  height: 25px;
+}
