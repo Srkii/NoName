@@ -83,7 +83,10 @@ export class AdminComponent implements OnInit{
   modalRef?: BsModalRef;
 
   curentUserId: number=0
-
+  curentEmail: string=''
+  curentName: string=''
+  currentLastName: string=''
+  currentRole: string=''
   currentId=localStorage.getItem('id');
 
   isFilterActive: boolean=true;
@@ -155,9 +158,12 @@ export class AdminComponent implements OnInit{
       if(updateeUser){
         this.adminService.updateUser(id,updateeUser).subscribe(
           (response)=>{
-            this.GetUsers()
+            this.GetUsers();
           }
         )
+      }
+      else{
+        console.log("Can't update user role")
       }
     }
 
@@ -291,9 +297,25 @@ export class AdminComponent implements OnInit{
       })
     }
 
-    openModal(modal: TemplateRef<void>, userId: number)
+    openModal(modal: TemplateRef<void>, user:Member)
     {
-      this.curentUserId=userId;
+      this.curentUserId=user.id;
+      this.curentEmail=user.email;
+      this.curentName=user.firstName;
+      this.currentLastName=user.lastName;
+      if(user.role==0)
+      {
+        this.currentRole="Admin";
+      }
+      else if(user.role==1)
+      {
+        this.currentRole="Member"
+      }
+      else if(user.role==2)
+      {
+        this.currentRole="Project Manager"
+      }
+      
       this.modalRef = this.modalService.show(
         modal,
         {
