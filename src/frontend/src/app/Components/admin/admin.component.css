@@ -358,13 +358,14 @@ select:focus-visible{
 .archUsers{
   /* margin: 10px !important; */
   cursor: default;
-  width: 225px;
+  width: 190px;
   height: 30px;
   border-radius: 0.375rem;
   justify-content: center;
+  border-bottom: 2px solid #D7D7F8;
 }
 .archUsers:hover {
-  border-bottom:2px solid #5d57c2;
+  border-bottom: 2px solid #696cff;
 }
 .table-responsive text-nowrap{
   width: 100%;
