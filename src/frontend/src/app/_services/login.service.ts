@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppUser } from '../Entities/AppUser';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, map, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 @Injectable({
@@ -18,9 +18,16 @@ export class LoginService {
     });
   }
 
-  checkToken():boolean{
-    let token=localStorage.getItem('token');
-    let exist=!!token;
-    return exist;
+  IsTokenValid(token: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/validToken/${token}`);
+  }
+
+  async checkToken(): Promise<boolean> {
+    let token = localStorage.getItem('token');
+    if (token) {
+      var valid = await firstValueFrom(this.IsTokenValid(token));
+      return valid ? true : false;
+    }
+    return false;
   }
 }
