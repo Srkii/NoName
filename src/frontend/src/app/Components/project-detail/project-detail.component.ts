@@ -380,17 +380,6 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-  enableNameChange(){
-    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
-    changeNameInp.disabled = false;
-    changeNameInp.focus();
-  }
-
-  disableNameChange(){
-    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
-    changeNameInp.disabled = true;
-  }
-
   async saveTask() {
     this.taskNameExists = false;
     this.buttonClicked = true;
