@@ -56,7 +56,7 @@
     <div id="alert_div">
       <div id="warning_div">
         Ensure that these requirements are met:<br>
-        Minimum 8 characters long , one uppercase letter and symbol.
+        Minimum 5 characters long , one uppercase letter and symbol.
       </div>
       <div id="success_div">
         Password changed successfully!
@@ -124,10 +124,14 @@
 
 <ng-template #removalModal class="modal-nody" style="padding:0;">
   <div class="card">
-    <div class="card-header"><h4 style="font-size: 20px;">Remove your profile photo?</h4></div>
-    <div class="card-body" style="align-items: center; display: flex; gap: 5px;">
-      <button class="btn btn-primary d-grid w-50"(click)="this.removeImage()">Remove</button>
-      <button class="btn btn-primary d-grid w-50" (click)="removeModalRef?.hide()">Cancel</button>
+    <div class="card-header tRemoveModalHeader"><h4 style="font-size: 20px;">Remove your profile photo?</h4></div>
+    <div class="card-body tRemoveButtons" style="align-items: center; display: flex; gap: 5px;">
+      <div>
+        <button class="btn btn-outline-primary tCancelRemove" (click)="removeModalRef?.hide()">Cancel</button>
+      </div>
+      <div>
+        <button class="btn btn-primary"(click)="this.removeImage()">Remove</button>
+      </div>
     </div>
   </div>
 </ng-template>

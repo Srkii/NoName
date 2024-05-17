@@ -167,7 +167,7 @@ export class UserInfoComponent implements OnInit {
     var id = localStorage.getItem('id');
     var token = localStorage.getItem('token');
     this.uploadService.removePfp(id,token).subscribe({
-      next: (response) => {
+      next: () => {
         this.spinner.show();
         setTimeout(() => {
           this.spinner.hide();

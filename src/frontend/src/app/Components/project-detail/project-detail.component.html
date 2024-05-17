@@ -287,7 +287,7 @@
                 <div *ngIf="!user.profilePicUrl" class="nameAvatar">
                   <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
                 </div>
-                <div>
+                <div class="tAssigneeName">
                   {{ user.fullName }}
                 </div>
               </div>
@@ -363,7 +363,9 @@
             <div *ngIf="!task.profilePicUrl" class="nameAvatar boardAvatar">
               <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
             </div>
-            {{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}
+            <div class="tAssigneeName">
+              {{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}
+            </div>
           </div>
         </td>
         <td class="tdDate">{{task.startDate | date}}</td>

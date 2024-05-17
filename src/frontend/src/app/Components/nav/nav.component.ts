@@ -64,6 +64,8 @@ export class NavComponent implements OnInit {
     }
   }
 
-
+  redirectToMyTasks(): void {
+    this.router.navigate(['/mytasks']);
+  }
 
 }

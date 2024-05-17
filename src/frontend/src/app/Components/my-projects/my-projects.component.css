@@ -24,6 +24,7 @@ body {
   color: #5f61e6 !important;
 }
 #all {
+  /* max-width: 1320px; */
   margin-top: 30px;
   margin: auto;
   padding: 20px;
@@ -32,7 +33,7 @@ body {
   background-color: #ffffff;
   color: #697a8d;
   border: solid 1px #d9dee3;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   /* overflow-y: hidden;
   overflow-x: hidden; */
@@ -45,7 +46,7 @@ body {
 .filter p-calendar
 {
   color: #697a8d;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   font-size: 16px;
   height: 100%;
 }
@@ -54,13 +55,13 @@ body {
 .filter select:hover {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  box-shadow: 0 0 2px #5f61e6;
 }
 .filter input:focus,
 .filter select:focus {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  box-shadow: 0 0 2px #5f61e6;
 }
 
 table {
@@ -116,7 +117,7 @@ p {
   text-align: center;
   padding: 2px;
   margin-bottom: 2%;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   font-weight: 600;
 }
 
@@ -170,7 +171,7 @@ p {
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   margin-right: 5px;
 }
 .paginate_buttons button{
@@ -224,7 +225,7 @@ p {
   color: #697a8d;
   font-size: 16px;
   border: 0.5px solid lightgray;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding: 6px;
   width: 200px; 
 }
@@ -237,7 +238,7 @@ p {
 .addProject{
   font-size: 16px;
   padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 0.375rem;
   margin-left: 1rem;
   background-color: #696cff;
   border-color: #696cff;
@@ -286,15 +287,24 @@ p {
   color: #697a8d;
   
   font-size: 16px;
-  border-radius: 8px;
+  border-radius: 0.375rem;
 }
 :host::ng-deep.p-calendar input:hover{
   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
-
-
+:host::ng-deep.p-calendar input:active {
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
+}
+/* sklanja cudni outline i border kad je focus i sklonis mis */
+:host::ng-deep.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+  box-shadow: 0 0 3px #5f61e6;
+}
 :host::ng-deep#pn_id_1_panel {
   font-size: 14px;
 }
@@ -346,4 +356,7 @@ p {
 }
 .mFilters > div {
   flex: 1;
+}
+.mFilters input {
+  line-height: normal !important;
 }
