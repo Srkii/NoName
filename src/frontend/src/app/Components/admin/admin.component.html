@@ -65,7 +65,7 @@
           (input)="filterUsers(); "
         />
 
-      <select class="page_size" [(ngModel)]="pageSize" (ngModelChange)="filterUsers()">
+      <select class="page_size" *ngIf="filteredUsers>5"  [(ngModel)]="pageSize" (ngModelChange)="filterUsers()">
         <option value="5" selected>Select page size</option>
         <option value="5">5</option>
         <option value="10">10</option>
