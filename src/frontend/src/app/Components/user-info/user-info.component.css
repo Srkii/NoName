@@ -206,3 +206,9 @@ label{
   background-color: #fff;
   transform: translateY(-1px) !important;
 }
+
+.dropdown-item:hover{
+  background-color: #696cff;
+  color: #FFFFFF;
+  transition: 0.25s ease-in-out;
+}

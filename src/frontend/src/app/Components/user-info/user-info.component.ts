@@ -128,16 +128,14 @@ export class UserInfoComponent implements OnInit {
       console.log("crop failed...");
   }
   uploadCroppedImage(){
+    this.spinner.show();
     var id = localStorage.getItem('id');
     var token = localStorage.getItem('token');
     var imageFile =  new File([this.cropImgPreview],id+"-"+this.imageName+'-userimg.png',{type: 'image/png'});
     this.uploadService.UploadImage(id,imageFile,token).subscribe({
       next: (response) => {
         console.log('Image uploaded successfully', response);
-        this.spinner.show();
-        setTimeout(() => {
-          this.spinner.hide();
-        }, 2000);
+        this.spinner.hide();
         location.reload();
       },
       error: (error) => {
@@ -164,14 +162,12 @@ export class UserInfoComponent implements OnInit {
   }
   removeImage(){
     this.removeModalRef?.hide();
+    this.spinner.show();
     var id = localStorage.getItem('id');
     var token = localStorage.getItem('token');
     this.uploadService.removePfp(id,token).subscribe({
       next: () => {
-        this.spinner.show();
-        setTimeout(() => {
-          this.spinner.hide();
-        }, 2000);
+        this.spinner.hide();
         location.reload();
       },
       error: (error) => {

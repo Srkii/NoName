@@ -99,7 +99,6 @@ td{
   padding: 5px;
   width: fit-content;
   cursor: pointer;
-
 }
 .notification-data{
   margin-left: 0;
@@ -108,8 +107,11 @@ td{
   padding-left: 0; 
   text-align: start;
 }
+.notifications-table .active_tr{
+  border: 1px transparent;
+}
 .notifications-table .active_tr:hover{
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-bottom : 1px solid #696cff;
 }
 .inactive_tr{
   border-bottom: #697a8d;
