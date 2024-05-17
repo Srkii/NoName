@@ -324,12 +324,17 @@ export class AdminComponent implements OnInit{
     }
 
     toogleFilter(): void{
+      console.log("1"+this.isFilterActive)
       if(this.isFilterActive)
       {
         this.filterUsers();
+        
+        console.log("2"+this.isFilterActive)
       }
       else{
         this.noFilter();
+        
+        console.log(this.isFilterActive)
       }
       this.isFilterActive=!this.isFilterActive;
     }
@@ -373,6 +378,13 @@ export class AdminComponent implements OnInit{
       this.isFocused = !this.isFocused;
     }
 
-
+    @HostListener('document:click', ['$event'])
+    clickOutside(event: MouseEvent) {
+      const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
+      if (!clickedInside && this.selectedRolee!='') {
+        // Click was outside the .clickable-div and the filter is active
+        event.stopPropagation(); // This prevents other click events from executing
+      }
+    }
   }
 
