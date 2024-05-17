@@ -76,7 +76,7 @@ img{
   font-size: 16px;
   outline: none;
   border: 0.5px solid lightgray;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
   word-wrap: break-word;
@@ -85,7 +85,7 @@ img{
   color: #697a8d;
   font-size: 12px;
   border: 0.5px solid lightgray;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding: 6px;
   margin-left: 5%;
   margin-bottom: 1%;
@@ -115,7 +115,7 @@ img{
   border: none;
   background-color: #5f61e6;
   color: #ffffff;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   float: right;
 }
@@ -161,7 +161,7 @@ img{
   color: #697a8d;
   border-color: solid #d9dee3;
   border-width: 0;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   /* font-weight: 600; */
   font-size: 14px;
@@ -174,7 +174,7 @@ img{
   font-size: 16px;
   outline: none;
   border: 0.5px solid lightgray;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
   margin-top: 10px;
@@ -186,7 +186,7 @@ img{
   font-size: 14px;
   outline: none;
   border: 0.5px solid lightgray;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
   margin-top: 5px;
@@ -197,7 +197,7 @@ img{
 .comments {
   margin-top: 20px;
   color: #697a8d;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   width: 100%;
   overflow-y: auto;
   overflow-x: auto;
@@ -205,7 +205,7 @@ img{
 .visible_comments{
   margin-top: -5px;
   border: 0.5px solid lightgray;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding: 5px;
 }
 .add_comment,
@@ -217,7 +217,7 @@ img{
   border: none;
   background-color: #5f61e6;
   color: #ffffff;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   float: right;
   margin-bottom: 10px;
@@ -233,7 +233,7 @@ img{
   border: none;
   background-color: #3fb94c;
   color: #ffffff;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   box-shadow: 0 5px 8px 0 rgba(67, 89, 113, 0.12);
   float: right;
   margin-bottom: 10px;
@@ -296,7 +296,7 @@ img{
   outline: none;
   /* padding: 10px; */
   padding-left: 20px;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   word-wrap: break-word;
 }
 .comment_date{
@@ -348,7 +348,7 @@ img{
   outline:none;
 }
 .taskName:hover, .taskName:focus, .taskName:active {
-  border-radius: 8px;
+  border-radius: 0.375rem;
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
@@ -357,7 +357,7 @@ img{
 .taskDueDate input:focus
 {
   outline: 1px solid #5f61e6 !important;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   box-shadow: 0 0 3px #5f61e6;
 }
 .taskDueDate{
@@ -371,7 +371,7 @@ img{
   border: none;
   outline: none;
   color: #697a8d;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding: 3px;
   padding-left: 10px;
 }
@@ -383,7 +383,7 @@ img{
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   border: none;
   outline: none;
   width: 300px;
@@ -401,14 +401,14 @@ img{
 }
 .asigneeDropdown{
   outline: none;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   font-size: 14px;
   width: 60%;
 }
 .projectDropdown{
   outline: none;
   margin-top: -5px;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   font-size: 14px;
   width: 60%;
 }
@@ -437,7 +437,7 @@ img{
 }
 
 .modal-container{
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding: 20px;
 }
 
@@ -448,7 +448,7 @@ img{
   outline: none;
   border: none;
   color: #ffffff;
-  border-radius: 8px;
+  border-radius: 0.375rem;
 }
 .cancel_task{
   background-color: #697a8d;
@@ -465,7 +465,7 @@ img{
   width: 50px;
   border: 1px solid lightgray;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 0.375rem;
   flex-direction: column;
   align-items: center;
 }

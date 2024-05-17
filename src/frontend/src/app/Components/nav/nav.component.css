@@ -21,7 +21,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: rgba(255, 255, 255, 0.95) !important;
   backdrop-filter: saturate(200%) blur(6px);
-  border-radius: 8px;
+  border-radius: 0.375rem;
   color: #697a8d;
 }
 .navbar-brand {
@@ -110,7 +110,7 @@ body {
   backdrop-filter: saturate(200%) blur(6px);
   color: #697a8d;
   border-color: #f5f5f9;
-  border-radius: 8px;
+  border-radius: 0.375rem;
 }
 .rightImg {
   width: 30px;

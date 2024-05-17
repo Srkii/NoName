@@ -32,7 +32,7 @@
   backdrop-filter: saturate(200%) blur(6px);
   color: #697a8d;
   border-color: #f5f5f9;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   padding-bottom: 0;
 }
 img{
@@ -129,7 +129,7 @@ td{
   padding: 5px;
   border:1px solid #696cff;
   color: #697a8d;
-  border-radius: 8px;
+  border-radius: 0.375rem;
 }
 .btn-primary:hover{
   background-color: #696cff;
