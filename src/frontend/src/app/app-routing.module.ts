@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'forgotpass', component: ForgotPassComponent, title: 'Forgot Password', canActivate: [loginGuard] },
   { path: 'forgotreset', component: ForgotResetComponent, title: 'Reset Password', canActivate: [loginGuard] },
   { path: 'project/:id', component: ProjectDetailComponent, title: 'Project Details', canActivate: [authGuard] },
+  { path: 'admin', component: AdminComponent, title: 'Admin Panel', canActivate: [adminGuard] },
   { path: 'landing', component: LandingPageComponent, title: 'Landing Page' },
   {
     path: '',
@@ -29,7 +30,6 @@ const routes: Routes = [
     children: [
       { path: 'userinfo', component: UserInfoComponent, title: 'User Information' },
       { path: 'myprojects', component: MyProjectsComponent, title: 'My Projects' },
-      { path: 'admin', component: AdminComponent, title: 'Admin Panel', canActivate: [adminGuard] },
       { path: 'mytasks', component: MyTasksComponent, title: 'My Tasks' }
     ],
   },
