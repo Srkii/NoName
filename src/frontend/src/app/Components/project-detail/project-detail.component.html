@@ -213,7 +213,7 @@
           <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Change role' : ((userRole === 3 || userRole === 4) ? 'Project role' : '') }}</span>
           <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Remove member' : ''}}</span>
         </div>
-        <div class="mb-3 scroll">
+        <div class="mb-3 scroll manageMemberScroll">
           <table class="table table-lg t2" id="table">
             <tbody>
               <tr *ngIf="filteredUsers.length == 0"><td>No results</td></tr>
