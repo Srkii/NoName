@@ -543,3 +543,10 @@ select:focus-visible{
 .tblActions svg {
   cursor: pointer;
 }
+.check{
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.avatar-wrapper{
+  margin-right: 5px;
+}
