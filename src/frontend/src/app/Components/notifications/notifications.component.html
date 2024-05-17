@@ -21,18 +21,18 @@
     <li class="dropdown-menu-header border-bottom">
       <div class="dropdown-header d-flex align-items-center py-3">
         <h5 class="text-body mb-0 me-auto">Notifications</h5>
-        <!-- <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top"  data-bs-original-title="Mark all as read">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#696cff" class="bi bi-envelope-open" viewBox="0 0 16 16" role="img" (click)="readAllFromTab()">
+        <a class="dropdown-notifications-all text-body" data-bs-placement="top"  data-bs-original-title="Mark all as read">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#696cff" class="bi bi-envelope-open" viewBox="0 0 16 16" role="img" (click)="readAllFromTab($event)">
             <title>Mark all as read</title>
             <path d="M8.47 1.318a1 1 0 0 0-.94 0l-6 3.2A1 1 0 0 0 1 5.4v.817l5.75 3.45L8 8.917l1.25.75L15 6.217V5.4a1 1 0 0 0-.53-.882zM15 7.383l-4.778 2.867L15 13.117zm-.035 6.88L8 10.082l-6.965 4.18A1 1 0 0 0 2 15h12a1 1 0 0 0 .965-.738ZM1 13.116l4.778-2.867L1 7.383v5.734ZM7.059.435a2 2 0 0 1 1.882 0l6 3.2A2 2 0 0 1 16 5.4V14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5.4a2 2 0 0 1 1.059-1.765z"/>
           </svg>
-        </a> --> 
-        <!-- ovo je nesto bugged wait -->
+        </a>
       </div>
     </li>
-    <li><span style="font-size: 14px; margin-left: 15px; margin-top: 5px;margin-bottom: 5px;" *ngIf="notification_list.length==0">No new notifications!</span>
+    <li><span style="font-size: 14px; margin-left: 15px; margin-top: 5px;margin-bottom: 5px;" *ngIf="notification_list.length==0">No new notifications.</span>
     </li>
-    <li class="dropdown-notifications-list scrollable-container ps" 
+    <li
+    class="dropdown-notifications-list scrollable-container ps"
     style="width: 100%; max-height: 300px; overflow: scroll;overflow-x: hidden;"
     >
       <ul class="list-group list-group-flush">
@@ -51,8 +51,8 @@
                 <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
               </svg>
             </div>
-            <div class="flex-grow-1" (click)="notificationService.follow_notif($event,notification)">
-              <h6 class="mb-1">{{notificationService.getType(notification.type)}}</h6>
+            <div class="flex-grow-1" (click)="notificationService.follow_notif_from_tab($event,notification)">
+              <h6 class="mb-1" style="font-weight: 600;">{{notificationService.getType(notification.type)}}</h6>
               <small class="mb-0">
                 {{notificationService.getNotificationText_small(notification)}}
               </small>
@@ -69,7 +69,7 @@
       <button class="btn btn-primary text-uppercase w-100" fdprocessedid="tvmgk" (click)="see_all_notifications(AllNotifications)">view all notifications</button>
     </li>
   </ul>
-  </div>
+</div>
 <ng-template #AllNotifications>
   <div class="modal-header">
     <h4 class="modal-title pull-left">All Notifications</h4>
@@ -100,7 +100,7 @@
           style="margin-left: 0;padding-left: 0; text-align: start;"
           (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()"
         >
-          <span class="notification-text">{{notificationService.getNotificationText(notification)}}</span>       
+          <span class="notification-text">{{notificationService.getNotificationText(notification)}}</span>
         </td>
         <td style="margin-left: 0;padding-left: 0; text-align: start;"
         (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()"
@@ -109,8 +109,8 @@
         </td>
 
         <td style="z-index:123; text-align: center;">
-          <input class="form-check-input" type="checkbox" 
-          [checked]="markedNotifications.includes(notification.id)" 
+          <input class="form-check-input" type="checkbox"
+          [checked]="markedNotifications.includes(notification.id)"
           (change)="toList(notification.id)" *ngIf="notification.read===false">
         </td>
       </tr>

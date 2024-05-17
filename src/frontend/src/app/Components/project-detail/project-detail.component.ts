@@ -117,7 +117,12 @@ export class ProjectDetailComponent implements OnInit {
     this.shared.sectionUpdated.subscribe(() => {
       this.getProjectInfo();
     })
-    this.getProjectInfo();
+    // nzm koliko je ovo pametno
+    this.route.params.subscribe(params => {
+      const projectId = +params['id']; // '+' converts the parameter string to a number
+      this.currentProjectId = projectId;
+      this.getProjectInfo();
+    });
     this.shared.togglePopup$.subscribe(({ event, taskId }) => {
     this.togglePopUp(event, taskId);
 
@@ -256,7 +261,7 @@ export class ProjectDetailComponent implements OnInit {
       this.myProjectsService.AddProjectMembers(projectMembers).subscribe(response => {
         this.loadAddableUsers()
         this.loadProjectMembers()
-        this.selectedUsers = [] 
+        this.selectedUsers = []
         this.spinner.hide()
       })
     }
@@ -318,7 +323,7 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.myTasksService
       .GetProjectTask(taskId,this.userId)
       .subscribe((task: ProjectTask) => {
@@ -348,8 +353,8 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   closePopup() {
-    this.clickedTask = null; 
-    this.showPopUp = false; 
+    this.clickedTask = null;
+    this.showPopUp = false;
   }
 
   getPriorityClass() {
@@ -432,7 +437,7 @@ export class ProjectDetailComponent implements OnInit {
       console.log("No user selected");
       return;
     }
-      
+
     this.buttonClicked = false;
     const task: NewTask = {
       CreatorId: Number(localStorage.getItem('id')),//treba mi da ne bih kreatoru slao da je dodelio sam sebi task ~maksim
@@ -450,7 +455,7 @@ export class ProjectDetailComponent implements OnInit {
         this.modalRef?.hide();
         this.getProjectInfo();
         this.shared.taskAdded(true);
-        
+
         // Resetuj polja
         this.newTaskName = '';
         this.newTaskDescription = '';
@@ -589,5 +594,5 @@ export class ProjectDetailComponent implements OnInit {
     }
     return false;
   }
-  
+
 }

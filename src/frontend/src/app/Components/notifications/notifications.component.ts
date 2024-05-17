@@ -55,12 +55,12 @@ export class NotificationsComponent {
       this.markedNotifications = this.notifications.map((notification:any) => notification.id);
     }
   }
-  readAllFromTab(){
-    this.notification_list.forEach((notification:any) => {
-      if(notification.read == false){
-        this.markedNotifications.push(notification.id);
-      }
+  readAllFromTab($event:MouseEvent){
+    $event.stopPropagation();
+    this.notification_list.forEach((element:any) => {
+      element.read = true;
     });
+    this.markedNotifications = this.notification_list.map((notification:any) => notification.id);
     this.read_notifications();
   }
 
