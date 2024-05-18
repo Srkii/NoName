@@ -150,17 +150,35 @@ export class AdminComponent implements OnInit{
       }}
 
     UpdateUser(id: number): void{
-      const updateeUser={
-        Email: this.newEmail,
-        FirstName: this.newFisrtName,
-        LastName: this.newLastName
+      if (this.newEmail) {
+        this.updateUser.Email=this.newEmail;
       }
-      if(updateeUser){
-        this.adminService.updateUser(id,updateeUser).subscribe(
-          (response)=>{
+      else{
+        this.updateUser.Email=this.curentEmail
+      }
+      if (this.newFisrtName) {
+        this.updateUser.FirstName=this.newFisrtName;
+        console.log(this.newFisrtName);
+      }
+      else{
+        this.updateUser.FirstName=this.curentName;
+      }
+      if (this.newLastName) {
+        this.updateUser.LastName=this.newLastName;
+      }
+      else{
+        this.updateUser.LastName=this.currentLastName
+      }
+      if(this.updateUser){
+        this.adminService.updateUser(id,this.updateUser).subscribe({
+          next:(response)=>{
             this.GetUsers();
+            console.log(response)
+          },
+          error: (error) => {
+            console.log(error);
           }
-        )
+      })
       }
       else{
         console.log("Can't update user role")
