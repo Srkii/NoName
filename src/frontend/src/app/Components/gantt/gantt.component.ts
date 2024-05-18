@@ -2,7 +2,7 @@ import { TaskDependency } from './../../Entities/TaskDependency';
 import { MyProjectsService } from './../../_services/my-projects.service';
 import { MyTasksComponent } from './../my-tasks/my-tasks.component';
 import { HttpClient} from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   GanttDragEvent,
@@ -22,6 +22,7 @@ import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { SharedService } from '../../_services/shared.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-gantt',
@@ -29,7 +30,7 @@ import { SharedService } from '../../_services/shared.service';
   styleUrl: './gantt.component.css'
 })
 export class GanttComponent implements OnInit{
-
+  removeModalRef?:BsModalRef;
   date = new GanttDate(1713125075).format("yyyy-mm-dd-hh-mm-ss");
   currentProjectId: number | null = null;
   ngOnInit(): void {
@@ -97,7 +98,8 @@ export class GanttComponent implements OnInit{
     private spinner:NgxSpinnerService,
     private myTasksService:MyTasksService,
     private myProjectsService:MyProjectsService,
-    private shared:SharedService
+    private shared:SharedService,
+    private modalService:BsModalService
     ) { }
 
   views = [{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
@@ -151,7 +153,7 @@ export class GanttComponent implements OnInit{
 
       this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
       .subscribe(() => {
-        this.reloadGanttData();
+        // this.reloadGanttData();
       });
     }
   }
@@ -183,18 +185,43 @@ export class GanttComponent implements OnInit{
     console.log('Selected item changed', event);
   }
 
-  onDragDropped(event: GanttTableDragDroppedEvent) {}
-
+  onDragDropped(event: GanttTableDragDroppedEvent) {
+    var section = Number(event.target.group_id);
+    var task = Number(event.source.id);
+    if(Number.isNaN(section)){
+      section = 0;
+    }
+    this.myTasksService.ChangeTaskSection(section, task)
+      .subscribe((response: any) => {
+        const index = this.items.findIndex(item => item.id === event.source.id);
+        if (index !== -1) {
+          this.items[index].group_id = event.target.group_id;
+          this.items = [...this.items]; // Reassign to trigger change detection
+        }
+      });
+  }
   onDragStarted(event: GanttTableDragStartedEvent) {}
 
   onDragEnded(event: GanttTableDragEndedEvent) {}
-
-  lineClick(event: any) {
-    console.log('Clicked on line', event);
-    this.openAddTaskToLinkDialog(event.source.id,event.target.id)
+  
+  dependency:TaskDependency = {
+     taskId:0,
+     dependencyTaskId:0
+  };
+  lineClick(event: any,modal:TemplateRef<void>):void{
+    this.openAddTaskToLinkDialog(event.source.id,event.target.id,modal);
   }
 
-  openAddTaskToLinkDialog(first_task : number,second_task : number): void { }
+  openAddTaskToLinkDialog(first_task : number,second_task : number,modal:TemplateRef<void>): void {
+    this.dependency.taskId = Number(first_task);
+    this.dependency.dependencyTaskId = Number(second_task);
+    this.removeModalRef = this.modalService.show(
+      modal,
+      {
+        class:'modal-face modal-sm modal-dialog-centered',
+      }
+    )
+  }
 
   barClick(event: any) {}
 
@@ -219,7 +246,7 @@ export class GanttComponent implements OnInit{
     // default sekcija, ukoliko nema svoju
     this.groups.push({ id: 'no-section', title: 'No Section' });
   }
-  getProjectTasks(){//ovo nzm dal moze drugacije jer moram da izvlacim zavisnosti kako bi crtalo one linije uopste..
+  getProjectTasks(){
     if(this.currentProjectId){
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) =>{
         tasks.forEach((t:any) =>{
@@ -242,7 +269,7 @@ export class GanttComponent implements OnInit{
               start: this.convertToUnixTimestamp(t.startDate),
               end: this.convertToUnixTimestamp(t.endDate),
               links: dependencies,
-              expandable: true,
+              expandable: false,
               linkable: true
             }
             this.items.push(item);
@@ -251,9 +278,25 @@ export class GanttComponent implements OnInit{
       })
     }
   }
+  removeDependencyGantt(){
+    if(this.dependency.dependencyTaskId!=0 && this.dependency.taskId!=0){
+      this.myTasksService.deleteTaskDependency(this.dependency)
+      .subscribe((response:any)=>{
+        const index = this.items.findIndex(item => item.id === String(this.dependency.taskId));
+        const linkIndex = this.items[index].links?.findIndex(link =>link == String(this.dependency.dependencyTaskId));
+        this.items[index].links?.splice(Number(linkIndex),1);
+        this.items = [...this.items];
+        this.dependency ={
+          taskId:0,
+          dependencyTaskId:0
+        }
+        this.removeModalRef?.hide();
+      });
+    }
+  }
   convertToUnixTimestamp(dateString: string): number {
     const date = new Date(dateString);
-    return Math.floor(date.getTime() / 1000);
+    return date.getTime() / 1000;
   }
   convertToStandardTimeStamp(unixTime:number) : string{
     const date = new Date(unixTime*1000);

@@ -1,6 +1,9 @@
 * {
     font-family: 'Public Sans', sans-serif;
 }
+.btn-0{/*dugme na remove modalu*/
+    color: #696cff;
+}
 .btn-sm {
     border-color: #e7e7ee !important;
 }

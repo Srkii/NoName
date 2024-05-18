@@ -309,6 +309,7 @@ namespace backend.Controllers
             {
                 return NotFound(); // Return not found if the dependency doesn't exist
             }
+
         }
 
         [AllowAnonymous]
@@ -652,7 +653,36 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok(task);
         }
+        [AllowAnonymous]
+        [HttpPost("changeSectionGantt")]
+        public async Task<IActionResult> ChangeSectionGantt(SectionChangeDTO dto){
 
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == dto.taskId);
+            var section = await _context.ProjectSections.FirstOrDefaultAsync(x=>x.Id == dto.sectionId);
+
+            if(task == null){
+                return NotFound("TASK ID NOT FOUND "+dto.taskId);
+            }
+            if(section == null && dto.sectionId!=0){
+                //ako je ovo stanje onda je neki error
+                //poenta je sto treba da mozes da izbacis task iz section-a
+                //section id 0 ce da bude prosledjen sa fronta samo u slucaju izbacivanja iz sectiona
+                //ukoliko dobijem null ovde a prosledio sam !=0 sectionId, to znaci da sam poslao nepostojeci section
+                return NotFound("SECTION ID NOT FOUND "+dto.sectionId);
+            }
+            
+            if(dto.sectionId!=0){//ako smo prosledili id 0 onda ide u no section
+                task.ProjectSectionId = dto.sectionId;
+                task.ProjectSection = section;
+            }
+            else{
+                task.ProjectSectionId = null;
+                task.ProjectSection = null;
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
         [HttpDelete("deleteTask/{taskId}")]
         public async Task<IActionResult> DeleteTask(int taskId)
         {

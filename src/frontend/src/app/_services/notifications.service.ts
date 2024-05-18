@@ -61,7 +61,7 @@ export class NotificationsService{
     })
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
       this.notifications = notifications;
-      console.log(notifications);
+      // console.log(notifications);
     });
 
     this.hubConnection.on('recieveAllNotifications',(notifications:[Notification])=>{
