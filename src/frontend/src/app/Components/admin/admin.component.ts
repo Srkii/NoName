@@ -222,6 +222,7 @@ export class AdminComponent implements OnInit{
         this.allUsers = response;
         //this.loadPicture(this.allUsers);
         this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
+          console.log(response);
           this.filteredUsers=response;
           this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
@@ -418,7 +419,20 @@ export class AdminComponent implements OnInit{
       this.isFocused = !this.isFocused;
     }
 
-    @HostListener('document:click', ['$event'])
+    getDisplayedPages(): number[] {
+      const maxDisplayedPages = 5;
+      let startPage = Math.max(this.currentPage - Math.floor(maxDisplayedPages / 2), 1);
+      let endPage = Math.min(startPage + maxDisplayedPages - 1, this.totalPages);
+  
+      if (startPage > this.totalPages - maxDisplayedPages + 1) {
+          startPage = Math.max(this.totalPages - maxDisplayedPages + 1, 1);
+          endPage = this.totalPages;
+      }
+  
+      return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+    }
+
+ @HostListener('document:click', ['$event'])
     clickOutside(event: MouseEvent) {
       const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
       if (!clickedInside && this.selectedRolee!='') {
@@ -426,5 +440,6 @@ export class AdminComponent implements OnInit{
         event.stopPropagation(); // This prevents other click events from executing
       }
     }
+
   }
 

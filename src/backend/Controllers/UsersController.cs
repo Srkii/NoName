@@ -197,7 +197,7 @@ namespace backend.Controllers
     }
     [AllowAnonymous]
     [HttpGet("filteredCount")]
-    public async Task<ActionResult<int>> CountFilteredProjects(UserRole? role=null)
+    public async Task<ActionResult<int>> CountFilteredUsers(UserRole? role=null)
     {
       var query=_context.Users.AsQueryable();
       query = query.Where(u => u.Archived == false);
