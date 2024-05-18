@@ -7,7 +7,7 @@
     <div class="card-title">
       <label>Total {{numOfAdmins}} administrators</label>
         <div class="pics">
-          <ng-container *ngFor="let user of admins.slice(0,4)">
+          <ng-container *ngFor="let user of admins.slice(0,3)">
             <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
             <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
           </ng-container>
@@ -41,7 +41,7 @@
         <label>Total {{numOfMembers}} members</label>
       <div class="pics">
 
-      <ng-container *ngFor="let user of members.slice(0,4)">
+      <ng-container *ngFor="let user of members.slice(0,3)">
         <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
         <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
       </ng-container>
@@ -110,7 +110,7 @@
       </thead>
       <tbody class="table-border-bottom-0">
         <tr *ngFor="let user of allUsers" >
-          <td >
+          <td  >
             <div class="d-flex justify-content-start align-items-center">
               <div class="avatar-wrapper">
                 <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>

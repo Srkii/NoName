@@ -54,6 +54,7 @@ th {
   cursor: default;
 }
 td {
+  width: 30%;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 5px;
@@ -168,7 +169,7 @@ p {
 }
 
 .col-sm-12.col-md-6 .dataTables_paginate {
-  width: 100%;
+  width: 90%;
 }
 
 .col-sm-12.col-md-6 .dataTables_paginate .pagination {
@@ -358,7 +359,7 @@ select:focus-visible{
 .archUsers{
   /* margin: 10px !important; */
   cursor: default;
-  width: 190px;
+  width: 210px;
   height: 30px;
   border-radius: 0.375rem;
   justify-content: center;
@@ -379,21 +380,30 @@ select:focus-visible{
 .btn-primary1{
   display: none;
 }
-
+.ngx-avatars{
+  size: 35;
+}
 /*izgled za telefone*/
 @media screen and (max-width: 500px) {
-  .card .pics{
-    display: none;
+
+  .card {
+    font-size: 14px;
   }
-  .card .card-body{
-    padding-left: 0px;
+  .card-body h3{
+    font-size: 20px;
   }
-  .card .card-title{
-    margin-left: 2px;
+  
+  .card-container{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    
   }
-  .card .card-body h3{
-    font-size: 18px;
-    display: inline-block;
+  .card{
+    width: 100%;
+    margin-bottom: 13px;
   }
 
   .invite {
@@ -407,6 +417,9 @@ select:focus-visible{
     width: 100%;
     font-size: small;
   }
+  .leftInvite input{
+    width: 60%;
+  }
   .invite input::placeholder{
     font-size: small;
   }
@@ -415,8 +428,12 @@ select:focus-visible{
     width: 100%;
     margin-top: 10px; 
   }
+  .inputEmail input{
+    width: 60%;
+  }
 
   .inputEmail .btn-primary1{
+    width: 35%;
     display: inline-block;
     font-size: small;
     border-radius: 0.375rem;
@@ -438,6 +455,7 @@ select:focus-visible{
     font-size: small;
   }
   .page_size{
+    width: 35%;
     font-size: small;
   }
   .archUsers {
@@ -448,20 +466,32 @@ select:focus-visible{
     padding-left: 5px;
    
   }
-  .archUsers .textArch{
+  .archUsers .textArch {
     display: none;
   }
 
   .dataTables_paginate {
     padding-top: 5px;
     align-self: flex-end;
-    width: 30%;
+    width: 50px !important;
+  }
+  .pagination .btn-primary{
+    width: 70px;
+    font-size: small;
+    font-display: center;
+  }
+  .pagination .page {
+    height: 33px;
+    font-size: small;
+  }
+  #all{
+    width: 93%;
   }
 }
 
 /*Galaxy fold*/
 @media screen and (max-width: 653px) {
-  .card .pics{
+  /* .card .pics{
     display: none;
   }
   .card .card-body{
@@ -475,7 +505,7 @@ select:focus-visible{
     font-size: 12px;
     display: inline-block;
    
-  }
+  } */
   .archUsers{
     width: 30px;
   }
@@ -525,6 +555,7 @@ select:focus-visible{
     width: 70%;
   }
   .inputEmail .btn-primary1{
+    width: 30%;
     display: inline-block;
     font-size: small;
     border-radius: 0.375rem;
@@ -537,6 +568,34 @@ select:focus-visible{
     display: none;
   }
 }
+
+/* @media screen and (max-width:500px) {
+   nije ni za k
+   1280,540 da se napravi
+  .inputEmail .btn-primary1{
+    display: inline-block;
+    font-size: small;
+    border-radius: 0.375rem;
+    color: #fff;
+    background-color: #696cff;
+    border-color: #696cff;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+    width: 50%;
+  }
+  .inputEmail .btn-primary{
+    display: none;
+  }
+  .inputEmail{
+    width: 40%;
+  }
+  .leftInvite{
+    width: 40%;
+  }
+  .leftInvite input{
+    width: 50%;
+  }
+} */
+
 .noFilt{
   margin-right: 5px;
   margin-bottom: 25px;
