@@ -492,7 +492,7 @@ export class ProjectDetailComponent implements OnInit {
     this.modalRef = this.modalService.show(
       modal,
       {
-        class: 'modal-lg modal-dialog-centered'
+        class: 'modal-md modal-dialog-centered'
       });
   }
 
