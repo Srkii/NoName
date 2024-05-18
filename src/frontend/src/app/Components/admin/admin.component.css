@@ -357,6 +357,7 @@ select:focus-visible{
   padding-right: 10px;
   border-radius: 0.375rem;
   margin-right: 5px;
+  width: 30px;
 }
 .paginate_buttons button{
   font-size: 20px;
