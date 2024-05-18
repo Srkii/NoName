@@ -267,13 +267,13 @@
           <label for="startDate" class="form-label">Start Date</label>
           <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskStartDate || isInvalidDate()}"  placeholder="Start Date"/>
           <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
-          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
+          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
       </div>
       <div class="mb-1">
           <label for="endDate" class="form-label">End Date</label>
           <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}" placeholder="End Date"/>
           <div *ngIf="buttonClicked && !newTaskEndDate" class="invalid">Please enter end date.</div>
-          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
+          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
       </div>
       <div class="mb-1 chooseAssignee" autocomplete="off">
         <label for="assignee2" class="form-label">Assignee</label>

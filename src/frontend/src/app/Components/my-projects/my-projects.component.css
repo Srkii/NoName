@@ -360,3 +360,7 @@ p {
 .mFilters input {
   line-height: normal !important;
 }
+
+:host::ng-deep.p-inputtext{
+  line-height: normal;
+}
