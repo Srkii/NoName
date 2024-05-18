@@ -7,10 +7,10 @@ export class QuillConfigService {
 
   editorModules = {
     toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],  
+      ['bold', 'italic', 'underline', 'strike',{ 'size': ['small', false, 'large', 'huge'] }],  
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
       [{ 'indent': '-1'}, { 'indent': '+1' }],       
-      [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': [1, 2, 3,false] }],  
+      [{ 'header': [1, 2, 3,false] }],  
       [{ 'color': [] }],         
       [{ 'align': [] }],
       ['clean']                                 

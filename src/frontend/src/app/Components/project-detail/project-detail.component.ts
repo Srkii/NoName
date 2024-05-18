@@ -17,6 +17,7 @@ import { NewTask } from '../../Entities/NewTask';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { ProjectSectionService } from '../../_services/project-section.service';
+import { QuillConfigService } from '../../_services/quill-config.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -97,16 +98,9 @@ export class ProjectDetailComponent implements OnInit {
     private datePipe: DatePipe,
     public uploadservice: UploadService,
     private shared: SharedService,
-    private projectSectionService: ProjectSectionService
+    private projectSectionService: ProjectSectionService,
+    public quillService: QuillConfigService
   ) {}
-
-  get formattedEndDate() {
-    return this.datePipe.transform(this.update.endDate, 'yyyy-MM-dd');
-  }
-
-  get formattedStartDate() {
-    return this.datePipe.transform(this.update.startDate, 'yyyy-MM-dd');
-  }
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
@@ -578,5 +572,4 @@ export class ProjectDetailComponent implements OnInit {
     }
     return false;
   }
-  
 }

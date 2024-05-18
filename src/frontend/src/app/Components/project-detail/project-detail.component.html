@@ -1,3 +1,4 @@
+<app-nav></app-nav>
 <div class="content-wrapper">
   <app-popup
   style="z-index: 100;"
@@ -53,7 +54,7 @@
             {{ userRole === 3 || userRole === 4? 'Member list' : 'Manage Members' }}
           </div>
         </div>
-      </div> 
+      </div>
       <div class="card" *ngIf="viewMode === 'table'" style="z-index: 0;">
         <div class="table-responsive text-nowrap">
           <table class="table">
@@ -111,13 +112,13 @@
       <div *ngIf="viewMode === 'gantt'" class="ganttComponent">
         <app-gantt></app-gantt>
       </div>
-   </div>   
+   </div>
   </div>
 </div>
 
 <ng-template #projectInfo>
   <div class="modal-container InfoModal">
-    <div class="modal-header" style="border-bottom: none;">
+    <div class="modal-header" style="background-color: white;border-bottom: none;">
       <div class="input-group-text editName">
         <h6 *ngIf="userRole==2 || userRole==3 || userRole==4"  class="projectName">{{ update.projectName }}</h6>
         <input class="form-control titleInp" id="projectName" [(ngModel)]="update.projectName" (blur)="updateProject()" *ngIf="userRole==0 || userRole==1">
@@ -139,11 +140,11 @@
             </div>
             <div class="my-2">
               <label for="startDate">Start date</label>
-              <span id="startDate" class="startDate">{{formattedStartDate | date:'MM/dd/yyyy'}}</span>
+              <span id="startDate" class="startDate">{{update.startDate | date: 'MM/dd/yyyy'}}</span>
             </div>
             <div class="my-2">
               <label for="endDate">End date</label>
-              <input type="date" id="endDate" class="endDate" [ngModel]="formattedEndDate" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3">
+              <input type="date" id="endDate" class="endDate" [ngModel]="update.endDate | date: 'yyyy-MM-dd'" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3">
             </div>
             <div class="my-2">
               <label for="endDate">Progress</label>
@@ -153,7 +154,8 @@
         </div>
         <div class="mb-3 description">
           <h5>Description</h5>
-          <textarea class="form-control area-desc" id="desc" rows="5" [(ngModel)]="update.description" name="Description" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3"></textarea>
+          <quill-editor class="area-desc" [(ngModel)]="update.description" (onBlur)="updateProject()" [modules]="quillService.editorModules" [formats]="quillService.editorFormats" [disabled]="userRole == 4 || userRole == 3" [ngClass]="{'hide-toolbar': userRole == 4 || userRole == 3}"></quill-editor>
+          <!-- <textarea class="form-control area-desc" id="desc" rows="5" [(ngModel)]="update.description" name="Description"  ></textarea> -->
         </div>
       </div>
   </div>
@@ -167,7 +169,7 @@
       <button type="button" class="btn-close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-      <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers"> 
+      <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers">
           <h5>Add project members</h5>
           <div class="addInfo">
             <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" name="Assignees" (click)="$event.stopPropagation()" style="height: 2rem;">
@@ -201,7 +203,7 @@
               </div>
               </ng-template>
             </ng-select>
-            <button class="btn btn-primary btn-xs add" style="width: 100%" type="button" (click)="addProjectMembers()" [disabled]="this.selectedUsers.length == 0">Add members</button> 
+            <button class="btn btn-primary btn-xs add" style="width: 100%" type="button" (click)="addProjectMembers()" [disabled]="this.selectedUsers.length == 0">Add members</button>
         </div>
       </div>
       <div class="mb-3 members">
@@ -233,7 +235,7 @@
                 <td style="text-align: center;">
                   <span class="deleteMember" (click)="deleteAssigne(user.appUserId)" data-toggle="dropdown" *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4">×</span>
                   <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
-                </td> 
+                </td>
               </tr>
             </tbody>
           </table>
@@ -328,7 +330,7 @@
             </ng-template>
           </ng-select>
       </div>
-      
+
       <div>
         <button class="btn btn-primary d-grid w-50 mx-auto btn-save-task">Save Task</button>
       </div>

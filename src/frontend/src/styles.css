@@ -37,3 +37,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   box-shadow: none !important;
 }
 .ng-input > input {color: #697a8d !important;}
+
+/* Rich text editor */
+.hide-toolbar .ql-toolbar  {
+  display: none;
+}
