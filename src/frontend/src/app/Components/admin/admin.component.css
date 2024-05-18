@@ -51,7 +51,7 @@ th {
   border-left: none;
   border-right: none;
   color: #697a8d;
-  cursor: default;
+  cursor: pointer;
 }
 td{
   width: 30%;
@@ -63,12 +63,11 @@ td{
   border-right: none;
   font-size: 16px;
   color: #697a8d;
-  cursor: default;
+  cursor: pointer;
 }
 .ostaleKolone
 {
   justify-content: center;
-  text-align: center;
   padding-top: 10px;
 }
 .prvaKolona{
@@ -204,6 +203,7 @@ select {
   color: #697a8d;
   font-size: 16px;
   transition: border-color 0.3s ease;
+  cursor: pointer;
 }
 
 select:focus {
@@ -255,7 +255,7 @@ select:focus-visible{
   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow:  #5f61e6;
-  cursor: default;
+  cursor: pointer;
   /* background-color: #6b6caf; */
 }
 .avatar avatar-sm me-2{
@@ -415,7 +415,7 @@ select:focus-visible{
 }
 .archUsers{
   /* margin: 10px !important; */
-  cursor: default;
+  cursor: pointer !important;
   width: 210px;
   height: 30px;
   border-radius: 0.375rem;
@@ -424,6 +424,7 @@ select:focus-visible{
 }
 .archUsers:hover {
   border-bottom: 2px solid #696cff;
+  cursor: pointer;
 }
 .table-responsive text-nowrap{
   width: 100%;
@@ -441,7 +442,7 @@ select:focus-visible{
   size: 35;
 }
 /*izgled za telefone*/
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 659px){
 
   .card {
     font-size: 14px;
@@ -518,7 +519,7 @@ select:focus-visible{
   .archUsers {
     margin-top: 5px;
     align-self: flex-start;
-    width: 50%;
+    width: 30px;
     padding-top: 3px;
     padding-left: 5px;
    
@@ -547,7 +548,7 @@ select:focus-visible{
 }
 
 /*Galaxy fold*/
-@media screen and (max-width: 653px) {
+@media screen and (min-width: 653px) {
   /* .card .pics{
     display: none;
   }
@@ -563,7 +564,7 @@ select:focus-visible{
     display: inline-block;
    
   } */
-  .archUsers{
+  /* .archUsers{
     width: 30px;
   }
   .col-sm-12.col-md-6 .dataTables_paginate {
@@ -580,11 +581,11 @@ select:focus-visible{
   }
   .inputEmail .btn-primary{
     display: none;
-  }
+  } */
 }
 
 /*za tablete*/
-@media screen and (min-width: 768px) and (max-width: 1024px)
+@media screen and (min-width: 650px) and (max-width: 1024px)
 {
   .card .card-body h3{
     font-size: 18px;
@@ -626,32 +627,8 @@ select:focus-visible{
   }
 }
 
-/* @media screen and (max-width:500px) {
-   nije ni za k
-   1280,540 da se napravi
-  .inputEmail .btn-primary1{
-    display: inline-block;
-    font-size: small;
-    border-radius: 0.375rem;
-    color: #fff;
-    background-color: #696cff;
-    border-color: #696cff;
-    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
-    width: 50%;
-  }
-  .inputEmail .btn-primary{
-    display: none;
-  }
-  .inputEmail{
-    width: 40%;
-  }
-  .leftInvite{
-    width: 40%;
-  }
-  .leftInvite input{
-    width: 50%;
-  }
-} */
+/* @media screen and (min-width: 601px) and (max-width: 767px){*/
+
 
 .noFilt{
   margin-right: 5px;
