@@ -719,6 +719,10 @@ select:disabled {
 .is-invalid{
     border-color: red !important;
 }
+.is-invalid:focus{
+    box-shadow: none;
+    border-color: red !important;
+}
 
 .invalid {
     height: 0;
@@ -735,6 +739,10 @@ select:disabled {
 input[type="date"].is-invalid{
     padding-right: 30px;
     border-color: red !important;
+}
+
+input.is-invalid:focus{
+    box-shadow: none;
 }
 .ng-select-wrapper.is-invalid{
     outline:0.5px solid  red !important;
