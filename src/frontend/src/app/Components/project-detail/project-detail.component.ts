@@ -485,6 +485,7 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   openNewTaskModal(modal: TemplateRef<void>) {
+    this.buttonClicked=false;
     if (this.currentProjectId !== null)
     {
       this.getProjectsUsersAndSections(this.currentProjectId);
@@ -588,6 +589,10 @@ export class ProjectDetailComponent implements OnInit {
       return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
     }
     return false;
+  }
+
+  restoreInvalidInputs():void{
+    this.buttonClicked=false;
   }
   
 }
