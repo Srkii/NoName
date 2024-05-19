@@ -34,7 +34,7 @@ export class GanttComponent implements OnInit{
   date = new GanttDate(1713125075).format("yyyy-mm-dd-hh-mm-ss");
   currentProjectId: number | null = null;
   ngOnInit(): void {
-    this.shared.taskUpdated.subscribe(() => { 
+    this.shared.taskUpdated.subscribe(() => {
       this.loading = true;
       this.data_loaded = false;
       this.items=[];
@@ -58,7 +58,7 @@ export class GanttComponent implements OnInit{
       this.loading = false;
       this.data_loaded = true
     }, 100);
-    
+
     // emit kad se doda novi task
     this.shared.taskAdded$.subscribe(success => {
       if (success) {
@@ -203,7 +203,7 @@ export class GanttComponent implements OnInit{
   onDragStarted(event: GanttTableDragStartedEvent) {}
 
   onDragEnded(event: GanttTableDragEndedEvent) {}
-  
+
   dependency:TaskDependency = {
      taskId:0,
      dependencyTaskId:0
@@ -304,7 +304,7 @@ export class GanttComponent implements OnInit{
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.shared.triggerPopup(event, taskId);
   }
 }
