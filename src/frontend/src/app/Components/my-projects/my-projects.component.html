@@ -32,14 +32,19 @@
         </select>
       </div>
       <div class="filter">
-        <p-calendar  [style]="{'width':'100%'}"
-        (onSelect)="filterProjects()"
-        (onClearClick)="filterProjects()"
+        <p-calendar
+          [hideOnDateTimeSelect]="false"
+          [style]="{'width':'100%'}"
+          (onSelect)="filterProjects()"
+          (onClearClick)="filterProjects()"
           placeholder="Filter by Date Range"
           [(ngModel)]="rangeDates" 
           selectionMode="range" 
           [readonlyInput]="true"
-          [showButtonBar]="true"/>
+          [showButtonBar]="true"
+          dateFormat="MM dd, yy"
+          [firstDayOfWeek]="1"
+          ></p-calendar>
       </div>
 
       
