@@ -244,7 +244,7 @@
   </div>
 </ng-template>
 
-<ng-template #newTask>
+<ng-template #newTask class="newTaskModal">
   <div class="modal-header">
     <h4 class="modal-title pull-left">Add New Task</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
@@ -264,10 +264,24 @@
           <textarea class="form-control" class="form-control" name="taskDescription" [(ngModel)]="newTaskDescription" placeholder="Enter new tasks's description"></textarea>
       </div>
       <div class="mb-1">
-          <label for="startDate" class="form-label">Start Date</label>
-          <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskStartDate || isInvalidDate()}"  placeholder="Start Date"/>
-          <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
-          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+          <div class="strtDate">
+            <div class="tLabel">
+              <label for="startDate" class="form-label">Start Date</label>
+            </div>
+            <div class="tNgCalendar">
+              <p-calendar
+              [(ngModel)]="newTaskStartDate"
+              [style]="{'line-height':'normal','min-width':'50% !important'}"
+              inputId="startDate"
+              [showButtonBar]="true"
+              [firstDayOfWeek]="1"
+              name="startDate"
+              dateFormat="MM dd, yy"
+              ></p-calendar>
+            <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
+            <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+            </div>
+          </div>
       </div>
       <div class="mb-1">
           <label for="endDate" class="form-label">End Date</label>
