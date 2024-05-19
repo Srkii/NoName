@@ -196,6 +196,29 @@ namespace backend.Controllers
         return filteredUsers;
     }
     [AllowAnonymous]
+    [HttpGet("fcount")]
+    public async Task<ActionResult<int>> GetUsersFF( UserRole? role=null, string searchTerm="")
+    {
+        var query = _context.Users.AsQueryable();
+        query = query.Where(u => u.Archived == false);
+
+        if(role!=null)
+        {
+          query = query.Where(u => u.Role == role);
+        }
+
+
+        if(!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
+        }
+
+
+        var filteredUsers=await query.ToListAsync();
+
+        return filteredUsers.Count;
+    }
+    [AllowAnonymous]
     [HttpGet("filteredCount")]
     public async Task<ActionResult<int>> CountFilteredUsers(UserRole? role=null)
     {

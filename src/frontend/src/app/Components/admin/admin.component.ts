@@ -220,13 +220,15 @@ export class AdminComponent implements OnInit{
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        //this.loadPicture(this.allUsers);
-        this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
-          console.log(response);
-          this.filteredUsers=response;
-          this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
-        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-        });
+        var counnt=this.allUsers.length;
+        this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
+          this.filteredUsers=res;
+          this.totalPages= Math.ceil(res / this.pageSize);
+          console.log("get2 "+this.totalPages);
+          console.log("count "+res)
+          this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        
+        }})
 
         this.spinner.hide();
       });
@@ -276,6 +278,7 @@ export class AdminComponent implements OnInit{
     onLoad(): void{
       this.adminService.getAllUsers2().subscribe(response=>{
         this.allUsersCount=response;
+        console.log("load "+this.allUsersCount)
       })
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
@@ -283,6 +286,7 @@ export class AdminComponent implements OnInit{
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        console.log("load2 "+this.totalPages)
         this.spinner.hide();
       });
       
