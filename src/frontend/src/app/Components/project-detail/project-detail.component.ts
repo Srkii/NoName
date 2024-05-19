@@ -88,6 +88,8 @@ export class ProjectDetailComponent implements OnInit {
   newSectionName: string = '';
   searchSection: string = '';
 
+  today: Date = new Date();
+
   constructor(
     private route: ActivatedRoute,
     private myProjectsService: MyProjectsService,
@@ -490,6 +492,7 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   openNewTaskModal(modal: TemplateRef<void>) {
+    this.buttonClicked=false;
     if (this.currentProjectId !== null)
     {
       this.getProjectsUsersAndSections(this.currentProjectId);
@@ -497,7 +500,7 @@ export class ProjectDetailComponent implements OnInit {
     this.modalRef = this.modalService.show(
       modal,
       {
-        class: 'modal-lg modal-dialog-centered'
+        class: 'modal-md modal-dialog-centered'
       });
   }
 
@@ -593,6 +596,10 @@ export class ProjectDetailComponent implements OnInit {
       return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
     }
     return false;
+  }
+
+  restoreInvalidInputs():void{
+    this.buttonClicked=false;
   }
 
 }

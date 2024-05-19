@@ -4,7 +4,7 @@
           <button *ngFor="let view of views" [class.active]="view.value === selectedViewType"  type="button" class="btn btn-outline-secondary btn-sm" (click)="selectView(view.value)">
               {{ view.name }}
           </button>
-          <button type="button" class="btn" style="background-color: #d7d7f8; width: 100px; color: #696cff; font-weight: 400;" (click)="goToToday()">
+          <button type="button" class="btn" style="background-color: #e7e7ee; width: 100px; color: #696cff; font-weight: 400;" (click)="goToToday()">
               Scroll to today
           </button>
       </div>
@@ -15,7 +15,7 @@
                     (lineClick)="lineClick($event,removalModal)" (dragMoved)="dragMoved($event)" (dragEnded)="dragEnded($event)" (selectedChange)="selectedChange($event)" (linkDragEnded)="linkDragEnded($event)">
                   <ngx-gantt-table [draggable]="true" (dragDropped)="onDragDropped($event)" (dragStarted)="onDragStarted($event)" (dragEnded)="onDragEnded($event)">
                   <ng-template #group let-group="group" let-items="items">
-                      <span class="text-primary">{{ group.title }} </span>
+                      <span class="text-primary" style="color: #696cff !important;">{{ group.title }} </span>
                   </ng-template>
                       <ngx-gantt-column name="Title" width="150px">
                           <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
@@ -32,7 +32,7 @@
                       </ngx-gantt-column>
                   </ngx-gantt-table>
                   <ng-template #bar let-item="item">
-                    <div  class="gantt-bar-content" style="background: rgb(102, 152, 255);" (click)="onTaskClick($event,item.id)">
+                    <div  class="gantt-bar-content" style="background: #696cff;" (click)="onTaskClick($event,item.id)">
                       <span style="color: #fff;">&nbsp;&nbsp;{{ item.title }} </span>
                       </div>
                   </ng-template>

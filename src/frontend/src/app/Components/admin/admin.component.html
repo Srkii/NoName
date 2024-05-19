@@ -3,11 +3,11 @@
     <br />
     <div class="card-container">
       
-    <div class="card clickable-div" [(ngModel)]="selectedRolee" [ngClass]="{'clicked': !isFilterActive}" btnRadio="admin" (click)="toogleFilter()">
+    <div class="card clickable-div" [(ngModel)]="selectedRolee"  btnRadio="admin" (click)="toogleFilter()">
     <div class="card-title">
       <label>Total {{numOfAdmins}} administrators</label>
         <div class="pics">
-          <ng-container *ngFor="let user of admins.slice(0,4)">
+          <ng-container *ngFor="let user of admins.slice(0,3)">
             <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
             <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
           </ng-container>
@@ -19,7 +19,7 @@
     </div>
 
 
-    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee" [ngClass]="{'clicked': !isFilterActive}" btnRadio="projectManager" (click)="toogleFilter()">
+    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee"  btnRadio="projectManager" (click)="toogleFilter()">
       <div class="card-title">
         <label>Total {{numOfPM}} project managers</label>
         <div class="pics">
@@ -36,12 +36,12 @@
     </div>
     </div>
 
-    <div class="card clickable-div " name="members" [(ngModel)]="selectedRolee" [ngClass]="{'clicked': !isFilterActive}" btnRadio="member" (click)="toogleFilter()">
+    <div class="card clickable-div " name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="toogleFilter()">
       <div class="card-title">
         <label>Total {{numOfMembers}} members</label>
       <div class="pics">
 
-      <ng-container *ngFor="let user of members.slice(0,4)">
+      <ng-container *ngFor="let user of members.slice(0,3)">
         <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
         <div *ngIf="!user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1"><ngx-avatars size="35"  [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars></div>
       </ng-container>
@@ -65,9 +65,9 @@
           (input)="filterUsers(); "
         />
 
-      <select class="page_size" [(ngModel)]="pageSize" (ngModelChange)="filterUsers()">
-        <option value="5" selected>Select page size</option>
-        <option value="5">5</option>
+      <select class="page_size" *ngIf="filteredUsers>5"  [(ngModel)]="pageSize" (ngModelChange)="filterUsers()">
+        <option value="5" hidden selected>Select page size</option>
+        <option value="1">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
       </select>
@@ -103,14 +103,14 @@
 
           </th>
 
-          <th>Role </th>
-          <!-- <th>WorkLoad</th> -->
+          <th>Email </th>
+          <th>Role</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody class="table-border-bottom-0">
         <tr *ngFor="let user of allUsers" >
-          <td  *ngIf="!user.archived">
+          <td class="prvaKolona" >
             <div class="d-flex justify-content-start align-items-center">
               <div class="avatar-wrapper">
                 <div *ngIf="user.profilePicUrl" class="avatar avatar-sm me-2"><img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong"></div>
@@ -118,25 +118,30 @@
               </div>
               <div class="d-flex flex-column">
                 <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
-                <span class="text-truncate text-muted">{{user.email}}</span>
+                
               </div>
             </div>
           </td>
-          <td  *ngIf="!user.archived"> <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>
-          <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
-          <td  *ngIf="!user.archived">
+          <td class="ostaleKolone">
+            <div class="d-flex justify-content-start align-items-center">
+              <span class="text-body text-truncate fw-medium">{{user.email}}</span>
+            </div>
+          </td>
+          <td class="ostaleKolone"> <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>
+          
+          <td class="ostaleKolone">
             <div class="d-flex align-items-center tblActions">
-              <svg xmlns="http://www.w3.org/2000/svg" (click)="openModal(updateUser,user.id)" width="16" height="16" fill="currentColor" class="bi bi-person-up" id="tableIcon"
+              <svg xmlns="http://www.w3.org/2000/svg" (click)="openModal(updateUser,user)" width="16" height="16" fill="currentColor" class="bi bi-person-up" id="tableIcon"
                 viewBox="0 0 16 16">
                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
                 <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
               </svg>
-              <svg xmlns="http://www.w3.org/2000/svg"  (click)="openModal(changeRole,user.id)" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" id="tableIcon"
+              <svg xmlns="http://www.w3.org/2000/svg"  (click)="openModal(changeRole,user)" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" id="tableIcon"
                 viewBox="0 0 16 16">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
               </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" *ngIf="currentUser(user.id)" (click)="openModal(archiveUser,user.id)" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" class="bi bi-pencil-square" id="tableIcon"
+              <svg xmlns="http://www.w3.org/2000/svg" *ngIf="currentUser(user.id)" (click)="openModal(archiveUser,user)" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" class="bi bi-pencil-square" id="tableIcon"
               aria-expanded="false">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
@@ -152,19 +157,27 @@
       <div class="archUsers" (click)="openModal1(archivedUsers)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
         <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
       </svg><label class="textArch" style="margin-left: 5px;">View archieved users</label>
-    </div>
-      <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate" *ngIf="filteredUsers>5" >
+      </div>
+      <div class="dataTables_paginate paging_simple_numbers" *ngIf="this.filteredUsers>this.pageSize" id="pages">
         <ul class="pagination">
-          <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
-            <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
-            <li class="paginate_button1 page-item active" *ngFor="let pageNumber of totalusersArray">
-              <button class="btn page" (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
-            </li>
-
-                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
-                  <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
-                </li></ul>
-      </div></div>
+          <li *ngIf="totalusersArray.length>5" class="paginate_buttons previous" [class.disabled]="currentPage === 1">
+            <button (click)="goToPage(1)" [disabled]="currentPage === 1">&laquo;</button>
+          </li>
+          <li class="paginate_button previous" [class.disabled]="currentPage === 1">
+            <button (click)="previousPage()" [disabled]="currentPage === 1">&lt;</button>
+          </li>
+          <li class="paginate_button" *ngFor="let pageNumber of getDisplayedPages()">
+            <button (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
+          </li>
+          <li class="paginate_button next" [class.disabled]="currentPage === totalPages">
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages">&gt;</button>
+          </li>
+          <li *ngIf="totalusersArray.length>5" class="paginate_buttons next" [class.disabled]="currentPage === totalPages">
+            <button  (click)="goToPage(totalusersArray.length)" [disabled]="currentPage === totalPages">&raquo;</button>
+          </li>
+        </ul>
+      </div>
+    </div>
 
       
 
@@ -191,15 +204,15 @@
     <form (ngSubmit)="UpdateUser(curentUserId)">
       <div class="mb-3">
         <label for="email" class="form-label">Email</label>
-        <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="newEmail" placeholder="Enter user's email"/>
+        <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="newEmail" placeholder="{{curentEmail}}"/>
       </div>
       <div class="mb-3">
         <label for="fisrt name" class="form-label">Fisrt Name</label>
-        <input type="text" id="form3Example3" class="form-control" name="firstName" [(ngModel)]="newFisrtName" placeholder="Enter user's First Nsme"/>
+        <input type="text" id="form3Example3" class="form-control" name="firstName" [(ngModel)]="newFisrtName" placeholder={{curentName}}/>
       </div>
       <div class="mb-3">
         <label for="last name" class="form-label">Last Name</label>
-        <input type="text" id="form3Example3" class="form-control" name="lastName" [(ngModel)]="newLastName" placeholder="Enter user's Last Name"/>
+        <input type="text" id="form3Example3" class="form-control" name="lastName" [(ngModel)]="newLastName" placeholder="{{currentLastName}}"/>
       </div>
       <div class="mb-3">
         <button class="btn btn-primary d-grid w-100" type="submit" (click)="modalRef?.hide()">Update</button>
@@ -241,7 +254,7 @@
     <form (ngSubmit)="ChangeUserRole(curentUserId)">
       <div class="mb-3 selectRole">
         <select name="role" [(ngModel)]="userRole" required>
-          <option value="" selected>Select role</option>
+          <option value="" hidden selected>{{currentRole}}</option>
           <option value="0">Admin</option>
           <option value="1">Member</option>
           <option value="2">Project Manager</option>
@@ -267,13 +280,19 @@
         <table class="table">
       <thead>
       <tr>
+        <th></th>
         <th>User</th>
-        <th>Role </th>
-        <th>Actions</th>
+        <th>Email </th>
+        <th>Role</th>
       </tr>
     </thead>
     <tbody class="table-border-bottom-0">
       <tr *ngFor="let user of archived_users" >
+        <td>
+          <div class="check">
+            <input type="checkbox" style="align-items:center;" (change)="putInArray(user.id)" [(ngModel)]="!user.archived" >
+          </div>
+        </td>
         <td >
           <div class="d-flex justify-content-start align-items-center">
             <div class="avatar-wrapper">
@@ -286,17 +305,15 @@
             </div>
             <div class="d-flex flex-column">
               <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
-              <span class="text-truncate text-muted">{{user.email}}</span>
             </div>
           </div>
         </td>
-        <td  > <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>
-        <!-- <td><span class="badge bg-label-success"> Workload</span></td> -->
-        <td >
-          <div class="d-flex align-items-center">
-            <input type="checkbox" style="align-items:center;" (change)="putInArray(user.id)" [(ngModel)]="!user.archived" >
+        <td>
+          <div class="d-flex flex-column">
+            <span class="text-body text-truncate fw-medium">{{user.email}}</span>
           </div>
         </td>
+        <td  > <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>       
       </tr>
     </tbody>
   

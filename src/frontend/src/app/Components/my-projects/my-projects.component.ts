@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnInit  } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';

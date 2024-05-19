@@ -213,7 +213,7 @@
           <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Change role' : ((userRole === 3 || userRole === 4) ? 'Project role' : '') }}</span>
           <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Remove member' : ''}}</span>
         </div>
-        <div class="mb-3 scroll">
+        <div class="mb-3 scroll manageMemberScroll">
           <table class="table table-lg t2" id="table">
             <tbody>
               <tr *ngIf="filteredUsers.length == 0"><td>No results</td></tr>
@@ -244,7 +244,7 @@
   </div>
 </ng-template>
 
-<ng-template #newTask>
+<ng-template #newTask class="newTaskModal">
   <div class="modal-header">
     <h4 class="modal-title pull-left">Add New Task</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
@@ -264,16 +264,47 @@
           <textarea class="form-control" class="form-control" name="taskDescription" [(ngModel)]="newTaskDescription" placeholder="Enter new tasks's description"></textarea>
       </div>
       <div class="mb-1">
+        <div class="tLabel">
           <label for="startDate" class="form-label">Start Date</label>
-          <input type="date" class="form-control" name="startDate" [(ngModel)]="newTaskStartDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskStartDate || isInvalidDate()}"  placeholder="Start Date"/>
-          <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
-          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
+        </div>
+        <div class="tNgCalendar">
+          <p-calendar
+          [style]="{'width':'100%'}"
+          [(ngModel)]="newTaskStartDate"
+          inputId="startDate"
+          name="startDate"
+          [showButtonBar]="true"
+          [firstDayOfWeek]="1"
+          placeholder="Start Date"
+          dateFormat="MM dd, yy"
+          [minDate]="today"
+          [maxDate]="newTaskEndDate"
+          [ngClass]="{'ng-invalid': buttonClicked && !newTaskStartDate || isInvalidDate()}"
+          ></p-calendar>
+        <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
+        <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+        </div>
       </div>
       <div class="mb-1">
+        <div class="tLabel">
           <label for="endDate" class="form-label">End Date</label>
-          <input type="date" class="form-control" name="endDate" [(ngModel)]="newTaskEndDate" [ngClass]="{'is-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}" placeholder="End Date"/>
+        </div>
+        <div class="tNgCalendar">
+          <p-calendar
+          [style]="{'width':'100%'}"
+          [(ngModel)]="newTaskEndDate"
+          inputId="endDate"
+          name="endtDate"
+          [showButtonBar]="true"
+          [firstDayOfWeek]="1"
+          placeholder="End Date"          
+          dateFormat="MM dd, yy"
+          [minDate]="newTaskStartDate"
+          [ngClass]="{'is-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}"
+        ></p-calendar>
           <div *ngIf="buttonClicked && !newTaskEndDate" class="invalid">Please enter end date.</div>
-          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set after the start date.</div>
+          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+        </div>
       </div>
       <div class="mb-1 chooseAssignee" autocomplete="off">
         <label for="assignee2" class="form-label">Assignee</label>

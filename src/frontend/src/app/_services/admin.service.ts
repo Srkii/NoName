@@ -111,6 +111,22 @@ export class AdminService {
 
   }
 
+  getCount(role: string|null, searchTerm: string|null): Observable<any>{
+
+    var params=new HttpParams();
+
+    if(role) {
+      params=params.set('role',role);
+    }
+    if(searchTerm) {
+      params=params.set('searchTerm', searchTerm);
+    }
+
+
+    return this.httpClient.get<number>(`${this.apiUrl}/users/fcount`,{params:params})
+
+  }
+
   getFilterCount(role:string|null): Observable<number>
   {
     var params=new HttpParams();

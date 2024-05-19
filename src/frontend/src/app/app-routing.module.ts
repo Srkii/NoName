@@ -13,6 +13,7 @@ import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.com
 import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { LandingPageComponent } from './Components/landing-page/landing-page.component';
+import { userGuard } from './_guards/user.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -21,15 +22,15 @@ const routes: Routes = [
   { path: 'forgotpass', component: ForgotPassComponent, title: 'Forgot Password', canActivate: [loginGuard] },
   { path: 'forgotreset', component: ForgotResetComponent, title: 'Reset Password', canActivate: [loginGuard] },
   { path: 'project/:id', component: ProjectDetailComponent, title: 'Project Details', canActivate: [authGuard] },
+  { path: 'admin', component: AdminComponent, title: 'Admin Panel', canActivate: [adminGuard] },
+  { path: 'userinfo', component: UserInfoComponent, title: 'User Information', canActivate: [userGuard] },
   { path: 'landing', component: LandingPageComponent, title: 'Landing Page' },
   {
     path: '',
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
-    children: [
-      { path: 'userinfo', component: UserInfoComponent, title: 'User Information' },
-      { path: 'myprojects', component: MyProjectsComponent, title: 'My Projects' },
-      { path: 'admin', component: AdminComponent, title: 'Admin Panel', canActivate: [adminGuard] },
+    children: [  
+      { path: 'myprojects', component: MyProjectsComponent, title: 'My Projects'},
       { path: 'mytasks', component: MyTasksComponent, title: 'My Tasks' }
     ],
   },

@@ -32,14 +32,19 @@
         </select>
       </div>
       <div class="filter">
-        <p-calendar  [style]="{'width':'100%'}"
-        (onSelect)="filterProjects()"
-        (onClearClick)="filterProjects()"
+        <p-calendar
+          [hideOnDateTimeSelect]="false"
+          [style]="{'width':'100%'}"
+          (onSelect)="filterProjects()"
+          (onClearClick)="filterProjects()"
           placeholder="Filter by Date Range"
           [(ngModel)]="rangeDates" 
           selectionMode="range" 
           [readonlyInput]="true"
-          [showButtonBar]="true"/>
+          [showButtonBar]="true"
+          dateFormat="MM dd, yy"
+          [firstDayOfWeek]="1"
+          ></p-calendar>
       </div>
 
       
@@ -94,7 +99,7 @@
 
 <div *ngIf="this.filteredProjects>this.pageSize" id="pages">
   <ul class="pagination">
-    <li class="paginate_buttons previous" [class.disabled]="currentPage === 1">
+    <li *ngIf="totalPagesArray.length>5" class="paginate_buttons previous" [class.disabled]="currentPage === 1">
       <button (click)="goToPage(1)" [disabled]="currentPage === 1">&laquo;</button>
     </li>
     <li class="paginate_button previous" [class.disabled]="currentPage === 1">
@@ -106,7 +111,7 @@
     <li class="paginate_button next" [class.disabled]="currentPage === totalPages">
       <button (click)="nextPage()" [disabled]="currentPage === totalPages">&gt;</button>
     </li>
-    <li class="paginate_buttons next" [class.disabled]="currentPage === totalPages">
+    <li *ngIf="totalPagesArray.length>5" class="paginate_buttons next" [class.disabled]="currentPage === totalPages">
       <button  (click)="goToPage(totalPagesArray.length)" [disabled]="currentPage === totalPages">&raquo;</button>
     </li>
   </ul>

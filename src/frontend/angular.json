@@ -35,13 +35,11 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/font-awesome/css/font-awesome.min.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
               "node_modules/ngx-spinner/animations/ball-beat.css",
-              "node_modules/primeng/resources/themes/bootstrap4-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "src/styles.css",
               "node_modules/@ng-select/ng-select/themes/default.theme.css",
@@ -49,6 +47,16 @@
                 "input": "src/GanttStyle.scss",
                 "bundleName": "ganttStyleMaksim",
                 "inject": true
+              },
+              {
+                "input": "src/tihomir-light-purple.css",
+                "bundleName": "tihomir-light-purple",
+                "inject": false
+              },
+              {
+                "input": "src/lara-dark-purple.css",
+                "bundleName": "lara-dark-purple",
+                "inject": false
               }
             ],
             "scripts": ["node_modules/@popperjs/core/dist/umd/popper-base.min.js",
