@@ -8,11 +8,12 @@ export class ThemeServiceService {
 
   constructor(@Inject(DOCUMENT) private document: Document) { }
 
-  switchTheme(theme: string) {
+  private isLightTheme = true;
+  switchTheme() {
     let themeLink = this.document.getElementById('app-theme') as HTMLLinkElement;
-
-    if(themeLink) {
-      themeLink.href = theme + '.css';
+    if (themeLink) {
+      themeLink.href = this.isLightTheme ? 'lara-dark-purple.css' : 'tihomir-light-purple.css';
+      this.isLightTheme = !this.isLightTheme;
     }
   }
 }
