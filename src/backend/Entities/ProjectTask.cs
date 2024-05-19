@@ -15,6 +15,7 @@
         public int? ProjectSectionId { get; set; } // foreign key to ProjectSection (nullable)
         public ProjectSection ProjectSection { get; set; } // navigation property
         public int? AppUserId { get; set; }
-        public AppUser AppUser { get; set; } 
+        public AppUser AppUser { get; set; }
+        public bool IsOriginProjectArchived { get; set; } = false; // efikasnije je ovako nego da radim join kad fetch taskove
     }
 }

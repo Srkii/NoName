@@ -27,7 +27,7 @@ export class NavComponent implements OnInit {
       this.getUser();
       this.notificationService.createHubConnection();
     }
-    
+    this.navigation();
   }
   admin!: boolean
   logovan!: boolean
@@ -80,4 +80,11 @@ export class NavComponent implements OnInit {
     this.router.navigate(['/mytasks']);
   }
 
+  navigation():void{
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((NavigationEnd) => {
+      this.isMyProjectsActive = this.router.url.includes('/myprojects') || this.router.url.includes('/project/');
+    });
+  }
 }
