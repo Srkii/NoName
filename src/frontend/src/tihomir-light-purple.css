@@ -465,7 +465,8 @@
   .p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
     outline: 0 none;
     outline-offset: 0;
-    box-shadow: 0 0 0 0.2rem #DDD6FE;
+    box-shadow: 0 0 2px #5f61e6; /* dodato tico */
+    border: 1px solid #5f61e6 !important; /* dodato tico */
     border-color: #696cff;
   }
 
@@ -524,7 +525,7 @@
     color: #4b5563;
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
     font-weight: 600;
-    padding: 0.5rem;
+    padding: 0.3rem;
   }
   .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year:enabled:hover,
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month:enabled:hover {
@@ -548,8 +549,8 @@
     padding: 0;
   }
   .p-datepicker table td > span {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem; /*dodato tico*/
+    height: 2rem; /*dodato tico*/
     border-radius: 50%;
     transition: box-shadow 0.2s;
     border: 1px solid transparent;
@@ -2103,7 +2104,7 @@
     color: #ffffff;
     background: #696cff;
     border: 1px solid #696cff;
-    padding: 0.75rem 1.25rem;
+    padding: 0.4rem 1rem; /*dodato tico*/
     font-size: 1rem;
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
     border-radius: 6px;

@@ -88,6 +88,8 @@ export class ProjectDetailComponent implements OnInit {
   newSectionName: string = '';
   searchSection: string = '';
 
+  today: Date = new Date();
+
   constructor(
     private route: ActivatedRoute,
     private myProjectsService: MyProjectsService,
