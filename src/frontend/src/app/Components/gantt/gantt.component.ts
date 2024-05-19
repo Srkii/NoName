@@ -16,7 +16,8 @@ import {
   NgxGanttComponent,
   GanttGroup,
   GanttDate,
-  GanttLink
+  GanttLink,
+  GanttGroupInternal,
 } from '@worktile/gantt';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
@@ -137,7 +138,7 @@ export class GanttComponent implements OnInit{
     }
   };
 
-  private reloadGanttData() {
+  private reloadGanttData() {//ovo zna da duplira podatke u ganttu ~maksim
     this.getGanttData(); // Fetch data again
   }
 
@@ -181,11 +182,12 @@ export class GanttComponent implements OnInit{
   }
 
   selectedChange(event: GanttSelectedEvent) {
-   event.current && this.ganttComponent.scrollToDate(Number(event.current?.start));
+    event.current && this.ganttComponent.scrollToDate(Number(event.current?.start));
     console.log('Selected item changed', event);
   }
 
   onDragDropped(event: GanttTableDragDroppedEvent) {
+    //ovo nije bas najbolje ali kinezi su se potrudili da bolje ne moze
     var section = Number(event.target.group_id);
     var task = Number(event.source.id);
     if(Number.isNaN(section)){
@@ -300,7 +302,7 @@ export class GanttComponent implements OnInit{
   }
   convertToStandardTimeStamp(unixTime:number) : string{
     const date = new Date(unixTime*1000);
-    return date.toLocaleDateString();
+    return date.toDateString();
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {

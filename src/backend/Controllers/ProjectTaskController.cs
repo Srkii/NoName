@@ -647,8 +647,8 @@ namespace backend.Controllers
         [HttpPost("timeUpdateGantt/{id}")]
         public async Task<ActionResult> UpdateTaskTimeGantt(int id, DateTimeDto newDateTime){
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == id);
-            task.StartDate = newDateTime.StartDate;
-            task.EndDate = newDateTime.EndDate;
+            task.StartDate = newDateTime.StartDate.AddDays(1);
+            task.EndDate = newDateTime.EndDate.AddDays(1);//sace da pamti normalno
 
             await _context.SaveChangesAsync();
             return Ok(task);
