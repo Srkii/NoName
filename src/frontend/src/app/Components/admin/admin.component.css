@@ -52,6 +52,7 @@ th {
   border-right: none;
   color: #697a8d;
   cursor: pointer;
+  width: 30%;
 }
 td{
   padding-bottom: 10px;
@@ -557,7 +558,7 @@ select:focus-visible{
 }
 
 /*za tablete*/
-@media screen and (min-width: 650px) and (max-width: 1024px)
+@media screen and (min-width: 650px) and (max-width: 1300px)
 {
   .card .card-body h3{
     font-size: 18px;
@@ -566,11 +567,11 @@ select:focus-visible{
 
   .inputEmail{
     width: auto;
-    margin-left: 15px;
+    /* margin-left: 15px; */
   }
   .leftInvite{
     justify-content: baseline;
-    
+    width: 40%;
   }
   .leftInvite .page_size{
     margin-left: 5px;
@@ -596,6 +597,9 @@ select:focus-visible{
   }
   .inputEmail .btn-primary{
     display: none;
+  }
+  .inputEmail input{
+    width: 65%;
   }
 }
 
