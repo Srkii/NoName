@@ -154,8 +154,7 @@
         </div>
         <div class="mb-3 description">
           <h5>Description</h5>
-          <quill-editor class="area-desc" [(ngModel)]="update.description" (onBlur)="updateProject()" [modules]="quillService.editorModules" [formats]="quillService.editorFormats" [disabled]="userRole == 4 || userRole == 3" [ngClass]="{'hide-toolbar': userRole == 4 || userRole == 3}"></quill-editor>
-          <!-- <textarea class="form-control area-desc" id="desc" rows="5" [(ngModel)]="update.description" name="Description"  ></textarea> -->
+          <quill-editor id="area-desc" class="area-desc" (click)="showEditOptions()" [(ngModel)]="update.description" (onBlur)="updateProject()" [modules]="quillService.editorModules" [formats]="quillService.editorFormats" [disabled]="userRole == 4 || userRole == 3" [ngClass]="{'hide-toolbar': userRole == 4 || userRole == 3 || !enabledEditorOptions, 'show-toolbar': userRole != 4 && userRole != 3 && enabledEditorOptions}" ></quill-editor>
         </div>
       </div>
   </div>

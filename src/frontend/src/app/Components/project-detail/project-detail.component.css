@@ -305,9 +305,14 @@ select:disabled {
     color: #697a8d;
     width: 100% !important;
     height: 15rem !important;
-    border-radius: 0.375rem;
-    border-top: 1px solid;
+    border: 1px solid transparent;
+    border-radius: 0.375rem !important;
     border-color: #dcdbdb;
+    overflow-y: hidden;
+}
+.area-desc:hover, .area-desc:focus , .area-desc:active{
+    border-color: #696cff !important;
+    box-shadow: 0 0 3px #5f61e6;
 }
 .info label{
     font-weight: 600;

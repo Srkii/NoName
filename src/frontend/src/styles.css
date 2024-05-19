@@ -42,3 +42,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .hide-toolbar .ql-toolbar  {
   display: none;
 }
+.area-desc .ql-container {
+  border: none !important;
+}
+.area-desc .ql-editor{
+  max-height: 100px !important;
+}
+.area-desc .ql-toolbar.ql-snow{
+  border: none !important;
+  border-bottom: 1px solid #ccc !important;
+}
+/* .area-desc .ql-toolbar button:hover {
+  color: #FFA500 !important; 
+}
+.area-desc .ql-toolbar button:hover svg {
+  fill: #FFA500 !important; 
+} */

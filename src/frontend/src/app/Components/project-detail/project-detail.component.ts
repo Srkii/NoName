@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Priority, Project, ProjectStatus } from '../../Entities/Project';
@@ -79,6 +79,7 @@ export class ProjectDetailComponent implements OnInit {
 
   buttonClicked: boolean = false;
   taskNameExists: boolean = false;
+  enabledEditorOptions: boolean = false;
 
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
@@ -95,11 +96,11 @@ export class ProjectDetailComponent implements OnInit {
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
-    private datePipe: DatePipe,
     public uploadservice: UploadService,
     private shared: SharedService,
     private projectSectionService: ProjectSectionService,
-    public quillService: QuillConfigService
+    public quillService: QuillConfigService,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -206,6 +207,7 @@ export class ProjectDetailComponent implements OnInit {
       this.update.endDate = this.project.endDate;
       this.update.priority = this.project.priority;
       this.update.projectStatus = this.project.projectStatus;
+      this.enabledEditorOptions = false;
   }
 
   openMemberManagment(modal: TemplateRef<void>){
@@ -571,5 +573,15 @@ export class ProjectDetailComponent implements OnInit {
       return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
     }
     return false;
+  }
+  showEditOptions(){
+    this.enabledEditorOptions = true;
+  }
+  @HostListener('document:click', ['$event'])
+  onClick(event: any) {
+    const elementRef = document.getElementById('area-desc') as HTMLElement;
+    if (elementRef && !elementRef.contains(event.target)) {
+      this.enabledEditorOptions = false;
+    }
   }
 }
