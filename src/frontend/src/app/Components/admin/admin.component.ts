@@ -83,7 +83,10 @@ export class AdminComponent implements OnInit{
   modalRef?: BsModalRef;
 
   curentUserId: number=0
-
+  curentEmail: string=''
+  curentName: string=''
+  currentLastName: string=''
+  currentRole: string=''
   currentId=localStorage.getItem('id');
 
   isFilterActive: boolean=true;
@@ -147,17 +150,38 @@ export class AdminComponent implements OnInit{
       }}
 
     UpdateUser(id: number): void{
-      const updateeUser={
-        Email: this.newEmail,
-        FirstName: this.newFisrtName,
-        LastName: this.newLastName
+      if (this.newEmail) {
+        this.updateUser.Email=this.newEmail;
       }
-      if(updateeUser){
-        this.adminService.updateUser(id,updateeUser).subscribe(
-          (response)=>{
-            this.GetUsers()
+      else{
+        this.updateUser.Email=this.curentEmail
+      }
+      if (this.newFisrtName) {
+        this.updateUser.FirstName=this.newFisrtName;
+        console.log(this.newFisrtName);
+      }
+      else{
+        this.updateUser.FirstName=this.curentName;
+      }
+      if (this.newLastName) {
+        this.updateUser.LastName=this.newLastName;
+      }
+      else{
+        this.updateUser.LastName=this.currentLastName
+      }
+      if(this.updateUser){
+        this.adminService.updateUser(id,this.updateUser).subscribe({
+          next:(response)=>{
+            this.GetUsers();
+            console.log(response)
+          },
+          error: (error) => {
+            console.log(error);
           }
-        )
+      })
+      }
+      else{
+        console.log("Can't update user role")
       }
     }
 
@@ -196,13 +220,15 @@ export class AdminComponent implements OnInit{
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        //this.loadPicture(this.allUsers);
-        this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
-          console.log(response);
-          this.filteredUsers=response;
-          this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
-        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-        });
+        var counnt=this.allUsers.length;
+        this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
+          this.filteredUsers=res;
+          this.totalPages= Math.ceil(res / this.pageSize);
+          console.log("get2 "+this.totalPages);
+          console.log("count "+res)
+          this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        
+        }})
 
         this.spinner.hide();
       });
@@ -252,6 +278,7 @@ export class AdminComponent implements OnInit{
     onLoad(): void{
       this.adminService.getAllUsers2().subscribe(response=>{
         this.allUsersCount=response;
+        console.log("load "+this.allUsersCount)
       })
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
@@ -259,6 +286,7 @@ export class AdminComponent implements OnInit{
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        console.log("load2 "+this.totalPages)
         this.spinner.hide();
       });
       
@@ -292,9 +320,25 @@ export class AdminComponent implements OnInit{
       })
     }
 
-    openModal(modal: TemplateRef<void>, userId: number)
+    openModal(modal: TemplateRef<void>, user:Member)
     {
-      this.curentUserId=userId;
+      this.curentUserId=user.id;
+      this.curentEmail=user.email;
+      this.curentName=user.firstName;
+      this.currentLastName=user.lastName;
+      if(user.role==0)
+      {
+        this.currentRole="Admin";
+      }
+      else if(user.role==1)
+      {
+        this.currentRole="Member"
+      }
+      else if(user.role==2)
+      {
+        this.currentRole="Project Manager"
+      }
+      
       this.modalRef = this.modalService.show(
         modal,
         {
@@ -325,12 +369,17 @@ export class AdminComponent implements OnInit{
     }
 
     toogleFilter(): void{
+      console.log("1"+this.isFilterActive)
       if(this.isFilterActive)
       {
         this.filterUsers();
+        
+        console.log("2"+this.isFilterActive)
       }
       else{
         this.noFilter();
+        
+        console.log(this.isFilterActive)
       }
       this.isFilterActive=!this.isFilterActive;
     }
@@ -387,6 +436,14 @@ export class AdminComponent implements OnInit{
       return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
     }
 
+ @HostListener('document:click', ['$event'])
+    clickOutside(event: MouseEvent) {
+      const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
+      if (!clickedInside && this.selectedRolee!='') {
+        // Click was outside the .clickable-div and the filter is active
+        event.stopPropagation(); // This prevents other click events from executing
+      }
+    }
 
   }
 

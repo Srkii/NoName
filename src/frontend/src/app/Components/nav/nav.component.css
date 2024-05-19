@@ -160,7 +160,7 @@ cursor: pointer;}
   text-decoration: underline;
   color: #705ab8;
   text-underline-offset: 30px;
-
+  text-decoration-thickness: 2px;  
 }
 
 .dropdown-menu-responsive .nav-item:active{

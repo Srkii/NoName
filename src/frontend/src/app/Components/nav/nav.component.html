@@ -29,18 +29,12 @@
           <li class="nav-item active" *ngIf="isAdmin()" routerLinkActive="active-link-text">
             <a class="nav-link" routerLink="/admin">Manage Users</a>
           </li>
-          <li class="nav-item active" *ngIf="!isAdmin()" routerLinkActive="active-link-text" [class.active]="isMyProjectsActive">
+          <li class="nav-item active" *ngIf="!isAdmin()" [ngClass]="{'active-link-text': isMyProjectsActive}">
             <a class="nav-link" routerLink="/myprojects">My Projects</a>
           </li>
           <li class="nav-item" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
             <a class="nav-link" routerLink="/mytasks">My Tasks</a>
           </li>
-          <!-- <li class="nav-item" *ngIf="" routerLinkActive="active-link-text">
-            <a class="nav-link" routerLink="/mytasks">My Profile</a>
-          </li>
-          <li class="nav-item" *ngIf="!isAdmin()" routerLinkActive="active-link-text">
-            <a class="nav-link" routerLink="/mytasks">My Tasks</a>
-          </li> -->
         </ul>
       </div>
     </div>
@@ -52,7 +46,7 @@
   <!-- Icons on the right remain visible on all screen sizes -->
   <div class="navbar-nav-right d-flex">
     <img src="../../../assets/navIcons/sun.png" alt="" class="rightImg2" />
-    <app-notifications class="notifications"></app-notifications>
+    <app-notifications *ngIf="!isAdmin()"  class="notifications"></app-notifications>
 
     <ngx-avatars  *ngIf="!user?.profilePicUrl" size="30" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>

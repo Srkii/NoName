@@ -51,10 +51,10 @@ th {
   border-left: none;
   border-right: none;
   color: #697a8d;
-  cursor: default;
+  cursor: pointer;
+  width: 30%;
 }
-td {
-  padding-top: 10px;
+td{
   padding-bottom: 10px;
   padding-left: 5px;
   border: 1px solid lightgray;
@@ -62,7 +62,17 @@ td {
   border-right: none;
   font-size: 16px;
   color: #697a8d;
-  cursor: default;
+  cursor: pointer;
+}
+.ostaleKolone
+{
+  width: 30%;
+  justify-content: center;
+  padding-top: 10px;
+}
+.prvaKolona{
+  width: 30%;
+  padding-top: 5px;
 }
 .text-body {
   --bs-text-opacity:#697a8d ;
@@ -85,6 +95,18 @@ p {
   align-items: baseline;
   width: 100%;
 }
+.leftInvite {
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.leftInvite .form-control{
+  width: 50%;
+}
+.leftInvite .page_size{
+  width: 45%;
+}
 .inputEmail{
   display: flex;
   align-items: baseline;
@@ -99,16 +121,13 @@ p {
 }
 .inputEmail btn{
   flex: 1;
-
 }
-.leftInvite {
+.c {
   display: flex;
-  width: 50%;
+  width: 40%;
   justify-content: space-between;
   align-items: baseline;
 }
-
-
 
 #button-addon2{
   background-color: #5d57c2;
@@ -168,7 +187,7 @@ p {
 }
 
 .col-sm-12.col-md-6 .dataTables_paginate {
-  width: 100%;
+  width: 90%;
 }
 
 .col-sm-12.col-md-6 .dataTables_paginate .pagination {
@@ -194,6 +213,7 @@ select {
   color: #697a8d;
   font-size: 16px;
   transition: border-color 0.3s ease;
+  cursor: pointer;
 }
 
 select:focus {
@@ -245,7 +265,7 @@ select:focus-visible{
   outline: none;
   border: 1px solid #5f61e6 !important;
   box-shadow:  #5f61e6;
-  cursor: default;
+  cursor: pointer;
   /* background-color: #6b6caf; */
 }
 .avatar avatar-sm me-2{
@@ -295,7 +315,7 @@ select:focus-visible{
   border: 0.5px solid lightgray;
   border-radius: 0.375rem;
   padding: 6px;
-  width: 40%;
+  width: 50%;
   height: 37px;
   padding: .375rem .75rem;
   font-size: 1rem;
@@ -328,8 +348,8 @@ select:focus-visible{
   border: 1px solid #5f61e6 !important;
   box-shadow: 0 0 3px #5f61e6;
 }
-.clickable-div:focus.clicked {
-  background-color: #d0cdff; 
+.clickable-div.active{
+  background-color: #d0cdff;
 }
 /* .paginate_button1 .btn{
   margin-left: 3px;
@@ -406,14 +426,16 @@ select:focus-visible{
 }
 .archUsers{
   /* margin: 10px !important; */
-  cursor: default;
-  width: 225px;
+  cursor: pointer !important;
+  width: 210px;
   height: 30px;
   border-radius: 0.375rem;
   justify-content: center;
+  border-bottom: 2px solid #D7D7F8;
 }
 .archUsers:hover {
-  border-bottom:2px solid #5d57c2;
+  border-bottom: 2px solid #696cff;
+  cursor: pointer;
 }
 .table-responsive text-nowrap{
   width: 100%;
@@ -427,21 +449,30 @@ select:focus-visible{
 .btn-primary1{
   display: none;
 }
-
+.ngx-avatars{
+  size: 35;
+}
 /*izgled za telefone*/
-@media screen and (max-width: 500px) {
-  .card .pics{
-    display: none;
+@media screen and (max-width: 659px){
+
+  .card {
+    font-size: 14px;
   }
-  .card .card-body{
-    padding-left: 0px;
+  .card-body h3{
+    font-size: 20px;
   }
-  .card .card-title{
-    margin-left: 2px;
+  
+  .card-container{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    
   }
-  .card .card-body h3{
-    font-size: 18px;
-    display: inline-block;
+  .card{
+    width: 100%;
+    margin-bottom: 13px;
   }
 
   .invite {
@@ -455,6 +486,9 @@ select:focus-visible{
     width: 100%;
     font-size: small;
   }
+  .leftInvite input{
+    width: 40%;
+  }
   .invite input::placeholder{
     font-size: small;
   }
@@ -463,8 +497,12 @@ select:focus-visible{
     width: 100%;
     margin-top: 10px; 
   }
+  .inputEmail input{
+    width: 60%;
+  }
 
   .inputEmail .btn-primary1{
+    width: 35%;
     display: inline-block;
     font-size: small;
     border-radius: 0.375rem;
@@ -486,66 +524,42 @@ select:focus-visible{
     font-size: small;
   }
   .page_size{
+    width: 35%;
     font-size: small;
   }
   .archUsers {
     margin-top: 5px;
     align-self: flex-start;
-    width: 50%;
+    width: 30px;
     padding-top: 3px;
     padding-left: 5px;
    
   }
-  .archUsers .textArch{
+  .archUsers .textArch {
     display: none;
   }
 
   .dataTables_paginate {
     padding-top: 5px;
     align-self: flex-end;
-    width: 30%;
+    width: 50px !important;
   }
-}
-
-/*Galaxy fold*/
-@media screen and (max-width: 653px) {
-  .card .pics{
-    display: none;
-  }
-  .card .card-body{
-    padding-left: 2px;
-  }
-  .card .card-title{
-    margin-left: 2px;
-    font-size: 12px;
-  }
-  .card .card-body h3{
-    font-size: 12px;
-    display: inline-block;
-   
-  }
-  .archUsers{
-    width: 30px;
-  }
-  .col-sm-12.col-md-6 .dataTables_paginate {
-    width: 70%;
-  }
-  .inputEmail .btn-primary1{
-    display: inline-block;
+  .pagination .btn-primary{
+    width: 70px;
     font-size: small;
-    border-radius: 0.375rem;
-    color: #fff;
-    background-color: #696cff;
-    border-color: #696cff;
-    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+    font-display: center;
   }
-  .inputEmail .btn-primary{
-    display: none;
+  .pagination .page {
+    height: 33px;
+    font-size: small;
+  }
+  #all{
+    width: 93%;
   }
 }
 
 /*za tablete*/
-@media screen and (min-width: 768px) and (max-width: 1024px)
+@media screen and (min-width: 650px) and (max-width: 1300px)
 {
   .card .card-body h3{
     font-size: 18px;
@@ -554,11 +568,11 @@ select:focus-visible{
 
   .inputEmail{
     width: auto;
-    margin-left: 15px;
+    /* margin-left: 15px; */
   }
   .leftInvite{
     justify-content: baseline;
-    
+    width: 40%;
   }
   .leftInvite .page_size{
     margin-left: 5px;
@@ -573,6 +587,7 @@ select:focus-visible{
     width: 70%;
   }
   .inputEmail .btn-primary1{
+    width: 30%;
     display: inline-block;
     font-size: small;
     border-radius: 0.375rem;
@@ -584,7 +599,14 @@ select:focus-visible{
   .inputEmail .btn-primary{
     display: none;
   }
+  .inputEmail input{
+    width: 65%;
+  }
 }
+
+/* @media screen and (min-width: 601px) and (max-width: 767px){*/
+
+
 .noFilt{
   margin-right: 5px;
   margin-bottom: 25px;
@@ -592,4 +614,15 @@ select:focus-visible{
 
 .tblActions svg {
   cursor: pointer;
+}
+.check{
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.avatar-wrapper{
+  margin-right: 5px;
+}
+.noArch{
+  height: 50px;
+  padding-top: 10px;
 }
