@@ -254,7 +254,7 @@
     <form (ngSubmit)="ChangeUserRole(curentUserId)">
       <div class="mb-3 selectRole">
         <select name="role" [(ngModel)]="userRole" required>
-          <option value="" selected>{{currentRole}}</option>
+          <option value="" hidden selected>{{currentRole}}</option>
           <option value="0">Admin</option>
           <option value="1">Member</option>
           <option value="2">Project Manager</option>
