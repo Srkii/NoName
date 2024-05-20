@@ -117,7 +117,7 @@ p {
 }
 
 .inputEmail input {
-  width: 60%;
+  width: 62%;
 }
 .inputEmail btn{
   flex: 1;
@@ -181,18 +181,22 @@ p {
 }
 
 .col-sm-12.col-md-6 {
+  /* display: flex;
+  justify-content: flex-end; */
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: baseline;
   width: 100%;
 }
 
-.col-sm-12.col-md-6 .dataTables_paginate {
+/* .col-sm-12.col-md-6 .dataTables_paginate {
   width: 90%;
-}
+} */
 
-.col-sm-12.col-md-6 .dataTables_paginate .pagination {
-  justify-content: flex-end;
-}
+/* .col-sm-12.col-md-6 .dataTables_paginate .pagination {
+   justify-content: flex-end; 
+  justify-content: right;
+} */
 
 .card-container {
   display: flex;
@@ -427,10 +431,10 @@ select:focus-visible{
 .archUsers{
   /* margin: 10px !important; */
   cursor: pointer !important;
-  width: 210px;
+  width: 200px;
   height: 30px;
   border-radius: 0.375rem;
-  justify-content: center;
+  justify-content: flex-start;
   border-bottom: 2px solid #D7D7F8;
 }
 .archUsers:hover {
@@ -453,7 +457,7 @@ select:focus-visible{
   size: 35;
 }
 /*izgled za telefone*/
-@media screen and (max-width: 659px){
+@media screen and (max-width: 649px){
 
   .card {
     font-size: 14px;
@@ -487,7 +491,7 @@ select:focus-visible{
     font-size: small;
   }
   .leftInvite input{
-    width: 40%;
+    width: 60% !important;
   }
   .invite input::placeholder{
     font-size: small;
@@ -498,7 +502,7 @@ select:focus-visible{
     margin-top: 10px; 
   }
   .inputEmail input{
-    width: 60%;
+    width: 60% !important;
   }
 
   .inputEmail .btn-primary1{
@@ -524,7 +528,7 @@ select:focus-visible{
     font-size: small;
   }
   .page_size{
-    width: 35%;
+    width: 35% !important;
     font-size: small;
   }
   .archUsers {
@@ -541,8 +545,9 @@ select:focus-visible{
 
   .dataTables_paginate {
     padding-top: 5px;
-    align-self: flex-end;
-    width: 50px !important;
+    /* align-self: flex-end; */
+    justify-content: flex-end;
+    /* width: 50% !important; */
   }
   .pagination .btn-primary{
     width: 70px;
@@ -559,7 +564,7 @@ select:focus-visible{
 }
 
 /*za tablete*/
-@media screen and (min-width: 650px) and (max-width: 1300px)
+@media screen and (min-width: 650px) and (max-width: 1400px)
 {
   .card .card-body h3{
     font-size: 18px;
@@ -601,6 +606,10 @@ select:focus-visible{
   }
   .inputEmail input{
     width: 65%;
+  }
+
+  .pagination{
+    justify-content: right;
   }
 }
 

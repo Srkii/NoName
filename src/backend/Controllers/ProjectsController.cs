@@ -382,6 +382,21 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok(new { message = "Project and its tasks have been archived." });
         }
+        
+        [HttpGet("isArchived/{projectId}")] //api/projects/isArchived/2
+        public async Task<ActionResult<bool>> IsProjectArchived(int projectId)
+        {
+            if(ProjectExists(projectId))
+            {
+                var project1= await _context.Projects.FirstOrDefaultAsync(proj=>proj.Id==projectId && proj.ProjectStatus==ProjectStatus.Archived);
+                if(project1!=null){
+                    return true; 
+                }
+                else return false; 
+            }
+            else return true; 
+           
+        }
     }
 }
 

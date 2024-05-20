@@ -185,7 +185,12 @@ export class AdminComponent implements OnInit{
     ArchiveUser(id:number): void{
       this.adminService.archiveUser(id).subscribe(
         (response)=>{
-          this.GetUsers()
+          if(this.currentPage>1 && this.totalPages==1)
+            {
+              this.currentPage=1;
+            }
+          this.GetUsers()        
+
         }
       )
 
@@ -214,6 +219,7 @@ export class AdminComponent implements OnInit{
     }
     }
 
+
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
@@ -221,6 +227,15 @@ export class AdminComponent implements OnInit{
         this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
           this.filteredUsers=res;
           this.totalPages= Math.ceil(res / this.pageSize);
+          console.log("get2 "+this.totalPages);
+          console.log("count "+res)
+          console.log("trenutna "+this.currentPage);
+          if(this.currentPage>1 && this.totalPages==1)
+            {
+              this.currentPage=1;
+              this.GetUsers();
+              return;
+            }
           this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
         
         }})
@@ -233,7 +248,6 @@ export class AdminComponent implements OnInit{
     nextPage(): void {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
-        const id = localStorage.getItem('id');
       this.GetUsers();
       }
     }
@@ -241,14 +255,12 @@ export class AdminComponent implements OnInit{
     previousPage(): void {
       if (this.currentPage > 1) {
         this.currentPage--;
-        const id = localStorage.getItem('id');
       this.GetUsers();
       }
     }
     goToPage(pageNumber: number): void {
       if (pageNumber >= 1 && pageNumber <= this.totalPages) {
         this.currentPage = pageNumber;
-        const id = localStorage.getItem('id');
       this.GetUsers();
       }
     }
