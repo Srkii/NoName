@@ -17,6 +17,8 @@ import { NewTask } from '../../Entities/NewTask';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { ProjectSectionService } from '../../_services/project-section.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-project-detail',
@@ -99,7 +101,9 @@ export class ProjectDetailComponent implements OnInit {
     private datePipe: DatePipe,
     public uploadservice: UploadService,
     private shared: SharedService,
-    private projectSectionService: ProjectSectionService
+    private projectSectionService: ProjectSectionService,
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   get formattedEndDate() {
@@ -119,7 +123,12 @@ export class ProjectDetailComponent implements OnInit {
     this.shared.sectionUpdated.subscribe(() => {
       this.getProjectInfo();
     })
-    this.getProjectInfo();
+    // nzm koliko je ovo pametno
+    this.route.params.subscribe(params => {
+      const projectId = +params['id']; // '+' converts the parameter string to a number
+      this.currentProjectId = projectId;
+      this.getProjectInfo();
+    });
     this.shared.togglePopup$.subscribe(({ event, taskId }) => {
     this.togglePopUp(event, taskId);
 
@@ -258,7 +267,7 @@ export class ProjectDetailComponent implements OnInit {
       this.myProjectsService.AddProjectMembers(projectMembers).subscribe(response => {
         this.loadAddableUsers()
         this.loadProjectMembers()
-        this.selectedUsers = [] 
+        this.selectedUsers = []
         this.spinner.hide()
       })
     }
@@ -269,7 +278,6 @@ export class ProjectDetailComponent implements OnInit {
     if(this.userRole == 0 || this.userRole == 1)
     {
       this.myProjectsService.DeleteProjectMember(this.project.id,userId).subscribe(updatedProject => {
-        console.log("Project member deleted successfully")
         this.loadProjectMembers()
         this.loadAddableUsers()
         this.searchTerm = ''
@@ -289,7 +297,6 @@ export class ProjectDetailComponent implements OnInit {
       }
 
       this.myProjectsService.UpdateUsersProjectRole(projectMember).subscribe(update => {
-        console.log("User role changed successfully")
         this.spinner.hide()
       })
     }
@@ -320,7 +327,7 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.myTasksService
       .GetProjectTask(taskId,this.userId)
       .subscribe((task: ProjectTask) => {
@@ -350,8 +357,8 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   closePopup() {
-    this.clickedTask = null; 
-    this.showPopUp = false; 
+    this.clickedTask = null;
+    this.showPopUp = false;
   }
 
   getPriorityClass() {
@@ -396,45 +403,37 @@ export class ProjectDetailComponent implements OnInit {
   async saveTask() {
     this.taskNameExists = false;
     this.buttonClicked = true;
-    console.log(this.selectedSection);
-
 
     if(!this.newTaskName)
     {
-        console.log("No task name");
         return;
     }
 
     if(await this.TaskNameExists())
       {
         this.taskNameExists = true;
-        console.log("Task name already exists")
         return;
       }
 
     if(this.newTaskStartDate == undefined || this.newTaskEndDate == undefined)
     {
-      console.log("You must enter a dates for the task")
       return;
     }
 
     if(this.isInvalidDate())
     {
-      console.log("Unvalid dates");
       return;
     }
 
     if(this.newTaskName == undefined)
     {
-      console.log("You must specify task name")
-      return
+      return;
     }
     if(this.selectedUser==undefined)
     {
-      console.log("No user selected");
       return;
     }
-      
+
     this.buttonClicked = false;
     const task: NewTask = {
       CreatorId: Number(localStorage.getItem('id')),//treba mi da ne bih kreatoru slao da je dodelio sam sebi task ~maksim
@@ -446,13 +445,12 @@ export class ProjectDetailComponent implements OnInit {
       AppUserId: this.selectedUser?.appUserId || 0,
       ProjectSectionId: this.selectedSection?.id || 0
     };
-    console.log(task);
     this.myTasksService.createTask(task).subscribe({
       next: () => {
         this.modalRef?.hide();
         this.getProjectInfo();
         this.shared.taskAdded(true);
-        
+
         // Resetuj polja
         this.newTaskName = '';
         this.newTaskDescription = '';
@@ -499,6 +497,13 @@ export class ProjectDetailComponent implements OnInit {
       });
   }
 
+  openViewArchTaksModal(modal: TemplateRef<void>) {
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: 'modal-lg modal-dialog-centered'
+      });
+  }
 
   removeFromArchived() {
     this.spinner.show(); // prikazi spinner
@@ -596,5 +601,33 @@ export class ProjectDetailComponent implements OnInit {
   restoreInvalidInputs():void{
     this.buttonClicked=false;
   }
+
+  openArchiveProjectcModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-sm modal-dialog-centered'
+    });
+  }
   
+  openDeleteProjectcModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-sm modal-dialog-centered'
+    });
+  }
+
+  confirmArchive() {
+    if (this.project && this.project.id) {
+      this.myProjectsService.archiveProject(this.project.id).subscribe({
+        next: () => {
+          this.getProjectInfo(); // Refresh project info or navigate away
+          this.modalRef?.hide();
+          this.router.navigate(['/myprojects']).then(() => {
+            this.toastr.success('Project has been archived.');
+          });
+        },
+        error: error => {
+          this.toastr.error('Failed to archive project');
+        }
+      });
+    }
+  }
 }

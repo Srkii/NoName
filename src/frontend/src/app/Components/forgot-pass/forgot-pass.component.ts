@@ -21,12 +21,10 @@ export class ForgotPassComponent implements OnInit{
   sendResetLink() {
     this.mailreset.sendResetLink(this.resetEmail).subscribe({
       next: response => {
-        console.log(response);
         this.emailSent = true;
       },
       error: error => {
         let errorMessage = '';
-        console.log(error);
         if (error.error.errors) {
           for (const key in error.error.errors) {
             if (error.error.errors.hasOwnProperty(key)) {

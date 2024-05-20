@@ -117,7 +117,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
         {
             var tasks = await _context.ProjectTasks
-                                      .Where(task => task.AppUserId == userId)
+                                      .Where(task => task.AppUserId == userId && !task.IsOriginProjectArchived)
                                       .Select(task => new
                                       {
                                           task.Id,
@@ -179,6 +179,10 @@ namespace backend.Controllers
             }
 
             task.TskStatusId = status.Id;
+            if(statusName.Equals("Archived")){
+                //arhiviram sve notifikacije
+                _notificationService.ArchiveRelatedTaskNotifications(taskId);
+            }
             await _context.SaveChangesAsync();
 
             // Now, after saving changes, fetch the updated task again
@@ -309,6 +313,7 @@ namespace backend.Controllers
             {
                 return NotFound(); // Return not found if the dependency doesn't exist
             }
+
         }
 
         [AllowAnonymous]
@@ -524,7 +529,7 @@ namespace backend.Controllers
         {
             var tasks = await _context.ProjectTasks
                 .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
-                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived")
+                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived" && !task.IsOriginProjectArchived)
                 .Take(count)
                 .OrderByDescending(task => task.DateCreated) // Order by DateCreated in descending order
                 .Select(task => new
@@ -556,7 +561,7 @@ namespace backend.Controllers
         {
             var tasks = await _context.ProjectTasks
                 .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
-                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived")
+                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived" && !task.IsOriginProjectArchived)
                 .Take(count)
                 .OrderBy(task => task.EndDate) // Order by DateCreated in descending order
                 .Select(task => new
@@ -587,7 +592,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetClosedTasksByUserId(int userId, int count)
         {
             var tasks = await _context.ProjectTasks
-                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview")
+                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview" && !task.IsOriginProjectArchived)
                 .Take(count)
                 .Select(task => new
                 {
@@ -646,13 +651,42 @@ namespace backend.Controllers
         [HttpPost("timeUpdateGantt/{id}")]
         public async Task<ActionResult> UpdateTaskTimeGantt(int id, DateTimeDto newDateTime){
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == id);
-            task.StartDate = newDateTime.StartDate;
-            task.EndDate = newDateTime.EndDate;
+            task.StartDate = newDateTime.StartDate.AddDays(1);
+            task.EndDate = newDateTime.EndDate.AddDays(1);//sace da pamti normalno
 
             await _context.SaveChangesAsync();
             return Ok(task);
         }
+        [AllowAnonymous]
+        [HttpPost("changeSectionGantt")]
+        public async Task<IActionResult> ChangeSectionGantt(SectionChangeDTO dto){
 
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == dto.taskId);
+            var section = await _context.ProjectSections.FirstOrDefaultAsync(x=>x.Id == dto.sectionId);
+
+            if(task == null){
+                return NotFound("TASK ID NOT FOUND "+dto.taskId);
+            }
+            if(section == null && dto.sectionId!=0){
+                //ako je ovo stanje onda je neki error
+                //poenta je sto treba da mozes da izbacis task iz section-a
+                //section id 0 ce da bude prosledjen sa fronta samo u slucaju izbacivanja iz sectiona
+                //ukoliko dobijem null ovde a prosledio sam !=0 sectionId, to znaci da sam poslao nepostojeci section
+                return NotFound("SECTION ID NOT FOUND "+dto.sectionId);
+            }
+            
+            if(dto.sectionId!=0){//ako smo prosledili id 0 onda ide u no section
+                task.ProjectSectionId = dto.sectionId;
+                task.ProjectSection = section;
+            }
+            else{
+                task.ProjectSectionId = null;
+                task.ProjectSection = null;
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
         [HttpDelete("deleteTask/{taskId}")]
         public async Task<IActionResult> DeleteTask(int taskId)
         {

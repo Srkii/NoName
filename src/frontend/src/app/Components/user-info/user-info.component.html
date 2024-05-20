@@ -13,7 +13,7 @@
             aria-expanded="false"
           >
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="userInfo?.profilePicUrl==null">View</button></li>
+            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" *ngIf="userInfo?.profilePicUrl" >View</button></li>
             <li><button class="dropdown-item" (click)="inputClick.click()">
               <span *ngIf="userInfo?.profilePicUrl">Change</span>
               <span *ngIf="!userInfo?.profilePicUrl">Upload</span></button>
@@ -65,29 +65,29 @@
     <div id="inputs">
       <div class="mb-3 form-password-toggle">
         <div class="d-flex justify-content-between">
-          <label class="form-label" for="password">Current Password</label>
-      </div>
+          <label class="form-label tPassLabel" for="password">Current Password</label>
+        </div>
           <div class="input-group input-group-merge">
-            <input type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+            <input style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="Enter Current Password"/>
           </div>
       </div>
       <div class="mb-3 form-password-toggle">
         <div class="d-flex justify-content-between">
-          <label class="form-label" for="password">New Password</label>
-      </div>
+          <label class="form-label tPassLabel" for="password">New Password</label>
+        </div>
           <div class="input-group input-group-merge">
-            <input type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+            <input style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="Enter New Password"/>
           </div>
       </div>
       <div class="mb-3 form-password-toggle">
         <div class="d-flex justify-content-between">
-          <label class="form-label" for="password">Confirm New Password</label>
-      </div>
+          <label class="form-label tPassLabel" for="password">Confirm New Password</label>
+        </div>
           <div class="input-group input-group-merge">
-            <input type="password" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
+            <input style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
             confirmpass !== newData.NewPassword &&
             confirmpass !== ''"
-            placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
+            placeholder="Confirm New Password"/>
           </div>
       </div>
       <!-- Submit button -->
@@ -149,3 +149,7 @@
     <button class="btn btn-primary d-grid w-100" (click)="viewModalRef?.hide()">Close</button>
   </div>
 </ng-template>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

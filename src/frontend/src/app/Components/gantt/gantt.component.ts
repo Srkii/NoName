@@ -2,7 +2,7 @@ import { TaskDependency } from './../../Entities/TaskDependency';
 import { MyProjectsService } from './../../_services/my-projects.service';
 import { MyTasksComponent } from './../my-tasks/my-tasks.component';
 import { HttpClient} from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   GanttDragEvent,
@@ -16,12 +16,14 @@ import {
   NgxGanttComponent,
   GanttGroup,
   GanttDate,
-  GanttLink
+  GanttLink,
+  GanttGroupInternal,
 } from '@worktile/gantt';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { SharedService } from '../../_services/shared.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-gantt',
@@ -29,11 +31,11 @@ import { SharedService } from '../../_services/shared.service';
   styleUrl: './gantt.component.css'
 })
 export class GanttComponent implements OnInit{
-
+  removeModalRef?:BsModalRef;
   date = new GanttDate(1713125075).format("yyyy-mm-dd-hh-mm-ss");
   currentProjectId: number | null = null;
   ngOnInit(): void {
-    this.shared.taskUpdated.subscribe(() => { 
+    this.shared.taskUpdated.subscribe(() => {
       this.loading = true;
       this.data_loaded = false;
       this.items=[];
@@ -57,11 +59,10 @@ export class GanttComponent implements OnInit{
       this.loading = false;
       this.data_loaded = true
     }, 100);
-    
+
     // emit kad se doda novi task
     this.shared.taskAdded$.subscribe(success => {
       if (success) {
-        console.log("Dodat task na ganttu");
         this.loading = true;
         this.data_loaded = false;
         this.items=[];
@@ -97,10 +98,11 @@ export class GanttComponent implements OnInit{
     private spinner:NgxSpinnerService,
     private myTasksService:MyTasksService,
     private myProjectsService:MyProjectsService,
-    private shared:SharedService
+    private shared:SharedService,
+    private modalService:BsModalService
     ) { }
 
-  views = [{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
+  views = [{name:'Hour',value:GanttViewType.hour},{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
 
   @ViewChild('gantt') ganttComponent!: NgxGanttComponent;
   viewType: GanttViewType = GanttViewType.month;
@@ -114,28 +116,20 @@ export class GanttComponent implements OnInit{
   };
 
 
-  items: GanttItem[] = [ //koristi unix time. moram da napravim neku konverziju kad ispisujem. ok GantDate ima koverziju
-    // { id: '000000', group_id: '000000', title: 'Task 0', start: 1711125075, end: 1715717075, expandable: true },
-    // { id: '000001', group_id: '000000', title: 'Task 1', start: 1713125075, end: 1715112275, links: ['000003', '000004', '000000'], expandable: true },
-    // { id: '000002', group_id: '000000', title: 'Task 2', start: 1713125075, end: 1714421075 },
-    // { id: '000003', group_id: '000001', title: 'Task 3', start: 1713125075, end: 1713729875, expandable: true, linkable: true }
-  ];
-  groups: GanttGroup[] = [
-    // { id: '000000', title: 'Group-0' },
-    // { id: '000001', title: 'Group-1' }
-  ];
+  items: GanttItem[] = [];
+  groups: GanttGroup[] = [];
 
   viewOptions = {
     dateFormat: {
       year: `yyyy`,
       yearQuarter: `QQQ 'of' yyyy`,
-      yearMonth: `LLLL yyyy'(week' w ')'`,
+      yearMonth: `LLLL yyyy' (week' w ')'`,
       month: 'LLLL',
       week : 'ww'
     }
   };
 
-  private reloadGanttData() {
+  private reloadGanttData() {//ovo zna da duplira podatke u ganttu ~maksim
     this.getGanttData(); // Fetch data again
   }
 
@@ -145,13 +139,12 @@ export class GanttComponent implements OnInit{
 
   dragEnded($event: GanttDragEvent) {
     if ($event?.item.start !== undefined && $event.item.end!==undefined) {
-
       const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
       const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
 
       this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
       .subscribe(() => {
-        this.reloadGanttData();
+        // this.reloadGanttData();
       });
     }
   }
@@ -179,22 +172,27 @@ export class GanttComponent implements OnInit{
   }
 
   selectedChange(event: GanttSelectedEvent) {
-   event.current && this.ganttComponent.scrollToDate(Number(event.current?.start));
-    console.log('Selected item changed', event);
+    event.current && this.ganttComponent.scrollToDate(Number(event.current?.start));
   }
 
-  onDragDropped(event: GanttTableDragDroppedEvent) {}
-
-  onDragStarted(event: GanttTableDragStartedEvent) {}
-
-  onDragEnded(event: GanttTableDragEndedEvent) {}
-
-  lineClick(event: any) {
-    console.log('Clicked on line', event);
-    this.openAddTaskToLinkDialog(event.source.id,event.target.id)
+  dependency:TaskDependency = {
+     taskId:0,
+     dependencyTaskId:0
+  };
+  lineClick(event: any,modal:TemplateRef<void>):void{
+    this.openAddTaskToLinkDialog(event.source.id,event.target.id,modal);
   }
 
-  openAddTaskToLinkDialog(first_task : number,second_task : number): void { }
+  openAddTaskToLinkDialog(first_task : number,second_task : number,modal:TemplateRef<void>): void {
+    this.dependency.taskId = Number(first_task);
+    this.dependency.dependencyTaskId = Number(second_task);
+    this.removeModalRef = this.modalService.show(
+      modal,
+      {
+        class:'modal-face modal-sm modal-dialog-centered',
+      }
+    )
+  }
 
   barClick(event: any) {}
 
@@ -219,7 +217,7 @@ export class GanttComponent implements OnInit{
     // default sekcija, ukoliko nema svoju
     this.groups.push({ id: 'no-section', title: 'No Section' });
   }
-  getProjectTasks(){//ovo nzm dal moze drugacije jer moram da izvlacim zavisnosti kako bi crtalo one linije uopste..
+  getProjectTasks(){
     if(this.currentProjectId){
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) =>{
         tasks.forEach((t:any) =>{
@@ -242,7 +240,7 @@ export class GanttComponent implements OnInit{
               start: this.convertToUnixTimestamp(t.startDate),
               end: this.convertToUnixTimestamp(t.endDate),
               links: dependencies,
-              expandable: true,
+              expandable: false,
               linkable: true
             }
             this.items.push(item);
@@ -251,17 +249,33 @@ export class GanttComponent implements OnInit{
       })
     }
   }
+  removeDependencyGantt(){
+    if(this.dependency.dependencyTaskId!=0 && this.dependency.taskId!=0){
+      this.myTasksService.deleteTaskDependency(this.dependency)
+      .subscribe((response:any)=>{
+        const index = this.items.findIndex(item => item.id === String(this.dependency.taskId));
+        const linkIndex = this.items[index].links?.findIndex(link =>link == String(this.dependency.dependencyTaskId));
+        this.items[index].links?.splice(Number(linkIndex),1);
+        this.items = [...this.items];
+        this.dependency ={
+          taskId:0,
+          dependencyTaskId:0
+        }
+        this.removeModalRef?.hide();
+      });
+    }
+  }
   convertToUnixTimestamp(dateString: string): number {
     const date = new Date(dateString);
-    return Math.floor(date.getTime() / 1000);
+    return date.getTime() / 1000;
   }
   convertToStandardTimeStamp(unixTime:number) : string{
     const date = new Date(unixTime*1000);
-    return date.toLocaleDateString();
+    return date.toDateString();
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.shared.triggerPopup(event, taskId);
   }
 }

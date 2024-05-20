@@ -8,6 +8,7 @@ import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { TaskDependency } from '../Entities/TaskDependency';
 import { DateTimeDto } from '../Entities/DateTimeDto';
 import { Project } from '../Entities/Project';
+import { sectionChangeDTO } from '../Entities/sectionChangeDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -116,7 +117,13 @@ export class MyTasksService {
     }
     return this.http.post<any>(`${this.baseUrl}/timeUpdateGantt/${id}`,newDatetime);
   }
-
+  ChangeTaskSection(id_section:number,id_task:number):Observable<any>{
+    var data : sectionChangeDTO = {
+      sectionId:id_section,
+      taskId:id_task
+    }
+    return this.http.post<any>(`${this.baseUrl}/changeSectionGantt/`,data);
+  }
   TaskNameExists(taskName: string,projectID:number): Observable<ProjectTask> {
     return this.http.get<ProjectTask>(`${this.baseUrl}/getTaskByName/${taskName}/${projectID}`);
   }
