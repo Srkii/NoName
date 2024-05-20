@@ -141,5 +141,8 @@ export class MyProjectsService {
   archiveProject(projectId: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/projects/archive/${projectId}`, {});
   }
+  getUsersArchivedProjects(userId: any): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/getUsersArchivedProjects/${userId}`);
+  }
 }
 

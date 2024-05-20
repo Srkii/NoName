@@ -29,7 +29,6 @@
           <option value="PROPOSED">PROPOSED</option>
           <option value="INPROGRESS">IN PROGRESS</option>
           <option value="COMPLETED">COMPLETED</option>
-          <option value="ARCHIVED">ARCHIVED</option>
         </select>
       </div>
       <div class="filter">
@@ -95,8 +94,8 @@
     </div>
   </div>   
   <div class="tFooter">
-    <div class="ViewarchProj">
-      <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="archTasks"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+    <div class="ViewarchProj" (click)="openViewArchProjModal(ViewArchivedProjModal)">
+      <div class="archProject"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
         </svg>View Archived Projects
       </div>
@@ -123,6 +122,56 @@
   </div>
 </div>
 
+
+<ng-template #ViewArchivedProjModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Archived Projects</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body" *ngIf="archivedProjects && archivedProjects.length > 0; else noArchivedProjects">
+    <div class="table-responsive text-nowrap">
+      <tr>
+        <th>Project Name</th>
+        <th>Project Owner</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th></th>
+      </tr>
+      <tr class="archTable" *ngFor="let project of archivedProjects" >
+        <td class="tdName">{{project.projectName}}</td>
+        <td class="tdAssignee">
+          <div style="display: flex; align-items: center;">
+            <div *ngIf="project.ownerProfilePicture">
+              <img [src]="uploadservice.getImage(project.ownerProfilePicture)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+            </div>
+            <div *ngIf="!project.ownerProfilePicture" class="nameAvatar boardAvatar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg>
+            </div>
+            <div class="tAssigneeName">
+              {{ project.ownerFirstName || project.ownerLastName ? (project.ownerFirstName + ' ' + project.ownerLastName) : 'Not assigned' }}
+            </div>
+          </div>
+        </td>
+        <td class="tdDate">{{project.startDate | date}}</td>
+        <td class="tdDate">{{project.endDate | date}}</td>
+        <!-- [(ngModel)]="task.selected" name="task{{task.id}}" -->
+        <td class="tdCheck"><input type="checkbox" style="align-items:center;"></td>
+      </tr>
+    </div>
+    <div class="mb-3">
+      <button class="btn btn-primary d-grid w-50 mx-auto archBtn" type="button" (click)="removeProjectFromArchived()">Remove from Archived</button>
+    </div>
+  </div>
+  <ng-template #noArchivedProjects>
+    <div class="text-center noArch">There are currently no archived projects.</div>
+  </ng-template>
+</ng-template>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
   <p style="font-size: 20px; color: white">Loading...</p>
