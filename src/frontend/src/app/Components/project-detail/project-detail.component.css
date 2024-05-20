@@ -136,7 +136,10 @@ thead th{
     /* width: 200px; */
     text-align: center;
 }
-.btn-primary:focus{ color:#696cff }
+.btn-primary:focus { 
+    background-color:#696cff;
+    border-color: #696cff !important;
+}
 .bg-label-primary {
     background-color: #e7e7ff !important;
     color: #696cff !important;
@@ -614,6 +617,12 @@ select:disabled {
     border: 1px transparent;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+.dropdown-item:active {
+    background-color: #696cff;
+    color: #ffffff;
+    border-left: #696cff;
+    border-right: #696cff;
+}
 .projInfo {
     display: flex;
 }
@@ -801,18 +810,30 @@ input.is-invalid:focus{
     display:none;
 }
 
-.archSpan {
-    font-size: 16px !important;
-    line-height: 24px !important;
+.archIcon:hover {
+    cursor: pointer;
 }
-.archBody {
-    border-bottom: none !important;
+.archIcon svg {
+    margin-right: 10px;
+    margin-top: 5px;
 }
-.archFooter {
-    display: flex;
-    flex-direction: row;
-    border-top: none !important;
+.archIcon svg:hover {
+    fill: #696cff;
 }
+
 .tFormControl {
     font-size: 16px !important;
+}
+
+::ng-deep .p-tooltip .p-tooltip-text {
+    background-color: #696cff;
+    color: #ffffff;
+    font-family: 'Public Sans', sans-serif !important;
+}
+
+.tArchBtn:focus {
+    color: #fff !important;
+}
+.archFooter {
+    border-top: none !important;
 }

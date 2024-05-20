@@ -129,24 +129,6 @@ namespace backend.Controllers
             return _context.Projects.Any(e => e.Id == id);
         }
 
-
-        // Za sad mi ne treba Delete
-        // [HttpDelete("{id}")] // DELETE: api/projects/2
-        // public async Task<IActionResult> DeleteProject(int id)
-        // {
-        //     var project = await context.Projects.FindAsync(id);
-        //     if (project == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     context.Projects.Remove(project);
-        //     await context.SaveChangesAsync();
-
-        //     return NoContent();
-        // }
-        
-
         [HttpPut("addProjectMembers")] 
         public async Task<IActionResult> AddProjectMembers(ProjectMemberDTO[] dtos)
         {
@@ -378,6 +360,27 @@ namespace backend.Controllers
                 return Ok(ProjectOwner);
             }
             return null;
+        }
+
+        // Add this method to the ProjectsController class
+        [HttpPut("archive/{projectId}")]
+        public async Task<IActionResult> ArchiveProject(int projectId) {
+            var project = await _context.Projects.FindAsync(projectId);
+            if (project == null) {
+                return NotFound("Project not found.");
+            }
+
+            project.ProjectStatus = ProjectStatus.Archived; // Assuming ProjectStatus.Archived enum is 3
+
+            var tasks = await _context.ProjectTasks
+                                    .Where(t => t.ProjectId == projectId)
+                                    .ToListAsync();
+            foreach (var task in tasks) {
+                task.IsOriginProjectArchived = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Project and its tasks have been archived." });
         }
     }
 }

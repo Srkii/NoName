@@ -206,3 +206,15 @@ label{
   background-color: #fff;
   transform: translateY(-1px) !important;
 }
+
+.dropdown-menu {
+  border: 1px transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item:active {
+  background-color: #696cff;
+  color: #ffffff;
+  border-left: #696cff;
+  border-right: #696cff;
+}

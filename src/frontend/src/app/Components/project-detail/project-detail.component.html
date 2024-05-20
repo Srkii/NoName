@@ -14,17 +14,13 @@
           <span>{{ project.projectName }}</span>
         </div>
         <div class="projInfo">
+          <div class="archIcon" pTooltip="Archive Project" tooltipPosition="left">
+            <svg (click)="openArchiveProjectcModal(arhieveCurrentProject)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16">
+              <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+            </svg>
+          </div>
           <div class="projInfoBtn">
             <input type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Project Details">
-          </div>
-          <div class="dropdown tDropDown">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical dropdown-toggle" viewBox="0 0 16 16" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-              <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-            </svg>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" (click)="openArchiveProjectcModal(arhieveCurrentProject)">Archive Project</a></li>
-              <li><a class="dropdown-item" (click)="openDeleteProjectcModal(deleteCurrentProject)">Delete Project</a></li>
-            </ul>
           </div>
         </div>
       </div>
@@ -46,7 +42,7 @@
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
             </svg>Add Task
           </div>
-          <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="archTasks" (click)="openNewTaskModal(archivedTasksModal)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+          <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="archTasks" (click)="openViewArchTaksModal(archivedTasksModal)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
             </svg>View Archived Tasks
           </div>
@@ -436,24 +432,7 @@
       <span class="archSpan">Are you sure you want to archive this project?</span>
     </div>
     <div class="modal-footer archFooter">
-      <button type="button" class="btn btn-primary d-grid w-100 mx-auto" (click)="confirmArchive()">Archive Project</button>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #deleteCurrentProject>
-  <div class="modal-container">
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">Delete Project</h4>
-      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body archBody">
-      <span class="archSpan">Are you sure you want to delete this project? This action is irreversible.</span>
-    </div>
-    <div class="modal-footer archFooter">
-      <button type="button" class="btn btn-primary d-grid w-100 mx-auto" (click)="confirmDelete()">Delete Project</button>
+      <button type="button" class="btn btn-primary d-grid w-100 mx-auto tArchBtn" (click)="confirmArchive()">Archive Project</button>
     </div>
   </div>
 </ng-template>
