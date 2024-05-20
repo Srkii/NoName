@@ -223,3 +223,9 @@ label{
 .tInput {
   
 }
+
+.dropdown-item:hover{
+  background-color: #696cff;
+  color: #FFFFFF;
+  transition: 0.25s ease-in-out;
+}

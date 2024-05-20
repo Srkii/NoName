@@ -23,7 +23,7 @@ export class UserinfoService {
   //tico: koristi apiUrl ako si ga vec importovao
   updateUserInfo(token: any, id:number, data:ChangePassword):Observable<any>{
     const url = `${this.baseUrl}/${id}`;
-    console.log("Xd");
+    // console.log("Xd");
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'application/json');

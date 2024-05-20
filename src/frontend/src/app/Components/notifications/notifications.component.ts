@@ -24,6 +24,7 @@ export class NotificationsComponent {
   async getNotifications(){
     await this.notificationService.getNotifications();//ovde smanjim da uzima manje notifikacija, tipa da uzme 10 najskorijih neprocitanih notifikacija
     this.notification_list = this.notificationService.notifications;
+    // console.log(this.notification_list);
   }
   see_all_notifications(modal:TemplateRef<void>){
     this.handleNotificationDisplay();
@@ -40,12 +41,12 @@ export class NotificationsComponent {
     this.notifications_read = [];//refresh
     this.notificationService.allNotifications.forEach((n:any) => {
       if(n.read == false){
-        this.notifications.push(n);
+        this.notifications.push(n);//lista neprocitanih
       }else{
-        this.notifications_read.push(n);
+        this.notifications_read.push(n);//lista procitanih
       }
     });
-    console.log(this.notifications);
+    // console.log(this.notifications);
   }
   selectAllNotifications() {
     if (this.areAllNotificationsSelected()) {
@@ -53,6 +54,14 @@ export class NotificationsComponent {
     } else {
       this.markedNotifications = this.notifications.map((notification:any) => notification.id);
     }
+  }
+  readAllFromTab($event:MouseEvent){
+    $event.stopPropagation();
+    this.notification_list.forEach((element:any) => {
+      element.read = true;
+    });
+    this.markedNotifications = this.notification_list.map((notification:any) => notification.id);
+    this.read_notifications();
   }
 
   areAllNotificationsSelected(): boolean {
@@ -69,6 +78,7 @@ export class NotificationsComponent {
   read_notifications(){
     this.notificationService.read_notifications(this.markedNotifications);
     this.handleNotificationDisplay();
+    this.markedNotifications = [];
   }
 
   getNotificationType(type:any):string{

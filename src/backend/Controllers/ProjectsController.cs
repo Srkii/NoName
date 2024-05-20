@@ -378,7 +378,7 @@ namespace backend.Controllers
             foreach (var task in tasks) {
                 task.IsOriginProjectArchived = true;
             }
-
+            _notificationService.ArchiveRelatedProjectNotifications(projectId);//~maksim
             await _context.SaveChangesAsync();
             return Ok(new { message = "Project and its tasks have been archived." });
         }

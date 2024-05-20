@@ -353,7 +353,7 @@ export class PopupComponent {
             senderFirstName: this.current_user.firstName,
             senderLastName: this.current_user.lastName,
             messageSent:  new Date,
-            fileUrl: this.attachment_name,
+            fileUrl: this.attachment_name?this.attachment_name:"",
             edited:false,
           };
           console.log("COMM ",commentDto);
@@ -363,7 +363,7 @@ export class PopupComponent {
               this.comments.push(commentDto);
               this.commentInput.nativeElement.value = '';
               
-              this.uploadAttachment();
+              if(this.attachment_name!="")this.uploadAttachment();
     
             setTimeout(() => {
               this.scrollToBottom();

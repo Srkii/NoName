@@ -13,7 +13,7 @@
             aria-expanded="false"
           >
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="userInfo?.profilePicUrl==null">View</button></li>
+            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" *ngIf="userInfo?.profilePicUrl" >View</button></li>
             <li><button class="dropdown-item" (click)="inputClick.click()">
               <span *ngIf="userInfo?.profilePicUrl">Change</span>
               <span *ngIf="!userInfo?.profilePicUrl">Upload</span></button>
@@ -149,3 +149,7 @@
     <button class="btn btn-primary d-grid w-100" (click)="viewModalRef?.hide()">Close</button>
   </div>
 </ng-template>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
