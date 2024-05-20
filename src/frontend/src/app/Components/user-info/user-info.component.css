@@ -220,12 +220,10 @@ label{
   border-left: #696cff;
   border-right: #696cff;
 }
-.tInput {
-  
-}
 
-.dropdown-item:hover{
+
+/* .dropdown-item:hover{
   background-color: #696cff;
   color: #FFFFFF;
   transition: 0.25s ease-in-out;
-}
+} */

@@ -101,29 +101,59 @@ namespace backend.Controllers
                     return "application/octet-stream"; // Fallback if the file type is not recognized
             }
         }
-
+        public bool IsExtensionAllowed(string filename){
+            var extension = Path.GetExtension(filename).ToLowerInvariant();
+            switch(extension){
+                case ".jpg":
+                    return true;
+                case ".jpeg":
+                    return true;
+                case ".png":
+                    return true;
+                case ".gif":
+                    return true;
+                case ".pdf":
+                    return true;
+                case ".zip":
+                    return true;
+                case ".rar ":
+                    return true;
+                case ".doc":
+                    return true;
+                case ".docx":
+                    return true;
+                case ".xls":
+                    return true;
+                case ".xlsx":
+                    return true;
+                case ".ppt":
+                    return true;
+                case ".pptx":
+                    return true;;
+                case ".txt":
+                    return true;
+                case ".csv":
+                    return true;
+                case ".xlsm":
+                    return true;
+                default:
+                    return false;
+            }
+        }
         [HttpPost("uploadfile/{id}")]
         public async Task<ActionResult> UploadFile(int id,[FromForm]int user_id,IFormFile file){
             if(file==null) return BadRequest("file is null");
+            if((IsExtensionAllowed(file.FileName))==false){
+                return BadRequest("file type not allowed.");
+            }
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
             var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == user_id);
-            //doraditi: treba da proveri dal task postoji pa onda da upload file. ako ne postoji vraca BadRequest sa opisom greske
+            
             if(task!=null){
                 var filename =  _uploadService.AddFile(file);
-                // var comment = new Comment{
-                //     TaskId = task.Id,
-                //     SenderId = user_id,
-                //     SenderFirstName = sender.FirstName,
-                //     SenderLastName = sender.LastName,
-                //     Content = "",
-                //     FileUrl = filename
-                // };
-                // _context.Comments.Add(comment);
-                // await _context.SaveChangesAsync();
-                // await _notificationService.TriggerNotification(task.Id,user_id,comment.Id,NotificationType.Attachment);
                 return Ok();
             }else{
-                return BadRequest("SPECIFIED TASK DOES NOT EXIST");
+                return BadRequest("Task does not exist.");
             }
         }
         [HttpGet("files/{filename}")]
@@ -131,7 +161,6 @@ namespace backend.Controllers
             string path = Path.Combine(Directory.GetCurrentDirectory(),"Assets","Attachments",filename);
             string mimeType = GetMimeType(filename);
             var fileBytes = System.IO.File.ReadAllBytes(path);
-
             return File(fileBytes,mimeType);
         }
     }

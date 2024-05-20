@@ -13,7 +13,7 @@
             aria-expanded="false"
           >
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" *ngIf="userInfo?.profilePicUrl" >View</button></li>
+            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="!userInfo?.profilePicUrl" >View</button></li>
             <li><button class="dropdown-item" (click)="inputClick.click()">
               <span *ngIf="userInfo?.profilePicUrl">Change</span>
               <span *ngIf="!userInfo?.profilePicUrl">Upload</span></button>

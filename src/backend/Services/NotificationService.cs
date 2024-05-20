@@ -150,7 +150,7 @@ namespace backend.Services
             await _context.SaveChangesAsync();
         }
         public async void ArchiveRelatedProjectNotifications(int id){
-            var notifications = await  _context.Notifications.Where(x => x.project_id == id).ToListAsync();
+            var notifications = await  _context.Notifications.Where(x => x.project_id == id || x.Task.ProjectId == id).ToListAsync();
             foreach(Notification n in notifications){
                 n.originArchived = true;
             }
@@ -164,7 +164,7 @@ namespace backend.Services
             await _context.SaveChangesAsync();
         }
         public async void DeArchiveRelatedProjectNotifications(int id){
-            var notifications = await  _context.Notifications.Where(x => x.project_id == id).ToListAsync();
+            var notifications = await  _context.Notifications.Where(x => x.project_id == id || x.Task.ProjectId == id).ToListAsync();
             foreach(Notification n in notifications){
                 n.originArchived = false;
             }

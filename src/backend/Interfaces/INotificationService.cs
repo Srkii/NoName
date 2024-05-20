@@ -8,6 +8,9 @@ namespace backend.Interfaces
         public Task TriggerTaskNotification(int task_id, int creatorId);//task notifications
         public void ArchiveRelatedTaskNotifications(int id);
         public void ArchiveRelatedProjectNotifications(int id);
+        public void DeArchiveRelatedTaskNotifications(int id);
+        public void DeArchiveRelatedProjectNotifications(int id);
+
     }
 }
 

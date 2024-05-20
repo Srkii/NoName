@@ -40,7 +40,7 @@ export class NotificationsService{
 
       .build();
     this.hubConnection.start().catch(error =>{
-      console.log(error);
+      // console.log(error);
   });
 
     this.hubConnection.on('newNotifications',() =>{
@@ -81,6 +81,7 @@ export class NotificationsService{
   }
   read_notifications(notificationIds:number[]){
     this.hubConnection?.invoke("readNotifications",notificationIds);
+    this.checkForNewNotifications();
   }
   getNotificationType(type:any):string{
     switch(type){
@@ -130,11 +131,9 @@ export class NotificationsService{
       await this.router.navigate(['/project/' + notification.task.projectId]);
       setTimeout(()=>{
         this.shared.triggerPopup(event, notification.task.id);
-        this.checkForNewNotifications();
       },500);
     } else if (notification.project != null) {
         await this.router.navigate(['/project/' + notification.project.id]);
-        this.checkForNewNotifications();
     }
   }
   async follow_notif_from_tab(event:MouseEvent,notification:any){//jedina razlika je sto nema stop propagination... Xd
@@ -143,11 +142,9 @@ export class NotificationsService{
       await this.router.navigate(['/project/' + notification.task.projectId]);
       setTimeout(()=>{
         this.shared.triggerPopup(event, notification.task.id);
-        this.checkForNewNotifications();
       },500);
     } else if (notification.project != null) {
         await this.router.navigate(['/project/' + notification.project.id]);
-        this.checkForNewNotifications();
     }
   }
   getType(type:number){

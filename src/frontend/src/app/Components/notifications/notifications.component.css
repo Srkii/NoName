@@ -86,16 +86,13 @@ td{
 .btn-primary{
   padding: 5px;
   border:1px solid #696cff;
-  background-color: white;
-  color: #696cff;
-  border-radius: 0.375rem;
-}
-.btn-primary:hover{
   background-color: #696cff;
   color: white;
-  transition: 0.5s ease-in-out;
+  border-radius: 0.375rem;
 }
-
+.notification-text{
+  margin-left: 10px;
+}
 img{
   width: 25px;
   height: 25px;

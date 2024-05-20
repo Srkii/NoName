@@ -83,7 +83,7 @@
         <td style="text-align: center;"><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0"></td></tr>
       <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td><i>No Unread Notifications.</i></td><td></td><td></td><td ></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications">
-        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()">
+        <td class="imagetd" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
           <svg *ngIf="notification.type==2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
@@ -95,11 +95,7 @@
             <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1M1 9h4a1 1 0 0 1 0 2H1z"/>
             <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
           </svg>
-        </td>
-        <td
-          style="margin-left: 0;padding-left: 0; text-align: start;"
-          (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()"
-        >
+
           <span class="notification-text">{{notificationService.getNotificationText(notification)}}</span>
         </td>
         <td style="margin-left: 0;padding-left: 0; text-align: start;"
@@ -131,11 +127,6 @@
             <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1M1 9h4a1 1 0 0 1 0 2H1z"/>
             <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
           </svg>
-        </td>
-        <td
-          style="margin-left: 0;padding-left: 0; text-align: start;"
-          (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()"
-        >
           <span class="notification-text">{{notificationService.getNotificationText(notification)}}</span>
         </td>
         <td style="margin-left: 0;padding-left: 0; text-align: start;"

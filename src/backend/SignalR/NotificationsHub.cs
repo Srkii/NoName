@@ -7,6 +7,7 @@ using backend.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using backend.DTO;
+using System.Linq;
 
 namespace backend.SignalR
 {
@@ -25,7 +26,7 @@ namespace backend.SignalR
             int userId = Convert.ToInt32(userIdClaim.Value);
             await Groups.AddToGroupAsync(Context.ConnectionId,Context.UserIdentifier);
             
-            var notifications = await _context.Notifications.Where(x=>x.reciever_id==userId && x.read==false).ToListAsync();
+            var notifications = await _context.Notifications.Where(x=>x.reciever_id==userId && x.read==false && x.originArchived == false).ToListAsync();
 
             if (!_userConnections.ContainsKey(userId.ToString()))
             {
@@ -33,7 +34,7 @@ namespace backend.SignalR
             }
 
             _userConnections[userId.ToString()].Add(Context.ConnectionId);
-            if(notifications.Count>0) await Clients.Group(userId.ToString()).newNotifications();
+            if(notifications!=null && notifications.Any()) await Clients.Group(userId.ToString()).newNotifications();
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception exception)
