@@ -203,12 +203,16 @@ label{
 .tCancelRemove {
   border-color: #696cff;
   color: #696cff;
+  width: 85px;
 }
 .tCancelRemove:hover {
   background-color: #fff;
   transform: translateY(-1px) !important;
 }
-
+.tRemove{
+  width: 85px;
+  margin: 0;
+}
 .dropdown-menu {
   border: 1px transparent;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
