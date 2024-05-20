@@ -44,19 +44,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .hide-toolbar .ql-toolbar  {
   display: none;
 }
-.area-desc .ql-editor{
-  font-family: 'Public Sans', sans-serif !important;
+.ql-snow.ql-toolbar button.ql-active .ql-fill,
+.ql-snow.ql-toolbar button:hover .ql-fill
+{
+  fill: #696cff !important;
 }
-.area-desc .ql-container {
-  border: none !important;
+.ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-picker-label:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke
+{
+  stroke: #696cff !important;
 }
-.area-desc .ql-toolbar.ql-snow{
-  border: none !important;
-  border-bottom: 1px solid #ccc !important;
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-item:hover{
+  color: #696cff !important;
 }
-/* .area-desc .ql-toolbar button:hover {
-  color: #FFA500 !important;
-}
-.area-desc .ql-toolbar button:hover svg {
-  fill: #FFA500 !important;
-} */
