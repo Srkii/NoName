@@ -20,10 +20,6 @@ export const projectGuard: CanActivateFn = (route, state) => {
             return true;
           }
         }),
-        catchError((error) => {
-          router.navigate(['/error']);
-          return of(false);
-        })
       );
   
   } else {

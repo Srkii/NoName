@@ -387,11 +387,11 @@ namespace backend.Controllers
             {
                 var project1= await _context.Projects.FirstOrDefaultAsync(proj=>proj.Id==projectId && proj.ProjectStatus==ProjectStatus.Archived);
                 if(project1!=null){
-                    return true; //postoji i arhiviran
+                    return true; 
                 }
-                else return false; //postoji i nije arhiviran to me ne zanima
+                else return false; 
             }
-            else return true; //ne postoji, to me zanima
+            else return true; 
            
         }
     }
