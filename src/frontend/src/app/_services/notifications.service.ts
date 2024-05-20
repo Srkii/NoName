@@ -69,7 +69,7 @@ export class NotificationsService{
     })
   }
   stopHubConnection(){
-    this.hubConnection?.stop().catch(error => console.log(error));
+    this.hubConnection?.stop().catch();
   }
   async getNotifications(){
     //invoke funkcije na back-u kad se klikne na zvonce
@@ -92,10 +92,6 @@ export class NotificationsService{
         return "You have been assigned to a task";
       case 3:
         return "You have been assigned to a project";
-      case 4:
-        return "A task deadline has been modified";
-      case 5:
-        return "A project deadline has been modified";
       default:
         return "";
     }
@@ -171,4 +167,5 @@ export class NotificationsService{
   public checkForNewNotifications() {
     this.newNotifications = this.notifications.some((notification: any) => !notification.read);
   }
+
 }

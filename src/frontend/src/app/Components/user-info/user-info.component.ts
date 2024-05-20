@@ -50,7 +50,7 @@ export class UserInfoComponent implements OnInit {
       this.userinfoService.getUserInfo(id,token).subscribe({
         next: (response) =>{
           this.userInfo = response;
-          console.log(response);
+          // console.log(response);
           if(this.userInfo.role == 2){
             this.role="Project manager";
           }else if(this.userInfo.role == 1){
@@ -58,8 +58,8 @@ export class UserInfoComponent implements OnInit {
           }else this.role="Admin";
         },
         error: (error) => {
-          console.log(error);
-          console.log("GET USER INFO FAILED");
+          // console.log(error);
+          // console.log("GET USER INFO FAILED");
         }
       });
     }else {
@@ -76,8 +76,8 @@ export class UserInfoComponent implements OnInit {
     var token = localStorage.getItem('token');
     this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
       next: (response) => {
-        console.log(response);
-        console.log("change info successful!");
+        // console.log(response);
+        // console.log("change info successful!");
         var succ = document.getElementById("success_div")
         if(succ) succ.style.display='block';
         var base = document.getElementById("warning_div");
@@ -89,8 +89,8 @@ export class UserInfoComponent implements OnInit {
         }
       },
       error: (error)=>{
-        console.log(error);
-        console.log("change info failed.");
+        // console.log(error);
+        // console.log("change info failed.");
       }
     });
   }
@@ -125,7 +125,7 @@ export class UserInfoComponent implements OnInit {
 
   imgFailed() {
       // error msg\
-      console.log("crop failed...");
+      // console.log("crop failed...");
   }
   uploadCroppedImage(){
     this.spinner.show();
@@ -134,12 +134,12 @@ export class UserInfoComponent implements OnInit {
     var imageFile =  new File([this.cropImgPreview],id+"-"+this.imageName+'-userimg.png',{type: 'image/png'});
     this.uploadService.UploadImage(id,imageFile,token).subscribe({
       next: (response) => {
-        console.log('Image uploaded successfully', response);
+        // console.log('Image uploaded successfully', response);
         this.spinner.hide();
         location.reload();
       },
       error: (error) => {
-        console.error('Error uploading image', error);
+        // console.error('Error uploading image', error);
       }
     });
 
@@ -171,7 +171,7 @@ export class UserInfoComponent implements OnInit {
         location.reload();
       },
       error: (error) => {
-        console.error(error);
+        // console.error(error);
       }
     });
   }
