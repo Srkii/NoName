@@ -144,11 +144,13 @@ input:focus{
 }
 label{
   display: block;
-  font-size:small;
+  font-size: 13px;
+  line-height: 19px;
   /* font-weight: 600; */
   margin: 0;
   padding: 0;
   text-transform: uppercase;
+  margin-bottom: .5rem;
 }
 #account_banner{
   display: flex;
@@ -217,4 +219,7 @@ label{
   color: #ffffff;
   border-left: #696cff;
   border-right: #696cff;
+}
+.tInput {
+  
 }
