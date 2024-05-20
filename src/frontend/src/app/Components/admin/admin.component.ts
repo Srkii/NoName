@@ -83,7 +83,10 @@ export class AdminComponent implements OnInit{
   modalRef?: BsModalRef;
 
   curentUserId: number=0
-
+  curentEmail: string=''
+  curentName: string=''
+  currentLastName: string=''
+  currentRole: string=''
   currentId=localStorage.getItem('id');
 
   isFilterActive: boolean=true;
@@ -134,7 +137,6 @@ export class AdminComponent implements OnInit{
       }
       if(ChangeDto)
       {
-        console.log(ChangeDto)
         this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
           this.GetUsers()
         },error: (error)=>{
@@ -147,24 +149,48 @@ export class AdminComponent implements OnInit{
       }}
 
     UpdateUser(id: number): void{
-      const updateeUser={
-        Email: this.newEmail,
-        FirstName: this.newFisrtName,
-        LastName: this.newLastName
+      if (this.newEmail) {
+        this.updateUser.Email=this.newEmail;
       }
-      if(updateeUser){
-        this.adminService.updateUser(id,updateeUser).subscribe(
-          (response)=>{
-            this.GetUsers()
+      else{
+        this.updateUser.Email=this.curentEmail
+      }
+      if (this.newFisrtName) {
+        this.updateUser.FirstName=this.newFisrtName;
+      }
+      else{
+        this.updateUser.FirstName=this.curentName;
+      }
+      if (this.newLastName) {
+        this.updateUser.LastName=this.newLastName;
+      }
+      else{
+        this.updateUser.LastName=this.currentLastName
+      }
+      if(this.updateUser){
+        this.adminService.updateUser(id,this.updateUser).subscribe({
+          next:()=>{
+            this.GetUsers();
+          },
+          error: (error) => {
+            console.log(error);
           }
-        )
+      })
+      }
+      else {
+        console.log("Can't update user role")
       }
     }
 
     ArchiveUser(id:number): void{
       this.adminService.archiveUser(id).subscribe(
         (response)=>{
-          this.GetUsers()
+          if(this.currentPage>1 && this.totalPages==1)
+            {
+              this.currentPage=1;
+            }
+          this.GetUsers()        
+
         }
       )
 
@@ -193,15 +219,26 @@ export class AdminComponent implements OnInit{
     }
     }
 
+
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        //this.loadPicture(this.allUsers);
-        this.adminService.getFilterCount(this.selectedRolee).subscribe(response=>{
-          this.filteredUsers=response;
-          this.totalPages= Math.ceil(this.filteredUsers / this.pageSize);
-        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-        });
+        var counnt=this.allUsers.length;
+        this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
+          this.filteredUsers=res;
+          this.totalPages= Math.ceil(res / this.pageSize);
+          console.log("get2 "+this.totalPages);
+          console.log("count "+res)
+          console.log("trenutna "+this.currentPage);
+          if(this.currentPage>1 && this.totalPages==1)
+            {
+              this.currentPage=1;
+              this.GetUsers();
+              return;
+            }
+          this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+        
+        }})
 
         this.spinner.hide();
       });
@@ -211,7 +248,6 @@ export class AdminComponent implements OnInit{
     nextPage(): void {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
-        const id = localStorage.getItem('id');
       this.GetUsers();
       }
     }
@@ -219,14 +255,12 @@ export class AdminComponent implements OnInit{
     previousPage(): void {
       if (this.currentPage > 1) {
         this.currentPage--;
-        const id = localStorage.getItem('id');
       this.GetUsers();
       }
     }
     goToPage(pageNumber: number): void {
       if (pageNumber >= 1 && pageNumber <= this.totalPages) {
         this.currentPage = pageNumber;
-        const id = localStorage.getItem('id');
       this.GetUsers();
       }
     }
@@ -291,9 +325,25 @@ export class AdminComponent implements OnInit{
       })
     }
 
-    openModal(modal: TemplateRef<void>, userId: number)
+    openModal(modal: TemplateRef<void>, user:Member)
     {
-      this.curentUserId=userId;
+      this.curentUserId=user.id;
+      this.curentEmail=user.email;
+      this.curentName=user.firstName;
+      this.currentLastName=user.lastName;
+      if(user.role==0)
+      {
+        this.currentRole="Admin";
+      }
+      else if(user.role==1)
+      {
+        this.currentRole="Member"
+      }
+      else if(user.role==2)
+      {
+        this.currentRole="Project Manager"
+      }
+      
       this.modalRef = this.modalService.show(
         modal,
         {
@@ -345,18 +395,14 @@ export class AdminComponent implements OnInit{
     }
 
     putInArray(id:number): void{
-      console.log(id)
-      // var id1= parseInt(id);
       this.archivedIds.push(id);
-      console.log(this.archivedIds);
     }
 
     removeFromArchived() : void{
       if(this.archivedIds!=null)
       {
         this.adminService.removeFromArchieve(this.archivedIds).subscribe({
-          next:(res)=>{
-            console.log(this.archivedIds);
+          next:()=>{
             this.onLoad();
             this.getArchivedUsers();
           }
@@ -373,6 +419,27 @@ export class AdminComponent implements OnInit{
       this.isFocused = !this.isFocused;
     }
 
+    getDisplayedPages(): number[] {
+      const maxDisplayedPages = 5;
+      let startPage = Math.max(this.currentPage - Math.floor(maxDisplayedPages / 2), 1);
+      let endPage = Math.min(startPage + maxDisplayedPages - 1, this.totalPages);
+  
+      if (startPage > this.totalPages - maxDisplayedPages + 1) {
+          startPage = Math.max(this.totalPages - maxDisplayedPages + 1, 1);
+          endPage = this.totalPages;
+      }
+  
+      return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+    }
+
+ @HostListener('document:click', ['$event'])
+    clickOutside(event: MouseEvent) {
+      const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
+      if (!clickedInside && this.selectedRolee!='') {
+        // Click was outside the .clickable-div and the filter is active
+        event.stopPropagation(); // This prevents other click events from executing
+      }
+    }
 
   }
 

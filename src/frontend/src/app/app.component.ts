@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SharedService } from './_services/shared.service';
 import { firstValueFrom } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NotificationsService } from './_services/notifications.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent implements OnInit{
   constructor(
     private router: Router,
     private sharedService: SharedService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    public notificationService: NotificationsService
   ) {}
 
   ngOnInit(): void {

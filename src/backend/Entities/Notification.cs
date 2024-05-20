@@ -25,5 +25,6 @@ namespace backend.Entities
         public DateTime dateTime{get;set;}
         public NotificationType Type{get;set;}
         public bool read{get;set;}
+        public bool? originArchived{get;set;}
     }
 }

@@ -32,6 +32,7 @@ namespace backend.Services
                     Type = type,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
                     dateTime = DateTime.Now,
                     read=false,
+                    originArchived = false
                 };
                 await _context.Notifications.AddAsync(notification);
                 await _context.SaveChangesAsync();
@@ -60,6 +61,7 @@ namespace backend.Services
                 Type = NotificationType.TaskAssignment,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
                 dateTime = DateTime.Now,
                 read=false,
+                originArchived = false
             };
             await _context.Notifications.AddAsync(notification);
             await _context.SaveChangesAsync();
@@ -87,7 +89,8 @@ namespace backend.Services
                 project_id = project.Id,
                 Type=NotificationType.ProjectAssignment,
                 dateTime = DateTime.Now,
-                read=false
+                read=false,
+                originArchived = false
             };
             await _context.Notifications.AddAsync(notification);
             await _context.SaveChangesAsync();
@@ -138,6 +141,34 @@ namespace backend.Services
             users = users.Where(u => u != initiatorId).Distinct().ToList();
 
             return users;
+        }
+        public async void ArchiveRelatedTaskNotifications(int id){
+            var notifications = await  _context.Notifications.Where(x => x.task_id == id).ToListAsync();
+            foreach(Notification n in notifications){
+                n.originArchived = true;
+            }
+            await _context.SaveChangesAsync();
+        }
+        public async void ArchiveRelatedProjectNotifications(int id){
+            var notifications = await  _context.Notifications.Where(x => x.project_id == id).ToListAsync();
+            foreach(Notification n in notifications){
+                n.originArchived = true;
+            }
+            await _context.SaveChangesAsync();
+        }
+        public async void DeArchiveRelatedTaskNotifications(int id){
+            var notifications = await  _context.Notifications.Where(x => x.task_id == id).ToListAsync();
+            foreach(Notification n in notifications){
+                n.originArchived = false;
+            }
+            await _context.SaveChangesAsync();
+        }
+        public async void DeArchiveRelatedProjectNotifications(int id){
+            var notifications = await  _context.Notifications.Where(x => x.project_id == id).ToListAsync();
+            foreach(Notification n in notifications){
+                n.originArchived = false;
+            }
+            await _context.SaveChangesAsync();
         }
 
     }

@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
       },
       error: (error) => {
         console.log(error);
-        console.log('Unsuccessful login');
         let errorMessage = '';
         if (error.error.errors) {
           for (const key in error.error.errors) {

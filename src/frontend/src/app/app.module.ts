@@ -33,12 +33,12 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NotificationsComponent } from './Components/notifications/notifications.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { NgxGanttModule } from '@worktile/gantt';
+import { GANTT_GLOBAL_CONFIG, NgxGanttModule } from '@worktile/gantt';
 import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 import { TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
-import { QuillModule } from 'ngx-quill';
+import { fr } from 'date-fns/locale';import { QuillModule } from 'ngx-quill';
 
 const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
 
@@ -93,8 +93,19 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     DatePipe,
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {
+      provide: GANTT_GLOBAL_CONFIG,
+      useValue: {
+        dateOptions: {
+             locale: fr,
+             weekStartsOn: 1
+        }
+      }
+    },
+
   ],
   bootstrap: [AppComponent],
+  
 })
 export class AppModule {}

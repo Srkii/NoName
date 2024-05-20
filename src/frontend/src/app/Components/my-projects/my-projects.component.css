@@ -84,7 +84,7 @@ table {
   }
 }
 th {
-  font-size: 14px;
+  font-size: 16px;
   border: 1.5px solid lightgray;
   font-weight: 700;
   padding: 5px;
@@ -173,6 +173,7 @@ p {
   padding-right: 10px;
   border-radius: 0.375rem;
   margin-right: 5px;
+  width: 30px;
 }
 .paginate_buttons button{
   font-size: 20px;
@@ -280,74 +281,6 @@ p {
   color: #697a8d;
 }
 
-
-/* :host::ng-deep.p-calendar{
-} */
-:host::ng-deep.p-calendar input{
-  color: #697a8d;
-  
-  font-size: 16px;
-  border-radius: 0.375rem;
-}
-:host::ng-deep.p-calendar input:hover{
-  outline: none;
-  border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
-}
-:host::ng-deep.p-calendar input:active {
-  outline: none;
-  border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
-}
-/* sklanja cudni outline i border kad je focus i sklonis mis */
-:host::ng-deep.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
-  outline: none;
-  border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
-}
-:host::ng-deep#pn_id_1_panel {
-  font-size: 14px;
-}
-:host::ng-deep.p-yearpicker,
-:host::ng-deep.p-monthpicker
-{
-  margin-top: -240px;
-}
-:host::ng-deep.p-datepicker-group{
-  min-height: 300px;
-  font-size: 12px;
-  padding: 1px;
-}
-:host::ng-deep.p-datepicker-group table{
-  font-size: 12px;
-}
-:host::ng-deep.p-datepicker-prev,
-:host::ng-deep.p-datepicker-month,
-:host::ng-deep.p-datepicker-year,
-:host::ng-deep.p-datepicker-next {
-  font-size: 14px;
-  margin: 1px;
-  padding: 3px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-:host::ng-deep.p-datepicker-calendar th{
-  font-size: 14px;
-  margin: 1px;
-  margin-left: 2px;
-}
-:host::ng-deep.p-datepicker-calendar td {
-  font-size: 14px;
-  margin: 1px;
-  padding: 3px;
-  padding-top: 1px;
-  padding-bottom: 0;
-}
-
-:host::ng-deep.p-datepicker-buttonbar{
-  height: 50px;
-}
-
 .mFilters {
   display: flex;
   gap: 50px;
@@ -360,3 +293,7 @@ p {
 .mFilters input {
   line-height: normal !important;
 }
+
+/* :host::ng-deep.p-inputtext{
+  line-height: normal;
+} */

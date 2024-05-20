@@ -5,6 +5,7 @@ import { NotificationsService } from '../../_services/notifications.service';
 import { Notification } from '../../Entities/Notification';
 import { UploadService } from '../../_services/upload.service';
 import { filter } from 'rxjs';
+import { ThemeServiceService } from '../../_services/theme-service.service';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -12,14 +13,21 @@ import { filter } from 'rxjs';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService, public uploadService:UploadService,public notificationService:NotificationsService) {}
+  constructor(
+    private router: Router,
+    private userInfo:UserinfoService, 
+    public uploadService:UploadService,
+    public notificationService:NotificationsService,
+    private themeService: ThemeServiceService
+    ) { }
+
   ngOnInit(): void {
     this.isAdmin()
     if(localStorage.getItem('token')) { // proveri dal token postoji
       this.getUser();
       this.notificationService.createHubConnection();
     }
-    
+    this.navigation();
   }
   admin!: boolean
   logovan!: boolean
@@ -29,6 +37,10 @@ export class NavComponent implements OnInit {
   notification_list:any;
 
   isMyProjectsActive: boolean = false;
+
+  changeTheme() {
+    this.themeService.switchTheme();
+  }
 
   async Logout(): Promise<void> {
     try {
@@ -68,4 +80,11 @@ export class NavComponent implements OnInit {
     this.router.navigate(['/mytasks']);
   }
 
+  navigation():void{
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((NavigationEnd) => {
+      this.isMyProjectsActive = this.router.url.includes('/myprojects') || this.router.url.includes('/project/');
+    });
+  }
 }

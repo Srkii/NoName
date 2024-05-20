@@ -1,24 +1,16 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { LoginService } from '../_services/login.service';
 import { inject } from '@angular/core';
-import { AdminService } from '../_services/admin.service';
 
-export const authGuard: CanActivateFn = async (route, state) => {
+export const userGuard: CanActivateFn = async (route, state) => {
   const service=inject(LoginService);
   const router=inject(Router)
-  const adminService=inject(AdminService)
 
   if(await service.checkToken())
   {
-    if(adminService.check()===true)
-    {
-      router.navigate(['/admin']);
-      return false
-    }
-     return true
+    return true
   }
   else{
-    localStorage.clear();
     router.navigate(['/login']);
     return false;
   }

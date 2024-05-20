@@ -196,8 +196,31 @@ namespace backend.Controllers
         return filteredUsers;
     }
     [AllowAnonymous]
+    [HttpGet("fcount")]
+    public async Task<ActionResult<int>> GetUsersFF( UserRole? role=null, string searchTerm="")
+    {
+        var query = _context.Users.AsQueryable();
+        query = query.Where(u => u.Archived == false);
+
+        if(role!=null)
+        {
+          query = query.Where(u => u.Role == role);
+        }
+
+
+        if(!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
+        }
+
+
+        var filteredUsers=await query.ToListAsync();
+
+        return filteredUsers.Count;
+    }
+    [AllowAnonymous]
     [HttpGet("filteredCount")]
-    public async Task<ActionResult<int>> CountFilteredProjects(UserRole? role=null)
+    public async Task<ActionResult<int>> CountFilteredUsers(UserRole? role=null)
     {
       var query=_context.Users.AsQueryable();
       query = query.Where(u => u.Archived == false);
@@ -243,16 +266,7 @@ namespace backend.Controllers
     [AllowAnonymous]
     [HttpPut("removeFromArch")]   //api/users/setAsArchived/1
     public async Task<IActionResult> RemoveArch([FromBody] List<int> userIds)
-    {
-      // var archieved=await _context.Users.Where(u => u.Archived==true)
-      // .Select(u=>u.Id)
-      // .FirstOrDefaultAsync();
-
-      // if (archieved ==0 )
-      // {
-      //    return NotFound("Completed status not found.");
-      // }
-      
+    { 
       var usersToUpdate=await _context.Users.Where(u=> userIds.Contains(u.Id))
         .ToListAsync();
 
