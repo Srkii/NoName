@@ -5,6 +5,7 @@ import { NotificationsService } from '../../_services/notifications.service';
 import { Notification } from '../../Entities/Notification';
 import { UploadService } from '../../_services/upload.service';
 import { filter } from 'rxjs';
+import { ThemeServiceService } from '../../_services/theme-service.service';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -12,7 +13,14 @@ import { filter } from 'rxjs';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService, public uploadService:UploadService,public notificationService:NotificationsService) {}
+  constructor(
+    private router: Router,
+    private userInfo:UserinfoService, 
+    public uploadService:UploadService,
+    public notificationService:NotificationsService,
+    private themeService: ThemeServiceService
+    ) { }
+
   ngOnInit(): void {
     this.isAdmin()
     if(localStorage.getItem('token')) { // proveri dal token postoji
@@ -29,6 +37,10 @@ export class NavComponent implements OnInit {
   notification_list:any;
 
   isMyProjectsActive: boolean = false;
+
+  changeTheme() {
+    this.themeService.switchTheme();
+  }
 
   async Logout(): Promise<void> {
     try {

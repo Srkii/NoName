@@ -144,11 +144,13 @@ input:focus{
 }
 label{
   display: block;
-  font-size:small;
+  font-size: 13px;
+  line-height: 19px;
   /* font-weight: 600; */
   margin: 0;
   padding: 0;
   text-transform: uppercase;
+  margin-bottom: .5rem;
 }
 #account_banner{
   display: flex;
@@ -205,4 +207,19 @@ label{
 .tCancelRemove:hover {
   background-color: #fff;
   transform: translateY(-1px) !important;
+}
+
+.dropdown-menu {
+  border: 1px transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item:active {
+  background-color: #696cff;
+  color: #ffffff;
+  border-left: #696cff;
+  border-right: #696cff;
+}
+.tInput {
+  
 }

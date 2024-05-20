@@ -362,10 +362,11 @@ input[type='checkbox'] {
     font-family: 'Public Sans', sans-serif !important;
 }
 /* tooltip arrow mora ovako */
-::ng-deep .p-tooltip .p-tooltip-arrow {
+/* u tihomir-purple sam promenio direktno */
+/* ::ng-deep .p-tooltip .p-tooltip-arrow {
     width: 0;
     height: 0;
     border-right: 3px solid #696cff;
     border-bottom: 3px solid transparent;
     border-top: 3px solid transparent;
-}
+} */
