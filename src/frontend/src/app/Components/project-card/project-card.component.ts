@@ -23,6 +23,7 @@ export class ProjectCardComponent {
   showComponent: boolean = true;
   buttonClicked: boolean = false;
   projectNameExists: boolean = false;
+  today: Date = new Date();
 
   projectMembers: ProjectMember[] = [];
   roles: string[] = ["Project Owner","Manager","Participant","Guest"];
