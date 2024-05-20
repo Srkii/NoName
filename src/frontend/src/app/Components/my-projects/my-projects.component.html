@@ -1,17 +1,18 @@
 <app-project-card class="proj_card" *ngIf="showProjectCard" (closeCard)="handleCloseCard()" (refreshNeeded)="ngOnInit()"></app-project-card>
-<div id="all">
-  <div class="header">
-    <h5>All Projects</h5>
-    <div class="d-flex justify-content-end page-size-container">
-      <select class="page_size" (change)="changePageSize($event)">
-        <option value="" hidden selected>Select page size</option>
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-      </select>
-      <button *ngIf="userRole==2" class="btn btn-primary btn-sm addProject" (click)="ToggleProjectCard()"><span style="margin-right: 0.5rem;">+</span>Add Project</button>
+<div class="container-xxl">
+  <div id="all">
+    <div class="header">
+      <h5>All Projects</h5>
+      <div class="d-flex justify-content-end page-size-container">
+        <select class="page_size" (change)="changePageSize($event)">
+          <option value="" hidden selected>Select page size</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+        </select>
+        <button *ngIf="userRole==2" class="btn btn-primary btn-sm addProject" (click)="ToggleProjectCard()"><span style="margin-right: 0.5rem;">+</span>Add Project</button>
+      </div>
     </div>
-  </div>
     <div class="mFilters">
       <div class="filter">
         <input 
@@ -43,80 +44,86 @@
           [readonlyInput]="true"
           [showButtonBar]="true"
           dateFormat="MM dd, yy"
-          [firstDayOfWeek]="1"
-          ></p-calendar>
+          [firstDayOfWeek]="1"></p-calendar>
       </div>
-
-      
     </div>
-        
-    <table>
-      <tr style="font-size: 16px !important;">
-        <th>Project Name</th>
-        <th>Project Owner</th>
-        <th>Status</th>
-        <th>Progress</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-      </tr>
-      <tr  *ngFor="let project of projects" (click)="goToProject(project.id)">
-        <!-- <ng-container *ngIf="isProjectVisible(project)"> -->
-        <ng-container>
-          <td class="project-name">{{ project.projectName }}</td>
-          <td *ngIf="!projectOwners[project.id]" class="mx-1">
-            <span class="d-flex align-items-center mx-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
-              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-              </svg>Not assigned
-            </span>
-          </td>
-          <td *ngIf="this.projectOwners && this.projectOwners[project.id]">
-            <span *ngIf="projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
-              <img class="avatar rounded-circle shadow-4-strong mx-1" height="21" width="21" [src]="uploadservice.getImage(projectOwners[project.id]?.profilePicUrl ?? '')">
-              {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
-            </span>
-            <span *ngIf="!projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
-              <ngx-avatars class="mx-1" size="21" bgColor="#5d57c2" [name]="projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName" value="75%"></ngx-avatars>
-              {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
-            </span>
-          </td>
-          <td [ngClass]="getStatusString(project.projectStatus)">
-            <p style="margin-left: -50px;">{{ getStatusString(project.projectStatus) }}</p>
-          </td>
-          <td>
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped" role="progressbar" [style.width.%]="project.progress" [attr.aria-valuenow]="project.progress" [ngClass]="getProgressClass(project.progress)" aria-valuemin="0" aria-valuemax="100">{{project.progress}}%</div>
-              <span *ngIf="project.progress<=15" class="progress-label" [ngStyle]="{'margin-right': project.progress + 'px'}">{{project.progress}}%</span>
-            </div>
-          </td>
-          <td>{{ project.startDate | date }}</td>
-          <td [ngStyle]="{'color': isOverdue(project.endDate) ? 'red' : ''}">{{ project.endDate | date }}</td>
-        </ng-container>
-      </tr>
-    </table>
+    <div class="tTable">
+      <table>
+        <tr style="font-size: 16px !important;">
+          <th>Project Name</th>
+          <th>Project Owner</th>
+          <th>Status</th>
+          <th>Progress</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+        </tr>
+        <tr  *ngFor="let project of projects" (click)="goToProject(project.id)">
+          <ng-container>
+            <td class="project-name">{{ project.projectName }}</td>
+            <td *ngIf="!projectOwners[project.id]" class="mx-1">
+              <span class="d-flex align-items-center mx-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg>Not assigned
+              </span>
+            </td>
+            <td *ngIf="this.projectOwners && this.projectOwners[project.id]">
+              <span *ngIf="projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
+                <img class="avatar rounded-circle shadow-4-strong mx-1" height="21" width="21" [src]="uploadservice.getImage(projectOwners[project.id]?.profilePicUrl ?? '')">
+                {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
+              </span>
+              <span *ngIf="!projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
+                <ngx-avatars class="mx-1" size="21" bgColor="#5d57c2" [name]="projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName" value="75%"></ngx-avatars>
+                {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
+              </span>
+            </td>
+            <td [ngClass]="getStatusString(project.projectStatus)">
+              <p style="margin-left: -50px;">{{ getStatusString(project.projectStatus) }}</p>
+            </td>
+            <td>
+              <div class="progress">
+                <div class="progress-bar progress-bar-striped" role="progressbar" [style.width.%]="project.progress" [attr.aria-valuenow]="project.progress" [ngClass]="getProgressClass(project.progress)" aria-valuemin="0" aria-valuemax="100">{{project.progress}}%</div>
+                <span *ngIf="project.progress<=15" class="progress-label" [ngStyle]="{'margin-right': project.progress + 'px'}">{{project.progress}}%</span>
+              </div>
+            </td>
+            <td>{{ project.startDate | date }}</td>
+            <td [ngStyle]="{'color': isOverdue(project.endDate) ? 'red' : ''}">{{ project.endDate | date }}</td>
+          </ng-container>
+        </tr>
+      </table>
+    </div>
+  </div>   
+  <div class="tFooter">
+    <div class="ViewarchProj">
+      <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="archTasks"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+        </svg>View Archived Projects
+      </div>
+    </div>
+    <div class="tPageinationElements" *ngIf="this.filteredProjects>this.pageSize">
+      <ul class="pagination">
+        <li *ngIf="totalPagesArray.length>5" class="paginate_buttons previous" [class.disabled]="currentPage === 1">
+          <button (click)="goToPage(1)" [disabled]="currentPage === 1">&laquo;</button>
+        </li>
+        <li class="paginate_button previous" [class.disabled]="currentPage === 1">
+          <button (click)="prevPage()" [disabled]="currentPage === 1">&lt;</button>
+        </li>
+        <li class="paginate_button" *ngFor="let pageNumber of getDisplayedPages()">
+          <button (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
+        </li>
+        <li class="paginate_button next" [class.disabled]="currentPage === totalPages">
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages">&gt;</button>
+        </li>
+        <li *ngIf="totalPagesArray.length>5" class="paginate_buttons next" [class.disabled]="currentPage === totalPages">
+          <button  (click)="goToPage(totalPagesArray.length)" [disabled]="currentPage === totalPages">&raquo;</button>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 
-<div *ngIf="this.filteredProjects>this.pageSize" id="pages">
-  <ul class="pagination">
-    <li *ngIf="totalPagesArray.length>5" class="paginate_buttons previous" [class.disabled]="currentPage === 1">
-      <button (click)="goToPage(1)" [disabled]="currentPage === 1">&laquo;</button>
-    </li>
-    <li class="paginate_button previous" [class.disabled]="currentPage === 1">
-      <button (click)="prevPage()" [disabled]="currentPage === 1">&lt;</button>
-    </li>
-    <li class="paginate_button" *ngFor="let pageNumber of getDisplayedPages()">
-      <button (click)="goToPage(pageNumber)" [class.active]="pageNumber === currentPage">{{ pageNumber }}</button>
-    </li>
-    <li class="paginate_button next" [class.disabled]="currentPage === totalPages">
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages">&gt;</button>
-    </li>
-    <li *ngIf="totalPagesArray.length>5" class="paginate_buttons next" [class.disabled]="currentPage === totalPages">
-      <button  (click)="goToPage(totalPagesArray.length)" [disabled]="currentPage === totalPages">&raquo;</button>
-    </li>
-  </ul>
-</div>
-    
+
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
   <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
