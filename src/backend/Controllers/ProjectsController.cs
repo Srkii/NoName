@@ -379,6 +379,21 @@ namespace backend.Controllers
             }
             return null;
         }
+
+        [HttpGet("isArchived/{projectId}")] //api/projects/isArchived/2
+        public async Task<ActionResult<bool>> IsProjectArchived(int projectId)
+        {
+            if(ProjectExists(projectId))
+            {
+                var project1= await _context.Projects.FirstOrDefaultAsync(proj=>proj.Id==projectId && proj.ProjectStatus==ProjectStatus.Archived);
+                if(project1!=null){
+                    return true; //postoji i arhiviran
+                }
+                else return false; //postoji i nije arhiviran to me ne zanima
+            }
+            else return true; //ne postoji, to me zanima
+           
+        }
     }
 }
 

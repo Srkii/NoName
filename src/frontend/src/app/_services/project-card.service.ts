@@ -33,4 +33,9 @@ export class ProjectCardService {
   AddProjectMembers(projectMember: ProjectMember[]):Observable<any>{
     return this.http.put<any>(`${this.projectUrl}/addProjectMembers`, projectMember, {responseType: 'json'})
   }
+
+  CheckProjectStatus(projectId: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.projectUrl}/isArchived/${projectId}`);
+  }
+
 }
