@@ -179,6 +179,10 @@ namespace backend.Controllers
             }
 
             task.TskStatusId = status.Id;
+            if(statusName.Equals("Archived")){
+                //arhiviram sve notifikacije
+                _notificationService.ArchiveRelatedTaskNotifications(taskId);
+            }
             await _context.SaveChangesAsync();
 
             // Now, after saving changes, fetch the updated task again

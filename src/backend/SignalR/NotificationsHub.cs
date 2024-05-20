@@ -54,7 +54,7 @@ namespace backend.SignalR
             var userId = Context.UserIdentifier;
 
             var notifications = await _context.Notifications
-            .Where(x=>x.reciever_id.ToString()==userId)
+            .Where(x=>x.reciever_id.ToString()==userId && x.originArchived == false)//samo one ciji origin nije archived
             .OrderByDescending(x=>x.dateTime)
             .Select(notification => new NotificationDto
             {
@@ -77,7 +77,7 @@ namespace backend.SignalR
             var userId = Context.UserIdentifier;
 
             var notifications = await _context.Notifications
-            .Where(x=>x.reciever_id.ToString()==userId)
+            .Where(x=>x.reciever_id.ToString()==userId && x.originArchived == false)//samo nearhivirane
             .OrderByDescending(x=>x.dateTime)
             .Select(notification => new NotificationDto{
                 Id = notification.Id,
