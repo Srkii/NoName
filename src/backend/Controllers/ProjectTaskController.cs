@@ -622,14 +622,14 @@ namespace backend.Controllers
         [HttpPut("UpdateArchTasksToCompleted")]
         public async Task<IActionResult> UpdateTasksToCompleted([FromBody] List<int> taskIds)
         {
-            var completedStatusId = await _context.TaskStatuses
-                .Where(s => s.StatusName == "Completed")
+            var InProgressId = await _context.TaskStatuses
+                .Where(s => s.StatusName == "InProgress")
                 .Select(s => s.Id)
                 .FirstOrDefaultAsync();
 
-            if (completedStatusId == 0)
+            if (InProgressId == 0)
             {
-                return NotFound("Completed status not found.");
+                return NotFound("InProgress status not found.");
             }
 
             var tasksToUpdate = await _context.ProjectTasks
@@ -638,14 +638,14 @@ namespace backend.Controllers
 
             foreach (var task in tasksToUpdate)
             {
-                task.TskStatusId = completedStatusId;
+                task.TskStatusId = InProgressId;
             }
             await _context.SaveChangesAsync();
 
             var projectId = tasksToUpdate[0].ProjectId;
             await updateProgress(projectId);
 
-            return Ok(new { message = "Tasks updated to Completed status." });
+            return Ok(new { message = "Tasks updated to InProgress status." });
         }
         [AllowAnonymous]    
         [HttpPost("timeUpdateGantt/{id}")]

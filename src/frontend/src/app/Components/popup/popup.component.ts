@@ -110,7 +110,6 @@ export class PopupComponent {
       this.commentsService.getComments(this.task.id).subscribe({
         next: (comments: Comment[]) => {
           this.comments = comments;
-          console.log(comments);
         },
         error: (error: any) => {
           console.error('Error fetching comments:', error);
