@@ -1,12 +1,7 @@
 <div class="content-wrapper">
-  <app-popup
-  style="z-index: 100;"
-  class="pop"
-    *ngIf="showPopUp && clickedTask"
-    [task]="clickedTask"
-    (backClicked)="closePopup();"
-    [@popFromSide]="showPopUp ? 'popFromSide' : ''"
-  ></app-popup>
+  <app-popup style="z-index: 100;"class="pop" *ngIf="showPopUp && clickedTask" [task]="clickedTask" (backClicked)="closePopup();"
+    [@popFromSide]="showPopUp ? 'popFromSide' : ''">
+  </app-popup>
   <div class="container-xxl flex-grow-1 container-p-y">
     <div *ngIf="project">
       <div class="project-heading flex-container">

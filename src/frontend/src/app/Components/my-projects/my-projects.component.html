@@ -61,7 +61,7 @@
             <td class="project-name">{{ project.projectName }}</td>
             <td *ngIf="!projectOwners[project.id]" class="mx-1">
               <span class="d-flex align-items-center mx-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
                 </svg>Not assigned
@@ -69,7 +69,7 @@
             </td>
             <td *ngIf="this.projectOwners && this.projectOwners[project.id]">
               <span *ngIf="projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
-                <img class="avatar rounded-circle shadow-4-strong mx-1" height="21" width="21" [src]="uploadservice.getImage(projectOwners[project.id]?.profilePicUrl ?? '')">
+                <img class="avatar rounded-circle shadow-4-strong mx-1" height="25" width="25" [src]="uploadservice.getImage(projectOwners[project.id]?.profilePicUrl ?? '')">
                 {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
               </span>
               <span *ngIf="!projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
@@ -132,15 +132,15 @@
   </div>
   
   <div class="modal-body" *ngIf="archivedProjects && archivedProjects.length > 0; else noArchivedProjects">
-    <div class="table-responsive text-nowrap">
-      <tr>
+    <div>
+      <tr class="tTop" style="border-top: none !important;">
         <th>Project Name</th>
         <th>Project Owner</th>
         <th>Start Date</th>
         <th>End Date</th>
         <th></th>
       </tr>
-      <tr class="archTable" *ngFor="let project of archivedProjects" >
+      <tr class="archTable" *ngFor="let project of archivedProjects" style="border-top: none !important;">
         <td class="tdName">{{project.projectName}}</td>
         <td class="tdAssignee">
           <div style="display: flex; align-items: center;">
@@ -148,7 +148,7 @@
               <img [src]="uploadservice.getImage(project.ownerProfilePicture)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
             </div>
             <div *ngIf="!project.ownerProfilePicture" class="nameAvatar boardAvatar">
-              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
                 </svg>
@@ -160,8 +160,7 @@
         </td>
         <td class="tdDate">{{project.startDate | date}}</td>
         <td class="tdDate">{{project.endDate | date}}</td>
-        <!-- [(ngModel)]="task.selected" name="task{{task.id}}" -->
-        <td class="tdCheck"><input type="checkbox" style="align-items:center;"></td>
+        <td class="tdCheck"><input type="checkbox" style="align-items:center;" [(ngModel)]="project.selected" name="project{{project.id}}"></td>
       </tr>
     </div>
     <div class="mb-3">

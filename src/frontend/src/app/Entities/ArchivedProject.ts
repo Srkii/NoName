@@ -6,4 +6,5 @@ export interface ArchivedProject {
     ownerFirstName?: string;
     ownerLastName?: string;
     ownerProfilePicture?: string;
+    selected?: boolean;
 }
