@@ -119,10 +119,11 @@ body {
   margin-right: 10px;*/
   cursor: pointer;
 }
-.rightImg2{
+.themeModeSelector{
   width: 23px;
   height: 23px;
   margin-right: 7px;
+  cursor: pointer;
 }
 .logoImg{
   width: 60px;

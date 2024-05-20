@@ -136,5 +136,10 @@ export class MyProjectsService {
   GetProjectOwner(projectId:number):Observable<Member>{
     return this.http.get<any>(`${this.baseUrl}/GetProjectOwner/${projectId}`);
   }
+
+  // Add this method to the MyProjectsService class
+  archiveProject(projectId: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/projects/archive/${projectId}`, {});
+  }
 }
 

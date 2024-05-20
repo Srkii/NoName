@@ -17,6 +17,8 @@ import { NewTask } from '../../Entities/NewTask';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { ProjectSectionService } from '../../_services/project-section.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-project-detail',
@@ -99,7 +101,9 @@ export class ProjectDetailComponent implements OnInit {
     private datePipe: DatePipe,
     public uploadservice: UploadService,
     private shared: SharedService,
-    private projectSectionService: ProjectSectionService
+    private projectSectionService: ProjectSectionService,
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   get formattedEndDate() {
@@ -504,6 +508,13 @@ export class ProjectDetailComponent implements OnInit {
       });
   }
 
+  openViewArchTaksModal(modal: TemplateRef<void>) {
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: 'modal-lg modal-dialog-centered'
+      });
+  }
 
   removeFromArchived() {
     this.spinner.show(); // prikazi spinner
@@ -602,4 +613,34 @@ export class ProjectDetailComponent implements OnInit {
     this.buttonClicked=false;
   }
 
+  openArchiveProjectcModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-sm modal-dialog-centered'
+    });
+  }
+  
+  openDeleteProjectcModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-sm modal-dialog-centered'
+    });
+  }
+
+  confirmArchive() {
+    if (this.project && this.project.id) {
+      this.myProjectsService.archiveProject(this.project.id).subscribe({
+        next: () => {
+          console.log('Project archived successfully');
+          this.getProjectInfo(); // Refresh project info or navigate away
+          this.modalRef?.hide();
+          this.router.navigate(['/myprojects']).then(() => {
+            this.toastr.success('Project has been archived.');
+          });
+        },
+        error: error => {
+          console.error('Failed to archive project:', error)
+          this.toastr.error('Failed to archive project');
+        }
+      });
+    }
+  }
 }

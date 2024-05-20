@@ -635,7 +635,7 @@ export class PopupComponent {
     this.modalRef = this.modalService.show(
       modal,
       {
-        class: "modal modal modal-dialog-centered"
+        class: 'modal-sm modal-dialog-centered'
       });
     
   }

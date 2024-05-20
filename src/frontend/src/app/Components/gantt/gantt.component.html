@@ -14,7 +14,7 @@
                     [viewOptions]="viewOptions" [toolbarOptions]="toolbarOptions" [loading]="loading" [virtualScrollEnabled]="true" (barClick)="barClick($event)" (viewChange)="viewChange($event)"
                     (lineClick)="lineClick($event,removalModal)" (dragMoved)="dragMoved($event)" (dragEnded)="dragEnded($event)" (selectedChange)="selectedChange($event)" (linkDragEnded)="linkDragEnded($event)"
                     >
-                  <ngx-gantt-table [draggable]="true" (dragDropped)="onDragDropped($event)" (dragStarted)="onDragStarted($event)" (dragEnded)="onDragEnded($event)">
+                  <ngx-gantt-table [draggable]="false">
                   <ng-template #group let-group="group" let-items="items">
                       <span class="text-primary" style="color: #696cff !important;">{{ group.title }}</span>
                   </ng-template>

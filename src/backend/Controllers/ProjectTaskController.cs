@@ -117,7 +117,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
         {
             var tasks = await _context.ProjectTasks
-                                      .Where(task => task.AppUserId == userId)
+                                      .Where(task => task.AppUserId == userId && !task.IsOriginProjectArchived)
                                       .Select(task => new
                                       {
                                           task.Id,
@@ -525,7 +525,7 @@ namespace backend.Controllers
         {
             var tasks = await _context.ProjectTasks
                 .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
-                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived")
+                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived" && !task.IsOriginProjectArchived)
                 .Take(count)
                 .OrderByDescending(task => task.DateCreated) // Order by DateCreated in descending order
                 .Select(task => new
@@ -557,7 +557,7 @@ namespace backend.Controllers
         {
             var tasks = await _context.ProjectTasks
                 .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
-                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived")
+                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived" && !task.IsOriginProjectArchived)
                 .Take(count)
                 .OrderBy(task => task.EndDate) // Order by DateCreated in descending order
                 .Select(task => new
@@ -588,7 +588,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetClosedTasksByUserId(int userId, int count)
         {
             var tasks = await _context.ProjectTasks
-                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview")
+                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview" && !task.IsOriginProjectArchived)
                 .Take(count)
                 .Select(task => new
                 {

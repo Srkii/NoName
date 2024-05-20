@@ -103,7 +103,7 @@ export class GanttComponent implements OnInit{
     private modalService:BsModalService
     ) { }
 
-  views = [{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
+  views = [{name:'Hour',value:GanttViewType.hour},{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
 
   @ViewChild('gantt') ganttComponent!: NgxGanttComponent;
   viewType: GanttViewType = GanttViewType.month;
@@ -117,22 +117,14 @@ export class GanttComponent implements OnInit{
   };
 
 
-  items: GanttItem[] = [ //koristi unix time. moram da napravim neku konverziju kad ispisujem. ok GantDate ima koverziju
-    // { id: '000000', group_id: '000000', title: 'Task 0', start: 1711125075, end: 1715717075, expandable: true },
-    // { id: '000001', group_id: '000000', title: 'Task 1', start: 1713125075, end: 1715112275, links: ['000003', '000004', '000000'], expandable: true },
-    // { id: '000002', group_id: '000000', title: 'Task 2', start: 1713125075, end: 1714421075 },
-    // { id: '000003', group_id: '000001', title: 'Task 3', start: 1713125075, end: 1713729875, expandable: true, linkable: true }
-  ];
-  groups: GanttGroup[] = [
-    // { id: '000000', title: 'Group-0' },
-    // { id: '000001', title: 'Group-1' }
-  ];
+  items: GanttItem[] = [];
+  groups: GanttGroup[] = [];
 
   viewOptions = {
     dateFormat: {
       year: `yyyy`,
       yearQuarter: `QQQ 'of' yyyy`,
-      yearMonth: `LLLL yyyy'(week' w ')'`,
+      yearMonth: `LLLL yyyy' (week' w ')'`,
       month: 'LLLL',
       week : 'ww'
     }
@@ -148,7 +140,7 @@ export class GanttComponent implements OnInit{
 
   dragEnded($event: GanttDragEvent) {
     if ($event?.item.start !== undefined && $event.item.end!==undefined) {
-
+      console.log($event);
       const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
       const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
 
@@ -185,26 +177,6 @@ export class GanttComponent implements OnInit{
     event.current && this.ganttComponent.scrollToDate(Number(event.current?.start));
     console.log('Selected item changed', event);
   }
-
-  onDragDropped(event: GanttTableDragDroppedEvent) {
-    //ovo nije bas najbolje ali kinezi su se potrudili da bolje ne moze
-    var section = Number(event.target.group_id);
-    var task = Number(event.source.id);
-    if(Number.isNaN(section)){
-      section = 0;
-    }
-    this.myTasksService.ChangeTaskSection(section, task)
-      .subscribe((response: any) => {
-        const index = this.items.findIndex(item => item.id === event.source.id);
-        if (index !== -1) {
-          this.items[index].group_id = event.target.group_id;
-          this.items = [...this.items]; // Reassign to trigger change detection
-        }
-      });
-  }
-  onDragStarted(event: GanttTableDragStartedEvent) {}
-
-  onDragEnded(event: GanttTableDragEndedEvent) {}
 
   dependency:TaskDependency = {
      taskId:0,
