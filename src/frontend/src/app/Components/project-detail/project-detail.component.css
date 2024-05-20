@@ -114,21 +114,26 @@ thead th{
     border: 1px solid #E7E7EE !important;
 }
 
+.archFooter .btn-primary:hover {
+    color: #fff !important;
+    background-color: #5f61e6 !important;
+    border-color: #5f61e6 !important;
+    transform: translateY(-1px) !important;
+}
 .btn-primary {
-    /* color: #696cff; */
     background-color: #696cff;
     border-color: #696cff;
     /* box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12); */
     /* display: inline-flex; */
     /* align-items: center; */
     /* justify-content: center; */
-    padding-top: 0.55rem;
-    padding-bottom: 0.55rem;
+    /* padding-top: 0.55rem; */
+    /* padding-bottom: 0.55rem; */
     font-size: 1rem;
     border-radius: 0.375rem;
     margin-right: 25px;
     line-height: 1.45;
-    width: 200px;
+    /* width: 200px; */
     text-align: center;
 }
 .btn-primary:focus{ color:#696cff }
@@ -592,12 +597,31 @@ select:disabled {
     flex-grow: 1;
 }
 
+/* dropdown za arch/detele project */
+.tArchCancel {
+    border-color: #696cff;
+    color: #696cff;
+}
+.tArchCancel:hover {
+    background-color: #fff;
+    transform: translateY(-1px) !important;
+}
+.tDropDown {
+    margin-left: 10px !important;
+    cursor: pointer;
+}
+.dropdown-menu {
+    border: 1px transparent;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.projInfo {
+    display: flex;
+}
 .projInfo button {
     margin-right: 100px !important;
 }
 .noArch {
     margin: 15px !important;
-    font-size: 20px;
 }
 .archBtn {
     margin-top: 20px;
@@ -775,4 +799,20 @@ input.is-invalid:focus{
 
 .manageMemberScroll::-webkit-scrollbar-button {
     display:none;
+}
+
+.archSpan {
+    font-size: 16px !important;
+    line-height: 24px !important;
+}
+.archBody {
+    border-bottom: none !important;
+}
+.archFooter {
+    display: flex;
+    flex-direction: row;
+    border-top: none !important;
+}
+.tFormControl {
+    font-size: 16px !important;
 }

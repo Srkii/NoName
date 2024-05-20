@@ -596,5 +596,24 @@ export class ProjectDetailComponent implements OnInit {
   restoreInvalidInputs():void{
     this.buttonClicked=false;
   }
+
+  openArchiveProjectcModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-sm modal-dialog-centered'
+    });
+  }
   
+  openDeleteProjectcModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-sm modal-dialog-centered'
+    });
+  }
+
+  confirmArchive() {
+    //
+  }
+
+  confirmDelete() {
+    //
+  }
 }
