@@ -184,7 +184,6 @@ export class PopupComponent {
               };
         
               this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
-                console.log('Dependency deleted successfully');
               }, (error: any) => {
                 console.error('Error deleting dependency:', error);
               });
@@ -338,12 +337,6 @@ export class PopupComponent {
     this.userInfo.getUserInfo2(id).subscribe({
       next:(response)=>{
         this.current_user=response;
-        console.log(this.task?.id);
-        console.log(this.current_user.id);
-        console.log(this.current_user.firstName);
-        console.log(this.current_user.lastName);
-        console.log(content);
-        console.log(new Date);
         if (content || this.attachment_added) {
           const commentDto: Comment = {
             id: -1,
@@ -356,7 +349,6 @@ export class PopupComponent {
             fileUrl: this.attachment_name?this.attachment_name:"",
             edited:false,
           };
-          console.log("COMM ",commentDto);
           this.commentsService.postComment(commentDto).subscribe({
             next: (comment: Comment) => {
               commentDto.id = comment.id;
@@ -574,7 +566,6 @@ export class PopupComponent {
   
     this.myTasksService.addTaskDependencies(dtos).subscribe(
       () => {
-        console.log('Task dependencies added successfully');
       },
       (error: any) => {
         console.error('Error adding task dependencies:', error);
@@ -598,7 +589,6 @@ export class PopupComponent {
 
       this.myTasksService.deleteTaskDependency(dto).subscribe(
         (response: TaskDependency) => {
-          console.log('Task dependency deleted:');
         },
         (error: any) => {
           console.error('Error adding task dependency:', error);
@@ -651,7 +641,6 @@ export class PopupComponent {
 
     this.myTasksService.deleteTask(taskId).subscribe({
       next: (response) => {
-        console.log('Task deleted successfully:', response);
         if(this.task)
           this.sharedService.emitTaskUpdated();
         this.backClicked.emit();
@@ -698,7 +687,6 @@ export class PopupComponent {
     {
       this.attachment_name = this.file.name;
       this.attachment_added = true;
-      console.log("file ready for upload");
     }
     else{
       console.log("no file data");

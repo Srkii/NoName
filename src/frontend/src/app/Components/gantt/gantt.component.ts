@@ -63,7 +63,6 @@ export class GanttComponent implements OnInit{
     // emit kad se doda novi task
     this.shared.taskAdded$.subscribe(success => {
       if (success) {
-        console.log("Dodat task na ganttu");
         this.loading = true;
         this.data_loaded = false;
         this.items=[];
@@ -140,7 +139,6 @@ export class GanttComponent implements OnInit{
 
   dragEnded($event: GanttDragEvent) {
     if ($event?.item.start !== undefined && $event.item.end!==undefined) {
-      console.log($event);
       const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
       const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
 
@@ -175,7 +173,6 @@ export class GanttComponent implements OnInit{
 
   selectedChange(event: GanttSelectedEvent) {
     event.current && this.ganttComponent.scrollToDate(Number(event.current?.start));
-    console.log('Selected item changed', event);
   }
 
   dependency:TaskDependency = {

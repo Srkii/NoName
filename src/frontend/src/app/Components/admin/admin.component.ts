@@ -137,7 +137,6 @@ export class AdminComponent implements OnInit{
       }
       if(ChangeDto)
       {
-        console.log(ChangeDto)
         this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
           this.GetUsers()
         },error: (error)=>{
@@ -158,7 +157,6 @@ export class AdminComponent implements OnInit{
       }
       if (this.newFisrtName) {
         this.updateUser.FirstName=this.newFisrtName;
-        console.log(this.newFisrtName);
       }
       else{
         this.updateUser.FirstName=this.curentName;
@@ -171,16 +169,15 @@ export class AdminComponent implements OnInit{
       }
       if(this.updateUser){
         this.adminService.updateUser(id,this.updateUser).subscribe({
-          next:(response)=>{
+          next:()=>{
             this.GetUsers();
-            console.log(response)
           },
           error: (error) => {
             console.log(error);
           }
       })
       }
-      else{
+      else {
         console.log("Can't update user role")
       }
     }
@@ -224,8 +221,6 @@ export class AdminComponent implements OnInit{
         this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
           this.filteredUsers=res;
           this.totalPages= Math.ceil(res / this.pageSize);
-          console.log("get2 "+this.totalPages);
-          console.log("count "+res)
           this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
         
         }})
@@ -278,7 +273,6 @@ export class AdminComponent implements OnInit{
     onLoad(): void{
       this.adminService.getAllUsers2().subscribe(response=>{
         this.allUsersCount=response;
-        console.log("load "+this.allUsersCount)
       })
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
@@ -286,7 +280,6 @@ export class AdminComponent implements OnInit{
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-        console.log("load2 "+this.totalPages)
         this.spinner.hide();
       });
       
@@ -369,17 +362,12 @@ export class AdminComponent implements OnInit{
     }
 
     toogleFilter(): void{
-      console.log("1"+this.isFilterActive)
       if(this.isFilterActive)
       {
         this.filterUsers();
-        
-        console.log("2"+this.isFilterActive)
       }
       else{
         this.noFilter();
-        
-        console.log(this.isFilterActive)
       }
       this.isFilterActive=!this.isFilterActive;
     }
@@ -395,18 +383,14 @@ export class AdminComponent implements OnInit{
     }
 
     putInArray(id:number): void{
-      console.log(id)
-      // var id1= parseInt(id);
       this.archivedIds.push(id);
-      console.log(this.archivedIds);
     }
 
     removeFromArchived() : void{
       if(this.archivedIds!=null)
       {
         this.adminService.removeFromArchieve(this.archivedIds).subscribe({
-          next:(res)=>{
-            console.log(this.archivedIds);
+          next:()=>{
             this.onLoad();
             this.getArchivedUsers();
           }

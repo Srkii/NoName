@@ -78,8 +78,6 @@ export class MyProjectsComponent implements OnInit {
     ).subscribe((projects: Project[]) => {
       this.projects = projects;
       this.filteredProjects = this.all_projects;
-      console.log(this.filteredProjects);
-      console.log("A: " + this.all_projects);
       this.totalPages = Math.ceil(this.all_projects / this.pageSize);
       this.totalPagesArray = Array.from({ length: this.totalPages }, (_, index) => index + 1);
       this.loadProjectOwners();
@@ -247,9 +245,6 @@ export class MyProjectsComponent implements OnInit {
     if (selectedDates && selectedDates.length === 2) {
       const startDate = selectedDates[0];
       const endDate = selectedDates[1];
-      console.log('Start Date:', startDate);
-      console.log('Start Date:', this.rangeDates);
-      console.log('End Date:', endDate);
   }
 }
 
