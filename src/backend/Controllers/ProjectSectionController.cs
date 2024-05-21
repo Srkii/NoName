@@ -1,6 +1,7 @@
 using backend.Data;
 using backend.DTO;
 using backend.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace backend.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost]
         public IActionResult CreateSection([FromBody] CreateSectionDto createSectionDto)
         {
@@ -28,6 +30,7 @@ namespace backend.Controllers
             return Ok(section);
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("{id}")] // GET: api/ProjectSection/5
         public async Task<ActionResult<ProjectSection>> GetSection(int id)
         {
@@ -41,12 +44,14 @@ namespace backend.Controllers
             return section;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("project/{id}")]//nzm nisam kreativan
         public async Task<ActionResult<IEnumerable<ProjectSection>>> GetSectionsByProject(int id){
             var sections = await _context.ProjectSections.Where(x => x.ProjectId == id).ToListAsync();
             return sections;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpDelete("{id}")] // DELETE: api/ProjectSection/5
         public async Task<IActionResult> DeleteSection(int id)
         {

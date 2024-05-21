@@ -25,7 +25,7 @@ export class UserinfoService {
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'application/json');
-    const response = this.httpClient.put<any>(url,JSON.stringify(data),{headers})
+    const response = this.httpClient.put<any>(url,JSON.stringify(data),{headers:headers})
     return response;
   }
 

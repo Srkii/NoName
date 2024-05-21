@@ -32,7 +32,7 @@ namespace backend.Controllers
       var users = await _context.Users.ToListAsync();
       return users;
     }
-    //[AllowAnonymous] 
+    [Authorize]
     [HttpGet("{id}")] // /api/users/2
     public async Task<ActionResult<AppUser>> GetUser(int id)
     {
@@ -46,7 +46,6 @@ namespace backend.Controllers
       var availableUsers = await _context.Users.Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin).ToListAsync();
       return  Ok(availableUsers);
     }
-
 
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser/{id}")] // /api/users/updateUser
@@ -113,6 +112,7 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
+    [Authorize]
     [HttpPut("changePassword/{id}")] // /api/users/changePassword
     public async Task<ActionResult<UserDto>> ChangePassword(int id, [FromBody] ChangePasswordDto data)
     {

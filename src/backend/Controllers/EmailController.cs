@@ -50,6 +50,7 @@ namespace backend.Controllers
             return Ok(responseData);
         }
 
+        [Authorize]
         [HttpPost("sendRecovery")]
         public async Task<IActionResult> SendRecoveryEmail(EmailDto emailDto)
         {

@@ -21,7 +21,7 @@ namespace backend.Controllers
             _notificationService = notificationService;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost] // POST: api/projectTask/
         public async Task<ActionResult<ProjectTask>> CreateTask(ProjectTaskDto taskDto)
         {
@@ -55,7 +55,7 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet] // GET: api/projectTask/
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetProjectTasks()
         {
@@ -77,7 +77,7 @@ namespace backend.Controllers
             return Ok(tasks);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("{task_id}/{userId}")] // GET: api/projectTask/2
         public async Task<ActionResult<ProjectTask>> GetProjectTask(int task_id,int userId)
         {
@@ -112,7 +112,7 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
         {
@@ -141,6 +141,7 @@ namespace backend.Controllers
             return Ok(tasks);
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("updateTicoStatus/{id}")] // PUT: api/projectTask/updateStatus/5
         public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, ProjectTaskDto taskDto)
         {
@@ -157,7 +158,7 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("updateStatus/{taskId}/{statusName}")]
         public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
         {
@@ -210,7 +211,7 @@ namespace backend.Controllers
             return taskDto;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
         public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
         {
@@ -235,7 +236,7 @@ namespace backend.Controllers
             return task;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("changeTaskSchedule")] // GET: api/projectTask/changeTaskSchedule
         public async Task<ActionResult<ProjectTask>> ChangeTaskSchedule(TaskScheduleDto dto)
         {
@@ -255,7 +256,7 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("addTaskDependency")] // GET: api/projectTask/addTaskDependency
         public async Task<ActionResult<TaskDependency>> AddTaskDependency(List<TaskDependencyDto> dtos)
         {
@@ -291,7 +292,7 @@ namespace backend.Controllers
             return Ok(); // Return success
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("deleteTaskDependency")] // POST: api/projectTask/deleteTaskDependency
         public async Task<ActionResult> DeleteTaskDependency(TaskDependencyDto dto)
         {
@@ -316,20 +317,21 @@ namespace backend.Controllers
 
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("getAllTasksDependencies")]
         public async Task<ActionResult<IEnumerable<TaskDependency>>> GetAllTasksDependencies()
         {
             var tasks = await _context.TaskDependencies.ToListAsync();
             return Ok(tasks);
         }
-        [AllowAnonymous]
+
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("getTaskDependencies/{id}")]
         public async Task<ActionResult<IEnumerable<TaskDependency>>> GetTaskDependencies(int id){
             return await _context.TaskDependencies.Where(x => x.TaskId == id).ToListAsync();
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("AddTaskAssignee")]
         public async Task<ActionResult<ProjectTask>> AddTaskAssignee(int taskId, int userId, int projectId)
         {
@@ -351,8 +353,6 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-
-
         [AllowAnonymous]
         [HttpGet("RoleCheck")]
         public async Task<bool> RoleCheck(int userId, int projectId)
@@ -362,7 +362,7 @@ namespace backend.Controllers
             return projectMember != null;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("ByProject/{projectId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId)
         {
@@ -388,6 +388,7 @@ namespace backend.Controllers
             return Ok(tasks);
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("statuses/{projectId}")] // GET: api/projectTask/statuses/{projectId}
         public ActionResult<IEnumerable<object>> GetTaskStatuses(int projectId)
         {
@@ -399,6 +400,7 @@ namespace backend.Controllers
             return Ok(statuses);
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("updateStatusPositions")]
         public async Task<IActionResult> UpdateTaskStatusPositions([FromBody] List<TskStatus> updatedStatuses)
         {
@@ -414,6 +416,7 @@ namespace backend.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("addTaskStatus")]
         public async Task<IActionResult> AddTaskStatus([FromBody] TaskStatusDto taskStatusDto)
         {
@@ -445,7 +448,7 @@ namespace backend.Controllers
             return Ok(newTaskStatus);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("sortTasksByDueDate/{userId}")]
         public async Task<ActionResult<IEnumerable<object>>> SortTasksByDueDate(int userId,string sortOrder)
         {
@@ -484,6 +487,7 @@ namespace backend.Controllers
             return sortedTasks;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpDelete("deleteTaskStatus/{TaskStatusId}")] // GET: api/projectTask/deleteTaskStatus/{TaskStatusId}
         public async Task<IActionResult> DeleteSection(int TaskStatusId)
         {
@@ -523,7 +527,8 @@ namespace backend.Controllers
 
             return Ok(new { message = "Section deleted and tasks updated to Proposed status." });
         }
-        [AllowAnonymous]
+
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("user/{userId}/count1/{count}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetNewTasksByUserId(int userId, int count)
         {
@@ -555,7 +560,8 @@ namespace backend.Controllers
 
             return Ok(tasks);
         }
-        [AllowAnonymous]
+
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("user/{userId}/count2/{count}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetSoonTasksByUserId(int userId, int count)
         {
@@ -587,7 +593,8 @@ namespace backend.Controllers
 
             return Ok(tasks);
         }
-        [AllowAnonymous]
+
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("user/{userId}/count3/{count}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetClosedTasksByUserId(int userId, int count)
         {
@@ -619,6 +626,7 @@ namespace backend.Controllers
         }
 
         // kada pomeram taskove iz archived saljem listu zbog boljih performansi
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("UpdateArchTasksToCompleted")]
         public async Task<IActionResult> UpdateTasksToCompleted([FromBody] List<int> taskIds)
         {
@@ -647,7 +655,8 @@ namespace backend.Controllers
 
             return Ok(new { message = "Tasks updated to InProgress status." });
         }
-        [AllowAnonymous]    
+        
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("timeUpdateGantt/{id}")]
         public async Task<ActionResult> UpdateTaskTimeGantt(int id, DateTimeDto newDateTime){
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == id);
@@ -657,7 +666,8 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok(task);
         }
-        [AllowAnonymous]
+
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("changeSectionGantt")]
         public async Task<IActionResult> ChangeSectionGantt(SectionChangeDTO dto){
 
@@ -687,6 +697,8 @@ namespace backend.Controllers
             return Ok();
 
         }
+
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpDelete("deleteTask/{taskId}")]
         public async Task<IActionResult> DeleteTask(int taskId)
         {
@@ -720,6 +732,7 @@ namespace backend.Controllers
             return Ok(new { message = "Task and related data deleted successfully." });
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("updateProgress/{projectId}")]
         public async Task<ActionResult> updateProgress(int projectId)
         {
@@ -733,7 +746,8 @@ namespace backend.Controllers
 
             return Ok("Project progress updated");
         } 
-    
+
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("getTaskByName/{taskName}/{projectId}")]
         public async Task<ActionResult<int>> GetTaskByName(string taskName,int projectId)
         {
