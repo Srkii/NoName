@@ -29,8 +29,7 @@ namespace backend.Controllers
                 Description = projectDto.Description,
                 StartDate = projectDto.StartDate,
                 EndDate = projectDto.EndDate,
-                ProjectStatus = projectDto.ProjectStatus,
-                Priority = projectDto.Priority
+                ProjectStatus = projectDto.ProjectStatus
             };
             await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
@@ -110,7 +109,6 @@ namespace backend.Controllers
             project.StartDate = projectDto.StartDate;
             project.EndDate = projectDto.EndDate;
             project.ProjectStatus = projectDto.ProjectStatus;
-            project.Priority = projectDto.Priority;
 
             try
             {
@@ -148,7 +146,7 @@ namespace backend.Controllers
         }
         
 
-       [HttpGet("filterAndPaginate")]
+        [HttpGet("filterAndPaginate")]
         public async Task<ActionResult<IEnumerable<Project>>> FilterAndPaginateProjects(
             string searchText = null,
             ProjectStatus? projectStatus = null,
@@ -159,6 +157,7 @@ namespace backend.Controllers
             int pageSize = 0)
         {
            var query = _context.Projects.AsQueryable();
+           query = query.Where(p => p.ProjectStatus != ProjectStatus.Archived);
 
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -208,7 +207,7 @@ namespace backend.Controllers
             return filteredProjects;
         }
 
-             [HttpGet("countFiltered")]
+        [HttpGet("countFiltered")]
         public async Task<ActionResult<int>> CountFilteredProjects(
             string searchText = null,
             ProjectStatus? projectStatus = null,
@@ -219,6 +218,7 @@ namespace backend.Controllers
             int pageSize = 0)
         {
            var query = _context.Projects.AsQueryable();
+           query = query.Where(p => p.ProjectStatus != ProjectStatus.Archived);
 
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -268,17 +268,17 @@ namespace backend.Controllers
         }
 
 
-        [HttpGet("getUsersProjectsCount/{userid}")]  // GET: api/projects/getProjects/1
+        [HttpGet("getUsersProjectsCount/{userid}")]
         public async Task<ActionResult<int>> GetUsersProjectsCount(int userid)
         {
             var projects = await _context.Projects
-                                         .Join(_context.ProjectMembers,
+                                        .Join(_context.ProjectMembers,
                                                 project => project.Id,
                                                 member => member.ProjectId,
                                                 (project, member) => new { Project = project, Member = member })
-                                         .Where(x => x.Member.AppUserId == userid)
-                                         .Select(x => x.Project)
-                                         .ToListAsync();
+                                        .Where(x => x.Member.AppUserId == userid && x.Project.ProjectStatus != ProjectStatus.Archived)
+                                        .Select(x => x.Project)
+                                        .ToListAsync();
             return projects.Count;
         }
 
@@ -370,7 +370,7 @@ namespace backend.Controllers
                 return NotFound("Project not found.");
             }
 
-            project.ProjectStatus = ProjectStatus.Archived; // Assuming ProjectStatus.Archived enum is 3
+            project.ProjectStatus = ProjectStatus.Archived;
 
             var tasks = await _context.ProjectTasks
                                     .Where(t => t.ProjectId == projectId)
@@ -397,6 +397,79 @@ namespace backend.Controllers
             else return true; 
            
         }
+
+        [HttpPut("unarchive/{projectId}")]
+        public async Task<IActionResult> UnarchiveProject(int projectId) {
+            var project = await _context.Projects.FindAsync(projectId);
+            if (project == null) {
+                return NotFound("Project not found.");
+            }
+
+            project.ProjectStatus = ProjectStatus.InProgress;
+
+            var tasks = await _context.ProjectTasks
+                                    .Where(t => t.ProjectId == projectId)
+                                    .ToListAsync();
+            foreach (var task in tasks) {
+                task.IsOriginProjectArchived = false;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Project and its tasks have been unarchived." });
+        }
+
+        [HttpPut("unarchiveMultiple")]
+        public async Task<IActionResult> UnarchiveMultipleProjects([FromBody] List<int> projectIds) {
+            var projects = await _context.Projects
+                                        .Where(p => projectIds.Contains(p.Id))
+                                        .ToListAsync();
+
+            if (!projects.Any()) {
+                return NotFound("No projects found.");
+            }
+
+            foreach (var project in projects) {
+                project.ProjectStatus = ProjectStatus.InProgress;
+                var tasks = await _context.ProjectTasks
+                                        .Where(t => t.ProjectId == project.Id)
+                                        .ToListAsync();
+                foreach (var task in tasks) {
+                    task.IsOriginProjectArchived = false;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Projects and their tasks have been unarchived." });
+        }
+
+        [HttpGet("getUsersArchivedProjects/{userId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsersArchivedProjects(int userId)
+        {
+            var projects = await _context.Projects
+                .Join(_context.ProjectMembers,
+                    project => project.Id,
+                    member => member.ProjectId,
+                    (project, member) => new { Project = project, Member = member })
+                .Where(x => x.Member.AppUserId == userId && x.Project.ProjectStatus == ProjectStatus.Archived)
+                .Select(x => new { x.Project.Id, x.Project.ProjectName, x.Project.StartDate, x.Project.EndDate })
+                .ToListAsync();
+
+            var projectOwners = await _context.ProjectMembers
+                .Where(pm => pm.ProjectRole == ProjectRole.ProjectOwner && projects.Select(p => p.Id).Contains(pm.ProjectId))
+                .Join(_context.Users,
+                    pm => pm.AppUserId,
+                    user => user.Id,
+                    (pm, user) => new { pm.ProjectId, Owner = new { user.FirstName, user.LastName, user.ProfilePicUrl } })
+                .ToListAsync();
+
+            var result = projects.Select(p => new {
+                Project = p,
+                Owner = projectOwners.FirstOrDefault(po => po.ProjectId == p.Id)?.Owner
+            });
+
+            return Ok(result);
+        }
+        
     }
 }
 

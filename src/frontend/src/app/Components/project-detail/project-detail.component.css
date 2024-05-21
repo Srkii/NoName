@@ -690,7 +690,7 @@ select:disabled {
 .nameAvatar img {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
-    vertical-align: middle !important; /* Aligns the image baseline to the middle */
+    vertical-align: middle !important;
 }
 .tProjectSection {
     margin-top: 10px;
@@ -836,4 +836,7 @@ input.is-invalid:focus{
 }
 .archFooter {
     border-top: none !important;
+}
+.tPCheck {
+    accent-color: #696cff !important;
 }

@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
         {
           this.router.navigate(['/mytasks']);
         }
-        console.log('Successful login');
       },
       error: (error) => {
         console.log(error);

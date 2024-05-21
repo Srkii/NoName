@@ -1,7 +1,7 @@
 import { Component, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
-import { Priority, Project, ProjectStatus } from '../../Entities/Project';
+import { Project, ProjectStatus } from '../../Entities/Project';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectTask} from '../../Entities/ProjectTask';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -221,7 +221,6 @@ export class ProjectDetailComponent implements OnInit {
       this.update.description = this.project.description;
       this.update.startDate = this.project.startDate;
       this.update.endDate = this.project.endDate;
-      this.update.priority = this.project.priority;
       this.update.projectStatus = this.project.projectStatus;
   }
 
@@ -240,14 +239,10 @@ export class ProjectDetailComponent implements OnInit {
     if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
     {
       if(this.update.projectName !== this.project.projectName || this.update.projectStatus!=this.project.projectStatus ||
-        this.update.endDate != this.project.endDate || this.update.description != this.project.description || this.update.priority != this.project.priority
-      )
+        this.update.endDate != this.project.endDate || this.update.description != this.project.description)
       {
-        if(this.update.priority!==undefined && this.update.projectStatus!==undefined)
-          {
-            this.update.priority = +this.update.priority;
+        if(this.update.projectStatus!==undefined)
             this.update.projectStatus = +this.update.projectStatus;
-          }
 
           this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
             this.getProjectInfo()
@@ -359,19 +354,6 @@ export class ProjectDetailComponent implements OnInit {
   closePopup() {
     this.clickedTask = null;
     this.showPopUp = false;
-  }
-
-  getPriorityClass() {
-    switch (this.update.priority) {
-        case Priority.Low:
-            return "LOW"
-        case Priority.Medium:
-            return "MEDIUM"
-        case Priority.High:
-            return "HIGH"
-        default:
-            return "DEFAULT"
-    }
   }
 
   getStatusClass(){

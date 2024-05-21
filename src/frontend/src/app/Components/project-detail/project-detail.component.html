@@ -1,12 +1,7 @@
 <div class="content-wrapper">
-  <app-popup
-  style="z-index: 100;"
-  class="pop"
-    *ngIf="showPopUp && clickedTask"
-    [task]="clickedTask"
-    (backClicked)="closePopup();"
-    [@popFromSide]="showPopUp ? 'popFromSide' : ''"
-  ></app-popup>
+  <app-popup style="z-index: 100;"class="pop" *ngIf="showPopUp && clickedTask" [task]="clickedTask" (backClicked)="closePopup();"
+    [@popFromSide]="showPopUp ? 'popFromSide' : ''">
+  </app-popup>
   <div class="container-xxl flex-grow-1 container-p-y">
     <div *ngIf="project">
       <div class="project-heading flex-container">
@@ -146,7 +141,6 @@
                 <option class="DEFAULT_STAT" value=0>Proposed</option>
                 <option class="DEFAULT_STAT" value=1>InProgress</option>
                 <option class="DEFAULT_STAT" value=2>Completed</option>
-                <option class="DEFAULT_STAT" value=3>Archived</option>
               </select>
             </div>
             <div class="my-2">
@@ -408,7 +402,7 @@
         </td>
         <td class="tdDate">{{task.startDate | date}}</td>
         <td class="tdDate">{{task.endDate | date}}</td>
-        <td class="tdCheck"><input type="checkbox" style="align-items:center;" [(ngModel)]="task.selected" name="task{{task.id}}"></td>
+        <td class="tdCheck"><input class="tPCheck" type="checkbox" style="align-items:center;" [(ngModel)]="task.selected" name="task{{task.id}}"></td>
       </tr>
     </div>
     <div class="mb-3">

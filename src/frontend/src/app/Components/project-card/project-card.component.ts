@@ -32,7 +32,6 @@ export class ProjectCardComponent {
 
   newProject: CreateProject = {
     ProjectName: '',
-    Priority: 0,
   }
 
   constructor(

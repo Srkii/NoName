@@ -7,12 +7,6 @@
         Completed,
         Archived
     }
-    public enum Priority
-    {
-        Low,
-        Medium,
-        High
-    }
 
     public class Project
     {
@@ -23,6 +17,5 @@
         public DateTime EndDate { get; set; }
         public int Progress { get; set; } = 0;
         public ProjectStatus ProjectStatus { get; set; }
-        public Priority Priority { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-import { Priority, ProjectStatus } from "./Project";
+import { ProjectStatus } from "./Project";
 
 export interface CreateProject {
     ProjectName: string;
@@ -6,6 +6,5 @@ export interface CreateProject {
     StartDate?: Date;
     EndDate?: Date;
     ProjectStatus?: ProjectStatus;
-    Priority: Priority;
     AppUserId?: Int16Array;
 }
