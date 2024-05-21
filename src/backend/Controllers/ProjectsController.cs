@@ -420,6 +420,30 @@ namespace backend.Controllers
             return Ok(new { message = "Project and its tasks have been unarchived." });
         }
 
+        [HttpPut("unarchiveMultiple")]
+        public async Task<IActionResult> UnarchiveMultipleProjects([FromBody] List<int> projectIds) {
+            var projects = await _context.Projects
+                                        .Where(p => projectIds.Contains(p.Id))
+                                        .ToListAsync();
+
+            if (!projects.Any()) {
+                return NotFound("No projects found.");
+            }
+
+            foreach (var project in projects) {
+                project.ProjectStatus = ProjectStatus.InProgress;
+                var tasks = await _context.ProjectTasks
+                                        .Where(t => t.ProjectId == project.Id)
+                                        .ToListAsync();
+                foreach (var task in tasks) {
+                    task.IsOriginProjectArchived = false;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Projects and their tasks have been unarchived." });
+        }
+
         [HttpGet("getUsersArchivedProjects/{userId}")]
         public async Task<ActionResult<IEnumerable<object>>> GetUsersArchivedProjects(int userId)
         {

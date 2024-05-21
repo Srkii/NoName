@@ -288,6 +288,21 @@ export class MyProjectsComponent implements OnInit {
   }
 
   removeProjectFromArchived() {
-    //
+    this.spinner.show();
+    const selectedProjectIds = this.archivedProjects
+      .filter(project => project.selected)
+      .map(project => project.id);
+    console.log(selectedProjectIds);
+    this.myProjectsService.removeProjectsFromArchived(selectedProjectIds).subscribe({
+      next: () => {
+        this.modalRef?.hide();
+        this.loadProjects(localStorage.getItem('id'));
+        this.spinner.hide();
+      },
+      error: (error) => {
+        console.error('Error removing projects from archived:', error);
+        this.spinner.hide();
+      }
+    });
   }
 }
