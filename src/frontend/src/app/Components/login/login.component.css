@@ -77,13 +77,31 @@ a {
   width: 300px;
   height: auto;
   position: absolute;
-  top: 150px;
-  right: 250px;
+  top: 200px;
+  right: 350px;
 }
-/* Hide .personimage on screens smaller than 1200px */
-@media (max-width: 1200px) {
+/* skloni .personimage za rezoluciju manju od 1000px */
+@media (max-width: 1000px) {
   .personimage {
     display: none;
+  }
+}
+@media (min-width: 1000px) and (max-width: 1200px) {
+  .personimage img {
+    width: 300px;
+    height: auto;
+    position: absolute;
+    top: 150px;
+    right: 0px;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1600px) {
+  .personimage img {
+    width: 300px;
+    height: auto;
+    position: absolute;
+    top: 150px;
+    right: 100px;
   }
 }
 .authentication-wrapper {
@@ -139,4 +157,7 @@ a {
   padding-left: 0.4rem;
   padding-right: 0.4rem;
   font-size: 150%;
+}
+.tForgotpass {
+  text-decoration: none;
 }

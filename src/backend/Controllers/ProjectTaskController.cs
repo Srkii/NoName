@@ -1,9 +1,12 @@
 ﻿using backend.Data;
 using backend.DTO;
 using backend.Entities;
+using backend.Interfaces;
+using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyModel;
 
 namespace backend.Controllers
 {
@@ -11,10 +14,11 @@ namespace backend.Controllers
     public class ProjectTaskController : BaseApiController
     {
         private readonly DataContext _context;
-
-        public ProjectTaskController(DataContext context)
+        private readonly INotificationService _notificationService;
+        public ProjectTaskController(DataContext context,INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         [AllowAnonymous]
@@ -35,13 +39,20 @@ namespace backend.Controllers
                         .Where(ts => ts.ProjectId == taskDto.ProjectId && ts.Position == 0)
                         .Select(ts => ts.Id)
                         .FirstOrDefault(),
-                ProjectSectionId = taskDto.ProjectSectionId
+                // ProjectSectionId = taskDto.ProjectSectionId,
+                DateCreated = DateTime.Now, // postavlja vreme i datum kad je task kreiran
+                AppUserId = taskDto.AppUserId,
+                ProjectSectionId=taskDto.ProjectSectionId!=0 ? taskDto.ProjectSectionId : null,
             };
 
-            _context.ProjectTasks.Add(task);
+            await _context.ProjectTasks.AddAsync(task);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetProjectTask), new { id = task.Id }, taskDto);
+            await updateProgress(task.ProjectId);
+            // ne obavestavamo sami sebe vise o kreaciji task-a
+            if(taskDto.CreatorId!=taskDto.AppUserId){
+                await _notificationService.TriggerTaskNotification(task.Id,taskDto.CreatorId); 
+            }
+            return Ok(task);
         }
 
         [AllowAnonymous]
@@ -51,26 +62,48 @@ namespace backend.Controllers
             var tasks = await _context.ProjectTasks
                 .Select(task => new
                 {
-                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                    task.ProjectSection.SectionName, task.AppUser
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.AppUser
                 })
                 .ToListAsync();
             return Ok(tasks);
         }
 
         [AllowAnonymous]
-        [HttpGet("{id}")] // GET: api/projectTask/2
-        public async Task<ActionResult<ProjectTask>> GetProjectTask(int id)
+        [HttpGet("{task_id}/{userId}")] // GET: api/projectTask/2
+        public async Task<ActionResult<ProjectTask>> GetProjectTask(int task_id,int userId)
         {
             var task = await _context.ProjectTasks
+            .Include(t=>t.AppUser)
             .Select(task => new
             {
-                task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                task.ProjectSection.SectionName
+                task.Id,
+                task.TaskName,
+                task.Description,
+                task.StartDate,
+                task.EndDate,
+                task.ProjectId,
+                task.TskStatus.StatusName,
+                task.TskStatus.Color,
+                task.ProjectSection.SectionName,
+                task.Project,
+                AppUser=task.AppUser,
+                ProjectSection=task.ProjectSection,
+                Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
+                 ProjectRole = _context.ProjectMembers
+                                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                                        .Select(member => member.ProjectRole)
+                                        .FirstOrDefault()
             })
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstOrDefaultAsync(t => t.Id == task_id);
 
             if (task == null)
             {
@@ -84,13 +117,26 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByUserId(int userId)
         {
             var tasks = await _context.ProjectTasks
-                                      .Where(task => task.AppUserId == userId)
+                                      .Where(task => task.AppUserId == userId && !task.IsOriginProjectArchived)
                                       .Select(task => new
                                       {
-                                          task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                                          task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                                          task.ProjectSection.SectionName
-                                      })
+                                          task.Id,
+                                          task.TaskName,
+                                          task.Description,
+                                          task.StartDate,
+                                          task.EndDate,
+                                          task.ProjectId,
+                                          task.TskStatus.StatusName,
+                                          task.TskStatus.Color,
+                                          task.ProjectSection.SectionName,
+                                          task.Project,
+                                           AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
+                                           Dependencies = _context.TaskDependencies.Where(dependency => dependency.TaskId == task.Id).Select(dependency=>dependency.DependencyTaskId).ToList(),
+                                        ProjectRole = _context.ProjectMembers
+                                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                                        .Select(member => member.ProjectRole)
+                                        .FirstOrDefault()
+                                    })
                                       .ToListAsync();
             return Ok(tasks);
         }
@@ -106,22 +152,26 @@ namespace backend.Controllers
             }
             task.TskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
+            await updateProgress(task.ProjectId);
 
             return Ok(task);
         }
 
 
-        [HttpPut("updateStatus/{id}/{statusName}")]
-        public async Task<ActionResult<ProjectTask>> UpdateTaskStatus(int id, string statusName)
+        [HttpPut("updateStatus/{taskId}/{statusName}")]
+        public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
         {
-            var task = await _context.ProjectTasks.Include(t => t.TskStatus).FirstOrDefaultAsync(t => t.Id == id);
+            var task = await _context.ProjectTasks
+                .Include(t => t.TskStatus)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
 
             if (task == null)
             {
                 return NotFound();
             }
 
-            var status = await _context.TaskStatuses.FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
+            var status = await _context.TaskStatuses
+                .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
 
             if (status == null)
             {
@@ -129,18 +179,43 @@ namespace backend.Controllers
             }
 
             task.TskStatusId = status.Id;
+            if(statusName.Equals("Archived")){
+                //arhiviram sve notifikacije
+                _notificationService.ArchiveRelatedTaskNotifications(taskId);
+            }
             await _context.SaveChangesAsync();
 
-            return Ok(task);
-        }
+            // Now, after saving changes, fetch the updated task again
+            task = await _context.ProjectTasks
+                .Include(t => t.TskStatus)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
 
+            // Create a DTO to shape the response
+            var taskDto = new ProjectTaskDto
+            {
+                Id = task.Id,
+                TaskName = task.TaskName,
+                Description = task.Description,
+                StartDate = task.StartDate,
+                EndDate = task.EndDate,
+                TaskStatusId = task.TskStatusId,
+                AppUserId = (int)task.AppUserId,
+                ProjectId = task.ProjectId,
+                ProjectSectionId = task.ProjectSectionId
+                
+            };
+            
+            await updateProgress(task.ProjectId);
+
+            return taskDto;
+        }
 
         [AllowAnonymous]
         [HttpPut("changeTaskInfo")] // GET: api/projectTask/changeTaskInfo
         public async Task<ActionResult<ProjectTask>> changeTaskInfo(ChangeTaskInfoDto dto)
         {
-            if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
-                return Unauthorized("Unvalid role");
+            // if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
+            //     return Unauthorized("Unvalid role");
 
             var task = await _context.ProjectTasks.FindAsync(dto.Id);
 
@@ -149,11 +224,15 @@ namespace backend.Controllers
 
             if (dto.TaskName != null) task.TaskName = dto.TaskName;
             if (dto.Description != null && dto.Description != "") task.Description = dto.Description;
-            // if(dto.TaskStatus != null) task.TaskStatus = (Entities.TaskStatus)dto.TaskStatus;
+            if (dto.DueDate != null) task.EndDate = (DateTime)dto.DueDate;
+            if (dto.ProjectId!=0) task.ProjectId = dto.ProjectId;
+            if (dto.AppUserId!=0) task.AppUserId = dto.AppUserId;
+            if(dto.SectionId!=0) task.ProjectSectionId=dto.SectionId;
+            if(dto.SectionId==0) task.ProjectSectionId=null;
 
             await _context.SaveChangesAsync();
 
-            return Ok(task);
+            return task;
         }
 
         [AllowAnonymous]
@@ -177,24 +256,81 @@ namespace backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPut("addTaskDependency")] // GET: api/projectTask/addTaskDependency
-        public async Task<ActionResult<ProjectTask>> AddTaskDependency(TaskDependencyDto dto)
+        [HttpPost("addTaskDependency")] // GET: api/projectTask/addTaskDependency
+        public async Task<ActionResult<TaskDependency>> AddTaskDependency(List<TaskDependencyDto> dtos)
         {
-            if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
-                return Unauthorized("Unvalid role");
-
-            var taskDep = new TaskDependency
+            // if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
+            //     return Unauthorized("Unvalid role");
+            foreach (var dto in dtos)
             {
-                TaskId = dto.TaskId,
-                DependencyTaskId = dto.DependencyTaskId
-            };
+                var existingDependency = await _context.TaskDependencies
+                .AnyAsync(dep => dep.TaskId == dto.TaskId && dep.DependencyTaskId == dto.DependencyTaskId);
 
-            await _context.TaskDependencies.AddAsync(taskDep);
-            await _context.SaveChangesAsync();
+                if (existingDependency)
+                {
+                    // If the dependency already exists, update it
+                    var existing = await _context.TaskDependencies.FirstOrDefaultAsync(dep => dep.TaskId == dto.TaskId);
+                    existing.TaskId = dto.TaskId;
+                    existing.DependencyTaskId = dto.DependencyTaskId;
+                }
+                else
+                {
+                    // If the dependency doesn't exist, add a new one
+                    var newDependency = new TaskDependency
+                    {
+                        TaskId = dto.TaskId,
+                        DependencyTaskId = dto.DependencyTaskId
+                    };
+
+                    _context.TaskDependencies.Add(newDependency);
+                }
+
+                await _context.SaveChangesAsync();
+            }
             //komentar
-            return Ok(taskDep);
+            return Ok(); // Return success
         }
 
+        [AllowAnonymous]
+        [HttpPost("deleteTaskDependency")] // POST: api/projectTask/deleteTaskDependency
+        public async Task<ActionResult> DeleteTaskDependency(TaskDependencyDto dto)
+        {
+            // if (!await RoleCheck(dto.AppUserId, dto.ProjectId))
+            //     return Unauthorized("Unvalid role");
+
+            // Find the task dependency to delete
+            var dependencyToDelete = await _context.TaskDependencies
+                .FirstOrDefaultAsync(dep => dep.TaskId == dto.TaskId && dep.DependencyTaskId == dto.DependencyTaskId);
+
+            if (dependencyToDelete != null)
+            {
+                // If the dependency exists, remove it from the context
+                _context.TaskDependencies.Remove(dependencyToDelete);
+                await _context.SaveChangesAsync();
+                return Ok(); // Return success
+            }
+            else
+            {
+                return NotFound(); // Return not found if the dependency doesn't exist
+            }
+
+        }
+
+        [AllowAnonymous]
+        [HttpGet("getAllTasksDependencies")]
+        public async Task<ActionResult<IEnumerable<TaskDependency>>> GetAllTasksDependencies()
+        {
+            var tasks = await _context.TaskDependencies.ToListAsync();
+            return Ok(tasks);
+        }
+        [AllowAnonymous]
+        [HttpGet("getTaskDependencies/{id}")]
+        public async Task<ActionResult<IEnumerable<TaskDependency>>> GetTaskDependencies(int id){
+            return await _context.TaskDependencies.Where(x => x.TaskId == id).ToListAsync();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("AddTaskAssignee")]
         public async Task<ActionResult<ProjectTask>> AddTaskAssignee(int taskId, int userId, int projectId)
         {
             var isMember = await _context.ProjectMembers.AnyAsync(pm => pm.AppUserId == userId && pm.ProjectId == projectId);
@@ -215,6 +351,10 @@ namespace backend.Controllers
             return Ok(task);
         }
 
+
+
+        [AllowAnonymous]
+        [HttpGet("RoleCheck")]
         public async Task<bool> RoleCheck(int userId, int projectId)
         {
             var roles = new List<ProjectRole> { ProjectRole.ProjectOwner, ProjectRole.Manager };
@@ -229,9 +369,19 @@ namespace backend.Controllers
             var tasks = await _context.ProjectTasks
                 .Select(task => new
                 {
-                    task.Id, task.TaskName, task.Description, task.StartDate, task.EndDate,
-                    task.ProjectId, task.TskStatus.StatusName, task.TskStatus.Color,
-                    task.ProjectSection.SectionName, task.AppUser.FirstName, task.AppUser.LastName
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.AppUser.FirstName,
+                    task.AppUser.LastName,
+                    task.AppUser.ProfilePicUrl,
+                    task.ProjectSectionId
                 })
                 .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
@@ -263,6 +413,335 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
-    }
-}
 
+        [HttpPost("addTaskStatus")]
+        public async Task<IActionResult> AddTaskStatus([FromBody] TaskStatusDto taskStatusDto)
+        {
+            if (await _context.TaskStatuses.AnyAsync(ts => ts.StatusName == taskStatusDto.StatusName && ts.ProjectId == taskStatusDto.ProjectId))
+            {
+                return BadRequest("A board with the same name already exists.");
+            }
+
+            var inReviewStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "InReview" && ts.ProjectId == taskStatusDto.ProjectId);
+            var CompletedStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "Completed" && ts.ProjectId == taskStatusDto.ProjectId);
+            var ArchivedStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "Archived" && ts.ProjectId == taskStatusDto.ProjectId);
+            var newPosition = inReviewStatus != null ? inReviewStatus.Position : 0; // Assuming positions are 0-indexed
+            
+            if (inReviewStatus != null) inReviewStatus.Position += 1;
+            if (CompletedStatus != null) CompletedStatus.Position += 1;
+            if (ArchivedStatus != null) ArchivedStatus.Position += 1;
+
+            var newTaskStatus = new TskStatus
+            {
+                StatusName = taskStatusDto.StatusName,
+                Position = newPosition,
+                Color = taskStatusDto.Color,
+                ProjectId = taskStatusDto.ProjectId
+            };
+
+            _context.TaskStatuses.Add(newTaskStatus);
+            await _context.SaveChangesAsync();
+
+            return Ok(newTaskStatus);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("sortTasksByDueDate/{userId}")]
+        public async Task<ActionResult<IEnumerable<object>>> SortTasksByDueDate(int userId,string sortOrder)
+        {
+            var query = _context.ProjectTasks.AsQueryable();
+            // Apply sorting based on the sortBy parameter
+            switch (sortOrder)
+            {
+                case "asc":
+                    query = query.OrderBy(task => task.EndDate);
+                    break;
+                // Add more cases for additional sorting criteria if needed
+                case "desc":
+                    // Default sorting by task ID if sortBy parameter is not recognized
+                    query = query.OrderByDescending(task => task.EndDate);
+                    break;
+            }
+
+            var sortedTasks = await query.Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview")
+                .Select(task => new
+                {
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.AppUser.FirstName,
+                    task.AppUser.LastName,
+                    task.Project
+                    
+                })
+                .ToListAsync();
+            return sortedTasks;
+        }
+
+        [HttpDelete("deleteTaskStatus/{TaskStatusId}")] // GET: api/projectTask/deleteTaskStatus/{TaskStatusId}
+        public async Task<IActionResult> DeleteSection(int TaskStatusId)
+        {
+            var statusToDelete = await _context.TaskStatuses.FindAsync(TaskStatusId);
+            if (statusToDelete == null)
+            {
+                return NotFound("Section not found.");
+            }
+
+            var proposedStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "Proposed" && ts.ProjectId == statusToDelete.ProjectId);
+            if (proposedStatus == null)
+            {
+                return NotFound("Proposed status not found in the project.");
+            }
+
+            var tasksToUpdate = await _context.ProjectTasks.Where(t => t.TskStatusId == TaskStatusId).ToListAsync();
+            foreach (var task in tasksToUpdate)
+            {
+                task.TskStatusId = proposedStatus.Id;
+            }
+
+            // brisanje TskStatus (section)
+            _context.TaskStatuses.Remove(statusToDelete);
+            await _context.SaveChangesAsync();
+
+            // sortiranje preostalih statusa
+            var remainingStatuses = await _context.TaskStatuses
+                .Where(ts => ts.ProjectId == statusToDelete.ProjectId)
+                .OrderBy(ts => ts.StatusName == "Proposed" ? 0 : ts.StatusName == "InProgress" ? 1 : ts.StatusName == "InReview" ? int.MaxValue - 2 : ts.StatusName == "Completed" ? int.MaxValue - 1 : ts.StatusName == "Archived" ? int.MaxValue : 2)
+                .ToListAsync();
+
+            for (int i = 0; i < remainingStatuses.Count; i++)
+            {
+                remainingStatuses[i].Position = i;
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Section deleted and tasks updated to Proposed status." });
+        }
+        [AllowAnonymous]
+        [HttpGet("user/{userId}/count1/{count}")]
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetNewTasksByUserId(int userId, int count)
+        {
+            var tasks = await _context.ProjectTasks
+                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
+                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived" && !task.IsOriginProjectArchived)
+                .Take(count)
+                .OrderByDescending(task => task.DateCreated) // Order by DateCreated in descending order
+                .Select(task => new
+                {
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
+                    ProjectRole = _context.ProjectMembers
+                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                        .Select(member => member.ProjectRole)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+            
+
+            return Ok(tasks);
+        }
+        [AllowAnonymous]
+        [HttpGet("user/{userId}/count2/{count}")]
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetSoonTasksByUserId(int userId, int count)
+        {
+            var tasks = await _context.ProjectTasks
+                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
+                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived" && !task.IsOriginProjectArchived)
+                .Take(count)
+                .OrderBy(task => task.EndDate) // Order by DateCreated in descending order
+                .Select(task => new
+                {
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
+                    ProjectRole = _context.ProjectMembers
+                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                        .Select(member => member.ProjectRole)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+            
+
+            return Ok(tasks);
+        }
+        [AllowAnonymous]
+        [HttpGet("user/{userId}/count3/{count}")]
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetClosedTasksByUserId(int userId, int count)
+        {
+            var tasks = await _context.ProjectTasks
+                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview" && !task.IsOriginProjectArchived)
+                .Take(count)
+                .Select(task => new
+                {
+                    task.Id,
+                    task.TaskName,
+                    task.Description,
+                    task.StartDate,
+                    task.EndDate,
+                    task.ProjectId,
+                    task.TskStatus.StatusName,
+                    task.TskStatus.Color,
+                    task.ProjectSection.SectionName,
+                    task.Project,
+                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
+                    ProjectRole = _context.ProjectMembers
+                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                        .Select(member => member.ProjectRole)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+            
+
+            return Ok(tasks);
+        }
+
+        // kada pomeram taskove iz archived saljem listu zbog boljih performansi
+        [HttpPut("UpdateArchTasksToCompleted")]
+        public async Task<IActionResult> UpdateTasksToCompleted([FromBody] List<int> taskIds)
+        {
+            var InProgressId = await _context.TaskStatuses
+                .Where(s => s.StatusName == "InProgress")
+                .Select(s => s.Id)
+                .FirstOrDefaultAsync();
+
+            if (InProgressId == 0)
+            {
+                return NotFound("InProgress status not found.");
+            }
+
+            var tasksToUpdate = await _context.ProjectTasks
+                .Where(t => taskIds.Contains(t.Id))
+                .ToListAsync();
+
+            foreach (var task in tasksToUpdate)
+            {
+                task.TskStatusId = InProgressId;
+            }
+            await _context.SaveChangesAsync();
+
+            var projectId = tasksToUpdate[0].ProjectId;
+            await updateProgress(projectId);
+
+            return Ok(new { message = "Tasks updated to InProgress status." });
+        }
+        [AllowAnonymous]    
+        [HttpPost("timeUpdateGantt/{id}")]
+        public async Task<ActionResult> UpdateTaskTimeGantt(int id, DateTimeDto newDateTime){
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == id);
+            task.StartDate = newDateTime.StartDate.AddDays(1);
+            task.EndDate = newDateTime.EndDate.AddDays(1);//sace da pamti normalno
+
+            await _context.SaveChangesAsync();
+            return Ok(task);
+        }
+        [AllowAnonymous]
+        [HttpPost("changeSectionGantt")]
+        public async Task<IActionResult> ChangeSectionGantt(SectionChangeDTO dto){
+
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == dto.taskId);
+            var section = await _context.ProjectSections.FirstOrDefaultAsync(x=>x.Id == dto.sectionId);
+
+            if(task == null){
+                return NotFound("TASK ID NOT FOUND "+dto.taskId);
+            }
+            if(section == null && dto.sectionId!=0){
+                //ako je ovo stanje onda je neki error
+                //poenta je sto treba da mozes da izbacis task iz section-a
+                //section id 0 ce da bude prosledjen sa fronta samo u slucaju izbacivanja iz sectiona
+                //ukoliko dobijem null ovde a prosledio sam !=0 sectionId, to znaci da sam poslao nepostojeci section
+                return NotFound("SECTION ID NOT FOUND "+dto.sectionId);
+            }
+            
+            if(dto.sectionId!=0){//ako smo prosledili id 0 onda ide u no section
+                task.ProjectSectionId = dto.sectionId;
+                task.ProjectSection = section;
+            }
+            else{
+                task.ProjectSectionId = null;
+                task.ProjectSection = null;
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
+        [HttpDelete("deleteTask/{taskId}")]
+        public async Task<IActionResult> DeleteTask(int taskId)
+        {
+            var task = await _context.ProjectTasks.FindAsync(taskId);
+
+            if (task == null)
+            {
+                return NotFound("Task not found.");
+            }
+
+            // Delete task dependencies
+            var taskDependencies = _context.TaskDependencies.Where(dep => dep.TaskId == taskId || dep.DependencyTaskId == taskId);
+            _context.TaskDependencies.RemoveRange(taskDependencies);
+
+            // Delete comments associated with the task
+            var comments = _context.Comments.Where(c => c.TaskId == taskId);
+            _context.Comments.RemoveRange(comments);
+            // Set notifications related to the task to null
+            var notifications = _context.Notifications.Where(n => n.task_id == taskId);
+            foreach (var notification in notifications)
+            {
+                notification.task_id = null;
+            }
+
+            var projectId = task.ProjectId;
+            _context.ProjectTasks.Remove(task);
+
+            await _context.SaveChangesAsync();
+            await updateProgress(projectId);
+
+            return Ok(new { message = "Task and related data deleted successfully." });
+        }
+
+        [HttpGet("updateProgress/{projectId}")]
+        public async Task<ActionResult> updateProgress(int projectId)
+        {
+            var project = await _context.Projects.FindAsync(projectId);
+            var TasksCount = await _context.ProjectTasks.CountAsync(x => x.ProjectId == projectId && x.TskStatus.StatusName != "Archived");
+            var CompletedTasksCount = await _context.ProjectTasks.CountAsync(x => x.TskStatus.StatusName == "Completed" && x.ProjectId == projectId);
+
+            project.Progress = TasksCount == 0 ? 0 : (int)(((double)CompletedTasksCount/TasksCount)*100);
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Project progress updated");
+        } 
+    
+        [HttpGet("getTaskByName/{taskName}/{projectId}")]
+        public async Task<ActionResult<int>> GetTaskByName(string taskName,int projectId)
+        {
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(task => task.TaskName.ToLower() == taskName.ToLower() && task.ProjectId==projectId);
+            return Ok(task);
+        }
+
+    }
+
+    
+}

@@ -1,9 +1,9 @@
 export interface ChangeRole{
     Id: number,
-    Role: number
+    Role: UserRole
 }
 export enum UserRole {
     Admin,
-    Member,
-    ProjectManager
+    ProjectManager,
+    User
 }

@@ -1,17 +1,18 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from '../../_services/shared.service';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { Project } from '../../Entities/Project';
 
 @Component({
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
-  styleUrl: './my-tasks.component.css',
-  providers: [DatePipe], // Provide DatePipe here
+  styleUrls: ['./my-tasks.component.css'],
+  providers: [DatePipe], 
   animations: [
     trigger('popFromSide', [
       transition(':enter', [
@@ -35,18 +36,25 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 
 export class MyTasksComponent implements OnInit {
-  tasks: ProjectTask[] = [];
+  [x: string]: any;
+  new_tasks: ProjectTask[] = [];
+  soon_tasks: ProjectTask[] = [];
+  closed_tasks: ProjectTask[] = [];
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
   TaskStatus: any;
   static showPopUp: boolean;
+  userId=localStorage.getItem('id');
+
 
   constructor(
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
     private shared: SharedService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private sharedService:SharedService
   ) {}
 
   closePopup() {
@@ -55,34 +63,23 @@ export class MyTasksComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.spinner.show();
-    const userId = localStorage.getItem('id');
+    this.sharedService.taskUpdated.subscribe(() => {
+      this.loadTasks();  
+    });
+    this.loadTasks();
 
-    if (userId !== null) {
-    const t=this.myTasksService
-      .GetTasksByUserId(userId)
-      .subscribe((tasks: ProjectTask[]) => {
-        this.tasks = tasks;
-        this.spinner.hide();
-      });
-    } else {
-      console.error('User ID is null');
-      this.spinner.hide();
-    }
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
     event.stopPropagation(); 
-    const row = document.querySelector('.red') as HTMLElement;
     this.myTasksService
-      .GetProjectTaskById(taskId)
+      .GetProjectTask(taskId,this.userId)
       .subscribe((task: ProjectTask) => {
         if (
           this.clickedTask &&
           this.clickedTask.id === taskId &&
           this.showPopUp
         ) {
-          row.style.backgroundColor = '';
           this.showPopUp = false;
           this.clickedTask = null;
           this.shared.current_task_id = null;
@@ -94,58 +91,57 @@ export class MyTasksComponent implements OnInit {
       });
   }
 
-  //   toggleTaskCompletion(event: any, task: ProjectTask): void {
-  //     event.stopPropagation();
-  //     if (event.target.checked) {
-  //       this.previousTaskStatus = task.taskStatusId;
-  //       task.taskStatusId = TaskStatus.Completed;
-  //     } else {
-  //       if (this.previousTaskStatus !== null) {
-  //         task.taskStatusId = this.previousTaskStatus;
-  //         this.previousTaskStatus = null;
-  //       } else {
-  //         task.taskStatusId = TaskStatus.InProgress;
-  //       }
-  //     }
-  //     // Update the task status on the server
-  //     this.myTasksService.updateTaskStatus(task.id, task).subscribe(
-  //       (updatedTask: ProjectTask) => {
-  //         // Optionally, handle the updated task response from the server
-  //         console.log('Task status updated successfully:', updatedTask);
-  //       },
-  //       (error: any) => {
-  //         // Handle any errors that occur during the update process
-  //         // console.error('Error updating task status:', error);
-  //       }
-  //     );
-  // }
-  handleTaskUpdate(updatedTask: ProjectTask): void {
-    const index = this.tasks.findIndex((task) => task.id === updatedTask.id);
-    if (index !== -1) {
-      this.tasks[index] = updatedTask;
-      this.clickedTask = updatedTask;
-      this.cdr.detectChanges();
+
+  loadTasks(): void {
+    this.spinner.show();
+
+    if (this.userId !== null) {
+    this.myTasksService
+      .GetNewTasksByUserId(this.userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.new_tasks = tasks;
+        this.spinner.hide();
+      });
+    this.myTasksService
+      .GetSoonTasksByUserId(this.userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.soon_tasks = tasks;
+        this.spinner.hide();
+      });
+    this.myTasksService
+      .GetClosedTasksByUserId(this.userId,5)
+      .subscribe((tasks: ProjectTask[]) => {
+        this.closed_tasks = tasks;
+        this.spinner.hide();
+      });
+    } else {
+      console.error('User ID is null');
+      this.spinner.hide();
     }
+    this.cdr.detectChanges();
   }
+
+  
+  
   sortOrder: 'asc' | 'desc' = 'asc';
 
   sortTasks() {
-    if (this.sortOrder === 'asc') {
-      this.tasks.sort((a, b) => {
-        const endDateA = new Date(a.endDate).getTime();
-        const endDateB = new Date(b.endDate).getTime();
-        return endDateA - endDateB;
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+
+    this.spinner.show();
+    this.myTasksService.sortTasksByDueDate(this.userId,this.sortOrder)
+      .subscribe({
+        next: (sortedTasks: ProjectTask[]) => {
+          this.closed_tasks = sortedTasks;
+          this.spinner.hide();
+        },
+        error: (error: any) => {
+          console.error('Error sorting tasks:', error);
+          this.spinner.hide();
+        }
       });
-      this.sortOrder = 'desc';
-    } else {
-      this.tasks.sort((a, b) => {
-        const endDateA = new Date(a.endDate).getTime();
-        const endDateB = new Date(b.endDate).getTime();
-        return endDateB - endDateA;
-      });
-      this.sortOrder = 'asc';
-    }
-  }
+}
+
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -156,7 +152,139 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
-  isTasksEmpty(status: string): boolean {
-    return this.tasks.filter(task => task.statusName === status).length === 0;
+  isNewTasksEmpty(): boolean {
+    return this.new_tasks.length === 0;
   }
+  isSoonTasksEmpty(): boolean {
+    return this.soon_tasks.length === 0;
+  }
+  isClosedTasksEmpty(): boolean {
+    return this.closed_tasks.length === 0;
+  }
+
+  LoadNewTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+    this.myTasksService
+      .GetNewTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.new_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
+  }
+  LoadSoonTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+      this.myTasksService
+      .GetSoonTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.soon_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
+  }
+  LoadClosedTasks(event:Event):void{
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.spinner.show();
+
+    if (this.userId !== null) {
+      this.myTasksService
+      .GetClosedTasksByUserId(this.userId,parseInt(selectedValue))
+      .subscribe((tasks: ProjectTask[]) => {
+        this.closed_tasks = tasks;
+        this.spinner.hide();
+      });
+    }
+  }
+
+  isOverdue(endDate: Date): boolean {
+    const now = new Date().getTime(); 
+    const endDateTimestamp = new Date(endDate).getTime(); 
+    return endDateTimestamp <= now; 
+  }
+
+  
+  goToProject(project: Project): void {
+    this.router.navigate(['/project', project.id]);
+  }
+
+  sortTasksByName(tasks: ProjectTask[]) {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+  
+    tasks.sort((a, b) => {
+      const nameA = a.taskName.toLowerCase();
+      const nameB = b.taskName.toLowerCase();
+  
+      if (nameA < nameB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  sortTasksByProjectName(tasks: ProjectTask[]) {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+  
+    tasks.sort((a, b) => {
+      const nameA = a.project.projectName.toLowerCase();
+      const nameB = b.project.projectName.toLowerCase();
+  
+      if (nameA < nameB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  sortTasksBySectionName(tasks: ProjectTask[]) {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+  
+    tasks.sort((a, b) => {
+      const nameA = a.sectionName.toLowerCase();
+      const nameB = b.sectionName.toLowerCase();
+  
+      if (nameA < nameB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  sortTasksByDueDate(tasks: ProjectTask[]) {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+  
+    tasks.sort((a, b) => {
+      const dateA = new Date(a.endDate);
+      const dateB = new Date(b.endDate);
+  
+      if (dateA < dateB) {
+        return this.sortOrder === 'asc' ? -1 : 1;
+      }
+      if (dateA > dateB) {
+        return this.sortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
+  //~maksim
+  openTaskPopup(taskId: number): void {
+    this.myTasksService.GetProjectTask(taskId, this.userId)
+      .subscribe((task: ProjectTask) => {
+        this.clickedTask = task;
+        this.showPopUp = true;
+      });
+  }
+  
 }

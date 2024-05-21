@@ -1,74 +1,155 @@
-<body>
-  <div class="container-xxl">
-    <div class="card" style="padding: 3%;">
-      <div class="d-flex align-items-start align-items-sm-center">
-        <div id="account_banner">
-          <div id="photo_wrap">
-            <img id="profile_photo"[src]="url"(click)="inputClick.click()">
-            <img id="overlay_photo"src="../../../assets/profile_photo_placeholders/change_photo.jpg" (click)="inputClick.click()">
-          </div>
-          <div class="fullname">
-            <span id="rolename">{{role}}</span><br>
-            <span id="full_name">{{userInfo?.firstName}} {{userInfo?.lastName}}</span>
-          </div>
-          <input #inputClick type="file" style="display: none;" (change)="imageSelected($event)" accept="image/*">
+<div class="container-xxl">
+  <div class="card" style="padding: 3%;">
+    <div class="d-flex align-items-start align-items-sm-center tContainer">
+      <div id="account_banner">
+        <div id="photo_wrap">
+          <img *ngIf="userInfo?.profilePicUrl" id="profile_photo"[src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
+          <ngx-avatars *ngIf="!userInfo?.profilePicUrl" size="130" bgColor="#5d57c2" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
+          <img
+            class="overlay"
+            src="../../../assets/profile_photo_placeholders/change_photo.jpg"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" *ngIf="userInfo?.profilePicUrl" >View</button></li>
+            <li><button class="dropdown-item" (click)="inputClick.click()">
+              <span *ngIf="userInfo?.profilePicUrl">Change</span>
+              <span *ngIf="!userInfo?.profilePicUrl">Upload</span></button>
+            </li>
+            <li><button class="dropdown-item" (click)="removeImageModal(removalModal)" [disabled]="userInfo?.profilePicUrl==null">Remove</button></li>
+          </ul>
         </div>
-        <div id="user_info" *ngIf="userInfo">
-          <h5>Details</h5>
-          <div>
-            First name: {{userInfo?.firstName}}<br>
-            Last name: {{userInfo?.lastName}}<br>
-            Email: {{userInfo?.email}}<br>
-            Role: {{role}}<br>
+        <div class="fullname">
+          <span id="rolename">{{role}}</span>
+          <!-- <span id="full_name">{{userInfo?.firstName}} {{userInfo?.lastName}}</span> -->
+        </div>
+        <input #inputClick type="file" style="display: none;" (change)="onImageSelected($event,cropperModal)" accept="image/*">
+      </div>
+      <div id="user_info" *ngIf="userInfo">
+        <!-- <h5>Details</h5> -->
+        <div class="tUserInfo">
+          <div class="InfoWrap">
+            <div class="tInfoCategory">First name:</div>
+            <div class="tInfo">{{userInfo?.firstName}}</div>
+          </div>
+          <div class="InfoWrap">
+            <div class="tInfoCategory">Last name:</div>
+            <div class="tInfo">{{userInfo?.lastName}}</div>
+          </div>
+          <div class="InfoWrap">
+            <div class="tInfoCategory">Email:</div>
+            <div class="tInfo">{{userInfo?.email}}</div>
+          </div>
+          <div class="InfoWrap">
+            <div class="tInfoCategory">Role:</div>
+            <div class="tInfo">{{role}}</div>
           </div>
         </div>
-        <div id="clear"></div>
+      </div>
+      <div id="clear"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top: 2%; padding: 3%;">
+    <h5>Change Password</h5>
+    <div id="alert_div">
+      <div id="warning_div">
+        Ensure that these requirements are met:<br>
+        Minimum 5 characters long , one uppercase letter and symbol.
+      </div>
+      <div id="success_div">
+        Password changed successfully!
       </div>
     </div>
-    <div class="card" style="margin-top: 2%; padding: 3%;">
-      <h5>Change Password</h5>
-      <div id="alert_div">
-        <div id="warning_div">
-          Ensure that these requirements are met:<br>
-          Minimum 8 characters long , one uppercase letter and symbol.
+    <div id="inputs">
+      <div class="mb-3 form-password-toggle">
+        <div class="d-flex justify-content-between">
+          <label class="form-label tPassLabel" for="password">Current Password</label>
         </div>
-        <div id="success_div">
-          Password changed successfully!
-        </div>
+          <div class="input-group input-group-merge">
+            <input style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="Enter Current Password"/>
+          </div>
       </div>
-      <div id="inputs">
-        <div class="mb-3 form-password-toggle">
-          <div class="d-flex justify-content-between">
-            <label class="form-label" for="password">Current Password</label>
+      <div class="mb-3 form-password-toggle">
+        <div class="d-flex justify-content-between">
+          <label class="form-label tPassLabel" for="password">New Password</label>
         </div>
-            <div class="input-group input-group-merge">
-              <input type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
-            </div>
+          <div class="input-group input-group-merge">
+            <input style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="Enter New Password"/>
+          </div>
+      </div>
+      <div class="mb-3 form-password-toggle">
+        <div class="d-flex justify-content-between">
+          <label class="form-label tPassLabel" for="password">Confirm New Password</label>
         </div>
-        <div class="mb-3 form-password-toggle">
-          <div class="d-flex justify-content-between">
-            <label class="form-label" for="password">New Password</label>
-        </div>
-            <div class="input-group input-group-merge">
-              <input type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
-            </div>
-        </div>
-        <div class="mb-3 form-password-toggle">
-          <div class="d-flex justify-content-between">
-            <label class="form-label" for="password">Confirm New Password</label>
-        </div>
-            <div class="input-group input-group-merge">
-              <input type="password" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
-              confirmpass !== newData.NewPassword &&
-              confirmpass !== ''"
-              placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"/>
-            </div>
-        </div>
-        <!-- Submit button -->
-        <div class="mb-3">
-          <button class="btn btn-primary d-grid" type="submit" [disabled]="!passwordMatch()" (click)="apply_changes()">Change Password</button>
-        </div>
+          <div class="input-group input-group-merge">
+            <input style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="confirmpass" #confirmPasswordInput="ngModel" [(ngModel)]="confirmpass" [class.is-invalid]="
+            confirmpass !== newData.NewPassword &&
+            confirmpass !== ''"
+            placeholder="Confirm New Password"/>
+          </div>
+      </div>
+      <!-- Submit button -->
+      <div class="mb-3">
+        <button class="btn btn-primary d-grid" type="submit" [disabled]="!passwordMatch()" (click)="apply_changes()">Change Password</button>
       </div>
     </div>
   </div>
-</body>
+</div>
+<ng-template #cropperModal style="text-align:center;">
+  <div class="modal-header">
+    <h5 class="modal-title pull-left">Please crop your photo</h5>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="padding: 0;">
+    <image-cropper style="padding: 0;"
+    [imageChangedEvent]="imgChangeEvt"
+    [maintainAspectRatio]="true"
+    [aspectRatio]="4 / 4"
+        [resizeToWidth]="256"
+        format="png"
+        (imageCropped)="cropImg($event)"
+        (imageLoaded)="imgLoad()"
+        (cropperReady)="initCropper()"
+        (loadImageFailed)="imgFailed()">
+    </image-cropper>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary d-grid w-100" (click)="uploadCroppedImage()"> Confirm</button>
+  </div>
+</ng-template>
+
+<ng-template #removalModal class="modal-nody" style="padding:0;">
+  <div class="card">
+    <div class="card-header tRemoveModalHeader"><h4 style="font-size: 20px;">Remove your profile photo?</h4></div>
+    <div class="card-body tRemoveButtons" style="align-items: center; display: flex; gap: 5px;">
+      <div>
+        <button class="btn btn-outline-primary tCancelRemove" (click)="removeModalRef?.hide()">Cancel</button>
+      </div>
+      <div>
+        <button class="btn btn-primary"(click)="this.removeImage()">Remove</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #viewModal class="modal-body" style="padding:0">
+  <div class="modal-header">
+    <h5 class="modal-title">Profile Picture</h5>
+  </div>
+  <div class="modal-body">
+    
+    <img *ngIf="userInfo.profilePicUrl" [src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
+    <!-- saljem request da bi prikazao sliku u full kvalitetu... -->
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary d-grid w-100" (click)="viewModalRef?.hide()">Close</button>
+  </div>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

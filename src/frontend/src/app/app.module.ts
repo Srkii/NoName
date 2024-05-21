@@ -1,3 +1,4 @@
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -6,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RegisterComponent } from './Components/register/register.component';
 import { LoginComponent } from './Components/login/login.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { UserInfoComponent } from './Components/user-info/user-info.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { AdminComponent } from './Components/admin/admin.component';
@@ -24,6 +25,22 @@ import { PopupComponent } from './Components/popup/popup.component';
 import { KanbanComponent } from './Components/kanban/kanban.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GanttComponent } from './Components/gantt/gantt.component';
+import { ProjectCardComponent } from './Components/project-card/project-card.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { AvatarModule } from 'ngx-avatars';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NotificationsComponent } from './Components/notifications/notifications.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { GANTT_GLOBAL_CONFIG, NgxGanttModule } from '@worktile/gantt';
+import { LandingPageComponent } from './Components/landing-page/landing-page.component';
+import { TooltipModule } from 'primeng/tooltip';
+import { CalendarModule } from 'primeng/calendar';
+import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
+import { fr } from 'date-fns/locale';
+const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
 
 @NgModule({
   declarations: [
@@ -41,7 +58,11 @@ import { GanttComponent } from './Components/gantt/gantt.component';
     ProjectDetailComponent,
     FileUploadComponent,
     KanbanComponent,
-    GanttComponent
+    GanttComponent,
+    ProjectCardComponent,
+    NotificationsComponent,
+    LandingPageComponent,
+    CustomToastComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,10 +75,36 @@ import { GanttComponent } from './Components/gantt/gantt.component';
       positionClass: 'toast-bottom-right',
     }),
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
-    DragDropModule
+    DragDropModule,
+    ModalModule.forRoot(),
+    MatDatepickerModule,
+    MultiSelectModule,
+    NgSelectModule,
+    AvatarModule.forRoot({
+      colors: avatarColors
+    }),
+    ButtonsModule.forRoot(),
+    ImageCropperModule,
+    NgxGanttModule,
+    TooltipModule,
+    CalendarModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [provideAnimationsAsync()],
+  providers: [
+    DatePipe,
+    provideAnimationsAsync(),
+    {
+      provide: GANTT_GLOBAL_CONFIG,
+      useValue: {
+        dateOptions: {
+             locale: fr,
+             weekStartsOn: 1
+        }
+      }
+    },
+
+  ],
   bootstrap: [AppComponent],
+  
 })
 export class AppModule {}

@@ -1,52 +1,130 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, Output, EventEmitter, HostListener, ViewChild, ElementRef, Renderer2  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { TaskAssignee } from '../../Entities/TaskAssignee';
+import { MyProjectsService } from '../../_services/my-projects.service';
+import { UploadService } from '../../_services/upload.service';
+import { NewTask } from '../../Entities/NewTask';
+import { SharedService } from '../../_services/shared.service';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
-  styleUrl: './kanban.component.css'
+  styleUrl: './kanban.component.css',
+  animations: [
+    trigger('popFromSide', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'translateX(50%)',
+        }),
+        animate('300ms ease-out', style({
+          opacity: 1,
+          transform: 'translateX(0)',
+        })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({
+          opacity: 0,
+          transform: 'translateX(50%)',
+        })),
+      ]),
+    ]),
+  ],
 })
 export class KanbanComponent implements OnInit{
   tasks: any[] = [];
   taskStatuses: any[] = [];
   tasksBySection: { [key: string]: ProjectTask[] } = {};
   taskStatusNames: string[] = [];
+  modalRef?: BsModalRef;
+  newSectionName: string = '';
+  currentProjectId: number | null = null;
+  newSectionColor: string = '#ffffff'; // default boja
+
+  // Section koji ce biti obrisan
+  currentSectionName: string = '';
+  currentSectionId: number | null = null;
+
+  
+  selectedArchivedTasks: any[] = [];
+
+  userId: number = -1;
+  clickedTask: ProjectTask | null = null;
+  showPopUp: boolean = false;
+  task!: ProjectTask;
+
+  users: TaskAssignee[] = [];
+  selectedUser: TaskAssignee | undefined;;
+  filterValue: string | undefined = '';
+
+  @Output() sectionChanged = new EventEmitter<boolean>();
 
   constructor(
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
-    private myTasksService: MyTasksService
-  ) {}
+    private myTasksService: MyTasksService,
+    private modalService: BsModalService,
+    private myProjectsService: MyProjectsService,
+    public uploadservice: UploadService,
+    private shared: SharedService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.GetTaskStatuses();
+    this.shared.taskUpdated.subscribe(() => {
+      this.loadTasksAndUsers();  // Reload tasks and users
+    });
+    this.populateTasks();
+    if (this.currentProjectId !== null) {
+      this.getProjectsUsers(this.currentProjectId);
+    }
+    this.spinner.hide();
+    this.shared.taskAdded$.subscribe(success => {
+      if (success) {
+          this.populateTasks();  // Reload tasks
+      }
+    });
+  }
 
+  loadTasksAndUsers():void{
+    this.spinner.show();
+    this.populateTasks();
+    if (this.currentProjectId !== null) {
+      this.getProjectsUsers(this.currentProjectId);
+    }
+    this.spinner.hide();
+  }
+
+  populateTasks() {
     const projectId = this.route.snapshot.paramMap.get('id');
-    if (projectId) {
-      this.myTasksService.GetTasksByProjectId(+projectId).subscribe((tasks) => {
+    this.currentProjectId = projectId ? +projectId : null;
+    this.GetTaskStatuses();
+    if (this.currentProjectId) {
+      this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) => {
         this.tasks = tasks;
         this.groupTasksByStatus();
       });
     }
-    
-    this.spinner.hide();
   }
 
   GetTaskStatuses() {
-    const projectId = this.route.snapshot.paramMap.get('id');
-    if (projectId) {
-      this.myTasksService.GetTaskStatuses(+projectId).subscribe((statuses) => {
+    if (this.currentProjectId) {
+      this.myTasksService.GetTaskStatuses(this.currentProjectId).subscribe((statuses) => {
         this.taskStatuses = statuses;
         this.taskStatuses.sort((a, b) => a.position - b.position);
       });
     }
   }
-  
+
   groupTasksByStatus() {
     this.tasksBySection = this.tasks.reduce((acc, task) => {
       const statusName = task.statusName;
@@ -64,11 +142,12 @@ export class KanbanComponent implements OnInit{
   }
 
   drop(event: CdkDragDrop<ProjectTask[]>) {
-    // mozda zatreba
-    // if (!event.previousContainer.data || !event.container.data) {
-    //   console.warn('Drag and drop data is not ready.');
-    //   return;
-    // }
+    // kad nece da prevuce ukoliko se odmah nakon pokretanja servera zabaguje
+    // samo prvo prevlacenje nece da radi. sledece hoce
+    if (!event.previousContainer.data || !event.container.data) {
+      this.populateTasks();
+      return;
+    }
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -81,7 +160,7 @@ export class KanbanComponent implements OnInit{
       if (task && newStatus) {
         task.taskStatusId = newStatus.id;
         this.myTasksService.updateTicoTaskStatus(task.id, task).subscribe();
-      }                        
+      }
     }
   }
 
@@ -99,4 +178,83 @@ export class KanbanComponent implements OnInit{
       this.GetTaskStatuses();
     });
   }
+  openDeleteStatusModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
+    this.currentSectionName = sectionName;
+    this.currentSectionId = sectionId;
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: 'modal-sm modal-dialog-centered'
+      });
+  }
+  openSimpleModal(modal: TemplateRef<void>, modalSize: string) {
+    let modalClass = '';
+    if(modalSize === 'newBoard')
+      modalClass = 'modal-sm modal-dialog-centered';
+    else if (modalSize === 'newTask' || modalSize === 'archivedTasks')
+    modalClass = 'modal-lg modal-dialog-centered';
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: modalClass
+      });
+    this.tasksBySection['Archived'].forEach(task => task.selected = false); // resetuj task.selection chekbox u remove arch tasks
+  }
+  deleteBoardFunction() {
+    if (this.currentSectionId === null) {
+      console.error('Section ID is null');
+      return;
+    }
+    this.myTasksService.deleteTaskStatus(this.currentSectionId).subscribe({
+      next: () => {
+        this.modalRef?.hide();
+        this.sectionChanged.emit(true);
+        this.populateTasks();
+      },
+      error: (error) => console.error('Error deleting section:', error)
+    });
+  }
+  saveNewBoard() {
+    if (this.currentProjectId === null) {
+      console.error('Project ID is null');
+      return;
+    }
+    const taskStatus = {
+      statusName: this.newSectionName,
+      projectId: this.currentProjectId,
+      color: this.newSectionColor
+    };
+    this.myTasksService.addTaskStatus(taskStatus).subscribe({
+      next: () => {
+        this.modalRef?.hide(); // za skrivanje modala
+        this.newSectionName = '';
+        this.newSectionColor = '#ffffff';
+        this.sectionChanged.emit(true);
+        this.populateTasks();
+      },
+      error: (error) => this.toastr.error(error.error)
+    });
+  }
+
+  
+
+  // vraca AppUsers koji su na projektu
+  getProjectsUsers(currentProjectId: number) {
+    this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
+      next: response => {
+        this.users = response,
+        this.users.forEach(user => {
+          user.fullName = user.firstName + ' ' + user.lastName;
+        });
+      },
+      error: error => console.log(error)
+    });
+  }
+  
+
+  onTaskClick(event: MouseEvent, taskId: number) {
+    event.stopPropagation(); 
+    this.shared.triggerPopup(event, taskId);
+  }
+
 }

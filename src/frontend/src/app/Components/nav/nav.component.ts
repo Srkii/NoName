@@ -1,8 +1,11 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
-import { AppUser } from '../../Entities/AppUser';
-
+import { NotificationsService } from '../../_services/notifications.service';
+import { Notification } from '../../Entities/Notification';
+import { UploadService } from '../../_services/upload.service';
+import { filter } from 'rxjs';
+import { ThemeServiceService } from '../../_services/theme-service.service';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -10,15 +13,34 @@ import { AppUser } from '../../Entities/AppUser';
 })
 export class NavComponent implements OnInit {
 
-  constructor(private router: Router,private userInfo:UserinfoService) {}
+  constructor(
+    private router: Router,
+    private userInfo:UserinfoService, 
+    public uploadService:UploadService,
+    public notificationService:NotificationsService,
+    private themeService: ThemeServiceService
+    ) { }
+
   ngOnInit(): void {
     this.isAdmin()
-    this.getUser()
+    if(localStorage.getItem('token')) { // proveri dal token postoji
+      this.getUser();
+      this.notificationService.createHubConnection();
+    }
+    this.navigation();
   }
   admin!: boolean
   logovan!: boolean
-
   user!:any
+
+  imgFlag: boolean=false;
+  notification_list:any;
+
+  isMyProjectsActive: boolean = false;
+
+  changeTheme() {
+    this.themeService.switchTheme();
+  }
 
   async Logout(): Promise<void> {
     try {
@@ -28,6 +50,7 @@ export class NavComponent implements OnInit {
       localStorage.removeItem('role');
 
       // Navigate to the login page
+      this.notificationService.stopHubConnection();
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('redirect failed:', error);
@@ -44,14 +67,24 @@ export class NavComponent implements OnInit {
 
   getUser(): void{
     var id=localStorage.getItem('id')
-    this.userInfo.getUserInfo2(id).subscribe({
-      next:(response)=>{
-        this.user=response;
-      },error:(error)=>{
-        console.log(error)
-      }
-      
-    })
+    if(id){
+      this.userInfo.getUserInfo2(id).subscribe({
+        next:(response)=>{
+          this.user=response;
+        }
+      })
+    }
   }
 
+  redirectToMyTasks(): void {
+    this.router.navigate(['/mytasks']);
+  }
+
+  navigation():void{
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((NavigationEnd) => {
+      this.isMyProjectsActive = this.router.url.includes('/myprojects') || this.router.url.includes('/project/');
+    });
+  }
 }

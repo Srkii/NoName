@@ -9,9 +9,36 @@ body {
 }
 .toast-error {
   background-color: #696cff;
+  border-radius: 0.375rem;
 }
 .toast-success {
   background-color: #696cff;
+  border-radius: 0.375rem;
 }
-html, body { height: 100%; }
+/* html, body { height: 100%; } */
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* modal na kanbanu ; jedino ovde hoce da ga overwrite */
+.modal-content {
+  border: 0px !important;
+}
+.modal-body {
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
+}
+.modal-header {
+  padding-top: 5px;
+  padding-bottom: 1px;
+}
+.projectInfoModal{
+  height: 25rem;
+}
+.MemberManagmentModel{
+  height: auto;
+}
+.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
+  border: 1px solid #ccc !important;
+  box-shadow: none !important;
+}
+.ng-input > input {color: #697a8d !important;}

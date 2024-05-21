@@ -1,10 +1,12 @@
+import { ApiUrl } from './../../ApiUrl/ApiUrl';
 import { UploadService } from '../../_services/upload.service';
-import { Component, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, TemplateRef} from '@angular/core';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { ChangePassword } from '../../Entities/ChangePassword';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
+import { CustomToastService } from '../../_services/custom-toast.service';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -16,24 +18,31 @@ export class UserInfoComponent implements OnInit {
   public newpas="";
   public confirmpass="";
   public role:any;
-  public profilePic:any;
-  public defaulturl="../../../assets/profile_photo_placeholders/1234.png";
-  public url="../../../assets/profile_photo_placeholders/1234.png";
+
+  isDropdownOpen = false;
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
   newData: ChangePassword = {
     CurrentPassword:""
   }
 
-  constructor(private userinfoService: UserinfoService, private router: Router,private uploadservice:UploadService, private spinner:NgxSpinnerService) {}
-  visibility_change(type:string,div:any){
-    if(div!=null) div.style.display = type;
-  }
+  constructor(
+    private userinfoService: UserinfoService,
+    public uploadService:UploadService,
+    private spinner:NgxSpinnerService,
+    private modalService:BsModalService,
+    ) {}
 
   ngOnInit(){
     this.spinner.show();
     this.UserInfo();
     this.spinner.hide();
   }
-  
+
+
+
   UserInfo(){
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token')
@@ -41,21 +50,7 @@ export class UserInfoComponent implements OnInit {
       this.userinfoService.getUserInfo(id,token).subscribe({
         next: (response) =>{
           this.userInfo = response;
-          console.log(response);
-          if(response.profilePicUrl!=null)
-          {
-            this.uploadservice.getImage(response.profilePicUrl)
-            .subscribe(response => {
-              const reader = new FileReader();
-              reader.readAsDataURL(response);
-              reader.onloadend = () =>{
-                this.url = reader.result as string;
-              };
-            },
-            error=>{
-              console.error("Error loading image",error);
-            });
-          }
+          // console.log(response);
           if(this.userInfo.role == 2){
             this.role="Project manager";
           }else if(this.userInfo.role == 1){
@@ -63,26 +58,26 @@ export class UserInfoComponent implements OnInit {
           }else this.role="Admin";
         },
         error: (error) => {
-          console.log(error);
-          console.log("GET USER INFO FAILED");
+          // console.log(error);
+          // console.log("GET USER INFO FAILED");
         }
       });
     }else {
       console.error("Token not found in local storage");
     }
+
   }
   passwordMatch(): boolean {
     return this.newData.NewPassword === this.confirmpass;
   }
 
   apply_changes(){
-    console.log("applying changes...");
     var id= Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
     this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
       next: (response) => {
-        console.log(response);
-        console.log("change info successful!");
+        // console.log(response);
+        // console.log("change info successful!");
         var succ = document.getElementById("success_div")
         if(succ) succ.style.display='block';
         var base = document.getElementById("warning_div");
@@ -94,36 +89,90 @@ export class UserInfoComponent implements OnInit {
         }
       },
       error: (error)=>{
-        console.log(error);
-        console.log("change info failed.");
+        // console.log(error);
+        // console.log("change info failed.");
       }
     });
   }
 
+  imgChangeEvt: any = '';
+  cropImgPreview: any = '';
+  imageName: any = '';
+  modalRef?:BsModalRef;
+  removeModalRef?:BsModalRef;
+  viewModalRef?:BsModalRef;
+  onImageSelected(event: any,modal:TemplateRef<void>): void {
+      this.imgChangeEvt = event;
+      this.imageName = event.target.files[0].name.split('.')[0];
+      this.modalRef = this.modalService.show(
+        modal,
+        {
+          class:'modal-face modal-sm modal-dialog-centered',
+        }
+      )
+  }
+  cropImg(event: ImageCroppedEvent) {
+    this.cropImgPreview = event.blob;
+  }
 
-  imageSelected(event:any){
-    const imageData:File = event.target.files[0];
+  imgLoad() {
+      // display cropper tool
+  }
 
-    if(imageData != null){
-      if(imageData && imageData.type.startsWith('image/')){
-        var id = Number(localStorage.getItem('id'));
-        var token = localStorage.getItem('token');
-        this.uploadservice.UploadImage(id,imageData,token).subscribe({
-          next: (response) => {
-            console.log("RESPONSE",response);
-            location.reload();
-          },
-          error: (error) =>{
-            console.log(error);
-          }
-        });
+  initCropper() {
+      // init cropper
+  }
+
+  imgFailed() {
+      // error msg\
+      // console.log("crop failed...");
+  }
+  uploadCroppedImage(){
+    this.spinner.show();
+    var id = localStorage.getItem('id');
+    var token = localStorage.getItem('token');
+    var imageFile =  new File([this.cropImgPreview],id+"-"+this.imageName+'-userimg.png',{type: 'image/png'});
+    this.uploadService.UploadImage(id,imageFile,token).subscribe({
+      next: (response) => {
+        // console.log('Image uploaded successfully', response);
+        this.spinner.hide();
+        location.reload();
+      },
+      error: (error) => {
+        // console.error('Error uploading image', error);
       }
-      else{
-        console.log("file uploaded is not an image.");
+    });
+
+  }
+  removeImageModal(modal:TemplateRef<void>):void{
+    this.removeModalRef = this.modalService.show(
+      modal,
+      {
+        class:'modal-face modal-sm modal-dialog-centered',
       }
-    }
-    else{
-      console.log("no image data.");
-    }
+    )
+  }
+  viewImageModal(modal:TemplateRef<void>):void{
+    this.viewModalRef = this.modalService.show(
+      modal,
+      {
+        class:'modal-face modal-sm modal-dialog-centered',
+      }
+    )
+  }
+  removeImage(){
+    this.removeModalRef?.hide();
+    this.spinner.show();
+    var id = localStorage.getItem('id');
+    var token = localStorage.getItem('token');
+    this.uploadService.removePfp(id,token).subscribe({
+      next: () => {
+        this.spinner.hide();
+        location.reload();
+      },
+      error: (error) => {
+        // console.error(error);
+      }
+    });
   }
 }

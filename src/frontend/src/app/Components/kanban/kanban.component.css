@@ -1,20 +1,27 @@
-.board-name {
-    font-size: 20px;
-    font-weight: bold;
-}
-.add-task {
-    background-color: rgb(247, 244, 244) !important;
-    cursor: pointer;
+* {
+    font-family: 'Public Sans', sans-serif;
 }
 .board {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    margin-top: 50px;
+    margin-top: 20px;
     min-width: 0;
     min-height: 0;
 }
 
+/* primeng dropdown  */
+.chooseAssignee {
+    display: flex;
+    flex-direction: column;
+}
+.user-item-image img{
+    width: 20px !important;
+    height: 20px !important;
+}
+.user-item {
+    display: flex;
+}
 .board-wrapper {
     display: flex;
     flex-grow: 1;
@@ -22,7 +29,83 @@
     flex-wrap: nowrap;
 }
 
-/* scrollbar ukoliko ima previse sekcija za statuse */
+.user-item-image {
+    margin-right: 5px !important;
+}
+.user-item img {
+    height: 25px !important;
+    width: 25px !important;
+}
+::ng-deep .p-inputwrapper-focus {
+    outline: none;
+    border: 0px solid #5f61e6 !important; 
+    box-shadow: none;
+}
+.ngAvtr {
+    font-family: 'Public Sans', sans-serif;
+}
+::ng-deep .p-dropdown {
+    width: 100%;
+    font-family: 'Public Sans', sans-serif;
+    border-radius: 0.375rem !important;
+}
+/* ::ng-deep .p-dropdown:focus {
+    border: 1px solid #5f61e6 !important; 
+    border-radius: 0.5 rem !important;
+} */
+::ng-deep .p-dropdown-label {
+    width: calc(100% - 2em);
+    font-family: 'Public Sans', sans-serif; 
+}
+
+::ng-deep .p-dropdown-items{
+    padding: 0 !important;
+    margin-bottom: 0px !important;
+    font-family: 'Public Sans', sans-serif;
+}
+::ng-deep .p-inputwrapper-focus {
+    outline: none;
+    border: 1px solid #5f61e6 !important; 
+    border-radius: 0.375rem !important;
+    border-collapse: collapse;
+    box-shadow: none;
+}
+.nameAvatar {
+    margin-right: 5px !important;
+}
+.boardAvatar {
+    margin-left: 5px !important;
+}
+.ng-select.asigneeDropdown ::ng-deep .ng-select-container{
+    border-radius: 0.375rem !important;
+}
+
+::ng-deep .ng-select-focused {
+    box-shadow: none;
+}
+::ng-deep .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+    border: 1px solid #5f61e6 !important;
+    box-shadow: none;
+}
+::ng-deep .ng-select.ng-select-focused > .ng-select-container {
+    border: 1px solid #5f61e6 !important;
+    box-shadow: none;
+}
+
+::ng-deep .ng-option-marked {
+    background-color: #F5F5F9 !important;
+}
+::ng-deep .ng-option-selected {
+    background-color: #a8a9f0 !important;
+}
+::ng-deep .ng-dropdown-panel {
+    background-color: #9a9cec !important;
+    border-top: 0px !important;
+}
+.btn-save-task {
+    margin-top: 15px;
+}
+
 .board-wrapper::-webkit-scrollbar {
     background-color: #F5F5F9;
     width: 16px;
@@ -42,12 +125,40 @@
     display:none;
 }
 
-.new-status {
+.add-task {
     margin-top: 10px !important;
     margin-left: 30px;
     cursor: pointer;
 }
-
+.new-items {
+    display: flex;
+    flex-direction: column;
+}
+.new-item {
+    margin: 10px !important;
+    margin-left: 30px !important;
+    cursor: pointer;
+    width: 150px;
+    border-radius: 0.375rem;
+    border-bottom: 2px solid #D7D7F8;
+}
+.new-item:hover {
+    border-bottom: 2px solid #696cff;
+}
+.archTasks {
+    margin: 10px !important;
+    margin-left: 30px !important;
+    cursor: pointer;
+    width: 185px;
+    border-radius: 0.375rem;
+    border-bottom: 2px solid #D7D7F8;
+}
+.new-items svg {
+    margin-right: 5px;
+}
+.archTasks:hover {
+    border-bottom: 2px solid #696cff;
+}
 .card {
     /* background-color: rgb(230, 224, 224); */
     display: flex;
@@ -61,7 +172,7 @@
     margin: 15px;
     margin-top: 0px !important;
     margin-left: 3px !important;
-    border-radius: 0.5rem;
+    border-radius: 0.375rem;
 
     box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
     border: 0px solid #d9dee3;
@@ -79,9 +190,15 @@
     font-weight: 400;
     /* text-transform: uppercase; */
     /* margin-bottom: 10px; */
-    text-align: center;
+    /* text-align: center; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     height: 25px;
     padding: 1px !important;
+    padding-left: 15px !important;
+    padding-top: 4px !important;
+    padding-right: 5px !important;
     /* color: #fff; */
     border: 0px solid #d9dee3;
     background-clip: border-box;
@@ -96,7 +213,7 @@
     padding: 0px;
     background: rgb(247, 244, 244);
     /* border-bottom: solid 1px #ddd; */
-    border-radius: 0.5rem;
+    border-radius: 0.375rem;
     margin-bottom: 15px;
     margin-top: 15px !important;
     margin-left: 15px !important;
@@ -121,10 +238,11 @@
 }
 .cdk-drag-preview {
     box-sizing: border-box;
-    border-radius: 0.5rem;
+    border-radius: 0.375rem;
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
                 0 8px 10px 1px rgba(0, 0, 0, 0.14),
                 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    cursor: move !important;
 }
   
 .cdk-drag-placeholder {
@@ -133,12 +251,122 @@
   
 .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    cursor: move !important;
 }
 .card-body.cdk-drop-list-dragging .task:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+.cdk-drag-dragging {
+    cursor: move !important;
+}
 
 .board-wrapper.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    cursor: move !important;
+}
+.draggable {
+    cursor: move !important;
+}
+.draggable:active {
+    cursor: move !important;
+}
+.draggable:focus {
+    cursor: move !important;
 }
 
+.btn-save-section {
+    margin-top: 20px;
+    margin-bottom: 0px !important;
+}
+/* menjam checkbox selected boju */
+input[type='checkbox'] {
+    accent-color: #696cff;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #696cff;
+    border-color: #696cff;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+}
+
+.btn-primary:hover {
+    color: #fff !important;
+    background-color: #5f61e6 !important;
+    border-color: #5f61e6 !important;
+    transform: translateY(-1px) !important;
+}
+
+.form-control {
+    display: inline;
+    width: 100%;
+    padding: 0.4375rem 0.875rem;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.53;
+    color: #697a8d;
+    appearance: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d9dee3;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form-control:focus {
+    border-color: #5f61e6 !important;
+    box-shadow: 0 0 2px #5f61e6;
+}
+.btn-save-section {
+    margin-bottom: 0px !important;
+}
+.more-options {
+    display: none; /* Hide by default */
+}
+.more-options:hover {
+    cursor: pointer;
+}
+.card-header:hover .more-options {
+    display: block; /* Show on hover */
+}
+
+.card-body-task-title {
+    cursor: pointer !important;
+}
+
+.card-body-task-title:hover,
+.card-body-task-title.clicked {
+    cursor: pointer;
+    background-color: #e7e7ff !important;
+    color: #5f61e6 !important;
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%;
+    /* font-weight: 600; */
+}
+
+.card-body-task-title{
+
+    /* flex-grow: 1; */
+    /* flex-basis: 0; */
+    padding: 15px;
+    margin-top: 0px !important;
+    border-radius: 0.375rem;
+
+}
+.newBoard {
+    cursor: pointer;
+    height: 25px;
+}
+/* tooltip boje */
+::ng-deep .p-tooltip .p-tooltip-text {
+    background-color: #696cff;
+    color: #ffffff;
+    font-family: 'Public Sans', sans-serif !important;
+}
+/* tooltip arrow mora ovako */
+/* u tihomir-purple sam promenio direktno */
+/* ::ng-deep .p-tooltip .p-tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-right: 3px solid #696cff;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid transparent;
+} */

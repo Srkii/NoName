@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
     Password: '',
   };
 
-  constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) {}
+  constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {}
 
@@ -33,13 +33,25 @@ export class LoginComponent implements OnInit {
         {
           this.router.navigate(['/mytasks']);
         }
-        console.log('Successful login');
       },
       error: (error) => {
         console.log(error);
-        console.log('Unsuccessful login');
-        this.toastr.error(error.error)
+        let errorMessage = '';
+        if (error.error.errors) {
+          for (const key in error.error.errors) {
+            if (error.error.errors.hasOwnProperty(key)) {
+              errorMessage += error.error.errors[key].join(' ') + ' ';
+            }
+          }
+          this.toastr.error(errorMessage.trim());
+        } else {
+          this.toastr.error(error.error)
+        }
       },
     });
+  }
+
+  disableRightClick(event: MouseEvent): void {
+    event.preventDefault();
   }
 }

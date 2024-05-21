@@ -1,6 +1,9 @@
-﻿using backend.Data;
+﻿using System.Globalization;
+using backend.Data;
 using backend.DTO;
 using backend.Entities;
+using backend.Interfaces;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,14 +12,16 @@ namespace backend.Controllers
     public class ProjectsController : BaseApiController
     {
         private readonly DataContext _context;
-        public ProjectsController(DataContext context)
+        private readonly INotificationService _notificationService;
+        public ProjectsController(DataContext context,INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         // [Authorize(Roles = "ProjectManager")]
         [HttpPost] // POST: api/projects/
-        public async Task<ActionResult<ProjectDto>> CreateProject(ProjectDto projectDto)
+        public async Task<ActionResult<Project>> CreateProject(ProjectDto projectDto)
         {
             var project = new Project
             {
@@ -24,23 +29,23 @@ namespace backend.Controllers
                 Description = projectDto.Description,
                 StartDate = projectDto.StartDate,
                 EndDate = projectDto.EndDate,
-                ProjectStatus = projectDto.ProjectStatus,
-                Priority = projectDto.Priority
+                ProjectStatus = projectDto.ProjectStatus
             };
-            _context.Projects.Add(project);
+            await _context.Projects.AddAsync(project);
+            await _context.SaveChangesAsync();
+
+            var ProjectCreator = new ProjectMember
+            {
+                AppUserId = projectDto.AppUserId,
+                ProjectId = project.Id,
+                ProjectRole = ProjectRole.ProjectManager
+            };
+            await _context.ProjectMembers.AddAsync(ProjectCreator);
             await _context.SaveChangesAsync();
 
             // dodavanje inicijalnih statusa
             await AddStarterStatuses(project);
-            return new ProjectDto
-            {
-                ProjectName = project.ProjectName,
-                Description = project.Description,
-                StartDate = project.StartDate,
-                EndDate = project.EndDate,
-                ProjectStatus = project.ProjectStatus,
-                Priority = project.Priority
-            };
+            return project;
         }
 
         //metoda za dodavanje inicijalnih statusa pri kreiranju projekta
@@ -90,10 +95,10 @@ namespace backend.Controllers
         }
 
         // [Authorize(Roles = "ProjectManager")]
-        [HttpPut("{id}")] // PUT: api/projects/3
-        public async Task<IActionResult> UpdateProject(int id, ProjectDto projectDto)
+        [HttpPut("updateProject")] // PUT: api/projects/updateProject
+        public async Task<ActionResult<Project>> UpdateProject(ProjectDto projectDto)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.FindAsync(projectDto.ProjectId);
             if (project == null)
             {
                 return NotFound();
@@ -104,18 +109,17 @@ namespace backend.Controllers
             project.StartDate = projectDto.StartDate;
             project.EndDate = projectDto.EndDate;
             project.ProjectStatus = projectDto.ProjectStatus;
-            project.Priority = projectDto.Priority;
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) when (!ProjectExists(id))
+            catch (DbUpdateConcurrencyException) when (!ProjectExists(projectDto.AppUserId))
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return project;
         }
 
         private bool ProjectExists(int id)
@@ -123,24 +127,349 @@ namespace backend.Controllers
             return _context.Projects.Any(e => e.Id == id);
         }
 
+        [HttpPut("addProjectMembers")] 
+        public async Task<IActionResult> AddProjectMembers(ProjectMemberDTO[] dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var projectMember = new ProjectMember 
+                {
+                AppUserId =  dto.AppUserId,
+                ProjectId = dto.ProjectId,
+                ProjectRole = dto.ProjectRole
+                };
+                await _context.ProjectMembers.AddAsync(projectMember);
+                await _context.SaveChangesAsync();   
+                await _notificationService.TriggerProjectNotification(dto.ProjectId,dto.AppUserId);
+            }
+            return Ok(dtos);
+        }
+        
 
-        // Za sad mi ne treba Delete
-        // [HttpDelete("{id}")] // DELETE: api/projects/2
-        // public async Task<IActionResult> DeleteProject(int id)
-        // {
-        //     var project = await context.Projects.FindAsync(id);
-        //     if (project == null)
-        //     {
-        //         return NotFound();
-        //     }
+        [HttpGet("filterAndPaginate")]
+        public async Task<ActionResult<IEnumerable<Project>>> FilterAndPaginateProjects(
+            string searchText = null,
+            ProjectStatus? projectStatus = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            int userId = 0,
+            int currentPage = 0,
+            int pageSize = 0)
+        {
+           var query = _context.Projects.AsQueryable();
+           query = query.Where(p => p.ProjectStatus != ProjectStatus.Archived);
 
-        //     context.Projects.Remove(project);
-        //     await context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                query = query.Where(p =>
+                    EF.Functions.Like(p.ProjectName.ToLower(), $"%{searchText.ToLower()}%") ||
+                    _context.ProjectMembers
+                        .Where(member => member.ProjectId == p.Id && member.ProjectRole == ProjectRole.ProjectOwner)
+                        .Any(member =>
+                            EF.Functions.Like(member.AppUser.FirstName + " " + member.AppUser.LastName, $"%{searchText.ToLower()}%")
+                        )
+                );
+            }
 
-        //     return NoContent();
-        // }
+            if (projectStatus != null)
+            {
+                query = query.Where(p => p.ProjectStatus == projectStatus);
+            }
+
+
+            if(startDate.HasValue && !endDate.HasValue)
+            {
+                query = query.Where(p => p.StartDate == startDate);
+            }
+            if(!startDate.HasValue && endDate.HasValue)
+            {
+                query = query.Where(p => p.EndDate == endDate);
+            }
+           if (startDate.HasValue && endDate.HasValue)
+            {
+                query = query.Where(p => p.StartDate >= startDate && p.EndDate <= endDate);
+            }
+            if (userId != 0)
+            {
+                query = query.Join(_context.ProjectMembers,
+                                project => project.Id,
+                                member => member.ProjectId,
+                                (project, member) => new { Project = project, Member = member })
+                            .Where(x => x.Member.AppUserId == userId)
+                            .Select(x => x.Project);
+            }
+
+            // Apply pagination
+            var filteredProjects = await query.Skip((currentPage - 1) * pageSize)
+                                            .Take(pageSize)
+                                            .ToListAsync();
+
+            return filteredProjects;
+        }
+
+        [HttpGet("countFiltered")]
+        public async Task<ActionResult<int>> CountFilteredProjects(
+            string searchText = null,
+            ProjectStatus? projectStatus = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            int userId = 0,
+            int currentPage = 0,
+            int pageSize = 0)
+        {
+           var query = _context.Projects.AsQueryable();
+           query = query.Where(p => p.ProjectStatus != ProjectStatus.Archived);
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                query = query.Where(p =>
+                    EF.Functions.Like(p.ProjectName.ToLower(), $"%{searchText.ToLower()}%") ||
+                    _context.ProjectMembers
+                        .Where(member => member.ProjectId == p.Id && member.ProjectRole == ProjectRole.ProjectOwner)
+                        .Any(member =>
+                            EF.Functions.Like(member.AppUser.FirstName + " " + member.AppUser.LastName, $"%{searchText.ToLower()}%")
+                        )
+                );
+            }
+
+            if (projectStatus != null)
+            {
+                query = query.Where(p => p.ProjectStatus == projectStatus);
+            }
+
+
+            if(startDate.HasValue && !endDate.HasValue)
+            {
+                query = query.Where(p => p.StartDate == startDate);
+            }
+            if(!startDate.HasValue && endDate.HasValue)
+            {
+                query = query.Where(p => p.EndDate == endDate);
+            }
+           if (startDate.HasValue && endDate.HasValue)
+            {
+                query = query.Where(p => p.StartDate >= startDate && p.EndDate <= endDate);
+            }
+
+            if (userId != 0)
+            {
+                query = query.Join(_context.ProjectMembers,
+                                project => project.Id,
+                                member => member.ProjectId,
+                                (project, member) => new { Project = project, Member = member })
+                            .Where(x => x.Member.AppUserId == userId)
+                            .Select(x => x.Project);
+            }
+
+            // Apply pagination
+            var filteredProjects = await query.ToListAsync();
+
+            return filteredProjects.Count;
+        }
+
+
+        [HttpGet("getUsersProjectsCount/{userid}")]
+        public async Task<ActionResult<int>> GetUsersProjectsCount(int userid)
+        {
+            var projects = await _context.Projects
+                                        .Join(_context.ProjectMembers,
+                                                project => project.Id,
+                                                member => member.ProjectId,
+                                                (project, member) => new { Project = project, Member = member })
+                                        .Where(x => x.Member.AppUserId == userid && x.Project.ProjectStatus != ProjectStatus.Archived)
+                                        .Select(x => x.Project)
+                                        .ToListAsync();
+            return projects.Count;
+        }
+
+        [HttpGet("getProjectByName/{projectName}")]
+        public async Task<ActionResult<int>> GetProjectByName(string projectName)
+        {
+            var project = await _context.Projects.FirstOrDefaultAsync(project => project.ProjectName.ToLower() == projectName.ToLower());
+            return Ok(project);
+        }
+
+        // vraca sve AppUser koji su na projektu (tj imaju odgovarajuci ProjectMember entry)
+        [HttpGet("GetUsersByProjectId/{projectId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsersByProjectId(int projectId)
+        {
+            var users = await _context.ProjectMembers
+                .Where(pm => pm.ProjectId == projectId)
+                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName,pm.AppUser.Email, pm.AppUser.ProfilePicUrl, pm.ProjectRole })
+                .ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound("No users found for the given project ID.");
+            }
+
+            return Ok(users);
+        }
+
+        [HttpGet("GetAddableUsers/{projectId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAddableUsers(int projectId)
+        {
+            var users = await _context.Users
+            .Where(user => !_context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId) && user.Role != UserRole.Admin)
+            .Select(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl })
+            .ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound("No users found for the given project ID.");
+            }
+
+            return Ok(users);
+        }
+
+        [HttpDelete("DeleteProjectMember/{projectId}/{userId}")]
+        public async Task<ActionResult> DeleteProjectMember(int projectId,int userId)
+        {
+            var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == projectId && member.AppUserId == userId);
+            if(projectMember != null)
+            {
+                _context.ProjectMembers.Remove(projectMember);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+                
+            return NotFound();
+        }
+
+        [HttpPost("UpdateUsersProjectRole")]
+        public async Task<ActionResult> UpdateUsersProjectRole(ProjectMemberDTO dto)
+        {
+            var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == dto.ProjectId && member.AppUserId == dto.AppUserId);
+            if(projectMember != null)
+            {
+                projectMember.ProjectRole = dto.ProjectRole;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+                
+            return NotFound();
+        }
+
+        [HttpGet("GetProjectOwner/{projectId}")]
+        public async Task<ActionResult<AppUser>> GetProjectOwner(int projectId)
+        {
+            var OwnerMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == projectId && member.ProjectRole == ProjectRole.ProjectOwner);
+            if(OwnerMember!=null)
+            {
+                var ProjectOwner = await _context.Users.FirstOrDefaultAsync(member => member.Id == OwnerMember.AppUserId);
+                return Ok(ProjectOwner);
+            }
+            return null;
+        }
+
+        // Add this method to the ProjectsController class
+        [HttpPut("archive/{projectId}")]
+        public async Task<IActionResult> ArchiveProject(int projectId) {
+            var project = await _context.Projects.FindAsync(projectId);
+            if (project == null) {
+                return NotFound("Project not found.");
+            }
+
+            project.ProjectStatus = ProjectStatus.Archived;
+
+            var tasks = await _context.ProjectTasks
+                                    .Where(t => t.ProjectId == projectId)
+                                    .ToListAsync();
+            foreach (var task in tasks) {
+                task.IsOriginProjectArchived = true;
+            }
+            _notificationService.ArchiveRelatedProjectNotifications(projectId);//~maksim
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Project and its tasks have been archived." });
+        }
+        
+        [HttpGet("isArchived/{projectId}")] //api/projects/isArchived/2
+        public async Task<ActionResult<bool>> IsProjectArchived(int projectId)
+        {
+            if(ProjectExists(projectId))
+            {
+                var project1= await _context.Projects.FirstOrDefaultAsync(proj=>proj.Id==projectId && proj.ProjectStatus==ProjectStatus.Archived);
+                if(project1!=null){
+                    return true; 
+                }
+                else return false; 
+            }
+            else return true; 
+           
+        }
+
+        [HttpPut("unarchive/{projectId}")]
+        public async Task<IActionResult> UnarchiveProject(int projectId) {
+            var project = await _context.Projects.FindAsync(projectId);
+            if (project == null) {
+                return NotFound("Project not found.");
+            }
+
+            project.ProjectStatus = ProjectStatus.InProgress;
+
+            var tasks = await _context.ProjectTasks
+                                    .Where(t => t.ProjectId == projectId)
+                                    .ToListAsync();
+            foreach (var task in tasks) {
+                task.IsOriginProjectArchived = false;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Project and its tasks have been unarchived." });
+        }
+
+        [HttpPut("unarchiveMultiple")]
+        public async Task<IActionResult> UnarchiveMultipleProjects([FromBody] List<int> projectIds) {
+            var projects = await _context.Projects
+                                        .Where(p => projectIds.Contains(p.Id))
+                                        .ToListAsync();
+
+            if (!projects.Any()) {
+                return NotFound("No projects found.");
+            }
+
+            foreach (var project in projects) {
+                project.ProjectStatus = ProjectStatus.InProgress;
+                var tasks = await _context.ProjectTasks
+                                        .Where(t => t.ProjectId == project.Id)
+                                        .ToListAsync();
+                foreach (var task in tasks) {
+                    task.IsOriginProjectArchived = false;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Projects and their tasks have been unarchived." });
+        }
+
+        [HttpGet("getUsersArchivedProjects/{userId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsersArchivedProjects(int userId)
+        {
+            var projects = await _context.Projects
+                .Join(_context.ProjectMembers,
+                    project => project.Id,
+                    member => member.ProjectId,
+                    (project, member) => new { Project = project, Member = member })
+                .Where(x => x.Member.AppUserId == userId && x.Project.ProjectStatus == ProjectStatus.Archived)
+                .Select(x => new { x.Project.Id, x.Project.ProjectName, x.Project.StartDate, x.Project.EndDate })
+                .ToListAsync();
+
+            var projectOwners = await _context.ProjectMembers
+                .Where(pm => pm.ProjectRole == ProjectRole.ProjectOwner && projects.Select(p => p.Id).Contains(pm.ProjectId))
+                .Join(_context.Users,
+                    pm => pm.AppUserId,
+                    user => user.Id,
+                    (pm, user) => new { pm.ProjectId, Owner = new { user.FirstName, user.LastName, user.ProfilePicUrl } })
+                .ToListAsync();
+
+            var result = projects.Select(p => new {
+                Project = p,
+                Owner = projectOwners.FirstOrDefault(po => po.ProjectId == p.Id)?.Owner
+            });
+
+            return Ok(result);
+        }
+        
     }
-
-
 }
 

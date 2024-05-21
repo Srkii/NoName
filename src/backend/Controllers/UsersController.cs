@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using backend.Data;
@@ -24,7 +25,7 @@ namespace backend.Controllers
       _tokenService = ts;
     }
 
-    //[AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
+    [AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {
@@ -37,6 +38,15 @@ namespace backend.Controllers
     {
       return await _context.Users.FindAsync(id);
     }
+
+    [AllowAnonymous]
+    [HttpGet("availableUsers/{projectCreatorId}")]
+    public async Task<ActionResult<AppUser>> GetAvailableUsers(int projectCreatorId)
+    {
+      var availableUsers = await _context.Users.Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin).ToListAsync();
+      return  Ok(availableUsers);
+    }
+
 
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser/{id}")] // /api/users/updateUser
@@ -81,7 +91,7 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     [HttpPost("changeUserRole")]   //api/users/changeUserRole
     public async Task<ActionResult<UserDto>> ChangeUserRole(RoleChangeDTO dto)
     {
@@ -149,5 +159,126 @@ namespace backend.Controllers
 
       return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
     }
+
+    [AllowAnonymous]
+    [HttpGet("all")]
+    public async Task<ActionResult<int>> GetAllUsers()
+    {
+        var query=_context.Users.AsQueryable();
+        query = query.Where(u => u.Archived == false);
+
+        var Users=await query.ToListAsync();
+
+        return Users.Count;
+    }
+
+    [AllowAnonymous]
+    [HttpGet("filtered")]
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="")
+    {
+        var query = _context.Users.AsQueryable();
+        query = query.Where(u => u.Archived == false);
+
+        if(role!=null)
+        {
+          query = query.Where(u => u.Role == role);
+        }
+
+
+        if(!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
+        }
+
+
+        var filteredUsers=await query.Skip((currentPage-1)*pageSize).Take(pageSize).ToListAsync();
+
+        return filteredUsers;
+    }
+    [AllowAnonymous]
+    [HttpGet("fcount")]
+    public async Task<ActionResult<int>> GetUsersFF( UserRole? role=null, string searchTerm="")
+    {
+        var query = _context.Users.AsQueryable();
+        query = query.Where(u => u.Archived == false);
+
+        if(role!=null)
+        {
+          query = query.Where(u => u.Role == role);
+        }
+
+
+        if(!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
+        }
+
+
+        var filteredUsers=await query.ToListAsync();
+
+        return filteredUsers.Count;
+    }
+    [AllowAnonymous]
+    [HttpGet("filteredCount")]
+    public async Task<ActionResult<int>> CountFilteredUsers(UserRole? role=null)
+    {
+      var query=_context.Users.AsQueryable();
+      query = query.Where(u => u.Archived == false);
+
+      if(role!=null)
+      {
+        query=query.Where(u=>u.Role==role);
+      }
+      
+
+      var filteredUsers=await query.ToListAsync();
+
+      return filteredUsers.Count;
+    }
+    [AllowAnonymous]
+    [HttpGet("getByRole")]
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetUserByRole(UserRole? role=null)
+    {
+      var query=_context.Users.AsQueryable();
+      query = query.Where(u => u.Archived == false);
+
+      if(role!=null)
+      {
+        query=query.Where(u=>u.Role==role);
+      }
+      var filteredUsers=await query.ToListAsync();
+
+      return filteredUsers;
+    }
+
+    [AllowAnonymous]
+    [HttpGet("getArchived")]
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetArchivedUsers()
+    {
+      var query = _context.Users.AsQueryable();
+      query = query.Where(u => u.Archived == true);
+
+      var archUsers=await query.ToListAsync();
+      return archUsers;
+
+    }
+
+    [AllowAnonymous]
+    [HttpPut("removeFromArch")]   //api/users/setAsArchived/1
+    public async Task<IActionResult> RemoveArch([FromBody] List<int> userIds)
+    { 
+      var usersToUpdate=await _context.Users.Where(u=> userIds.Contains(u.Id))
+        .ToListAsync();
+
+      foreach (var user in usersToUpdate)
+      {
+        user.Archived=false;
+      }
+
+      await _context.SaveChangesAsync();
+
+      return Ok(new { message = "Tasks updated to Completed status." });
+    }
+
   }
 }

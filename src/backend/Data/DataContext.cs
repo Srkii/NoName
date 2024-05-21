@@ -8,17 +8,16 @@ namespace backend.Data
         public DataContext(DbContextOptions options) : base(options) { }
 
         public DbSet<AppUser> Users { get; set; }
-        public DbSet<Project> Projects {get; set;}
-        public DbSet<ProjectMember> ProjectMembers {get; set;}
-        public DbSet<ProjectTask> ProjectTasks {get; set;}
-        public DbSet<TaskDependency> TaskDependencies {get; set;}
-        public DbSet<Invitation> Invitations {get; set;}
-        public DbSet<UserRequest> UserRequests {get; set;}
-        public DbSet<Attachment> Attachments{get; set;}
-        public DbSet<Comment> Comments {get; set;}
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectMember> ProjectMembers { get; set; }
+        public DbSet<ProjectTask> ProjectTasks { get; set; }
+        public DbSet<TaskDependency> TaskDependencies { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<UserRequest> UserRequests { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<TskStatus> TaskStatuses { get; set; }
         public DbSet<ProjectSection> ProjectSections { get; set; }
-        
+        public DbSet<Notification> Notifications { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectMember>(entity =>
@@ -49,7 +48,7 @@ namespace backend.Data
                 entity.HasOne(pt => pt.ProjectSection)
                     .WithMany(ps => ps.Tasks)
                     .HasForeignKey(pt => pt.ProjectSectionId);
-                
+
                 entity.HasOne(pt => pt.AppUser)
                     .WithMany()
                     .HasForeignKey(pt => pt.AppUserId);
@@ -68,6 +67,25 @@ namespace backend.Data
                     .HasForeignKey(td => td.DependencyTaskId);
                 // task ne moze da zavisi sam od sebe
                 entity.ToTable("TaskDependencies", t => t.HasCheckConstraint("DifferentTasks", "TaskId <> DependencyTaskId"));
+            });
+
+            modelBuilder.Entity<Notification>(entity => {
+                entity.HasKey(n => n.Id);
+                entity.HasOne(n => n.Task)
+                    .WithMany()
+                    .HasForeignKey(n => n.task_id);
+                entity.HasOne(n => n.Project)
+                    .WithMany()
+                    .HasForeignKey(n => n.project_id);
+                entity.HasOne(n => n.Sender)
+                    .WithMany()
+                    .HasForeignKey(n => n.sender_id);
+                entity.HasOne(n => n.Reciever)
+                    .WithMany()
+                    .HasForeignKey(n => n.reciever_id);
+                entity.HasOne(n=> n.Comment)
+                    .WithMany()
+                    .HasForeignKey(n=>n.comment_id);
             });
         }
     }

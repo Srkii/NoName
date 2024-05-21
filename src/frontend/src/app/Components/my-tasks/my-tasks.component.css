@@ -14,19 +14,20 @@ body {
 }
 
 .all {
+  /* max-width: 1320px; */
   margin-top: 30px;
-  margin: auto; /* Center the div horizontally */
+  margin: auto; 
   padding: 20px;
   width: 85%;
-  min-height: 10vh; /* Set a minimum height */
+  min-height: 10vh; 
   background-color: #ffffff;
   color: #697a8d;
   border: solid 1px #d9dee3;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  overflow-y: hidden; /* Hide the vertical scrollbar */
-  overflow-x: auto; /* Hide the vertical scrollbar */
-  box-sizing: border-box; /* Include padding and border in the total width and height */
+  overflow-y: hidden; 
+  overflow-x: auto; 
+  box-sizing: border-box; 
 }
 
 table {
@@ -34,12 +35,9 @@ table {
   font-size: 12px;
   border: 1px solid lightgray;
   border-collapse: collapse;
-  /* padding: 6px; */
-  /* margin-left: -20px; */
   margin-bottom: -20px;
   margin-top: 10px;
   width: 100%;
-  /* margin-left: 20px; */
   border-left: none;
   border-bottom: none;
   border-right: none;
@@ -51,14 +49,14 @@ table {
   }
 }
 th {
-  font-size: 14px;
+  font-size: 16px;
   border: 1.5px solid lightgray;
-  font-weight: 700; /* thinner text */
+  font-weight: 700; 
   padding: 5px;
   border-left: none;
   border-right: none;
-  width: 15%;
-  padding-left: 10%;
+  width: 25%; 
+  /* padding-left: 10%; */
 }
 
 td {
@@ -66,11 +64,13 @@ td {
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
-  font-size: 12px;
-  padding-left: 10%;
-  white-space: nowrap; /* Prevent text wrapping */
-  text-overflow: ellipsis; /* Add ellipsis for overflowed content */
+  font-size: 16px;
+  width: 25%;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+  /* text-align: center; */
 }
+
 
 tr:last-child {
   border-bottom: none;
@@ -79,45 +79,72 @@ tr:last-child td {
   border-bottom: none;
 }
 
-.name {
-  font-size: 14px;
-  font-weight: bold;
+
+.name:hover {
+  cursor: pointer;
+  color: #484ac5 !important;
 }
 
-.red:hover,
-.red.clicked {
+/* .td_row:hover,
+.td_row.clicked {
   cursor: pointer;
-  background-color: #e7e7ff !important;
-  color: #5f61e6 !important;
-}
+  /* background-color: #e7e7ff !important; */
+  /* color: #5f61e6 !important; */
+  /* font-weight: 600; */
+/* }  */
 
 p {
   text-align: center;
   padding: 5px;
-  border-radius: 8px;
-  font-weight: 600;
+  border-radius: 0.375rem;
 }
 .filter {
   margin-left: 2%;
 }
-.filter:hover {
+.filter:hover,
+.filter:focus {
   cursor: pointer;
+  color: #5f61e6;
 }
 .empty-table th {
   border-bottom: none;
 }
 
 
-/* .mark:hover {
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+}
+.page-size-container {
+  margin-left: 10px;
+  display: flex;
+}
+
+.page_size {
+  color: #697a8d;
+  font-size: 16px;
+  border: 0.5px solid lightgray;
+  border-radius: 0.375rem;
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  width: 100%;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+.page_size:hover{
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+}
+.page_size:focus{
+  outline: none;
+}
+.projectname:hover{
   cursor: pointer;
-  box-shadow: 0 0 3px #5f61e6;
-  filter: brightness(120%);
+  color: #484ac5 !important;
 }
-.mark:focus {
-  background-color: #3fb94c;
-  box-shadow: 0 0 3px #3fb94c;
+.align-middle {
+  vertical-align: middle;
 }
-.checked-button {
-  background-color: #3fb94c;
-  box-shadow: 0 0 3px #3fb94c;
-} */

@@ -19,5 +19,6 @@ namespace backend.Entities
         public byte[] PasswordSalt { get; set; }
         public UserRole Role { get; set; }
         public bool Archived { get; set; }
+        public bool IsDarkTheme { get; set; } = false; // Default = false za light theme
     }
 }

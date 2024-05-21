@@ -23,7 +23,6 @@ export class ForgotResetComponent implements OnInit{
   token: any;
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token')?.toString();
-    console.log('Token from URL:', this.token);
     this.GetEmailByToken(this.token)
   }
 
@@ -34,7 +33,6 @@ export class ForgotResetComponent implements OnInit{
     }
     this.mailresetService.getEmailByToken(token).subscribe({
       next: (response: any) => {
-        console.log(response);
         const email = response?.email;
         if (email) {
           this.newRequest.Email = email;
@@ -50,13 +48,11 @@ export class ForgotResetComponent implements OnInit{
 
   resetPassword() {
     if (this.newRequest.NewPassword !== this.confirmPassword) {
-      console.log('Passwords do not match');
       return;
     }
     this.newRequest.Token = this.token;
     this.mailresetService.resetPassword(this.newRequest).subscribe({
       next: () => {
-        console.log('Password reseted');
         this.router.navigate(['/login']);
       },
       error: () => console.log('Could not reset password')
@@ -65,5 +61,9 @@ export class ForgotResetComponent implements OnInit{
 
   passwordMatch(): boolean {
     return this.newRequest.NewPassword === this.confirmPassword;
+  }
+
+  disableRightClick(event: MouseEvent): void {
+    event.preventDefault();
   }
 }

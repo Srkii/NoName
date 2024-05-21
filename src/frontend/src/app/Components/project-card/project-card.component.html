@@ -1,0 +1,104 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<div id="container">
+  <div class="col-md-5 mx-2 float-end" *ngIf="showComponent">
+      <div class="card shadow border-0">
+        <div class="card">
+          <div class="card-header project-header">
+            Create New Project
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="back" viewBox="0 0 16 16" (click)="ToggleProjectCard()">
+              <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <form #createProjectForm="ngForm" class="mg-3" (ngSubmit)="CreateProject()" autocomplete="off" id="ProjectCreate">
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Project Name</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Project Name" [(ngModel)]="newProject.ProjectName" name="Name" [ngClass]="{'is-invalid': buttonClicked && (!newProject.ProjectName || projectNameExists)}">
+                <div *ngIf="buttonClicked && !newProject.ProjectName && !projectNameExists" class="invalid">Please enter project name.</div>
+                <div *ngIf="buttonClicked && projectNameExists" class="invalid">You already have project with the same name.</div>
+              </div>
+              <div class="mb-3">
+                <label for="StartDate" class="form-label">Start Date</label>
+                <div class="tNgCalendar">
+                  <p-calendar
+                  (click)="$event.stopPropagation()"
+                  [style]="{'width':'100%'}"
+                  [(ngModel)]="newProject.StartDate"
+                  inputId="startDate"
+                  name="startDate"
+                  [showButtonBar]="true"
+                  [firstDayOfWeek]="1"
+                  placeholder="Start Date"
+                  dateFormat="MM dd, yy"
+                  [minDate]="today"
+                  [maxDate]="newProject.EndDate"
+                  [ngClass]="{'ng-invalid': buttonClicked && !newProject.StartDate || isInvalidDate()}"
+                  ></p-calendar>
+                </div>
+                <div *ngIf="buttonClicked && !newProject.StartDate" class="invalid">Please enter start date.</div>
+                <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+              </div>
+              <div class="mb-3">
+                <label for="EndDate" class="form-label">End Date</label>
+                <div class="tNgCalendar">
+                  <p-calendar
+                  (click)="$event.stopPropagation()"
+                  [style]="{'width':'100%'}"
+                  [(ngModel)]="newProject.EndDate"
+                  inputId="endDate"
+                  name="endtDate"
+                  [showButtonBar]="true"
+                  [firstDayOfWeek]="1"
+                  placeholder="End Date"          
+                  dateFormat="MM dd, yy"
+                  [minDate]="newProject.StartDate"
+                  [ngClass]="{'is-invalid': buttonClicked && !newProject.EndDate || isInvalidDate()}"></p-calendar>
+                </div>
+                <div *ngIf="buttonClicked && !newProject.EndDate" class="invalid">Please enter end date.</div>
+                <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="newProject.Description" name="Description"></textarea>
+              </div>
+              <div class="mb-3">
+                <label id="lbl" for="assignees" class="form-label">Project Members</label>
+                <ng-select [items]="users" [(ngModel)]="selectedUsers" bindLabel="name" placeholder="Select Project Members" optionLabel="name" id="assignee" name="Assignees" [multiple]="true" (click)="$event.stopPropagation()">
+                  <ng-template ng-option-tmp let-user="item">
+                    <div class="user-detail">
+                      <div *ngIf="user.profilePicUrl" class="nameAvatar">
+                        <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong nameAvatar" height="25" width="25">
+                        <div style="margin-left: 0.4rem;">{{ user.name }}</div>
+                      </div>
+                      <div *ngIf="!user.profilePicUrl" class="nameAvatar">
+                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="user.name" value="75%"></ngx-avatars>
+                        <div style="margin-left: 0.4rem;">{{ user.name }}</div>
+                      </div>
+                      <div (click)="$event.stopPropagation()">
+                        <select (mousedown)="$event.stopPropagation()" [(ngModel)]="user.projectRole" [ngModelOptions]="{standalone: true}" class="form-select form-select-xs">
+                          <option value=1 *ngIf="!SelectedOwner(user)">Project Owner</option>
+                          <option value=2>Manager</option>
+                          <option value=3>Participant</option>
+                          <option value=4 selected>Guest</option>
+                        </select>
+                      </div>
+                    </div>
+                  </ng-template>
+                  <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                    <span *ngIf="item.profilePicUrl" class="ng-value-label"><img class="avatar rounded-circle shadow-4-strong"  height="25" width="25"  [src]="uploadservice.getImage(item.profilePicUrl)"> {{item.name}}</span>
+                    <span *ngIf="!item.profilePicUrl" class="ng-value-label"><ngx-avatars size="21" bgColor="#5d57c2" [name]="item.name" value="75%"></ngx-avatars>{{item.name}}</span>
+                    <div class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</div>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="mb-3" class="addProjectBtn">
+                <input class="btn btn-primary" tabindex="0" aria-controls="DataTables_Table_0" type="submit" value="Add Project" style="z-index: 0 !important;">
+              </div>
+          </form>
+          </div>
+        </div>
+        </div>
+    </div>
+</div>
