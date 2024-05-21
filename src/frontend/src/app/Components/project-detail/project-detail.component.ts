@@ -341,9 +341,13 @@ export class ProjectDetailComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const popUp = document.querySelector('.pop') as HTMLElement;
+    const elementRef = document.getElementById('area-desc') as HTMLElement;
     if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
       this.showPopUp = false;
       this.clickedTask = null;
+    }
+    else if (elementRef && !elementRef.contains(event.target as Node)) {
+      this.enabledEditorOptions = false;
     }
   }
 
@@ -567,14 +571,6 @@ export class ProjectDetailComponent implements OnInit {
   showEditOptions(){
     this.enabledEditorOptions = true;
   }
-  @HostListener('document:click', ['$event'])
-  onClick(event: any) {
-    const elementRef = document.getElementById('area-desc') as HTMLElement;
-    if (elementRef && !elementRef.contains(event.target)) {
-      this.enabledEditorOptions = false;
-    }
-  }
-
   restoreInvalidInputs():void{
     this.buttonClicked=false;
   }
