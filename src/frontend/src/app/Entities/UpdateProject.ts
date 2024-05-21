@@ -1,4 +1,4 @@
-import { Priority, ProjectStatus } from "./Project";
+import {  ProjectStatus } from "./Project";
 
 export interface UpdateProject {
     projectId?: number,
@@ -8,5 +8,4 @@ export interface UpdateProject {
     startDate?: Date;
     endDate?: Date;
     projectStatus?: ProjectStatus;
-    priority?: Priority;
 }

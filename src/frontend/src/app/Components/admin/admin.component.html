@@ -239,7 +239,7 @@
           This user will no longer be visible.</label>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="ArchiveUser(curentUserId)" (click)="modalRef?.hide()">Archive user</button>
+        <button class="btn btn-primary d-grid w-100 archBtn" type="submit" (click)="ArchiveUser(curentUserId)" (click)="modalRef?.hide()">Archive user</button>
       </div>
     </form>
   </div>
@@ -276,57 +276,53 @@
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
- 
-    <div class="modal-body" *ngIf="archived_users.length>0; else noArchivedUsers">
-      <div class="table-responsive text-nowrap">
-        <table class="table">
-      <thead>
-      <tr>
-        <th></th>
-        <th>User</th>
-        <th>Email </th>
-        <th>Role</th>
-      </tr>
-    </thead>
-    <tbody class="table-border-bottom-0">
-      <tr *ngFor="let user of archived_users" >
-        <td>
-          <div class="check">
-            <input type="checkbox" style="align-items:center;" (change)="putInArray(user.id)" [(ngModel)]="!user.archived" >
-          </div>
-        </td>
-        <td >
-          <div class="d-flex justify-content-start align-items-center">
-            <div class="avatar-wrapper">
-              <div *ngIf="user.profilePicUrl" class="nameAvatar boardAvatar">
-                <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="35" width="35"/>
+  <div class="modal-body" *ngIf="archived_users.length>0; else noArchivedUsers">
+    <div class="table-responsive text-nowrap">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>User</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          <tr *ngFor="let user of archived_users" >
+            <td >
+              <div class="d-flex justify-content-start align-items-center">
+                <div class="avatar-wrapper">
+                  <div *ngIf="user.profilePicUrl" class="nameAvatar boardAvatar archAvatar">
+                    <img [src]="uploadservice.getImage(user.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" style="height: 25px; width: 25px;"/>
+                  </div>
+                  <div *ngIf="!user.profilePicUrl" class="nameAvatar boardAvatar archAvatar">
+                    <ngx-avatars size="25" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName"></ngx-avatars>
+                  </div>
+                </div>
+                <div class="d-flex flex-column">
+                  <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
+                </div>
               </div>
-              <div *ngIf="!user.profilePicUrl" class="nameAvatar boardAvatar">
-                <ngx-avatars size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" value="75%"></ngx-avatars>
+            </td>
+            <td>
+              <div class="d-flex flex-column">
+                <span class="text-body text-truncate fw-medium">{{user.email}}</span>
               </div>
-            </div>
-            <div class="d-flex flex-column">
-              <span  class="text-body text-truncate fw-medium">{{user.firstName}} {{user.lastName}}</span>
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="d-flex flex-column">
-            <span class="text-body text-truncate fw-medium">{{user.email}}</span>
-          </div>
-        </td>
-        <td  > <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>       
-      </tr>
-    </tbody>
-  
-</table>
-</div>
-<div class="mb-3 text-center">
-  <button class="btn btn-primary d-grid w-50 mx-auto" type="submit" (click)="removeFromArchived()" (click)="modalRef?.hide()" >Remove from Archieved</button>
-</div>
-</div>
-
+            </td>
+            <td><span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>
+            <td>
+              <input class="tPCheck" type="checkbox" style="align-items:center;" (change)="putInArray(user.id)" [(ngModel)]="!user.archived" >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+    <div class="mb-3 text-center">
+      <button class="btn btn-primary d-grid w-50 mx-auto archBtn" type="submit" (click)="removeFromArchived()" (click)="modalRef?.hide()" >Remove from Archieved</button>
+    </div>
+  </div>
 </ng-template>
+
 <ng-template #noArchivedUsers>
   <div class="text-center noArch">Currently, there are no archived users.</div>
 </ng-template>

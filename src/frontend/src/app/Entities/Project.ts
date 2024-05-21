@@ -5,7 +5,6 @@ export interface Project {
   startDate: Date;
   endDate: Date;
   projectStatus: ProjectStatus;
-  priority: Priority;
   progress: number;
 }
 
@@ -14,10 +13,4 @@ export enum ProjectStatus {
   InProgress,
   Completed,
   Archived,
-}
-
-export enum Priority {
-  Low,
-  Medium,
-  High,
 }

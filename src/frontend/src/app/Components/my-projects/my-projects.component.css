@@ -394,3 +394,11 @@ p {
   background-color:#696cff;
   border-color: #696cff !important;
 }
+
+.noArch {
+  margin: 15px !important;
+}
+
+.tPCheck:checked {
+  accent-color: #696cff !important;
+}

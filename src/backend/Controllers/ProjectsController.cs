@@ -29,8 +29,7 @@ namespace backend.Controllers
                 Description = projectDto.Description,
                 StartDate = projectDto.StartDate,
                 EndDate = projectDto.EndDate,
-                ProjectStatus = projectDto.ProjectStatus,
-                Priority = projectDto.Priority
+                ProjectStatus = projectDto.ProjectStatus
             };
             await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
@@ -110,7 +109,6 @@ namespace backend.Controllers
             project.StartDate = projectDto.StartDate;
             project.EndDate = projectDto.EndDate;
             project.ProjectStatus = projectDto.ProjectStatus;
-            project.Priority = projectDto.Priority;
 
             try
             {
