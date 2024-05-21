@@ -62,3 +62,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .ql-snow.ql-toolbar .ql-picker-item:hover{
   color: #696cff !important;
 }
+.area-desc .ql-toolbar.ql-snow {
+  border: none !important;
+  border-bottom: 1px solid #ccc !important;
+}
+.area-desc .ql-container.ql-snow {
+  border: none !important;
+}

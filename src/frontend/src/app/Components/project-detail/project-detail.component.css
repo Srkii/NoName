@@ -323,13 +323,6 @@ select:disabled {
 .area-desc .ql-editor{
     font-family: 'Public Sans', sans-serif !important;
 }
-.area-desc .ql-container {
-    border: none !important;
-}
-.area-desc .ql-toolbar.ql-snow{
-    border: none !important;
-    border-bottom: 1px solid #ccc !important;
-}
 .info label{
     font-weight: 600;
     color: #676f79;
