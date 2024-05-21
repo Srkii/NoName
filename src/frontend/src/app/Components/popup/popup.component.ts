@@ -14,6 +14,7 @@ import { TaskDependency } from '../../Entities/TaskDependency';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedService } from '../../_services/shared.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-popup',
@@ -55,6 +56,7 @@ export class PopupComponent {
 
 
   constructor(private myTasksService: MyTasksService,
+              private spinner: NgxSpinnerService,
               private cdr: ChangeDetectorRef,
               private userInfo:UserinfoService,  
               private commentsService: CommentsService,
@@ -331,6 +333,7 @@ export class PopupComponent {
   }
 
   addComment(): void {
+    this.spinner.show();
     const content = this.commentInput.nativeElement.value.trim();
     var id=localStorage.getItem("id");
     this.userInfo.getUserInfo2(id).subscribe({
@@ -347,6 +350,7 @@ export class PopupComponent {
             messageSent:  new Date,
             fileUrl: this.attachment_name?this.attachment_name:"",
             edited:false,
+            appUserPicUrl: this.current_user.profilePicUrl,
           };
           this.commentsService.postComment(commentDto).subscribe({
             next: (comment: Comment) => {
@@ -359,6 +363,7 @@ export class PopupComponent {
             setTimeout(() => {
               this.scrollToBottom();
             });
+            this.spinner.hide();
     
             },
             error: (error: any) => {
@@ -708,6 +713,7 @@ export class PopupComponent {
       }
     }); 
   }
+  
 
 }
 

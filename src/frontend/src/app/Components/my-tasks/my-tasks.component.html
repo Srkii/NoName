@@ -11,7 +11,7 @@
     <h5>📬 New Issues</h5>
     <div class="page-size-container">
       <span class="align-middle">Show</span>
-      <select class="page_size" (change)="LoadSoonTasks($event)">
+      <select class="page_size" (change)="LoadNewTasks($event)">
         <option value="5" selected>5</option>
         <option value="10">10</option>
         <option value="15">15</option>
@@ -185,7 +185,7 @@
     <h5>🎉 Closed Tasks</h5>
     <div class="page-size-container">
       <span class="align-middle">Show</span>
-      <select class="page_size" (change)="LoadSoonTasks($event)">
+      <select class="page_size" (change)="LoadClosedTasks($event)">
         <option value="5" selected>5</option>
         <option value="10">10</option>
         <option value="15">15</option>

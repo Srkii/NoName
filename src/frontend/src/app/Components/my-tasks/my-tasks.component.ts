@@ -165,9 +165,8 @@ export class MyTasksComponent implements OnInit {
   LoadNewTasks(event:Event):void{
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.spinner.show();
-
     if (this.userId !== null) {
-    this.myTasksService
+      this.myTasksService
       .GetNewTasksByUserId(this.userId,parseInt(selectedValue))
       .subscribe((tasks: ProjectTask[]) => {
         this.new_tasks = tasks;
