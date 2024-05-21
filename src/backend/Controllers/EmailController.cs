@@ -2,6 +2,7 @@
 using backend.DTO;
 using backend.Entities;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -17,6 +18,7 @@ namespace backend.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("sendInvitation")]
         public async Task<IActionResult> SendInvitationEmail(EmailDto emailDto)
         {
