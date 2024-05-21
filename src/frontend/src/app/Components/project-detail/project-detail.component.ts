@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus } from '../../Entities/Project';
@@ -19,6 +19,7 @@ import { ProjectSection } from '../../Entities/ProjectSection';
 import { ProjectSectionService } from '../../_services/project-section.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { QuillConfigService } from '../../_services/quill-config.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -80,6 +81,7 @@ export class ProjectDetailComponent implements OnInit {
 
   buttonClicked: boolean = false;
   taskNameExists: boolean = false;
+  enabledEditorOptions: boolean = false;
 
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
@@ -98,21 +100,14 @@ export class ProjectDetailComponent implements OnInit {
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
-    private datePipe: DatePipe,
     public uploadservice: UploadService,
     private shared: SharedService,
     private projectSectionService: ProjectSectionService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public quillService: QuillConfigService,
+    private elementRef: ElementRef
   ) {}
-
-  get formattedEndDate() {
-    return this.datePipe.transform(this.update.endDate, 'yyyy-MM-dd');
-  }
-
-  get formattedStartDate() {
-    return this.datePipe.transform(this.update.startDate, 'yyyy-MM-dd');
-  }
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
@@ -222,6 +217,7 @@ export class ProjectDetailComponent implements OnInit {
       this.update.startDate = this.project.startDate;
       this.update.endDate = this.project.endDate;
       this.update.projectStatus = this.project.projectStatus;
+      this.enabledEditorOptions = false;
   }
 
   openMemberManagment(modal: TemplateRef<void>){
@@ -369,17 +365,6 @@ export class ProjectDetailComponent implements OnInit {
       default:
           return "DEFAULT"
     }
-  }
-
-  enableNameChange(){
-    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
-    changeNameInp.disabled = false;
-    changeNameInp.focus();
-  }
-
-  disableNameChange(){
-    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
-    changeNameInp.disabled = true;
   }
 
   async saveTask() {
@@ -578,6 +563,16 @@ export class ProjectDetailComponent implements OnInit {
       return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
     }
     return false;
+  }
+  showEditOptions(){
+    this.enabledEditorOptions = true;
+  }
+  @HostListener('document:click', ['$event'])
+  onClick(event: any) {
+    const elementRef = document.getElementById('area-desc') as HTMLElement;
+    if (elementRef && !elementRef.contains(event.target)) {
+      this.enabledEditorOptions = false;
+    }
   }
 
   restoreInvalidInputs():void{

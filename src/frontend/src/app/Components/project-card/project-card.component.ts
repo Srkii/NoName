@@ -6,6 +6,7 @@ import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { UploadService } from '../../_services/upload.service';
+import { QuillConfigService } from '../../_services/quill-config.service';
 
 @Component({
   selector: 'app-project-card',
@@ -37,7 +38,8 @@ export class ProjectCardComponent {
   constructor(
     private route: ActivatedRoute,
     private myProjectCardService: ProjectCardService,
-    public uploadservice: UploadService
+    public uploadservice: UploadService,
+    public quillService: QuillConfigService
   ) {}
 
   ngOnInit(): void {
