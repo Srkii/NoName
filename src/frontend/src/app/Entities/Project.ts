@@ -1,6 +1,5 @@
 export interface Project {
   id: number;
-  parentId?: number;
   projectName: string;
   description?: string;
   startDate: Date;

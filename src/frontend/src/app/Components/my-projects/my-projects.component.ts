@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit  } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef  } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus, Priority } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -6,7 +6,8 @@ import { Router } from '@angular/router';
 import { Member, UserRole } from '../../Entities/Member';
 import { UploadService } from '../../_services/upload.service';
 import { switchMap } from 'rxjs';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ArchivedProject } from '../../Entities/ArchivedProject';
 
 @Component({
   selector: 'app-my-projects',
@@ -23,33 +24,31 @@ export class MyProjectsComponent implements OnInit {
   originalProjects: Project[] = [];
   totalPagesArray: number[] = [];
   rangeDates: Date[] | undefined;
-  
 
   selectedStatus: string = '';
   userRole: UserRole | any;
   projectOwners: { [projectId: number]: Member | null } = {};
   searchText: string='';
   
-  
-  
   showProjectCard: boolean = false;
+  modalRef?: BsModalRef;
+
+  archivedProjects: ArchivedProject[] = [];
+
   constructor(
-
     private myProjectsService: MyProjectsService,
-
     private spinner: NgxSpinnerService,
     public uploadservice: UploadService,
     private router: Router,
-    
-
+    private modalService: BsModalService
   ) {}
 
   ngOnInit(): void {
     var all_projects:number=-1;
     this.spinner.show();
-
     const userId = localStorage.getItem('id')
     this.userRole = localStorage.getItem('role');
+
     let startDate = '';
     let endDate = '';
     if (this.rangeDates && this.rangeDates.length === 2) {
@@ -99,8 +98,7 @@ export class MyProjectsComponent implements OnInit {
         startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
       if(this.rangeDates[1])
         endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
-    
-  }
+    }
     this.myProjectsService.filterAndPaginateProjects(
       this.searchText,
       this.selectedStatus,
@@ -165,14 +163,9 @@ export class MyProjectsComponent implements OnInit {
     }
   }
 
-
-
   handleStatusChange(event: any) {
     this.selectedStatus = event.target.value;
   }
-
-
-
 
   goToProject(id: number) {
     this.router.navigate(['/project', id]);
@@ -268,5 +261,48 @@ export class MyProjectsComponent implements OnInit {
     }
 
     return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
+
+  openViewArchProjModal(modal: TemplateRef<void>) {
+    const userId = localStorage.getItem('id');
+    this.myProjectsService.getUsersArchivedProjects(userId).subscribe({
+      next: (response: { project: { id: number; projectName: string; startDate: string; endDate: string; }, owner?: { firstName: string; lastName: string; profilePicUrl?: string } }[]) => {
+        this.archivedProjects = response.map(item => ({
+          id: item.project.id,
+          projectName: item.project.projectName,
+          startDate: new Date(item.project.startDate),
+          endDate: new Date(item.project.endDate),
+          ownerFirstName: item.owner ? item.owner.firstName : undefined,
+          ownerLastName: item.owner ? item.owner.lastName : undefined,
+          ownerProfilePicture: item.owner ? item.owner.profilePicUrl : undefined
+        }));
+        console.log(this.archivedProjects);
+        this.modalRef = this.modalService.show(modal, {
+          class: 'modal-lg modal-dialog-centered'
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching archived projects:', error);
+      }
+    });
+  }
+
+  removeProjectFromArchived() {
+    this.spinner.show();
+    const selectedProjectIds = this.archivedProjects
+      .filter(project => project.selected)
+      .map(project => project.id);
+    console.log(selectedProjectIds);
+    this.myProjectsService.removeProjectsFromArchived(selectedProjectIds).subscribe({
+      next: () => {
+        this.modalRef?.hide();
+        this.loadProjects(localStorage.getItem('id'));
+        this.spinner.hide();
+      },
+      error: (error) => {
+        console.error('Error removing projects from archived:', error);
+        this.spinner.hide();
+      }
+    });
   }
 }
