@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit, TemplateRef  } from '@angular/core';
 import { MyProjectsService } from '../../_services/my-projects.service';
-import { Project, ProjectStatus, Priority } from '../../Entities/Project';
+import { Project, ProjectStatus } from '../../Entities/Project';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { Member, UserRole } from '../../Entities/Member';
@@ -150,19 +150,6 @@ export class MyProjectsComponent implements OnInit {
     }
   }
 
-  getPriorityString(priority: Priority): string {
-    switch (priority) {
-      case Priority.Low:
-        return 'LOW';
-      case Priority.Medium:
-        return 'MEDIUM';
-      case Priority.High:
-        return 'HIGH';
-      default:
-        return '';
-    }
-  }
-
   handleStatusChange(event: any) {
     this.selectedStatus = event.target.value;
   }
@@ -276,7 +263,6 @@ export class MyProjectsComponent implements OnInit {
           ownerLastName: item.owner ? item.owner.lastName : undefined,
           ownerProfilePicture: item.owner ? item.owner.profilePicUrl : undefined
         }));
-        console.log(this.archivedProjects);
         this.modalRef = this.modalService.show(modal, {
           class: 'modal-lg modal-dialog-centered'
         });
@@ -292,7 +278,6 @@ export class MyProjectsComponent implements OnInit {
     const selectedProjectIds = this.archivedProjects
       .filter(project => project.selected)
       .map(project => project.id);
-    console.log(selectedProjectIds);
     this.myProjectsService.removeProjectsFromArchived(selectedProjectIds).subscribe({
       next: () => {
         this.modalRef?.hide();

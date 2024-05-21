@@ -837,3 +837,6 @@ input.is-invalid:focus{
 .archFooter {
     border-top: none !important;
 }
+.tPCheck {
+    accent-color: #696cff !important;
+}

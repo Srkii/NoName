@@ -24,7 +24,7 @@ body {
 table {
   color: #697a8d;
   font-size: 12px;
-  border: 1px solid lightgray;
+  /* border: 1px solid lightgray; */
   border-collapse: collapse;
   /* padding: 6px; */
   /* margin-left: -20px; */
@@ -43,16 +43,17 @@ table {
     padding: 2px;
   }
 }
+.modal-body {
+  padding-top: 0px !important;
+}
 th {
-  font-size: 14px;
-  border: 1.5px solid lightgray;
+  font-size: 16px;
   font-weight: 700; /* thinner text */
   padding-left: 5px;
   border-left: none;
   border-right: none;
-  color: #697a8d;
   cursor: pointer;
-  width: 30%;
+  width: 40%;
 }
 td{
   padding-bottom: 10px;
@@ -133,9 +134,7 @@ p {
   background-color: #5d57c2;
   border-color: #5d57c2;
 }
-.btn btn-primary{
-  background-color: #705ab8;
-}
+
 .dropdown-menu pop
 {
   background-color: #ffffff;
@@ -158,13 +157,12 @@ p {
   color: #fff;
   background-color: #696cff;
   border-color: #696cff;
-  box-shadow: 0 0 2px #5f61e6;
 }
 .btn-primary:hover {
   color: #fff !important;
   background-color: #5f61e6 !important;
   border-color: #5f61e6 !important;
-  /* transform: translateY(-1px) !important; */
+  transform: translateY(-1px) !important;
 }
 .avatar{
   padding-left: 0px;
@@ -172,9 +170,7 @@ p {
   height: 35px;
 }
 .btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
-  background-color: #5d57c2 !important;
-  color: #ccc;
-
+  background-color: #696cff !important;
 }
 .card{
   position: static;
@@ -431,8 +427,8 @@ select:focus-visible{
 .archUsers{
   /* margin: 10px !important; */
   cursor: pointer !important;
-  width: 200px;
-  height: 30px;
+  width: 185px;
+  /* height: 30px; */
   border-radius: 0.375rem;
   justify-content: flex-start;
   border-bottom: 2px solid #D7D7F8;
@@ -632,6 +628,21 @@ select:focus-visible{
   margin-right: 5px;
 }
 .noArch{
-  height: 50px;
-  padding-top: 10px;
+  margin: 15px !important;
+}
+
+.tPCheck {
+  accent-color: #696cff !important;
+}
+
+.archAvatar {
+  width: 25px !important;
+  height: 25px !important;
+}
+.archBtn {
+  margin-top: 10px;
+}
+.archBtn:focus {
+  background-color: #696cff;
+  border-color: #696cff;
 }

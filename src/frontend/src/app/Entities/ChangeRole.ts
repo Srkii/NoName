@@ -3,9 +3,7 @@ export interface ChangeRole{
     Role: UserRole
 }
 export enum UserRole {
-    
     Admin,
     ProjectManager,
     User
-      
 }
