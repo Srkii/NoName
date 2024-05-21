@@ -6,7 +6,6 @@ import { ChangeRole } from '../Entities/ChangeRole';
 import { UpdateUser } from '../Entities/UpdateUser';
 import { RegisterInvitation } from '../Entities/RegisterInvitation';
 import { environment } from '../../environments/environment';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root'
@@ -38,24 +37,21 @@ export class AdminService {
   getAllUsers(): Observable<any>{
     if(this.token)
       return this.httpClient.get<Member[]>(`${this.apiUrl}/users`,{headers:this.httpHeader})
-    return of(null); //u slucaju da nisam ulogovan i nemam korisnika nemoj da mi uzimas info o korisniku
+    return of(null);
   }
 
-  //updateUser
   updateUser(id: number, user:UpdateUser): Observable<any>{
     if(this.token)
       return this.httpClient.put<Member>(`${this.apiUrl}/users/updateUser/${id}`,user,{headers:this.httpHeader})
     return of(null);
   }
 
-  //ArchiveUser
   archiveUser(id: number): Observable<any> {
     return this.httpClient.post(`${this.apiUrl}/users/setAsArchived/${id}`, null, {headers:this.httpHeader});
   }
 
   changeUserRole(response: ChangeRole): Observable<any>{
-    let token=localStorage.getItem("token");
-    if(token)
+    if(this.token)
       return this.httpClient.post<ChangeRole>(`${this.apiUrl}/users/changeUserRole`,response,{headers:this.httpHeader})
     return of(null);
   }

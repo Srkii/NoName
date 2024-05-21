@@ -14,7 +14,6 @@ export class UploadService {
   UploadImage(id:any,imageData:File,token:any){
     const formData = new FormData();
     formData.append('image',imageData,imageData.name);
-    console.log(formData);
     var httpheader = new HttpHeaders({
       "Authorization":`Bearer ${token}`
     });

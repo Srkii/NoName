@@ -39,7 +39,7 @@ namespace backend.Controllers
       return await _context.Users.FindAsync(id);
     }
 
-    [AllowAnonymous]
+    [Authorize]
     [HttpGet("availableUsers/{projectCreatorId}")]
     public async Task<ActionResult<AppUser>> GetAvailableUsers(int projectCreatorId)
     {

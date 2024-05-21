@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,6 @@ export class UserinfoService {
   //tico: koristi apiUrl ako si ga vec importovao
   updateUserInfo(token: any, id:number, data:ChangePassword):Observable<any>{
     const url = `${this.baseUrl}/${id}`;
-    // console.log("Xd");
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'application/json');
