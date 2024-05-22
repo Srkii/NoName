@@ -60,6 +60,13 @@ export class ProjectCardComponent {
       return;
     }
 
+    //resetujem milisekunde
+    if(this.newProject.StartDate)
+      this.newProject.StartDate = this.resetTime(this.newProject.StartDate);
+    if(this.newProject.EndDate)
+      this.newProject.EndDate = this.resetTime(this.newProject.EndDate);
+
+
     if(this.newProject.StartDate == undefined || this.newProject.EndDate == undefined)
     {
       console.log("You must enter a dates for the project")
@@ -91,6 +98,13 @@ export class ProjectCardComponent {
       }
     });
   }
+
+  // sklanja milisekunde
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
 
   async ProjectNameExists(ProjectName: string)
   {

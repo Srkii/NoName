@@ -141,7 +141,7 @@
             </div>
             <div class="my-2">
               <label for="startDate">Start date</label>
-              <span id="startDate" class="startDate">{{update.startDate | date: 'MM/dd/yyyy'}}</span>
+              <span id="startDate" class="startDate">{{update.startDate | date }}</span>
             </div>
             <div class="my-2">
               <label for="endDate">End date</label>
@@ -283,7 +283,7 @@
           [ngClass]="{'ng-invalid': buttonClicked && !newTaskStartDate || isInvalidDate()}"
           ></p-calendar>
         <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
-        <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+        <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
         </div>
       </div>
       <div class="mb-1">
@@ -304,7 +304,7 @@
           [ngClass]="{'is-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}"
         ></p-calendar>
           <div *ngIf="buttonClicked && !newTaskEndDate" class="invalid">Please enter end date.</div>
-          <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+          <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
         </div>
       </div>
       <div class="mb-1 chooseAssignee" autocomplete="off">
