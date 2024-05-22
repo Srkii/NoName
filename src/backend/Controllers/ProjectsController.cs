@@ -285,24 +285,24 @@ namespace backend.Controllers
             }
 
             if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
-    {
-        if (sortedColumn == "ProjectOwner")
-        {
-            query = sortedOrder == 1
-                ? query.OrderBy(x => _context.ProjectMembers
-                    .Where(m => m.ProjectId == x.Id && m.ProjectRole == ProjectRole.ProjectOwner)
-                    .Select(m => m.AppUser.FirstName + " " + m.AppUser.LastName).FirstOrDefault())
-                : query.OrderByDescending(x => _context.ProjectMembers
-                    .Where(m => m.ProjectId == x.Id && m.ProjectRole == ProjectRole.ProjectOwner)
-                    .Select(m => m.AppUser.FirstName + " " + m.AppUser.LastName).FirstOrDefault());
-        }
-        else
-        {
-            query = sortedOrder == 1
-                ? query.OrderBy(x => EF.Property<object>(x, sortedColumn))
-                : query.OrderByDescending(x => EF.Property<object>(x, sortedColumn));
-        }
-    }
+            {
+                if (sortedColumn == "ProjectOwner")
+                {
+                    query = sortedOrder == 1
+                        ? query.OrderBy(x => _context.ProjectMembers
+                            .Where(m => m.ProjectId == x.Id && m.ProjectRole == ProjectRole.ProjectOwner)
+                            .Select(m => m.AppUser.FirstName + " " + m.AppUser.LastName).FirstOrDefault())
+                        : query.OrderByDescending(x => _context.ProjectMembers
+                            .Where(m => m.ProjectId == x.Id && m.ProjectRole == ProjectRole.ProjectOwner)
+                            .Select(m => m.AppUser.FirstName + " " + m.AppUser.LastName).FirstOrDefault());
+                }
+                else
+                {
+                    query = sortedOrder == 1
+                        ? query.OrderBy(x => EF.Property<object>(x, sortedColumn))
+                        : query.OrderByDescending(x => EF.Property<object>(x, sortedColumn));
+                }
+            }
 
             // Apply pagination
             var filteredProjects = await query.ToListAsync();
