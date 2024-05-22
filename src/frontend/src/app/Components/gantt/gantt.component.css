@@ -1,5 +1,6 @@
 * {
     font-family: 'Public Sans', sans-serif;
+    max-width: 1550px;
 }
 .btn-0{/*dugme na remove modalu*/
     color: #696cff;

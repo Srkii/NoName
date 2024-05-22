@@ -8,7 +8,6 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UpdateProject } from '../../Entities/UpdateProject';
-import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
@@ -60,7 +59,7 @@ export class ProjectDetailComponent implements OnInit {
   filteredUsers: SelectedUser[] = [];
   userId: number = -1;
   searchTerm: string = "";
-  userRole: ProjectRole | any;
+
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
@@ -94,6 +93,8 @@ export class ProjectDetailComponent implements OnInit {
   searchSection: string = '';
 
   today: Date = new Date();
+  userRole: ProjectRole | any;
+
 
   rangeDates: Date[] | undefined;
   selectedStatus: string = '';
@@ -119,12 +120,16 @@ export class ProjectDetailComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     public quillService: QuillConfigService,
-    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
+    const userId = localStorage.getItem("userId");
     this.currentProjectId = projectId ? +projectId : null;
+    if (projectId && userId) {
+      this.getUsersProjectRole(+projectId, +userId);
+    }
+    console.log(this.userRole);
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
@@ -142,6 +147,18 @@ export class ProjectDetailComponent implements OnInit {
 
   });
   }
+
+  getUsersProjectRole(projectId: number, userId: number) {
+    this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
+        next: (role) => {
+            this.userRole = role;
+        },
+        error: (error) => {
+            console.error('Failed to fetch user role', error);
+        }
+    });
+}
+
   getProjectInfo() {
     this.spinner.show();
     this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
@@ -245,6 +262,9 @@ export class ProjectDetailComponent implements OnInit {
 
   updateProject()
   {
+    if(this.update.endDate)
+      this.update.endDate = this.resetTime(this.update.endDate);
+    
     this.spinner.show()
     if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
     {
@@ -405,6 +425,11 @@ export class ProjectDetailComponent implements OnInit {
       return;
     }
 
+    // uklanja milisekunde
+    this.newTaskStartDate = this.resetTime(this.newTaskStartDate);
+    this.newTaskEndDate = this.resetTime(this.newTaskEndDate);
+
+
     if(this.isInvalidDate())
     {
       return;
@@ -449,6 +474,13 @@ export class ProjectDetailComponent implements OnInit {
       error: (error) => console.error('Error creating task:', error)
     });
   }
+
+  // sklanja milisekunde
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
   // vraca AppUsers koji su na projektu
   getProjectsUsersAndSections(currentProjectId: number) {
     const noSection = { id: 0, sectionName: 'No Section', projectId:currentProjectId };
@@ -578,7 +610,7 @@ export class ProjectDetailComponent implements OnInit {
       let currentDate = new Date();
       startDate.setHours(0,0,0,0);
       currentDate.setHours(0,0,0,0);
-      return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
+      return !(this.newTaskStartDate <= this.newTaskEndDate && (startDate>=currentDate));
     }
     return false;
   }

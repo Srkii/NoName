@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using backend.Data;
 using backend.DTO;
 using backend.Entities;
 using backend.Interfaces;
 using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +21,7 @@ namespace backend.Controllers
             _notificationService = notificationService;
         }
 
-        // [Authorize(Roles = "ProjectManager")]
+        [Authorize(Roles = "ProjectManager")]
         [HttpPost] // POST: api/projects/
         public async Task<ActionResult<Project>> CreateProject(ProjectDto projectDto)
         {
@@ -64,7 +66,7 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
         }
 
-        // [Authorize(Roles = "ProjectManager,Member")]
+        [Authorize]
         [HttpGet] // GET: api/projects/
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
@@ -72,14 +74,14 @@ namespace backend.Controllers
             return projects;
         }
 
-        // [Authorize(Roles = "ProjectManager,Member")]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("{id}")] // GET: api/projects/2
         public async Task<ActionResult<Project>> GetProject(int id)
         {
             return await _context.Projects.FindAsync(id);
         }
 
-        // [Authorize(Roles = "ProjectManager,Member")]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("getUsersProjects/{userid}")]  // GET: api/projects/getProjects/1
         public async Task<ActionResult<IEnumerable<Project>>> GetUsersProjects(int userid)
         {
@@ -94,7 +96,7 @@ namespace backend.Controllers
             return projects;
         }
 
-        // [Authorize(Roles = "ProjectManager")]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("updateProject")] // PUT: api/projects/updateProject
         public async Task<ActionResult<Project>> UpdateProject(ProjectDto projectDto)
         {
@@ -127,6 +129,7 @@ namespace backend.Controllers
             return _context.Projects.Any(e => e.Id == id);
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("addProjectMembers")] 
         public async Task<IActionResult> AddProjectMembers(ProjectMemberDTO[] dtos)
         {
@@ -145,7 +148,7 @@ namespace backend.Controllers
             return Ok(dtos);
         }
         
-
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("filterAndPaginate")]
         public async Task<ActionResult<IEnumerable<Project>>> FilterAndPaginateProjects(
             string searchText = null,
@@ -228,6 +231,7 @@ namespace backend.Controllers
             return filteredProjects;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("countFiltered")]
         public async Task<ActionResult<int>> CountFilteredProjects(
             string searchText = null,
@@ -310,7 +314,7 @@ namespace backend.Controllers
             return filteredProjects.Count;
         }
 
-
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("getUsersProjectsCount/{userid}")]
         public async Task<ActionResult<int>> GetUsersProjectsCount(int userid)
         {
@@ -325,6 +329,7 @@ namespace backend.Controllers
             return projects.Count;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("getProjectByName/{projectName}")]
         public async Task<ActionResult<int>> GetProjectByName(string projectName)
         {
@@ -333,6 +338,7 @@ namespace backend.Controllers
         }
 
         // vraca sve AppUser koji su na projektu (tj imaju odgovarajuci ProjectMember entry)
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("GetUsersByProjectId/{projectId}")]
         public async Task<ActionResult<IEnumerable<object>>> GetUsersByProjectId(int projectId)
         {
@@ -349,6 +355,7 @@ namespace backend.Controllers
             return Ok(users);
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("GetAddableUsers/{projectId}")]
         public async Task<ActionResult<IEnumerable<object>>> GetAddableUsers(int projectId)
         {
@@ -365,9 +372,13 @@ namespace backend.Controllers
             return Ok(users);
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpDelete("DeleteProjectMember/{projectId}/{userId}")]
         public async Task<ActionResult> DeleteProjectMember(int projectId,int userId)
         {
+            if(!await RoleCheck(projectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner]))
+                return Unauthorized("Invalid role");
+
             var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == projectId && member.AppUserId == userId);
             if(projectMember != null)
             {
@@ -379,9 +390,13 @@ namespace backend.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("UpdateUsersProjectRole")]
         public async Task<ActionResult> UpdateUsersProjectRole(ProjectMemberDTO dto)
         {
+            if(!await RoleCheck(dto.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner]))
+                return Unauthorized("Invalid role");
+
             var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == dto.ProjectId && member.AppUserId == dto.AppUserId);
             if(projectMember != null)
             {
@@ -393,6 +408,7 @@ namespace backend.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("GetProjectOwner/{projectId}")]
         public async Task<ActionResult<AppUser>> GetProjectOwner(int projectId)
         {
@@ -405,9 +421,10 @@ namespace backend.Controllers
             return null;
         }
 
-        // Add this method to the ProjectsController class
+        [Authorize(Roles = "ProjectManager")]
         [HttpPut("archive/{projectId}")]
         public async Task<IActionResult> ArchiveProject(int projectId) {
+
             var project = await _context.Projects.FindAsync(projectId);
             if (project == null) {
                 return NotFound("Project not found.");
@@ -426,6 +443,7 @@ namespace backend.Controllers
             return Ok(new { message = "Project and its tasks have been archived." });
         }
         
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("isArchived/{projectId}")] //api/projects/isArchived/2
         public async Task<ActionResult<bool>> IsProjectArchived(int projectId)
         {
@@ -441,6 +459,7 @@ namespace backend.Controllers
            
         }
 
+        [Authorize(Roles = "ProjectManager")]
         [HttpPut("unarchive/{projectId}")]
         public async Task<IActionResult> UnarchiveProject(int projectId) {
             var project = await _context.Projects.FindAsync(projectId);
@@ -461,6 +480,7 @@ namespace backend.Controllers
             return Ok(new { message = "Project and its tasks have been unarchived." });
         }
 
+        [Authorize(Roles = "ProjectManager")]
         [HttpPut("unarchiveMultiple")]
         public async Task<IActionResult> UnarchiveMultipleProjects([FromBody] List<int> projectIds) {
             var projects = await _context.Projects
@@ -485,6 +505,7 @@ namespace backend.Controllers
             return Ok(new { message = "Projects and their tasks have been unarchived." });
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("getUsersArchivedProjects/{userId}")]
         public async Task<ActionResult<IEnumerable<object>>> GetUsersArchivedProjects(int userId)
         {
@@ -511,6 +532,35 @@ namespace backend.Controllers
             });
 
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("getProjectUserRole/{projectId}/{userId}")]
+        public async Task<ActionResult<ProjectRole>> getProjectUserRole(int projectId, int userId)
+        {   
+            var user = await _context.ProjectMembers.FirstOrDefaultAsync(x => x.ProjectId == projectId && x.AppUserId == userId);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            return user.ProjectRole;
+        }
+
+        public async Task<bool> RoleCheck(int projectId, List<ProjectRole> roles)
+        {
+            string authHeader = HttpContext.Request.Headers["Authorization"];
+            if (authHeader != null && authHeader.StartsWith("Bearer "))
+            {
+                string token = authHeader.Substring("Bearer ".Length).Trim();
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jsonToken = tokenHandler.ReadJwtToken(token);
+
+                var userid = int.Parse(jsonToken.Claims.FirstOrDefault(c => c.Type == "nameid").Value);
+                var ProjectMember = await _context.ProjectMembers.FirstOrDefaultAsync(x => x.ProjectId == projectId && x.AppUserId == userid && roles.Contains(x.ProjectRole));
+            
+                return ProjectMember != null;
+            }
+            return false;
         }
         
     }

@@ -56,7 +56,7 @@ export class PopupComponent {
   attachment_name:string = '';
   attachment_added:boolean = false;
   file:any;
-
+  today: Date = new Date();
 
   constructor(private myTasksService: MyTasksService,
               private spinner: NgxSpinnerService,
@@ -418,6 +418,7 @@ export class PopupComponent {
     });
   }
 
+  
 
   updateTaskInfo(task: ProjectTask): void {
     const dto: ChangeTaskInfo = {
@@ -447,17 +448,17 @@ export class PopupComponent {
 
   }
 
-  updateTaskDueDate(event:Event): void {
+  // sklanja milisekunde
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
 
-      const dueDateString = (event.target as HTMLInputElement).value;
-      const dueDate = new Date(dueDateString);
-  
-      if (this.task) {
-        this.task.endDate = dueDate;
-  
-        this.updateTaskInfo(this.task);
-      }
-
+  updateTaskDueDate(): void {
+    if (this.task) {
+      this.task.endDate = this.resetTime(this.task.endDate);
+      this.updateTaskInfo(this.task);
+    }
   }
 
   ShowEdit(comment_id:number):void{

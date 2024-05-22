@@ -28,6 +28,7 @@ export class NavComponent implements OnInit {
       this.notificationService.createHubConnection();
     }
     this.navigation();
+    this.setActiveOption(this.selectedOption)
   }
   admin!: boolean
   logovan!: boolean
@@ -37,6 +38,8 @@ export class NavComponent implements OnInit {
   notification_list:any;
 
   isMyProjectsActive: boolean = false;
+
+  selectedOption: string=''
 
   changeTheme() {
     this.themeService.switchTheme();
@@ -48,7 +51,7 @@ export class NavComponent implements OnInit {
       localStorage.removeItem('token');
       localStorage.removeItem('id');
       localStorage.removeItem('role');
-
+      sessionStorage.removeItem('selectedOption');
       // Navigate to the login page
       this.notificationService.stopHubConnection();
       this.router.navigate(['/login']);
@@ -82,9 +85,38 @@ export class NavComponent implements OnInit {
 
   navigation():void{
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((NavigationEnd) => {
-      this.isMyProjectsActive = this.router.url.includes('/myprojects') || this.router.url.includes('/project/');
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      if (event.urlAfterRedirects.includes('/mytasks')) {
+        this.selectedOption = 'MyTasks'
+      }
+      else if(event.urlAfterRedirects.includes('/myprojects') || event.urlAfterRedirects.includes('/project/'))
+      {
+        this.selectedOption = 'MyProjects'
+      }
+      else if(event.urlAfterRedirects.includes('/admin'))
+      {
+        this.selectedOption = 'Admin' 
+      }
+      else if(event.urlAfterRedirects.includes('/userinfo'))
+      {
+        this.selectedOption = '' 
+      }
+      else {
+        this.selectedOption=''
+      }
     });
+    const storedOption = sessionStorage.getItem('selectedOption');
+    this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
+
   }
+
+  setActiveOption(option: string) {
+    if (option === '') {
+      sessionStorage.removeItem('selectedOption');
+    } else {
+      sessionStorage.setItem('selectedOption', option);
+    }
+  }
+
 }
