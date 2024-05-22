@@ -52,7 +52,6 @@ th {
   padding-left: 5px;
   border-left: none;
   border-right: none;
-  cursor: pointer;
   width: 40%;
 }
 td{
@@ -63,7 +62,6 @@ td{
   border-right: none;
   font-size: 16px;
   color: #697a8d;
-  cursor: pointer;
 }
 .ostaleKolone
 {

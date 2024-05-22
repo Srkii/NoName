@@ -227,9 +227,6 @@ export class AdminComponent implements OnInit{
         this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
           this.filteredUsers=res;
           this.totalPages= Math.ceil(res / this.pageSize);
-          console.log("get2 "+this.totalPages);
-          console.log("count "+res)
-          console.log("trenutna "+this.currentPage);
           if(this.currentPage>1 && this.totalPages==1)
             {
               this.currentPage=1;

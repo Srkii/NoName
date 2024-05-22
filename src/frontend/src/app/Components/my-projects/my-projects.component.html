@@ -129,9 +129,9 @@
           </svg>
           </th>
         </tr>
-        <tr  *ngFor="let project of projects" (click)="goToProject(project.id)">
+        <tr  *ngFor="let project of projects">
           <ng-container>
-            <td class="project-name">{{ project.projectName }}</td>
+            <td class="project-name" (click)="goToProject(project.id)">{{ project.projectName }}</td>
             <td *ngIf="!projectOwners[project.id]" class="mx-1">
               <span class="d-flex align-items-center mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">

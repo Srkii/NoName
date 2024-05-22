@@ -840,3 +840,6 @@ input.is-invalid:focus{
 .tPCheck {
     accent-color: #696cff !important;
 }
+.input-group-text {
+    background-color: #fff;
+}
