@@ -7,7 +7,7 @@ namespace backend.DTO
         [Required]
         public string CurrentPassword { get; set; }
         
-        [StringLength(5, ErrorMessage = "Password must be at least 5 characters long", MinimumLength = 5)]
+        [StringLength(30, ErrorMessage = "Password must be at least 5 characters long", MinimumLength = 5)]
         public string NewPassword { get; set; }
     }
 }
