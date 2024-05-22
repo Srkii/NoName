@@ -47,8 +47,8 @@
   overflow: auto;
 }
 
-table,tr,td{
-  border: 1px transparent;
+tr{
+  border: 1px solid transparent;
 }
 .notifications-table{
   width: 100%;

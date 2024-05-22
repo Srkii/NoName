@@ -11,7 +11,7 @@
     fill="currentColor"
     class="bi bi-bell"
     viewBox="0 0 16 16"
-    class="nav-link dropdown-toggle hide-arrow rightImg"
+    class="nav-link dropdown-toggle"
     data-bs-toggle="dropdown"
     aria-expanded="false"
     data-bs-boundary="viewport"
@@ -30,7 +30,8 @@
         </a>
       </div>
     </li>
-    <li><span style="font-size: 14px; margin-left: 15px; margin-top: 5px;margin-bottom: 5px;" *ngIf="notification_list.length==0">No new notifications.</span>
+    <li>
+      <span style="font-size: 16px; margin:15px;" *ngIf="notification_list.length==0">No new notifications.</span>
     </li>
     <li
     class="dropdown-notifications-list scrollable-container ps"
@@ -88,7 +89,7 @@
         <td><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0"></td></tr>
       <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td><i>No Unread Notifications.</i></td><td></td><td></td><td ></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications">
-        <td class="imagetd" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()">
+        <td class="imagetd" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
           <svg *ngIf="notification.type==2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
@@ -123,7 +124,7 @@
       <tr class="inactive_tr"><td><i>Read</i></td><td></td><td></td><td ></td></tr>
       <tr class="inactive_tr_flag" *ngIf="notifications_read.length==0"><td><i>No Read Notifications.</i></td><td></td><td></td><td ></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications_read">
-        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()">
+        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
           <svg *ngIf="notification.type==2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-clipboard2-check" viewBox="0 0 16 16">

@@ -39,6 +39,7 @@ namespace backend.Services
                 await _hubContext.Clients.Group(Users[i].ToString())
                     .Notify(
                          new NotificationDto{
+                            Id = notification.Id,
                             Task = notification.Task,
                             Comment = notification.Comment,
                             Project = notification.Project,
@@ -68,6 +69,7 @@ namespace backend.Services
             await _hubContext.Clients.Group(reciever.Id.ToString())
                     .Notify(
                          new NotificationDto{
+                            Id = notification.Id,
                             Comment = notification.Comment,
                             Task = notification.Task,
                             Project = notification.Project,
@@ -97,6 +99,7 @@ namespace backend.Services
             await _hubContext.Clients.Group(reciever_id.ToString())
                     .Notify(
                          new NotificationDto{
+                            Id = notification.Id,
                             Comment = notification.Comment,
                             Task = notification.Task,
                             Project = notification.Project,
@@ -125,17 +128,18 @@ namespace backend.Services
             await _context.Notifications.AddAsync(notification);
             await _context.SaveChangesAsync();
             
-            await _hubContext.Clients.Group(owner.AppUserId.ToString())
-                    .Notify(
-                        new NotificationDto{
-                            Comment = notification.Comment,
-                            Task = notification.Task,
-                            Project = notification.Project,
-                            Sender = notification.Sender,
-                            dateTime = notification.dateTime,
-                            Type = notification.Type,
-                            read = notification.read
-                        });   
+            // await _hubContext.Clients.Group(owner.AppUserId.ToString())
+            //         .Notify(
+            //             new NotificationDto{
+            //                 Id = notification.Id,
+            //                 Comment = notification.Comment,
+            //                 Task = notification.Task,
+            //                 Project = notification.Project,
+            //                 Sender = notification.Sender,
+            //                 dateTime = notification.dateTime,
+            //                 Type = notification.Type,
+            //                 read = notification.read
+            //             });   
             
         }
         public async Task<List<int>> GetUsersForTaskNotification(int taskId, int initiatorId)

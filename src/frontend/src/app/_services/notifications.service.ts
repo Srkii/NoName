@@ -48,7 +48,7 @@ export class NotificationsService{
     });
 
     this.hubConnection.on('Notify',(notification:any)=>{
-      console.log(notification);
+      // console.log(notification);
       this.notifications.push(notification);//ide u listu real-time notifikacija
       this.allNotifications.push(notification);//lista neprocitanih u tabeli..
       this.newNotifications = true;
@@ -62,7 +62,7 @@ export class NotificationsService{
     })
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
       this.notifications = notifications;
-      console.log(notifications);
+      // console.log(notifications);
     });
 
     this.hubConnection.on('recieveAllNotifications',(notifications:[Notification])=>{
@@ -95,7 +95,7 @@ export class NotificationsService{
       case 3:
         return "You have been assigned to a project";
       case 4:
-        return "finished their task.";
+        return "finished their task";
       default:
         return "";
     }
@@ -109,7 +109,7 @@ export class NotificationsService{
       case 2:
         return this.getNotificationType(notification.type)+" "+notification.task.taskName;
       case 3:
-        return this.getNotificationType(notification.type)+" "+notification.task.taskName;
+        return this.getNotificationType(notification.type)+" "+notification.project.projectName;
       case 4:
         return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
       default:
@@ -136,6 +136,7 @@ export class NotificationsService{
   }
 
   async follow_notif(event: MouseEvent, notification: any) {
+    console.log(notification);
     this.read_notifications([notification.id]);
     if (notification.task != null) {
       event.stopPropagation();
