@@ -99,6 +99,7 @@ export class AdminComponent implements OnInit{
   invalidLastName: boolean=false;
   invalidEmail: boolean=false;
   regex: RegExp = /^[A-Za-z]{2,}$/;
+  regexEmail: RegExp =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   archMembers: { [key: string]: Member[] } = {};
 
@@ -154,13 +155,22 @@ export class AdminComponent implements OnInit{
 
     UpdateUser(id: number): void{
       
-      if (this.newEmail!=this.updateUser.Email || this.newFisrtName!=this.updateUser.FirstName || this.newLastName != this.updateUser.LastName) {
+      if (this.newEmail==this.updateUser.Email && this.newFisrtName==this.updateUser.FirstName && this.newLastName == this.updateUser.LastName) {
         return;
       }
-    
+
+      if(!this.regex.test(this.newFisrtName) || !this.regex.test(this.newLastName) || !this.regexEmail.test(this.newEmail)){
+        return;
+      }
+
+      this.updateUser.Email = this.newEmail;
+      this.updateUser.FirstName = this.newFisrtName;
+      this.updateUser.LastName = this.newLastName;
+      
       this.adminService.updateUser(id,this.updateUser).subscribe({
         next:()=>{
           this.GetUsers();
+          this.modalRef?.hide();
         },
         error: (error) => {
           console.log(error);
