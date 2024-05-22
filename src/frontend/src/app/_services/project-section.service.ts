@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProjectSection } from '../Entities/ProjectSection';
 
@@ -9,19 +9,24 @@ import { ProjectSection } from '../Entities/ProjectSection';
 })
 export class ProjectSectionService {
   private apiUrl = environment.apiUrl + '/ProjectSection';
+  private token: string;
+  private httpHeader: HttpHeaders;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.token = localStorage.getItem('token') || '';
+    this.httpHeader=new HttpHeaders({"Authorization": `Bearer ${this.token}`});
+  }
 
   getSectionsByProject(projectId: number): Observable<ProjectSection[]> {
-    return this.http.get<ProjectSection[]>(`${this.apiUrl}/project/${projectId}`);
+    return this.http.get<ProjectSection[]>(`${this.apiUrl}/project/${projectId}`, {headers:this.httpHeader});
   }
 
   createSection(sectionName: string, projectId: number): Observable<ProjectSection> {
     const body = { sectionName, projectId };
-    return this.http.post<ProjectSection>(this.apiUrl, body);
+    return this.http.post<ProjectSection>(this.apiUrl, body, {headers:this.httpHeader});
   }
 
   deleteSection(sectionId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${sectionId}`);
+    return this.http.delete<void>(`${this.apiUrl}/${sectionId}`, {headers:this.httpHeader});
   }
 }

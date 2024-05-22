@@ -59,7 +59,7 @@ export class ProjectDetailComponent implements OnInit {
   filteredUsers: SelectedUser[] = [];
   userId: number = -1;
   searchTerm: string = "";
-  userRole: ProjectRole | any;
+
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
@@ -92,6 +92,8 @@ export class ProjectDetailComponent implements OnInit {
   searchSection: string = '';
 
   today: Date = new Date();
+  userRole: ProjectRole | any;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -105,12 +107,16 @@ export class ProjectDetailComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     public quillService: QuillConfigService,
-    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
+    const userId = localStorage.getItem("userId");
     this.currentProjectId = projectId ? +projectId : null;
+    if (projectId && userId) {
+      this.getUsersProjectRole(+projectId, +userId);
+    }
+    console.log(this.userRole);
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
@@ -128,6 +134,18 @@ export class ProjectDetailComponent implements OnInit {
 
   });
   }
+
+  getUsersProjectRole(projectId: number, userId: number) {
+    this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
+        next: (role) => {
+            this.userRole = role;
+        },
+        error: (error) => {
+            console.error('Failed to fetch user role', error);
+        }
+    });
+}
+
   getProjectInfo() {
     this.spinner.show();
     this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
@@ -230,6 +248,9 @@ export class ProjectDetailComponent implements OnInit {
 
   updateProject()
   {
+    if(this.update.endDate)
+      this.update.endDate = this.resetTime(this.update.endDate);
+    
     this.spinner.show()
     if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
     {
