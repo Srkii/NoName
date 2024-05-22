@@ -52,7 +52,7 @@ export class PopupComponent {
   attachment_name:string = '';
   attachment_added:boolean = false;
   file:any;
-
+  today: Date = new Date();
 
   constructor(private myTasksService: MyTasksService,
               private cdr: ChangeDetectorRef,
@@ -410,6 +410,7 @@ export class PopupComponent {
     });
   }
 
+  
 
   updateTaskInfo(task: ProjectTask): void {
     const dto: ChangeTaskInfo = {
@@ -438,13 +439,15 @@ export class PopupComponent {
     });
   }
 
-  updateTaskDueDate(event:Event): void {
-    const dueDateString = (event.target as HTMLInputElement).value;
-    const dueDate = new Date(dueDateString);
+  // sklanja milisekunde
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
 
+  updateTaskDueDate(): void {
     if (this.task) {
-      this.task.endDate = dueDate;
-
+      this.task.endDate = this.resetTime(this.task.endDate);
       this.updateTaskInfo(this.task);
     }
   }

@@ -45,8 +45,21 @@
         <div class="mInfoTitle">
           Due Date:
         </div>
-        <div>
-          <input type="text" placeholder="{{task.endDate|date}}" onfocus="this.type='date'"  onblur="this.type='text|date'" [value]="task.endDate | date" (blur)="updateTaskDueDate($event)">
+        <div class="tNgDatePicker">
+          <p-calendar
+          *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"
+          [style]="{'width':'100%'}"
+          [(ngModel)]="task.endDate"
+          inputId="endDate"
+          name="endDate"
+          [showButtonBar]="true"
+          [firstDayOfWeek]="1"
+          placeholder="{{task.endDate|date}}"
+          dateFormat="MM dd, yy"
+          [minDate]="today"
+          (onSelect)="updateTaskDueDate()"
+          (click)="$event.stopPropagation()"
+          ></p-calendar>
         </div>
       </div>
       <div class="mOrigin">

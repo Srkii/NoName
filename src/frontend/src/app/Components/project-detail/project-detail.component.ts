@@ -8,7 +8,6 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UpdateProject } from '../../Entities/UpdateProject';
-import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
