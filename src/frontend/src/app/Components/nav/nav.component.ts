@@ -28,6 +28,7 @@ export class NavComponent implements OnInit {
       this.notificationService.createHubConnection();
     }
     this.navigation();
+    this.setActiveOption(this.selectedOption)
   }
   admin!: boolean
   logovan!: boolean
@@ -37,6 +38,8 @@ export class NavComponent implements OnInit {
   notification_list:any;
 
   isMyProjectsActive: boolean = false;
+
+  selectedOption: string=''
 
   changeTheme() {
     this.themeService.switchTheme();
@@ -82,9 +85,28 @@ export class NavComponent implements OnInit {
 
   navigation():void{
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((NavigationEnd) => {
-      this.isMyProjectsActive = this.router.url.includes('/myprojects') || this.router.url.includes('/project/');
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      if (event.urlAfterRedirects.includes('/mytasks')) {
+        this.selectedOption = 'MyTasks'
+      }
+      else if(event.urlAfterRedirects.includes('/myprojects') || event.urlAfterRedirects.includes('/project/'))
+      {
+        this.selectedOption = 'MyProjects'
+      }
+      else if(event.urlAfterRedirects.includes('/admin'))
+      {
+        this.selectedOption = 'AdminPage' 
+      }
+      else 
+      {this.selectedOption=''}
     });
+    this.selectedOption = sessionStorage.getItem('selectedOption') || '';
   }
+
+  setActiveOption(option: string) {
+    this.selectedOption = option
+    sessionStorage.setItem('selectedOption', option) 
+  }
+
 }
