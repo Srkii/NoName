@@ -48,6 +48,7 @@ export class NotificationsService{
     });
 
     this.hubConnection.on('Notify',(notification:any)=>{
+      console.log(notification);
       this.notifications.push(notification);//ide u listu real-time notifikacija
       this.allNotifications.push(notification);//lista neprocitanih u tabeli..
       this.newNotifications = true;
@@ -61,7 +62,7 @@ export class NotificationsService{
     })
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
       this.notifications = notifications;
-      // console.log(notifications);
+      console.log(notifications);
     });
 
     this.hubConnection.on('recieveAllNotifications',(notifications:[Notification])=>{
@@ -72,7 +73,7 @@ export class NotificationsService{
     this.hubConnection?.stop().catch();
   }
   async getNotifications(){
-    //invoke funkcije na back-u kad se klikne na zvonce
+
     await this.hubConnection?.invoke('invokeGetNotifications');//top 10 najskorijih neprocitanih notif -> OD SADA SAMO NAJSKORIJE, U NOTIF TAB-U IZBACUJE SAD MALO DRUGACIJE..
 
   }
@@ -93,6 +94,8 @@ export class NotificationsService{
         return "You have been assigned to a task";
       case 3:
         return "You have been assigned to a project";
+      case 4:
+        return "finished their task.";
       default:
         return "";
     }
@@ -105,6 +108,10 @@ export class NotificationsService{
         return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
       case 2:
         return this.getNotificationType(notification.type)+" "+notification.task.taskName;
+      case 3:
+        return this.getNotificationType(notification.type)+" "+notification.task.taskName;
+      case 4:
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type)+" "+notification.task.taskName;
       default:
         return this.getNotificationType(notification.type)+" "+notification.project.projectName;//pravi jos tipova...
 
@@ -118,6 +125,10 @@ export class NotificationsService{
         return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
       case 2:
         return this.getNotificationType(notification.type);
+      case 3:
+        return this.getNotificationType(notification.type);
+      case 4:
+        return notification.sender.firstName+" "+notification.sender.lastName+" "+this.getNotificationType(notification.type);
       default:
         return this.getNotificationType(notification.type);
 

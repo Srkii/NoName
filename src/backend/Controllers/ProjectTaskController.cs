@@ -167,7 +167,7 @@ namespace backend.Controllers
         }
 
 
-        [HttpPut("updateStatus/{taskId}/{statusName}")]//abominacija ~maksim
+        [HttpPut("updateStatus/{taskId}/{statusName}")]
         public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
         {
             var task = await _context.ProjectTasks
@@ -191,13 +191,16 @@ namespace backend.Controllers
             }
 
             task.TskStatusId = status.Id;
+
+            await _context.SaveChangesAsync();
             if(statusName.Equals("Archived")){
-                //arhiviram sve notifikacije
                 _notificationService.ArchiveRelatedTaskNotifications(taskId);
             }else if(wasArchived){
                 _notificationService.DeArchiveRelatedTaskNotifications(taskId);
             }
-            await _context.SaveChangesAsync();
+            if(statusName.Equals("InReview")){
+                await _notificationService.notifyTaskCompleted(taskId);
+            }   
 
             // Now, after saving changes, fetch the updated task again
             task = await _context.ProjectTasks
