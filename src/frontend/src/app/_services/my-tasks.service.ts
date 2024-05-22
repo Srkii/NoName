@@ -59,10 +59,7 @@ export class MyTasksService {
   updateTaskStatusPositions(updatedStatuses: any[]): Observable<any> {
   return this.http.put(`${this.baseUrl}/updateStatusPositions`, updatedStatuses);
   }
-  sortTasksByDueDate(userId:any,sortOrder: string): Observable<ProjectTask[]> {
-    const url = `${this.baseUrl}/sortTasksByDueDate/${userId}?sortOrder=${sortOrder}`;
-    return this.http.get<ProjectTask[]>(url);
-  }
+
   // za addNewSection modal
   addTaskStatus(taskStatus: { statusName: string; projectId: number }): Observable<any> {
     return this.http.post(`${this.baseUrl}/addTaskStatus`, taskStatus);

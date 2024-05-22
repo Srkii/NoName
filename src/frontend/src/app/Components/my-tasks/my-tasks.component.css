@@ -148,3 +148,15 @@ p {
 .align-middle {
   vertical-align: middle;
 }
+
+.sorted-asc {
+  color: #5f61e6;
+}
+
+.sorted-desc {
+  color: #5f61e6;
+}
+
+.unsorted {
+  color: none;
+}

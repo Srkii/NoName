@@ -445,45 +445,6 @@ namespace backend.Controllers
             return Ok(newTaskStatus);
         }
 
-        [AllowAnonymous]
-        [HttpGet("sortTasksByDueDate/{userId}")]
-        public async Task<ActionResult<IEnumerable<object>>> SortTasksByDueDate(int userId,string sortOrder)
-        {
-            var query = _context.ProjectTasks.AsQueryable();
-            // Apply sorting based on the sortBy parameter
-            switch (sortOrder)
-            {
-                case "asc":
-                    query = query.OrderBy(task => task.EndDate);
-                    break;
-                // Add more cases for additional sorting criteria if needed
-                case "desc":
-                    // Default sorting by task ID if sortBy parameter is not recognized
-                    query = query.OrderByDescending(task => task.EndDate);
-                    break;
-            }
-
-            var sortedTasks = await query.Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview")
-                .Select(task => new
-                {
-                    task.Id,
-                    task.TaskName,
-                    task.Description,
-                    task.StartDate,
-                    task.EndDate,
-                    task.ProjectId,
-                    task.TskStatus.StatusName,
-                    task.TskStatus.Color,
-                    task.ProjectSection.SectionName,
-                    task.AppUser.FirstName,
-                    task.AppUser.LastName,
-                    task.Project
-                    
-                })
-                .ToListAsync();
-            return sortedTasks;
-        }
-
         [HttpDelete("deleteTaskStatus/{TaskStatusId}")] // GET: api/projectTask/deleteTaskStatus/{TaskStatusId}
         public async Task<IActionResult> DeleteSection(int TaskStatusId)
         {

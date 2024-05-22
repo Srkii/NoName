@@ -399,3 +399,24 @@ p {
 .tPCheck:checked {
   accent-color: #696cff !important;
 }
+
+.filter {
+  margin-left: 2%;
+}
+.filter:hover,
+.filter:focus {
+  cursor: pointer;
+  color: #5f61e6;
+}
+
+.sorted-asc {
+  color: #5f61e6;
+}
+
+.sorted-desc {
+  color: #5f61e6;
+}
+
+.unsorted {
+  color: none;
+}

@@ -34,6 +34,8 @@ export class MyProjectsComponent implements OnInit {
   modalRef?: BsModalRef;
 
   archivedProjects: ArchivedProject[] = [];
+  sortedColumn: string = '';
+  sortedOrder: number = 0; 
 
   constructor(
     private myProjectsService: MyProjectsService,
@@ -71,7 +73,9 @@ export class MyProjectsComponent implements OnInit {
           endDate,
           userId,
           this.currentPage,
-          this.pageSize
+          this.pageSize,
+          this.sortedColumn,
+          this.sortedOrder
         );
       })
     ).subscribe((projects: Project[]) => {
@@ -106,7 +110,9 @@ export class MyProjectsComponent implements OnInit {
       endDate,
       userId,
       this.currentPage,
-      this.pageSize
+      this.pageSize,
+      this.sortedColumn,
+      this.sortedOrder
     ).subscribe((projects: Project[]) => {
       this.projects = projects;
       this.loadProjectOwners();
@@ -118,7 +124,7 @@ export class MyProjectsComponent implements OnInit {
       endDate,
       userId,
       this.currentPage,
-      this.pageSize
+      this.pageSize,
     ).subscribe((filteredProjects: number) => {
       this.filteredProjects=filteredProjects;
       this.totalPages = Math.ceil(this.filteredProjects / this.pageSize);
@@ -289,5 +295,29 @@ export class MyProjectsComponent implements OnInit {
         this.spinner.hide();
       }
     });
+  }
+
+
+  toggleSortOrder(column: string): void {
+    const userId = localStorage.getItem('id');
+    if (this.sortedColumn === column) {
+      this.sortedOrder = (this.sortedOrder + 1) % 3;
+    } else {
+      this.sortedColumn = column;
+      this.sortedOrder = 1;
+    }
+    this.loadProjects(userId);
+  }
+
+  getSortClass(column: string): string {
+    if (this.sortedColumn === column) {
+      if(this.sortedOrder==1)
+        return 'sorted-asc';
+      if(this.sortedOrder==2)
+        return 'sorted-desc';
+      else
+        return 'unsorted';
+    }
+    return 'unsorted';
   }
 }

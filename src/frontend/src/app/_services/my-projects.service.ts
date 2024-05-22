@@ -36,7 +36,9 @@ export class MyProjectsService {
     endDate: string | null = null,
     userId: any = null,
     currentPage: number = 0,
-    pageSize: number = 0
+    pageSize: number = 0,
+    sortedColumn:string|null=null,
+    sortedOrder:number=0
   ): Observable<Project[]> {
     let params = new HttpParams();
     if (searchText) {
@@ -54,6 +56,12 @@ export class MyProjectsService {
     if (userId) {
       params = params.set('userId', userId);
     }
+    if (sortedColumn) {
+      params = params.set('sortedColumn', sortedColumn);
+    }
+    if (sortedOrder) {
+      params = params.set('sortedOrder', sortedOrder);
+    }
     if (currentPage) {
       params = params.set('currentPage', currentPage.toString());
     }
@@ -70,7 +78,9 @@ export class MyProjectsService {
     endDate: string | null = null,
     userId: any = null,
     currentPage: number = 0,
-    pageSize: number = 0
+    pageSize: number = 0,
+    sortedColumn:string|null=null,
+    sortedOrder:number=0
   ): Observable<number> {
     let params = new HttpParams();
     if (searchText) {
@@ -87,6 +97,12 @@ export class MyProjectsService {
     }
     if (userId) {
       params = params.set('userId', userId);
+    }
+    if (sortedColumn) {
+      params = params.set('sortedColumn', sortedColumn);
+    }
+    if (sortedOrder) {
+      params = params.set('sortedOrder', sortedOrder);
     }
     if (currentPage) {
       params = params.set('currentPage', currentPage.toString());
