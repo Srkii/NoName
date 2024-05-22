@@ -143,9 +143,29 @@
               <label for="startDate">Start date</label>
               <span id="startDate" class="startDate">{{update.startDate | date }}</span>
             </div>
-            <div class="my-2">
-              <label for="endDate">End date</label>
-              <input type="date" id="endDate" class="endDate" [ngModel]="update.endDate | date: 'yyyy-MM-dd'" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3">
+            <div class="my-2 sPrimeNgEndDate">
+              <div class="sLabel">
+                <label for="endDate">End date</label>
+              </div>
+              <div class="sSpan">
+                <span *ngIf="userRole == 2 || userRole == 3 || userRole == 4" id="startDate" class="startDate">{{ update.endDate | date }}</span>
+              </div>
+              <div class="sPrimeNg">
+                <p-calendar
+              [style]="{'width':'100%'}"
+              [(ngModel)]="update.endDate"
+              inputId="endDate"
+              name="endDate"
+              [showButtonBar]="true"
+              [firstDayOfWeek]="1"
+              placeholder="{{ update.endDate | date }}"
+              dateFormat="MM dd, yy"
+              [minDate]="today"
+              (onSelect)="updateProject()"
+              (click)="$event.stopPropagation()"
+              ></p-calendar>
+              </div>
+              <!-- <input type="date" id="endDate" class="endDate" [ngModel]="update.endDate | date: 'yyyy-MM-dd'" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3"> -->
             </div>
             <div class="my-2">
               <label for="endDate">Progress</label>
