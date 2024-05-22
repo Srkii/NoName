@@ -228,11 +228,13 @@ export class MyProjectsComponent implements OnInit {
   }
 }
 
-  isOverdue(endDate: Date): boolean {
-    const now = new Date().getTime(); 
-    const endDateTimestamp = new Date(endDate).getTime(); 
-    return endDateTimestamp <= now; 
-  }
+isOverdue(endDate: Date): boolean {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const endDateReset = new Date(endDate);
+  endDateReset.setHours(0, 0, 0, 0);
+  return endDateReset < now;
+}
 
   getProgressClass(progress: number): string {
     return progress <= 15? 'progress-type2' : 'progress-type1';

@@ -8,7 +8,6 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UpdateProject } from '../../Entities/UpdateProject';
-import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
@@ -391,6 +390,11 @@ export class ProjectDetailComponent implements OnInit {
       return;
     }
 
+    // uklanja milisekunde
+    this.newTaskStartDate = this.resetTime(this.newTaskStartDate);
+    this.newTaskEndDate = this.resetTime(this.newTaskEndDate);
+
+
     if(this.isInvalidDate())
     {
       return;
@@ -435,6 +439,13 @@ export class ProjectDetailComponent implements OnInit {
       error: (error) => console.error('Error creating task:', error)
     });
   }
+
+  // sklanja milisekunde
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
   // vraca AppUsers koji su na projektu
   getProjectsUsersAndSections(currentProjectId: number) {
     const noSection = { id: 0, sectionName: 'No Section', projectId:currentProjectId };
@@ -564,7 +575,7 @@ export class ProjectDetailComponent implements OnInit {
       let currentDate = new Date();
       startDate.setHours(0,0,0,0);
       currentDate.setHours(0,0,0,0);
-      return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
+      return !(this.newTaskStartDate <= this.newTaskEndDate && (startDate>=currentDate));
     }
     return false;
   }
