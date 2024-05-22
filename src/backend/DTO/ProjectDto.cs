@@ -1,4 +1,5 @@
-﻿using backend.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using backend.Entities;
 
 namespace backend.DTO
 {
@@ -6,6 +7,8 @@ namespace backend.DTO
     {
         public int AppUserId { get; set; }
         public int ProjectId { get; set;}
+
+        [StringLength(1, ErrorMessage = "Project name must be at least 1 characters long", MinimumLength = 1)]
         public string ProjectName { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
