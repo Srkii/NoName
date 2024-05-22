@@ -38,7 +38,8 @@ import { LandingPageComponent } from './Components/landing-page/landing-page.com
 import { TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
-import { fr } from 'date-fns/locale';import { QuillModule } from 'ngx-quill';
+import { enUS } from 'date-fns/locale';
+import { QuillModule } from 'ngx-quill';
 
 const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
 
@@ -98,12 +99,11 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
       provide: GANTT_GLOBAL_CONFIG,
       useValue: {
         dateOptions: {
-             locale: fr,
+             locale: enUS,
              weekStartsOn: 1
         }
       }
-    },
-
+    }
   ],
   bootstrap: [AppComponent],
   
