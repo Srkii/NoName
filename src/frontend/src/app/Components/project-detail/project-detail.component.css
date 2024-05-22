@@ -842,3 +842,12 @@ input.is-invalid:focus{
 .input-group-text {
     background-color: #fff;
 }
+.tMng {
+    margin-bottom: 0px !important;
+}
+.tProjDet {
+    font-size: 16px !important;
+}
+.tProjDet:hover {
+    transform: translateY(-1px) !important;
+}

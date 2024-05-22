@@ -16,7 +16,7 @@
             </svg>
           </div>
           <div class="projInfoBtn">
-            <input type="button" class="btn btn-outline-info btn-sm" (click)="openProjectInfo(projectInfo)" value="Project Details">
+            <input type="button" class="btn btn-outline-info btn-sm tProjDet" (click)="openProjectInfo(projectInfo)" value="Project Details">
           </div>
         </div>
       </div>
@@ -441,10 +441,10 @@
       <div class="createSection">
         <h5>Add section</h5>
         <form (ngSubmit)="createNewSection()">
-          <div class="mb-3">
+          <div class="mb-1 tMng">
             <input type="text" class="form-control" placeholder="Enter new section name" [(ngModel)]="newSectionName" name="sectionName" autocomplete="off">
           </div>
-          <button type="submit" class="btn btn-primary d-grid w-50 mx-auto addSection" [disabled]="!newSectionName">Create Section</button>
+          <button type="submit" class="btn btn-primary d-grid w-100 mx-auto addSection" [disabled]="!newSectionName">Create Section</button>
         </form>
       </div>
       <div class="tProjectSection">
