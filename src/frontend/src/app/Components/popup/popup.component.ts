@@ -15,6 +15,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedService } from '../../_services/shared.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ta } from 'date-fns/locale';
 
 @Component({
   selector: 'app-popup',
@@ -48,6 +49,8 @@ export class PopupComponent {
   sections:ProjectSection[]=[];
   selectedSection: ProjectSection | undefined;
   current_user: any;
+
+
   
     
   attachment_name:string = '';
@@ -427,31 +430,34 @@ export class PopupComponent {
       sectionId: this.selectedSection ? this.selectedSection.id : 0
     };
 
-    this.myTasksService.changeTaskInfo(dto).subscribe({
-      next: (updatedTask: ProjectTask) => {
-        let rola=this.task?.projectRole;
-        this.task = updatedTask;
-        this.task.projectRole=rola;
+      this.myTasksService.changeTaskInfo(dto).subscribe({
+        next: (updatedTask: ProjectTask) => {
+          let rola=this.task?.projectRole;
+          this.task = updatedTask;
+          this.task.projectRole=rola;
+  
+  
+          this.sharedService.emitTaskUpdated();
+          this.cdr.detectChanges();
+        },
+        error: (error: any) => {
+          console.error('Error updating task information:', error);
+        }
+      });
 
-
-        this.sharedService.emitTaskUpdated();
-        this.cdr.detectChanges();
-      },
-      error: (error: any) => {
-        console.error('Error updating task information:', error);
-      }
-    });
   }
 
   updateTaskDueDate(event:Event): void {
-    const dueDateString = (event.target as HTMLInputElement).value;
-    const dueDate = new Date(dueDateString);
 
-    if (this.task) {
-      this.task.endDate = dueDate;
+      const dueDateString = (event.target as HTMLInputElement).value;
+      const dueDate = new Date(dueDateString);
+  
+      if (this.task) {
+        this.task.endDate = dueDate;
+  
+        this.updateTaskInfo(this.task);
+      }
 
-      this.updateTaskInfo(this.task);
-    }
   }
 
   ShowEdit(comment_id:number):void{
@@ -713,6 +719,8 @@ export class PopupComponent {
       }
     }); 
   }
+
+
   
 
 }

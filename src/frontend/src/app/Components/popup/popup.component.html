@@ -46,7 +46,7 @@
           Due Date:
         </div>
         <div>
-          <input type="text" placeholder="{{task.endDate|date}}" onfocus="this.type='date'"  onblur="this.type='text|date'" [value]="task.endDate | date" (blur)="updateTaskDueDate($event)">
+          <input type="text" placeholder="{{task.endDate|date}}" onfocus="this.type='date'"  onblur="this.type='text|date'" [value]="task.endDate | date" (blur)="updateTaskDueDate($event)" >
         </div>
       </div>
       <div class="mOrigin">
@@ -98,7 +98,7 @@
         <textarea class="description1" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='2' || this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
         <textarea class="description" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1'"></textarea>
       <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Dependency</p>
-      <ng-select [disabled]="this.task.projectRole=='4'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" placeholder="Select Project Tasks" class="task_select" bindValue="id" style="border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d; " name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
+      <ng-select [disabled]="this.task.projectRole=='4'" [placeholder]="this.task.projectRole=='4'?'No Dependencies':'Select Project Tasks'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name"  class="task_select" bindValue="id" style="border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d; " name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
         <ng-template ng-option-tmp let-task="item">
           <div class="user-detail" >
             <div class="nameAvatar">
@@ -113,7 +113,7 @@
       </ng-select>
 
       <p style="font-size: 16px; margin-bottom: 5px; margin-top:10px;">Section</p>
-      <ng-select  class="task_select" style="margin-bottom: 10px; border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" placeholder="Select Project Section" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)"
+      <ng-select  class="task_select" style="margin-bottom: 10px; border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" [placeholder]="this.task.projectRole=='4'?'No Section':'Select Project Section'" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)"
       [disabled]="this.task.projectRole=='4'" >
         <ng-template ng-option-tmp let-section="item" let-index="index">
           <div style="display: flex; align-items: center;">

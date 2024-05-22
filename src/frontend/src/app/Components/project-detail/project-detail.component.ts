@@ -82,6 +82,7 @@ export class ProjectDetailComponent implements OnInit {
   buttonClicked: boolean = false;
   taskNameExists: boolean = false;
   enabledEditorOptions: boolean = false;
+  allTasks: any[] = [];
 
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
@@ -93,6 +94,18 @@ export class ProjectDetailComponent implements OnInit {
   searchSection: string = '';
 
   today: Date = new Date();
+
+  rangeDates: Date[] | undefined;
+  selectedStatus: string = '';
+  searchText: string='';
+
+  sortOrderName: 'asc' | 'desc' = 'asc';
+  sortOrderAssignee: 'asc' | 'desc' = 'asc';
+  sortOrderStartDate: 'asc' | 'desc' = 'asc';
+  sortOrderEndDate: 'asc' | 'desc' = 'asc';
+  sortOrderStatus: 'asc' | 'desc' = 'asc';
+  sortField: keyof ProjectTask = 'taskName';
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -139,6 +152,7 @@ export class ProjectDetailComponent implements OnInit {
         this.project = project;
         this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.allTasks=this.projectTasks;
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
           this.groupedTasks = this.groupTasksBySection(this.projectTasks);
         });
@@ -571,9 +585,6 @@ export class ProjectDetailComponent implements OnInit {
   showEditOptions(){
     this.enabledEditorOptions = true;
   }
-  restoreInvalidInputs():void{
-    this.buttonClicked=false;
-  }
 
   openArchiveProjectcModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {
@@ -603,4 +614,144 @@ export class ProjectDetailComponent implements OnInit {
       });
     }
   }
+
+ filterTasks():void{
+    let filteredTasks = [...this.allTasks];
+
+    if (this.searchText) {
+      filteredTasks = filteredTasks.filter(task => {
+        return task.taskName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+          (`${task.firstName || ''} ${task.lastName || ''}`).toLowerCase().includes(this.searchText.toLowerCase());
+      });
+    }
+
+    if (this.selectedStatus) {
+      filteredTasks = filteredTasks.filter(task => task.statusName === this.selectedStatus);
+    }
+
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const [startDate, endDate] = this.rangeDates;
+      filteredTasks = filteredTasks.filter(task => {
+        const taskStartDate = new Date(task.startDate);
+        const taskEndDate = new Date(task.endDate);
+        return taskStartDate >= startDate && taskEndDate <= endDate;
+      });
+    }
+
+    this.projectTasks = filteredTasks;
+    this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
+    if(this.searchText!='' || this.selectedStatus!='')
+    {
+      Object.keys(this.groupedTasks).forEach(section => {
+          this.groupedTasks[section].visible = true;
+      });
+    }
+ }
+ SortByName(): void {
+  this.sortOrderName = this.sortOrderName === 'asc' ? 'desc' : 'asc'; 
+  
+  this.projectTasks.sort((a, b) => {
+      const nameA = a.taskName.toLowerCase();
+      const nameB = b.taskName.toLowerCase();
+      
+      if (nameA < nameB) {
+        return this.sortOrderName === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrderName === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  
+  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
+  Object.keys(this.groupedTasks).forEach(section => {
+    this.groupedTasks[section].visible = true;
+  });
 }
+ SortByAssignee(): void {
+  this.sortOrderAssignee = this.sortOrderAssignee === 'asc' ? 'desc' : 'asc'; 
+  
+  this.projectTasks.sort((a, b) => {
+      const nameA = (a.firstName+" "+a.lastName).toLowerCase();
+      const nameB = (b.firstName+" "+b.lastName).toLowerCase();
+      
+      if (nameA < nameB) {
+        return this.sortOrderAssignee === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrderAssignee === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  
+  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
+  Object.keys(this.groupedTasks).forEach(section => {
+    this.groupedTasks[section].visible = true;
+  });
+}
+ SortByStartDate(): void {
+  this.sortOrderStartDate = this.sortOrderStartDate === 'asc' ? 'desc' : 'asc'; 
+  
+  this.projectTasks.sort((a, b) => {
+      const nameA =new Date(a.startDate);
+      const nameB = new Date(b.startDate);
+      
+      if (nameA < nameB) {
+        return this.sortOrderStartDate === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrderStartDate === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  
+  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
+  Object.keys(this.groupedTasks).forEach(section => {
+    this.groupedTasks[section].visible = true;
+  });
+}
+ SortByEndDate(): void {
+  this.sortOrderEndDate = this.sortOrderEndDate === 'asc' ? 'desc' : 'asc'; 
+  
+  this.projectTasks.sort((a, b) => {
+      const nameA =new Date(a.endDate);
+      const nameB = new Date(b.endDate);
+      
+      if (nameA < nameB) {
+        return this.sortOrderEndDate === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrderEndDate === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  
+  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
+  Object.keys(this.groupedTasks).forEach(section => {
+    this.groupedTasks[section].visible = true;
+  });
+}
+ SortByStatus(): void {
+  this.sortOrderStatus = this.sortOrderStatus === 'asc' ? 'desc' : 'asc'; 
+  
+  this.projectTasks.sort((a, b) => {
+      const nameA =a.statusName;
+      const nameB =b.statusName;
+      
+      if (nameA < nameB) {
+        return this.sortOrderStatus === 'asc' ? -1 : 1;
+      }
+      if (nameA > nameB) {
+        return this.sortOrderStatus === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  
+  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
+  Object.keys(this.groupedTasks).forEach(section => {
+    this.groupedTasks[section].visible = true;
+  });
+}
+
+}
+  
