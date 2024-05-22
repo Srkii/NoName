@@ -258,5 +258,5 @@ font-size: smaller;
 textarea:hover,textarea:focus,input:hover,input:focus{
     outline: none;
     border: 1px solid #5f61e6 !important; 
-    box-shadow: 0 0 3px #5f61e6; 
+    box-shadow: none !important; 
 }

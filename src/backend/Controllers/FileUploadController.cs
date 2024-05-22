@@ -23,6 +23,7 @@ namespace backend.Controllers
             _notificationService = ns;
         }
 
+        [Authorize]
         [HttpPost("uploadpfp/{id}")] // /api/FileUpload
         public async Task<ActionResult> UploadImage(int id,IFormFile image){
             if(image==null) return BadRequest("photo is null");
@@ -37,6 +38,7 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok(user);
         }
+
         [HttpGet("images/{filename}")]
         public FileContentResult GetImage(string filename){
             // string path = Directory.GetCurrentDirectory()+"\\Assets\\Images\\"+filename;
@@ -45,6 +47,8 @@ namespace backend.Controllers
             string mimetype = GetMimeType(filename);
             return File(imageBytes,mimetype);
         }
+
+        [Authorize]
         [HttpDelete("removepfp/{id}")]
         public async Task<OkObjectResult> RemoveImage(int id,string token){
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -102,6 +106,7 @@ namespace backend.Controllers
             }
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("uploadfile/{id}")]
         public async Task<ActionResult> UploadFile(int id,[FromForm]int user_id,IFormFile file){
             if(file==null) return BadRequest("file is null");
@@ -126,6 +131,7 @@ namespace backend.Controllers
                 return BadRequest("SPECIFIED TASK DOES NOT EXIST");
             }
         }
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("files/{filename}")]
         public FileContentResult GetFile(string filename){
             string path = Path.Combine(Directory.GetCurrentDirectory(),"Assets","Attachments",filename);

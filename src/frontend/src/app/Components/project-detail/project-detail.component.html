@@ -10,8 +10,8 @@
           <span>{{ project.projectName }}</span>
         </div>
         <div class="projInfo">
-          <div class="archIcon" pTooltip="Archive Project" tooltipPosition="left" *ngIf="userRole == 2">
-            <svg (click)="openArchiveProjectcModal(arhieveCurrentProject)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16">
+          <div class="archIcon" pTooltip="Archive Project" tooltipPosition="left">
+            <svg (click)="openArchiveProjectcModal(arhieveCurrentProject)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16" *ngIf="userRole==0">
               <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
             </svg>
           </div>
@@ -130,32 +130,53 @@
     <div class="modal-body">
         <div class="mb-3 mr-2">
           <h5 class="heading">Details</h5>
-          <div class="d-flex justify-content-between info">
+          <div class="d-flex justify-content-between info tInfoDiv">
             <div class="my-2">
-              <label for="projectStatus">Status</label>
-              <select id="projectStatus" class="selectElements" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3" [ngClass]="getStatusClass()">
+              <label for="projectStatus">Status:</label>
+              <select id="projectStatus" class="selectElements" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3 || userRole == 2" [ngClass]="getStatusClass()">
                 <option class="DEFAULT_STAT" value=0>Proposed</option>
                 <option class="DEFAULT_STAT" value=1>InProgress</option>
                 <option class="DEFAULT_STAT" value=2>Completed</option>
               </select>
             </div>
             <div class="my-2">
-              <label for="startDate">Start date</label>
+              <label for="startDate">Start date:</label>
               <span id="startDate" class="startDate">{{update.startDate | date }}</span>
             </div>
-            <div class="my-2">
-              <label for="endDate">End date</label>
-              <input type="date" id="endDate" class="endDate" [ngModel]="update.endDate | date: 'yyyy-MM-dd'" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3">
+            <div class="my-2 sPrimeNgEndDate">
+              <div class="sLabel">
+                <label for="endDate">End date:</label>
+              </div>
+              <div class="sSpan">
+                <span *ngIf="userRole == 2 || userRole == 3 || userRole == 4" id="startDate" class="startDate">{{ update.endDate | date }}</span>
+              </div>
+              <div class="sPrimeNg" style="width: 130px !important;">
+                <p-calendar
+                *ngIf="userRole == 0 || userRole == 1"
+                [style]="{'width':'100%'}"
+                [(ngModel)]="update.endDate"
+                inputId="endDate"
+                name="endDate"
+                [showButtonBar]="true"
+                [firstDayOfWeek]="1"
+                placeholder="{{ update.endDate | date }}"
+                dateFormat="MM dd, yy"
+                [minDate]="today"
+                (onSelect)="updateProject()"
+                (click)="$event.stopPropagation()"
+                ></p-calendar>
+              </div>
+              <!-- <input type="date" id="endDate" class="endDate" [ngModel]="update.endDate | date: 'yyyy-MM-dd'" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3"> -->
             </div>
             <div class="my-2">
-              <label for="endDate">Progress</label>
+              <label for="endDate">Progress:</label>
               <span>{{project.progress}}%</span>
             </div>
         </div>
         </div>
         <div class="mb-3 description">
           <h5>Description</h5>
-          <quill-editor id="area-desc" class="area-desc" (click)="showEditOptions()" [(ngModel)]="update.description" (onBlur)="updateProject()" [modules]="quillService.editorModules" [formats]="quillService.editorFormats" [disabled]="userRole == 4 || userRole == 3" [ngClass]="{'hide-toolbar': userRole == 4 || userRole == 3 || !enabledEditorOptions, 'show-toolbar': userRole != 4 && userRole != 3 && enabledEditorOptions}" placeholder="Change description here ..."></quill-editor>
+          <quill-editor id="area-desc" class="area-desc" (click)="showEditOptions()" [(ngModel)]="update.description" (onBlur)="updateProject()" [modules]="quillService.editorModules" [formats]="quillService.editorFormats" [disabled]="userRole == 4 || userRole == 3 || userRole==2" [ngClass]="{'hide-toolbar': userRole == 4 || userRole == 3 || userRole == 2 || !enabledEditorOptions, 'show-toolbar': userRole == 0 && userRole == 1 && enabledEditorOptions}" placeholder="Change description here ..."></quill-editor>
         </div>
       </div>
   </div>
@@ -212,7 +233,7 @@
         <div class="d-flex tableHeaders">
           <span>Name</span>
           <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Change role' : ((userRole === 3 || userRole === 4) ? 'Project role' : '') }}</span>
-          <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Remove member' : ''}}</span>
+          <span>{{ (userRole === 0 || userRole === 1) ? 'Remove member' : ''}}</span>
         </div>
         <div class="mb-3 scroll manageMemberScroll">
           <table class="table table-lg t2" id="table">
@@ -224,7 +245,7 @@
                   <span *ngIf="!user.profilePicUrl" class="ng-value-label d-inline-flex"><ngx-avatars size="25" bgColor="#5d57c2" [name]="user.name"></ngx-avatars>{{ user.name }}</span>
                 </td>
                 <td>
-                  <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 4 || userRole == 3 || userId == user.appUserId">
+                  <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 2 || userRole == 4 || userRole == 3 || userId == user.appUserId">
                     <option value=1 *ngIf="!OwnerAlreadyExists(user.appUserId)">Project Owner</option>
                     <option value=2>Manager</option>
                     <option value=3>Participant</option>
@@ -462,7 +483,7 @@
               <tbody>
                 <tr *ngFor="let section of filteredSections">
                   <td>{{ section.sectionName }}</td>
-                  <td class="delSection"><span class="deleteMember" (click)="deleteSection(+section.id)" data-toggle="dropdown" *ngIf="userRole != 2 && userRole != 3 && userRole != 4">×</span></td>
+                  <td class="delSection"><span class="deleteMember" (click)="deleteSection(+section.id)" data-toggle="dropdown" *ngIf="userRole != 3 && userRole != 4">×</span></td>
                 </tr>
                 <tr *ngIf="filteredSections.length == 0">
                   <td class="noSections">No sections found</td>

@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { ProjectTask } from '../Entities/ProjectTask';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';

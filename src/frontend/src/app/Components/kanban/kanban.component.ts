@@ -8,7 +8,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { UploadService } from '../../_services/upload.service';
-import { NewTask } from '../../Entities/NewTask';
 import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastrService } from 'ngx-toastr';
@@ -52,11 +51,11 @@ export class KanbanComponent implements OnInit{
   // Section koji ce biti obrisan
   currentSectionName: string = '';
   currentSectionId: number | null = null;
-
   
   selectedArchivedTasks: any[] = [];
 
   userId: number = -1;
+  userProjectRole: number | null = null;
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
@@ -93,6 +92,8 @@ export class KanbanComponent implements OnInit{
           this.populateTasks();  // Reload tasks
       }
     });
+
+    this.getUserRole();
   }
 
   loadTasksAndUsers():void{
@@ -104,6 +105,15 @@ export class KanbanComponent implements OnInit{
     this.spinner.hide();
   }
 
+  getUserRole(){
+    this.userId = parseInt(localStorage.getItem('id') || '-1');
+    if(this.currentProjectId){
+      this.myProjectsService.getUserProjectRole(this.currentProjectId,this.userId).subscribe(response => {
+        this.userProjectRole = response;
+      })
+    }
+  }
+
   populateTasks() {
     const projectId = this.route.snapshot.paramMap.get('id');
     this.currentProjectId = projectId ? +projectId : null;
@@ -112,6 +122,7 @@ export class KanbanComponent implements OnInit{
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) => {
         this.tasks = tasks;
         this.groupTasksByStatus();
+        this.userProjectRole = this.tasks.find(x => x)
       });
     }
   }
@@ -174,9 +185,10 @@ export class KanbanComponent implements OnInit{
 
   updateTaskStatusPositions() {
     const updatedStatuses = this.taskStatuses.map((status, index) => ({ ...status, position: index }));
-    this.myTasksService.updateTaskStatusPositions(updatedStatuses).subscribe(() => {
-      this.GetTaskStatuses();
-    });
+    if(this.currentProjectId)
+      this.myTasksService.updateTaskStatusPositions(updatedStatuses, this.currentProjectId).subscribe(() => {
+        this.GetTaskStatuses();
+      });
   }
   openDeleteStatusModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
     this.currentSectionName = sectionName;
