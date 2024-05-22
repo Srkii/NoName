@@ -25,28 +25,27 @@ namespace backend.Controllers
       _tokenService = ts;
     }
 
-    [AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
+    [Authorize(Roles = "Admin")] //skloni ovo ako hoces da radi samo ako ima token
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {
       var users = await _context.Users.ToListAsync();
       return users;
     }
-    //[AllowAnonymous] 
+    [Authorize]
     [HttpGet("{id}")] // /api/users/2
     public async Task<ActionResult<AppUser>> GetUser(int id)
     {
       return await _context.Users.FindAsync(id);
     }
 
-    [AllowAnonymous]
+    [Authorize]
     [HttpGet("availableUsers/{projectCreatorId}")]
     public async Task<ActionResult<AppUser>> GetAvailableUsers(int projectCreatorId)
     {
       var availableUsers = await _context.Users.Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin).ToListAsync();
       return  Ok(availableUsers);
     }
-
 
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser/{id}")] // /api/users/updateUser
@@ -67,8 +66,7 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
-    //[Authorize(Roles = "Admin")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpPost("setAsArchived/{id}")]   //api/users/setAsArchived/1
     public async Task<ActionResult<UserDto>> ArchiveUser(int id)
     {
@@ -91,7 +89,7 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpPost("changeUserRole")]   //api/users/changeUserRole
     public async Task<ActionResult<UserDto>> ChangeUserRole(RoleChangeDTO dto)
     {
@@ -114,6 +112,7 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
+    [Authorize]
     [HttpPut("changePassword/{id}")] // /api/users/changePassword
     public async Task<ActionResult<UserDto>> ChangePassword(int id, [FromBody] ChangePasswordDto data)
     {
@@ -160,7 +159,7 @@ namespace backend.Controllers
       return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpGet("all")]
     public async Task<ActionResult<int>> GetAllUsers()
     {
@@ -172,7 +171,7 @@ namespace backend.Controllers
         return Users.Count;
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpGet("filtered")]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="")
     {
@@ -195,7 +194,8 @@ namespace backend.Controllers
 
         return filteredUsers;
     }
-    [AllowAnonymous]
+    
+    [Authorize(Roles = "Admin")]
     [HttpGet("fcount")]
     public async Task<ActionResult<int>> GetUsersFF( UserRole? role=null, string searchTerm="")
     {
@@ -218,7 +218,8 @@ namespace backend.Controllers
 
         return filteredUsers.Count;
     }
-    [AllowAnonymous]
+    
+    [Authorize(Roles = "Admin")]
     [HttpGet("filteredCount")]
     public async Task<ActionResult<int>> CountFilteredUsers(UserRole? role=null)
     {
@@ -235,7 +236,7 @@ namespace backend.Controllers
 
       return filteredUsers.Count;
     }
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpGet("getByRole")]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUserByRole(UserRole? role=null)
     {
@@ -251,7 +252,7 @@ namespace backend.Controllers
       return filteredUsers;
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpGet("getArchived")]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetArchivedUsers()
     {
@@ -263,7 +264,7 @@ namespace backend.Controllers
 
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpPut("removeFromArch")]   //api/users/setAsArchived/1
     public async Task<IActionResult> RemoveArch([FromBody] List<int> userIds)
     { 

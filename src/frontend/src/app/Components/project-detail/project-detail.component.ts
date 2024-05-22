@@ -105,7 +105,6 @@ export class ProjectDetailComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     public quillService: QuillConfigService,
-    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace backend.DTO
 {
@@ -6,6 +7,8 @@ namespace backend.DTO
     {
         public int Id { get; set; }
         public int CreatorId{get;set;}
+
+        [StringLength(1, ErrorMessage = "Task name must be at least 1 characters long", MinimumLength = 1)]
         public string TaskName { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
