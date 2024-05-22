@@ -63,17 +63,19 @@ body {
 .dropdown-menu .firstDrop{
   text-align: justify;
   padding-top: 6px;
+  padding-left: 0px;
   list-style: none;
   background-color: #ffffff;
   z-index: 1000;
-  position: absolute;
+  position: static;
+  margin-bottom: 0px;
 }
 .dropdown-menu .firstDrop .nav-item{
-  padding-top: 5px;
+  /* padding-top: 5px; */
   padding-bottom: 5px;
 }
-.dropdown-menu .firstDrop .nav-item a::after{
-  background-color: #413561;
+.firstDrop .nav-item a{
+  padding-left: 30px;
 }
 
 .avatar {
@@ -151,15 +153,15 @@ cursor: pointer;}
     }
 }
 .dropdown-menu-responsive a:hover {
-  background-color: #ff0000; /* Change this to the color you want */
+  background-color: #b8b9f2; /* Change this to the color you want */
   color: #413561;
 }
 
 .active-link-text {
   text-decoration: underline;
   color: #705ab8;
-  text-underline-offset: 30px;
-  text-decoration-thickness: 3px;
+  text-underline-offset: 31px;
+  text-decoration-thickness: 2px;
 }
 
 .dropdown-menu-responsive .nav-item:active{

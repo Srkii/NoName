@@ -108,6 +108,27 @@ a {
     font-weight: 600;
     line-height: 180%;
   }
+  .container-xxl {
+    width: 100%;
+  }
+  .card {
+    width: 100%;
+  }
+  #inputs{
+    width: 207px !important;
+  }
+}
+
+@media (min-width: 591px) and (max-width:900px){
+  .container-xxl {
+    width: 80%;
+  }
+  .card {
+    width: 100%;
+  }
+  #inputs{
+    width: 207px !important;
+  }
 }
 .align-items-start {
   align-items: flex-start !important;
