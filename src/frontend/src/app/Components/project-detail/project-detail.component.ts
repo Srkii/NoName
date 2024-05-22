@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, TemplateRef} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project, ProjectStatus } from '../../Entities/Project';
@@ -8,7 +8,6 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UpdateProject } from '../../Entities/UpdateProject';
-import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
@@ -19,6 +18,7 @@ import { ProjectSection } from '../../Entities/ProjectSection';
 import { ProjectSectionService } from '../../_services/project-section.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { QuillConfigService } from '../../_services/quill-config.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -59,7 +59,7 @@ export class ProjectDetailComponent implements OnInit {
   filteredUsers: SelectedUser[] = [];
   userId: number = -1;
   searchTerm: string = "";
-  userRole: ProjectRole | any;
+
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
@@ -80,6 +80,7 @@ export class ProjectDetailComponent implements OnInit {
 
   buttonClicked: boolean = false;
   taskNameExists: boolean = false;
+  enabledEditorOptions: boolean = false;
 
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
@@ -91,6 +92,8 @@ export class ProjectDetailComponent implements OnInit {
   searchSection: string = '';
 
   today: Date = new Date();
+  userRole: ProjectRole | any;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -98,25 +101,22 @@ export class ProjectDetailComponent implements OnInit {
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
-    private datePipe: DatePipe,
     public uploadservice: UploadService,
     private shared: SharedService,
     private projectSectionService: ProjectSectionService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public quillService: QuillConfigService,
   ) {}
-
-  get formattedEndDate() {
-    return this.datePipe.transform(this.update.endDate, 'yyyy-MM-dd');
-  }
-
-  get formattedStartDate() {
-    return this.datePipe.transform(this.update.startDate, 'yyyy-MM-dd');
-  }
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
+    const userId = localStorage.getItem("userId");
     this.currentProjectId = projectId ? +projectId : null;
+    if (projectId && userId) {
+      this.getUsersProjectRole(+projectId, +userId);
+    }
+    console.log(this.userRole);
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
@@ -134,6 +134,18 @@ export class ProjectDetailComponent implements OnInit {
 
   });
   }
+
+  getUsersProjectRole(projectId: number, userId: number) {
+    this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
+        next: (role) => {
+            this.userRole = role;
+        },
+        error: (error) => {
+            console.error('Failed to fetch user role', error);
+        }
+    });
+}
+
   getProjectInfo() {
     this.spinner.show();
     this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
@@ -222,6 +234,7 @@ export class ProjectDetailComponent implements OnInit {
       this.update.startDate = this.project.startDate;
       this.update.endDate = this.project.endDate;
       this.update.projectStatus = this.project.projectStatus;
+      this.enabledEditorOptions = false;
   }
 
   openMemberManagment(modal: TemplateRef<void>){
@@ -235,6 +248,9 @@ export class ProjectDetailComponent implements OnInit {
 
   updateProject()
   {
+    if(this.update.endDate)
+      this.update.endDate = this.resetTime(this.update.endDate);
+    
     this.spinner.show()
     if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
     {
@@ -345,9 +361,13 @@ export class ProjectDetailComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const popUp = document.querySelector('.pop') as HTMLElement;
+    const elementRef = document.getElementById('area-desc') as HTMLElement;
     if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
       this.showPopUp = false;
       this.clickedTask = null;
+    }
+    else if (elementRef && !elementRef.contains(event.target as Node)) {
+      this.enabledEditorOptions = false;
     }
   }
 
@@ -371,17 +391,6 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-  enableNameChange(){
-    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
-    changeNameInp.disabled = false;
-    changeNameInp.focus();
-  }
-
-  disableNameChange(){
-    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
-    changeNameInp.disabled = true;
-  }
-
   async saveTask() {
     this.taskNameExists = false;
     this.buttonClicked = true;
@@ -401,6 +410,11 @@ export class ProjectDetailComponent implements OnInit {
     {
       return;
     }
+
+    // uklanja milisekunde
+    this.newTaskStartDate = this.resetTime(this.newTaskStartDate);
+    this.newTaskEndDate = this.resetTime(this.newTaskEndDate);
+
 
     if(this.isInvalidDate())
     {
@@ -446,6 +460,13 @@ export class ProjectDetailComponent implements OnInit {
       error: (error) => console.error('Error creating task:', error)
     });
   }
+
+  // sklanja milisekunde
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
   // vraca AppUsers koji su na projektu
   getProjectsUsersAndSections(currentProjectId: number) {
     const noSection = { id: 0, sectionName: 'No Section', projectId:currentProjectId };
@@ -575,11 +596,13 @@ export class ProjectDetailComponent implements OnInit {
       let currentDate = new Date();
       startDate.setHours(0,0,0,0);
       currentDate.setHours(0,0,0,0);
-      return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
+      return !(this.newTaskStartDate <= this.newTaskEndDate && (startDate>=currentDate));
     }
     return false;
   }
-
+  showEditOptions(){
+    this.enabledEditorOptions = true;
+  }
   restoreInvalidInputs():void{
     this.buttonClicked=false;
   }

@@ -17,11 +17,9 @@ import {
   GanttGroup,
   GanttDate,
   GanttLink,
-  GanttGroupInternal,
 } from '@worktile/gantt';
-import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { ProjectSection } from '../../Entities/ProjectSection';
 import { SharedService } from '../../_services/shared.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
@@ -93,7 +91,6 @@ export class GanttComponent implements OnInit{
     });
   }
   constructor(
-    private http: HttpClient,
     private route:ActivatedRoute,
     private spinner:NgxSpinnerService,
     private myTasksService:MyTasksService,
@@ -102,7 +99,7 @@ export class GanttComponent implements OnInit{
     private modalService:BsModalService
     ) { }
 
-  views = [{name:'Hour',value:GanttViewType.hour},{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
+  views = [{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
 
   @ViewChild('gantt') ganttComponent!: NgxGanttComponent;
   viewType: GanttViewType = GanttViewType.month;

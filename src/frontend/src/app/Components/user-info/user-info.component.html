@@ -1,17 +1,12 @@
+<app-nav></app-nav>
 <div class="container-xxl">
   <div class="card" style="padding: 3%;">
     <div class="d-flex align-items-start align-items-sm-center tContainer">
       <div id="account_banner">
         <div id="photo_wrap">
           <img *ngIf="userInfo?.profilePicUrl" id="profile_photo"[src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
-          <ngx-avatars *ngIf="!userInfo?.profilePicUrl" size="130" bgColor="#5d57c2" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
-          <img
-            class="overlay"
-            src="../../../assets/profile_photo_placeholders/change_photo.jpg"
-            data-bs-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
+          <ngx-avatars class="square-avatar" *ngIf="!userInfo?.profilePicUrl" size="130" bgColor="#5d57c2" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
+          <img class="overlay" src="../../../assets/profile_photo_placeholders/change_photo.jpg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <ul class="dropdown-menu dropdown-menu-end">
             <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="!userInfo?.profilePicUrl" >View</button></li>
             <li><button class="dropdown-item" (click)="inputClick.click()">
@@ -23,7 +18,6 @@
         </div>
         <div class="fullname">
           <span id="rolename">{{role}}</span>
-          <!-- <span id="full_name">{{userInfo?.firstName}} {{userInfo?.lastName}}</span> -->
         </div>
         <input #inputClick type="file" style="display: none;" (change)="onImageSelected($event,cropperModal)" accept="image/*">
       </div>

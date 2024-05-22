@@ -6,6 +6,7 @@ import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { UploadService } from '../../_services/upload.service';
+import { QuillConfigService } from '../../_services/quill-config.service';
 
 @Component({
   selector: 'app-project-card',
@@ -37,7 +38,8 @@ export class ProjectCardComponent {
   constructor(
     private route: ActivatedRoute,
     private myProjectCardService: ProjectCardService,
-    public uploadservice: UploadService
+    public uploadservice: UploadService,
+    public quillService: QuillConfigService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +59,13 @@ export class ProjectCardComponent {
       console.log("Project name already exists")
       return;
     }
+
+    //resetujem milisekunde
+    if(this.newProject.StartDate)
+      this.newProject.StartDate = this.resetTime(this.newProject.StartDate);
+    if(this.newProject.EndDate)
+      this.newProject.EndDate = this.resetTime(this.newProject.EndDate);
+
 
     if(this.newProject.StartDate == undefined || this.newProject.EndDate == undefined)
     {
@@ -89,6 +98,13 @@ export class ProjectCardComponent {
       }
     });
   }
+
+  // sklanja milisekunde
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
 
   async ProjectNameExists(ProjectName: string)
   {

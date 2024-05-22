@@ -31,9 +31,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding-top: 5px;
   padding-bottom: 1px;
 }
-.projectInfoModal{
-  height: 25rem;
-}
 .MemberManagmentModel{
   height: auto;
 }
@@ -42,3 +39,40 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   box-shadow: none !important;
 }
 .ng-input > input {color: #697a8d !important;}
+
+/* Rich text editor */
+.hide-toolbar .ql-toolbar  {
+  display: none;
+}
+.ql-snow.ql-toolbar button.ql-active .ql-fill,
+.ql-snow.ql-toolbar button:hover .ql-fill
+{
+  fill: #696cff !important;
+}
+.ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-picker-label:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke
+{
+  stroke: #696cff !important;
+}
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-item:hover{
+  color: #696cff !important;
+}
+.area-desc .ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: 1px solid #dcdbdb !important;
+}
+.area-desc .ql-container.ql-snow {
+  height: 12rem !important;
+  border: none !important;
+}
+.desc .ql-container.ql-snow{
+  border-radius: 0 0 0.375rem 0.375rem !important;
+}
+.desc .ql-toolbar.ql-snow {
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+}

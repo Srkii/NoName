@@ -227,7 +227,7 @@ p {
 .page_size:hover, .page_size:focus{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  box-shadow: none !important;
 }
 
 .addProject{
@@ -299,7 +299,7 @@ p {
 } */
 
 .container-xxl {
-  max-width: 1600px;
+  max-width: 1550px;
 }
 .tFooter {
   display: flex;

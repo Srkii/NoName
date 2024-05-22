@@ -60,7 +60,10 @@ a {
 }
 .form-control:focus {
   border-color: #5f61e6 !important;
-  box-shadow: 0 0 2px #5f61e6;
+  box-shadow: none !important;
+}
+.form-control:hover {
+  border-color: #5f61e6 !important;
 }
 /* tablet */
 @media (max-width: 1200px) {
@@ -104,6 +107,27 @@ a {
     font-size: 16px;
     font-weight: 600;
     line-height: 180%;
+  }
+  .container-xxl {
+    width: 100%;
+  }
+  .card {
+    width: 100%;
+  }
+  #inputs{
+    width: 207px !important;
+  }
+}
+
+@media (min-width: 591px) and (max-width:900px){
+  .container-xxl {
+    width: 80%;
+  }
+  .card {
+    width: 100%;
+  }
+  #inputs{
+    width: 207px !important;
   }
 }
 .align-items-start {
@@ -225,9 +249,14 @@ label{
   border-right: #696cff;
 }
 
-
 /* .dropdown-item:hover{
   background-color: #696cff;
   color: #FFFFFF;
   transition: 0.25s ease-in-out;
-} */
+}
+
+.square-avatar {
+  border-radius: 0.375rem;
+  width: 130px; /* Ensure it's square by setting width equal to size attribute */
+  height: 130px; /* Ensure it's square by setting height equal to size attribute */
+}

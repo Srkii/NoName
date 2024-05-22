@@ -1,5 +1,4 @@
-import { MatDialogModule } from '@angular/material/dialog';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,7 +38,9 @@ import { LandingPageComponent } from './Components/landing-page/landing-page.com
 import { TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
-import { enUS,fr } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
+import { QuillModule } from 'ngx-quill';
+
 const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
 
 @NgModule({
@@ -62,7 +63,7 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     ProjectCardComponent,
     NotificationsComponent,
     LandingPageComponent,
-    CustomToastComponent,
+    CustomToastComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +88,8 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     ImageCropperModule,
     NgxGanttModule,
     TooltipModule,
-    CalendarModule
+    CalendarModule,
+    QuillModule.forRoot()
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
@@ -101,8 +103,7 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
              weekStartsOn: 1
         }
       }
-    },
-
+    }
   ],
   bootstrap: [AppComponent],
   

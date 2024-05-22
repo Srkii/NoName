@@ -202,10 +202,18 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
+  // ukoliko zatreba za otklanjanje milisekundi
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
   isOverdue(endDate: Date): boolean {
-    const now = new Date().getTime(); 
-    const endDateTimestamp = new Date(endDate).getTime(); 
-    return endDateTimestamp <= now; 
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const endDateReset = new Date(endDate);
+    endDateReset.setHours(0, 0, 0, 0);
+    return endDateReset < now;
   }
 
   

@@ -34,7 +34,6 @@ export class RegisterComponent implements OnInit {
   token: any;
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token')?.toString();
-    console.log('Token from URL:', this.token);
     this.GetEmailByToken(this.token);
   }
 
@@ -46,7 +45,6 @@ export class RegisterComponent implements OnInit {
 
     this.registerService.getEmailByToken(token).subscribe({
       next: (response: any) => {
-        console.log(response);
         const email = response?.email;
         if (email) {
           this.newUser.Email = email;
@@ -72,7 +70,6 @@ export class RegisterComponent implements OnInit {
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
-        console.log('Successful registration');
         this.router.navigate(['/mytasks']);
       },
       error: () => {

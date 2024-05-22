@@ -59,9 +59,9 @@
                 <div *ngIf="buttonClicked && !newProject.EndDate" class="invalid">Please enter end date.</div>
                 <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
               </div>
-              <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="newProject.Description" name="Description"></textarea>
+              <div class="mb-3" >
+                <label for="desc" class="form-label">Description</label>
+                <quill-editor id="desc" class="desc" [(ngModel)]="newProject.Description" [modules]="quillService.editorModules" [formats]="quillService.editorFormats" name="Description" placeholder="Insert description here.."></quill-editor>
               </div>
               <div class="mb-3">
                 <label id="lbl" for="assignees" class="form-label">Project Members</label>

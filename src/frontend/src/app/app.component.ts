@@ -21,27 +21,10 @@ export class AppComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.isTokenValid()
-    this.isLoginOrRegisterPage()
+    // this.isLoginOrRegisterPage();
   }
 
   isLoginOrRegisterPage(): boolean {
     return this.router.url === '/login' || this.router.url.startsWith('/landing') || this.router.url.startsWith('/register') || this.router.url === '/forgotpass' || this.router.url.startsWith('/forgotreset') ;
-  }
-
-  async isTokenValid(): Promise<void> {
-    this.spinner.show()
-    var token = localStorage.getItem("token");
-    if (token) {
-        var valid = await firstValueFrom(this.sharedService.IsTokenValid(token));
-        if(!valid)
-        {
-          localStorage.removeItem('token');
-          localStorage.removeItem('id');
-          localStorage.removeItem('role');
-          this.router.navigate(['/login'])
-        }
-        this.spinner.hide()
-    }
   }
 }

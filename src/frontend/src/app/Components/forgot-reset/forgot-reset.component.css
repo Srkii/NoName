@@ -61,7 +61,10 @@ a {
 }
 .form-control:focus {
   border-color: #5f61e6 !important;
-  box-shadow: 0 0 2px #5f61e6;
+  box-shadow: none !important;
+}
+.form-control:hover {
+  border-color: #5f61e6 !important;
 }
 .form-label {
   color: #697a8d;

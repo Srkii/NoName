@@ -17,7 +17,7 @@ namespace backend.Controllers
             _notificationService = notificationService;
         }
         
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("postComment")] // /api/comments/postComment
         public async Task<IActionResult> PostComment(CommentDto commentDto)
         {
@@ -39,42 +39,36 @@ namespace backend.Controllers
             return Ok(comment);
         }
 
-    [AllowAnonymous]
-    [HttpGet("getComments/{taskId}")]
-    public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments(int taskId)
-    {
-        var comments = await _context.Comments
-            .Where(x => x.TaskId == taskId)
-            .Join(
-                _context.Users,
-                comment => comment.SenderId,
-                user => user.Id,
-                (comment, user) => new CommentDto
-                {
-                    Id=comment.Id,
-                    TaskId = comment.TaskId,
-                    Content = comment.Content,
-                    MessageSent=comment.MessageSent,
-                    SenderId = comment.SenderId,
-                    SenderFirstName = comment.SenderFirstName,
-                    SenderLastName = comment.SenderLastName,
-                    FileUrl =comment.FileUrl,
-                    Edited=comment.Edited,
-                    AppUserPicUrl = user.ProfilePicUrl,
-                }
-            )
-            .ToListAsync();
-        
-        return Ok(comments);
-    }
+        [Authorize(Roles = "ProjectManager,Member")]
+        [HttpGet("getComments/{taskId}")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments(int taskId)
+        {
+            var comments = await _context.Comments
+                .Where(x => x.TaskId == taskId)
+                .Join(
+                    _context.Users,
+                    comment => comment.SenderId,
+                    user => user.Id,
+                    (comment, user) => new CommentDto
+                    {
+                        Id=comment.Id,
+                        TaskId = comment.TaskId,
+                        Content = comment.Content,
+                        MessageSent=comment.MessageSent,
+                        SenderId = comment.SenderId,
+                        SenderFirstName = comment.SenderFirstName,
+                        SenderLastName = comment.SenderLastName,
+                        FileUrl =comment.FileUrl,
+                        Edited=comment.Edited,
+                        AppUserPicUrl = user.ProfilePicUrl,
+                    }
+                )
+                .ToListAsync();
+            
+            return Ok(comments);
+        }
 
-
-
-
-
-
-        // [Authorize]
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpDelete("deleteComment/{commentId}")]
         public async Task<ActionResult> DeleteComment(int commentId)
         {
@@ -102,7 +96,7 @@ namespace backend.Controllers
         return Ok(responseData);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("updateComment/{commentId}/{content}")]
         public async Task<IActionResult> UpdateComment(int commentId, string content)
         {
