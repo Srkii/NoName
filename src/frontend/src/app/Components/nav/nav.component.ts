@@ -51,7 +51,7 @@ export class NavComponent implements OnInit {
       localStorage.removeItem('token');
       localStorage.removeItem('id');
       localStorage.removeItem('role');
-
+      sessionStorage.removeItem('selectedOption');
       // Navigate to the login page
       this.notificationService.stopHubConnection();
       this.router.navigate(['/login']);
@@ -96,17 +96,27 @@ export class NavComponent implements OnInit {
       }
       else if(event.urlAfterRedirects.includes('/admin'))
       {
-        this.selectedOption = 'AdminPage' 
+        this.selectedOption = 'Admin' 
       }
-      else 
-      {this.selectedOption=''}
+      else if(event.urlAfterRedirects.includes('/userinfo'))
+      {
+        this.selectedOption = '' 
+      }
+      else {
+        this.selectedOption=''
+      }
     });
-    this.selectedOption = sessionStorage.getItem('selectedOption') || '';
+    const storedOption = sessionStorage.getItem('selectedOption');
+    this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
+
   }
 
   setActiveOption(option: string) {
-    this.selectedOption = option
-    sessionStorage.setItem('selectedOption', option) 
+    if (option === '') {
+      sessionStorage.removeItem('selectedOption');
+    } else {
+      sessionStorage.setItem('selectedOption', option);
+    }
   }
 
 }
