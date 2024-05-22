@@ -97,19 +97,18 @@ thead th{
 
 .btn-active {
     background-color: #d7d7f8 !important;
-    border: 1px solid #d8d8e0;
+    border: 1px solid #d8d8e0 !important;
     border: 0px;
     font-weight: 400;
-    color: #696cff;
+    color: #696cff !important;
     /* border: 1px solid #E7E7EE !important; */
 }
 .btn-inactive {
     background-color: #e7e7ee !important;
     /* background-color: #fff!important; */
-    border: 1px solid #d8d8e0;
-    border: 0px;
+    border: 1px solid #d8d8e0 !important;
     font-weight: 400;
-    color: #696cff;
+    color: #696cff !important;
     /* background-color: #F5F5F9 !important; */
     border: 1px solid #E7E7EE !important;
 }
@@ -138,7 +137,7 @@ thead th{
 }
 .btn-primary:focus { 
     background-color:#696cff;
-    border-color: #696cff !important;
+    /* border-color: #696cff !important; */
 }
 .bg-label-primary {
     background-color: #e7e7ff !important;
