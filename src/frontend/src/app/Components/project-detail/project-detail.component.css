@@ -860,3 +860,7 @@ input.is-invalid:focus{
     display: flex;
     align-items: center;
 }
+.tInfoDiv {
+    display: flex;
+    align-items: center;
+}
