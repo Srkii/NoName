@@ -465,7 +465,7 @@
   .p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
     outline: 0 none;
     outline-offset: 0;
-    box-shadow: 0 0 2px #5f61e6; /* dodato tico */
+    box-shadow: none !important; /* dodato tico */
     border: 1px solid #5f61e6 !important; /* dodato tico */
     border-color: #696cff;
   }

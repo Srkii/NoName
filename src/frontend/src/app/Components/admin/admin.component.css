@@ -162,6 +162,9 @@ p {
   border-color: #5f61e6 !important;
   transform: translateY(-1px) !important;
 }
+.btn-primary:focus {
+  border-color: #696cff !important;
+}
 .avatar{
   padding-left: 0px;
   width: 35px;
@@ -228,17 +231,17 @@ select:active{
 select:focus-visible{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 2px #5f61e6 !important;
+  /* box-shadow: 0 0 2px #5f61e6 !important; */
 }
 .form-control:focus-visible{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 2px #5f61e6 !important; 
+  /* box-shadow: 0 0 2px #5f61e6 !important;  */
 }
 .btn:focus-visible{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 2px #5f61e6 !important;
+  /* box-shadow: 0 0 2px #5f61e6 !important; */
 }
 .card{
   --bs-card-border-width: 0px;
@@ -262,7 +265,7 @@ select:focus-visible{
 .card:hover{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow:  #5f61e6;
+  /* box-shadow:  #5f61e6; */
   cursor: pointer;
   /* background-color: #6b6caf; */
 }
@@ -301,7 +304,7 @@ select:focus-visible{
 .form-control:hover {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow:  #5f61e6;
+  /* box-shadow:  #5f61e6; */
 }
 .form-control:focus {
   outline: none;
@@ -331,20 +334,20 @@ select:focus-visible{
 .clickable-div:hover{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow:  #5f61e6;
+  /* box-shadow:  #5f61e6; */
   transform: translateY(0);
   transform: translateX(0);
 }
 .clickable-div:focus-visible{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  /* box-shadow: 0 0 3px #5f61e6; */
 }
 .clickable-div:active{
   background-color: #ffffff; 
    outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  /* box-shadow: 0 0 3px #5f61e6; */
 }
 .clickable-div.active{
   background-color: #d0cdff;

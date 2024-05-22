@@ -7,6 +7,9 @@
     margin-left: 0px !important;
     padding-left: 0px !important;
 }
+.container-xxl {
+    max-width: 1550px;
+}
 /* za tablete */
 @media screen and (max-width: 1200px) {
     .button-selectors {
