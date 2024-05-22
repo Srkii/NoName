@@ -414,7 +414,9 @@ namespace backend.Controllers
             if(updatedStatuses.Count == 0)
                 return BadRequest("No task status positions to update");
 
-            if(!await RoleCheck(updatedStatuses[0].ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner, ProjectRole.Manager]))
+            int projectId = updatedStatuses[0].ProjectId; // Extract projectId from the first status
+
+            if(!await RoleCheck(projectId, new List<ProjectRole> { ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager }))
                 return Unauthorized("Invalid role");
 
             foreach (var status in updatedStatuses)

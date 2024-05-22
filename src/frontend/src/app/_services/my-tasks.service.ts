@@ -59,8 +59,9 @@ export class MyTasksService {
     return this.http.get<any[]>(`${this.baseUrl}/statuses/${projectId}`, {headers:this.httpHeader});
   }
   // za kanban
-  updateTaskStatusPositions(updatedStatuses: any[]): Observable<any> {
-  return this.http.put(`${this.baseUrl}/updateStatusPositions`,updatedStatuses, {headers:this.httpHeader});
+  updateTaskStatusPositions(updatedStatuses: any[], projectId: number): Observable<any> {
+    const payload = updatedStatuses.map(status => ({ ...status, projectId }));
+    return this.http.put(`${this.baseUrl}/updateStatusPositions`, payload, {headers:this.httpHeader});
   }
   sortTasksByDueDate(userId:any,sortOrder: string): Observable<ProjectTask[]> {
     const url = `${this.baseUrl}/sortTasksByDueDate/${userId}?sortOrder=${sortOrder}`;

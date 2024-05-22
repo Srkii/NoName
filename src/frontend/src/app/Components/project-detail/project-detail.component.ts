@@ -116,7 +116,6 @@ export class ProjectDetailComponent implements OnInit {
     if (projectId && userId) {
       this.getUsersProjectRole(+projectId, +userId);
     }
-    console.log(this.userRole);
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
