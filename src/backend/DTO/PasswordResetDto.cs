@@ -8,7 +8,7 @@ namespace backend.DTO
         public string Email { get; set; }
         public string Token { get; set; }
         
-        [StringLength(5, ErrorMessage = "Password must be at least 5 characters long", MinimumLength = 5)]
+        [StringLength(30, ErrorMessage = "Password must be at least 5 characters long", MinimumLength = 5)]
         public string NewPassword{get;set;}
     }
 }

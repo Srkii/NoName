@@ -229,6 +229,9 @@ export class ProjectDetailComponent implements OnInit {
 
   updateProject()
   {
+    if(this.update.endDate)
+      this.update.endDate = this.resetTime(this.update.endDate);
+    
     this.spinner.show()
     if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
     {
