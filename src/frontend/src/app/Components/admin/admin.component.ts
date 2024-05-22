@@ -95,6 +95,10 @@ export class AdminComponent implements OnInit{
 
   archivedIds:number[]=[];
   archId: boolean=false;
+  invalidName: boolean=false;
+  invalidLastName: boolean=false;
+  invalidEmail: boolean=false;
+  regex: RegExp = /^[A-Za-z]{2,}$/;
 
   archMembers: { [key: string]: Member[] } = {};
 
@@ -149,37 +153,20 @@ export class AdminComponent implements OnInit{
       }}
 
     UpdateUser(id: number): void{
-      if (this.newEmail) {
-        this.updateUser.Email=this.newEmail;
+      
+      if (this.newEmail!=this.updateUser.Email || this.newFisrtName!=this.updateUser.FirstName || this.newLastName != this.updateUser.LastName) {
+        return;
       }
-      else{
-        this.updateUser.Email=this.curentEmail
-      }
-      if (this.newFisrtName) {
-        this.updateUser.FirstName=this.newFisrtName;
-      }
-      else{
-        this.updateUser.FirstName=this.curentName;
-      }
-      if (this.newLastName) {
-        this.updateUser.LastName=this.newLastName;
-      }
-      else{
-        this.updateUser.LastName=this.currentLastName
-      }
-      if(this.updateUser){
-        this.adminService.updateUser(id,this.updateUser).subscribe({
-          next:()=>{
-            this.GetUsers();
-          },
-          error: (error) => {
-            console.log(error);
-          }
-      })
-      }
-      else {
-        console.log("Can't update user role")
-      }
+    
+      this.adminService.updateUser(id,this.updateUser).subscribe({
+        next:()=>{
+          this.GetUsers();
+        },
+        error: (error) => {
+          console.log(error);
+        }
+    })
+      
     }
 
     ArchiveUser(id:number): void{
@@ -324,10 +311,11 @@ export class AdminComponent implements OnInit{
 
     openModal(modal: TemplateRef<void>, user:Member)
     {
+      this.newEmail = user.email;
+      this.newFisrtName = user.firstName;
+      this.newLastName = user.lastName;
       this.curentUserId=user.id;
-      this.curentEmail=user.email;
-      this.curentName=user.firstName;
-      this.currentLastName=user.lastName;
+
       if(user.role==0)
       {
         this.currentRole="Admin";
