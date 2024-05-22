@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using backend.Data;
 using backend.DTO;
 using backend.Entities;
@@ -332,6 +333,9 @@ namespace backend.Controllers
         [HttpDelete("DeleteProjectMember/{projectId}/{userId}")]
         public async Task<ActionResult> DeleteProjectMember(int projectId,int userId)
         {
+            if(!await RoleCheck(projectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner]))
+                return Unauthorized("Invalid role");
+
             var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == projectId && member.AppUserId == userId);
             if(projectMember != null)
             {
@@ -347,6 +351,9 @@ namespace backend.Controllers
         [HttpPost("UpdateUsersProjectRole")]
         public async Task<ActionResult> UpdateUsersProjectRole(ProjectMemberDTO dto)
         {
+            if(!await RoleCheck(dto.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner]))
+                return Unauthorized("Invalid role");
+
             var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == dto.ProjectId && member.AppUserId == dto.AppUserId);
             if(projectMember != null)
             {
@@ -371,10 +378,10 @@ namespace backend.Controllers
             return null;
         }
 
-        // Add this method to the ProjectsController class
-        [Authorize(Roles = "ProjectManager,Member")]
+        [Authorize(Roles = "ProjectManager")]
         [HttpPut("archive/{projectId}")]
         public async Task<IActionResult> ArchiveProject(int projectId) {
+
             var project = await _context.Projects.FindAsync(projectId);
             if (project == null) {
                 return NotFound("Project not found.");
@@ -409,7 +416,7 @@ namespace backend.Controllers
            
         }
 
-        [Authorize(Roles = "ProjectManager,Member")]
+        [Authorize(Roles = "ProjectManager")]
         [HttpPut("unarchive/{projectId}")]
         public async Task<IActionResult> UnarchiveProject(int projectId) {
             var project = await _context.Projects.FindAsync(projectId);
@@ -430,7 +437,7 @@ namespace backend.Controllers
             return Ok(new { message = "Project and its tasks have been unarchived." });
         }
 
-        [Authorize(Roles = "ProjectManager,Member")]
+        [Authorize(Roles = "ProjectManager")]
         [HttpPut("unarchiveMultiple")]
         public async Task<IActionResult> UnarchiveMultipleProjects([FromBody] List<int> projectIds) {
             var projects = await _context.Projects
@@ -482,6 +489,35 @@ namespace backend.Controllers
             });
 
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("getProjectUserRole/{projectId}/{userId}")]
+        public async Task<ActionResult<ProjectRole>> getProjectUserRole(int projectId, int userId)
+        {   
+            var user = await _context.ProjectMembers.FirstOrDefaultAsync(x => x.ProjectId == projectId && x.AppUserId == userId);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            return user.ProjectRole;
+        }
+
+        public async Task<bool> RoleCheck(int projectId, List<ProjectRole> roles)
+        {
+            string authHeader = HttpContext.Request.Headers["Authorization"];
+            if (authHeader != null && authHeader.StartsWith("Bearer "))
+            {
+                string token = authHeader.Substring("Bearer ".Length).Trim();
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jsonToken = tokenHandler.ReadJwtToken(token);
+
+                var userid = int.Parse(jsonToken.Claims.FirstOrDefault(c => c.Type == "nameid").Value);
+                var ProjectMember = await _context.ProjectMembers.FirstOrDefaultAsync(x => x.ProjectId == projectId && x.AppUserId == userid && roles.Contains(x.ProjectRole));
+            
+                return ProjectMember != null;
+            }
+            return false;
         }
         
     }

@@ -141,8 +141,9 @@ export class MyProjectsService {
   }
 
   archiveProject(projectId: number): Observable<any> {
-    return this.http.put(`${this.apiUrl}/projects/archive/${projectId}`, {headers:this.httpHeader});
+    return this.http.put(`${this.apiUrl}/projects/archive/${projectId}`,null, {headers:this.httpHeader});
   }
+
   getUsersArchivedProjects(userId: any): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/getUsersArchivedProjects/${userId}`,{headers:this.httpHeader});
   }
@@ -150,6 +151,10 @@ export class MyProjectsService {
   removeProjectsFromArchived(projectIds: number[]): Observable<any> {
     const headers = { 'Content-Type': 'application/json', "Authorization": `Bearer ${this.token}`};
     return this.http.put(`${this.baseUrl}/unarchiveMultiple`, JSON.stringify( projectIds ), { headers });
+  }
+
+  getUserProjectRole(projectId: number, userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/getProjectUserRole/${projectId}/${userId}`,{  headers: this.httpHeader });
   }
 }
 
