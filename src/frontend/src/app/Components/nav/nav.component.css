@@ -63,6 +63,7 @@ body {
 .dropdown-menu .firstDrop{
   text-align: justify;
   padding-top: 6px;
+  padding-left: 0px;
   list-style: none;
   background-color: #ffffff;
   z-index: 1000;
@@ -73,8 +74,8 @@ body {
   /* padding-top: 5px; */
   padding-bottom: 5px;
 }
-.dropdown-menu .firstDrop .nav-item a::after{
-  background-color: #413561;
+.firstDrop .nav-item a{
+  padding-left: 30px;
 }
 
 .avatar {
@@ -152,7 +153,7 @@ cursor: pointer;}
     }
 }
 .dropdown-menu-responsive a:hover {
-  background-color: #ff0000; /* Change this to the color you want */
+  background-color: #b8b9f2; /* Change this to the color you want */
   color: #413561;
 }
 
