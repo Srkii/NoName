@@ -13,12 +13,15 @@ body {
   display: inline;
 }
 
+.container-xxl {
+  max-width: 1550px;
+}
 .all {
-  /* max-width: 1320px; */
   margin-top: 30px;
-  margin: auto; 
+  margin: auto;
+  margin-bottom: 20px !important;
   padding: 20px;
-  width: 85%;
+  /* width: 85%; */
   min-height: 10vh; 
   background-color: #ffffff;
   color: #697a8d;
