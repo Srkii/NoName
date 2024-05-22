@@ -66,10 +66,11 @@ body {
   list-style: none;
   background-color: #ffffff;
   z-index: 1000;
-  position: absolute;
+  position: static;
+  margin-bottom: 0px;
 }
 .dropdown-menu .firstDrop .nav-item{
-  padding-top: 5px;
+  /* padding-top: 5px; */
   padding-bottom: 5px;
 }
 .dropdown-menu .firstDrop .nav-item a::after{

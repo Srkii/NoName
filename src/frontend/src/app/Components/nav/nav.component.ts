@@ -98,8 +98,13 @@ export class NavComponent implements OnInit {
       {
         this.selectedOption = 'AdminPage' 
       }
-      else 
-      {this.selectedOption=''}
+      else if(event.urlAfterRedirects.includes('/userinfo'))
+      {
+        this.selectedOption = '' 
+      }
+      else {
+        this.selectedOption=''
+      }
     });
     this.selectedOption = sessionStorage.getItem('selectedOption') || '';
   }
