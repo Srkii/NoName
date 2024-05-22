@@ -130,9 +130,9 @@
     <div class="modal-body">
         <div class="mb-3 mr-2">
           <h5 class="heading">Details</h5>
-          <div class="d-flex justify-content-between info">
+          <div class="d-flex justify-content-between info tInfoDiv">
             <div class="my-2">
-              <label for="projectStatus">Status</label>
+              <label for="projectStatus">Status:</label>
               <select id="projectStatus" class="selectElements" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3 || userRole == 2" [ngClass]="getStatusClass()">
                 <option class="DEFAULT_STAT" value=0>Proposed</option>
                 <option class="DEFAULT_STAT" value=1>InProgress</option>
@@ -140,35 +140,36 @@
               </select>
             </div>
             <div class="my-2">
-              <label for="startDate">Start date</label>
+              <label for="startDate">Start date:</label>
               <span id="startDate" class="startDate">{{update.startDate | date }}</span>
             </div>
             <div class="my-2 sPrimeNgEndDate">
               <div class="sLabel">
-                <label for="endDate">End date</label>
+                <label for="endDate">End date:</label>
               </div>
               <div class="sSpan">
                 <span *ngIf="userRole == 2 || userRole == 3 || userRole == 4" id="startDate" class="startDate">{{ update.endDate | date }}</span>
               </div>
               <div class="sPrimeNg">
                 <p-calendar
-              [style]="{'width':'100%'}"
-              [(ngModel)]="update.endDate"
-              inputId="endDate"
-              name="endDate"
-              [showButtonBar]="true"
-              [firstDayOfWeek]="1"
-              placeholder="{{ update.endDate | date }}"
-              dateFormat="MM dd, yy"
-              [minDate]="today"
-              (onSelect)="updateProject()"
-              (click)="$event.stopPropagation()"
-              ></p-calendar>
+                *ngIf="userRole == 0 || userRole == 1"
+                [style]="{'width':'100%'}"
+                [(ngModel)]="update.endDate"
+                inputId="endDate"
+                name="endDate"
+                [showButtonBar]="true"
+                [firstDayOfWeek]="1"
+                placeholder="{{ update.endDate | date }}"
+                dateFormat="MM dd, yy"
+                [minDate]="today"
+                (onSelect)="updateProject()"
+                (click)="$event.stopPropagation()"
+                ></p-calendar>
               </div>
               <!-- <input type="date" id="endDate" class="endDate" [ngModel]="update.endDate | date: 'yyyy-MM-dd'" (ngModelChange)="update.endDate=$event" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3"> -->
             </div>
             <div class="my-2">
-              <label for="endDate">Progress</label>
+              <label for="endDate">Progress:</label>
               <span>{{project.progress}}%</span>
             </div>
         </div>
