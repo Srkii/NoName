@@ -236,10 +236,10 @@ namespace backend.Controllers
             if (dto.TaskName != null) task.TaskName = dto.TaskName;
             if (dto.Description != null && dto.Description != "") task.Description = dto.Description;
             if (dto.DueDate != null) task.EndDate = (DateTime)dto.DueDate;
-            if (dto.ProjectId!=0) task.ProjectId = dto.ProjectId;
-            if (dto.AppUserId!=0) task.AppUserId = dto.AppUserId;
-            if(dto.SectionId!=0) task.ProjectSectionId=dto.SectionId;
-            if(dto.SectionId==0) task.ProjectSectionId=null;    
+            if (dto.ProjectId != 0) task.ProjectId = dto.ProjectId;
+            if (dto.AppUserId != 0) task.AppUserId = dto.AppUserId;
+            if (dto.SectionId != 0) task.ProjectSectionId=dto.SectionId;
+            if (dto.SectionId == 0) task.ProjectSectionId=null;    
 
             await _context.SaveChangesAsync();
 
