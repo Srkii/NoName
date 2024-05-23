@@ -18,7 +18,7 @@ import { projectGuard } from './_guards/project.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'register', component: RegisterComponent, title: 'Register'}, //canActivate: [loginGuard] 
+  { path: 'register', component: RegisterComponent, title: 'Register', canActivate: [loginGuard] },
   { path: 'login', component: LoginComponent, title: 'Login', canActivate: [loginGuard] },
   { path: 'forgotpass', component: ForgotPassComponent, title: 'Forgot Password', canActivate: [loginGuard] },
   { path: 'forgotreset', component: ForgotResetComponent, title: 'Reset Password', canActivate: [loginGuard] },

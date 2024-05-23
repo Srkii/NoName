@@ -84,7 +84,6 @@ export class ProjectCardComponent {
 
     this.myProjectCardService.CreateProject(this.newProject).subscribe({
       next: response => {
-        console.log("Project created successfully", response);
         var projectMembers = this.selectedUsers.map<ProjectMember>(user => ({ AppUserId: user.appUserId, ProjectId: response.id, ProjectRole: user.projectRole = +user.projectRole}));
         this.AddAssigness(projectMembers);
       },
@@ -118,8 +117,6 @@ export class ProjectCardComponent {
  AddAssigness(projectMembers: ProjectMember[]){
   
       this.myProjectCardService.AddProjectMembers(projectMembers).subscribe(response => {
-        console.log("All users added")
-        console.log(response)
       })
     
       this.showComponent = false;

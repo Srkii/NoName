@@ -859,6 +859,7 @@ input.is-invalid:focus{
 .sPrimeNgEndDate {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 .tInfoDiv {
     display: flex;
