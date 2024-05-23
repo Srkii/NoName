@@ -78,6 +78,10 @@ export class KanbanComponent implements OnInit{
   ) { }
 
   ngOnInit() {
+    const projectId = this.route.snapshot.paramMap.get('id');
+    this.currentProjectId = projectId ? +projectId : null;
+    this.getUserRole();
+
     this.spinner.show();
     this.shared.taskUpdated.subscribe(() => {
       this.loadTasksAndUsers();  // Reload tasks and users
@@ -92,8 +96,6 @@ export class KanbanComponent implements OnInit{
           this.populateTasks();  // Reload tasks
       }
     });
-
-    this.getUserRole();
   }
 
   loadTasksAndUsers():void{
@@ -115,8 +117,7 @@ export class KanbanComponent implements OnInit{
   }
 
   populateTasks() {
-    const projectId = this.route.snapshot.paramMap.get('id');
-    this.currentProjectId = projectId ? +projectId : null;
+    
     this.GetTaskStatuses();
     if (this.currentProjectId) {
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) => {

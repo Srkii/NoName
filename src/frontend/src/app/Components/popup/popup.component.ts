@@ -221,7 +221,6 @@ export class PopupComponent {
               };
         
               this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
-                console.log('Dependency deleted successfully');
               }, (error: any) => {
                 console.error('Error deleting dependency:', error);
               });
