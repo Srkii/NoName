@@ -767,11 +767,8 @@ namespace backend.Controllers
             var comments = _context.Comments.Where(c => c.TaskId == taskId);
             _context.Comments.RemoveRange(comments);
             // Set notifications related to the task to null
-            var notifications = _context.Notifications.Where(n => n.task_id == taskId);
-            foreach (var notification in notifications)
-            {
-                notification.task_id = null;
-            }
+            
+            _notificationService.ArchiveRelatedTaskNotifications(task.Id);
 
             var projectId = task.ProjectId;
             _context.ProjectTasks.Remove(task);
