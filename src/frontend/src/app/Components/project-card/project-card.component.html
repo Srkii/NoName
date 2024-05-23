@@ -17,7 +17,7 @@
                 <label for="exampleFormControlInput1" class="form-label">Project Name</label>
                 <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Project Name" [(ngModel)]="newProject.ProjectName" name="Name" [ngClass]="{'is-invalid': buttonClicked && (!newProject.ProjectName || projectNameExists)}">
                 <div *ngIf="buttonClicked && !newProject.ProjectName && !projectNameExists" class="invalid">Please enter project name.</div>
-                <div *ngIf="buttonClicked && projectNameExists" class="invalid">You already have project with the same name.</div>
+                <div *ngIf="buttonClicked && projectNameExists" class="invalid">Project with the same name already exists.</div>
               </div>
               <div class="mb-3">
                 <label for="StartDate" class="form-label">Start Date</label>
@@ -38,7 +38,7 @@
                   ></p-calendar>
                 </div>
                 <div *ngIf="buttonClicked && !newProject.StartDate" class="invalid">Please enter start date.</div>
-                <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+                <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
               </div>
               <div class="mb-3">
                 <label for="EndDate" class="form-label">End Date</label>
@@ -57,7 +57,7 @@
                   [ngClass]="{'is-invalid': buttonClicked && !newProject.EndDate || isInvalidDate()}"></p-calendar>
                 </div>
                 <div *ngIf="buttonClicked && !newProject.EndDate" class="invalid">Please enter end date.</div>
-                <div *ngIf="isInvalidDate()" class="invalid">Invalid date entered. Please check if the start date is in the past or if the end date is set before the start date.</div>
+                <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
               </div>
               <div class="mb-3" >
                 <label for="desc" class="form-label">Description</label>

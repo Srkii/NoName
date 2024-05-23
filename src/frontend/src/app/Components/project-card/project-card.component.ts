@@ -36,7 +36,6 @@ export class ProjectCardComponent {
   }
 
   constructor(
-    private route: ActivatedRoute,
     private myProjectCardService: ProjectCardService,
     public uploadservice: UploadService,
     public quillService: QuillConfigService
@@ -56,7 +55,6 @@ export class ProjectCardComponent {
     if(await this.ProjectNameExists(this.newProject.ProjectName))
     {
       this.projectNameExists = true;
-      console.log("Project name already exists")
       return;
     }
 
@@ -69,19 +67,16 @@ export class ProjectCardComponent {
 
     if(this.newProject.StartDate == undefined || this.newProject.EndDate == undefined)
     {
-      console.log("You must enter a dates for the project")
       return;
     }
 
     if(this.isInvalidDate())
     {
-      console.log("Unvalid dates");
       return;
     }
 
     if(this.newProject.ProjectName == undefined)
     {
-      console.log("You must specify project name")
       return
     }
 
