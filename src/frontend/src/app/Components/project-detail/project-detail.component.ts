@@ -124,12 +124,12 @@ export class ProjectDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("id");
     this.currentProjectId = projectId ? +projectId : null;
+
     if (projectId && userId) {
       this.getUsersProjectRole(+projectId, +userId);
     }
-    console.log(this.userRole);
     this.shared.taskUpdated.subscribe(() => {
       this.getProjectInfo();  // Reload project info
     });
@@ -184,7 +184,6 @@ export class ProjectDetailComponent implements OnInit {
     this.myProjectsService.getUsersByProjectId(this.project.id).subscribe((users: any[]) => {
       this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole}));
       this.filteredUsers = this.usersOnProject;
-      this.userRole = this.usersOnProject.find(x => x.appUserId == this.userId)?.projectRole;
     });
   }
 

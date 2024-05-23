@@ -78,6 +78,10 @@ export class KanbanComponent implements OnInit{
   ) { }
 
   ngOnInit() {
+    const projectId = this.route.snapshot.paramMap.get('id');
+    this.currentProjectId = projectId ? +projectId : null;
+    this.getUserRole();
+
     this.spinner.show();
     this.shared.taskUpdated.subscribe(() => {
       this.loadTasksAndUsers();  // Reload tasks and users
@@ -92,8 +96,6 @@ export class KanbanComponent implements OnInit{
           this.populateTasks();  // Reload tasks
       }
     });
-
-    this.getUserRole();
   }
 
   loadTasksAndUsers():void{
@@ -110,14 +112,12 @@ export class KanbanComponent implements OnInit{
     if(this.currentProjectId){
       this.myProjectsService.getUserProjectRole(this.currentProjectId,this.userId).subscribe(response => {
         this.userProjectRole = response;
-        console.log(response)
       })
     }
   }
 
   populateTasks() {
-    const projectId = this.route.snapshot.paramMap.get('id');
-    this.currentProjectId = projectId ? +projectId : null;
+    
     this.GetTaskStatuses();
     if (this.currentProjectId) {
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) => {
@@ -186,10 +186,12 @@ export class KanbanComponent implements OnInit{
 
   updateTaskStatusPositions() {
     const updatedStatuses = this.taskStatuses.map((status, index) => ({ ...status, position: index }));
-    this.myTasksService.updateTaskStatusPositions(updatedStatuses).subscribe(() => {
-      this.GetTaskStatuses();
-    });
+    if(this.currentProjectId)
+      this.myTasksService.updateTaskStatusPositions(updatedStatuses, this.currentProjectId).subscribe(() => {
+        this.GetTaskStatuses();
+      });
   }
+  
   openDeleteStatusModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
     this.currentSectionName = sectionName;
     this.currentSectionId = sectionId;

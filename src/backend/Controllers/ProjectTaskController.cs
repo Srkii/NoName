@@ -150,7 +150,6 @@ namespace backend.Controllers
                 return Unauthorized("Invalid role");
 
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
-
             if (task == null)
             {
                 return NotFound();
@@ -169,7 +168,10 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks
                 .Include(t => t.TskStatus)
                 .FirstOrDefaultAsync(t => t.Id == taskId);
-
+            bool wasArchived = false;
+            if(task.TskStatus.StatusName.Equals("Archived")){
+                wasArchived = true;
+            }
             if (task == null)
             {
                 return NotFound();
@@ -187,11 +189,16 @@ namespace backend.Controllers
             }
 
             task.TskStatusId = status.Id;
-            if(statusName.Equals("Archived")){
-                //arhiviram sve notifikacije
-                _notificationService.ArchiveRelatedTaskNotifications(taskId);
-            }
+
             await _context.SaveChangesAsync();
+            if(statusName.Equals("Archived")){
+                _notificationService.ArchiveRelatedTaskNotifications(taskId);
+            }else if(wasArchived){
+                _notificationService.DeArchiveRelatedTaskNotifications(taskId);
+            }
+            if(statusName.Equals("InReview")){
+                await _notificationService.notifyTaskCompleted(taskId);
+            }   
 
             // Now, after saving changes, fetch the updated task again
             task = await _context.ProjectTasks
@@ -236,10 +243,10 @@ namespace backend.Controllers
             if (dto.TaskName != null) task.TaskName = dto.TaskName;
             if (dto.Description != null && dto.Description != "") task.Description = dto.Description;
             if (dto.DueDate != null) task.EndDate = (DateTime)dto.DueDate;
-            if (dto.ProjectId!=0) task.ProjectId = dto.ProjectId;
-            if (dto.AppUserId!=0) task.AppUserId = dto.AppUserId;
-            if(dto.SectionId!=0) task.ProjectSectionId=dto.SectionId;
-            if(dto.SectionId==0) task.ProjectSectionId=null;    
+            if (dto.ProjectId != 0) task.ProjectId = dto.ProjectId;
+            if (dto.AppUserId != 0) task.AppUserId = dto.AppUserId;
+            if (dto.SectionId != 0) task.ProjectSectionId=dto.SectionId;
+            if (dto.SectionId == 0) task.ProjectSectionId=null;    
 
             await _context.SaveChangesAsync();
 
@@ -414,7 +421,9 @@ namespace backend.Controllers
             if(updatedStatuses.Count == 0)
                 return BadRequest("No task status positions to update");
 
-            if(!await RoleCheck(updatedStatuses[0].ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner, ProjectRole.Manager]))
+            int projectId = updatedStatuses[0].ProjectId; // Extract projectId from the first status
+
+            if(!await RoleCheck(projectId, new List<ProjectRole> { ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager }))
                 return Unauthorized("Invalid role");
 
             foreach (var status in updatedStatuses)
@@ -676,6 +685,7 @@ namespace backend.Controllers
             foreach (var task in tasksToUpdate)
             {
                 task.TskStatusId = InProgressId;
+                _notificationService.DeArchiveRelatedTaskNotifications(task.Id);
             }
             await _context.SaveChangesAsync();
 

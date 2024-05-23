@@ -226,7 +226,6 @@ export class PopupComponent {
               };
         
               this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
-                console.log('Dependency deleted successfully');
               }, (error: any) => {
                 console.error('Error deleting dependency:', error);
               });
@@ -719,6 +718,11 @@ export class PopupComponent {
         console.log(error);
       }
     }); 
+  }
+  clearattachment($event:MouseEvent){
+    $event.stopPropagation();
+    this.attachment_name = ""
+    this.attachment_added = false;
   }
 
 

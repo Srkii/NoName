@@ -30,7 +30,7 @@ namespace backend.Services
                     comment_id = comment_id,
                     task_id=task_id,
                     Type = type,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
-                    dateTime = DateTime.Now,
+                    dateTime = DateTime.UtcNow,
                     read=false,
                     originArchived = false
                 };
@@ -39,11 +39,12 @@ namespace backend.Services
                 await _hubContext.Clients.Group(Users[i].ToString())
                     .Notify(
                          new NotificationDto{
+                            Id = notification.Id,
                             Task = notification.Task,
                             Comment = notification.Comment,
                             Project = notification.Project,
                             Sender = notification.Sender,
-                            dateTime = notification.dateTime,
+                            dateTime = notification.dateTime.AddHours(2),
                             Type = notification.Type,
                             read = notification.read
                          });
@@ -54,12 +55,12 @@ namespace backend.Services
             //zadatak ove funkcije jeste da posalje notifikaciju korisniku kojem je dodeljen zadatak ili projekat
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
             var reciever = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
-            if(reciever==null) throw new Exception("THIS BITCH EMPTY");
+            if(reciever==null) throw new Exception("reciever not found");
             Notification notification = new Notification{
                 reciever_id = reciever.Id,
                 task_id=task.Id,
                 Type = NotificationType.TaskAssignment,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
-                dateTime = DateTime.Now,
+                dateTime = DateTime.UtcNow,
                 read=false,
                 originArchived = false
             };
@@ -68,11 +69,12 @@ namespace backend.Services
             await _hubContext.Clients.Group(reciever.Id.ToString())
                     .Notify(
                          new NotificationDto{
+                            Id = notification.Id,
                             Comment = notification.Comment,
                             Task = notification.Task,
                             Project = notification.Project,
                             Sender = notification.Sender,
-                            dateTime = notification.dateTime,
+                            dateTime = notification.dateTime.AddHours(2),
                             Type = notification.Type,
                             read = notification.read
                          });
@@ -88,7 +90,7 @@ namespace backend.Services
                 reciever_id = user.Id,
                 project_id = project.Id,
                 Type=NotificationType.ProjectAssignment,
-                dateTime = DateTime.Now,
+                dateTime = DateTime.UtcNow,
                 read=false,
                 originArchived = false
             };
@@ -97,47 +99,77 @@ namespace backend.Services
             await _hubContext.Clients.Group(reciever_id.ToString())
                     .Notify(
                          new NotificationDto{
+                            Id = notification.Id,
                             Comment = notification.Comment,
                             Task = notification.Task,
                             Project = notification.Project,
                             Sender = notification.Sender,
-                            dateTime = notification.dateTime,
+                            dateTime = notification.dateTime.AddHours(2),
                             Type = notification.Type,
                             read = notification.read
                          });
+        }
+        public async Task notifyTaskCompleted(int task_id){
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id == task_id); 
+            var owner = await _context.ProjectMembers.FirstOrDefaultAsync(x=>x.ProjectId == task.ProjectId && x.ProjectRole == ProjectRole.ProjectManager);
+            //osoba koja je project manager za projekat ciji je task u pitanju..
+            if(owner==null) throw new Exception("Owner not found");
+            if(task==null) throw new Exception("Task not found");
+            Notification notification = new Notification
+            {
+                task_id = task.Id,
+                sender_id = task.AppUserId,
+                reciever_id = owner.AppUserId,
+                Type = NotificationType.TaskCompleted,
+                dateTime = DateTime.UtcNow,
+                read = false,
+                originArchived = false
+            };
+            await _context.Notifications.AddAsync(notification);
+            await _context.SaveChangesAsync();
+            
+            // await _hubContext.Clients.Group(owner.AppUserId.ToString())
+            //         .Notify(
+            //             new NotificationDto{
+            //                 Id = notification.Id,
+            //                 Comment = notification.Comment,
+            //                 Task = notification.Task,
+            //                 Project = notification.Project,
+            //                 Sender = notification.Sender,
+            //                 dateTime = notification.dateTime,
+            //                 Type = notification.Type,
+            //                 read = notification.read
+            //             });   
+            
         }
         public async Task<List<int>> GetUsersForTaskNotification(int taskId, int initiatorId)
         {
             var users = new List<int>();
 
-            // Get the project ID from the task
             var projectId = await _context.ProjectTasks.Where(t => t.Id == taskId).Select(t => t.ProjectId).FirstOrDefaultAsync();
 
-            // Include all project owners
             var projectOwners = await _context.ProjectMembers
                 .Where(x => x.ProjectId == projectId && (x.ProjectRole == ProjectRole.ProjectOwner || x.ProjectRole == ProjectRole.ProjectManager))
                 .Select(x => x.AppUserId)
                 .ToListAsync();
             users.AddRange(projectOwners);
 
-            // Include all project managers
             var projectManagers = await _context.ProjectMembers
                 .Where(x => x.ProjectId == projectId && x.ProjectRole == ProjectRole.Manager)
                 .Select(x => x.AppUserId)
                 .ToListAsync();
             users.AddRange(projectManagers);
 
-            // Get assignee
+     
             var assignee = await _context.ProjectTasks.Where(t => t.Id == taskId).Select(t => t.AppUserId).FirstOrDefaultAsync();
             if (assignee != null) users.Add(assignee.Value);
 
-            // Get commenters and attachment uploaders
+
             var commentersAndUploaders = await _context.Comments.Where(c => c.TaskId == taskId).Select(c => c.SenderId)
                 .Union(_context.Comments.Where(a => a.TaskId == taskId).Select(a => a.SenderId))
                 .ToListAsync();
             users.AddRange(commentersAndUploaders);
 
-            // Exclude the initiator and remove duplicates
             users = users.Where(u => u != initiatorId).Distinct().ToList();
 
             return users;
@@ -150,7 +182,7 @@ namespace backend.Services
             await _context.SaveChangesAsync();
         }
         public async void ArchiveRelatedProjectNotifications(int id){
-            var notifications = await  _context.Notifications.Where(x => x.project_id == id).ToListAsync();
+            var notifications = await  _context.Notifications.Where(x => x.project_id == id || x.Task.ProjectId == id).ToListAsync();
             foreach(Notification n in notifications){
                 n.originArchived = true;
             }
@@ -164,7 +196,7 @@ namespace backend.Services
             await _context.SaveChangesAsync();
         }
         public async void DeArchiveRelatedProjectNotifications(int id){
-            var notifications = await  _context.Notifications.Where(x => x.project_id == id).ToListAsync();
+            var notifications = await  _context.Notifications.Where(x => x.project_id == id || x.Task.ProjectId == id).ToListAsync();
             foreach(Notification n in notifications){
                 n.originArchived = false;
             }

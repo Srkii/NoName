@@ -227,12 +227,16 @@ label{
 .tCancelRemove {
   border-color: #696cff;
   color: #696cff;
+  width: 85px;
 }
 .tCancelRemove:hover {
   background-color: #fff;
   transform: translateY(-1px) !important;
 }
-
+.tRemove{
+  width: 85px;
+  margin: 0;
+}
 .dropdown-menu {
   border: 1px transparent;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -243,16 +247,4 @@ label{
   color: #ffffff;
   border-left: #696cff;
   border-right: #696cff;
-}
-
-.dropdown-item:hover{
-  background-color: #696cff;
-  color: #FFFFFF;
-  transition: 0.25s ease-in-out;
-}
-
-.square-avatar {
-  border-radius: 0.375rem;
-  width: 130px; /* Ensure it's square by setting width equal to size attribute */
-  height: 130px; /* Ensure it's square by setting height equal to size attribute */
 }

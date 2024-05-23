@@ -647,3 +647,17 @@ select:focus-visible{
   background-color: #696cff;
   border-color: #696cff;
 }
+.invalid{
+  height: 0;
+  overflow: visible;
+  margin-bottom: 0;
+  transition: height 0.3s ease;
+  color: red !important;
+  font-size: 0.7rem;
+}
+.is_invalid{
+  border-color: red !important;
+}
+.is-invalid:hover, .is-invalid:focus {
+  border-color: red !important;
+}
