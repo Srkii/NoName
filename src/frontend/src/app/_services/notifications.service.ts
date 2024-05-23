@@ -41,11 +41,10 @@ export class NotificationsService{
       .build();
     this.hubConnection.start().catch(error =>{
       // console.log(error);
-  });
+    });
 
     this.hubConnection.on('newNotifications',() =>{
       this.newNotifications = true;
-      console.log("you have new notifs..");
     });
 
     this.hubConnection.on('Notify',(notification:any)=>{

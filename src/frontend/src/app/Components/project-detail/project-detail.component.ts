@@ -676,16 +676,19 @@ export class ProjectDetailComponent implements OnInit {
 
     if (this.rangeDates && this.rangeDates.length === 2) {
       const [startDate, endDate] = this.rangeDates;
+      const adjustedEndDate = new Date(endDate);
+      adjustedEndDate.setHours(23, 59, 59, 999);
+    
       filteredTasks = filteredTasks.filter(task => {
         const taskStartDate = new Date(task.startDate);
         const taskEndDate = new Date(task.endDate);
-        return taskStartDate >= startDate && taskEndDate <= endDate;
+        return taskStartDate >= startDate && taskEndDate <= adjustedEndDate;
       });
     }
 
     this.projectTasks = filteredTasks;
     this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-    if(this.searchText!='' || this.selectedStatus!='')
+    if(this.searchText!='' || this.selectedStatus!='' || this.rangeDates)
     {
       Object.keys(this.groupedTasks).forEach(section => {
           this.groupedTasks[section].visible = true;
