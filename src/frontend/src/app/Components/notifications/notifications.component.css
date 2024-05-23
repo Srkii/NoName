@@ -47,8 +47,8 @@
   overflow: auto;
 }
 
-table,tr,td{
-  border: 1px transparent;
+tr{
+  border: 1px solid transparent;
 }
 .notifications-table{
   width: 100%;
@@ -86,16 +86,13 @@ td{
 .btn-primary{
   padding: 5px;
   border:1px solid #696cff;
-  background-color: white;
-  color: #696cff;
-  border-radius: 0.375rem;
-}
-.btn-primary:hover{
   background-color: #696cff;
   color: white;
-  transition: 0.5s ease-in-out;
+  border-radius: 0.375rem;
 }
-
+.notification-text{
+  margin-left: 10px;
+}
 img{
   width: 25px;
   height: 25px;
@@ -117,4 +114,13 @@ img{
 
 ::-webkit-scrollbar-button {
   display:none;
+}
+.dropdown-menu{
+  margin-top: 142%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.last_td{
+  width: 35px;
+  height: 20px;
 }

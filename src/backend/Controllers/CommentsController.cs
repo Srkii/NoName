@@ -23,6 +23,7 @@ namespace backend.Controllers
         {
             //doraditi: treba da proveri dal task postoji pa onda da post komentar. ako ne postoji vraca BadRequest sa opisom greske
             var task = await _context.ProjectTasks.FindAsync(commentDto.TaskId);
+            if(task==null) return BadRequest("task does not exist.");
             var comment = new Comment
             {
                 TaskId = commentDto.TaskId,
@@ -111,7 +112,7 @@ namespace backend.Controllers
             // Update the content and message sent date of the comment
             comment.Content = content;
             comment.Edited=true;
-            comment.MessageSent = DateTime.UtcNow.AddHours(2); // Update the message sent date
+            comment.MessageSent = DateTime.Now; // Update the message sent date
 
             // Save the changes to the database
             try
