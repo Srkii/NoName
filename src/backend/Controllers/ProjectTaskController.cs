@@ -150,12 +150,21 @@ namespace backend.Controllers
                 return Unauthorized("Invalid role");
 
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
-
+            bool wasArchived = false;
+            if(task.TskStatus.StatusName.Equals("Archived")){
+                wasArchived = true;
+            }
             if (task == null)
             {
                 return NotFound();
             }
             task.TskStatusId = taskDto.TaskStatusId;
+            var statusName = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id == taskDto.TaskStatusId);
+            if(statusName.Equals("Archived")){
+                _notificationService.ArchiveRelatedTaskNotifications(taskDto.Id);//ukoliko ga sad renameujemo u archived onda ide ovo
+            }else if(wasArchived){
+                _notificationService.DeArchiveRelatedTaskNotifications(taskDto.Id);//ako je bio arhiviran , onda se sigurno dearhivira...
+            }
             await _context.SaveChangesAsync();
             await updateProgress(task.ProjectId);
 
@@ -169,7 +178,10 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks
                 .Include(t => t.TskStatus)
                 .FirstOrDefaultAsync(t => t.Id == taskId);
-
+            bool wasArchived = false;
+            if(task.TskStatus.StatusName.Equals("Archived")){
+                wasArchived = true;
+            }
             if (task == null)
             {
                 return NotFound();
@@ -187,11 +199,16 @@ namespace backend.Controllers
             }
 
             task.TskStatusId = status.Id;
-            if(statusName.Equals("Archived")){
-                //arhiviram sve notifikacije
-                _notificationService.ArchiveRelatedTaskNotifications(taskId);
-            }
+
             await _context.SaveChangesAsync();
+            if(statusName.Equals("Archived")){
+                _notificationService.ArchiveRelatedTaskNotifications(taskId);
+            }else if(wasArchived){
+                _notificationService.DeArchiveRelatedTaskNotifications(taskId);
+            }
+            if(statusName.Equals("InReview")){
+                await _notificationService.notifyTaskCompleted(taskId);
+            }   
 
             // Now, after saving changes, fetch the updated task again
             task = await _context.ProjectTasks
@@ -678,6 +695,7 @@ namespace backend.Controllers
             foreach (var task in tasksToUpdate)
             {
                 task.TskStatusId = InProgressId;
+                _notificationService.DeArchiveRelatedTaskNotifications(task.Id);
             }
             await _context.SaveChangesAsync();
 
