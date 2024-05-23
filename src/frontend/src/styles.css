@@ -67,10 +67,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-bottom: 1px solid #dcdbdb !important;
 }
 .area-desc .ql-container.ql-snow {
+  font-size: 16px !important;
+  font-family: 'Public Sans', sans-serif !important;
   height: 12rem !important;
   border: none !important;
 }
 .desc .ql-container.ql-snow{
+  font-size: 16px !important;
+  font-family: 'Public Sans', sans-serif !important;
   border-radius: 0 0 0.375rem 0.375rem !important;
 }
 .desc .ql-toolbar.ql-snow {
