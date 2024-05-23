@@ -180,7 +180,7 @@ export class NotificationsService{
   }
   public checkForNewNotifications() {
     this.newNotifications = this.notifications.some((notification: any) => !notification.read);
-    console.log("checked",this.newNotifications);
+    // console.log("checked",this.newNotifications);
   }
 
 }

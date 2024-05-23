@@ -202,12 +202,12 @@ namespace backend.Controllers
 
             await _context.SaveChangesAsync();
             if(statusName.Equals("Archived")){
-                _notificationService.ArchiveRelatedTaskNotifications(taskId);
+                _notificationService.ArchiveRelatedTaskNotifications(task.Id);
             }else if(wasArchived){
-                _notificationService.DeArchiveRelatedTaskNotifications(taskId);
+                _notificationService.DeArchiveRelatedTaskNotifications(task.Id);
             }
-            if(statusName.Equals("InReview")){
-                await _notificationService.notifyTaskCompleted(taskId);
+            else if(statusName.Equals("InReview")){
+                await _notificationService.notifyTaskCompleted(task.Id);
             }   
 
             // Now, after saving changes, fetch the updated task again
