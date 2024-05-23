@@ -420,3 +420,6 @@ p {
 .unsorted {
   color: none;
 }
+.form-select:focus{
+  box-shadow: none !important;
+}

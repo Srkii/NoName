@@ -72,9 +72,7 @@
             <select class="form-select" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterTasks();" >
               <option value="" hidden selected>Select Status</option>
               <option value="">Select All</option>
-              <option value="Proposed">Proposed</option>
-              <option value="InProgress">In Progress</option>
-              <option value="Completed">Completed</option>
+              <option *ngFor="let status of allStatuses" [value]="status.name">{{ status.name }}</option>
             </select>
           </div>
           <div class="filter">

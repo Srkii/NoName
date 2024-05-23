@@ -106,6 +106,8 @@ export class ProjectDetailComponent implements OnInit {
   sortOrderEndDate: 'asc' | 'desc' = 'asc';
   sortOrderStatus: 'asc' | 'desc' = 'asc';
   sortField: keyof ProjectTask = 'taskName';
+
+  allStatuses:any[]=[];
   
 
   constructor(
@@ -124,6 +126,11 @@ export class ProjectDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
+    if(projectId)
+      this.myTasksService.GetTaskStatuses(parseInt(projectId)).subscribe((statuses: any[]) => {
+        this.allStatuses = statuses;
+        this.allStatuses = this.allStatuses.filter(status => status.name !== 'Archived');
+      });
     const userId = localStorage.getItem("id");
     this.currentProjectId = projectId ? +projectId : null;
 

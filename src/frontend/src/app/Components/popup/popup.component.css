@@ -550,6 +550,13 @@ img{
   margin-bottom: 10px;
   margin-right: 10px;
 }
+.upload_attachment svg:hover,
+.upload_attachment span:hover{
+  cursor: pointer;
+}
+.m-SVG:hover{
+  color: #a64266
+}
 
 .btn-primary {
   background-color: #696cff;

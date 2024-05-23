@@ -907,3 +907,6 @@ input.is-invalid:focus{
 .filter1 {
     margin-left: 2%;
 }
+.form-select:focus{
+    box-shadow: none !important;
+}
