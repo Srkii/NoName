@@ -65,7 +65,7 @@ namespace backend.SignalR
                 Project = notification.Project,
                 Reciever = notification.Reciever,
                 Sender = notification.Sender,
-                dateTime = notification.dateTime,
+                dateTime = notification.dateTime.AddHours(2),
                 Type = notification.Type,
                 read = notification.read
 
@@ -87,7 +87,7 @@ namespace backend.SignalR
                 Project = notification.Project,
                 Reciever = notification.Reciever,
                 Sender = notification.Sender,
-                dateTime = notification.dateTime,
+                dateTime = notification.dateTime.AddHours(2),
                 Type = notification.Type,
                 read = notification.read
             })

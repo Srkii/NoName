@@ -120,3 +120,7 @@ img{
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.last_td{
+  width: 35px;
+  height: 20px;
+}
