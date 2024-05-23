@@ -29,7 +29,7 @@ export class AdminComponent implements OnInit{
    this.onLoad();
    this.numbersOfRoles();
    this.PicturesOfRoles();
-   this.getArchivedUsers(); // zasto u onInit a ne tek kad se otvori modal
+  //  this.getArchivedUsers(); // zasto u onInit a ne tek kad se otvori modal
    // vrv je problem sto 5-6 salje server request i svaki put proverava validnost tokena na onInit. On ne stigne i ne prikaze nista
   }
 
@@ -348,6 +348,7 @@ export class AdminComponent implements OnInit{
     }
 
     openModal1(modal: TemplateRef<void>){
+      this.getArchivedUsers();
       this.modalRef = this.modalService.show(
         modal,
         {
