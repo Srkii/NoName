@@ -17,7 +17,7 @@ namespace backend.DTO
         public string Email{get; set;}
 
         [Required]
-        [StringLength(5, ErrorMessage = "Password must have at least 5 characters", MinimumLength = 5)]
+        [StringLength(30, ErrorMessage = "Password must have at least 5 characters", MinimumLength = 5)]
         public string Password{get; set;}
         
         public string Token{get; set;}

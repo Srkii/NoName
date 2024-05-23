@@ -63,6 +63,7 @@ export class MyTasksService {
     const payload = updatedStatuses.map(status => ({ ...status, projectId }));
     return this.http.put(`${this.baseUrl}/updateStatusPositions`, payload, {headers:this.httpHeader});
   }
+  
   sortTasksByDueDate(userId:any,sortOrder: string): Observable<ProjectTask[]> {
     const url = `${this.baseUrl}/sortTasksByDueDate/${userId}?sortOrder=${sortOrder}`;
     return this.http.get<ProjectTask[]>(url,{headers:this.httpHeader});

@@ -190,6 +190,7 @@ export class KanbanComponent implements OnInit{
         this.GetTaskStatuses();
       });
   }
+  
   openDeleteStatusModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
     this.currentSectionName = sectionName;
     this.currentSectionId = sectionId;

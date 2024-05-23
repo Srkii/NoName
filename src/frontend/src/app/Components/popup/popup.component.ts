@@ -711,6 +711,11 @@ export class PopupComponent {
       }
     }); 
   }
+  clearattachment($event:MouseEvent){
+    $event.stopPropagation();
+    this.attachment_name = ""
+    this.attachment_added = false;
+  }
 
 }
 

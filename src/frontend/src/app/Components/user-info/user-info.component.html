@@ -8,7 +8,7 @@
           <ngx-avatars class="square-avatar" *ngIf="!userInfo?.profilePicUrl" size="130" bgColor="#5d57c2" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
           <img class="overlay" src="../../../assets/profile_photo_placeholders/change_photo.jpg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" *ngIf="userInfo?.profilePicUrl" >View</button></li>
+            <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="!userInfo?.profilePicUrl" >View</button></li>
             <li><button class="dropdown-item" (click)="inputClick.click()">
               <span *ngIf="userInfo?.profilePicUrl">Change</span>
               <span *ngIf="!userInfo?.profilePicUrl">Upload</span></button>
@@ -124,7 +124,7 @@
         <button class="btn btn-outline-primary tCancelRemove" (click)="removeModalRef?.hide()">Cancel</button>
       </div>
       <div>
-        <button class="btn btn-primary"(click)="this.removeImage()">Remove</button>
+        <button class="btn btn-primary tRemove"(click)="this.removeImage()">Remove</button>
       </div>
     </div>
   </div>
@@ -134,9 +134,9 @@
   <div class="modal-header">
     <h5 class="modal-title">Profile Picture</h5>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" style=" display:flex; align-items: center; justify-content: center;padding: 0;">
     
-    <img *ngIf="userInfo.profilePicUrl" [src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
+    <img *ngIf="userInfo.profilePicUrl" [src]="uploadService.getProfileImage(userInfo.profilePicUrl)" style="padding: 0;">
     <!-- saljem request da bi prikazao sliku u full kvalitetu... -->
   </div>
   <div class="modal-footer">

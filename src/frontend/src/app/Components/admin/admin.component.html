@@ -204,20 +204,22 @@
     <form (ngSubmit)="UpdateUser(curentUserId)">
       <div class="mb-3">
         <label for="email" class="form-label">Email</label>
-        <input type="email" id="form3Example3" class="form-control" name="email" [(ngModel)]="newEmail" placeholder="{{curentEmail}}"/>
+        <input type="email" id="form3Example3" class="form-control email" name="email" [(ngModel)]="newEmail" placeholder="{{curentEmail}}" [ngClass]="{'is-invalid': !regexEmail.test(newEmail)}"/>
+        <div class="invalid" *ngIf="!regexEmail.test(newEmail)">Please enter a valid email address</div>
       </div>
       <div class="mb-3">
         <label for="fisrt name" class="form-label">Fisrt Name</label>
-        <input type="text" id="form3Example3" class="form-control" name="firstName" [(ngModel)]="newFisrtName" placeholder={{curentName}}/>
+        <input type="text" id="form3Example3" class="form-control fname" name="firstName" [ngClass]="{'is-invalid': invalidName || newFisrtName.length<2 || !regex.test(newFisrtName)}" [(ngModel)]="newFisrtName"/>
+        <div class="invalid" *ngIf="invalidName || newFisrtName.length<2 || !regex.test(newFisrtName)">First name must be longer and contain only letters</div>
       </div>
       <div class="mb-3">
         <label for="last name" class="form-label">Last Name</label>
-        <input type="text" id="form3Example3" class="form-control" name="lastName" [(ngModel)]="newLastName" placeholder="{{currentLastName}}"/>
+        <input type="text" id="form3Example3" class="form-control lname" name="lastName" [ngClass]="{'is-invalid': invalidLastName || newLastName.length<2 || !regex.test(newLastName)}" [(ngModel)]="newLastName"/>
+        <div class="invalid" *ngIf="invalidLastName || newLastName.length<2 || !regex.test(newLastName)">Last name must be longer and contain only letters</div>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100" type="submit" (click)="modalRef?.hide()">Update</button>
+        <button class="btn btn-primary d-grid w-100" style="margin-top: 1.5rem;" type="submit">Update</button>
       </div>
-
   </form>
   </div>
 </ng-template>
@@ -225,7 +227,7 @@
 <ng-template #archiveUser>
   <div class="modal-header">
     <h4>Archive user</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+    <button type="button" class="btn-close close pull-right" aria-label="Close">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>

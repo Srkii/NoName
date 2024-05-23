@@ -24,6 +24,12 @@ export class RegisterComponent implements OnInit {
   };
   confirmPassword: string = '';
 
+  regexName: RegExp = /^[A-Za-z]{2,}$/;
+  regexPassword: RegExp = /^[A-Za-z]{2,}$/;
+  invalidFirstName: boolean = false;
+  invalidLastName: boolean = false;
+  invalidPassword: boolean = false;
+
   constructor(
     private registerService: RegisterService,
     private router: Router,
@@ -59,10 +65,29 @@ export class RegisterComponent implements OnInit {
   }
 
   Register(): void {
-    if (this.newUser.Password !== this.confirmPassword) {
-      console.log('Passwords do not match');
+
+    if(this.newUser.FirstName && !this.regexName.test(this.newUser.FirstName))
+    {
+      this.invalidFirstName = true;
       return;
     }
+    this.invalidFirstName = false;
+    if(this.newUser.LastName && !this.regexName.test(this.newUser.LastName))
+    {
+      this.invalidLastName = true;
+      return;
+    }
+    this.invalidLastName = false;
+    if(this.newUser.Password && this.newUser.Password.length < 5)
+    {
+        this.invalidPassword = true;
+        return;
+    }
+    this.invalidPassword = false;
+    if (this.newUser.Password !== this.confirmPassword) {
+      return;
+    }
+    
     this.newUser.Token = this.token;
 
     this.registerService.register(this.newUser).subscribe({

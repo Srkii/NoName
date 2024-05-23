@@ -6,8 +6,7 @@ namespace backend.Entities
         Comment,
         TaskAssignment,
         ProjectAssignment,
-        TaskDeadlineChanged,
-        ProjectDeadlineChanged
+        TaskCompleted
     }
     public class Notification
     {
