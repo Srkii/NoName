@@ -125,23 +125,6 @@ export class MyTasksComponent implements OnInit {
   
   sortOrder: 'asc' | 'desc' = 'asc';
 
-  sortTasks() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
-
-    this.spinner.show();
-    this.myTasksService.sortTasksByDueDate(this.userId,this.sortOrder)
-      .subscribe({
-        next: (sortedTasks: ProjectTask[]) => {
-          this.closed_tasks = sortedTasks;
-          this.spinner.hide();
-        },
-        error: (error: any) => {
-          console.error('Error sorting tasks:', error);
-          this.spinner.hide();
-        }
-      });
-}
-
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -255,8 +238,13 @@ export class MyTasksComponent implements OnInit {
   }
   sortTasksBySectionName(tasks: ProjectTask[]) {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
+
   
     tasks.sort((a, b) => {
+      if(a.sectionName==null)
+        a.sectionName='No section';
+      if(b.sectionName==null)
+        b.sectionName='No section';
       const nameA = a.sectionName.toLowerCase();
       const nameB = b.sectionName.toLowerCase();
   

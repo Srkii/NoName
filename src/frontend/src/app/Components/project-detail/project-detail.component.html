@@ -58,15 +58,102 @@
         </div>
       </div>
       <div class="card" *ngIf="viewMode === 'table'" style="z-index: 0;">
+        <div class="mFilters">
+          <div class="filter">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Search by Project Name or Owner"
+              [(ngModel)]="searchText"
+              (input)="filterTasks(); "
+              />
+          </div>
+          <div class="filter">
+            <select class="form-select" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterTasks();" >
+              <option value="" hidden selected>Select Status</option>
+              <option value="">Select All</option>
+              <option *ngFor="let status of allStatuses" [value]="status.name">{{ status.name }}</option>
+            </select>
+          </div>
+          <div class="filter">
+            <p-calendar
+              [hideOnDateTimeSelect]="false"
+              [style]="{'width':'100%'}"
+              (onSelect)="filterTasks()"
+              (onClearClick)="filterTasks()"
+              placeholder="Filter by Date Range"
+              [(ngModel)]="rangeDates" 
+              selectionMode="range" 
+              [readonlyInput]="true"
+              [showButtonBar]="true"
+              dateFormat="MM dd, yy"
+              [firstDayOfWeek]="1"></p-calendar>
+          </div>
+        </div>
         <div class="table-responsive text-nowrap">
           <table class="table">
             <thead>
               <tr>
-                <th>Task Name</th>
-                <th>Assignee</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Status</th>
+                <th>Task Name
+                  <svg
+                  (click)="SortByName()"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="filter1"
+                  viewBox="0 0 16 16"
+                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+                </th>
+                <th>Assignee
+                  <svg
+                  (click)="SortByAssignee()"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="filter1"
+                  viewBox="0 0 16 16"
+                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+                </th>
+                <th>Start Date
+                  <svg
+                  (click)="SortByStartDate()"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="filter1"
+                  viewBox="0 0 16 16"
+                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+                </th>
+                <th>End Date
+                  <svg
+                  (click)="SortByEndDate()"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="filter1"
+                  viewBox="0 0 16 16"
+                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+                </th>
+                <th>Status
+                  <svg
+                  (click)="SortByStatus()"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="filter1"
+                  viewBox="0 0 16 16"
+                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+                </th>
               </tr>
             </thead>
           </table>

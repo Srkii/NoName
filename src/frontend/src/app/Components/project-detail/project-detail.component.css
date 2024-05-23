@@ -865,3 +865,48 @@ input.is-invalid:focus{
     display: flex;
     align-items: center;
 }
+
+.filter input,
+.filter select,
+.filter p-calendar
+{
+  color: #697a8d;
+  border-radius: 8px;
+  font-size: 16px;
+  height: 100%;
+}
+
+.filter input:hover,
+.filter select:hover {
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+}
+.filter input:focus,
+.filter select:focus {
+  outline: none;
+  border: 1px solid #5f61e6 !important;
+}
+
+.mFilters {
+    display: flex;
+    gap: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.mFilters > div {
+    flex: 1;
+}
+.mFilters input {
+    line-height: normal !important;
+}
+.filter1:hover,
+.filter1:focus {
+    cursor: pointer;
+    color: #5f61e6;
+}
+.filter1 {
+    margin-left: 2%;
+}
+.form-select:focus{
+    box-shadow: none !important;
+}

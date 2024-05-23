@@ -46,7 +46,7 @@ body {
 .filter p-calendar
 {
   color: #697a8d;
-  border-radius: 0.375rem;
+  border-radius: 8px;
   font-size: 16px;
   height: 100%;
 }
@@ -55,13 +55,11 @@ body {
 .filter select:hover {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 2px #5f61e6;
 }
 .filter input:focus,
 .filter select:focus {
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 2px #5f61e6;
 }
 
 table {
@@ -227,7 +225,6 @@ p {
 .page_size:hover, .page_size:focus{
   outline: none;
   border: 1px solid #5f61e6 !important;
-  box-shadow: none !important;
 }
 
 .addProject{
@@ -401,4 +398,28 @@ p {
 
 .tPCheck:checked {
   accent-color: #696cff !important;
+}
+
+.filter {
+  margin-left: 2%;
+}
+.filter:hover,
+.filter:focus {
+  cursor: pointer;
+  color: #5f61e6;
+}
+
+.sorted-asc {
+  color: #5f61e6;
+}
+
+.sorted-desc {
+  color: #5f61e6;
+}
+
+.unsorted {
+  color: none;
+}
+.form-select:focus{
+  box-shadow: none !important;
 }

@@ -157,7 +157,9 @@ namespace backend.Controllers
             DateTime? endDate = null,
             int userId = 0,
             int currentPage = 0,
-            int pageSize = 0)
+            int pageSize = 0,
+            string sortedColumn = null,
+            int sortedOrder = 0)
         {
            var query = _context.Projects.AsQueryable();
            query = query.Where(p => p.ProjectStatus != ProjectStatus.Archived);
@@ -201,6 +203,25 @@ namespace backend.Controllers
                             .Where(x => x.Member.AppUserId == userId)
                             .Select(x => x.Project);
             }
+            if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+    {
+        if (sortedColumn == "ProjectOwner")
+        {
+            query = sortedOrder == 1
+                ? query.OrderBy(x => _context.ProjectMembers
+                    .Where(m => m.ProjectId == x.Id && m.ProjectRole == ProjectRole.ProjectOwner)
+                    .Select(m => m.AppUser.FirstName + " " + m.AppUser.LastName).FirstOrDefault())
+                : query.OrderByDescending(x => _context.ProjectMembers
+                    .Where(m => m.ProjectId == x.Id && m.ProjectRole == ProjectRole.ProjectOwner)
+                    .Select(m => m.AppUser.FirstName + " " + m.AppUser.LastName).FirstOrDefault());
+        }
+        else
+        {
+            query = sortedOrder == 1
+                ? query.OrderBy(x => EF.Property<object>(x, sortedColumn))
+                : query.OrderByDescending(x => EF.Property<object>(x, sortedColumn));
+        }
+    }
 
             // Apply pagination
             var filteredProjects = await query.Skip((currentPage - 1) * pageSize)
@@ -219,7 +240,9 @@ namespace backend.Controllers
             DateTime? endDate = null,
             int userId = 0,
             int currentPage = 0,
-            int pageSize = 0)
+            int pageSize = 0,
+            string sortedColumn = null,
+            int sortedOrder = 0)
         {
            var query = _context.Projects.AsQueryable();
            query = query.Where(p => p.ProjectStatus != ProjectStatus.Archived);
@@ -263,6 +286,26 @@ namespace backend.Controllers
                                 (project, member) => new { Project = project, Member = member })
                             .Where(x => x.Member.AppUserId == userId)
                             .Select(x => x.Project);
+            }
+
+            if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+            {
+                if (sortedColumn == "ProjectOwner")
+                {
+                    query = sortedOrder == 1
+                        ? query.OrderBy(x => _context.ProjectMembers
+                            .Where(m => m.ProjectId == x.Id && m.ProjectRole == ProjectRole.ProjectOwner)
+                            .Select(m => m.AppUser.FirstName + " " + m.AppUser.LastName).FirstOrDefault())
+                        : query.OrderByDescending(x => _context.ProjectMembers
+                            .Where(m => m.ProjectId == x.Id && m.ProjectRole == ProjectRole.ProjectOwner)
+                            .Select(m => m.AppUser.FirstName + " " + m.AppUser.LastName).FirstOrDefault());
+                }
+                else
+                {
+                    query = sortedOrder == 1
+                        ? query.OrderBy(x => EF.Property<object>(x, sortedColumn))
+                        : query.OrderByDescending(x => EF.Property<object>(x, sortedColumn));
+                }
             }
 
             // Apply pagination

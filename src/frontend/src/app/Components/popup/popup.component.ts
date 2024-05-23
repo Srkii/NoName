@@ -14,6 +14,8 @@ import { TaskDependency } from '../../Entities/TaskDependency';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedService } from '../../_services/shared.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ta } from 'date-fns/locale';
 
 @Component({
   selector: 'app-popup',
@@ -47,6 +49,8 @@ export class PopupComponent {
   sections:ProjectSection[]=[];
   selectedSection: ProjectSection | undefined;
   current_user: any;
+
+
   
     
   attachment_name:string = '';
@@ -55,6 +59,7 @@ export class PopupComponent {
   today: Date = new Date();
 
   constructor(private myTasksService: MyTasksService,
+              private spinner: NgxSpinnerService,
               private cdr: ChangeDetectorRef,
               private userInfo:UserinfoService,  
               private commentsService: CommentsService,
@@ -330,6 +335,7 @@ export class PopupComponent {
   }
 
   addComment(): void {
+    this.spinner.show();
     const content = this.commentInput.nativeElement.value.trim();
     var id=localStorage.getItem("id");
     this.userInfo.getUserInfo2(id).subscribe({
@@ -346,6 +352,7 @@ export class PopupComponent {
             messageSent:  new Date,
             fileUrl: this.attachment_name?this.attachment_name:"",
             edited:false,
+            appUserPicUrl: this.current_user.profilePicUrl,
           };
           this.commentsService.postComment(commentDto).subscribe({
             next: (comment: Comment) => {
@@ -358,6 +365,7 @@ export class PopupComponent {
             setTimeout(() => {
               this.scrollToBottom();
             });
+            this.spinner.hide();
     
             },
             error: (error: any) => {
@@ -422,20 +430,21 @@ export class PopupComponent {
       sectionId: this.selectedSection ? this.selectedSection.id : 0
     };
 
-    this.myTasksService.changeTaskInfo(dto).subscribe({
-      next: (updatedTask: ProjectTask) => {
-        let rola=this.task?.projectRole;
-        this.task = updatedTask;
-        this.task.projectRole=rola;
+      this.myTasksService.changeTaskInfo(dto).subscribe({
+        next: (updatedTask: ProjectTask) => {
+          let rola=this.task?.projectRole;
+          this.task = updatedTask;
+          this.task.projectRole=rola;
+  
+  
+          this.sharedService.emitTaskUpdated();
+          this.cdr.detectChanges();
+        },
+        error: (error: any) => {
+          console.error('Error updating task information:', error);
+        }
+      });
 
-
-        this.sharedService.emitTaskUpdated();
-        this.cdr.detectChanges();
-      },
-      error: (error: any) => {
-        console.error('Error updating task information:', error);
-      }
-    });
   }
 
   // sklanja milisekunde
@@ -715,6 +724,9 @@ export class PopupComponent {
     this.attachment_name = ""
     this.attachment_added = false;
   }
+
+
+  
 
 }
 

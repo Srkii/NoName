@@ -223,6 +223,7 @@ export class KanbanComponent implements OnInit{
       next: () => {
         this.modalRef?.hide();
         this.sectionChanged.emit(true);
+        this.shared.notifyTaskStatusChange();
         this.populateTasks();
       },
       error: (error) => console.error('Error deleting section:', error)
@@ -244,6 +245,7 @@ export class KanbanComponent implements OnInit{
         this.newSectionName = '';
         this.newSectionColor = '#ffffff';
         this.sectionChanged.emit(true);
+        this.shared.notifyTaskStatusChange();
         this.populateTasks();
       },
       error: (error) => this.toastr.error(error.error)
