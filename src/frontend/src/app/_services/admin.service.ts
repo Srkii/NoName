@@ -22,7 +22,7 @@ export class AdminService {
 
   private apiUrl=environment.apiUrl;
 
-  check():boolean{
+  async check(): Promise<boolean>{
     const role=localStorage.getItem('role')
     
     if(role==='0')

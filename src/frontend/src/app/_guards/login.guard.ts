@@ -6,16 +6,15 @@ export const loginGuard: CanActivateFn = async (route, state) => {
   const service=inject(LoginService);
   const router=inject(Router)
 
-  if(await service.checkToken()===false){
-    localStorage.clear();
-    return true;
+  if(await service.checkToken()===true){
+    if(localStorage.getItem('role')==='0')
+      router.navigate(['/admin']);
+    else router.navigate(['/mytasks']);
+      return false;
   }
   else{
-    if(localStorage.getItem('role')==='0')
-         router.navigate(['/admin']);
-    else router.navigate(['/mytasks']);
-
-    return false;
+    localStorage.clear();
+    return true;
   }
 
 };

@@ -8,7 +8,7 @@ export const adminGuard: CanActivateFn = async (route, state) => {
   const loginService=inject(LoginService);
   const router=inject(Router)
   
-  if(adminService.check() && await loginService.checkToken())
+  if(await adminService.check() && await loginService.checkToken())
   {
     return true;
   }

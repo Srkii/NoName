@@ -150,21 +150,11 @@ namespace backend.Controllers
                 return Unauthorized("Invalid role");
 
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(t => t.Id == id);
-            bool wasArchived = false;
-            if(task.TskStatus.StatusName.Equals("Archived")){
-                wasArchived = true;
-            }
             if (task == null)
             {
                 return NotFound();
             }
             task.TskStatusId = taskDto.TaskStatusId;
-            var statusName = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id == taskDto.TaskStatusId);
-            if(statusName.Equals("Archived")){
-                _notificationService.ArchiveRelatedTaskNotifications(taskDto.Id);//ukoliko ga sad renameujemo u archived onda ide ovo
-            }else if(wasArchived){
-                _notificationService.DeArchiveRelatedTaskNotifications(taskDto.Id);//ako je bio arhiviran , onda se sigurno dearhivira...
-            }
             await _context.SaveChangesAsync();
             await updateProgress(task.ProjectId);
 
@@ -253,10 +243,10 @@ namespace backend.Controllers
             if (dto.TaskName != null) task.TaskName = dto.TaskName;
             if (dto.Description != null && dto.Description != "") task.Description = dto.Description;
             if (dto.DueDate != null) task.EndDate = (DateTime)dto.DueDate;
-            if (dto.ProjectId!=0) task.ProjectId = dto.ProjectId;
-            if (dto.AppUserId!=0) task.AppUserId = dto.AppUserId;
-            if(dto.SectionId!=0) task.ProjectSectionId=dto.SectionId;
-            if(dto.SectionId==0) task.ProjectSectionId=null;    
+            if (dto.ProjectId != 0) task.ProjectId = dto.ProjectId;
+            if (dto.AppUserId != 0) task.AppUserId = dto.AppUserId;
+            if (dto.SectionId != 0) task.ProjectSectionId=dto.SectionId;
+            if (dto.SectionId == 0) task.ProjectSectionId=null;    
 
             await _context.SaveChangesAsync();
 

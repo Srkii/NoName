@@ -150,9 +150,9 @@
               <div class="sSpan">
                 <span *ngIf="userRole == 2 || userRole == 3 || userRole == 4" id="startDate" class="startDate">{{ update.endDate | date }}</span>
               </div>
-              <div class="sPrimeNg">
+              <div class="sPrimeNg" style="width: 130px !important;">
                 <p-calendar
-                [disabled]="userRole != 0 && userRole != 1"
+                *ngIf="userRole == 0 || userRole == 1"
                 [style]="{'width':'130px'}"
                 [(ngModel)]="update.endDate"
                 inputId="endDate"

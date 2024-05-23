@@ -29,7 +29,8 @@ export class AdminComponent implements OnInit{
    this.onLoad();
    this.numbersOfRoles();
    this.PicturesOfRoles();
-   this.getArchivedUsers();
+   this.getArchivedUsers(); // zasto u onInit a ne tek kad se otvori modal
+   // vrv je problem sto 5-6 salje server request i svaki put proverava validnost tokena na onInit. On ne stigne i ne prikaze nista
   }
 
   invitation:RegisterInvitation={

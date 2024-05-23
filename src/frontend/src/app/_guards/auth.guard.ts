@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
 
   if(await service.checkToken())
   {
-    if(adminService.check()===true)
+    if(await adminService.check()===true)
     {
       router.navigate(['/admin']);
       return false

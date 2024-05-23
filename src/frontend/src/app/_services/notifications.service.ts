@@ -68,6 +68,7 @@ export class NotificationsService{
 
     this.hubConnection.on('recieveAllNotifications',(notifications:[Notification])=>{
       this.allNotifications = notifications;//pokupim sve u niz
+      console.log(this.allNotifications);
     })
   }
   stopHubConnection(){
@@ -180,7 +181,6 @@ export class NotificationsService{
   }
   public checkForNewNotifications() {
     this.newNotifications = this.notifications.some((notification: any) => !notification.read);
-    console.log("checked",this.newNotifications);
   }
 
 }
