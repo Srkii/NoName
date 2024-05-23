@@ -13,8 +13,10 @@ export class SharedService {
   private togglePopupSource = new Subject<{ event: MouseEvent, taskId: number }>();
   togglePopup$ = this.togglePopupSource.asObservable();
   taskUpdated: EventEmitter<void> = new EventEmitter();
-  constructor(private http: HttpClient) {}
+  public taskStatusChanged: EventEmitter<void> = new EventEmitter();
 
+  constructor(private http: HttpClient) {}
+  
   triggerPopup(event: MouseEvent, taskId: number) {
     this.togglePopupSource.next({ event, taskId });
   }
@@ -26,6 +28,10 @@ export class SharedService {
   taskAdded$ = this.taskAddedSource.asObservable();
   taskAdded(success: boolean) {
     this.taskAddedSource.next(success);
+  }
+
+  notifyTaskStatusChange(): void {
+    this.taskStatusChanged.emit();
   }
 
   // emit za novu sekciju

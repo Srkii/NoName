@@ -126,6 +126,13 @@ export class ProjectDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
+    this.shared.taskStatusChanged.subscribe(() => {
+      if(projectId)
+        this.myTasksService.GetTaskStatuses(parseInt(projectId)).subscribe((statuses: any[]) => {
+          this.allStatuses = statuses;
+          this.allStatuses = this.allStatuses.filter(status => status.name !== 'Archived');
+        });
+    });
     if(projectId)
       this.myTasksService.GetTaskStatuses(parseInt(projectId)).subscribe((statuses: any[]) => {
         this.allStatuses = statuses;
