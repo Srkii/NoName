@@ -45,6 +45,7 @@ export class NotificationsService{
 
     this.hubConnection.on('newNotifications',() =>{
       this.newNotifications = true;
+      console.log("you have new notifs..");
     });
 
     this.hubConnection.on('Notify',(notification:any)=>{
@@ -81,7 +82,9 @@ export class NotificationsService{
     await this.hubConnection?.invoke('invokeGetAllNotifications');//sve notifikacije sortirane prvo po vremenu, pa onda po tome da li su procitane...
   }
   read_notifications(notificationIds:number[]){
-    this.hubConnection?.invoke("readNotifications",notificationIds);
+    this.hubConnection?.invoke("readNotifications", notificationIds);
+    this.notifications = this.notifications.filter((notification:any) => !notificationIds.includes(notification.id));
+    this.allNotifications = this.allNotifications.filter((notification:any) => !notificationIds.includes(notification.id));
     this.checkForNewNotifications();
   }
   getNotificationType(type:any):string{
@@ -169,12 +172,15 @@ export class NotificationsService{
         return "Task Assignment";
       case 3:
         return "Project Assignment";
+      case 4:
+        return "Task Completed";
       default:
         return "";
     }
   }
   public checkForNewNotifications() {
     this.newNotifications = this.notifications.some((notification: any) => !notification.read);
+    console.log("checked",this.newNotifications);
   }
 
 }
