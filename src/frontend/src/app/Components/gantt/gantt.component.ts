@@ -146,14 +146,28 @@ export class GanttComponent implements OnInit{
     }
   }
 
+
+  // ovo smo testirali i menjali
   linkDragEnded(event: any){
-    let taskDependency:TaskDependency={
-      taskId:Number(event.source.id),
-      dependencyTaskId:Number(event.target.id)
+    let taskDependency: TaskDependency = {
+        taskId: Number(event.target.id), // Now the target is the dependent task
+        dependencyTaskId: Number(event.source.id) // And the source is the task it depends on
     }
-    let arr:TaskDependency[] = [taskDependency];
+    let arr: TaskDependency[] = [taskDependency];
     this.myTasksService.addTaskDependencies(arr).subscribe((response)=>{});
-  }
+  } 
+
+
+  // ovo je kako je bilo kad je maksim odradio
+  // linkDragEnded(event: any){
+  //   let taskDependency:TaskDependency={
+  //     taskId:Number(event.source.id),
+  //     dependencyTaskId:Number(event.target.id)
+  //   }
+  //   let arr:TaskDependency[] = [taskDependency];
+  //   this.myTasksService.addTaskDependencies(arr).subscribe((response)=>{});
+  // }
+
 
   dragMoved(event: any) {
     //ovde nikako nista, ovo cita svaki pokret elementa unutar gantta
@@ -225,7 +239,7 @@ export class GanttComponent implements OnInit{
 
               depencency_array.forEach((dep:TaskDependency) => {
                 dependencies.push({
-                  type: 1,
+                  type: 4,
                   link: String(dep.dependencyTaskId)
                 });
               });
@@ -262,6 +276,7 @@ export class GanttComponent implements OnInit{
       });
     }
   }
+
   convertToUnixTimestamp(dateString: string): number {
     const date = new Date(dateString);
     return date.getTime() / 1000;

@@ -273,13 +273,22 @@ export class ProjectDetailComponent implements OnInit {
     );
   }
 
+  
+  resetTimeProjInfo(date: Date | string): Date {
+    if (!(date instanceof Date)) {
+      date = new Date(date);
+    }
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }
+
   updateProject()
   {
     if(this.update.endDate)
-      this.update.endDate = this.resetTime(this.update.endDate);
+      this.update.endDate = this.resetTimeProjInfo(this.update.endDate);
     
     this.spinner.show()
-    if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
+    if(this.userRole == 1 || this.userRole == 0)
     {
       if(this.update.projectName !== this.project.projectName || this.update.projectStatus!=this.project.projectStatus ||
         this.update.endDate != this.project.endDate || this.update.description != this.project.description)

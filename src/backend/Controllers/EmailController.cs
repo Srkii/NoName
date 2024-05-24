@@ -18,7 +18,8 @@ namespace backend.Controllers
             _context = context;
         }
 
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost("sendInvitation")]
         public async Task<IActionResult> SendInvitationEmail(EmailDto emailDto)
         {

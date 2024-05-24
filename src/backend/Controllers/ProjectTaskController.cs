@@ -334,7 +334,7 @@ namespace backend.Controllers
             }
             else
             {
-                return NotFound(); // Return not found if the dependency doesn't exist
+                return NotFound("Can't delete these links. Something went wrong!"); // Return not found if the dependency doesn't exist
             }
 
         }
