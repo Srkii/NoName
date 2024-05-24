@@ -34,7 +34,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NotificationsComponent } from './Components/notifications/notifications.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { GANTT_GLOBAL_CONFIG, NgxGanttModule } from '@worktile/gantt';
-import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 import { TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
@@ -62,7 +61,6 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     GanttComponent,
     ProjectCardComponent,
     NotificationsComponent,
-    LandingPageComponent,
     CustomToastComponent
   ],
   imports: [

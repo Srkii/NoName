@@ -196,13 +196,13 @@
 <ng-template #updateUser>
   <div class="modal-header">
     <h5>Update user's info</h5>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <form (ngSubmit)="UpdateUser(curentUserId)">
-      <div class="mb-3">
+      <div class="mb-3 tEmail">
         <label for="email" class="form-label">Email</label>
         <input type="email" id="form3Example3" class="form-control email" name="email" [(ngModel)]="newEmail" placeholder="{{curentEmail}}" [ngClass]="{'is-invalid': !regexEmail.test(newEmail)}"/>
         <div class="invalid" *ngIf="!regexEmail.test(newEmail)">Please enter a valid email address</div>
@@ -227,7 +227,7 @@
 <ng-template #archiveUser>
   <div class="modal-header">
     <h4>Archive user</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close">
+    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
@@ -235,8 +235,6 @@
     <form >
       <div class="mb-3">
         <label for="text" class="form-label">Are you sure you want to archive this user?</label>
-        <label for="text" class="form-label">
-          This user will no longer be visible.</label>
       </div>
       <div class="mb-3">
         <button class="btn btn-primary d-grid w-100 archBtn" type="submit" (click)="ArchiveUser(curentUserId)" (click)="modalRef?.hide()">Archive user</button>
@@ -248,7 +246,7 @@
 <ng-template #changeRole>
   <div class="modal-header archy">
     <h4>Change user's role</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
@@ -272,7 +270,7 @@
 <ng-template #archivedUsers>
   <div class="modal-header text-center">
     <h4 class="modal-title text-center">Archived users</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
@@ -318,11 +316,11 @@
       </table>
   </div>
     <div class="mb-3 text-center">
-      <button class="btn btn-primary d-grid w-50 mx-auto archBtn" type="submit" (click)="removeFromArchived()" (click)="modalRef?.hide()" >Remove from Archieved</button>
+      <button class="btn btn-primary d-grid w-50 mx-auto archBtn" type="submit" (click)="removeFromArchived()" (click)="modalRef?.hide()" >Remove from Archived</button>
     </div>
   </div>
 </ng-template>
 
 <ng-template #noArchivedUsers>
-  <div class="text-center noArch">Currently, there are no archived users.</div>
+  <div class="text-center noArch">There are no archived users.</div>
 </ng-template>

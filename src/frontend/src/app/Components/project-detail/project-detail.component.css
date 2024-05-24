@@ -684,7 +684,10 @@ select:disabled {
 }
 .form-control:focus {
     border-color: #5f61e6 !important;
-    box-shadow: 0 0 2px #5f61e6;
+    box-shadow: none !important;
+}
+.form-control:hover {
+    border: 1px solid #5f61e6 !important;
 }
 .avatar .rounded-circle .shadow-4-strong {
     margin-bottom: 0px !important;
@@ -909,4 +912,14 @@ input.is-invalid:focus{
 }
 .form-select:focus{
     box-shadow: none !important;
+}
+.tNoBoxShadow:focus,
+.tNoBoxShadow:hover {
+    box-shadow: none !important;
+    border: 1px solid #5f61e6 !important;
+}
+.tModalRemoveIcon svg:focus,
+.tModalRemoveIcon svg:hover {
+    fill: #a64266 !important;
+    cursor: pointer !important;
 }

@@ -15,13 +15,8 @@
       </div>
     </div>
     <div class="mFilters">
-      <div class="filter">
-        <input 
-          class="form-control"
-          type="text"
-          placeholder="Search by Project Name or Owner"
-          [(ngModel)]="searchText"
-          (input)="filterProjects(); "/>
+      <div class="filter tNameSearch">
+        <input class="form-control tNameSearch" type="text" placeholder="Search by Project Name or Owner" [(ngModel)]="searchText" (input)="filterProjects(); "/>
       </div>
       <div class="filter">
         <select class="form-select" name="status" id="status" [(ngModel)]="selectedStatus" (change)="filterProjects();">

@@ -423,3 +423,7 @@ p {
 .form-select:focus{
   box-shadow: none !important;
 }
+
+.tNameSearch:focus {
+  box-shadow: none !important;
+}

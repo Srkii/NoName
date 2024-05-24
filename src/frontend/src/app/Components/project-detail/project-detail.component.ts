@@ -482,19 +482,21 @@ export class ProjectDetailComponent implements OnInit {
         this.modalRef?.hide();
         this.getProjectInfo();
         this.shared.taskAdded(true);
-
-        // Resetuj polja
-        this.newTaskName = '';
-        this.newTaskDescription = '';
-        this.newTaskStartDate = null;
-        this.newTaskEndDate = null;
-        this.newTaskStatusId = null;
-        this.newTaskProjectSectionId = null;
-        this.selectedUser = undefined;
-        this.selectedSection = undefined;
+        this.resetNewTaskFields();
       },
       error: (error) => console.error('Error creating task:', error)
     });
+  }
+
+  resetNewTaskFields(): void {
+    this.newTaskName = '';
+    this.newTaskDescription = '';
+    this.newTaskStartDate = null;
+    this.newTaskEndDate = null;
+    this.newTaskStatusId = null;
+    this.newTaskProjectSectionId = null;
+    this.selectedUser = undefined;
+    this.selectedSection = undefined;
   }
 
   // sklanja milisekunde

@@ -34,7 +34,7 @@
           </svg>Gantt</button>
         </div>
         <div class="actionLinks">
-          <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="new-item addTask" (click)="openNewTaskModal(newTask)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <div *ngIf="userRole == 0 || userRole == 1 || userRole == 2" class="new-item addTask" (click)="openNewTaskModal(newTask); resetNewTaskFields()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
             </svg>Add Task
           </div>
@@ -63,7 +63,7 @@
             <input
               class="form-control"
               type="text"
-              placeholder="Search by Project Name or Owner"
+              placeholder="Search by Task Name or Assignee"
               [(ngModel)]="searchText"
               (input)="filterTasks(); "
               />
@@ -315,7 +315,7 @@
       </div>
       <div class="mb-3 members">
         <h5>Project members</h5>
-        <input type="text" class="form-control form-control-sm search" placeholder="Search by name..." [(ngModel)]="searchTerm" (input)="filterUsers()">
+        <input type="text" class="form-control form-control-sm search tNoBoxShadow" placeholder="Search by name" [(ngModel)]="searchTerm" (input)="filterUsers()">
         <div class="d-flex tableHeaders">
           <span>Name</span>
           <span>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Change role' : ((userRole === 3 || userRole === 4) ? 'Project role' : '') }}</span>
@@ -339,8 +339,10 @@
                   </select>
                   <span class="isPM" *ngIf="user.projectRole == 0">Project Manager</span>
                 </td>
-                <td style="text-align: center;">
-                  <span class="deleteMember" (click)="deleteAssigne(user.appUserId)" data-toggle="dropdown" *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4">×</span>
+                <td style="text-align: center;" class="tModalRemoveIcon">
+                  <svg *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4" (click)="deleteAssigne(user.appUserId)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                  </svg>
                   <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
                 </td>
               </tr>
@@ -363,13 +365,13 @@
     <form class="mb-3" (ngSubmit)="saveTask()">
       <div class="mb-1" autocomplete="off">
           <label for="taskName" class="form-label">Task Name</label>
-          <input type="text" class="form-control tFormControl" name="taskName" [(ngModel)]="newTaskName"  [ngClass]="{'is-invalid': buttonClicked && (!newTaskName || taskNameExists)}" placeholder="Enter new tasks's name"/>
+          <input type="text" class="form-control tFormControl tNoBoxShadow" name="taskName" [(ngModel)]="newTaskName"  [ngClass]="{'is-invalid': buttonClicked && (!newTaskName || taskNameExists)}" placeholder="Enter new tasks's name"/>
           <div *ngIf="buttonClicked && !newTaskName && !taskNameExists" class="invalid">Please enter task name.</div>
           <div *ngIf="buttonClicked && taskNameExists" class="invalid">You already have task with the same name.</div>
       </div>
       <div class="mb-1" autocomplete="off">
           <label for="taskDescription" class="form-label">Task Description</label>
-          <textarea style="font-size: 16px !important;" class="form-control" class="form-control" name="taskDescription" [(ngModel)]="newTaskDescription" placeholder="Enter new tasks's description"></textarea>
+          <textarea style="font-size: 16px !important;" class="form-control tNoBoxShadow" class="form-control" name="taskDescription" [(ngModel)]="newTaskDescription" placeholder="Enter new tasks's description"></textarea>
       </div>
       <div class="mb-1">
         <div class="tLabel">
@@ -549,7 +551,7 @@
         <h5>Add section</h5>
         <form (ngSubmit)="createNewSection()">
           <div class="mb-1 tMng">
-            <input type="text" class="form-control" placeholder="Enter new section name" [(ngModel)]="newSectionName" name="sectionName" autocomplete="off">
+            <input type="text" class="form-control tNoBoxShadow" placeholder="Enter new section name" [(ngModel)]="newSectionName" name="sectionName" autocomplete="off">
           </div>
           <button type="submit" class="btn btn-primary d-grid w-100 mx-auto addSection" [disabled]="!newSectionName">Create Section</button>
         </form>
@@ -557,7 +559,7 @@
       <div class="tProjectSection">
         <div style="margin-bottom: 1rem;">
           <h5>Section list</h5>
-          <input type="text" class="form-control form-control-sm search" placeholder="Search by section name..." [(ngModel)]="searchSection" (input)="filterSections()">
+          <input type="text" class="form-control form-control-sm search tNoBoxShadow" placeholder="Search by section name" [(ngModel)]="searchSection" (input)="filterSections()">
         </div>
         <div>
           <div class="d-flex justify-content-between tableHeaders" style="padding-left: 0;">
@@ -569,7 +571,11 @@
               <tbody>
                 <tr *ngFor="let section of filteredSections">
                   <td>{{ section.sectionName }}</td>
-                  <td class="delSection"><span class="deleteMember" (click)="deleteSection(+section.id)" data-toggle="dropdown" *ngIf="userRole != 3 && userRole != 4">×</span></td>
+                  <td class="delSection tModalRemoveIcon">
+                    <svg *ngIf="userRole != 3 && userRole != 4" (click)="deleteSection(+section.id)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                    </svg>
+                  </td>
                 </tr>
                 <tr *ngIf="filteredSections.length == 0">
                   <td class="noSections">No sections found</td>

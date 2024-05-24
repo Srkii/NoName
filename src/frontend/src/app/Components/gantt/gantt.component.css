@@ -2,9 +2,7 @@
     font-family: 'Public Sans', sans-serif;
     max-width: 1550px;
 }
-.btn-0{/*dugme na remove modalu*/
-    color: #696cff;
-}
+
 .btn-sm {
     border-color: #e7e7ee !important;
     font-size: 16px !important;
@@ -27,4 +25,26 @@
 
 .btn, btn-outline-secondary, btn-sm {
     background-color: #fff;
+}
+
+.archFooter .btn-primary {
+    color: #fff !important;
+    background-color: #5f61e6 !important;
+    border-color: #5f61e6 !important;
+}
+.archFooter .btn-primary:hover {
+    color: #fff !important;
+    background-color: #5f61e6 !important;
+    border-color: #5f61e6 !important;
+    box-shadow: none !important;
+    transform: translateY(-1px) !important;
+}
+.archFooter .btn-primary:active {
+    color: #fff !important;
+    background-color: #5f61e6 !important;
+    border-color: #5f61e6 !important;
+    box-shadow: none !important;
+}
+.archFooter {
+    border-top: none !important;
 }
