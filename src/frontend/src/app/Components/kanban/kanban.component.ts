@@ -64,6 +64,8 @@ export class KanbanComponent implements OnInit{
   selectedUser: TaskAssignee | undefined;;
   filterValue: string | undefined = '';
 
+  userRole: number | null = null;
+
   @Output() sectionChanged = new EventEmitter<boolean>();
 
   constructor(
@@ -78,9 +80,12 @@ export class KanbanComponent implements OnInit{
   ) { }
 
   ngOnInit() {
+    const userId = localStorage.getItem("id");
     const projectId = this.route.snapshot.paramMap.get('id');
     this.currentProjectId = projectId ? +projectId : null;
-    this.getUserRole();
+    if (projectId && userId) {
+      this.getUsersProjectRole(+projectId, +userId);
+    }
 
     this.spinner.show();
     this.shared.taskUpdated.subscribe(() => {
@@ -107,13 +112,15 @@ export class KanbanComponent implements OnInit{
     this.spinner.hide();
   }
 
-  getUserRole(){
-    this.userId = parseInt(localStorage.getItem('id') || '-1');
-    if(this.currentProjectId){
-      this.myProjectsService.getUserProjectRole(this.currentProjectId,this.userId).subscribe(response => {
-        this.userProjectRole = response;
-      })
-    }
+  getUsersProjectRole(projectId: number, userId: number) {
+    this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
+        next: (role) => {
+            this.userRole = role;
+        },
+        error: (error) => {
+            console.error('Failed to fetch user role', error);
+        }
+    });
   }
 
   populateTasks() {

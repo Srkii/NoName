@@ -45,7 +45,7 @@
     <div class="tTable">
       <table>
         <tr style="font-size: 16px !important;">
-          <th>Project Name
+          <th style="width: 20% !important;">Project Name
             <svg
             (click)="toggleSortOrder('ProjectName')"
             [ngClass]="getSortClass('ProjectName')"
@@ -58,7 +58,7 @@
           ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
           </svg>
           </th>
-          <th>Project Owner
+          <th style="width: 15% !important;">Project Owner
             <svg
             (click)="toggleSortOrder('ProjectOwner')"
             [ngClass]="getSortClass('ProjectOwner')"
@@ -71,7 +71,7 @@
           ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
           </svg>
           </th>
-          <th>Status
+          <th style="width: 15% !important;">Status
             <svg
             (click)="toggleSortOrder('ProjectStatus')"
             [ngClass]="getSortClass('ProjectStatus')"
@@ -84,7 +84,7 @@
           ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
           </svg>
           </th>
-          <th>Progress
+          <th style="width: 20% !important;">Progress
             <svg
             (click)="toggleSortOrder('Progress')"
             [ngClass]="getSortClass('Progress')"
@@ -97,7 +97,7 @@
           ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
           </svg>
           </th>
-          <th>Start Date
+          <th style="width: 20% !important;">Start Date
             <svg
             (click)="toggleSortOrder('StartDate')"
             [ngClass]="getSortClass('StartDate')"
@@ -110,7 +110,7 @@
           ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
           </svg>
           </th>
-          <th>End Date
+          <th style="width: 20% !important;">End Date
             <svg
             (click)="toggleSortOrder('EndDate')"
             [ngClass]="getSortClass('EndDate')"
@@ -146,7 +146,7 @@
               </span>
             </td>
             <td [ngClass]="getStatusString(project.projectStatus)">
-              <p >{{ getStatusString(project.projectStatus) }}</p>
+              <p style="width: 85% !important;">{{ getStatusString(project.projectStatus) }}</p>
             </td>
             <td>
               <div class="progress">

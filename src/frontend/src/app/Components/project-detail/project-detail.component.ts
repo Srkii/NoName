@@ -171,7 +171,7 @@ export class ProjectDetailComponent implements OnInit {
             console.error('Failed to fetch user role', error);
         }
     });
-}
+  }
 
   getProjectInfo() {
     this.spinner.show();
