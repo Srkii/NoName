@@ -36,3 +36,12 @@ Rešenje se sastoji iz 2 dela, odnosno 2 odvojene aplikacije, _**Angular** front
 ## Portovi
 - 5001 - Backend
 - 4200 - Frontend
+
+Globalni Project Manager:
+tihomir.rajicic@gmail.com / password
+
+Globalni Administrator:
+miljana@gmail.com / password
+
+Globalni Member:
+srdjan@gmail.com / password
