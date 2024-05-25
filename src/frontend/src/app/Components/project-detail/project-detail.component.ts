@@ -100,14 +100,10 @@ export class ProjectDetailComponent implements OnInit {
   selectedStatus: string = '';
   searchText: string='';
 
-  sortOrderName: 'asc' | 'desc' = 'asc';
-  sortOrderAssignee: 'asc' | 'desc' = 'asc';
-  sortOrderStartDate: 'asc' | 'desc' = 'asc';
-  sortOrderEndDate: 'asc' | 'desc' = 'asc';
-  sortOrderStatus: 'asc' | 'desc' = 'asc';
-  sortField: keyof ProjectTask = 'taskName';
-
   allStatuses:any[]=[];
+
+  sortedColumn: string = '';
+  sortedOrder: number = 0; 
   
 
   constructor(
@@ -145,7 +141,7 @@ export class ProjectDetailComponent implements OnInit {
       this.getUsersProjectRole(+projectId, +userId);
     }
     this.shared.taskUpdated.subscribe(() => {
-      this.getProjectInfo();  // Reload project info
+      this.getProjectInfo();  
     });
     this.shared.sectionUpdated.subscribe(() => {
       this.getProjectInfo();
@@ -181,7 +177,7 @@ export class ProjectDetailComponent implements OnInit {
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
-        this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
           this.allTasks=this.projectTasks;
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
@@ -223,6 +219,22 @@ export class ProjectDetailComponent implements OnInit {
 
     return grouped;
   }
+  groupTasksBySectionSorted(tasks: any[]): { [key: string]: any } {
+    const grouped = tasks.reduce((acc, task) => {
+      const section = task.sectionName || 'No Section';
+      if (!acc[section]) {
+        acc[section] = { tasks: [], visible: section != 'No Section' };
+      }
+      acc[section].tasks.push(task);
+      return acc;
+    }, {});
+    if (!grouped['No Section']) {
+      grouped['No Section'] = { tasks: [], visible: true };
+    }
+
+    return grouped;
+  }
+ 
 
   toggleSectionVisibility(section: string): void {
     this.groupedTasks[section].visible = !this.groupedTasks[section].visible;
@@ -706,111 +718,50 @@ export class ProjectDetailComponent implements OnInit {
       });
     }
  }
- SortByName(): void {
-  this.sortOrderName = this.sortOrderName === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA = a.taskName.toLowerCase();
-      const nameB = b.taskName.toLowerCase();
-      
-      if (nameA < nameB) {
-        return this.sortOrderName === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderName === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
- SortByAssignee(): void {
-  this.sortOrderAssignee = this.sortOrderAssignee === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA = (a.firstName+" "+a.lastName).toLowerCase();
-      const nameB = (b.firstName+" "+b.lastName).toLowerCase();
-      
-      if (nameA < nameB) {
-        return this.sortOrderAssignee === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderAssignee === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
- SortByStartDate(): void {
-  this.sortOrderStartDate = this.sortOrderStartDate === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA =new Date(a.startDate);
-      const nameB = new Date(b.startDate);
-      
-      if (nameA < nameB) {
-        return this.sortOrderStartDate === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderStartDate === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
- SortByEndDate(): void {
-  this.sortOrderEndDate = this.sortOrderEndDate === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA =new Date(a.endDate);
-      const nameB = new Date(b.endDate);
-      
-      if (nameA < nameB) {
-        return this.sortOrderEndDate === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderEndDate === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
- SortByStatus(): void {
-  this.sortOrderStatus = this.sortOrderStatus === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA =a.statusName;
-      const nameB =b.statusName;
-      
-      if (nameA < nameB) {
-        return this.sortOrderStatus === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderStatus === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
+
+ toggleSortOrder(column: string): void {
+    if (this.sortedColumn === column) {
+      this.sortedOrder = (this.sortedOrder + 1) % 3;
+    } else {
+      this.sortedColumn = column;
+      this.sortedOrder = 1;
+    }
+    this.spinner.show();
+    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
+
+    const projectId = this.route.snapshot.paramMap.get('id');
+    if (projectId) {
+      this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
+        this.project = project;
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder).subscribe((tasks) => {
+          this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.allTasks=this.projectTasks;
+          this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
+          this.groupedTasks = this.groupTasksBySectionSorted(this.projectTasks);
+        });
+        this.loadProjectMembers();
+        this.loadAddableUsers();
+        this.spinner.hide();
+      });
+    }
+      Object.keys(this.groupedTasks).forEach(section => {
+          this.groupedTasks[section].visible = true;
+      });
+  }
+
+  getSortClass(column: string): string {
+    if (this.sortedColumn === column) {
+      if(this.sortedOrder==1)
+        return 'sorted-asc';
+      if(this.sortedOrder==2)
+        return 'sorted-desc';
+      else
+        return 'unsorted';
+    }
+    return 'unsorted';
+  }
+
+ 
 
 }
   

@@ -60,7 +60,6 @@ export class MyProjectsComponent implements OnInit {
         startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
       if(this.rangeDates[1])
         endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
-    
     }
 
     this.myProjectsService.GetUsersProjectsCount(userId).pipe(
@@ -102,6 +101,7 @@ export class MyProjectsComponent implements OnInit {
         startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
       if(this.rangeDates[1])
         endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
+      
     }
     this.myProjectsService.filterAndPaginateProjects(
       this.searchText,

@@ -29,8 +29,8 @@ export class MyTasksService {
     return this.http.get<ProjectTask[]>(this.baseUrl,{headers:this.httpHeader});
   }
 
-  GetTasksByProjectId(projectId: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}`,{headers:this.httpHeader});
+  GetTasksByProjectId(projectId: number, sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`,{headers:this.httpHeader});
   }
 
   GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
@@ -84,14 +84,14 @@ export class MyTasksService {
     return this.http.delete(`${this.baseUrl}/deleteTaskStatus/${taskStatusId}`, {headers:this.httpHeader});
   }
 
-  GetNewTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count1/${count}`, {headers:this.httpHeader});
+  GetNewTasksByUserId(userId: any, count: number,sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count1/${count}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`, {headers:this.httpHeader});
   }
-  GetSoonTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count2/${count}`, {headers:this.httpHeader});
+  GetSoonTasksByUserId(userId: any, count: number,sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count2/${count}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`, {headers:this.httpHeader});
   }
-  GetClosedTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count3/${count}`, {headers:this.httpHeader});
+  GetClosedTasksByUserId(userId: any, count: number,sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count3/${count}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`, {headers:this.httpHeader});
   }
   changeTaskInfo(dto: ChangeTaskInfo): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskInfo`, dto, {headers:this.httpHeader});
