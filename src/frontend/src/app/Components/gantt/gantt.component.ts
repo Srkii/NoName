@@ -32,7 +32,17 @@ export class GanttComponent implements OnInit{
   removeModalRef?:BsModalRef;
   date = new GanttDate(1713125075).format("yyyy-mm-dd-hh-mm-ss");
   currentProjectId: number | null = null;
+  userRole: number | null = null;
+
   ngOnInit(): void {
+
+    const userId = localStorage.getItem("id");
+    const projectId = this.route.snapshot.paramMap.get('id');
+    this.currentProjectId = projectId ? +projectId : null;
+    if (projectId && userId) {
+      this.getUsersProjectRole(+projectId, +userId);
+    }
+
     this.shared.taskUpdated.subscribe(() => {
       this.loading = true;
       this.data_loaded = false;
@@ -44,7 +54,7 @@ export class GanttComponent implements OnInit{
         {
         this.loading = false;
         this.data_loaded = true
-      }, 100);
+      }, 250);
     });
     this.spinner.show();
     this.loading = true;
@@ -56,7 +66,7 @@ export class GanttComponent implements OnInit{
     {
       this.loading = false;
       this.data_loaded = true
-    }, 100);
+    }, 250);
 
     // emit kad se doda novi task
     this.shared.taskAdded$.subscribe(success => {
@@ -71,7 +81,7 @@ export class GanttComponent implements OnInit{
         {
           this.loading = false;
           this.data_loaded = true
-        }, 100);
+        }, 250);
       }
     });
 
@@ -87,7 +97,7 @@ export class GanttComponent implements OnInit{
         {
           this.loading = false;
           this.data_loaded = true
-        }, 100);
+        }, 250);
     });
   }
   constructor(
@@ -126,6 +136,17 @@ export class GanttComponent implements OnInit{
     }
   };
 
+  getUsersProjectRole(projectId: number, userId: number) {
+    this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
+        next: (role) => {
+            this.userRole = role;
+        },
+        error: (error) => {
+            console.error('Failed to fetch user role', error);
+        }
+    });
+  }
+
   private reloadGanttData() {//ovo zna da duplira podatke u ganttu ~maksim
     this.getGanttData(); // Fetch data again
   }
@@ -135,14 +156,16 @@ export class GanttComponent implements OnInit{
   }
 
   dragEnded($event: GanttDragEvent) {
-    if ($event?.item.start !== undefined && $event.item.end!==undefined) {
-      const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
-      const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
+    if (this.userRole !== 4) { // Check if the user is not a guest
+      if ($event?.item.start !== undefined && $event.item.end !== undefined) {
+        const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
+        const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
 
-      this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
-      .subscribe(() => {
-        // this.reloadGanttData();
-      });
+        this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
+        .subscribe(() => {
+          // this.reloadGanttData();
+        });
+      }
     }
   }
 

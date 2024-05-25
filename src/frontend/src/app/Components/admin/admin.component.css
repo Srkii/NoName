@@ -423,7 +423,8 @@ select:focus-visible{
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  height: 100%; 
+  height: 100%;
+  margin-top: 15px !important;
 }
 .archUsers{
   /* margin: 10px !important; */
@@ -442,11 +443,7 @@ select:focus-visible{
   width: 100%;
   margin: 5px;
 }
-.archy{
-  --bs-modal-header-border-width:0px;
-  --bs-modal-header-border-color: #ffffff;
-  border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
-}
+
 .btn-primary1{
   display: none;
 }
@@ -660,4 +657,11 @@ select:focus-visible{
 }
 .is-invalid:hover, .is-invalid:focus {
   border-color: red !important;
+}
+.tEmail {
+  margin-top: 10px !important;
+}
+.tClose:hover,
+.tClose:focus {
+  box-shadow: none !important;
 }

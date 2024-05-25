@@ -90,7 +90,7 @@ th {
   border-right: none;
 }
 td {
-  padding: 10px;
+  padding: 0.5rem;
   border: 1px solid lightgray;
   border-left: none;
   border-right: none;
@@ -421,5 +421,9 @@ p {
   color: none;
 }
 .form-select:focus{
+  box-shadow: none !important;
+}
+
+.tNameSearch:focus {
   box-shadow: none !important;
 }

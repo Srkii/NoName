@@ -248,3 +248,20 @@ label{
   border-left: #696cff;
   border-right: #696cff;
 }
+
+.tViewImg {
+  display:flex; 
+  align-items: center; 
+  justify-content: center;
+  padding-bottom: 1.25rem !important;
+}
+.tBtnClose:focus,
+.tBtnClose:active {
+  box-shadow: none !important;
+}
+
+.archFooter {
+  display: flex;
+  flex-direction: row;
+  border-top: none !important;
+}

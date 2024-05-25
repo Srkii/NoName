@@ -108,8 +108,8 @@
         </ng-select>
       </div>
       <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Description</p>
-        <textarea class="description1" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
-        <textarea class="description" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'"></textarea>
+        <textarea class="description1 tNoBoxShadow" rows="3" placeholder="Description" [value]="task.description" readonly  *ngIf="this.task.projectRole=='3' || this.task.projectRole=='4'"></textarea>
+        <textarea class="description tNoBoxShadow" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'"></textarea>
       <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Dependency</p>
       <ng-select [disabled]="this.task.projectRole=='4' || this.task.projectRole=='3'" [placeholder]="this.task.projectRole=='4'?'No Dependencies':'Select Project Tasks'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name"  class="task_select" bindValue="id" style="border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d; " name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
         <ng-template ng-option-tmp let-task="item">
@@ -215,7 +215,7 @@
     </div>
     </div>
     <div *ngIf="this.task.projectRole!='4'" class="fixed-comment-area" #fixedArea>
-      <textarea [disabled]="task.projectRole == '4'" class="comment" rows="3" placeholder="Add a comment" #commentInput></textarea>
+      <textarea [disabled]="task.projectRole == '4'" class="comment tNoBoxShadow" rows="3" placeholder="Add a comment" #commentInput></textarea>
       <div style="display: flex; align-items: center; justify-content: space-between;">
           <span class="upload_attachment">
             <svg 

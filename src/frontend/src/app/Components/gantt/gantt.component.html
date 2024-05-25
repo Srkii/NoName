@@ -10,7 +10,7 @@
       </div>
       <div class="col-12">
           <div class="table-responsive" style="height: 70vh;">
-              <ngx-gantt #gantt *ngIf="data_loaded" [items]="items" [groups]="groups" [viewType]="viewType" [draggable]="true" [linkable]="true" [selectable]="true" [multiple]="true"
+              <ngx-gantt #gantt *ngIf="data_loaded" [items]="items" [groups]="groups" [viewType]="viewType" [draggable]="userRole !== 4 ? true : false" [linkable]="true" [selectable]="true" [multiple]="true"
                     [viewOptions]="viewOptions" [toolbarOptions]="toolbarOptions" [loading]="loading" [virtualScrollEnabled]="true" (barClick)="barClick($event)" (viewChange)="viewChange($event)"
                     (lineClick)="lineClick($event,removalModal)" (dragMoved)="dragMoved($event)" (dragEnded)="dragEnded($event)" (selectedChange)="selectedChange($event)" (linkDragEnded)="linkDragEnded($event)"
                     >
@@ -43,16 +43,19 @@
   </div>
 </div>
 
-<ng-template #removalModal class="modal-nody" style="padding:0;">
-    <div class="card">
-      <div class="card-header tRemoveModalHeader"><h4 style="font-size: 20px;">Remove task dependency?</h4></div>
-      <div class="card-body tRemoveButtons" style="align-items: center; display: flex; gap: 5px;justify-content: center;">
-        <div>
-          <button class="btn btn-primary btn-0" (click)="removeModalRef?.hide()">Cancel</button>
+<ng-template #removalModal>
+    <div class="modal-container" style="color: #697a8d; font-size: 16px;">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Remove dependency?</h4>
+          <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="removeModalRef?.hide()">
+            <span aria-hidden="true" class="visually-hidden">&times;</span>
+          </button>
         </div>
-        <div>
-          <button class="btn btn-primary btn-0" (click)="this.removeDependencyGantt()" >Remove</button>
+        <div class="modal-body archBody">
+          <span class="archSpan">Are you sure you want to remove the dependency between these two tasks?</span>
+        </div>
+        <div class="modal-footer archFooter">
+          <button class="btn btn-primary d-grid w-100 mx-auto" (click)="this.removeDependencyGantt()">Remove Dependency</button>
         </div>
       </div>
-    </div>
   </ng-template>
