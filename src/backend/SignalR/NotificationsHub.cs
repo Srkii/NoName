@@ -60,7 +60,14 @@ namespace backend.SignalR
             .Select(notification => new NotificationDto
             {
                 Id = notification.Id,
-                Task = notification.Task,
+                Task = new ProjectTaskDto{
+                        Id = notification.Task.Id,
+                        TaskName = notification.Task.TaskName,
+                        AppUserId = (int)notification.Task.AppUserId,
+                        ProjectId = (int)notification.Task.ProjectId,
+                        StartDate = notification.Task.StartDate,
+                        EndDate = notification.Task.EndDate   
+                },
                 Comment = notification.Comment,
                 Project = notification.Project,
                 Reciever = notification.Reciever,
@@ -82,7 +89,14 @@ namespace backend.SignalR
             .OrderByDescending(x=>x.dateTime)
             .Select(notification => new NotificationDto{
                 Id = notification.Id,
-                Task = notification.Task,
+                Task = new ProjectTaskDto{
+                        Id = notification.Task.Id,
+                        TaskName = notification.Task.TaskName,
+                        AppUserId = (int)notification.Task.AppUserId,
+                        ProjectId = (int)notification.Task.ProjectId,
+                        StartDate = notification.Task.StartDate,
+                        EndDate = notification.Task.EndDate   
+                },
                 Comment = notification.Comment,
                 Project = notification.Project,
                 Reciever = notification.Reciever,

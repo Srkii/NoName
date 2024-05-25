@@ -1,4 +1,4 @@
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import * as SignalR from '@microsoft/signalr';
 import { environment } from '../../environments/environment';
 import { ComponentRef, Injectable} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,7 @@ export class NotificationsService{
   hubUrl = environment.hubUrl;
   //flag koji dopusta izvlacenje novih notifikacija sa backenda -> ukoliko nema novih notifikacija user ne sme da ima pravo da spamuje requestove klikom na zvonce
   newNotifications:boolean = false;
-  private hubConnection?:HubConnection;
+  private hubConnection?:SignalR.HubConnection;
 
 
   notifications : Notification[] = [];
@@ -30,14 +30,14 @@ export class NotificationsService{
 
   createHubConnection(){
     var token = localStorage.getItem('token');
-    this.hubConnection = new HubConnectionBuilder()
+    this.hubConnection = new SignalR.HubConnectionBuilder()
 
       .withUrl(this.hubUrl+'notifications', {
         accessTokenFactory: () => token ? token : ''
       })
 
       .withAutomaticReconnect([0,3000,5000])
-
+      .configureLogging(SignalR.LogLevel.None)
       .build();
     this.hubConnection.start().catch(error =>{
       // console.log(error);
@@ -139,7 +139,7 @@ export class NotificationsService{
   }
 
   async follow_notif(event: MouseEvent, notification: any) {
-    console.log(notification);
+    // console.log(notification);
     this.read_notifications([notification.id]);
     if (notification.task != null) {
       event.stopPropagation();

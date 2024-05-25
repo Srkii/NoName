@@ -5,14 +5,15 @@ using backend.Interfaces;
 using backend.SignalR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-
 namespace backend.Services
 {
     public class NotificationService:INotificationService
     {
         private readonly IHubContext<NotificationsHub,INotificationsHub> _hubContext;
         private readonly DataContext _context;
-        public NotificationService(IHubContext<NotificationsHub,INotificationsHub> hubContext,DataContext context){
+        public NotificationService(IHubContext<NotificationsHub,
+        INotificationsHub> hubContext,
+        DataContext context){
             _hubContext = hubContext;
             _context = context;
         }
@@ -40,7 +41,14 @@ namespace backend.Services
                     .Notify(
                          new NotificationDto{
                             Id = notification.Id,
-                            Task = notification.Task,
+                            Task = new ProjectTaskDto{
+                                Id = task.Id,
+                                TaskName = task.TaskName,
+                                AppUserId = (int)task.AppUserId,
+                                ProjectId = (int)task.ProjectId,
+                                StartDate = task.StartDate,
+                                EndDate = task.EndDate                            
+                                },
                             Comment = notification.Comment,
                             Project = notification.Project,
                             Sender = notification.Sender,
@@ -51,7 +59,7 @@ namespace backend.Services
             }
         }
 
-        public async Task TriggerTaskNotification(int task_id,int creator_id){
+        public async Task TriggerTaskNotification(int task_id){
             //zadatak ove funkcije jeste da posalje notifikaciju korisniku kojem je dodeljen zadatak ili projekat
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
             var reciever = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
@@ -71,7 +79,14 @@ namespace backend.Services
                          new NotificationDto{
                             Id = notification.Id,
                             Comment = notification.Comment,
-                            Task = notification.Task,
+                            Task = new ProjectTaskDto{
+                                Id = task.Id,
+                                TaskName = task.TaskName,
+                                AppUserId = (int)task.AppUserId,
+                                ProjectId = (int)task.ProjectId,
+                                StartDate = task.StartDate,
+                                EndDate = task.EndDate   
+                            },
                             Project = notification.Project,
                             Sender = notification.Sender,
                             dateTime = notification.dateTime.AddHours(2),
@@ -101,7 +116,7 @@ namespace backend.Services
                          new NotificationDto{
                             Id = notification.Id,
                             Comment = notification.Comment,
-                            Task = notification.Task,
+                            Task = null,
                             Project = notification.Project,
                             Sender = notification.Sender,
                             dateTime = notification.dateTime.AddHours(2),
@@ -109,18 +124,19 @@ namespace backend.Services
                             read = notification.read
                          });
         }
-        public async Task notifyTaskCompleted(int task_id){
-            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id == task_id); 
-            var owner = await _context.ProjectMembers.FirstOrDefaultAsync(x=>x.ProjectId == task.ProjectId && x.ProjectRole == ProjectRole.ProjectManager);
-            //osoba koja je project manager za projekat ciji je task u pitanju..
+
+        public async Task notifyTaskCompleted(ProjectTask task){
+            var Owner = await _context.ProjectMembers
+            .FirstOrDefaultAsync(x=>x.ProjectId == task.ProjectId &&
+                                     x.ProjectRole == ProjectRole.ProjectOwner);
+            var owner = await _context.Users.FirstOrDefaultAsync(x=>x.Id == Owner.AppUserId);
             if(owner==null) throw new Exception("Owner not found");
-            if(task==null) throw new Exception("Task not found");
-            if(owner.AppUserId != task.AppUserId){
+            if(owner.Id != task.AppUserId){
                 Notification notification = new Notification
                 {
                     task_id = task.Id,
                     sender_id = task.AppUserId,
-                    reciever_id = owner.AppUserId,
+                    reciever_id = owner.Id,
                     Type = NotificationType.TaskCompleted,
                     dateTime = DateTime.UtcNow,
                     read = false,
@@ -128,22 +144,28 @@ namespace backend.Services
                 };
                 await _context.Notifications.AddAsync(notification);
                 await _context.SaveChangesAsync();
-            }
-                
-            // await _hubContext.Clients.Group(owner.AppUserId.ToString())
-            //         .Notify(
-            //             new NotificationDto{
-            //                 Id = notification.Id,
-            //                 Comment = notification.Comment,
-            //                 Task = notification.Task,
-            //                 Project = notification.Project,
-            //                 Sender = notification.Sender,
-            //                 dateTime = notification.dateTime,
-            //                 Type = notification.Type,
-            //                 read = notification.read
-            //             });   
-            
+                var sender = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
+                var notifDTO = new NotificationDto{
+                            Id = notification.Id,
+                            Reciever = owner,
+                            Comment = notification.Comment,
+                            Task = new ProjectTaskDto{
+                                Id = task.Id,
+                                TaskName = task.TaskName,
+                                AppUserId = (int)task.AppUserId,
+                                ProjectId = (int)task.ProjectId,
+                                StartDate = task.StartDate,
+                                EndDate = task.EndDate   
+                            },
+                            Sender = sender,
+                            dateTime = notification.dateTime,
+                            Type = notification.Type,
+                            read = notification.read
+                        };
+                await _hubContext.Clients.Group(owner.Id.ToString()).Notify(notifDTO);   
+            }     
         }
+
         public async Task<List<int>> GetUsersForTaskNotification(int taskId, int initiatorId)
         {
             var users = new List<int>();

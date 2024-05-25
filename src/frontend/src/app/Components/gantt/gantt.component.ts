@@ -257,14 +257,13 @@ export class GanttComponent implements OnInit{
         tasks.forEach((t:any) =>{
           if (t.statusName !== 'Archived') { // Filter out archived tasks
             var dependencies:GanttLink[] = [];
-
             this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:TaskDependency[])=>{
-
               depencency_array.forEach((dep:TaskDependency) => {
                 dependencies.push({
                   type: 4,
-                  link: String(dep.dependencyTaskId)
-                });
+                  link: String(dep.dependencyTaskId),
+                },
+              );
               });
             })
             let item:GanttItem={
@@ -275,7 +274,7 @@ export class GanttComponent implements OnInit{
               end: this.convertToUnixTimestamp(t.endDate),
               links: dependencies,
               expandable: false,
-              linkable: true
+              linkable: false
             }
             this.items.push(item);
           }
