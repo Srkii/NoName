@@ -52,13 +52,14 @@ table {
   }
 }
 th {
-  font-size: 16px;
+  font-size: 18px;
   border: 1.5px solid lightgray;
-  font-weight: 700; 
+  font-weight: 500; 
+  line-height: 20px;
   padding: 5px;
   border-left: none;
   border-right: none;
-  width: 30%; 
+  width: 30%;
   /* padding-left: 10%; */
 }
 

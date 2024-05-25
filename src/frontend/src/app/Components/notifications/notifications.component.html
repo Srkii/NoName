@@ -58,8 +58,8 @@
               </svg>
             </div>
             <div class="flex-grow-1" (click)="notificationService.follow_notif_from_tab($event,notification)">
-              <h6 class="mb-1" style="font-weight: 600;">{{notificationService.getType(notification.type)}}</h6>
-              <small class="mb-0">
+              <h6 class="mb-1 tNotifType" style="font-weight: 600;">{{notificationService.getType(notification.type)}}</h6>
+              <small class="mb-0 tNotifContent">
                 {{notificationService.getNotificationText_small(notification)}}
               </small>
             </div>
@@ -79,15 +79,15 @@
 <ng-template #AllNotifications>
   <div class="modal-header">
     <h4 class="modal-title pull-left">All Notifications</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalref?.hide()">
+    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalref?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
   <div class="modal-body" *ngIf="this.notifications.length!=0 || this.notifications_read.length!=0">
     <table class="notifications-table">
-      <tr class="inactive_tr"><td><i>Unread</i></td><td></td>
-        <td><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0"></td></tr>
-      <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td><i>No Unread Notifications.</i></td><td></td><td></td></tr>
+      <tr class="inactive_tr"><td>Unread</td><td></td>
+        <td><input class="form-check-input tPCheck" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0" style="accent-color: #696cff !important;"></td></tr>
+      <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td>No Unread Notifications</td><td></td><td></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications">
         <td class="imagetd" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
@@ -114,14 +114,14 @@
         </td>
 
         <td class="last_td" style="z-index:123;">
-          <input class="form-check-input" type="checkbox"
+          <input class="form-check-input tPCheck" type="checkbox"
           [checked]="markedNotifications.includes(notification.id)"
           (change)="toList(notification.id)" *ngIf="notification.read===false">
         </td>
       </tr>
     </table>
     <table class="notifications-table">
-      <tr class="inactive_tr"><td><i>Read</i></td><td></td><td></td><td ></td></tr>
+      <tr class="inactive_tr"><td>Read</td><td></td><td></td><td ></td></tr>
       <tr class="inactive_tr_flag" *ngIf="notifications_read.length==0"><td><i>No Read Notifications.</i></td><td></td><td></td><td ></td></tr>
       <tr class="active_tr" *ngFor="let notification of notifications_read">
         <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
