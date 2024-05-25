@@ -115,19 +115,21 @@ namespace backend.Services
             //osoba koja je project manager za projekat ciji je task u pitanju..
             if(owner==null) throw new Exception("Owner not found");
             if(task==null) throw new Exception("Task not found");
-            Notification notification = new Notification
-            {
-                task_id = task.Id,
-                sender_id = task.AppUserId,
-                reciever_id = owner.AppUserId,
-                Type = NotificationType.TaskCompleted,
-                dateTime = DateTime.UtcNow,
-                read = false,
-                originArchived = false
-            };
-            await _context.Notifications.AddAsync(notification);
-            await _context.SaveChangesAsync();
-            
+            if(owner.AppUserId != task.AppUserId){
+                Notification notification = new Notification
+                {
+                    task_id = task.Id,
+                    sender_id = task.AppUserId,
+                    reciever_id = owner.AppUserId,
+                    Type = NotificationType.TaskCompleted,
+                    dateTime = DateTime.UtcNow,
+                    read = false,
+                    originArchived = false
+                };
+                await _context.Notifications.AddAsync(notification);
+                await _context.SaveChangesAsync();
+            }
+                
             // await _hubContext.Clients.Group(owner.AppUserId.ToString())
             //         .Notify(
             //             new NotificationDto{
