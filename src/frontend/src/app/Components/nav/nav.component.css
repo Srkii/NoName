@@ -220,7 +220,10 @@ cursor: pointer;}
   background: #fff !important;
 }
 
-.tActionsInfoDd:hover {
+.tActionsInfoDd:hover,
+.tActionsInfoDd:focus,
+.tActionsInfoDd:active {
   fill: #696cff !important;
   color: #696cff !important;
+  background: #fff !important;
 }

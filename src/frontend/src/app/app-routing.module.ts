@@ -12,7 +12,6 @@ import { ForgotPassComponent } from './Components/forgot-pass/forgot-pass.compon
 import { ForgotResetComponent } from './Components/forgot-reset/forgot-reset.component';
 import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
-import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 import { userGuard } from './_guards/user.guard';
 import { projectGuard } from './_guards/project.guard';
 
@@ -25,7 +24,6 @@ const routes: Routes = [
   { path: 'project/:id', component: ProjectDetailComponent, title: 'Project Details', canActivate: [authGuard, projectGuard] },
   { path: 'admin', component: AdminComponent, title: 'Admin Panel', canActivate: [adminGuard] },
   { path: 'userinfo', component: UserInfoComponent, title: 'User Information', canActivate: [userGuard] },
-  { path: 'landing', component: LandingPageComponent, title: 'Landing Page' },
   {
     path: '',
     runGuardsAndResolvers: 'always',

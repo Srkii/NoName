@@ -1,7 +1,7 @@
 <div class="board">
   <div class="board-wrapper" cdkDropListGroup cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="taskStatuses" (cdkDropListDropped)="dropColumn($event)">
     <ng-container *ngFor="let status of taskStatuses">
-      <div *ngIf="status.name !== 'Archived'" class="card draggable" cdkDrag>
+      <div *ngIf="status.name !== 'Archived'" class="card draggable" cdkDrag [cdkDragDisabled]="userRole === 4">
       <div class="card-header" [style.background-color]="status.color">
         <div class="status-name">
           {{status.name}}
@@ -13,7 +13,7 @@
         </div>
         </div>
           <div class="card-body" cdkDropList [id]="status.name" [cdkDropListData]="tasksBySection[status.name]" (cdkDropListDropped)="drop($event)">
-            <div *ngFor="let task of tasksBySection[status.name]"  class="card task" cdkDrag [cdkDragData]="task">
+            <div *ngFor="let task of tasksBySection[status.name]"  class="card task" cdkDrag [cdkDragData]="task" [cdkDragDisabled]="userRole === 4">
               <div [class.clicked]="clickedTask?.id === task.id" (click)="onTaskClick($event,task.id)" class="card-body-task-title">{{task.taskName}}
               </div>
               <div class="card-footer assignee" style="display: flex; align-items: center;">
@@ -29,7 +29,7 @@
         </div>
       </div>
   </ng-container>
-  <div class="newBoard" (click)="openSimpleModal(newBoard, 'newBoard')" pTooltip="Create Board"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+  <div *ngIf="userRole != 4" class="newBoard" (click)="openSimpleModal(newBoard, 'newBoard')" pTooltip="Create Board"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
     </svg>
   </div>
