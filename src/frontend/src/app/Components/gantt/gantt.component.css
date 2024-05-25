@@ -48,3 +48,7 @@
 .archFooter {
     border-top: none !important;
 }
+.tClose:focus,
+.tClose:active {
+    box-shadow: none !important;
+}

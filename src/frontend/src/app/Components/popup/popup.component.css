@@ -596,3 +596,6 @@ img{
 .tPCheck {
   accent-color: #696cff !important;
 }
+.no-hover {
+  pointer-events: none; /* Disables hover effects */
+}

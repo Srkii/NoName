@@ -10,7 +10,7 @@
       </div>
       <div class="col-12">
           <div class="table-responsive" style="height: 70vh;">
-              <ngx-gantt #gantt *ngIf="data_loaded" [items]="items" [groups]="groups" [viewType]="viewType" [draggable]="userRole !== 4 ? true : false" [linkable]="true" [selectable]="true" [multiple]="true"
+              <ngx-gantt #gantt *ngIf="data_loaded" [items]="items" [groups]="groups" [viewType]="viewType" [draggable]="userRole !== 4 && userRole!==3 ? true : false" [linkable]="true" [selectable]="true" [multiple]="true"
                     [viewOptions]="viewOptions" [toolbarOptions]="toolbarOptions" [loading]="loading" [virtualScrollEnabled]="true" (barClick)="barClick($event)" (viewChange)="viewChange($event)"
                     (lineClick)="lineClick($event,removalModal)" (dragMoved)="dragMoved($event)" (dragEnded)="dragEnded($event)" (selectedChange)="selectedChange($event)" (linkDragEnded)="linkDragEnded($event)"
                     >
@@ -47,7 +47,7 @@
     <div class="modal-container" style="color: #697a8d; font-size: 16px;">
         <div class="modal-header">
           <h4 class="modal-title pull-left">Remove dependency?</h4>
-          <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="removeModalRef?.hide()">
+          <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="removeModalRef?.hide()">
             <span aria-hidden="true" class="visually-hidden">&times;</span>
           </button>
         </div>
