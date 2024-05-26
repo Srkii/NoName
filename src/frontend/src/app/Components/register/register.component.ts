@@ -26,9 +26,7 @@ export class RegisterComponent implements OnInit {
 
   regexName: RegExp = /^[A-Za-z]{2,}$/;
   regexPassword: RegExp = /^[A-Za-z]{2,}$/;
-  invalidFirstName: boolean = false;
-  invalidLastName: boolean = false;
-  invalidPassword: boolean = false;
+  buttonClicked: boolean = false;
 
   constructor(
     private registerService: RegisterService,
@@ -39,12 +37,12 @@ export class RegisterComponent implements OnInit {
 
   token: any;
   ngOnInit(): void {
-    this.token = this.route.snapshot.queryParamMap.get('token')?.toString();
+    this.token = this.route.snapshot.queryParamMap.get('token');
     this.GetEmailByToken(this.token);
   }
 
   GetEmailByToken(token: string | null): void {
-    if (!token) {
+    if (!token && token == undefined) {
       console.error('Token is missing');
       return;
     }
@@ -65,29 +63,11 @@ export class RegisterComponent implements OnInit {
   }
 
   Register(): void {
-
-    if(this.newUser.FirstName && !this.regexName.test(this.newUser.FirstName))
-    {
-      this.invalidFirstName = true;
-      return;
-    }
-    this.invalidFirstName = false;
-    if(this.newUser.LastName && !this.regexName.test(this.newUser.LastName))
-    {
-      this.invalidLastName = true;
-      return;
-    }
-    this.invalidLastName = false;
-    if(this.newUser.Password && this.newUser.Password.length < 5)
-    {
-        this.invalidPassword = true;
-        return;
-    }
-    this.invalidPassword = false;
-    if (this.newUser.Password !== this.confirmPassword) {
-      return;
-    }
+    this.buttonClicked = true;
     
+    if (!this.checkFirstName() || !this.checkLastName() || !this.checkPassword() || !this.passwordMatch())
+      return;
+
     this.newUser.Token = this.token;
 
     this.registerService.register(this.newUser).subscribe({
@@ -101,6 +81,18 @@ export class RegisterComponent implements OnInit {
         this.toastr.error('Unsuccessful registration');
       },
     });
+  }
+
+  checkFirstName(): boolean{
+    return this.newUser.FirstName!=null && this.regexName.test(this.newUser.FirstName);
+  }
+
+  checkLastName(): boolean{
+    return this.newUser.LastName!=null && this.regexName.test(this.newUser.LastName);
+  }
+
+  checkPassword(): boolean{
+    return this.newUser.Password!=null && this.newUser.Password.length >= 5
   }
 
   passwordMatch(): boolean {

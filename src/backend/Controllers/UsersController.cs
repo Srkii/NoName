@@ -25,7 +25,7 @@ namespace backend.Controllers
       _tokenService = ts;
     }
 
-    [Authorize(Roles = "Admin")] //skloni ovo ako hoces da radi samo ako ima token
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {
@@ -149,7 +149,7 @@ namespace backend.Controllers
     [HttpGet("token/{token}")] // /api/users/token
     public async Task<ActionResult<InvitationDto>> GetEmail(string token)
     {
-      var invitation = await _context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
+      var invitation = await _context.Invitations.FirstOrDefaultAsync(i => i.Token == token && i.IsUsed == false && i.ExpirationDate >= DateTime.UtcNow);
 
       if (invitation == null)
       {

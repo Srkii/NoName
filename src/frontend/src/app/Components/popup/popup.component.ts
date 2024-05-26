@@ -95,20 +95,6 @@ export class PopupComponent {
     }
   }
 
-  ngAfterViewInit() {
-    this.adjustCommentHeight();
-  }
-
-  adjustCommentHeight() {
-    if(this.task?.projectRole!='4')
-    {
-      const containerHeight = this.containerDiv.nativeElement.offsetHeight;
-      const fixedHeight = this.fixedArea.nativeElement.offsetHeight;
-      const commentHeight = containerHeight - (fixedHeight+60);
-      this.commentDiv.nativeElement.style.height = `${commentHeight}px`;
-    }
-  }
-
 
   fetchComments(): void {
     if (this.task && this.task.id) {
@@ -173,7 +159,7 @@ export class PopupComponent {
       if(previousTaskStatus!="")
         task.statusName = previousTaskStatus;
       else
-        task.statusName = 'InReview';
+        task.statusName = 'InProgress';
     }
     
       

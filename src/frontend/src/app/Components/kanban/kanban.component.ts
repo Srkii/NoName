@@ -276,7 +276,7 @@ export class KanbanComponent implements OnInit{
   
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    event.stopPropagation(); 
+    // event.stopPropagation(); 
     this.shared.triggerPopup(event, taskId);
   }
 

@@ -55,7 +55,6 @@ a {
   appearance: none;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #d9dee3;
   border-radius: 0.375rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -148,13 +147,13 @@ a {
   height: 0;
   overflow: visible;
   margin-bottom: 0;
-  transition: height 0.3s ease;
+  /* transition: height 0.3s ease; */
   color: red !important;
   font-size: 0.7rem;
 }
 .is_invalid{
   border-color: red !important;
 }
-.is-invalid:hover, .is-invalid:focus {
+.is-invalid:hover, .is-invalid:focus, .is-invalid:active{
   border-color: red !important;
 }
