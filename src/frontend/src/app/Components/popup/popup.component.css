@@ -8,6 +8,15 @@
   }
 
 }
+@media (max-width: 600px) {
+  .col-md-5{
+    width: calc(100% - 22px);
+  }
+  .full{
+    display: none;
+  }
+
+}
 
 .popupTaskName {
   font-size: 18px;
