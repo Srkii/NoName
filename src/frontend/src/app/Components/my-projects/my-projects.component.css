@@ -2,51 +2,34 @@
   font-family: 'Public Sans', sans-serif !important;
 }
 
-html {
-  background-color: #f5f5f9;
-}
-body {
-  background-color: #f5f5f9;
-  color: #697a8d;
-  margin: auto;
-}
-.nav {
-  display: inline;
-}
 .project-name:hover {
   cursor: pointer;
-  color: #484ac5 !important;
-  border-bottom: 1px solid #696cff;
-}
-.project-name.clicked {
-  cursor: pointer;
-  background-color: #e7e7ff !important;
-  color: #5f61e6 !important;
+  color: var(--normal-purple) !important;
+  border-bottom: 1px solid var(--normal-purple);
 }
 #all {
   /* max-width: 1320px; */
   margin-top: 30px;
   margin: auto;
   padding: 20px;
-  /* width: 85%; */
   min-height: 10vh;
-  background-color: #ffffff;
-  color: #697a8d;
-  border: solid 1px #d9dee3;
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border: 1px solid var(--card-border);
   border-radius: 0.375rem;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  /* overflow-y: hidden;
-  overflow-x: hidden; */
+  box-shadow: var(--card-shadow);
   box-sizing: border-box;
   overflow: visible;
+}
+.container-xxl {
+  max-width: 1550px;
 }
 
 .filter input,
 .filter select,
-.filter p-calendar
-{
-  color: #697a8d;
-  border-radius: 8px;
+.filter p-calendar {
+  color: var(--text-color);
+  border-radius: 0.375rem;
   font-size: 16px;
   height: 100%;
 }
@@ -54,18 +37,17 @@ body {
 .filter input:hover,
 .filter select:hover {
   outline: none;
-  border: 1px solid #5f61e6 !important;
+  border: 1px solid var(--dark-purple) !important;
 }
 .filter input:focus,
 .filter select:focus {
   outline: none;
-  border: 1px solid #5f61e6 !important;
+  border: 1px solid var(--dark-purple) !important;
 }
 
 table {
-  color: #697a8d;
-  font-size: 12px;
-  border: 1px solid lightgray;
+  color: var(--text-color);
+  border: 1px solid var(--table-border-color);
   border-collapse: collapse;
   /* padding: 6px; */
   /* margin-left: -20px; */
@@ -90,9 +72,13 @@ th {
   border-left: none;
   border-right: none;
 }
+tr {
+  border-collapse: collapse;
+}
 td {
   padding: 0.5rem;
-  border: 1px solid lightgray;
+  border: 1px solid var(--table-border-color);
+  border-collapse: collapse;
   border-left: none;
   border-right: none;
   /* padding-left: 20px; */
@@ -149,9 +135,6 @@ p {
 .HIGH p {
   background-color: #e16a26 !important;
   color: #ffffff !important;
-}
-.tPageinationElements{
-
 }
 
 .paginate_button button,
@@ -296,9 +279,7 @@ p {
   line-height: normal;
 } */
 
-.container-xxl {
-  max-width: 1550px;
-}
+
 .tFooter {
   display: flex;
   justify-content: space-between;
@@ -316,7 +297,7 @@ p {
   border-bottom: 2px solid #696cff;
 }
 .archTable td, th{
-  border-bottom: 1px solid #d9dee3 !important;
+  border-bottom: 1px solid var(--table-border-color) !important;
   padding: 5px;
 }
 .tdName {
