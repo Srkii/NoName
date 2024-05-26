@@ -24,26 +24,6 @@ import { QuillConfigService } from '../../_services/quill-config.service';
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.css',
-  animations: [
-    trigger('popFromSide', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        }),
-        animate('300ms ease-out', style({
-          opacity: 1,
-          transform: 'translateX(0)',
-        })),
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        })),
-      ]),
-    ]),
-  ],
 })
 export class ProjectDetailComponent implements OnInit {
   project: Project | any;
@@ -104,6 +84,8 @@ export class ProjectDetailComponent implements OnInit {
 
   sortedColumn: string = '';
   sortedOrder: number = 0; 
+
+  fetchingTaskId: number | null = null;
   
 
   constructor(
@@ -171,13 +153,28 @@ export class ProjectDetailComponent implements OnInit {
 
   getProjectInfo() {
     this.spinner.show();
-    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
+    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
+
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
+    }
 
     const projectId = this.route.snapshot.paramMap.get('id');
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
-        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder).subscribe((tasks) => {
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder, this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
           this.allTasks=this.projectTasks;
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
@@ -223,7 +220,36 @@ export class ProjectDetailComponent implements OnInit {
     const grouped = tasks.reduce((acc, task) => {
       const section = task.sectionName || 'No Section';
       if (!acc[section]) {
-        acc[section] = { tasks: [], visible: section != 'No Section' };
+        if(this.sortedOrder==0)
+        {
+          acc[section] = { tasks: [], visible: section === 'No Section' };
+        }
+        else
+        {
+          acc[section] = { tasks: [], visible: section != 'No Section' };
+        }
+      }
+      acc[section].tasks.push(task);
+      return acc;
+    }, {});
+    if (!grouped['No Section']) {
+      grouped['No Section'] = { tasks: [], visible: true };
+    }
+
+    return grouped;
+  }
+  groupTasksBySectionFiltered(tasks: any[]): { [key: string]: any } {
+    const grouped = tasks.reduce((acc, task) => {
+      const section = task.sectionName || 'No Section';
+      if (!acc[section]) {
+        if(this.searchText=='' && this.selectedStatus=="" &&  this.rangeDates==undefined)
+        {
+          acc[section] = { tasks: [], visible: section === 'No Section' };
+        }
+        else
+        {
+          acc[section] = { tasks: [], visible: section != 'No Section' };
+        }
       }
       acc[section].tasks.push(task);
       return acc;
@@ -386,24 +412,26 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation();
-    this.myTasksService
-      .GetProjectTask(taskId,this.userId)
-      .subscribe((task: ProjectTask) => {
-        if (
-          this.clickedTask &&
-          this.clickedTask.id === taskId &&
-          this.showPopUp
-        ) {
-          this.showPopUp = false;
-          this.clickedTask = null;
-          this.shared.current_task_id = null;
-        } else {
+    if (this.clickedTask && this.clickedTask.id === taskId && this.showPopUp) {
+      this.closePopup();
+    } else {
+      this.showPopUp = false;
+      this.fetchingTaskId = taskId; 
+      this.myTasksService.GetProjectTask(taskId, this.userId).subscribe((task: ProjectTask) => {
+        if (this.fetchingTaskId === taskId) { 
           this.clickedTask = task;
           this.showPopUp = true;
           this.shared.current_task_id = this.clickedTask.id;
+          this.fetchingTaskId = null; 
         }
       });
+    }
+  }
+  
+  closePopup() {
+    this.clickedTask = null;
+    this.showPopUp = false;
+    this.shared.current_task_id = null;
   }
 
   @HostListener('document:click', ['$event'])
@@ -413,15 +441,11 @@ export class ProjectDetailComponent implements OnInit {
     if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
       this.showPopUp = false;
       this.clickedTask = null;
+      this.shared.current_task_id=null;
     }
     else if (elementRef && !elementRef.contains(event.target as Node)) {
       this.enabledEditorOptions = false;
     }
-  }
-
-  closePopup() {
-    this.clickedTask = null;
-    this.showPopUp = false;
   }
 
   getStatusClass(){
@@ -683,42 +707,6 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
- filterTasks():void{
-    let filteredTasks = [...this.allTasks];
-
-    if (this.searchText) {
-      filteredTasks = filteredTasks.filter(task => {
-        return task.taskName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          (`${task.firstName || ''} ${task.lastName || ''}`).toLowerCase().includes(this.searchText.toLowerCase());
-      });
-    }
-
-    if (this.selectedStatus) {
-      filteredTasks = filteredTasks.filter(task => task.statusName === this.selectedStatus);
-    }
-
-    if (this.rangeDates && this.rangeDates.length === 2) {
-      const [startDate, endDate] = this.rangeDates;
-      const adjustedEndDate = new Date(endDate);
-      adjustedEndDate.setHours(23, 59, 59, 999);
-    
-      filteredTasks = filteredTasks.filter(task => {
-        const taskStartDate = new Date(task.startDate);
-        const taskEndDate = new Date(task.endDate);
-        return taskStartDate >= startDate && taskEndDate <= adjustedEndDate;
-      });
-    }
-
-    this.projectTasks = filteredTasks;
-    this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-    if(this.searchText!='' || this.selectedStatus!='' || this.rangeDates)
-    {
-      Object.keys(this.groupedTasks).forEach(section => {
-          this.groupedTasks[section].visible = true;
-      });
-    }
- }
-
  toggleSortOrder(column: string): void {
     if (this.sortedColumn === column) {
       this.sortedOrder = (this.sortedOrder + 1) % 3;
@@ -727,13 +715,28 @@ export class ProjectDetailComponent implements OnInit {
       this.sortedOrder = 1;
     }
     this.spinner.show();
-    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
+    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
+
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
+    }
 
     const projectId = this.route.snapshot.paramMap.get('id');
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
-        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder).subscribe((tasks) => {
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder,this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
           this.allTasks=this.projectTasks;
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
@@ -744,9 +747,6 @@ export class ProjectDetailComponent implements OnInit {
         this.spinner.hide();
       });
     }
-      Object.keys(this.groupedTasks).forEach(section => {
-          this.groupedTasks[section].visible = true;
-      });
   }
 
   getSortClass(column: string): string {
@@ -759,6 +759,39 @@ export class ProjectDetailComponent implements OnInit {
         return 'unsorted';
     }
     return 'unsorted';
+  }
+
+  filterTasks():void{
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
+    }
+
+    const projectId = this.route.snapshot.paramMap.get('id');
+    if (projectId) {
+      this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
+        this.project = project;
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder,this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
+          this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.allTasks=this.projectTasks;
+          this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
+          this.groupedTasks = this.groupTasksBySectionFiltered(this.projectTasks);
+        });
+        this.loadProjectMembers();
+        this.loadAddableUsers();
+        this.spinner.hide();
+      });
+    }
   }
 
  

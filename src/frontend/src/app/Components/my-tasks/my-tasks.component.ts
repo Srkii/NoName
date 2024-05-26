@@ -36,9 +36,11 @@ export class MyTasksComponent implements OnInit {
   pageSize2: number = 5;
   pageSize3: number = 5;
 
+  fetchingTaskId: number | null = null;
 
 
 
+  
   constructor(
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
@@ -48,10 +50,6 @@ export class MyTasksComponent implements OnInit {
     private sharedService:SharedService
   ) {}
 
-  closePopup() {
-    this.clickedTask = null; 
-    this.showPopUp = false; 
-  }
 
   ngOnInit(): void {
     this.sharedService.taskUpdated.subscribe(() => {
@@ -62,24 +60,26 @@ export class MyTasksComponent implements OnInit {
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation(); 
-    this.myTasksService
-      .GetProjectTask(taskId,this.userId)
-      .subscribe((task: ProjectTask) => {
-        if (
-          this.clickedTask &&
-          this.clickedTask.id === taskId &&
-          this.showPopUp
-        ) {
-          this.showPopUp = false;
-          this.clickedTask = null;
-          this.shared.current_task_id = null;
-        } else {
+    if (this.clickedTask && this.clickedTask.id === taskId && this.showPopUp) {
+      this.closePopup();
+    } else {
+      this.showPopUp = false;
+      this.fetchingTaskId = taskId; 
+      this.myTasksService.GetProjectTask(taskId, this.userId).subscribe((task: ProjectTask) => {
+        if (this.fetchingTaskId === taskId) { 
           this.clickedTask = task;
           this.showPopUp = true;
           this.shared.current_task_id = this.clickedTask.id;
+          this.fetchingTaskId = null; 
         }
       });
+    }
+  }
+  
+  closePopup() {
+    this.clickedTask = null;
+    this.showPopUp = false;
+    this.shared.current_task_id = null;
   }
 
 

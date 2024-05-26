@@ -378,7 +378,7 @@ namespace backend.Controllers
 
         // [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("ByProject/{projectId}")]
-       public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId, string sortedColumn = null, int sortedOrder = 0)
+       public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId, string sortedColumn = null, int sortedOrder = 0,  string searchText = null,string taskStatus = null,DateTime? startDate = null,DateTime? endDate = null)
         {
             var query = _context.ProjectTasks
                 .Include(task => task.TskStatus)
@@ -401,6 +401,34 @@ namespace backend.Controllers
                     task.AppUser.ProfilePicUrl,
                     task.ProjectSectionId
                 }).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                query = query.Where(p =>
+                    EF.Functions.Like(p.TaskName.ToLower(), $"%{searchText.ToLower()}%") ||
+                    EF.Functions.Like(p.FirstName + " " + p.LastName, $"%{searchText.ToLower()}%")
+                );
+            }
+
+            if (taskStatus != null)
+            {
+                if(taskStatus!="All")
+                    query = query.Where(p => p.StatusName == taskStatus);
+            }
+
+
+            if(startDate.HasValue && !endDate.HasValue)
+            {
+                query = query.Where(p => p.StartDate == startDate);
+            }
+            if(!startDate.HasValue && endDate.HasValue)
+            {
+                query = query.Where(p => p.EndDate == endDate);
+            }
+           if (startDate.HasValue && endDate.HasValue)
+            {
+                query = query.Where(p => p.StartDate >= startDate && p.EndDate <= endDate);
+            }
 
             if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
             {

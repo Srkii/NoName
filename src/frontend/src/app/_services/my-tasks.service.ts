@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
 import { ChangeTaskInfo } from '../Entities/ChangeTaskInfo';
 import { Observable } from 'rxjs';
@@ -29,8 +29,24 @@ export class MyTasksService {
     return this.http.get<ProjectTask[]>(this.baseUrl,{headers:this.httpHeader});
   }
 
-  GetTasksByProjectId(projectId: number, sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`,{headers:this.httpHeader});
+  GetTasksByProjectId(
+    projectId: number, 
+    sortedColumn: string | null = null, 
+    sortedOrder: number = 0, 
+    searchText: string | null = null,
+    taskStatus: string | null = null,
+    startDate: string | null = null,
+    endDate: string | null = null
+  ): Observable<ProjectTask[]> {
+    let params = new HttpParams()
+      .set('sortedColumn', sortedColumn ? sortedColumn : '')
+      .set('sortedOrder', sortedOrder.toString())
+      .set('searchText', searchText ? searchText : '')
+      .set('taskStatus', taskStatus ? taskStatus : '')
+      .set('startDate', startDate ? startDate : '')
+      .set('endDate', endDate ? endDate : '');
+  
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}`, { headers: this.httpHeader, params: params });
   }
 
   GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
