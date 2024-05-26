@@ -2,7 +2,7 @@ import { TaskDependency } from './../../Entities/TaskDependency';
 import { MyProjectsService } from './../../_services/my-projects.service';
 import { MyTasksComponent } from './../my-tasks/my-tasks.component';
 import { HttpClient} from '@angular/common/http';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   GanttDragEvent,
@@ -310,7 +310,13 @@ export class GanttComponent implements OnInit{
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    event.stopPropagation();
-    this.shared.triggerPopup(event, taskId);
+    if (this.shared.current_task_id != taskId) {
+      this.shared.triggerPopup(event, taskId);
+    } else {
+      this.shared.current_task_id = null;
+    }
+  
   }
+
+
 }

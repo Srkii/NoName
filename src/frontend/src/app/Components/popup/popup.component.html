@@ -172,7 +172,7 @@
           [ngStyle]="{ 'pointer-events': this.DisableCloseTask()==false ? 'none' : 'auto', 'opacity': this.DisableCloseTask()==false ? 0.5 : 1 }"
           (click)="toggleTaskCompletion(task)"
         >
-          {{ task && task.statusName === 'Completed' ? "Completed" : "Mark Complete" }}
+          {{ task && task.statusName === 'Completed' ? "Remove from Completed" : "Mark Complete" }}
         </button>
       </div>
     </div>

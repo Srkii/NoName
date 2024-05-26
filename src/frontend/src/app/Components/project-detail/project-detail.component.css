@@ -933,3 +933,20 @@ th {
     font-weight: 500;
     line-height: 20px;
 }
+.sorted-asc {
+    transform: rotateX(0deg);
+    transition: transform 0.3s;
+    color: #5f61e6;
+}
+  
+.sorted-desc {
+    transform: rotateX(180deg);
+    transition: transform 0.3s;
+    color: #5f61e6;
+}
+  
+.unsorted {
+    transform: rotateX(0deg);
+    transition: transform 0.3s;
+    color: inherit;
+}
