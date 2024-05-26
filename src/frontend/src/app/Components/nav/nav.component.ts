@@ -89,14 +89,17 @@ export class NavComponent implements OnInit {
     ).subscribe((event: NavigationEnd) => {
       if (event.urlAfterRedirects.includes('/mytasks')) {
         this.selectedOption = 'MyTasks'
+        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/myprojects') || event.urlAfterRedirects.includes('/project/'))
       {
         this.selectedOption = 'MyProjects'
+        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/admin'))
       {
         this.selectedOption = 'Admin' 
+        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/userinfo'))
       {
@@ -105,10 +108,11 @@ export class NavComponent implements OnInit {
       else {
         this.selectedOption=''
       }
+      sessionStorage.setItem('selectedOption', this.selectedOption);
+
     });
     const storedOption = sessionStorage.getItem('selectedOption');
     this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
-
   }
 
   setActiveOption(option: string) {
