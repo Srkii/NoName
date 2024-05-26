@@ -30,6 +30,7 @@ body {
   --btn-text: #fff;
   --btn-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
   --card-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  /* --btn-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4); */
   --card-border: solid #d9dee3;
   --disabled-input: #4d4d64;
   --warning-div: #4d4036;

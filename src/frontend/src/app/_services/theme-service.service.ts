@@ -10,6 +10,7 @@ export class ThemeServiceService {
   constructor(@Inject(DOCUMENT) private document: Document) { }
 
   private isLightTheme = true;
+
   switchTheme() {
     let themeLink = this.document.getElementById('app-theme') as HTMLLinkElement;
 
@@ -21,4 +22,9 @@ export class ThemeServiceService {
       this.isLightTheme = !this.isLightTheme;
     }
   }
+
+  isDarkMode(): boolean {
+    return this.isDarkTheme;
+  }
+
 }

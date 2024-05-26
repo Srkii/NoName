@@ -18,7 +18,7 @@ export class NavComponent implements OnInit {
     private userInfo:UserinfoService, 
     public uploadService:UploadService,
     public notificationService:NotificationsService,
-    private themeService: ThemeServiceService
+    public themeService: ThemeServiceService
     ) { }
 
   ngOnInit(): void {
@@ -39,7 +39,7 @@ export class NavComponent implements OnInit {
 
   isMyProjectsActive: boolean = false;
 
-  selectedOption: string=''
+  selectedOption: string='';
 
   changeTheme() {
     this.themeService.switchTheme();
