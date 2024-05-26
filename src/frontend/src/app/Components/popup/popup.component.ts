@@ -159,7 +159,7 @@ export class PopupComponent {
       if(previousTaskStatus!="")
         task.statusName = previousTaskStatus;
       else
-        task.statusName = 'InReview';
+        task.statusName = 'InProgress';
     }
     
       
