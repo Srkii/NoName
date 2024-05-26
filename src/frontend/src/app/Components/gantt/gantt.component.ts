@@ -154,19 +154,21 @@ export class GanttComponent implements OnInit{
   goToToday() {
     this.ganttComponent.scrollToToday();
   }
-
+  ElementwasDragged:boolean = false;
   dragEnded($event: GanttDragEvent) {
     if (this.userRole !== 4) { // Check if the user is not a guest
       if ($event?.item.start !== undefined && $event.item.end !== undefined) {
         const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
         const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
-
+        
         this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
         .subscribe(() => {
           // this.reloadGanttData();
         });
       }
     }
+    this.ElementwasDragged = true; // Set the flag indicating that a drag event has occurred
+    setTimeout(() => { this.ElementwasDragged = false; }, 200); // Reset the flag after a delay
   }
 
 
@@ -309,12 +311,13 @@ export class GanttComponent implements OnInit{
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    if (this.shared.current_task_id != taskId) {
-      this.shared.triggerPopup(event, taskId);
-    } else {
-      this.shared.current_task_id = null;
+    if(!this.ElementwasDragged){
+      if (this.shared.current_task_id != taskId) {
+        this.shared.triggerPopup(event, taskId);
+      } else {
+        this.shared.current_task_id = null;
+      }
     }
-  
   }
 
 

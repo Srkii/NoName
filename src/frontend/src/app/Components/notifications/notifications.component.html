@@ -61,7 +61,8 @@
               <h6 class="mb-1" style="font-weight: 600;">{{notificationService.getType(notification.type)}}</h6>
               <small class="mb-0">
                 {{notificationService.getNotificationText_small(notification)}}
-              </small>
+              </small><br>
+              <small class="text-muted">{{this.getNotificationTimeAgo(notification)}}</small>
             </div>
             <div class="flex-shrink-0 dropdown-notifications-actions" style="margin-left: 5px;">
               <span class="badge-dot" [class.unread]="!notification.read" [class.read]="notification.read"></span>
@@ -76,6 +77,11 @@
     </li>
   </ul>
 </div>
+
+
+<!-- table -->
+
+
 <ng-template #AllNotifications>
   <div class="modal-header">
     <h4 class="modal-title pull-left">All Notifications</h4>
@@ -84,10 +90,17 @@
     </button>
   </div>
   <div class="modal-body" *ngIf="this.notifications.length!=0 || this.notifications_read.length!=0">
+    <!-- table 1 -->
     <table class="notifications-table">
-      <tr class="inactive_tr"><td><i>Unread</i></td><td></td>
-        <td><input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0"></td></tr>
-      <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td><i>No Unread Notifications.</i></td><td></td><td></td></tr>
+      <tr class="inactive_tr">
+        <td><i>Unread</i></td>
+        <td>&nbsp;</td>
+        <td style="text-align: end;">
+          <input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0">
+        </td>
+      </tr>
+      <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td><i>No Unread Notifications.</i></td></tr>
+
       <tr class="active_tr" *ngFor="let notification of notifications">
         <td class="imagetd" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
@@ -107,24 +120,33 @@
           </svg>
           <span class="notification-text">{{notificationService.getNotificationText(notification)}}</span>
         </td>
-        <td style="margin-left: 0;padding-left: 0; text-align: start;"
-        (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()"
-        >
-          {{notification.dateTime | date:'yyyy-MM-dd HH:mm'}}
+        <td class="datetd">
+          {{notification.dateTime | date}}
         </td>
-
-        <td class="last_td" style="z-index:123;">
-          <input class="form-check-input" type="checkbox"
-          [checked]="markedNotifications.includes(notification.id)"
-          (change)="toList(notification.id)" *ngIf="notification.read===false">
+        <td class="last_td"> 
+          <input
+            class="form-check-input myinput" 
+            type="checkbox"
+            [checked]="markedNotifications.includes(notification.id)"
+            (change)="toList(notification.id)" *ngIf="notification.read===false"
+            >
         </td>
       </tr>
     </table>
+
+    <!-- table 2 -->
+
     <table class="notifications-table">
-      <tr class="inactive_tr"><td><i>Read</i></td><td></td><td></td><td ></td></tr>
-      <tr class="inactive_tr_flag" *ngIf="notifications_read.length==0"><td><i>No Read Notifications.</i></td><td></td><td></td><td ></td></tr>
+      <tr class="inactive_tr">
+        <td><i>Read</i></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr class="inactive_tr_flag" *ngIf="notifications_read.length==0">
+        <td><i>No Read Notifications.</i></td>
+      </tr>
       <tr class="active_tr" *ngFor="let notification of notifications_read">
-        <td (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
+        <td class="imagetd" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
           <ngx-avatars *ngIf="!notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" size="25" bgColor="#5d57c2" [name]="notification.sender?.firstName + ' ' + notification.sender?.lastName" class="dropImg1 rounded-circle shadow-4-strong"></ngx-avatars>
           <img *ngIf="notification.sender?.profilePicUrl &&( notification.type===0 || notification.type===1)" class="dropImg1 rounded-circle shadow-4-strong" [src]="uploadService.getImage(notification.sender.profilePicUrl)" alt="">
           <svg *ngIf="notification.type==2" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#696cff" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
@@ -142,13 +164,12 @@
           </svg>
           <span class="notification-text">{{notificationService.getNotificationText(notification)}}</span>
         </td>
-        <td style="margin-left: 0;padding-left: 0; text-align: start;"
-        (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()"
-        >
-          {{notification.dateTime | date:'yyyy-MM-dd HH:mm'}}
+
+        <td class="datetd">
+          {{notification.dateTime | date}}
         </td>
         <td class="last_td">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#696cff" class="bi bi-check-all" viewBox="0 0 16 16">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#696cff" class="bi bi-check-all mysvg" viewBox="0 0 16 16">
             <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
           </svg>
         </td>

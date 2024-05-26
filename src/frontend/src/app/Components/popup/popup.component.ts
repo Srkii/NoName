@@ -728,7 +728,18 @@ export class PopupComponent {
     this.attachment_name = ""
     this.attachment_added = false;
   }
+  abbreviate(filename: any): string {
+    const maxLength = 20;
+    if (filename.length <= maxLength) {
+        return filename;
+    }
 
+    const extension = filename.substring(filename.lastIndexOf('.'));
+    const baseName = filename.substring(0, filename.lastIndexOf('.'));
+    const abbreviationLength = maxLength - extension.length - 3; // 3 for the ellipsis
+
+    return baseName.substring(0, abbreviationLength) + '...' + extension;
+}
 
   
 

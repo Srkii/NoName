@@ -67,14 +67,13 @@ export class NotificationsService{
 
     this.hubConnection.on('recieveAllNotifications',(notifications:[Notification])=>{
       this.allNotifications = notifications;//pokupim sve u niz
-      console.log(this.allNotifications);
+      // console.log(this.allNotifications);
     })
   }
   stopHubConnection(){
     this.hubConnection?.stop().catch();
   }
   async getNotifications(){
-
     await this.hubConnection?.invoke('invokeGetNotifications');//top 10 najskorijih neprocitanih notif -> OD SADA SAMO NAJSKORIJE, U NOTIF TAB-U IZBACUJE SAD MALO DRUGACIJE..
 
   }
@@ -180,6 +179,26 @@ export class NotificationsService{
   }
   public checkForNewNotifications() {
     this.newNotifications = this.notifications.some((notification: any) => !notification.read);
+  }
+
+  getTimeAgo(dateTime: Date): string {
+    const now = new Date();
+    const notificationDate = new Date(dateTime);
+    const diff = now.getTime() - notificationDate.getTime();
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+  
+    if (days > 0) {
+      return `${days} days ago`;
+    } else if (hours > 0) {
+      return `${hours} hours ago`;
+    } else if (minutes > 0) {
+      return `${minutes} minutes ago`;
+    } else {
+      return `${seconds} seconds ago`;
+    }
   }
 
 }
