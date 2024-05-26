@@ -36,6 +36,8 @@ Rešenje se sastoji iz 2 dela, odnosno 2 odvojene aplikacije, _**Angular** front
 ## Portovi
 - 5001 - Backend
 - 4200 - Frontend
+URL aplikacije:
+http://softeng.pmf.kg.ac.rs:10101/
 
 Globalni Project Manager:
 tihomir.rajicic@gmail.com / password
