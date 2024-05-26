@@ -200,9 +200,9 @@
 <ng-template #updateUser>
   <div class="modal-header">
     <h5>Update user's info</h5>
-    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body">
     <form (ngSubmit)="UpdateUser(curentUserId)">
@@ -231,9 +231,9 @@
 <ng-template #archiveUser>
   <div class="modal-header">
     <h4>Archive user</h4>
-    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body">
     <form >
@@ -250,9 +250,9 @@
 <ng-template #changeRole>
   <div class="modal-header archy">
     <h4>Change user's role</h4>
-    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body">
     <form (ngSubmit)="ChangeUserRole(curentUserId)">
@@ -274,9 +274,9 @@
 <ng-template #archivedUsers>
   <div class="modal-header text-center">
     <h4 class="modal-title text-center">Archived users</h4>
-    <button type="button" class="btn-close close pull-right tClose" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body" *ngIf="archived_users.length>0; else noArchivedUsers">
     <div class="table-responsive text-nowrap">

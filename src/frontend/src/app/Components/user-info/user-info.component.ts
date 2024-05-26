@@ -1,4 +1,3 @@
-import { ApiUrl } from './../../ApiUrl/ApiUrl';
 import { UploadService } from '../../_services/upload.service';
 import { Component, OnInit, TemplateRef} from '@angular/core';
 import { UserinfoService } from '../../_services/userinfo.service';
@@ -6,7 +5,8 @@ import { ChangePassword } from '../../Entities/ChangePassword';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
-import { CustomToastService } from '../../_services/custom-toast.service';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -18,6 +18,8 @@ export class UserInfoComponent implements OnInit {
   public newpas="";
   public confirmpass="";
   public role:any;
+  public showSuccess: boolean = false;
+  public showError: boolean = false;
 
   isDropdownOpen = false;
   toggleDropdown() {
@@ -33,15 +35,14 @@ export class UserInfoComponent implements OnInit {
     public uploadService:UploadService,
     private spinner:NgxSpinnerService,
     private modalService:BsModalService,
+    private toastr: ToastrService,
     ) {}
-
-  ngOnInit(){
+  
+    ngOnInit(){
     this.spinner.show();
     this.UserInfo();
     this.spinner.hide();
   }
-
-
 
   UserInfo(){
     const id = localStorage.getItem('id');
@@ -71,26 +72,18 @@ export class UserInfoComponent implements OnInit {
     return this.newData.NewPassword === this.confirmpass;
   }
 
-  apply_changes(){
-    var id= Number(localStorage.getItem('id'));
+  apply_changes() {
+    var id = Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
-    this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
-      next: (response) => {
-        // console.log(response);
-        // console.log("change info successful!");
-        var succ = document.getElementById("success_div")
-        if(succ) succ.style.display='block';
-        var base = document.getElementById("warning_div");
-        if(base) base.style.display='none';
-        var change = document.getElementById("alert_div");
-        if(change){
-          change.style.backgroundColor = '#83EDA1'
-          change.style.color = '#FFFFFF';
-        }
+    this.userinfoService.updateUserInfo(token, id, this.newData).subscribe({
+      next: () => {
+        this.showSuccess = true;
+        this.showError = false;
       },
-      error: (error)=>{
-        // console.log(error);
-        // console.log("change info failed.");
+      error: (error) => {
+        this.toastr.error(error.error);
+        this.showSuccess = false;
+        this.showError = true;
       }
     });
   }

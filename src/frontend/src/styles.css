@@ -15,6 +15,10 @@ body {
   --card-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   --card-border: solid #d9dee3;
   --disabled-input: #f6f5f8;
+  --warning-div: #fff2d6;
+  --warning-div-text: #ffab00;
+  --success-background-color: #83EDA1;
+  --success-text-color: #11441f;
 }
 
 [data-theme="dark"] {
@@ -28,6 +32,10 @@ body {
   --card-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   --card-border: solid #d9dee3;
   --disabled-input: #4d4d64;
+  --warning-div: #4d4036;
+  --warning-div-text: #f9a702;
+  --success-background-color: #5ead75;
+  --success-text-color: #11441f;
 }
 
 .form-label {
@@ -57,7 +65,7 @@ body {
   background-clip: padding-box;
   border: 1px var(--card-border);
   border-radius: 0.375rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  /* transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
 }
 .form-control::placeholder {
   color: var(--text-color);
@@ -103,6 +111,10 @@ body {
 a {
   color: var(--normal-purple);
 }
+.container-xxl {
+  max-width: 1550px !important;
+  background-color: var(--background-color);
+}
 
 /* ne diraj ove 2 klase!!! */
 .toast-bottom-right {
@@ -122,15 +134,30 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* modal na kanbanu ; jedino ovde hoce da ga overwrite */
 .modal-content {
+  background-color: var(--card-color);
+  color: var(--text-color);
   border: 0px !important;
 }
 .modal-body {
+  background-color: var(--card-color);
+  color: var(--text-color);
   margin-bottom: 0px !important;
   padding-bottom: 0px !important;
 }
 .modal-header {
+  background-color: var(--card-color);
+  color: var(--text-color);
   padding-top: 5px;
   padding-bottom: 1px;
+}
+.modal-footer {
+  background-color: var(--card-color);
+  color: var(--text-color);
+}
+.modal-header svg {
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+  cursor: pointer;
 }
 .MemberManagmentModel{
   height: auto;

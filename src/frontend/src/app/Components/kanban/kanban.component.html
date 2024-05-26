@@ -37,40 +37,40 @@
 
 
 <ng-template #deleteBoard>
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">Delete Board</h4>
-      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
-      </button>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Delete Board</h4>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">This action will delete the <b>{{currentSectionName}}</b> Board and move all of its tasks to the <b>Proposed</b> Board.</div>
+    <div class="mb-3">
+      <button class="btn btn-primary d-grid w-100 mx-auto" (click)="deleteBoardFunction()">Delete Board</button>
     </div>
-    <div class="modal-body">
-      <div class="mb-3">This action will delete the <b>{{currentSectionName}}</b> Board and move all of its tasks to the <b>Proposed</b> Board.</div>
-      <div class="mb-3">
-        <button class="btn btn-primary d-grid w-100 mx-auto" (click)="deleteBoardFunction()">Delete Board</button>
-      </div>
-    </div>
+  </div>
 </ng-template>
 
 <ng-template #newBoard>
-    <div class="modal-header">
-        <h4 class="modal-title pull-left">Add New Board</h4>
-        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-          <span aria-hidden="true" class="visually-hidden">&times;</span>
-        </button>
-      </div>
-    <div class="modal-body">
-        <form (ngSubmit)="saveNewBoard()" class="mb-3">
-            <div class="mb-3" autocomplete="off">
-                <label for="newSection" class="form-label">Section Name</label>
-                <input type="text" class="form-control" name="newSection" [(ngModel)]="newSectionName" placeholder="Enter new section's name"/>
-            </div>
-            <div class="mb-3">
-                <label for="sectionColor" class="form-label">Section Color</label>
-                <input type="color" class="form-control" id="sectionColor" name="sectionColor" [(ngModel)]="newSectionColor" required>
-            </div>
-            <div class="mb-3 btn-save-section">
-                <button class="btn btn-primary d-grid w-100 mx-auto" type="submit">Add New Board</button>
-            </div>
-        </form>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left">Add New Board</h4>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
+  <div class="modal-body">
+      <form (ngSubmit)="saveNewBoard()" class="mb-3">
+          <div class="mb-3" autocomplete="off">
+              <label for="newSection" class="form-label">Section Name</label>
+              <input type="text" class="form-control" name="newSection" [(ngModel)]="newSectionName" placeholder="Enter new section's name"/>
+          </div>
+          <div class="mb-3">
+              <label for="sectionColor" class="form-label">Section Color</label>
+              <input type="color" class="form-control" id="sectionColor" name="sectionColor" [(ngModel)]="newSectionColor" required>
+          </div>
+          <div class="mb-3 btn-save-section">
+              <button class="btn btn-primary d-grid w-100 mx-auto" type="submit">Add New Board</button>
+          </div>
+      </form>
+  </div>
 </ng-template>

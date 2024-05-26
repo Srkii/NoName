@@ -212,7 +212,9 @@
         <h6 *ngIf="userRole==2 || userRole==3 || userRole==4"  class="projectName">{{ update.projectName }}</h6>
         <input class="form-control titleInp" id="projectName" [(ngModel)]="update.projectName" (blur)="updateProject()" *ngIf="userRole==0 || userRole==1">
       </div>
-      <button type="button" class="btn-close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close"></button>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body">
         <div class="mb-3 mr-2">
@@ -273,7 +275,9 @@
   <div class="modal-container">
     <div class="modal-header">
       <h4>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Member Management' : 'Member list' }}</h4>
-      <button type="button" class="btn-close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close"></button>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body">
       <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers">
@@ -357,9 +361,9 @@
 <ng-template #newTask class="newTaskModal">
   <div class="modal-header">
     <h4 class="modal-title pull-left">Add New Task</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body">
     <form class="mb-3" (ngSubmit)="saveTask()">
@@ -481,9 +485,9 @@
 <ng-template #archivedTasksModal>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Archived Tasks</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body" *ngIf="archivedTasks && archivedTasks.length > 0; else noArchivedTasks">
     <div class="table-responsive text-nowrap">
@@ -527,9 +531,9 @@
   <div class="modal-container">
     <div class="modal-header">
       <h4 class="modal-title pull-left">Archive Project</h4>
-      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
-      </button>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body archBody">
       <span class="archSpan">Are you sure you want to archive this project?</span>
@@ -544,7 +548,9 @@
   <div class="modal-container">
     <div class="modal-header">
       <h4>Manage Sections</h4>
-      <button type="button" class="btn-close" (click)="modalRef?.hide()" aria-label="Close"></button>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body">
       <div class="createSection">

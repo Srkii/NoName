@@ -1,11 +1,11 @@
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from '../../_services/notifications.service';
-import { Notification } from '../../Entities/Notification';
 import { UploadService } from '../../_services/upload.service';
 import { filter } from 'rxjs';
 import { ThemeServiceService } from '../../_services/theme-service.service';
+
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',

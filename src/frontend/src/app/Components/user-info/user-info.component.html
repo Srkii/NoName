@@ -1,6 +1,6 @@
 <app-nav></app-nav>
 <div class="container-xxl">
-  <div class="card" style="padding: 3%;">
+  <div class="card">
     <div class="d-flex align-items-start align-items-sm-center tContainer">
       <div id="account_banner">
         <div id="photo_wrap">
@@ -22,7 +22,6 @@
         <input #inputClick type="file" style="display: none;" (change)="onImageSelected($event,cropperModal)" accept="image/*">
       </div>
       <div id="user_info" *ngIf="userInfo">
-        <!-- <h5>Details</h5> -->
         <div class="tUserInfo">
           <div class="InfoWrap">
             <div class="tInfoCategory">First name:</div>
@@ -45,15 +44,13 @@
       <div id="clear"></div>
     </div>
   </div>
-  <div class="card" style="margin-top: 2%; padding: 3%;">
+  <div class="card tPassReset">
     <h5>Change Password</h5>
-    <div id="alert_div">
-      <div id="warning_div">
-        Ensure that your password is at least 5 characters long.
-      </div>
-      <div id="success_div">
-        Password changed successfully!
-      </div>
+    <div class="warning-display" [ngClass]="{'d-none': showSuccess, 'd-block': showError}">
+      Ensure that your password is at least 5 characters long.
+    </div>
+    <div class="success-display" [ngClass]="{'d-block': showSuccess, 'd-none': !showSuccess}">
+      Password changed successfully!
     </div>
     <div id="inputs">
       <div class="mb-3 form-password-toggle">
@@ -93,9 +90,9 @@
 <ng-template #cropperModal style="text-align:center;">
   <div class="modal-header">
     <h5 class="modal-title pull-left">Please crop your photo</h5>
-    <button type="button" class="btn-close close pull-right tBtnClose" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body" style="padding: 0;">
     <image-cropper style="padding: 0;"
@@ -118,9 +115,9 @@
   <div class="modal-container" style="color: #697a8d; font-size: 16px;">
     <div class="modal-header">
       <h4 class="modal-title pull-left">Remove photo?</h4>
-      <button type="button" class="btn-close close pull-right tBtnClose" aria-label="Close" (click)="removeModalRef?.hide()">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
-      </button>
+      <svg (click)="removeModalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body archBody">
       <span class="archSpan">Are you sure you want to remove your profile picture? This action is irreversible.</span>
@@ -135,9 +132,9 @@
   <div class="modal-container" style="color: #697a8d; font-size: 16px;">
     <div class="modal-header">
       <h4 class="modal-title pull-left">Profile Picture</h4>
-      <button type="button" class="btn-close close pull-right tBtnClose" aria-label="Close" (click)="viewModalRef?.hide()">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
-      </button>
+      <svg (click)="viewModalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body tViewImg">
       <img *ngIf="userInfo.profilePicUrl" [src]="uploadService.getProfileImage(userInfo.profilePicUrl)">

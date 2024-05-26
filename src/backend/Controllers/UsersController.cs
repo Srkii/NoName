@@ -120,7 +120,7 @@ namespace backend.Controllers
       
       if(!VerifyPassword(user,data.CurrentPassword))
       {
-        return Unauthorized("Password is unvalid");
+        return Unauthorized("Password is invalid");
       }
 
       var hmac = new HMACSHA512();
