@@ -4,7 +4,7 @@
     <br />
     <div class="card-container">
       
-    <div class="card clickable-div" [(ngModel)]="selectedRolee"  btnRadio="admin" (click)="toogleFilter()">
+    <div class="card clickable-div" [(ngModel)]="selectedRolee"  btnRadio="admin" (click)="toogleFilter('admin')">
     <div class="card-title">
       <label>Total {{numOfAdmins}} administrators</label>
         <div class="pics">
@@ -20,7 +20,7 @@
     </div>
 
 
-    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee"  btnRadio="projectManager" (click)="toogleFilter()">
+    <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee"  btnRadio="projectManager" (click)="toogleFilter('projectManager')">
       <div class="card-title">
         <label>Total {{numOfPM}} project managers</label>
         <div class="pics">
@@ -37,7 +37,7 @@
     </div>
     </div>
 
-    <div class="card clickable-div " name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="toogleFilter()">
+    <div class="card clickable-div " name="members" [(ngModel)]="selectedRolee" btnRadio="member" (click)="toogleFilter('member')">
       <div class="card-title">
         <label>Total {{numOfMembers}} members</label>
       <div class="pics">

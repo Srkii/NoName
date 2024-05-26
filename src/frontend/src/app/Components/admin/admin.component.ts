@@ -91,6 +91,7 @@ export class AdminComponent implements OnInit{
   currentId=localStorage.getItem('id');
 
   isFilterActive: boolean=true;
+  isFilter1: number=0
 
   archived_users: Member[]=[];
 
@@ -103,6 +104,8 @@ export class AdminComponent implements OnInit{
   regexEmail: RegExp =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   archMembers: { [key: string]: Member[] } = {};
+
+  filterRole: string|null=null
 
   Invite(): void{
    
@@ -359,6 +362,7 @@ export class AdminComponent implements OnInit{
     noFilter():void
     {
       this.selectedRolee='';
+      this.filterRole=null
       this.onLoad();
     }
 
@@ -370,15 +374,20 @@ export class AdminComponent implements OnInit{
 
     }
 
-    toogleFilter(): void{
-      if(this.isFilterActive)
-      {
-        this.filterUsers();
+    toogleFilter(role:string): void {
+
+      if(this.filterRole===role){
+        console.log(this.filterRole)
+        this.noFilter();
+        
       }
       else{
-        this.noFilter();
+        console.log("pre: " +this.filterRole)
+        this.filterRole=role;
+        console.log("posle: "+this.filterRole)
+        this.filterUsers();
+       
       }
-      this.isFilterActive=!this.isFilterActive;
     }
 
     getArchivedUsers(): void{
