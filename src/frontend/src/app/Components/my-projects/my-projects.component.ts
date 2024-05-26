@@ -56,11 +56,14 @@ export class MyProjectsComponent implements OnInit {
     if (this.rangeDates && this.rangeDates.length === 2) {
       const start = new Date(this.rangeDates[0]);
       const end = new Date(this.rangeDates[1]);
-      if(this.rangeDates[0])
-        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
-      if(this.rangeDates[1])
-        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
-    
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
     }
 
     this.myProjectsService.GetUsersProjectsCount(userId).pipe(
@@ -90,18 +93,19 @@ export class MyProjectsComponent implements OnInit {
 
   loadProjects(userId: any): void {
     this.spinner.show();
-    // this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
-    //   this.all_projects = count;
-    // });
     let startDate = '';
     let endDate = '';
     if (this.rangeDates && this.rangeDates.length === 2) {
       const start = new Date(this.rangeDates[0]);
       const end = new Date(this.rangeDates[1]);
-      if(this.rangeDates[0])
-        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
-      if(this.rangeDates[1])
-        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
     }
     this.myProjectsService.filterAndPaginateProjects(
       this.searchText,
