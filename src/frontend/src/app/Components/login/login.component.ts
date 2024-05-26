@@ -3,7 +3,7 @@ import { LoginService } from '../../_services/login.service';
 import { AppUser } from '../../Entities/AppUser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-
+import { ThemeServiceService } from '../../_services/theme-service.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,9 +15,18 @@ export class LoginComponent implements OnInit {
     Password: '',
   };
 
-  constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) { }
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private toastr: ToastrService,
+    private themeService: ThemeServiceService
+    ) { }
 
   ngOnInit(): void {}
+
+  toggleTheme() {
+    this.themeService.switchTheme();
+  }
 
   login() {
     this.loginService.login(this.newUser).subscribe({

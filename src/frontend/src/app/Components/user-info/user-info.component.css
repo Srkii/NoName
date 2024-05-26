@@ -4,21 +4,22 @@
 .container-xxl{
   width: 55%;
   margin: auto;
-  background-color: #f5f5f9;
+  background-color: var(--background-color);
 }
 h5{
   font-size: 20px;
   /* font-weight: 600; */
 }
 a {
-  color: #696cff;
+  color: var(--normal-purple);
 }
 .card {
-  color:#697a8d;
+  color: var(--text-color);
   border-color: solid #d9dee3;
   border-width: 0;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
   position: static;
+  background-color: var(--card-color);
 }
 .btn-primary {
   margin-top: 2%;

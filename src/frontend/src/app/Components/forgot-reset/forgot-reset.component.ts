@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MailresetService } from '../../_services/mailreset.service';
 import { ResetRequest } from '../../Entities/ResetRequest';
+import { ThemeServiceService } from '../../_services/theme-service.service';
 
 @Component({
   selector: 'app-forgot-reset',
@@ -18,7 +18,16 @@ export class ForgotResetComponent implements OnInit{
   };
   confirmPassword: string = '';
 
-  constructor(private mailresetService: MailresetService, private router: Router, private route: ActivatedRoute) { }
+  constructor(
+    private mailresetService: MailresetService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private themeService: ThemeServiceService
+    ) { }
+
+  toggleTheme() {
+    this.themeService.switchTheme();
+  }
 
   token: any;
   ngOnInit(): void {
