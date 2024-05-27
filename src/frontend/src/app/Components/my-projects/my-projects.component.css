@@ -299,7 +299,7 @@ p {
   margin-left: 5px;
   width: 195px;
   border-radius: 0.375rem;
-  border-bottom: 2px solid var(--text-color);
+  border-bottom: var(--action-border-bottom);
 }
 .archProject:hover {
   cursor: pointer;

@@ -1307,7 +1307,7 @@
     font-size: 1rem;
     color: #4b5563;
     background: #ffffff;
-    padding: 0.5rem 0.5rem; /*dodato tico*/
+    padding: 0.5rem 14px; /*dodato tico*/
     border: 1px solid #d1d5db;
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
     appearance: none;

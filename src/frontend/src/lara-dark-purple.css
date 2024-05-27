@@ -1314,8 +1314,8 @@
     color: var(--text-color);
     background: var(--card-color);
     /* padding: 0.75rem 0.75rem; */
-    padding: 0.5rem 0.5rem; /*dodato tico*/
-    border: 1px solid #424b57;
+    padding: 0.5rem 14px; /*dodato tico*/
+    border: 1px var(--input-border);
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
     appearance: none;
     border-radius: 6px;

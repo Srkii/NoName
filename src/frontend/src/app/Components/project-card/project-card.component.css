@@ -149,20 +149,6 @@ i{
     color: #a0a6ac;
 }
 
-.btn{
-    color: #fff;
-    background-color: #696cff;
-    border-color: #696cff;
-    box-shadow: 0 .125rem .25rem 0 rgba(105,108,255,.4)
-}
-
-.btn:hover{
-    color: #fff !important;
-    background-color: #5f61e6 !important;
-    border-color: #5f61e6 !important;
-    transform: translateY(-1px) !important
-}
-
 .is-invalid{
     border-color: red !important;
 }
@@ -267,10 +253,4 @@ textarea:hover,textarea:focus,input:hover,input:focus{
     outline: none;
     border: 1px solid #5f61e6 !important; 
     box-shadow: none !important; 
-}
-
-.tAddBtn:focus,
-.tAddBtn:active {
-    background-color: #696cff !important;
-    border-color: #696cff !important;
 }

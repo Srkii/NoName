@@ -31,6 +31,10 @@ body {
   --progress-shadow: none;
   --progress-background: #eceef1;
   --kanban-status-text: #212529;
+  --btn-actInact-shadow: none;
+  --action-border-bottom: 2px solid #d7d7f8;
+  --action-active-background: #d7d7f8;
+  --action-active-color: #696cff;
 }
 
 [data-theme="dark"] {
@@ -60,6 +64,10 @@ body {
   --progress-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
   --progress-background: #444564;
   --kanban-status-text: #444564;
+  --btn-actInact-shadow: 0 0.125rem 0.5rem 0 rgba(0, 0, 0, 0.16);
+  --action-border-bottom: 2px solid #a7a7b8;
+  --action-active-background: #697a8d;
+  --action-active-color: #fff;
 }
 
 .form-label {
@@ -145,8 +153,11 @@ a {
 select {
   background-color: var(--card-color) !important;
   border-color: var(--table-border-color) !important;
+  color: var(--text-color) !important;
 }
-
+input {
+  color: var(--text-color) !important;
+}
 /* ne diraj ove 2 klase!!! */
 .toast-bottom-right {
   font-family: 'Public Sans', sans-serif !important;
@@ -165,12 +176,12 @@ select {
 /* modal na kanbanu ; jedino ovde hoce da ga overwrite */
 .modal-content {
   background-color: var(--card-color);
-  color: var(--text-color);
+  color: var(--text-color) !important;
   border: 0px !important;
 }
 .modal-body {
   background-color: var(--card-color);
-  color: var(--text-color);
+  color: var(--text-color) !important;
   margin-bottom: 0px !important;
   padding-bottom: 0px !important;
 }
