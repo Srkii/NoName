@@ -31,10 +31,10 @@ namespace backend.Controllers
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {   
             if(!await IsValidTokenAsync(registerDto.Token))
-                return BadRequest("Token is not valid");
+                return BadRequest(new {message = "Unvalid request token"});
 
             if(await EmailExists(registerDto.Email))
-                return BadRequest("E-mail is already in use.");
+                return BadRequest(new {message = "E-mail is already in use."});
 
             var hmac = new HMACSHA512();
 
@@ -92,19 +92,36 @@ namespace backend.Controllers
         [HttpPost("resetPassword")] // /api/account/resetPassword
         public async Task<ActionResult<InvitationDto>> ResetPassword(PasswordResetDto PassDto)
         {
-            var request = await _context.UserRequests.FirstOrDefaultAsync(i => i.Token == PassDto.Token);
+            var request = await _context.UserRequests.FirstOrDefaultAsync(i => i.Token == PassDto.Token && i.IsUsed == false);
 
             if (request == null)
             {
-                return NotFound("Request not found");
+                return BadRequest(new {message = "Token not found or already used"});
             }
 
             request.IsUsed = true;
 
             var user = await _context.Users.FirstOrDefaultAsync(i => i.Email == PassDto.Email);
 
-            var hmac = new HMACSHA512();
-            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(PassDto.NewPassword));
+            var hmac = new HMACSHA512(user.PasswordSalt);
+            var hashNewPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(PassDto.NewPassword));
+            var different = false;
+
+            for(int i=0;i<hashNewPassword.Length;i++)
+            {
+                if(user.PasswordHash[i] != hashNewPassword[i])
+                {
+                    different = true;
+                    break;
+                }
+            }
+
+            if(!different)
+            {
+                return BadRequest(new {message = "Please choose a new password"});
+            }
+
+            user.PasswordHash = hashNewPassword;
             user.PasswordSalt = hmac.Key;
 
             await _context.SaveChangesAsync();

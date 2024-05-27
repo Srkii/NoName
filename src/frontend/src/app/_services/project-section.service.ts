@@ -9,24 +9,24 @@ import { ProjectSection } from '../Entities/ProjectSection';
 })
 export class ProjectSectionService {
   private apiUrl = environment.apiUrl + '/ProjectSection';
-  private token: string;
-  private httpHeader: HttpHeaders;
 
-  constructor(private http: HttpClient) {
-    this.token = localStorage.getItem('token') || '';
-    this.httpHeader=new HttpHeaders({"Authorization": `Bearer ${this.token}`});
+  constructor(private http: HttpClient) {}
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || '';
+    return new HttpHeaders({"Authorization": `Bearer ${token}`});
   }
 
   getSectionsByProject(projectId: number): Observable<ProjectSection[]> {
-    return this.http.get<ProjectSection[]>(`${this.apiUrl}/project/${projectId}`, {headers:this.httpHeader});
+    return this.http.get<ProjectSection[]>(`${this.apiUrl}/project/${projectId}`, {headers:this.getHeaders()});
   }
 
   createSection(sectionName: string, projectId: number): Observable<ProjectSection> {
     const body = { sectionName, projectId };
-    return this.http.post<ProjectSection>(this.apiUrl, body, {headers:this.httpHeader});
+    return this.http.post<ProjectSection>(this.apiUrl, body, {headers:this.getHeaders()});
   }
 
   deleteSection(sectionId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${sectionId}`, {headers:this.httpHeader});
+    return this.http.delete<void>(`${this.apiUrl}/${sectionId}`, {headers:this.getHeaders()});
   }
 }

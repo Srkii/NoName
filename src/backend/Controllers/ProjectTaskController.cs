@@ -28,6 +28,10 @@ namespace backend.Controllers
         {
             if(!await RoleCheck(taskDto.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner, ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
+            
+            var project = await _context.Projects.FindAsync(taskDto.ProjectId);
+            if(taskDto.StartDate < DateTime.UtcNow.Date || taskDto.StartDate < project.StartDate || taskDto.EndDate > project.EndDate)
+                return ValidationProblem("Start and end date must be set within the project dates and can't be in past");
 
             var task = new ProjectTask
             {
@@ -236,6 +240,9 @@ namespace backend.Controllers
             
             if(task.StartDate > dto.DueDate)
                 return BadRequest("Start date must be <= end date");
+            
+            if(dto.DueDate > dto.ProjectEndDate)
+                return BadRequest("Task end date cant be set after project end date");
 
             if(!await RoleCheck(task.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner,ProjectRole.Manager]))
                 return Unauthorized("Invalid role");

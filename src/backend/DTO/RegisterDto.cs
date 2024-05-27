@@ -5,11 +5,11 @@ namespace backend.DTO
     public class RegisterDto
     {
         [Required]
-        [RegularExpression(@"^[A-Za-z]{2,}$", ErrorMessage = "First name must contain only letters and be at least two characters long.")]
+        [RegularExpression(@"^[A-Za-zĀ-ž]{2,}$", ErrorMessage = "First name must contain only letters and be at least two characters long.")]
         public string FirstName {get; set;}
 
         [Required]
-        [RegularExpression(@"^[A-Za-z]{2,}$", ErrorMessage = "Last name must contain only letters and be at least two characters long.")]
+        [RegularExpression(@"^[A-Za-zĀ-ž]{2,}$", ErrorMessage = "Last name must contain only letters and be at least two characters long.")]
         public string LastName {get; set;}
 
         [Required]
