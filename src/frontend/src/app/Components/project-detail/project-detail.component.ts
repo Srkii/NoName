@@ -135,10 +135,8 @@ export class ProjectDetailComponent implements OnInit {
     });
     this.shared.togglePopup$.subscribe(({ event, taskId }) => {
     this.togglePopUp(event, taskId);
-
-  });
+    });
   }
-
   getUsersProjectRole(projectId: number, userId: number) {
     this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
         next: (role) => {
@@ -793,7 +791,16 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
- 
+  getDarkerColor(color: string): string {
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+    let darkeningFactor = 0.5; // promeni shade factor
+    r = Math.floor(r * darkeningFactor);
+    g = Math.floor(g * darkeningFactor);
+    b = Math.floor(b * darkeningFactor);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
 
 }
   

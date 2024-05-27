@@ -1,6 +1,12 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
+.form-label {
+    color: var(--text-color);
+    font-size: 18px !important;
+    letter-spacing: inherit;
+    text-transform: none !important;
+}
 svg {
     fill: var(--text-color);
 }
@@ -147,7 +153,7 @@ thead th{
     background-color: #e7e7ff !important;
     color: var(--normal-purple) !important;
 }
-.badge {
+/* .badge {
     width: 150px !important;
     text-align: center;
     white-space: nowrap;
@@ -156,12 +162,26 @@ thead th{
     display: inline-block;
     line-height: 1;
     border-radius: 0.375rem;
+    font-size: 13px !important;
     --bs-badge-padding-x: 0.593em;
     --bs-badge-padding-y: 0.52em;
-    --bs-badge-font-size: 0.8125em;
     --bs-badge-font-weight: 500;
     --bs-badge-color: #fff;
     --bs-badge-border-radius: 0.25rem;
+} */
+.badge {
+    width: 180px !important;
+    text-align: center;
+    white-space: nowrap;
+    text-transform: uppercase;
+    vertical-align: baseline;
+    display: inline-block;
+    line-height: 1.5;
+    border-radius: 0.375rem;
+    font-size: 16px !important;
+    padding: 0px 8.32px 0px 9.488px !important;
+    font-weight: 500;
+    color: #fff;
 }
 .btn-primary svg {
     margin-right: 5px;

@@ -151,7 +151,7 @@
                     <td>{{ task.startDate | date }}</td>
                     <td>{{ task.endDate | date }}</td>
                     <td>
-                      <span class="badge" [style.background-color]="task.color">{{ task.statusName }}</span>
+                      <span class="badge" [style.background-color]="task.color" [style.color]="getDarkerColor(task.color)">{{ task.statusName }}</span>
                     </td>
                   </tr>
                 </tbody>

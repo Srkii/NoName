@@ -35,6 +35,7 @@ body {
   --action-border-bottom: 2px solid #d7d7f8;
   --action-active-background: #d7d7f8;
   --action-active-color: #696cff;
+  --kanban-task-background: #e7e7ff;
 }
 
 [data-theme="dark"] {
@@ -68,11 +69,13 @@ body {
   --action-border-bottom: 2px solid #a7a7b8;
   --action-active-background: #697a8d;
   --action-active-color: #fff;
+  --kanban-task-background: #3b3d58;
 }
 
 .form-label {
   color: var(--text-color);
   font-size: 0.8rem;
+  /* font-size: 18px !important; */
   letter-spacing: inherit;
   text-transform: uppercase;
 }
