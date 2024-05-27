@@ -25,6 +25,16 @@ namespace backend.Controllers
         [HttpPost] // POST: api/projects/
         public async Task<ActionResult<Project>> CreateProject(ProjectDto projectDto)
         {
+            if(projectDto.StartDate < DateTime.UtcNow.Date)
+            {
+                return ValidationProblem("Project start date can't be in the past");
+            }
+
+            if(projectDto.EndDate <= projectDto.StartDate)
+            {
+                return ValidationProblem("Project end date must be set after start date and can't be set in the past");
+            }
+
             var project = new Project
             {
                 ProjectName = projectDto.ProjectName,
@@ -100,6 +110,9 @@ namespace backend.Controllers
         [HttpPut("updateProject")] // PUT: api/projects/updateProject
         public async Task<ActionResult<Project>> UpdateProject(ProjectDto projectDto)
         {
+            if(projectDto.EndDate < DateTime.UtcNow.Date)
+                return ValidationProblem("End date can't be in the past");
+
             var project = await _context.Projects.FindAsync(projectDto.ProjectId);
             if (project == null)
             {

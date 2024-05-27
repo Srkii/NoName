@@ -316,15 +316,12 @@ export class ProjectDetailComponent implements OnInit {
     if (!(date instanceof Date)) {
       date = new Date(date);
     }
-    date.setHours(0, 0, 0, 0);
+    date.setHours(2, 0, 0, 0);
     return date;
   }
 
   updateProject()
-  {
-    if(this.update.endDate)
-      this.update.endDate = this.resetTimeProjInfo(this.update.endDate);
-    
+  { 
     this.spinner.show()
     if(this.userRole == 1 || this.userRole == 0)
     {
@@ -333,11 +330,14 @@ export class ProjectDetailComponent implements OnInit {
       {
         if(this.update.projectStatus!==undefined)
             this.update.projectStatus = +this.update.projectStatus;
+        
+        if(this.update.endDate)
+          this.update.endDate = this.resetTimeProjInfo(this.update.endDate);
 
-          this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
-            this.getProjectInfo()
-            this.spinner.hide()
-          })
+        this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
+          this.getProjectInfo()
+          this.spinner.hide()
+        })
       }
     }
   }

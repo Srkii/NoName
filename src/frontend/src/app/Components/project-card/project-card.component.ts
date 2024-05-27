@@ -58,18 +58,6 @@ export class ProjectCardComponent {
       return;
     }
 
-    //resetujem milisekunde
-    if(this.newProject.StartDate)
-      this.newProject.StartDate = this.resetTime(this.newProject.StartDate);
-    if(this.newProject.EndDate)
-      this.newProject.EndDate = this.resetTime(this.newProject.EndDate);
-
-
-    if(this.newProject.StartDate == undefined || this.newProject.EndDate == undefined)
-    {
-      return;
-    }
-
     if(this.isInvalidDate())
     {
       return;
@@ -77,8 +65,13 @@ export class ProjectCardComponent {
 
     if(this.newProject.ProjectName == undefined)
     {
-      return
+      return;
     }
+
+    if(this.newProject.StartDate)
+      this.newProject.StartDate = this.resetTime(this.newProject.StartDate);
+    if(this.newProject.EndDate)
+      this.newProject.EndDate = this.resetTime(this.newProject.EndDate);
 
     this.newProject.AppUserId = this.creatorId;
 
