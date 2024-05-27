@@ -73,6 +73,7 @@ export class ProjectDetailComponent implements OnInit {
   searchSection: string = '';
 
   today: Date = new Date();
+  projectEndDate: Date = new Date();
   userRole: ProjectRole | any;
 
 
@@ -174,6 +175,7 @@ export class ProjectDetailComponent implements OnInit {
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
+        this.projectEndDate = new Date(project.endDate);
         this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder, this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
           this.allTasks=this.projectTasks;
@@ -473,12 +475,12 @@ export class ProjectDetailComponent implements OnInit {
     }
 
     if(await this.TaskNameExists())
-      {
-        this.taskNameExists = true;
-        return;
-      }
+    {
+      this.taskNameExists = true;
+      return;
+    }
 
-    if(this.newTaskStartDate == undefined || this.newTaskEndDate == undefined)
+    if(!this.newTaskStartDate || !this.newTaskEndDate)
     {
       return;
     }
@@ -493,11 +495,7 @@ export class ProjectDetailComponent implements OnInit {
       return;
     }
 
-    if(this.newTaskName == undefined)
-    {
-      return;
-    }
-    if(this.selectedUser==undefined)
+    if(!this.selectedUser)
     {
       return;
     }

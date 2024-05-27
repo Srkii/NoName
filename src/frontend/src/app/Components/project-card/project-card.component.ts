@@ -52,6 +52,11 @@ export class ProjectCardComponent {
     this.projectNameExists = false;
     this.buttonClicked = true;
 
+    if(!this.newProject.ProjectName)
+    {
+      return;
+    }
+
     if(await this.ProjectNameExists(this.newProject.ProjectName))
     {
       this.projectNameExists = true;
@@ -59,11 +64,6 @@ export class ProjectCardComponent {
     }
 
     if(this.isInvalidDate())
-    {
-      return;
-    }
-
-    if(this.newProject.ProjectName == undefined)
     {
       return;
     }

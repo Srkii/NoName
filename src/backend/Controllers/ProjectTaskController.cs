@@ -29,6 +29,10 @@ namespace backend.Controllers
             if(!await RoleCheck(taskDto.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner, ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
 
+            var ProjectEndDate = (await _context.Projects.FindAsync(taskDto.ProjectId)).EndDate;
+            if(taskDto.EndDate > ProjectEndDate)
+                return ValidationProblem("Start and end date must be set within the project dates");
+
             var task = new ProjectTask
             {
                 TaskName = taskDto.TaskName,
