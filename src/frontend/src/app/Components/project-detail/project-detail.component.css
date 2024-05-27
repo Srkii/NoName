@@ -10,6 +10,10 @@
 svg {
     fill: var(--text-color);
 }
+.sortSvg svg:hover,
+.sortSvg svg:active {
+    fill: var(--normal-purple);
+}
 .viewButtons svg {
     fill: var(--normal-purple);
 }
@@ -71,7 +75,7 @@ svg {
 }
 .section-name {
     cursor: pointer;
-    color: var(--text-color);
+    /* color: var(--text-color); */
     text-decoration: underline;
     font-size: large;
     line-height: 20px;

@@ -102,8 +102,8 @@ export class ProjectDetailComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     public quillService: QuillConfigService,
-    public themeService: ThemeServiceService,
-  ) {}
+    public themeService: ThemeServiceService
+  ) { }
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
@@ -816,49 +816,40 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   getLessPoppingColor(color: string): string {
-    // Convert hex to RGB
     let r = parseInt(color.slice(1, 3), 16);
     let g = parseInt(color.slice(3, 5), 16);
     let b = parseInt(color.slice(5, 7), 16);
   
-    // Convert RGB to HSL
     let { h, s, l } = this.rgbToHsl(r, g, b);
   
-    // Decrease saturation and lightness
-    s = Math.max(s * 0.5, 0);  // Adjust the factor to decrease saturation
-    l = Math.max(l * 0.5, 0);  // Adjust the factor to decrease lightness
+    s = Math.max(s * 0.5, 0);
+    l = Math.max(l * 0.5, 0);
   
-    // Convert HSL back to RGB
     ({ r, g, b } = this.hslToRgb(h, s, l));
     return `rgb(${r}, ${g}, ${b})`;
   }
 
   getPoppingColor(color: string): string {
-    // Convert hex to RGB
     let r = parseInt(color.slice(1, 3), 16);
     let g = parseInt(color.slice(3, 5), 16);
     let b = parseInt(color.slice(5, 7), 16);
   
-    // Convert RGB to HSL
     let { h, s, l } = this.rgbToHsl(r, g, b);
   
-    // Increase saturation and lightness
     s = Math.min(s * 1.5, 100);
     l = Math.min(l * 1.5, 100);
   
-    // Convert HSL back to RGB
     ({ r, g, b } = this.hslToRgb(h, s, l));
     return `rgb(${r}, ${g}, ${b})`;
   }
   
-  // Helper function to convert RGB to HSL
   rgbToHsl(r: number, g: number, b: number): { h: number, s: number, l: number } {
     r /= 255, g /= 255, b /= 255;
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
     let h = 0, s, l = (max + min) / 2;
   
     if (max === min) {
-      h = s = 0; // achromatic
+      h = s = 0;
     } else {
       const d = max - min;
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
@@ -872,12 +863,11 @@ export class ProjectDetailComponent implements OnInit {
     return { h, s, l };
   }
   
-  // Helper function to convert HSL to RGB
   hslToRgb(h: number, s: number, l: number): { r: number, g: number, b: number } {
     let r, g, b;
   
     if (s === 0) {
-      r = g = b = l; // achromatic
+      r = g = b = l;
     } else {
       const hue2rgb = (p: number, q: number, t: number) => {
         if (t < 0) t += 1;
