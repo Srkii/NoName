@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDe
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
-import { CommentsService } from '../../_services/comments.service'; 
-import { Comment } from '../../Entities/Comments'; 
+import { CommentsService } from '../../_services/comments.service';
+import { Comment } from '../../Entities/Comments';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { Project } from '../../Entities/Project';
@@ -51,20 +51,21 @@ export class PopupComponent {
   current_user: any;
 
 
-  
-    
+
+
   attachment_name:string = '';
   attachment_added:boolean = false;
   file:any;
   today: Date = new Date();
+  projectEndDate: Date = new Date();
 
   constructor(private myTasksService: MyTasksService,
               private spinner: NgxSpinnerService,
               private cdr: ChangeDetectorRef,
-              private userInfo:UserinfoService,  
+              private userInfo:UserinfoService,
               private commentsService: CommentsService,
-              private myProjectsService: MyProjectsService,    
-              public uploadservice: UploadService, 
+              private myProjectsService: MyProjectsService,
+              public uploadservice: UploadService,
               private router: Router,
               private modalService: BsModalService,
               private sharedService:SharedService,
@@ -73,13 +74,13 @@ export class PopupComponent {
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
-      
+      this.projectEndDate=new Date(this.task.project.endDate);
       if (Array.isArray(this.task.dependencies)) {
         this.selectedTasks = [...this.task.dependencies];
       } else {
         this.selectedTasks = [];
       }
-      
+
       if (this.task.projectRole === undefined || this.task.projectRole === null) {
         console.error('Task does not have projectRole property');
       } else {
@@ -91,7 +92,7 @@ export class PopupComponent {
       this.getProjectsUsers(this.task.projectId);
       this.getAllTasks();
       this.getProjectSections();
-      
+
     }
   }
 
@@ -121,8 +122,8 @@ export class PopupComponent {
       else
         task.statusName = 'InProgress';
     }
-    
-      
+
+
     this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
       next: () => {
         this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
@@ -132,17 +133,17 @@ export class PopupComponent {
                 taskId: closed.taskId,
                 dependencyTaskId: task.id
               };
-        
+
               this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
                 console.log('Dependency deleted successfully');
               }, (error: any) => {
                 console.error('Error deleting dependency:', error);
               });
         });
-          
+
         });
         this.sharedService.emitTaskUpdated();
-        
+
       },
       error: (error: any) => {
         console.error('Error toggling task completion:', error);
@@ -161,8 +162,8 @@ export class PopupComponent {
       else
         task.statusName = 'InProgress';
     }
-    
-      
+
+
     this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
       next: () => {
         this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
@@ -172,16 +173,16 @@ export class PopupComponent {
                 taskId: closed.taskId,
                 dependencyTaskId: task.id
               };
-        
+
               this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
               }, (error: any) => {
                 console.error('Error deleting dependency:', error);
               });
         });
-          
+
         });
         this.sharedService.emitTaskUpdated();
-        
+
       },
       error: (error: any) => {
         console.error('Error toggling task completion:', error);
@@ -199,8 +200,8 @@ export class PopupComponent {
       else
         task.statusName = 'InProgress';
     }
-    
-      
+
+
     this.myTasksService.updateTaskStatus1(task.id,task.statusName).subscribe({
       next: () => {
         this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
@@ -210,16 +211,16 @@ export class PopupComponent {
                 taskId: closed.taskId,
                 dependencyTaskId: task.id
               };
-        
+
               this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
               }, (error: any) => {
                 console.error('Error deleting dependency:', error);
               });
         });
-          
+
         });
         this.sharedService.emitTaskUpdated();
-        
+
       },
       error: (error: any) => {
         console.error('Error toggling task completion:', error);
@@ -345,14 +346,14 @@ export class PopupComponent {
               commentDto.id = comment.id;
               this.comments.push(commentDto);
               this.commentInput.nativeElement.value = '';
-              
+
               if(this.attachment_name!="")this.uploadAttachment();
-    
+
             setTimeout(() => {
               this.scrollToBottom();
             });
             this.spinner.hide();
-    
+
             },
             error: (error: any) => {
               console.error('Error adding comment:', error);
@@ -403,8 +404,6 @@ export class PopupComponent {
     });
   }
 
-  
-
   updateTaskInfo(task: ProjectTask): void {
     const dto: ChangeTaskInfo = {
       id: task.id,
@@ -413,6 +412,7 @@ export class PopupComponent {
       projectId: this.selectedProject.id,
       appUserId: this.selectedUser?.appUserId,
       dueDate: task.endDate,
+      projectEndDate: new Date(task.project.endDate),
       sectionId: this.selectedSection ? this.selectedSection.id : 0
     };
 
@@ -421,8 +421,8 @@ export class PopupComponent {
           let rola=this.task?.projectRole;
           this.task = updatedTask;
           this.task.projectRole=rola;
-  
-  
+
+
           this.sharedService.emitTaskUpdated();
           this.cdr.detectChanges();
         },
@@ -456,14 +456,14 @@ export class PopupComponent {
       save.style.display='block';
       cancel.style.display='block';
   }
-  
+
   editContent(comment_id:number): void {
-    
+
     const edit=document.getElementById("edit_content"+comment_id) as HTMLTextAreaElement;
     const original_content=this.comments.find(comment => comment.id === comment_id)?.content;
 
-    
-    
+
+
     if(edit.value!=original_content)
       {
         this.commentsService.updateComment(comment_id, edit.value).subscribe({
@@ -479,8 +479,8 @@ export class PopupComponent {
     {
       this.CancelEdit(comment_id);
     }
-      
-  
+
+
   }
 
   CancelEdit(comment_id:number):void{
@@ -492,7 +492,7 @@ export class PopupComponent {
     const original_content=this.comments.find(comment => comment.id === comment_id)?.content;
 
     if(original_content!=undefined)
-      edit1.value=original_content; 
+      edit1.value=original_content;
 
     content.style.display="block";
     edit.style.display="none";
@@ -509,10 +509,10 @@ export class PopupComponent {
     this.myTasksService.GetTasksByProjectId(this.task?.projectId).subscribe((tasks: ProjectTask[]) => {
       this.myTasksService.GetAllTasksDependencies().subscribe((deps: TaskDependency[]) => {
         const dependentTaskIds = this.getAllDependentTaskIds(this.task?.id, deps);
-        
+
         this.tasks = tasks.filter(task => {
           if (dependentTaskIds.includes(task.id) || task.id === this.task?.id) {
-            return false; 
+            return false;
           }
           const taskDependencyChain = this.getAllDependentTaskIds(task.id, deps);
           return !taskDependencyChain.includes(task.id);
@@ -520,46 +520,46 @@ export class PopupComponent {
       });
     });
   }
-  
+
   getAllDependentTaskIds(taskId: any, dependencies: TaskDependency[]): number[] {
     const dependentTaskIds: number[] = [];
-  
+
     const directDependencies = dependencies.filter(dep => dep.dependencyTaskId === taskId);
-    
+
     directDependencies.forEach(dep => {
-      dependentTaskIds.push(dep.taskId); 
-      dependentTaskIds.push(...this.getAllDependentTaskIds(dep.taskId, dependencies)); 
+      dependentTaskIds.push(dep.taskId);
+      dependentTaskIds.push(...this.getAllDependentTaskIds(dep.taskId, dependencies));
     });
-  
+
     return dependentTaskIds;
   }
-  
-  
-  
-  
+
+
+
+
   addTaskDependency(): void {
     if (!this.task) {
       console.error('Task is null');
       return;
     }
-  
+
     const dtos: TaskDependency[] = [];
-  
+
     this.selectedTasks.forEach(selectedTask => {
       if(this.task)
         {
           const dto: TaskDependency= {
             taskId: this.task.id,
-            dependencyTaskId: selectedTask 
+            dependencyTaskId: selectedTask
         }
         dtos.push(dto);
       };
     });
-  
+
     if (dtos.length === 0) {
       return;
     }
-  
+
     this.myTasksService.addTaskDependencies(dtos).subscribe(
       () => {
       },
@@ -569,7 +569,7 @@ export class PopupComponent {
     );
     this.sharedService.emitTaskUpdated();
   }
-  
+
   deleteTaskDependency(item:ProjectTask): void {
 
       if (!this.task) {
@@ -580,7 +580,7 @@ export class PopupComponent {
         taskId: this.task.id,
         dependencyTaskId: item.id
       };
-      
+
 
 
       this.myTasksService.deleteTaskDependency(dto).subscribe(
@@ -595,7 +595,7 @@ export class PopupComponent {
 
   DisableCloseTask():boolean{
     if (Array.isArray(this.selectedTasks))
-      {    
+      {
           if(this.selectedTasks.length==0)
             {
               return true;
@@ -623,7 +623,7 @@ export class PopupComponent {
       {
         class: 'modal-sm modal-dialog-centered'
       });
-    
+
   }
 
   closeDeleteModal() {
@@ -669,11 +669,11 @@ export class PopupComponent {
       {
         return false;
       }
-    
+
   }
 
-  
-  
+
+
   //emigrirao sam ovde ~maksim
 
   fileInputHandler($event:any){
@@ -695,7 +695,7 @@ export class PopupComponent {
     this.uploadService.UploadFile(task_id,user_id,this.file,token).subscribe({
       next: (response) =>{
         //vise ne treba ovo da radi
-        // console.log(response); 
+        // console.log(response);
         // this.comments.push(response);
         this.attachment_name = ""
         this.attachment_added = false;
@@ -703,7 +703,7 @@ export class PopupComponent {
       error:(error) =>{
         console.log(error);
       }
-    }); 
+    });
   }
   clearattachment($event:MouseEvent){
     $event.stopPropagation();
@@ -712,15 +712,15 @@ export class PopupComponent {
   }
 
 
-  
+
 
 }
 
 
 
 
-  
 
-  
+
+
 
 

@@ -236,6 +236,9 @@ namespace backend.Controllers
             
             if(task.StartDate > dto.DueDate)
                 return BadRequest("Start date must be <= end date");
+            
+            if(dto.DueDate > dto.ProjectEndDate)
+                return BadRequest("Task end date cant be set after project end date");
 
             if(!await RoleCheck(task.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner,ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
