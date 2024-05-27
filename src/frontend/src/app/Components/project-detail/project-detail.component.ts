@@ -53,6 +53,7 @@ export class ProjectDetailComponent implements OnInit {
   currentProjectId: number | null = null;
   users: TaskAssignee[] = [];
   selectedUser: TaskAssignee | undefined;
+  availableAssigness: any;
   selectedSection: ProjectSection | undefined;
   filterValue: string | undefined = '';
   @Output() taskAdded = new EventEmitter<boolean>();
@@ -72,6 +73,7 @@ export class ProjectDetailComponent implements OnInit {
   searchSection: string = '';
 
   today: Date = new Date();
+  projectEndDate: Date = new Date();
   userRole: ProjectRole | any;
 
 
@@ -171,14 +173,13 @@ export class ProjectDetailComponent implements OnInit {
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
+        this.projectEndDate = new Date(project.endDate);
         this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder, this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
           this.allTasks=this.projectTasks;
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
           this.groupedTasks = this.groupTasksBySection(this.projectTasks);
         });
-        this.loadProjectMembers();
-        this.loadAddableUsers();
         this.spinner.hide();
       });
     }
@@ -194,7 +195,18 @@ export class ProjectDetailComponent implements OnInit {
   loadAddableUsers(){
     this.myProjectsService.GetAddableUsers(this.project.id).subscribe((users: any[]) => {
       this.addableUsers = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
-      //this.loadPicture(this.addableUsers)
+    });
+  }
+
+  loadAvailableAssigness(){
+    this.myProjectsService.getAvailableAssigness(this.project.id).subscribe({
+      next: response => {
+        this.availableAssigness = response,
+        this.availableAssigness.forEach((assigne: any) => {
+          assigne.fullName = assigne.firstName + ' ' + assigne.lastName;
+        });
+      },
+      error: error => console.log(error)
     });
   }
 
@@ -300,6 +312,8 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   openMemberManagment(modal: TemplateRef<void>){
+    this.loadProjectMembers();
+    this.loadAddableUsers();
     this.modalRef = this.modalService.show(
       modal,
       {
@@ -318,10 +332,7 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   updateProject()
-  {
-    if(this.update.endDate)
-      this.update.endDate = this.resetTimeProjInfo(this.update.endDate);
-    
+  { 
     this.spinner.show()
     if(this.userRole == 1 || this.userRole == 0)
     {
@@ -330,11 +341,14 @@ export class ProjectDetailComponent implements OnInit {
       {
         if(this.update.projectStatus!==undefined)
             this.update.projectStatus = +this.update.projectStatus;
+        
+        if(this.update.endDate)
+          this.update.endDate = this.resetTimeProjInfo(this.update.endDate);
 
-          this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
-            this.getProjectInfo()
-            this.spinner.hide()
-          })
+        this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
+          this.getProjectInfo()
+          this.spinner.hide()
+        })
       }
     }
   }
@@ -470,12 +484,12 @@ export class ProjectDetailComponent implements OnInit {
     }
 
     if(await this.TaskNameExists())
-      {
-        this.taskNameExists = true;
-        return;
-      }
+    {
+      this.taskNameExists = true;
+      return;
+    }
 
-    if(this.newTaskStartDate == undefined || this.newTaskEndDate == undefined)
+    if(!this.newTaskStartDate || !this.newTaskEndDate)
     {
       return;
     }
@@ -490,11 +504,7 @@ export class ProjectDetailComponent implements OnInit {
       return;
     }
 
-    if(this.newTaskName == undefined)
-    {
-      return;
-    }
-    if(this.selectedUser==undefined)
+    if(!this.selectedUser)
     {
       return;
     }
@@ -560,6 +570,7 @@ export class ProjectDetailComponent implements OnInit {
 
   openNewTaskModal(modal: TemplateRef<void>) {
     this.buttonClicked=false;
+    this.loadAvailableAssigness();
     if (this.currentProjectId !== null)
     {
       this.getProjectsUsersAndSections(this.currentProjectId);

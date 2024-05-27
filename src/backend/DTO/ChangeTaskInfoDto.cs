@@ -12,6 +12,7 @@ namespace backend.DTO
         public string Description { get; set; }
         public int? AppUserId { get; set; }
         public DateTime? DueDate { get; set; }
+        public DateTime? ProjectEndDate { get; set; }
         public int ProjectId { get; set; }
         public int SectionId { get; set; }
     }

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MailresetService } from '../../_services/mailreset.service';
 import { ResetRequest } from '../../Entities/ResetRequest';
 import { ThemeServiceService } from '../../_services/theme-service.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-forgot-reset',
@@ -16,13 +17,16 @@ export class ForgotResetComponent implements OnInit{
     Token: '',
     NewPassword: '',
   };
+  buttonClicked: boolean = false;
+  invalidPassword: boolean = false;
   confirmPassword: string = '';
 
   constructor(
     private mailresetService: MailresetService,
     private router: Router,
     private route: ActivatedRoute,
-    private themeService: ThemeServiceService
+    private themeService: ThemeServiceService,
+    private toastr: ToastrService
     ) { }
 
   toggleTheme() {
@@ -55,16 +59,45 @@ export class ForgotResetComponent implements OnInit{
     });
   }
 
-  resetPassword() {
-    if (this.newRequest.NewPassword !== this.confirmPassword) {
-      return;
+  checkPasswords(){
+    if(!this.newRequest.NewPassword || this.newRequest.NewPassword.length < 5){
+      this.newRequest.NewPassword = '';
+      this.confirmPassword = '';
+      this.invalidPassword = true;
+      return false;
     }
+    if (this.newRequest.NewPassword !== this.confirmPassword) {
+      return false;
+    }
+    if(this.token == undefined){
+      this.newRequest.NewPassword = '';
+      this.confirmPassword = '';
+      this.invalidPassword = false;
+      this.toastr.error("Recovery token doesn't exists")
+      return false;
+    }
+
+    return true;
+  }
+
+  resetPassword() {
+    this.buttonClicked = true;
+
+    if(!this.checkPasswords())
+        return;
+
     this.newRequest.Token = this.token;
     this.mailresetService.resetPassword(this.newRequest).subscribe({
       next: () => {
         this.router.navigate(['/login']);
       },
-      error: () => console.log('Could not reset password')
+      error: (obj) => {
+        if(this.token)
+          this.toastr.error(obj.error.message);
+        this.invalidPassword = false;
+        this.newRequest.NewPassword = '';
+        this.confirmPassword = '';
+      }
     })
   }
 

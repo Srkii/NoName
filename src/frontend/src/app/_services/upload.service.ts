@@ -6,22 +6,22 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class UploadService {
-  private token: string;
-  private httpHeader: HttpHeaders;
   private apiUrl = environment.apiUrl;
   private fileurl = environment.fileurl;
   private baseUrl = `${this.apiUrl}/FileUpload`;
 
-  constructor(private readonly httpClient:HttpClient) {
-    this.token = localStorage.getItem('token') || '';
-    this.httpHeader=new HttpHeaders({"Authorization": `Bearer ${this.token}`});
-   }
+  constructor(private readonly httpClient:HttpClient) {}
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || '';
+    return new HttpHeaders({"Authorization": `Bearer ${token}`});
+  }
 
   UploadImage(id:any,imageData:File,token:any){
     const formData = new FormData();
     formData.append('image',imageData,imageData.name);
     //tico: koristi apiUrl ako si ga vec importovao
-    return this.httpClient.post<any>(`${this.baseUrl}/uploadpfp/${id}`,formData,{headers:this.httpHeader});//saljem sliku na back
+    return this.httpClient.post<any>(`${this.baseUrl}/uploadpfp/${id}`,formData,{headers:this.getHeaders()});//saljem sliku na back
   }
 
   getImage(filename:string){//ova vraca avatare
@@ -36,14 +36,31 @@ export class UploadService {
     const formData = new FormData();
     formData.append('file',file,file.name);
     formData.append('user_id',String(user_id));
-    return this.httpClient.post<any>(`${this.apiUrl}/FileUpload/uploadfile/${id}`,formData,{headers:this.httpHeader});
+    return this.httpClient.post<any>(`${this.apiUrl}/FileUpload/uploadfile/${id}`,formData,{headers:this.getHeaders()});
   }
 
   removePfp(id:any,token:any){
-    return this.httpClient.delete<any>(`${this.apiUrl}/FileUpload/removepfp/${id}`,{headers:this.httpHeader});
+    return this.httpClient.delete<any>(`${this.apiUrl}/FileUpload/removepfp/${id}`,{headers:this.getHeaders()});
   }
 
   downloadFile(fileUrl:string){
-    return this.httpClient.get(`${this.fileurl}${fileUrl}`, { responseType: 'blob',headers:this.httpHeader});
+    return this.httpClient.get(`${this.fileurl}${fileUrl}`, { responseType: 'blob',headers:this.getHeaders()});
+  }
+  checkFileType(file:File):boolean{
+    var extension = file.name.split('.');
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'zip', 'rar', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'xlsm'];
+    if(allowedExtensions.includes(extension[extension.length-1])) return true
+    return false;
+  }
+  checkFileSize(file:File):boolean{
+    console.log(file.size);
+    if(file.size<10*1024*1024) return true;//ako je manje od 10mb moze da uploaduje
+    return false;
+  }
+  isSelectedFileImage(file:File):boolean{
+    var extension = file.name.split('.');
+    const allowedExtensions = ['jpg', 'jpeg', 'png'];
+    if(allowedExtensions.includes(extension[extension.length-1])) return true;
+    return false;
   }
 }

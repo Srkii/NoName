@@ -148,17 +148,18 @@ namespace backend.Controllers
         [HttpPost("uploadfile/{id}")]
         public async Task<ActionResult> UploadFile(int id,[FromForm]int user_id,IFormFile file){
             if(file==null) return BadRequest("file is null");
-            if((IsExtensionAllowed(file.FileName))==false){
+            if(IsExtensionAllowed(file.FileName)==false){
                 return BadRequest("file type not allowed.");
-            }
-            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
-            var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == user_id);
-            
-            if(task!=null){
-                var filename =  _uploadService.AddFile(file);
-                return Ok();
             }else{
-                return BadRequest("Task does not exist.");
+                var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
+                var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == user_id);
+                
+                if(task!=null){
+                    var filename =  _uploadService.AddFile(file);
+                    return Ok();
+                }else{
+                    return BadRequest("Task does not exist.");
+                }
             }
         }
         [Authorize(Roles = "ProjectManager,Member")]

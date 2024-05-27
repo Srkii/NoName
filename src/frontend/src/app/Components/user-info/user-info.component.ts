@@ -7,6 +7,7 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -35,7 +36,7 @@ export class UserInfoComponent implements OnInit {
     public uploadService:UploadService,
     private spinner:NgxSpinnerService,
     private modalService:BsModalService,
-    private toastr: ToastrService,
+    private toast:ToastrService
     ) {}
   
     ngOnInit(){
@@ -97,12 +98,16 @@ export class UserInfoComponent implements OnInit {
   onImageSelected(event: any,modal:TemplateRef<void>): void {
       this.imgChangeEvt = event;
       this.imageName = event.target.files[0].name.split('.')[0];
-      this.modalRef = this.modalService.show(
-        modal,
-        {
-          class:'modal-face modal-sm modal-dialog-centered',
-        }
-      )
+      if(this.uploadService.isSelectedFileImage(event.target.files[0])){
+        this.modalRef = this.modalService.show(
+          modal,
+          {
+            class:'modal-face modal-sm modal-dialog-centered',
+          }
+        )
+      }else{
+        this.toast.error("Please upload an image.");
+      }
   }
   cropImg(event: ImageCroppedEvent) {
     this.cropImgPreview = event.blob;

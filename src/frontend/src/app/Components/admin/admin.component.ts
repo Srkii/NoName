@@ -99,7 +99,7 @@ export class AdminComponent implements OnInit{
   invalidName: boolean=false;
   invalidLastName: boolean=false;
   invalidEmail: boolean=false;
-  regex: RegExp = /^[A-Za-z]{2,}$/;
+  regex: RegExp = /^[A-Za-zĀ-ž]{2,}$/;
   regexEmail: RegExp =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   archMembers: { [key: string]: Member[] } = {};

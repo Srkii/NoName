@@ -24,11 +24,8 @@ export class RegisterComponent implements OnInit {
   };
   confirmPassword: string = '';
 
-  regexName: RegExp = /^[A-Za-z]{2,}$/;
-  regexPassword: RegExp = /^[A-Za-z]{2,}$/;
-  invalidFirstName: boolean = false;
-  invalidLastName: boolean = false;
-  invalidPassword: boolean = false;
+  regexName: RegExp = /^[A-Za-zĀ-ž]{2,}$/;
+  buttonClicked: boolean = false;
 
   constructor(
     private registerService: RegisterService,
@@ -42,55 +39,40 @@ export class RegisterComponent implements OnInit {
   }
   token: any;
   ngOnInit(): void {
-    this.token = this.route.snapshot.queryParamMap.get('token')?.toString();
+    this.token = this.route.snapshot.queryParamMap.get('token');
     this.GetEmailByToken(this.token);
   }
 
   GetEmailByToken(token: string | null): void {
-    if (!token) {
-      console.error('Token is missing');
+    if (!token && token == undefined) {
       return;
     }
 
     this.registerService.getEmailByToken(token).subscribe({
       next: (response: any) => {
         const email = response?.email;
-        if (email) {
+        if (email) 
+        {
           this.newUser.Email = email;
-        } else {
-          console.error('Email not found in response');
-        }
+        } 
       },
-      error: (error) => {
-        console.error('Error fetching email:', error);
-      },
+      error: () => {},
     });
   }
 
   Register(): void {
-
-    if(this.newUser.FirstName && !this.regexName.test(this.newUser.FirstName))
-    {
-      this.invalidFirstName = true;
-      return;
-    }
-    this.invalidFirstName = false;
-    if(this.newUser.LastName && !this.regexName.test(this.newUser.LastName))
-    {
-      this.invalidLastName = true;
-      return;
-    }
-    this.invalidLastName = false;
-    if(this.newUser.Password && this.newUser.Password.length < 5)
-    {
-        this.invalidPassword = true;
-        return;
-    }
-    this.invalidPassword = false;
-    if (this.newUser.Password !== this.confirmPassword) {
-      return;
-    }
+    this.buttonClicked = true;
     
+    if (!this.checkFirstName() || !this.checkLastName() || !this.checkPassword() || !this.passwordMatch())
+      return;
+
+    console.log(this.newUser.Email)
+    if(!this.token || this.newUser.Email == '')
+    {
+      this.toastr.error("Unvalid token provided");
+      return
+    }
+
     this.newUser.Token = this.token;
 
     this.registerService.register(this.newUser).subscribe({
@@ -100,10 +82,22 @@ export class RegisterComponent implements OnInit {
         localStorage.setItem('role', response.role);
         this.router.navigate(['/mytasks']);
       },
-      error: () => {
-        this.toastr.error('Unsuccessful registration');
+      error: (error) => {
+        this.toastr.error(error.error.message);
       },
     });
+  }
+
+  checkFirstName(): boolean{
+    return this.newUser.FirstName!=null && this.regexName.test(this.newUser.FirstName);
+  }
+
+  checkLastName(): boolean{
+    return this.newUser.LastName!=null && this.regexName.test(this.newUser.LastName);
+  }
+
+  checkPassword(): boolean{
+    return this.newUser.Password!=null && this.newUser.Password.length >= 5
   }
 
   passwordMatch(): boolean {

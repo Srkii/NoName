@@ -755,7 +755,6 @@ select:disabled {
     box-shadow: none;
     border-color: red !important;
 }
-
 .invalid {
     height: 0;
     overflow: visible;
@@ -777,7 +776,7 @@ input.is-invalid:focus{
     box-shadow: none;
 }
 .ng-select-wrapper.is-invalid{
-    outline:0.5px solid  red !important;
+    border: 1px solid  red !important;
     border-radius: 0.375rem;
 }
 
