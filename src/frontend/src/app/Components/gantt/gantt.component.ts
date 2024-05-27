@@ -17,6 +17,7 @@ import {
   GanttGroup,
   GanttDate,
   GanttLink,
+  LinkColors,
 } from '@worktile/gantt';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
@@ -37,7 +38,7 @@ export class GanttComponent implements OnInit{
   ngOnInit(): void {
 
     const userId = localStorage.getItem("id");
-    const projectId = this.route.snapshot.paramMap.get('id');
+    const projectId = this.route.snapshot.paramMap.get('id');  
     this.currentProjectId = projectId ? +projectId : null;
     if (projectId && userId) {
       this.getUsersProjectRole(+projectId, +userId);
@@ -54,7 +55,7 @@ export class GanttComponent implements OnInit{
         {
         this.loading = false;
         this.data_loaded = true
-      }, 250);
+      }, 300);
     });
     this.spinner.show();
     this.loading = true;
@@ -148,27 +149,30 @@ export class GanttComponent implements OnInit{
   }
 
   private reloadGanttData() {//ovo zna da duplira podatke u ganttu ~maksim
+
     this.getGanttData(); // Fetch data again
   }
 
   goToToday() {
     this.ganttComponent.scrollToToday();
   }
-
+  ElementwasDragged:boolean = false;
   dragEnded($event: GanttDragEvent) {
     if (this.userRole !== 4) { // Check if the user is not a guest
       if ($event?.item.start !== undefined && $event.item.end !== undefined) {
         const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
         const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
-
+        // this.checkLinks($event?.item);
         this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
         .subscribe(() => {
-          // this.reloadGanttData();
+          //  this.reloadGanttData();
         });
+        
       }
     }
+    this.ElementwasDragged = true; // Set the flag indicating that a drag event has occurred
+    setTimeout(() => { this.ElementwasDragged = false; }, 200); // Reset the flag after a delay
   }
-
 
   // ovo smo testirali i menjali
   linkDragEnded(event: any){
@@ -179,17 +183,6 @@ export class GanttComponent implements OnInit{
     let arr: TaskDependency[] = [taskDependency];
     this.myTasksService.addTaskDependencies(arr).subscribe((response)=>{});
   } 
-
-
-  // ovo je kako je bilo kad je maksim odradio
-  // linkDragEnded(event: any){
-  //   let taskDependency:TaskDependency={
-  //     taskId:Number(event.source.id),
-  //     dependencyTaskId:Number(event.target.id)
-  //   }
-  //   let arr:TaskDependency[] = [taskDependency];
-  //   this.myTasksService.addTaskDependencies(arr).subscribe((response)=>{});
-  // }
 
 
   dragMoved(event: any) {
@@ -257,14 +250,13 @@ export class GanttComponent implements OnInit{
         tasks.forEach((t:any) =>{
           if (t.statusName !== 'Archived') { // Filter out archived tasks
             var dependencies:GanttLink[] = [];
-
             this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:TaskDependency[])=>{
-
               depencency_array.forEach((dep:TaskDependency) => {
                 dependencies.push({
                   type: 4,
-                  link: String(dep.dependencyTaskId)
-                });
+                  link: String(dep.dependencyTaskId),
+                },
+              );
               });
             })
             let item:GanttItem={
@@ -275,7 +267,7 @@ export class GanttComponent implements OnInit{
               end: this.convertToUnixTimestamp(t.endDate),
               links: dependencies,
               expandable: false,
-              linkable: true
+              linkable: false // link-ovanje elemenata na ganttu iskljuceno
             }
             this.items.push(item);
           }
@@ -288,17 +280,20 @@ export class GanttComponent implements OnInit{
       this.myTasksService.deleteTaskDependency(this.dependency)
       .subscribe((response:any)=>{
         const index = this.items.findIndex(item => item.id === String(this.dependency.taskId));
-        const linkIndex = this.items[index].links?.findIndex(link =>link == String(this.dependency.dependencyTaskId));
-        this.items[index].links?.splice(Number(linkIndex),1);
+        const linkIndex = this.items[index].links?.findIndex(link => link.link === String(this.dependency.dependencyTaskId));
+        if (linkIndex !== -1 && linkIndex!=undefined) {
+          this.items[index].links?.splice(linkIndex, 1);
+        }
         this.items = [...this.items];
-        this.dependency ={
-          taskId:0,
-          dependencyTaskId:0
+        this.dependency = {
+          taskId: 0,
+          dependencyTaskId: 0
         }
         this.removeModalRef?.hide();
       });
     }
   }
+  
 
   convertToUnixTimestamp(dateString: string): number {
     const date = new Date(dateString);
@@ -310,13 +305,12 @@ export class GanttComponent implements OnInit{
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    if (this.shared.current_task_id != taskId) {
-      this.shared.triggerPopup(event, taskId);
-    } else {
-      this.shared.current_task_id = null;
+    if(!this.ElementwasDragged){
+      if (this.shared.current_task_id != taskId) {
+        this.shared.triggerPopup(event, taskId);
+      } else {
+        this.shared.current_task_id = null;
+      }
     }
-  
   }
-
-
 }

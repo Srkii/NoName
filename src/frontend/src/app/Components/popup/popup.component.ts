@@ -16,6 +16,8 @@ import { SharedService } from '../../_services/shared.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ta } from 'date-fns/locale';
+import { HttpError, HttpResponse } from '@microsoft/signalr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-popup',
@@ -69,7 +71,8 @@ export class PopupComponent {
               private router: Router,
               private modalService: BsModalService,
               private sharedService:SharedService,
-              private uploadService:UploadService
+              private uploadService:UploadService,
+              private toast:ToastrService
             ){}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -135,7 +138,7 @@ export class PopupComponent {
               };
 
               this.myTasksService.deleteTaskDependency(deleteDto).subscribe(() => {
-                console.log('Dependency deleted successfully');
+                // console.log('Dependency deleted successfully');
               }, (error: any) => {
                 console.error('Error deleting dependency:', error);
               });
@@ -330,36 +333,41 @@ export class PopupComponent {
       next:(response)=>{
         this.current_user=response;
         if (content || this.attachment_added) {
-          const commentDto: Comment = {
-            id: -1,
-            taskId: this.task!.id,
-            content: content,
-            senderId: this.current_user.id,
-            senderFirstName: this.current_user.firstName,
-            senderLastName: this.current_user.lastName,
-            messageSent:  new Date,
-            fileUrl: this.attachment_name?this.attachment_name:"",
-            edited:false,
-            appUserPicUrl: this.current_user.profilePicUrl,
-          };
-          this.commentsService.postComment(commentDto).subscribe({
-            next: (comment: Comment) => {
-              commentDto.id = comment.id;
-              this.comments.push(commentDto);
-              this.commentInput.nativeElement.value = '';
-
-              if(this.attachment_name!="")this.uploadAttachment();
-
-            setTimeout(() => {
-              this.scrollToBottom();
+          var success = true;
+          if(this.attachment_name!="")
+          {
+            success = this.uploadAttachment();
+          }//ne dam upload komentara sa nevalidnim attachmentom..
+          if(success){
+            const commentDto: Comment = {
+              id: -1,
+              taskId: this.task!.id,
+              content: content,
+              senderId: this.current_user.id,
+              senderFirstName: this.current_user.firstName,
+              senderLastName: this.current_user.lastName,
+              messageSent:  new Date,
+              fileUrl: this.attachment_name?this.attachment_name:"",
+              edited:false,
+              appUserPicUrl: this.current_user.profilePicUrl,
+            };
+            this.commentsService.postComment(commentDto).subscribe({
+              next: (comment: Comment) => {
+                commentDto.id = comment.id;
+                this.comments.push(commentDto);
+                this.commentInput.nativeElement.value = '';
+      
+              setTimeout(() => {
+                this.scrollToBottom();
+              });
+              this.spinner.hide();
+      
+              },
+              error: (error: any) => {
+                console.error('Error adding comment:', error);
+              }
             });
-            this.spinner.hide();
-
-            },
-            error: (error: any) => {
-              console.error('Error adding comment:', error);
-            }
-          });
+          }
         }
       },error:(error)=>{
         console.log(error)
@@ -689,29 +697,50 @@ export class PopupComponent {
       console.log("no file data");
     }
   }
-  uploadAttachment(){
+  uploadAttachment():boolean{
     var task_id = Number(this.sharedService.current_task_id);
     var token = localStorage.getItem('token');
     var user_id = localStorage.getItem('id');//prosledim id posiljaoce
-    this.uploadService.UploadFile(task_id,user_id,this.file,token).subscribe({
-      next: (response) =>{
-        //vise ne treba ovo da radi
-        // console.log(response);
-        // this.comments.push(response);
-        this.attachment_name = ""
-        this.attachment_added = false;
-      },
-      error:(error) =>{
-        console.log(error);
+    if(this.uploadService.checkFileType(this.file)){
+      if(this.uploadService.checkFileSize(this.file)){
+        this.uploadService.UploadFile(task_id,user_id,this.file,token).subscribe({
+          next: (response:HttpResponse) =>{
+            //vise ne treba ovo da radi
+            // console.log(response); 
+            // this.comments.push(response);
+            this.attachment_name = ""
+            this.attachment_added = false;
+          },
+          error:(error:HttpError) =>{
+            this.toast.error("invalid file type backend response");
+          }
+        }); 
+        return true;
+      }else{
+        this.toast.error("File size exceeds 10Mb");
       }
-    });
+    }else{
+      this.toast.error("Invalid file type");
+    }
+    return false;
   }
   clearattachment($event:MouseEvent){
     $event.stopPropagation();
     this.attachment_name = ""
     this.attachment_added = false;
   }
+  abbreviate(filename: any): string {
+    const maxLength = 20;
+    if (filename.length <= maxLength) {
+        return filename;
+    }
 
+    const extension = filename.substring(filename.lastIndexOf('.'));
+    const baseName = filename.substring(0, filename.lastIndexOf('.'));
+    const abbreviationLength = maxLength - extension.length - 3; // 3 for the ellipsis
+
+    return baseName.substring(0, abbreviationLength) + '...' + extension;
+}
 
 
 

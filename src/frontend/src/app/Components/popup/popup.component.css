@@ -29,6 +29,11 @@
   border-bottom: 1px solid #5f61e6;
 }
 
+.bi-x-lg:hover{
+  fill: #696cff;
+  transition: 0.5s ease-in-out;
+}
+
 .header {
   text-align: left;
   margin-right: 20px;
@@ -435,7 +440,7 @@ img{
 }
 
 .mark.disabled {
-  opacity: 0.5; 
+  opacity: 0.5;
   background-color: red;
 }
 
@@ -545,7 +550,7 @@ img{
 
 .download-link
 {
-  padding-left: 3px; 
+  padding-left: 3px;
   padding-right: 3px;
   color: #696cff;
 }

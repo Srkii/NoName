@@ -55,7 +55,7 @@ namespace backend.Controllers
             await updateProgress(task.ProjectId);
             // ne obavestavamo sami sebe vise o kreaciji task-a
             if(taskDto.CreatorId!=taskDto.AppUserId){
-                await _notificationService.TriggerTaskNotification(task.Id,taskDto.CreatorId); 
+                await _notificationService.TriggerTaskNotification(task.Id); 
             }
             return Ok(task);
         }
@@ -192,16 +192,16 @@ namespace backend.Controllers
                 return NotFound("Status not found.");
             }
 
-            task.TskStatusId = status.Id;
 
+            task.TskStatusId = status.Id;
             await _context.SaveChangesAsync();
             if(statusName.Equals("Archived")){
-                _notificationService.ArchiveRelatedTaskNotifications(taskId);
+                _notificationService.ArchiveRelatedTaskNotifications(task.Id);
             }else if(wasArchived){
-                _notificationService.DeArchiveRelatedTaskNotifications(taskId);
+                _notificationService.DeArchiveRelatedTaskNotifications(task.Id);
             }
-            if(statusName.Equals("InReview")){
-                await _notificationService.notifyTaskCompleted(taskId);
+            else if(statusName.Equals("InReview")){
+                await _notificationService.notifyTaskCompleted(task);
             }   
 
             // Now, after saving changes, fetch the updated task again
@@ -246,15 +246,21 @@ namespace backend.Controllers
 
             if(!await RoleCheck(task.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner,ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
-            
+            Boolean userChanged = false;
             if (dto.TaskName != null) task.TaskName = dto.TaskName;
             if (dto.Description != null && dto.Description != "") task.Description = dto.Description;
             if (dto.DueDate != null) task.EndDate = (DateTime)dto.DueDate;
             if (dto.ProjectId != 0) task.ProjectId = dto.ProjectId;
-            if (dto.AppUserId != 0) task.AppUserId = dto.AppUserId;
+            if (dto.AppUserId != 0)
+            {   
+                task.AppUserId = dto.AppUserId;
+                userChanged = true;
+            }
             if (dto.SectionId != 0) task.ProjectSectionId=dto.SectionId;
             if (dto.SectionId == 0) task.ProjectSectionId=null;    
-
+            if(userChanged){
+                await _notificationService.TriggerTaskNotification(task.Id);
+            }
             await _context.SaveChangesAsync();
 
             return task;

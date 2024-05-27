@@ -46,4 +46,21 @@ export class UploadService {
   downloadFile(fileUrl:string){
     return this.httpClient.get(`${this.fileurl}${fileUrl}`, { responseType: 'blob',headers:this.getHeaders()});
   }
+  checkFileType(file:File):boolean{
+    var extension = file.name.split('.');
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'zip', 'rar', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'xlsm'];
+    if(allowedExtensions.includes(extension[extension.length-1])) return true
+    return false;
+  }
+  checkFileSize(file:File):boolean{
+    console.log(file.size);
+    if(file.size<10*1024*1024) return true;//ako je manje od 10mb moze da uploaduje
+    return false;
+  }
+  isSelectedFileImage(file:File):boolean{
+    var extension = file.name.split('.');
+    const allowedExtensions = ['jpg', 'jpeg', 'png'];
+    if(allowedExtensions.includes(extension[extension.length-1])) return true;
+    return false;
+  }
 }
