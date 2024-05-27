@@ -5,7 +5,7 @@ import { DOCUMENT } from '@angular/common';
   providedIn: 'root'
 })
 export class ThemeServiceService {
-  private isDarkTheme = false;
+  public isDarkTheme = false;
 
   constructor(@Inject(DOCUMENT) private document: Document) {
     this.isDarkTheme = localStorage.getItem('isDarkTheme') === 'true';
