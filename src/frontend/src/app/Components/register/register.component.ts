@@ -25,7 +25,6 @@ export class RegisterComponent implements OnInit {
   confirmPassword: string = '';
 
   regexName: RegExp = /^[A-Za-z]{2,}$/;
-  regexPassword: RegExp = /^[A-Za-z]{2,}$/;
   buttonClicked: boolean = false;
 
   constructor(
