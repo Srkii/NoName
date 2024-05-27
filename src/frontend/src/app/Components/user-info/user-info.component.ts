@@ -20,6 +20,8 @@ export class UserInfoComponent implements OnInit {
   public role:any;
   public showSuccess: boolean = false;
   public showError: boolean = false;
+  public invalidCurrPassword: boolean = false;
+  public invalidNewPassword: boolean = false;
 
   isDropdownOpen = false;
   toggleDropdown() {
@@ -69,19 +71,50 @@ export class UserInfoComponent implements OnInit {
 
   }
   passwordMatch(): boolean {
-    return this.newData.NewPassword === this.confirmpass;
+    if(this.newData.NewPassword && this.confirmpass)
+      return this.newData.NewPassword === this.confirmpass;
+    return false;
+
+  }
+  clearInputs(){
+    this.newData.CurrentPassword = '';
+    this.newData.NewPassword = '';
+    this.confirmpass = '';
+  }
+  turnOfCurrentPassError(){
+    this.invalidCurrPassword = false;
+  }
+  turnOfNewPassError(){
+    this.invalidNewPassword = false;
   }
 
   apply_changes() {
+    if(!this.newData.CurrentPassword || !this.passwordMatch())
+      return; 
+    if(this.newData.NewPassword && this.newData.NewPassword?.length < 5)
+    {
+      this.invalidNewPassword = true;
+      this.showSuccess = false;
+      this.showError = true;
+      return;
+    }
+
+
     var id = Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
     this.userinfoService.updateUserInfo(token, id, this.newData).subscribe({
       next: () => {
         this.showSuccess = true;
         this.showError = false;
+        this.clearInputs();
       },
-      error: (error) => {
-        this.toast.error(error.error);
+      error: (obj) => {
+        this.toast.error(obj.error.message)
+        if(obj.error.type == 1) this.invalidCurrPassword = true;
+        else this.invalidCurrPassword = false;
+        if(obj.error.type == 2) this.invalidNewPassword = true;
+        else this.invalidNewPassword = false;
+
         this.showSuccess = false;
         this.showError = true;
       }

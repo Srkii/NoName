@@ -7,19 +7,28 @@ import { DOCUMENT } from '@angular/common';
 export class ThemeServiceService {
   private isDarkTheme = false;
 
-  constructor(@Inject(DOCUMENT) private document: Document) { }
-
-  private isLightTheme = true;
+  constructor(@Inject(DOCUMENT) private document: Document) {
+    this.isDarkTheme = localStorage.getItem('isDarkTheme') === 'true';
+   }
 
   switchTheme() {
     let themeLink = this.document.getElementById('app-theme') as HTMLLinkElement;
 
     this.isDarkTheme = !this.isDarkTheme;
+    localStorage.setItem('isDarkTheme', this.isDarkTheme.toString());
     this.document.body.setAttribute('data-theme', this.isDarkTheme ? 'dark' : 'light');
     
     if (themeLink) {
-      themeLink.href = this.isLightTheme ? 'lara-dark-purple.css' : 'tihomir-light-purple.css';
-      this.isLightTheme = !this.isLightTheme;
+      themeLink.href = this.isDarkTheme ? 'lara-dark-purple.css' : 'tihomir-light-purple.css';
+    }
+  }
+
+  applyTheme(isDarkTheme: boolean): void {
+    this.isDarkTheme = isDarkTheme;
+    this.document.body.setAttribute('data-theme', this.isDarkTheme ? 'dark' : 'light');
+    let themeLink = this.document.getElementById('app-theme') as HTMLLinkElement;
+    if (themeLink) {
+      themeLink.href = this.isDarkTheme ? 'lara-dark-purple.css' : 'tihomir-light-purple.css';
     }
   }
 

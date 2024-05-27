@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppUser } from '../Entities/AppUser';
-import {Observable, firstValueFrom} from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
+
 @Injectable({
   providedIn: 'root',
 })

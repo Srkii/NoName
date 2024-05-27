@@ -12,8 +12,11 @@ export const loginGuard: CanActivateFn = async (route, state) => {
     else router.navigate(['/mytasks']);
       return false;
   }
-  else{
-    localStorage.clear();
+  else {
+    localStorage.removeItem('token');
+    localStorage.removeItem('id');
+    localStorage.removeItem('role');
+    sessionStorage.removeItem('selectedOption');
     return true;
   }
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MailresetService } from '../../_services/mailreset.service';
 import { ResetRequest } from '../../Entities/ResetRequest';
-import { ThemeServiceService } from '../../_services/theme-service.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -25,13 +24,8 @@ export class ForgotResetComponent implements OnInit{
     private mailresetService: MailresetService,
     private router: Router,
     private route: ActivatedRoute,
-    private themeService: ThemeServiceService,
     private toastr: ToastrService
     ) { }
-
-  toggleTheme() {
-    this.themeService.switchTheme();
-  }
 
   token: any;
   ngOnInit(): void {

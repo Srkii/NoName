@@ -58,7 +58,7 @@
           <label class="form-label tPassLabel" for="password">Current Password</label>
         </div>
           <div class="input-group input-group-merge">
-            <input style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="Enter Current Password"/>
+            <input [ngClass]="{'is-invalid': invalidCurrPassword}" (ngModelChange)="turnOfCurrentPassError()" style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="password" [(ngModel)]="newData.CurrentPassword" placeholder="Enter Current Password"/>
           </div>
       </div>
       <div class="mb-3 form-password-toggle">
@@ -66,7 +66,7 @@
           <label class="form-label tPassLabel" for="password">New Password</label>
         </div>
           <div class="input-group input-group-merge">
-            <input style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="Enter New Password"/>
+            <input [ngClass]="{'is-invalid': invalidNewPassword && newData.CurrentPassword.length>=5}" (ngModelChange)="turnOfNewPassError()" style="font-size: 15px !important; line-height: 23px !important; padding: 0.4375rem 0.875rem;" type="password" class="form-control" name="password" [(ngModel)]="newData.NewPassword" placeholder="Enter New Password"/>
           </div>
       </div>
       <div class="mb-3 form-password-toggle">

@@ -4,7 +4,6 @@ import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Invintation } from '../../Entities/Invitation';
 import { ToastrService } from 'ngx-toastr';
-import { ThemeServiceService } from '../../_services/theme-service.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -32,11 +31,8 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private themeService: ThemeServiceService
-  ) {}
-  toggleTheme() {
-    this.themeService.switchTheme();
-  }
+  ) { }
+  
   token: any;
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
