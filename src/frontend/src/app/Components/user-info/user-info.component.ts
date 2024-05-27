@@ -7,7 +7,6 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
-import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -82,7 +81,7 @@ export class UserInfoComponent implements OnInit {
         this.showError = false;
       },
       error: (error) => {
-        this.toastr.error(error.error);
+        this.toast.error(error.error);
         this.showSuccess = false;
         this.showError = true;
       }
