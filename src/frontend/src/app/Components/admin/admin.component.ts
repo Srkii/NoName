@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UploadService } from '../../_services/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { th } from 'date-fns/locale';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -144,6 +145,7 @@ export class AdminComponent implements OnInit{
         Id:id,
         Role: parseInt(this.userRole)
       }
+
       if(ChangeDto)
       {
         this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
@@ -224,7 +226,6 @@ export class AdminComponent implements OnInit{
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        var counnt=this.allUsers.length;
         this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
           this.filteredUsers=res;
           this.totalPages= Math.ceil(res / this.pageSize);
@@ -329,20 +330,10 @@ export class AdminComponent implements OnInit{
       this.newFisrtName = user.firstName;
       this.newLastName = user.lastName;
       this.curentUserId=user.id;
-
-      if(user.role==0)
-      {
-        this.currentRole="Admin";
-      }
-      else if(user.role==1)
-      {
-        this.currentRole="Member"
-      }
-      else if(user.role==2)
-      {
-        this.currentRole="Project Manager"
-      }
       
+      this.userRole = user.role.toString();
+      this.currentRole=this.GetUserRole(user.role)
+
       this.modalRef = this.modalService.show(
         modal,
         {

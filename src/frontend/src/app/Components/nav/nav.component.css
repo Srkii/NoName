@@ -136,7 +136,8 @@ cursor: pointer;}
 .dropdown-menu-end{
   --bs-dropdown-link-active-bg: #f4f3f3;
 }
- @media only screen and (min-width: 768px){
+/*za tablete*/
+@media screen and (min-width: 651px) and (max-width: 1400px){
 
   .navbar-brand .dropdown-menu{
     display: none;
@@ -144,9 +145,12 @@ cursor: pointer;}
   .tabs-to-dropdown{
     display: block
   }
+  .mb-2 {
+    margin-bottom: .0rem !important;
+  }
 }
 /*za telefone*/
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 649px){
   .dropdown-menu-end
     {
       z-index: 100;
@@ -166,13 +170,6 @@ cursor: pointer;}
 
 .dropdown-menu-responsive .nav-item:active{
   background-color: #c5c5c5;
-}
-
-@media (min-width: 768px) {
-  .dropdown-menu-responsive .firstDrop li:active {
-    background-color: #0000ff; /* Change this to the color you want */
-    color: #413561;
-  }
 }
 .avatar avatar-online {
   margin-left: 10px;
