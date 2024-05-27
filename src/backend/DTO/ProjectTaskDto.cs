@@ -13,6 +13,7 @@ namespace backend.DTO
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public DateTime ProjectEndDate { get; set; }
         public int TaskStatusId { get; set; }
         public int AppUserId { get; set; }
         public int ProjectId { get; set; }

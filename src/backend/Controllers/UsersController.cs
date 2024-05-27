@@ -25,7 +25,7 @@ namespace backend.Controllers
       _tokenService = ts;
     }
 
-    [Authorize(Roles = "Admin")] //skloni ovo ako hoces da radi samo ako ima token
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {

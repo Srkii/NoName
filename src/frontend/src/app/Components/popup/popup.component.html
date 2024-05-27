@@ -57,6 +57,7 @@
           placeholder="{{task.endDate|date}}"
           dateFormat="MM dd, yy"
           [minDate]="today"
+          [maxDate]="projectEndDate"
           (onSelect)="updateTaskDueDate()"
           (click)="$event.stopPropagation()"
           ></p-calendar>
