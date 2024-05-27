@@ -128,6 +128,12 @@ export class MyProjectsService {
     return this.http.get(`${this.baseUrl}/GetUsersByProjectId/${projectId}`,{headers:this.getHeaders()})
   }
 
+  getAvailableAssigness(projectId: number): Observable<any> {
+    if(projectId === null)
+      throw new Error('ProjetId is null.');
+    return this.http.get(`${this.baseUrl}/GetAvailableAssigness/${projectId}`,{headers:this.getHeaders()})
+  }
+
   GetAddableUsers(projectCreatorId: number): Observable<Member[]> {
     return this.http.get<Member[]>(`${this.baseUrl}/GetAddableUsers/${projectCreatorId}`,{headers:this.getHeaders()});
   }

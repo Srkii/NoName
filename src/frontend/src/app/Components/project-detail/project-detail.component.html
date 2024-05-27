@@ -425,7 +425,7 @@
       <div class="mb-1 chooseAssignee" autocomplete="off">
         <label for="assignee2" class="form-label">Assignee</label>
         <div class="ng-select-wrapper" [ngClass]="{'is-invalid': buttonClicked && !selectedUser}">
-          <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
+          <ng-select class="asigneeDropdown" [items]="availableAssigness" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
             <ng-template ng-option-tmp let-user="item" let-index="index">
               <div style="display: flex; align-items: center;">
                 <div *ngIf="user.profilePicUrl" class="nameAvatar">

@@ -54,6 +54,7 @@ export class ProjectDetailComponent implements OnInit {
   currentProjectId: number | null = null;
   users: TaskAssignee[] = [];
   selectedUser: TaskAssignee | undefined;
+  availableAssigness: any;
   selectedSection: ProjectSection | undefined;
   filterValue: string | undefined = '';
   @Output() taskAdded = new EventEmitter<boolean>();
@@ -182,8 +183,6 @@ export class ProjectDetailComponent implements OnInit {
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
           this.groupedTasks = this.groupTasksBySection(this.projectTasks);
         });
-        this.loadProjectMembers();
-        this.loadAddableUsers();
         this.spinner.hide();
       });
     }
@@ -199,7 +198,18 @@ export class ProjectDetailComponent implements OnInit {
   loadAddableUsers(){
     this.myProjectsService.GetAddableUsers(this.project.id).subscribe((users: any[]) => {
       this.addableUsers = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
-      //this.loadPicture(this.addableUsers)
+    });
+  }
+
+  loadAvailableAssigness(){
+    this.myProjectsService.getAvailableAssigness(this.project.id).subscribe({
+      next: response => {
+        this.availableAssigness = response,
+        this.availableAssigness.forEach((assigne: any) => {
+          assigne.fullName = assigne.firstName + ' ' + assigne.lastName;
+        });
+      },
+      error: error => console.log(error)
     });
   }
 
@@ -305,6 +315,8 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   openMemberManagment(modal: TemplateRef<void>){
+    this.loadProjectMembers();
+    this.loadAddableUsers();
     this.modalRef = this.modalService.show(
       modal,
       {
@@ -561,6 +573,7 @@ export class ProjectDetailComponent implements OnInit {
 
   openNewTaskModal(modal: TemplateRef<void>) {
     this.buttonClicked=false;
+    this.loadAvailableAssigness();
     if (this.currentProjectId !== null)
     {
       this.getProjectsUsersAndSections(this.currentProjectId);

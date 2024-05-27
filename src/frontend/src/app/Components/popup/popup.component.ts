@@ -393,7 +393,7 @@ export class PopupComponent {
     }
   }
   getProjectsUsers(currentProjectId: any) {
-    this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
+    this.myProjectsService.getAvailableAssigness(currentProjectId).subscribe({
       next: response => {
         this.users = response,
         this.users.forEach(user => {

@@ -559,6 +559,23 @@ namespace backend.Controllers
             return user.ProjectRole;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
+        [HttpGet("GetAvailableAssigness/{projectId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAvailableAssigness(int projectId)
+        {
+            var users = await _context.Users
+            .Where(user => _context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId && member.ProjectRole != ProjectRole.Guest) && user.Role != UserRole.Admin)
+            .Select(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl })
+            .ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound("No users found for the given project ID.");
+            }
+
+            return Ok(users);
+        }
+
         public async Task<bool> RoleCheck(int projectId, List<ProjectRole> roles)
         {
             string authHeader = HttpContext.Request.Headers["Authorization"];
