@@ -901,7 +901,7 @@ input.is-invalid:focus{
     fill: #a64266 !important;
     cursor: pointer !important;
 }
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 659px) {
     .button-selectors {
         display: flex;
         flex-direction: column;
@@ -938,9 +938,10 @@ input.is-invalid:focus{
         font-size: 20px !important;
     }
 }
-@media screen and (min-width:650px )and (max-width: 1400px) {
+@media screen and (min-width:660px )and (max-width: 1400px) {
     .button-selectors {
-        flex-direction: row;
+        display: flex;
+        flex-direction: column;
     }
     .btn-primary {
         margin: 10px !important;
@@ -948,5 +949,11 @@ input.is-invalid:focus{
     }
     .card-header {
         font-size: 20px !important;
+    }
+    .actionLinks {
+        margin-right: auto;
+    }
+    .viewButtons {
+        margin-right: auto;
     }
 }
