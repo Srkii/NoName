@@ -11,7 +11,6 @@ import { UpdateProject } from '../../Entities/UpdateProject';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { NewTask } from '../../Entities/NewTask';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { ProjectSection } from '../../Entities/ProjectSection';
@@ -316,7 +315,7 @@ export class ProjectDetailComponent implements OnInit {
     if (!(date instanceof Date)) {
       date = new Date(date);
     }
-    date.setHours(0, 0, 0, 0);
+    date.setHours(2, 0, 0, 0);
     return date;
   }
 

@@ -525,7 +525,7 @@
     color: #4b5563;
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
     font-weight: 600;
-    padding: 0.3rem;
+    padding: 0.3rem; /* dodato tico */
   }
   .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year:enabled:hover,
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month:enabled:hover {
@@ -4591,23 +4591,23 @@
   }
 
   .p-tooltip .p-tooltip-text {
-    background: #696cff;
+    background: var(--normal-purple);
     color: #ffffff;
     padding: 0.75rem 0.75rem;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: var(--btn-shadow);
     border-radius: 6px;
   }
   .p-tooltip.p-tooltip-right .p-tooltip-arrow {
-    border-right-color: #696cff;
+    border-right-color: var(--normal-purple);
   }
   .p-tooltip.p-tooltip-left .p-tooltip-arrow {
-    border-left-color: #696cff;
+    border-left-color: var(--normal-purple);
   }
   .p-tooltip.p-tooltip-top .p-tooltip-arrow {
-    border-top-color: #696cff;
+    border-top-color: var(--normal-purple);
   }
   .p-tooltip.p-tooltip-bottom .p-tooltip-arrow {
-    border-bottom-color: #696cff;
+    border-bottom-color: var(--normal-purple);
   }
 
   .p-fileupload .p-fileupload-buttonbar {

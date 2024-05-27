@@ -179,6 +179,9 @@
     background-clip: border-box;
     background: rgb(247, 244, 244);
 }
+.card-header {
+    color: var(--kanban-status-text) !important;
+}
 .card-body {
     padding: 0px;
 }

@@ -472,15 +472,17 @@
 
   .p-datepicker {
     /* padding: 0.5rem; */  /* dodato tico */
-    background: var(--card-color);;
-    color: var(--text-color);
+    background: var(--card-color); /* dodato tico */
+    color: var(--text-color); /* dodato tico */
     border: 1px solid #424b57;
     border-radius: 6px;
+    box-shadow: var(--card-shadow); /* dodato tico */
   }
   .p-datepicker:not(.p-datepicker-inline) {
     background: var(--card-color);;
     border: 1px solid #424b57;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+    /* box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12); */
+    box-shadow: var(--card-shadow); /* dodato tico */
   }
   .p-datepicker:not(.p-datepicker-inline) .p-datepicker-header {
     background: var(--card-color);;
@@ -525,7 +527,7 @@
     color: var(--text-color);
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
     font-weight: 700;
-    padding: 0.5rem;
+    padding: 0.3rem; /* dodato tico */
   }
   .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year:enabled:hover,
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month:enabled:hover {
@@ -4597,23 +4599,23 @@
   }
 
   .p-tooltip .p-tooltip-text {
-    background: #424b57;
-    color: rgba(255, 255, 255, 0.87);
+    background: var(--normal-purple);
+    color: #ffffff;
     padding: 0.75rem 0.75rem;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: var(--btn-shadow);
     border-radius: 6px;
   }
   .p-tooltip.p-tooltip-right .p-tooltip-arrow {
-    border-right-color: #424b57;
+    border-right-color: var(--normal-purple);
   }
   .p-tooltip.p-tooltip-left .p-tooltip-arrow {
-    border-left-color: #424b57;
+    border-left-color: var(--normal-purple);
   }
   .p-tooltip.p-tooltip-top .p-tooltip-arrow {
-    border-top-color: #424b57;
+    border-top-color: var(--normal-purple);
   }
   .p-tooltip.p-tooltip-bottom .p-tooltip-arrow {
-    border-bottom-color: #424b57;
+    border-bottom-color: var(--normal-purple);
   }
 
   .p-fileupload .p-fileupload-buttonbar {

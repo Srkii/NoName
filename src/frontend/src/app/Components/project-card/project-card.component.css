@@ -4,7 +4,10 @@
 #container {
     position: relative;
 }
-  
+.form-label {
+    font-size: 16px !important;
+    text-transform: none !important;
+}
 .col-md-5 {
     position: absolute;
     top: 0%;
@@ -12,7 +15,9 @@
     transition: right 0.5s;
     z-index: 50;
 }
-
+.form-control {
+    color: var(--text-color) !important;
+}
 .project-header{
     display: flex;
     justify-content: space-between;
@@ -27,8 +32,11 @@
     cursor: pointer;
     color: #5f61e6;
 }
-
-input[type="date"]{
+.card-header {
+    background-color: var(--card-color) !important;
+    color: var(--text-color) !important;
+}
+/* input[type="date"]{
     display: block;
     width: 100%;
     padding: .4375rem .875rem;
@@ -42,7 +50,7 @@ input[type="date"]{
     border: var(--bs-border-width) solid #d9dee3;
     border-radius: var(--bs-border-radius);
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-}
+} */
 
 .desc{
     width: 100%;
