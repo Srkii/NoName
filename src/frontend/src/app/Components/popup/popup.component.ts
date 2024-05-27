@@ -269,6 +269,7 @@ export class PopupComponent {
         {
           pop.style.height="100%";
           pop.style.width="90%";
+
         }
       else
       {
