@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
   };
   confirmPassword: string = '';
 
-  regexName: RegExp = /^[A-Za-z]{2,}$/;
+  regexName: RegExp = /^[A-Za-zĀ-ž]{2,}$/;
   buttonClicked: boolean = false;
 
   constructor(
@@ -42,22 +42,18 @@ export class RegisterComponent implements OnInit {
 
   GetEmailByToken(token: string | null): void {
     if (!token && token == undefined) {
-      console.error('Token is missing');
       return;
     }
 
     this.registerService.getEmailByToken(token).subscribe({
       next: (response: any) => {
         const email = response?.email;
-        if (email) {
+        if (email) 
+        {
           this.newUser.Email = email;
-        } else {
-          console.error('Email not found in response');
-        }
+        } 
       },
-      error: (error) => {
-        console.error('Error fetching email:', error);
-      },
+      error: () => {},
     });
   }
 
@@ -66,6 +62,13 @@ export class RegisterComponent implements OnInit {
     
     if (!this.checkFirstName() || !this.checkLastName() || !this.checkPassword() || !this.passwordMatch())
       return;
+
+    console.log(this.newUser.Email)
+    if(!this.token || this.newUser.Email == '')
+    {
+      this.toastr.error("Unvalid token provided");
+      return
+    }
 
     this.newUser.Token = this.token;
 
@@ -76,8 +79,8 @@ export class RegisterComponent implements OnInit {
         localStorage.setItem('role', response.role);
         this.router.navigate(['/mytasks']);
       },
-      error: () => {
-        this.toastr.error('Unsuccessful registration');
+      error: (error) => {
+        this.toastr.error(error.error.message);
       },
     });
   }

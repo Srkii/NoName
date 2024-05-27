@@ -31,10 +31,10 @@ namespace backend.Controllers
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {   
             if(!await IsValidTokenAsync(registerDto.Token))
-                return BadRequest("Token is not valid");
+                return BadRequest(new {message = "Unvalid request token"});
 
             if(await EmailExists(registerDto.Email))
-                return BadRequest("E-mail is already in use.");
+                return BadRequest(new {message = "E-mail is already in use."});
 
             var hmac = new HMACSHA512();
 

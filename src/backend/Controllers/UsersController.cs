@@ -149,7 +149,7 @@ namespace backend.Controllers
     [HttpGet("token/{token}")] // /api/users/token
     public async Task<ActionResult<InvitationDto>> GetEmail(string token)
     {
-      var invitation = await _context.Invitations.FirstOrDefaultAsync(i => i.Token == token && i.IsUsed == false && i.ExpirationDate >= DateTime.UtcNow);
+      var invitation = await _context.Invitations.FirstOrDefaultAsync(i => i.Token == token);
 
       if (invitation == null)
       {
