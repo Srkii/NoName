@@ -244,3 +244,11 @@ h5 {
   flex-direction: row;
   border-top: none !important;
 }
+
+.is_invalid{
+  border-color: red !important;
+}
+
+.is-invalid:hover, .is-invalid:focus, .is-invalid:active{
+  border-color: red !important;
+}
