@@ -405,7 +405,8 @@ export class PopupComponent {
     this.myProjectsService.getAvailableAssigness(currentProjectId).subscribe({
       next: response => {
         this.users = response,
-        this.users.forEach(user => {
+        this.users.forEach((user: any) => {
+          user.appUserId=user.id;
           user.fullName = user.firstName + ' ' + user.lastName;
         });
       },
@@ -421,9 +422,9 @@ export class PopupComponent {
       projectId: this.selectedProject.id,
       appUserId: this.selectedUser?.appUserId,
       dueDate: task.endDate,
-      projectEndDate: new Date(task.project.endDate),
       sectionId: this.selectedSection ? this.selectedSection.id : 0
     };
+    console.log(dto);
 
       this.myTasksService.changeTaskInfo(dto).subscribe({
         next: (updatedTask: ProjectTask) => {
