@@ -1,34 +1,16 @@
-// @use '../node_modules/@worktile/gantt/styles/index.scss';
-// @use '../node_modules/@worktile/gantt/styles/variables.scss';
-// @use '../node_modules/@worktile/gantt/gantt.component.scss';
-// @use '../node_modules/@worktile/gantt/components/table/gantt-table.scss';
-// @use '../node_modules/@worktile/gantt/components/calendar/calendar.scss';
-// @use '../node_modules/@worktile/gantt/components/drag-backdrop/drag-backdrop.component.scss';
-// @use '../node_modules/@worktile/gantt/components/bar/bar.component.scss';
-// @use '../node_modules/@worktile/gantt/components/range/range.component.scss';
-// @use '../node_modules/@worktile/gantt/components/icon/icon.component.scss';
-// @use '../node_modules/@worktile/gantt/components/links/links.component.scss';
-// @use '../node_modules/@worktile/gantt/components/baseline/baseline.component.scss';
-// @use '../node_modules/@worktile/gantt/components/toolbar/toolbar.component.scss';
-// @use '../node_modules/@worktile/gantt/components/loader/loader.component.scss';
-
 @use 'sass:math';
 
-//boje
-
-
-
 // basic
-$gantt-color: #333 !default;
+$gantt-color: var(--text-color) !default;
 $gantt-primary-color: #6698ff !default;
 $gantt-header-height: 44px !default;
-$gantt-border-color: #eee !default;
-$gantt-bg-color: #fff !default;
+$gantt-border-color: var(--table-border-color)!default;
+$gantt-bg-color: var(--card-color) !default;
 $gantt-side-shadow: 12px 0 16px -10px rgba(0, 0, 0, 0.15) !default;
 $gantt-container-background-color: #fafafa !default;
 $gantt-item-height: 44px !default;
 $gantt-group-background-color: rgba(
-  $color: #f3f3f3,
+  $color: var(--text-color),
   $alpha: 0.5
 ) !default;
 $gantt-group-height: 44px !default;
@@ -49,7 +31,7 @@ $gantt-date-today-color: #ff9f73 !default;
 $gantt-date-today-text-color: #fff !default;
 
 // bar
-$gantt-bar-bg: #fff !default;
+$gantt-bar-bg: var(--card-color) !default;
 $gantt-bar-layer-bg: #fff !default;
 $gantt-bar-handle-color: #cacaca !default;
 $gantt-bar-handle-height: 12px !default;
@@ -1091,7 +1073,7 @@ $gantt-bar-link-drop-border: 5px;
       padding: 0 15px;
       cursor: pointer;
       flex: 0 1 auto;
-      border: 1px solid #ddd;
+      border: 1px solid var(--table-color);
       margin-left: -1px;
       position: relative;
       background-color: #ffffff;

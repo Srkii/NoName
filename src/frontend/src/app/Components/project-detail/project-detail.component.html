@@ -77,6 +77,7 @@
           </div>
           <div class="filter">
             <p-calendar
+              [style]="{'width':'100%'}"
               [hideOnDateTimeSelect]="false"
               (onSelect)="filterTasks()"
               (onClearClick)="filterTasks()"
@@ -209,7 +210,6 @@
               <div class="sPrimeNg" style="width: 130px !important;">
                 <p-calendar
                 *ngIf="userRole == 0 || userRole == 1"
-                [style]="{'width':'130px'}"
                 [(ngModel)]="update.endDate"
                 inputId="endDate"
                 name="endDate"
