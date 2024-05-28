@@ -116,11 +116,11 @@ export class NavComponent implements OnInit {
   }
 
   setActiveOption(option: string) {
-    if (option === '') {
-      sessionStorage.removeItem('selectedOption');
-    } else {
+    // if (option === '') {
+    //   sessionStorage.removeItem('selectedOption');
+    // } else {
       sessionStorage.setItem('selectedOption', option);
-    }
+    //}
   }
 
 }

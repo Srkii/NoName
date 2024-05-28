@@ -433,8 +433,7 @@ export class AdminComponent implements OnInit{
     clickOutside(event: MouseEvent) {
       const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
       if (!clickedInside && this.selectedRolee!='') {
-        // Click was outside the .clickable-div and the filter is active
-        event.stopPropagation(); // This prevents other click events from executing
+        event.stopPropagation(); 
       }
     }
 
