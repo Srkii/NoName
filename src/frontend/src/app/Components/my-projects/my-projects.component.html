@@ -2,8 +2,8 @@
 <app-project-card class="proj_card" *ngIf="showProjectCard" (closeCard)="handleCloseCard()" (refreshNeeded)="ngOnInit()"></app-project-card>
 <div class="container-xxl">
   <div id="all">
-    <div class="header">
-      <h5>All Projects</h5>
+    <div class="project-heading flex-container">
+      <span class="header">All Projects</span>
       <div class="d-flex justify-content-end page-size-container">
         <select class="page_size" (change)="changePageSize($event)">
           <option value="" hidden selected>Select page size</option>
@@ -42,8 +42,11 @@
           [firstDayOfWeek]="1"></p-calendar>
       </div>
     </div>
-    <div class="tTable">
-      <table>
+    <!-- <div class="table-responsive text-nowrap">
+      <table class="table">
+        <thead> -->
+    <div class="table-responsive text-nowrap">
+      <table>    
         <tr style="font-size: 16px !important;">
           <th style="width: 20% !important;">Project Name
             <svg
@@ -124,10 +127,11 @@
           </svg>
           </th>
         </tr>
+      <!-- </thead> -->
         <tr  *ngFor="let project of projects">
           <ng-container>
             <td class="project-name" (click)="goToProject(project.id)">{{ project.projectName }}</td>
-            <td *ngIf="!projectOwners[project.id]" class="mx-1">
+            <td *ngIf="!projectOwners[project.id]" class="mx-1 pOwners">
               <span class="d-flex align-items-center mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
@@ -135,7 +139,7 @@
                 </svg>Not assigned
               </span>
             </td>
-            <td *ngIf="this.projectOwners && this.projectOwners[project.id]">
+            <td *ngIf="this.projectOwners && this.projectOwners[project.id]" class="pOwners">
               <span *ngIf="projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
                 <img class="avatar rounded-circle shadow-4-strong mx-1" height="25" width="25" [src]="uploadservice.getImage(projectOwners[project.id]?.profilePicUrl ?? '')">
                 {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
