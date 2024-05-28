@@ -78,7 +78,6 @@
           <div class="filter">
             <p-calendar
               [hideOnDateTimeSelect]="false"
-              [style]="{'width':'100%'}"
               (onSelect)="filterTasks()"
               (onClearClick)="filterTasks()"
               placeholder="Filter by Date Range"
@@ -175,7 +174,7 @@
 
 <ng-template #projectInfo>
   <div class="modal-container InfoModal">
-    <div class="modal-header" style="background-color: white;border-bottom: none;">
+    <div class="modal-header modalHeadProjDetails">
       <div class="input-group-text editName">
         <h6 *ngIf="userRole==2 || userRole==3 || userRole==4"  class="projectName">{{ update.projectName }}</h6>
         <input class="form-control titleInp" id="projectName" [(ngModel)]="update.projectName" (blur)="updateProject()" *ngIf="userRole==0 || userRole==1">
@@ -541,7 +540,7 @@
             <span>Name</span>
             <span style="text-align: right;">Delete section</span>
           </div>
-          <div class="scroll">
+          <div class="scroll manageSectionScroll">
             <table class="table table-sm SectionTable">
               <tbody>
                 <tr *ngFor="let section of filteredSections">

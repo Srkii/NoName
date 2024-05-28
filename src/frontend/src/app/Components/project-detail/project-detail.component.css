@@ -276,7 +276,7 @@ thead th{
 }
 .titleInp{
     font-size: 18px !important;
-    font-weight: bold !important;
+    /* font-weight: bold !important; */
     color: #697a8d;
     width: 70% !important;
     border-radius: 0% !important;
@@ -329,27 +329,32 @@ select:disabled {
     padding:0;
 }
 .area-desc{
-    color: #697a8d;
+    color: var(--text-color);
     width: 100% !important;
     height: 15rem !important;
-    border: 1px solid transparent;
+    border: 1px solid var(--table-border-color) !important;
     border-radius: 0.375rem !important;
-    border-color: #dcdbdb;
+    /* border-color: var(--table-border-color); */
     overflow: hidden;
+    /* border-collapse: collapse !important; */
 }
 .area-desc .ql-editor{
     font-family: 'Public Sans', sans-serif !important;
 }
+.ql-toolbar.ql-snow {
+    border: none !important;
+    /* border-collapse: collapse !important; */
+}
 .info label{
-    font-weight: 600;
-    color: #676f79;
+    font-weight: 500;
+    color: var(--text-color);
     margin-right: 0.5rem;
 }
 .info dl{
     justify-content: center;
 }
 .description h5{
-    color: black;
+    color: var(--text-color) !important;
     margin-bottom: 0.2rem;
 }
 .COMPLETED{
@@ -390,13 +395,16 @@ select:disabled {
 }
 
 /* Member Managment */
-
+.modalHeadProjDetails {
+    border-bottom: none !important;
+}
 .modal-header h4{
-    color: black;
+    color: var(--text-color) !important;
     margin-bottom: 0.3125rem;
+    
 }
 .btn-close{
-    color: #676f79;
+    color: var(--text-color) !important;
     box-shadow: none;
 }
 .new-item {
@@ -442,7 +450,7 @@ select:disabled {
 .members h5{
     font-weight: 400;
     padding-bottom: 0.2rem;
-    color: #212529;  
+    color: var(--text-color);
 }
 .search{
     border-radius: 0%;
@@ -484,7 +492,7 @@ select:disabled {
 .addmembers h5{
     font-weight: 400;
     padding-bottom: 0.2rem;
-    color: #212529;
+    color: var(--text-color) !important;
 }
 .t2{
     border-left: 1px solid inherit;
@@ -493,18 +501,18 @@ select:disabled {
 .t2 td{
     width: 9rem;
     vertical-align: bottom;
-    color: #676f79;
+    color: var(--text-color);
 }
 .t2 tr td:first-child{
     width: 11rem !important;
 }
 .t2 .isPM{
     font-size: smaller;
-    color: #697a8d;
+    color: var(--text-color);
     padding-right: 0.3rem;
 }
 .tableHeaders{
-    color: #676f79;
+    color: var(--text-color);
     font-weight: 500;
     font-size: 18px;
     margin-top: 0.6rem;
@@ -536,7 +544,7 @@ select:disabled {
 .ng-value-label{
     vertical-align: middle;
     font-family: 'Public Sans', sans-serif;
-    color: #697a8d;
+    color: var(--text-color) !important;
 }
 .ng-value-label img, .ng-value-label ngx-avatars{
     margin-right: 0.2rem !important;
@@ -545,7 +553,7 @@ select:disabled {
     display: flex;
     justify-content: space-between;
     font-family: 'Public Sans', sans-serif;
-    color: #697a8d;
+    color: var(--text-color);
 }
 .ng-value-container{
     display: inline-flex !important;
@@ -715,13 +723,19 @@ select:disabled {
 .addSection:focus{color: white !important;}
 .addSection:hover{background-color: #5f61e6;}
 .SectionTable td {
-    color: #676f79;
+    color: var(--text-color) !important;
     font-weight: 500;
     line-height: 20px;
 }
-.createSection h5{color: black;}
-.tProjectSection h5{color: black;}
-.heading{color: black;}
+.createSection h5 {
+    color: var(--text-color) !important;
+}
+.tProjectSection h5 {
+    color: var(--text-color) !important;
+}
+.heading {
+    color: var(--text-color) !important;
+}
 
 .noSections{
     text-align: center;
@@ -794,23 +808,43 @@ input.is-invalid:focus{
 }
 
 .manageMemberScroll::-webkit-scrollbar {
-    background-color: #ffffff;
+    background-color: var(--card-color);
     width: 16px;
 }
 
 .manageMemberScroll::-webkit-scrollbar-track {
-    background-color: #ffffff;
+    background-color: var(--card-color);
 }
 
 .manageMemberScroll::-webkit-scrollbar-thumb {
-    background-color: #babac0;
+    background-color: var(--scroll-color);
     border-radius: 16px;
-    border: 4px solid #ffffff;
+    border: 4px solid var(--card-color);
 }
 
 .manageMemberScroll::-webkit-scrollbar-button {
     display:none;
 }
+.manageSectionScroll::-webkit-scrollbar {
+    background-color: var(--card-color);
+    width: 16px;
+}
+
+.manageSectionScroll::-webkit-scrollbar-track {
+    background-color: var(--card-color);
+}
+
+.manageSectionScroll::-webkit-scrollbar-thumb {
+    background-color: var(--scroll-color);
+    border-radius: 16px;
+    border: 4px solid var(--card-color);
+}
+
+.manageSectionScroll::-webkit-scrollbar-button {
+    display:none;
+}
+
+
 
 .archIcon:hover {
     cursor: pointer;
@@ -860,7 +894,9 @@ input.is-invalid:focus{
     display: flex;
     align-items: center;
 }
-
+.input-group-text {
+    background-color: var(--card-color) !important;
+}
 .filter input,
 .filter select,
 .filter p-calendar
@@ -904,6 +940,9 @@ input.is-invalid:focus{
 }
 .form-select:focus{
     box-shadow: none !important;
+}
+.tNoBoxShadow {
+    border-radius: 0.375rem !important;
 }
 .tNoBoxShadow:focus,
 .tNoBoxShadow:hover {

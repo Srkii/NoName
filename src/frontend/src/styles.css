@@ -36,6 +36,7 @@ body {
   --action-active-background: #d7d7f8;
   --action-active-color: #696cff;
   --kanban-task-background: #e7e7ff;
+  --scroll-color: #babac0;
 }
 
 [data-theme="dark"] {
@@ -70,6 +71,7 @@ body {
   --action-active-background: #697a8d;
   --action-active-color: #fff;
   --kanban-task-background: #3b3d58;
+  --scroll-color: #a7a7b8;
 }
 
 .form-label {
@@ -216,41 +218,114 @@ input {
 .hide-toolbar .ql-toolbar  {
   display: none;
 }
+.ql-snow.ql-toolbar button.ql .ql-fill,
+.ql-snow.ql-toolbar button .ql-fill 
+{
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+  stroke: var(--text-color) !important;
+  svg {
+    fill: var(--text-color) !important;
+  }
+}
 .ql-snow.ql-toolbar button.ql-active .ql-fill,
 .ql-snow.ql-toolbar button:hover .ql-fill
 {
-  fill: #696cff !important;
+  fill: var(--normal-purple) !important;
 }
 .ql-snow.ql-toolbar button.ql-active .ql-stroke,
 .ql-snow.ql-toolbar button:hover .ql-stroke,
 .ql-snow .ql-picker-label:hover .ql-stroke,
 .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke
 {
-  stroke: #696cff !important;
+  stroke: var(--normal-purple) !important;
 }
 .ql-snow.ql-toolbar .ql-picker-item.ql-selected,
 .ql-snow.ql-toolbar .ql-picker-label.ql-active,
 .ql-snow.ql-toolbar .ql-picker-label:hover,
 .ql-snow.ql-toolbar .ql-picker-item:hover{
-  color: #696cff !important;
+  color: var(--normal-purple) !important;
 }
 .area-desc .ql-toolbar.ql-snow {
-  border: none;
-  border-bottom: 1px solid #dcdbdb !important;
+  border: none !important;
+  border-bottom: 1px solid var(--table-border-color) !important;
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+  stroke: var(--text-color) !important;
+  svg {
+    fill: var(--text-color) !important;
+  }
+}
+.ql-toolbar {
+  border: 1px solid var(--table-border-color) !important;
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+  stroke: var(--text-color) !important;
+  svg {
+    fill: var(--text-color) !important;
+  }
+}
+line.ql-stroke,
+path.ql-stroke,
+span.ql-picker-label::after,
+span.ql-picker-label::before,
+span.ql-picker-label,
+polyline.ql-stroke,
+polygon.ql-stroke,
+line.ql-color-label.ql-stroke.ql-transparent,
+line.ql-color-label.ql-stroke,
+.ql-transparent {
+  stroke: var(--text-color) !important;
+  color: var(--text-color) !important;
+}
+.ql-picker-label {
+  border: none !important;
+}
+.ql-picker-options {
+  background-color: var(--card-color) !important;
+  color: var(--text-color) !important;
+  border-color: var(--table-border-color) !important;
+  border-radius: 0.375rem !important;
+}
+.ql-editor.ql-blank {
+  color: var(--text-color) !important;
 }
 .area-desc .ql-container.ql-snow {
   font-size: 16px !important;
   font-family: 'Public Sans', sans-serif !important;
   height: 12rem !important;
   border: none !important;
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+  stroke: var(--text-color) !important;
+  svg {
+    fill: var(--text-color) !important;
+  }
 }
+.ql-editor.ql-blank::before {
+  color: var(--text-color) !important;
+}
+
 .desc .ql-container.ql-snow{
   font-size: 16px !important;
   font-family: 'Public Sans', sans-serif !important;
   border-radius: 0 0 0.375rem 0.375rem !important;
+  border-color: var(--table-border-color) !important;
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+  stroke: var(--text-color) !important;
+  svg {
+    fill: var(--text-color) !important;
+  }
 }
 .desc .ql-toolbar.ql-snow {
   border-radius: 0.375rem 0.375rem 0 0 !important;
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+  stroke: var(--text-color) !important;
+  svg {
+    fill: var(--text-color) !important;
+  }
 }
 .is-invalid .ng-select .ng-select-container{
   border: none !important;
