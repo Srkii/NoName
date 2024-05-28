@@ -28,6 +28,10 @@ namespace backend.Controllers
         {
             if(!await RoleCheck(taskDto.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner, ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
+            
+            var project = await _context.Projects.FindAsync(taskDto.ProjectId);
+            if(taskDto.StartDate < DateTime.UtcNow.Date || taskDto.StartDate < project.StartDate || taskDto.EndDate > project.EndDate)
+                return ValidationProblem("Start and end date must be set within the project dates and can't be in past");
 
             var task = new ProjectTask
             {
@@ -51,7 +55,7 @@ namespace backend.Controllers
             await updateProgress(task.ProjectId);
             // ne obavestavamo sami sebe vise o kreaciji task-a
             if(taskDto.CreatorId!=taskDto.AppUserId){
-                await _notificationService.TriggerTaskNotification(task.Id,taskDto.CreatorId); 
+                await _notificationService.TriggerTaskNotification(task.Id); 
             }
             return Ok(task);
         }
@@ -188,16 +192,16 @@ namespace backend.Controllers
                 return NotFound("Status not found.");
             }
 
-            task.TskStatusId = status.Id;
 
+            task.TskStatusId = status.Id;
             await _context.SaveChangesAsync();
             if(statusName.Equals("Archived")){
-                _notificationService.ArchiveRelatedTaskNotifications(taskId);
+                _notificationService.ArchiveRelatedTaskNotifications(task.Id);
             }else if(wasArchived){
-                _notificationService.DeArchiveRelatedTaskNotifications(taskId);
+                _notificationService.DeArchiveRelatedTaskNotifications(task.Id);
             }
-            if(statusName.Equals("InReview")){
-                await _notificationService.notifyTaskCompleted(taskId);
+            else if(statusName.Equals("InReview")){
+                await _notificationService.notifyTaskCompleted(task);
             }   
 
             // Now, after saving changes, fetch the updated task again
@@ -236,18 +240,27 @@ namespace backend.Controllers
             
             if(task.StartDate > dto.DueDate)
                 return BadRequest("Start date must be <= end date");
+            
+            if(dto.DueDate > dto.ProjectEndDate)
+                return BadRequest("Task end date cant be set after project end date");
 
             if(!await RoleCheck(task.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner,ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
-            
+            Boolean userChanged = false;
             if (dto.TaskName != null) task.TaskName = dto.TaskName;
             if (dto.Description != null && dto.Description != "") task.Description = dto.Description;
             if (dto.DueDate != null) task.EndDate = (DateTime)dto.DueDate;
             if (dto.ProjectId != 0) task.ProjectId = dto.ProjectId;
-            if (dto.AppUserId != 0) task.AppUserId = dto.AppUserId;
+            if (dto.AppUserId != 0)
+            {   
+                task.AppUserId = dto.AppUserId;
+                userChanged = true;
+            }
             if (dto.SectionId != 0) task.ProjectSectionId=dto.SectionId;
             if (dto.SectionId == 0) task.ProjectSectionId=null;    
-
+            if(userChanged){
+                await _notificationService.TriggerTaskNotification(task.Id);
+            }
             await _context.SaveChangesAsync();
 
             return task;
@@ -376,11 +389,15 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        [Authorize(Roles = "ProjectManager,Member")]
+        // [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("ByProject/{projectId}")]
-        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId)
+       public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId, string sortedColumn = null, int sortedOrder = 0,  string searchText = null,string taskStatus = null,DateTime? startDate = null,DateTime? endDate = null)
         {
-            var tasks = await _context.ProjectTasks
+            var query = _context.ProjectTasks
+                .Include(task => task.TskStatus)
+                .Include(task => task.ProjectSection)
+                .Include(task => task.AppUser)
+                .Where(t => t.ProjectId == projectId)
                 .Select(task => new
                 {
                     task.Id,
@@ -389,16 +406,66 @@ namespace backend.Controllers
                     task.StartDate,
                     task.EndDate,
                     task.ProjectId,
-                    task.TskStatus.StatusName,
+                    StatusName = task.TskStatus.StatusName,
                     task.TskStatus.Color,
-                    task.ProjectSection.SectionName,
-                    task.AppUser.FirstName,
-                    task.AppUser.LastName,
+                    SectionName = task.ProjectSection.SectionName,
+                    FirstName = task.AppUser.FirstName,
+                    LastName = task.AppUser.LastName,
                     task.AppUser.ProfilePicUrl,
                     task.ProjectSectionId
-                })
-                .Where(t => t.ProjectId == projectId)
-                .ToListAsync();
+                }).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                query = query.Where(p =>
+                    EF.Functions.Like(p.TaskName.ToLower(), $"%{searchText.ToLower()}%") ||
+                    EF.Functions.Like(p.FirstName + " " + p.LastName, $"%{searchText.ToLower()}%")
+                );
+            }
+
+            if (taskStatus != null)
+            {
+                if(taskStatus!="All")
+                    query = query.Where(p => p.StatusName == taskStatus);
+            }
+
+
+            if(startDate.HasValue && !endDate.HasValue)
+            {
+                query = query.Where(p => p.StartDate == startDate);
+            }
+            if(!startDate.HasValue && endDate.HasValue)
+            {
+                query = query.Where(p => p.EndDate == endDate);
+            }
+           if (startDate.HasValue && endDate.HasValue)
+            {
+                query = query.Where(p => p.StartDate >= startDate && p.EndDate <= endDate);
+            }
+
+            if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+            {
+                switch (sortedColumn)
+                {
+                    case "TaskName":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.TaskName) : query.OrderByDescending(x => x.TaskName);
+                        break;
+                    case "StartDate":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.StartDate) : query.OrderByDescending(x => x.StartDate);
+                        break;
+                    case "EndDate":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.EndDate) : query.OrderByDescending(x => x.EndDate);
+                        break;
+                    case "StatusName":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.StatusName) : query.OrderByDescending(x => x.StatusName);
+                        break;
+                    case "Assignee":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.FirstName+" "+x.LastName) : query.OrderByDescending(x => x.FirstName+" "+x.LastName);
+                        break;
+                }
+            }
+
+            var tasks = await query.ToListAsync();
             return Ok(tasks);
         }
 
@@ -558,42 +625,59 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("user/{userId}/count1/{count}")]
-        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetNewTasksByUserId(int userId, int count)
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetNewTasksByUserId(int userId, int count,string sortedColumn = null, int sortedOrder = 0)
         {
-            var tasks = await _context.ProjectTasks
-                .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
-                && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived" && !task.IsOriginProjectArchived)
-                .Take(count)
-                .OrderByDescending(task => task.DateCreated) // Order by DateCreated in descending order
-                .Select(task => new
-                {
-                    task.Id,
-                    task.TaskName,
-                    task.Description,
-                    task.StartDate,
-                    task.EndDate,
-                    task.ProjectId,
-                    task.TskStatus.StatusName,
-                    task.TskStatus.Color,
-                    task.ProjectSection.SectionName,
-                    task.Project,
-                    AppUser = _context.Users.FirstOrDefault(u => u.Id == task.AppUserId),
-                    ProjectRole = _context.ProjectMembers
-                        .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
-                        .Select(member => member.ProjectRole)
-                        .FirstOrDefault()
-                })
-                .ToListAsync();
+             var query = _context.ProjectTasks
+        .Where(task => task.AppUserId == userId && task.TskStatusId == task.TskStatus.Id && task.TskStatus.StatusName != "InReview"
+                       && task.TskStatus.StatusName != "Completed" && task.TskStatus.StatusName != "Archived" && !task.IsOriginProjectArchived)
+        .Take(count)
+        .OrderByDescending(task => task.DateCreated) // Order by DateCreated in descending order initially
+        .Select(task => new
+        {
+            task.Id,
+            task.TaskName,
+            task.Description,
+            task.StartDate,
+            task.EndDate,
+            task.ProjectId,
+            task.TskStatus.StatusName,
+            task.TskStatus.Color,
+            task.ProjectSection.SectionName,
+            task.Project,
+            ProjectRole = _context.ProjectMembers
+                .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
+                .Select(member => member.ProjectRole)
+                .FirstOrDefault()
+            });
             
-
+            if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+            {
+                switch (sortedColumn)
+                {
+                    case "TaskName":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.TaskName) : query.OrderByDescending(x => x.TaskName);
+                        break;
+                    case "DueDate":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.EndDate) : query.OrderByDescending(x => x.EndDate);
+                        break;
+                    case "SectionName":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.SectionName) : query.OrderByDescending(x => x.SectionName);
+                        break;
+                    case "OriginProject":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.Project.ProjectName) : query.OrderByDescending(x => x.Project.ProjectName);
+                        break;
+                }
+            }
+            
+            var tasks = await query.ToListAsync();
             return Ok(tasks);
         }
 
         [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("user/{userId}/count2/{count}")]
-        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetSoonTasksByUserId(int userId, int count)
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetSoonTasksByUserId(int userId, int count,string sortedColumn = null, int sortedOrder = 0)
         {
-            var tasks = await _context.ProjectTasks
+            var query = _context.ProjectTasks
                 .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName!="InReview" 
                 && task.TskStatus.StatusName!="Completed" && task.TskStatus.StatusName!="Archived" && !task.IsOriginProjectArchived)
                 .Take(count)
@@ -615,18 +699,37 @@ namespace backend.Controllers
                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                         .Select(member => member.ProjectRole)
                         .FirstOrDefault()
-                })
-                .ToListAsync();
+                });
             
 
+            if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+            {
+                switch (sortedColumn)
+                {
+                    case "TaskName":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.TaskName) : query.OrderByDescending(x => x.TaskName);
+                        break;
+                    case "DueDate":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.EndDate) : query.OrderByDescending(x => x.EndDate);
+                        break;
+                    case "SectionName":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.SectionName) : query.OrderByDescending(x => x.SectionName);
+                        break;
+                    case "OriginProject":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.Project.ProjectName) : query.OrderByDescending(x => x.Project.ProjectName);
+                        break;
+                }
+            }
+            
+            var tasks = await query.ToListAsync();
             return Ok(tasks);
         }
 
         [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("user/{userId}/count3/{count}")]
-        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetClosedTasksByUserId(int userId, int count)
+        public async Task<ActionResult<IEnumerable<ProjectTask>>> GetClosedTasksByUserId(int userId, int count,string sortedColumn = null, int sortedOrder = 0)
         {
-            var tasks = await _context.ProjectTasks
+            var query = _context.ProjectTasks
                 .Where(task => task.AppUserId == userId && task.TskStatusId==task.TskStatus.Id && task.TskStatus.StatusName=="InReview" && !task.IsOriginProjectArchived)
                 .Take(count)
                 .Select(task => new
@@ -646,10 +749,28 @@ namespace backend.Controllers
                         .Where(member => member.AppUserId == userId && member.ProjectId == task.ProjectId)
                         .Select(member => member.ProjectRole)
                         .FirstOrDefault()
-                })
-                .ToListAsync();
-            
+                });
 
+            if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+            {
+                switch (sortedColumn)
+                {
+                    case "TaskName":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.TaskName) : query.OrderByDescending(x => x.TaskName);
+                        break;
+                    case "DueDate":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.EndDate) : query.OrderByDescending(x => x.EndDate);
+                        break;
+                    case "SectionName":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.SectionName) : query.OrderByDescending(x => x.SectionName);
+                        break;
+                    case "OriginProject":
+                        query = sortedOrder == 1 ? query.OrderBy(x => x.Project.ProjectName) : query.OrderByDescending(x => x.Project.ProjectName);
+                        break;
+                }
+            }
+            
+            var tasks = await query.ToListAsync();
             return Ok(tasks);
         }
 

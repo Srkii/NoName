@@ -10,16 +10,16 @@
 .badge-dot {
   height: 10px;
   width: 10px;
-  background-color: #bbb; /* Default color */
+  background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
 }
 .badge-dot.unread {
-  background-color: #696cff; /* Red color for unread notifications */
+  background-color: #696cff;
 }
 
 .badge-dot {
-  background-color: transparent; /* Green color for read notifications */
+  background-color: transparent;
 }
 .flex-shrink-0 {
   display: flex;
@@ -121,8 +121,14 @@ img{
 }
 
 .last_td{
-  width: 35px;
-  height: 20px;
+  padding: 0;
+  margin: 0;
+  text-align: end;
+  width: 30px;
+  height: 30px;
+}
+.datetd{
+  text-align: end;
 }
 @media screen and (max-width: 649px){
   .dropdown-menu-end[data-bs-popper] {

@@ -18,7 +18,8 @@
                     <label class="form-label" for="password">Password</label>
                 </div>
                     <div class="input-group input-group-merge">
-                      <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newRequest.NewPassword" placeholder="New Password"/>
+                      <input type="password" id="form3Example4" class="form-control" name="password" [(ngModel)]="newRequest.NewPassword" [ngClass]="{'is-invalid': buttonClicked && invalidPassword && newRequest.NewPassword.length<5}" placeholder="New Password"/>
+                      <div class="invalid" *ngIf="buttonClicked && invalidPassword && newRequest.NewPassword.length<5">Password must be at least 5 characters</div>
                     </div>
                 </div>
                 <div class="mb-3 form-password-toggle">
@@ -34,7 +35,7 @@
                 </div>
                 <!-- Submit button -->
                 <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="!passwordMatch()">Reset Password</button>
+                  <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="!passwordMatch() || !newRequest.NewPassword">Reset Password</button>
                 </div>
               </form>
             </div>

@@ -38,7 +38,7 @@
                   ></p-calendar>
                 </div>
                 <div *ngIf="buttonClicked && !newProject.StartDate" class="invalid">Please enter start date.</div>
-                <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
+                <div *ngIf="isInvalidDate()" class="invalid">Please check if the end date is set after the start date.</div>
               </div>
               <div class="mb-3">
                 <label for="EndDate" class="form-label">End Date</label>
@@ -48,16 +48,16 @@
                   [style]="{'width':'100%'}"
                   [(ngModel)]="newProject.EndDate"
                   inputId="endDate"
-                  name="endtDate"
+                  name="endDate"
                   [showButtonBar]="true"
                   [firstDayOfWeek]="1"
                   placeholder="End Date"          
                   dateFormat="MM dd, yy"
                   [minDate]="newProject.StartDate"
-                  [ngClass]="{'is-invalid': buttonClicked && !newProject.EndDate || isInvalidDate()}"></p-calendar>
+                  [ngClass]="{'ng-invalid': buttonClicked && !newProject.EndDate || isInvalidDate()}"></p-calendar>
                 </div>
                 <div *ngIf="buttonClicked && !newProject.EndDate" class="invalid">Please enter end date.</div>
-                <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
+                <div *ngIf="isInvalidDate()" class="invalid">Please check if the end date is set after the start date.</div>
               </div>
               <div class="mb-3" >
                 <label for="desc" class="form-label">Description</label>

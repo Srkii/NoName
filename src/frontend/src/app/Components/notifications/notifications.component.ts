@@ -24,6 +24,9 @@ export class NotificationsComponent {
   async getNotifications(){
     await this.notificationService.getNotifications();//ovde smanjim da uzima manje notifikacija, tipa da uzme 10 najskorijih neprocitanih notifikacija
     this.notification_list = this.notificationService.notifications;
+    this.notificationService.notifications.forEach((n:any) => {
+      n.timeAgo = this.notificationService.getTimeAgo(n.dateTime);
+    });
     // console.log(this.notification_list);
   }
   see_all_notifications(modal:TemplateRef<void>){
@@ -84,4 +87,9 @@ export class NotificationsComponent {
   getNotificationType(type:any):string{
     return this.notificationService.getNotificationType(type);
   }
+
+  getNotificationTimeAgo(notification: any): string {
+    return this.notificationService.getTimeAgo(notification.dateTime);
+  }
+
 }

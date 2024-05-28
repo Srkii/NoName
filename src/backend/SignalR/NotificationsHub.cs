@@ -55,16 +55,23 @@ namespace backend.SignalR
             var userId = Context.UserIdentifier;
 
             var notifications = await _context.Notifications
-            .Where(x=>x.reciever_id.ToString()==userId && x.originArchived == false)//samo one ciji origin nije archived
+            .Where(x=>x.reciever_id.ToString()==userId && x.originArchived == false && x.read == false)
             .OrderByDescending(x=>x.dateTime)
             .Select(notification => new NotificationDto
             {
                 Id = notification.Id,
-                Task = notification.Task,
-                Comment = notification.Comment,
-                Project = notification.Project,
-                Reciever = notification.Reciever,
-                Sender = notification.Sender,
+                Task = notification.Task!=null?new ProjectTaskDto{
+                        Id = notification.Task.Id,
+                        TaskName = notification.Task.TaskName,
+                        AppUserId = (int)notification.Task.AppUserId,
+                        ProjectId = (int)notification.Task.ProjectId,
+                        StartDate = notification.Task.StartDate,
+                        EndDate = notification.Task.EndDate   
+                }:null,
+                Comment = notification.Comment!=null?notification.Comment:null,
+                Project = notification.Project!=null?notification.Project:null,
+                Reciever = notification.Reciever!=null?notification.Reciever:null,
+                Sender = notification.Sender!=null?notification.Sender:null,
                 dateTime = notification.dateTime.AddHours(2),
                 Type = notification.Type,
                 read = notification.read
@@ -72,6 +79,35 @@ namespace backend.SignalR
             })
             .Take(10)
             .ToListAsync();
+
+            int count = notifications.Count;
+            
+            if(count<10){
+                var readnotifs = await _context.Notifications
+                    .Where(x=>x.reciever_id.ToString()==userId && x.originArchived == false && x.read == true)
+                    .OrderByDescending(x=>x.dateTime)
+                    .Select(notification => new NotificationDto{
+                        Id = notification.Id,
+                        Task = notification.Task!=null?new ProjectTaskDto{
+                            Id = notification.Task.Id,
+                            TaskName = notification.Task.TaskName,
+                            AppUserId = (int)notification.Task.AppUserId,
+                            ProjectId = (int)notification.Task.ProjectId,
+                            StartDate = notification.Task.StartDate,
+                            EndDate = notification.Task.EndDate   
+                        }:null,
+                        Comment = notification.Comment!=null?notification.Comment:null,
+                        Project = notification.Project!=null?notification.Project:null,
+                        Reciever = notification.Reciever!=null?notification.Reciever:null,
+                        Sender = notification.Sender!=null?notification.Sender:null,
+                        dateTime = notification.dateTime.AddHours(2),
+                        Type = notification.Type,
+                        read = notification.read
+                    })
+                    .Take(10-count)
+                    .ToListAsync();
+                notifications.AddRange(readnotifs);
+            }
             await Clients.Caller.recieveNotifications(notifications);
         }
         public async Task invokeGetAllNotifications(){
@@ -82,11 +118,18 @@ namespace backend.SignalR
             .OrderByDescending(x=>x.dateTime)
             .Select(notification => new NotificationDto{
                 Id = notification.Id,
-                Task = notification.Task,
-                Comment = notification.Comment,
-                Project = notification.Project,
-                Reciever = notification.Reciever,
-                Sender = notification.Sender,
+                Task = notification.Task!=null?new ProjectTaskDto{
+                        Id = notification.Task.Id,
+                        TaskName = notification.Task.TaskName,
+                        AppUserId = (int)notification.Task.AppUserId,
+                        ProjectId = (int)notification.Task.ProjectId,
+                        StartDate = notification.Task.StartDate,
+                        EndDate = notification.Task.EndDate   
+                }:null,
+                Comment = notification.Comment!=null?notification.Comment:null,
+                Project = notification.Project!=null?notification.Project:null,
+                Reciever = notification.Reciever!=null?notification.Reciever:null,
+                Sender = notification.Sender!=null?notification.Sender:null,
                 dateTime = notification.dateTime.AddHours(2),
                 Type = notification.Type,
                 read = notification.read

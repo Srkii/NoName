@@ -1,4 +1,4 @@
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import * as SignalR from '@microsoft/signalr';
 import { environment } from '../../environments/environment';
 import { ComponentRef, Injectable} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,7 @@ export class NotificationsService{
   hubUrl = environment.hubUrl;
   //flag koji dopusta izvlacenje novih notifikacija sa backenda -> ukoliko nema novih notifikacija user ne sme da ima pravo da spamuje requestove klikom na zvonce
   newNotifications:boolean = false;
-  private hubConnection?:HubConnection;
+  private hubConnection?:SignalR.HubConnection;
 
 
   notifications : Notification[] = [];
@@ -30,14 +30,14 @@ export class NotificationsService{
 
   createHubConnection(){
     var token = localStorage.getItem('token');
-    this.hubConnection = new HubConnectionBuilder()
+    this.hubConnection = new SignalR.HubConnectionBuilder()
 
       .withUrl(this.hubUrl+'notifications', {
         accessTokenFactory: () => token ? token : ''
       })
 
       .withAutomaticReconnect([0,3000,5000])
-
+      .configureLogging(SignalR.LogLevel.None)
       .build();
     this.hubConnection.start().catch(error =>{
       // console.log(error);
@@ -67,14 +67,13 @@ export class NotificationsService{
 
     this.hubConnection.on('recieveAllNotifications',(notifications:[Notification])=>{
       this.allNotifications = notifications;//pokupim sve u niz
-      console.log(this.allNotifications);
+      // console.log(this.allNotifications);
     })
   }
   stopHubConnection(){
     this.hubConnection?.stop().catch();
   }
   async getNotifications(){
-
     await this.hubConnection?.invoke('invokeGetNotifications');//top 10 najskorijih neprocitanih notif -> OD SADA SAMO NAJSKORIJE, U NOTIF TAB-U IZBACUJE SAD MALO DRUGACIJE..
 
   }
@@ -139,7 +138,7 @@ export class NotificationsService{
   }
 
   async follow_notif(event: MouseEvent, notification: any) {
-    console.log(notification);
+    // console.log(notification);
     this.read_notifications([notification.id]);
     if (notification.task != null) {
       event.stopPropagation();
@@ -180,6 +179,26 @@ export class NotificationsService{
   }
   public checkForNewNotifications() {
     this.newNotifications = this.notifications.some((notification: any) => !notification.read);
+  }
+
+  getTimeAgo(dateTime: Date): string {
+    const now = new Date();
+    const notificationDate = new Date(dateTime);
+    const diff = now.getTime() - notificationDate.getTime();
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+  
+    if (days > 0) {
+      return `${days} days ago`;
+    } else if (hours > 0) {
+      return `${hours} hours ago`;
+    } else if (minutes > 0) {
+      return `${minutes} minutes ago`;
+    } else {
+      return `${seconds} seconds ago`;
+    }
   }
 
 }

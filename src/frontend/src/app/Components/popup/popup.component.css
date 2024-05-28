@@ -8,6 +8,15 @@
   }
 
 }
+@media (max-width: 600px) {
+  .col-md-5{
+    width: calc(100% - 22px);
+  }
+  .full{
+    display: none;
+  }
+
+}
 
 .popupTaskName {
   font-size: 18px;
@@ -18,6 +27,11 @@
   padding-bottom: 5px;
   width: 70%;
   border-bottom: 1px solid #5f61e6;
+}
+
+.bi-x-lg:hover{
+  fill: #696cff;
+  transition: 0.5s ease-in-out;
 }
 
 .header {
@@ -150,6 +164,7 @@ img{
   overflow-y: auto;
 }
 .col-md-5 {
+  z-index: 100;
   background-color: #ffffff;
   padding: 15px;
   padding-top: 12px;
@@ -266,13 +281,12 @@ img{
   width: 100%;
 }
 .show_comment {
-  /* height: calc(var(--col-md-5-height) - var(--scroll-height)); */
-  /* height: 78%; */
+  height: calc(100% - 180px);
   overflow-y: auto;
 }
 
 .hide_comment{
-  height: 95%;
+  height: 93%;
   overflow-y: auto;
 }
 .no_comments{
@@ -426,7 +440,7 @@ img{
 }
 
 .mark.disabled {
-  opacity: 0.5; 
+  opacity: 0.5;
   background-color: red;
 }
 
@@ -536,7 +550,7 @@ img{
 
 .download-link
 {
-  padding-left: 3px; 
+  padding-left: 3px;
   padding-right: 3px;
   color: #696cff;
 }

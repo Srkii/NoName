@@ -25,7 +25,7 @@ namespace backend.Controllers
       _tokenService = ts;
     }
 
-    [Authorize(Roles = "Admin")] //skloni ovo ako hoces da radi samo ako ima token
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {
@@ -120,11 +120,28 @@ namespace backend.Controllers
       
       if(!VerifyPassword(user,data.CurrentPassword))
       {
-        return Unauthorized("Password is unvalid");
+        return BadRequest(new {message = "Wrong current password",type = 1});
       }
 
-      var hmac = new HMACSHA512();
-      user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
+      var hmac = new HMACSHA512(user.PasswordSalt);
+      var hashNewPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
+
+      var different = false;
+      for(int i=0;i<hashNewPassword.Length;i++)
+      {
+          if(user.PasswordHash[i] != hashNewPassword[i])
+          {
+              different = true;
+              break;
+          }
+      }
+
+      if(!different)
+      {
+        return BadRequest(new {message = "Your new password is the same as your previous.", type = 2});
+      }
+
+      user.PasswordHash = hashNewPassword;
       user.PasswordSalt = hmac.Key;
       await _context.SaveChangesAsync();
 

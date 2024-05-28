@@ -741,7 +741,6 @@ select:disabled {
     box-shadow: none;
     border-color: red !important;
 }
-
 .invalid {
     height: 0;
     overflow: visible;
@@ -763,7 +762,7 @@ input.is-invalid:focus{
     box-shadow: none;
 }
 .ng-select-wrapper.is-invalid{
-    outline:0.5px solid  red !important;
+    border: 1px solid  red !important;
     border-radius: 0.375rem;
 }
 
@@ -901,7 +900,26 @@ input.is-invalid:focus{
     fill: #a64266 !important;
     cursor: pointer !important;
 }
-@media screen and (max-width: 659px) {
+.sorted-asc {
+    transform: rotateX(0deg);
+    transition: transform 0.3s;
+    color: #5f61e6;
+  }
+  
+  .sorted-desc {
+    transform: rotateX(180deg);
+    transition: transform 0.3s;
+    color: #5f61e6;
+  }
+  
+  .unsorted {
+    transform: rotateX(0deg);
+    transition: transform 0.3s;
+    color: inherit;
+  }
+  
+
+  @media screen and (max-width: 659px) {
     .button-selectors {
         display: flex;
         flex-direction: column;

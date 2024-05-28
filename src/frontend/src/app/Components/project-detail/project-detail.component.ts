@@ -24,26 +24,6 @@ import { QuillConfigService } from '../../_services/quill-config.service';
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.css',
-  animations: [
-    trigger('popFromSide', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        }),
-        animate('300ms ease-out', style({
-          opacity: 1,
-          transform: 'translateX(0)',
-        })),
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        })),
-      ]),
-    ]),
-  ],
 })
 export class ProjectDetailComponent implements OnInit {
   project: Project | any;
@@ -74,6 +54,7 @@ export class ProjectDetailComponent implements OnInit {
   currentProjectId: number | null = null;
   users: TaskAssignee[] = [];
   selectedUser: TaskAssignee | undefined;
+  availableAssigness: any;
   selectedSection: ProjectSection | undefined;
   filterValue: string | undefined = '';
   @Output() taskAdded = new EventEmitter<boolean>();
@@ -93,6 +74,7 @@ export class ProjectDetailComponent implements OnInit {
   searchSection: string = '';
 
   today: Date = new Date();
+  projectEndDate: Date = new Date();
   userRole: ProjectRole | any;
 
 
@@ -100,14 +82,12 @@ export class ProjectDetailComponent implements OnInit {
   selectedStatus: string = '';
   searchText: string='';
 
-  sortOrderName: 'asc' | 'desc' = 'asc';
-  sortOrderAssignee: 'asc' | 'desc' = 'asc';
-  sortOrderStartDate: 'asc' | 'desc' = 'asc';
-  sortOrderEndDate: 'asc' | 'desc' = 'asc';
-  sortOrderStatus: 'asc' | 'desc' = 'asc';
-  sortField: keyof ProjectTask = 'taskName';
-
   allStatuses:any[]=[];
+
+  sortedColumn: string = '';
+  sortedOrder: number = 0; 
+
+  fetchingTaskId: number | null = null;
   
 
   constructor(
@@ -145,7 +125,7 @@ export class ProjectDetailComponent implements OnInit {
       this.getUsersProjectRole(+projectId, +userId);
     }
     this.shared.taskUpdated.subscribe(() => {
-      this.getProjectInfo();  // Reload project info
+      this.getProjectInfo();  
     });
     this.shared.sectionUpdated.subscribe(() => {
       this.getProjectInfo();
@@ -175,20 +155,34 @@ export class ProjectDetailComponent implements OnInit {
 
   getProjectInfo() {
     this.spinner.show();
-    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
+    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
+
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
+    }
 
     const projectId = this.route.snapshot.paramMap.get('id');
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
-        this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
+        this.projectEndDate = new Date(project.endDate);
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder, this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
           this.allTasks=this.projectTasks;
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
           this.groupedTasks = this.groupTasksBySection(this.projectTasks);
         });
-        this.loadProjectMembers();
-        this.loadAddableUsers();
         this.spinner.hide();
       });
     }
@@ -204,7 +198,19 @@ export class ProjectDetailComponent implements OnInit {
   loadAddableUsers(){
     this.myProjectsService.GetAddableUsers(this.project.id).subscribe((users: any[]) => {
       this.addableUsers = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
-      //this.loadPicture(this.addableUsers)
+    });
+  }
+
+  loadAvailableAssigness(){
+    this.myProjectsService.getAvailableAssigness(this.project.id).subscribe({
+      next: response => {
+        this.availableAssigness = response,
+        this.availableAssigness.forEach((assigne: any) => {
+          assigne.appUserId = assigne.id;
+          assigne.fullName = assigne.firstName + ' ' + assigne.lastName;
+        });
+      },
+      error: error => console.log(error)
     });
   }
 
@@ -223,6 +229,51 @@ export class ProjectDetailComponent implements OnInit {
 
     return grouped;
   }
+  groupTasksBySectionSorted(tasks: any[]): { [key: string]: any } {
+    const grouped = tasks.reduce((acc, task) => {
+      const section = task.sectionName || 'No Section';
+      if (!acc[section]) {
+        if(this.sortedOrder==0)
+        {
+          acc[section] = { tasks: [], visible: section === 'No Section' };
+        }
+        else
+        {
+          acc[section] = { tasks: [], visible: section != 'No Section' };
+        }
+      }
+      acc[section].tasks.push(task);
+      return acc;
+    }, {});
+    if (!grouped['No Section']) {
+      grouped['No Section'] = { tasks: [], visible: true };
+    }
+
+    return grouped;
+  }
+  groupTasksBySectionFiltered(tasks: any[]): { [key: string]: any } {
+    const grouped = tasks.reduce((acc, task) => {
+      const section = task.sectionName || 'No Section';
+      if (!acc[section]) {
+        if(this.searchText=='' && this.selectedStatus=="" &&  this.rangeDates==undefined)
+        {
+          acc[section] = { tasks: [], visible: section === 'No Section' };
+        }
+        else
+        {
+          acc[section] = { tasks: [], visible: section != 'No Section' };
+        }
+      }
+      acc[section].tasks.push(task);
+      return acc;
+    }, {});
+    if (!grouped['No Section']) {
+      grouped['No Section'] = { tasks: [], visible: true };
+    }
+
+    return grouped;
+  }
+ 
 
   toggleSectionVisibility(section: string): void {
     this.groupedTasks[section].visible = !this.groupedTasks[section].visible;
@@ -265,6 +316,8 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   openMemberManagment(modal: TemplateRef<void>){
+    this.loadProjectMembers();
+    this.loadAddableUsers();
     this.modalRef = this.modalService.show(
       modal,
       {
@@ -278,15 +331,12 @@ export class ProjectDetailComponent implements OnInit {
     if (!(date instanceof Date)) {
       date = new Date(date);
     }
-    date.setHours(0, 0, 0, 0);
+    date.setHours(2, 0, 0, 0);
     return date;
   }
 
   updateProject()
-  {
-    if(this.update.endDate)
-      this.update.endDate = this.resetTimeProjInfo(this.update.endDate);
-    
+  { 
     this.spinner.show()
     if(this.userRole == 1 || this.userRole == 0)
     {
@@ -295,11 +345,14 @@ export class ProjectDetailComponent implements OnInit {
       {
         if(this.update.projectStatus!==undefined)
             this.update.projectStatus = +this.update.projectStatus;
+        
+        if(this.update.endDate)
+          this.update.endDate = this.resetTimeProjInfo(this.update.endDate);
 
-          this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
-            this.getProjectInfo()
-            this.spinner.hide()
-          })
+        this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
+          this.getProjectInfo()
+          this.spinner.hide()
+        })
       }
     }
   }
@@ -374,24 +427,26 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation();
-    this.myTasksService
-      .GetProjectTask(taskId,this.userId)
-      .subscribe((task: ProjectTask) => {
-        if (
-          this.clickedTask &&
-          this.clickedTask.id === taskId &&
-          this.showPopUp
-        ) {
-          this.showPopUp = false;
-          this.clickedTask = null;
-          this.shared.current_task_id = null;
-        } else {
+    if (this.clickedTask && this.clickedTask.id === taskId && this.showPopUp) {
+      this.closePopup();
+    } else {
+      this.showPopUp = false;
+      this.fetchingTaskId = taskId; 
+      this.myTasksService.GetProjectTask(taskId, this.userId).subscribe((task: ProjectTask) => {
+        if (this.fetchingTaskId === taskId) { 
           this.clickedTask = task;
           this.showPopUp = true;
           this.shared.current_task_id = this.clickedTask.id;
+          this.fetchingTaskId = null; 
         }
       });
+    }
+  }
+  
+  closePopup() {
+    this.clickedTask = null;
+    this.showPopUp = false;
+    this.shared.current_task_id = null;
   }
 
   @HostListener('document:click', ['$event'])
@@ -401,15 +456,11 @@ export class ProjectDetailComponent implements OnInit {
     if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
       this.showPopUp = false;
       this.clickedTask = null;
+      this.shared.current_task_id=null;
     }
     else if (elementRef && !elementRef.contains(event.target as Node)) {
       this.enabledEditorOptions = false;
     }
-  }
-
-  closePopup() {
-    this.clickedTask = null;
-    this.showPopUp = false;
   }
 
   getStatusClass(){
@@ -437,12 +488,12 @@ export class ProjectDetailComponent implements OnInit {
     }
 
     if(await this.TaskNameExists())
-      {
-        this.taskNameExists = true;
-        return;
-      }
+    {
+      this.taskNameExists = true;
+      return;
+    }
 
-    if(this.newTaskStartDate == undefined || this.newTaskEndDate == undefined)
+    if(!this.newTaskStartDate || !this.newTaskEndDate)
     {
       return;
     }
@@ -457,11 +508,7 @@ export class ProjectDetailComponent implements OnInit {
       return;
     }
 
-    if(this.newTaskName == undefined)
-    {
-      return;
-    }
-    if(this.selectedUser==undefined)
+    if(!this.selectedUser)
     {
       return;
     }
@@ -527,6 +574,7 @@ export class ProjectDetailComponent implements OnInit {
 
   openNewTaskModal(modal: TemplateRef<void>) {
     this.buttonClicked=false;
+    this.loadAvailableAssigness();
     if (this.currentProjectId !== null)
     {
       this.getProjectsUsersAndSections(this.currentProjectId);
@@ -671,146 +719,94 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
- filterTasks():void{
-    let filteredTasks = [...this.allTasks];
-
-    if (this.searchText) {
-      filteredTasks = filteredTasks.filter(task => {
-        return task.taskName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          (`${task.firstName || ''} ${task.lastName || ''}`).toLowerCase().includes(this.searchText.toLowerCase());
-      });
+ toggleSortOrder(column: string): void {
+    if (this.sortedColumn === column) {
+      this.sortedOrder = (this.sortedOrder + 1) % 3;
+    } else {
+      this.sortedColumn = column;
+      this.sortedOrder = 1;
     }
+    this.spinner.show();
+    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
 
-    if (this.selectedStatus) {
-      filteredTasks = filteredTasks.filter(task => task.statusName === this.selectedStatus);
-    }
-
+    let startDate = '';
+    let endDate = '';
     if (this.rangeDates && this.rangeDates.length === 2) {
-      const [startDate, endDate] = this.rangeDates;
-      const adjustedEndDate = new Date(endDate);
-      adjustedEndDate.setHours(23, 59, 59, 999);
-    
-      filteredTasks = filteredTasks.filter(task => {
-        const taskStartDate = new Date(task.startDate);
-        const taskEndDate = new Date(task.endDate);
-        return taskStartDate >= startDate && taskEndDate <= adjustedEndDate;
-      });
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
     }
 
-    this.projectTasks = filteredTasks;
-    this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-    if(this.searchText!='' || this.selectedStatus!='' || this.rangeDates)
-    {
-      Object.keys(this.groupedTasks).forEach(section => {
-          this.groupedTasks[section].visible = true;
+    const projectId = this.route.snapshot.paramMap.get('id');
+    if (projectId) {
+      this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
+        this.project = project;
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder,this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
+          this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.allTasks=this.projectTasks;
+          this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
+          this.groupedTasks = this.groupTasksBySectionSorted(this.projectTasks);
+        });
+        this.loadProjectMembers();
+        this.loadAddableUsers();
+        this.spinner.hide();
       });
     }
- }
- SortByName(): void {
-  this.sortOrderName = this.sortOrderName === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA = a.taskName.toLowerCase();
-      const nameB = b.taskName.toLowerCase();
-      
-      if (nameA < nameB) {
-        return this.sortOrderName === 'asc' ? -1 : 1;
+  }
+
+  getSortClass(column: string): string {
+    if (this.sortedColumn === column) {
+      if(this.sortedOrder==1)
+        return 'sorted-asc';
+      if(this.sortedOrder==2)
+        return 'sorted-desc';
+      else
+        return 'unsorted';
+    }
+    return 'unsorted';
+  }
+
+  filterTasks():void{
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
       }
-      if (nameA > nameB) {
-        return this.sortOrderName === 'asc' ? 1 : -1;
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
       }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
- SortByAssignee(): void {
-  this.sortOrderAssignee = this.sortOrderAssignee === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA = (a.firstName+" "+a.lastName).toLowerCase();
-      const nameB = (b.firstName+" "+b.lastName).toLowerCase();
-      
-      if (nameA < nameB) {
-        return this.sortOrderAssignee === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderAssignee === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
- SortByStartDate(): void {
-  this.sortOrderStartDate = this.sortOrderStartDate === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA =new Date(a.startDate);
-      const nameB = new Date(b.startDate);
-      
-      if (nameA < nameB) {
-        return this.sortOrderStartDate === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderStartDate === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
- SortByEndDate(): void {
-  this.sortOrderEndDate = this.sortOrderEndDate === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA =new Date(a.endDate);
-      const nameB = new Date(b.endDate);
-      
-      if (nameA < nameB) {
-        return this.sortOrderEndDate === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderEndDate === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
- SortByStatus(): void {
-  this.sortOrderStatus = this.sortOrderStatus === 'asc' ? 'desc' : 'asc'; 
-  
-  this.projectTasks.sort((a, b) => {
-      const nameA =a.statusName;
-      const nameB =b.statusName;
-      
-      if (nameA < nameB) {
-        return this.sortOrderStatus === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrderStatus === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  
-  this.groupedTasks = this.groupTasksBySection(this.projectTasks); 
-  Object.keys(this.groupedTasks).forEach(section => {
-    this.groupedTasks[section].visible = true;
-  });
-}
+    }
+
+    const projectId = this.route.snapshot.paramMap.get('id');
+    if (projectId) {
+      this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
+        this.project = project;
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder,this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
+          this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.allTasks=this.projectTasks;
+          this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
+          this.groupedTasks = this.groupTasksBySectionFiltered(this.projectTasks);
+        });
+        this.loadProjectMembers();
+        this.loadAddableUsers();
+        this.spinner.hide();
+      });
+    }
+  }
+
+ 
 
 }
   

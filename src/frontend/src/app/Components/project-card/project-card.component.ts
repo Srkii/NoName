@@ -52,21 +52,14 @@ export class ProjectCardComponent {
     this.projectNameExists = false;
     this.buttonClicked = true;
 
-    if(await this.ProjectNameExists(this.newProject.ProjectName))
+    if(!this.newProject.ProjectName)
     {
-      this.projectNameExists = true;
       return;
     }
 
-    //resetujem milisekunde
-    if(this.newProject.StartDate)
-      this.newProject.StartDate = this.resetTime(this.newProject.StartDate);
-    if(this.newProject.EndDate)
-      this.newProject.EndDate = this.resetTime(this.newProject.EndDate);
-
-
-    if(this.newProject.StartDate == undefined || this.newProject.EndDate == undefined)
+    if(await this.ProjectNameExists(this.newProject.ProjectName))
     {
+      this.projectNameExists = true;
       return;
     }
 
@@ -75,10 +68,10 @@ export class ProjectCardComponent {
       return;
     }
 
-    if(this.newProject.ProjectName == undefined)
-    {
-      return
-    }
+    if(this.newProject.StartDate)
+      this.newProject.StartDate = this.resetTime(this.newProject.StartDate);
+    if(this.newProject.EndDate)
+      this.newProject.EndDate = this.resetTime(this.newProject.EndDate);
 
     this.newProject.AppUserId = this.creatorId;
 

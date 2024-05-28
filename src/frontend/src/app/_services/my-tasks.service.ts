@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
 import { ChangeTaskInfo } from '../Entities/ChangeTaskInfo';
 import { Observable } from 'rxjs';
@@ -17,120 +17,136 @@ export class MyTasksService {
   private apiUrl = environment.apiUrl;
   private baseUrl = `${this.apiUrl}/projectTask`;
   sectionDeleted = new EventEmitter<void>();
-  private token: string;
-  private httpHeader: HttpHeaders;
 
-  constructor(private http: HttpClient) {
-    this.token = localStorage.getItem('token') || '';
-    this.httpHeader=new HttpHeaders({"Authorization": `Bearer ${this.token}`});
+  constructor(private http: HttpClient) {}
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || '';
+    return new HttpHeaders({"Authorization": `Bearer ${token}`});
   }
 
   GetProjectTasks(): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(this.baseUrl,{headers:this.httpHeader});
+    return this.http.get<ProjectTask[]>(this.baseUrl,{headers:this.getHeaders()});
   }
 
-  GetTasksByProjectId(projectId: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}`,{headers:this.httpHeader});
+  GetTasksByProjectId(
+    projectId: number, 
+    sortedColumn: string | null = null, 
+    sortedOrder: number = 0, 
+    searchText: string | null = null,
+    taskStatus: string | null = null,
+    startDate: string | null = null,
+    endDate: string | null = null
+  ): Observable<ProjectTask[]> {
+    let params = new HttpParams()
+      .set('sortedColumn', sortedColumn ? sortedColumn : '')
+      .set('sortedOrder', sortedOrder.toString())
+      .set('searchText', searchText ? searchText : '')
+      .set('taskStatus', taskStatus ? taskStatus : '')
+      .set('startDate', startDate ? startDate : '')
+      .set('endDate', endDate ? endDate : '');
+  
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/ByProject/${projectId}`, { headers: this.getHeaders(), params: params });
   }
 
   GetTasksByUserId(userId: any): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`,{headers:this.httpHeader});
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}`,{headers:this.getHeaders()});
   }
 
   GetProjectTask(taskId: number, userId: any): Observable<ProjectTask> {
-    return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}/${userId}`,{headers:this.httpHeader});
+    return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}/${userId}`,{headers:this.getHeaders()});
   }
   //tico: mirkov updateTaskStatus. Treba da se promeni
   updateTaskStatus1(id: number, statusName: string): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`,null,{headers:this.httpHeader});
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`,null,{headers:this.getHeaders()});
   }
 
   // kada pomeram taskove iz archived saljem listu zbog boljih performansi
   UpdateArchTasksToCompleted(taskIds: number[]): Observable<any> {
-    return this.http.put(`${this.baseUrl}/UpdateArchTasksToCompleted`,taskIds,{headers:this.httpHeader});
+    return this.http.put(`${this.baseUrl}/UpdateArchTasksToCompleted`,taskIds,{headers:this.getHeaders()});
   }
 
   updateTicoTaskStatus(taskId: number, task: ProjectTask): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/updateTicoStatus/${taskId}`, task, {headers:this.httpHeader});
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateTicoStatus/${taskId}`, task, {headers:this.getHeaders()});
   }
 
   //tico kanban ; ne diraj!
   GetTaskStatuses(projectId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/statuses/${projectId}`, {headers:this.httpHeader});
+    return this.http.get<any[]>(`${this.baseUrl}/statuses/${projectId}`, {headers:this.getHeaders()});
   }
   // za kanban
   updateTaskStatusPositions(updatedStatuses: any[], projectId: number): Observable<any> {
     const payload = updatedStatuses.map(status => ({ ...status, projectId }));
-    return this.http.put(`${this.baseUrl}/updateStatusPositions`, payload, {headers:this.httpHeader});
+    return this.http.put(`${this.baseUrl}/updateStatusPositions`, payload, {headers:this.getHeaders()});
   }
   
   sortTasksByDueDate(userId:any,sortOrder: string): Observable<ProjectTask[]> {
     const url = `${this.baseUrl}/sortTasksByDueDate/${userId}?sortOrder=${sortOrder}`;
-    return this.http.get<ProjectTask[]>(url,{headers:this.httpHeader});
+    return this.http.get<ProjectTask[]>(url,{headers:this.getHeaders()});
   }
   // za addNewSection modal
   addTaskStatus(taskStatus: { statusName: string; projectId: number }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/addTaskStatus`, taskStatus, {headers:this.httpHeader});
+    return this.http.post(`${this.baseUrl}/addTaskStatus`, taskStatus, {headers:this.getHeaders()});
   }
   // za addNewTask modal
   createTask(task: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, task, {headers:this.httpHeader});
+    return this.http.post(`${this.baseUrl}`, task, {headers:this.getHeaders()});
   }
   // za deleteSection modal
   deleteTaskStatus(taskStatusId: number | null): Observable<any> {
     if (taskStatusId === null) {
       throw new Error('Task status ID is null');
     }
-    return this.http.delete(`${this.baseUrl}/deleteTaskStatus/${taskStatusId}`, {headers:this.httpHeader});
+    return this.http.delete(`${this.baseUrl}/deleteTaskStatus/${taskStatusId}`, {headers:this.getHeaders()});
   }
 
-  GetNewTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count1/${count}`, {headers:this.httpHeader});
+  GetNewTasksByUserId(userId: any, count: number,sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count1/${count}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`, {headers:this.getHeaders()});
   }
-  GetSoonTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count2/${count}`, {headers:this.httpHeader});
+  GetSoonTasksByUserId(userId: any, count: number,sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count2/${count}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`, {headers:this.getHeaders()});
   }
-  GetClosedTasksByUserId(userId: any, count: number): Observable<ProjectTask[]> {
-    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count3/${count}`, {headers:this.httpHeader});
+  GetClosedTasksByUserId(userId: any, count: number,sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
+    return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count3/${count}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`, {headers:this.getHeaders()});
   }
   changeTaskInfo(dto: ChangeTaskInfo): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskInfo`, dto, {headers:this.httpHeader});
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskInfo`, dto, {headers:this.getHeaders()});
   }
 
   addTaskDependencies(dtos: TaskDependency[]): Observable<any> {
-    return this.http.post(`${this.baseUrl}/addTaskDependency`, dtos, {headers:this.httpHeader});
+    return this.http.post(`${this.baseUrl}/addTaskDependency`, dtos, {headers:this.getHeaders()});
   }
 
   deleteTaskDependency(dto: TaskDependency): Observable<any> {
-    return this.http.post(`${this.baseUrl}/deleteTaskDependency`, dto, {headers:this.httpHeader});
+    return this.http.post(`${this.baseUrl}/deleteTaskDependency`, dto, {headers:this.getHeaders()});
   }
   GetAllTasksDependencies():Observable<TaskDependency[]>{
-    return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`, {headers:this.httpHeader});
+    return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`, {headers:this.getHeaders()});
   }
 
   deleteTask(taskId: number): Observable<any> {
     const url = `${this.baseUrl}/deleteTask/${taskId}`;
-    return this.http.delete(url, {headers:this.httpHeader});
+    return this.http.delete(url, {headers:this.getHeaders()});
   }
   GetTaskDependencies(id:any):Observable<TaskDependency[]>{
-    return this.http.get<TaskDependency[]>(`${this.baseUrl}/getTaskDependencies/${id}`, {headers:this.httpHeader});
+    return this.http.get<TaskDependency[]>(`${this.baseUrl}/getTaskDependencies/${id}`, {headers:this.getHeaders()});
   }
   UpdateTimeGantt(id:any,startDate:Date,endDate:Date){
     var newDatetime:DateTimeDto = {
       StartDate:startDate,
       EndDate:endDate,
     }
-    return this.http.post<any>(`${this.baseUrl}/timeUpdateGantt/${id}`,newDatetime, {headers:this.httpHeader});
+    return this.http.post<any>(`${this.baseUrl}/timeUpdateGantt/${id}`,newDatetime, {headers:this.getHeaders()});
   }
   ChangeTaskSection(id_section:number,id_task:number):Observable<any>{
     var data : sectionChangeDTO = {
       sectionId:id_section,
       taskId:id_task
     }
-    return this.http.post<any>(`${this.baseUrl}/changeSectionGantt/`,data, {headers:this.httpHeader});
+    return this.http.post<any>(`${this.baseUrl}/changeSectionGantt/`,data, {headers:this.getHeaders()});
   }
   TaskNameExists(taskName: string,projectID:number): Observable<ProjectTask> {
-    return this.http.get<ProjectTask>(`${this.baseUrl}/getTaskByName/${taskName}/${projectID}`, {headers:this.httpHeader});
+    return this.http.get<ProjectTask>(`${this.baseUrl}/getTaskByName/${taskName}/${projectID}`, {headers:this.getHeaders()});
   }
 
 
