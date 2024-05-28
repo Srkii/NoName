@@ -45,13 +45,8 @@
               "node_modules/@ng-select/ng-select/themes/default.theme.css",
               "node_modules/quill/dist/quill.snow.css",
               {
-                "input": "src/ngx-gantt-ligh.scss",
-                "bundleName": "ngx-gantt-ligh",
-                "inject": true
-              },
-              {
-                "input": "src/ngx-gantt-dark.scss",
-                "bundleName": "ngx-gantt-dark",
+                "input": "src/ngx-gantt.scss",
+                "bundleName": "ngx-gantt",
                 "inject": true
               },
               {

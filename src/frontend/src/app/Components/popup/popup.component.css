@@ -20,8 +20,8 @@
 
 .popupTaskName {
   font-size: 18px;
-  font-weight: bold;
-  color: #697a8d;
+  /* font-weight: bold; */
+  color: var(--text-color) !important;
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 5px;
@@ -30,7 +30,7 @@
 }
 
 .bi-x-lg:hover{
-  fill: #696cff;
+  fill: var(--normal-purple);
   transition: 0.5s ease-in-out;
 }
 
@@ -50,21 +50,12 @@
   margin-bottom: 5px;
   font-size: 16px !important;
 }
-/* #popupOriginProject {
-  font-weight: normal !important;
-  margin-left: 15px !important;
-  background-color: #8072cf !important;
-  color: #5322db !important;
-  text-align: center;
-  padding: 2px !important;
-  border-radius: 8px;
-} */
 #popupOriginProject:hover{
   cursor: pointer;
 }
 .badge {
   font-size: 16px !important;
-  background-color: #5f61e6 !important;
+  background-color: var(--normal-purple) !important;
   font-weight: normal !important;
 }
 #assignee {
@@ -86,28 +77,16 @@ img{
 }
 .description,
 .description1{
-  color: #697a8d;
+  color: var(--text-color) !important;
   font-size: 16px;
   outline: none;
-  border: 0.5px solid lightgray;
+  border: 1px solid var(--table-border-color);
   border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
   word-wrap: break-word;
-}
-.form-control {
-  color: #697a8d;
-  font-size: 12px;
-  border: 0.5px solid lightgray;
-  border-radius: 0.375rem;
-  padding: 6px;
-  margin-left: 5%;
-  margin-bottom: 1%;
-}
-.form-control[type="file"]:not(:disabled):not([readonly]):hover {
-  cursor: pointer;
-  background-color: #e7e7ff !important;
-  color: #5f61e6 !important;
+  background-color: var(--card-color) !important;
+  color: var(--text-color) !important;
 }
 
 .comment:hover,
@@ -127,7 +106,7 @@ img{
   padding-right: 10px;
   padding-left: 10px;
   border: none;
-  background-color: #5f61e6;
+  background-color: var(--normal-purple);
   color: #ffffff;
   border-radius: 0.375rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
@@ -165,7 +144,7 @@ img{
 }
 .col-md-5 {
   z-index: 100;
-  background-color: #ffffff;
+  background-color: var(--card-color) !important;
   padding: 15px;
   padding-top: 12px;
   padding-bottom: 10px;
@@ -173,11 +152,11 @@ img{
   position: absolute;
   right: 4px;
   transition: right 0.5s;
-  color: #697a8d;
+  color: var(--text-color) !important;
   border-color: solid #d9dee3;
   border-width: 0;
   border-radius: 0.375rem;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  box-shadow: var(--card-shadow);
   /* font-weight: 600; */
   font-size: 14px;
   overflow-y: hidden;
@@ -185,10 +164,11 @@ img{
 }
 
 .comment {
-  color: #697a8d;
+  color: var(--text-color) !important;
+  border: 1px solid var(--table-border-color) !important;
+  background-color: var(--card-color) !important;
   font-size: 16px;
   outline: none;
-  border: 0.5px solid lightgray;
   border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
@@ -197,10 +177,11 @@ img{
   resize: none;
 }
 .edit_content{
-  color: #697a8d;
+  color: var(--text-color) !important;
   font-size: 14px;
   outline: none;
-  border: 0.5px solid lightgray;
+  border: 1px solid var(--table-border-color);
+  background-color: var(--card-color) !important;
   border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
@@ -211,7 +192,7 @@ img{
 }
 .comments {
   margin-top: 20px;
-  color: #697a8d;
+  color: var(--text-color) !important;
   border-radius: 0.375rem;
   width: 100%;
   overflow-y: auto;
@@ -219,7 +200,7 @@ img{
 }
 .visible_comments{
   margin-top: -5px;
-  border: 0.5px solid lightgray;
+  border: 1px solid var(--table-border-color);
   border-radius: 0.375rem;
   padding: 5px;
 }
@@ -247,7 +228,7 @@ img{
   padding-left: 10px;
   border: none;
   background-color: #3fb94c;
-  color: #ffffff;
+  color: var(--text-color) !important;
   border-radius: 0.375rem;
   box-shadow: 0 5px 8px 0 rgba(67, 89, 113, 0.12);
   float: right;
@@ -267,7 +248,7 @@ img{
   margin-left: -10px;
 }
 .fixed-comment-area {
-  border-top: 0.5px solid lightgray;
+  border-top: 1px solid var(--table-border-color);
   position: absolute;
   padding-right: 15px;
   padding-left: 15px;
@@ -275,7 +256,8 @@ img{
   height: 140px;
   bottom: 0;
   right: 0;
-  background-color: #ffffff;
+  background-color: var(--card-color) !important;
+  color: var(--text-color) !important;
 }
 .scroll{
   width: 100%;
@@ -294,7 +276,7 @@ img{
 }
 
 .singleComment {
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid var(--table-border-color);
 }
 .singleComment:last-child {
   border-bottom: none;
@@ -303,7 +285,7 @@ img{
   border-bottom: none;
 } */
 .content p{
-  color: #697a8d;
+  color: var(--text-color) !important;
   font-size: 14px;
   margin-top: 5px;
   /* margin-bottom: 10px; */
@@ -318,7 +300,7 @@ img{
   margin-top: -40px;
   margin-right: 5px;
   font-size: 12px;
-  color: #697a8d;
+  color: var(--text-color) !important;
 }
 .edit{
   margin-top: -5px;
@@ -350,12 +332,13 @@ img{
   margin-bottom: 10px;
   font-size: 18px;
   font-weight: 500;
-  color: #697a8d;
+  color: var(--text-color) !important;
   padding-left: 10px;
   padding-right: 10px;
   width: 70%;
   border: 1px solid transparent;
   border-bottom: 1px solid #5f61e6;
+  background-color: var(--card-color) !important;
 }
 /* sklanja crni outline na inputima; nesto do chrome-a */
 *,*:focus,*:hover{
@@ -386,7 +369,7 @@ img{
 #taskOriginProject{
   margin-left: 20px;
   font-size: 16px;
-  color: #697a8d;
+  color: var(--text-color) !important;
   background-color: #d9dee3;
   padding: 5px;
   padding-left: 10px;
@@ -463,7 +446,7 @@ img{
   border-radius: 0.375rem;
 }
 .cancel_task{
-  background-color: #697a8d;
+  background-color: var(--text-color) !important;
 }
 .delete_task:hover,
 .cancel_task:hover
@@ -482,20 +465,19 @@ img{
   align-items: center;
 }
 
-
 .scroll::-webkit-scrollbar {
-  background-color: #ffffff;
+  background-color: var(--card-color);
   width: 16px;
 }
 
 .scroll::-webkit-scrollbar-track {
-  background-color: #ffffff;
+  background-color: var(--card-color);
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  background-color: #babac0;
+  background-color: var(--scroll-color);
   border-radius: 16px;
-  border: 4px solid #ffffff;
+  border: 4px solid var(--card-color);
 }
 
 .scroll::-webkit-scrollbar-button {
@@ -573,21 +555,6 @@ img{
   color: #a64266
 }
 
-.btn-primary {
-  background-color: #696cff;
-  border-color: #696cff;
-  font-size: 1rem;
-  border-radius: 0.375rem;
-  margin-right: 25px;
-  line-height: 1.45;
-  text-align: center;
-}
-.btn-primary:hover {
-  color: #fff !important;
-  background-color: #5f61e6 !important;
-  border-color: #5f61e6 !important;
-  transform: translateY(-1px) !important;
-}
 .archBody {
   border-bottom: none !important;
 }

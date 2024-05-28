@@ -141,7 +141,7 @@
                 {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
               </span>
               <span *ngIf="!projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
-                <ngx-avatars class="mx-1" size="21" bgColor="#5d57c2" [name]="projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName" value="75%"></ngx-avatars>
+                <ngx-avatars class="mx-1" size="25" bgColor="#5d57c2" [name]="projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName" value="75%"></ngx-avatars>
                 {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
               </span>
             </td>
@@ -215,13 +215,16 @@
             <div *ngIf="project.ownerProfilePicture">
               <img [src]="uploadservice.getImage(project.ownerProfilePicture)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
             </div>
-            <div *ngIf="!project.ownerProfilePicture" class="nameAvatar boardAvatar">
+            <div *ngIf="!project.ownerProfilePicture && !project.ownerFirstName" class="nameAvatar boardAvatar tNoSectionAvatar" style=" padding: 0 !important;">
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                </svg>
+              </svg>
             </div>
-            <div class="tAssigneeName">
+            <div *ngIf="!project.ownerProfilePicture && project.ownerFirstName">
+              <ngx-avatars size="25" bgColor="#5d57c2" [name]="project.ownerFirstName + ' ' + project.ownerLastName"></ngx-avatars>
+            </div>
+            <div class="tAssigneeName" [ngStyle]="!project.ownerFirstName ? {'margin': '0'} : {}">
               {{ project.ownerFirstName || project.ownerLastName ? (project.ownerFirstName + ' ' + project.ownerLastName) : 'Not assigned' }}
             </div>
           </div>

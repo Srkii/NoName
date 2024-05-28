@@ -1,45 +1,44 @@
 <div class="container mt-4">
   <div class="row">
-      <div class="btn-group" role="group" aria-label="View Buttons">
-          <button *ngFor="let view of views" [class.active]="view.value === selectedViewType"  type="button" class="btn btn-outline-secondary btn-sm" (click)="selectView(view.value)">
-              {{ view.name }}
-          </button>
-          <button type="button" class="btn" style="background-color: #e7e7ee; width: 100px; color: #696cff; font-weight: 400;" (click)="goToToday()">
-              Scroll to today
-          </button>
-      </div>
-      <div class="col-12">
-          <div class="table-responsive" style="height: 70vh;">
-              <ngx-gantt #gantt *ngIf="data_loaded" [items]="items" [groups]="groups" [viewType]="viewType" [draggable]="userRole !== 4 && userRole!==3 ? true : false" [linkable]="true" [selectable]="true" [multiple]="true"
-                    [viewOptions]="viewOptions" [toolbarOptions]="toolbarOptions" [loading]="loading" [virtualScrollEnabled]="true" (barClick)="barClick($event)" (viewChange)="viewChange($event)"
-                    (lineClick)="lineClick($event,removalModal)" (dragMoved)="dragMoved($event)" (dragEnded)="dragEnded($event)" (selectedChange)="selectedChange($event)" (linkDragEnded)="linkDragEnded($event)"
-                    >
-                  <ngx-gantt-table [draggable]="false">
-                  <ng-template #group let-group="group" let-items="items">
-                      <span class="text-primary" style="color: #696cff !important;">{{ group.title }}</span>
-                  </ng-template>
-                      <ngx-gantt-column name="Title" width="150px">
-                          <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
-                      </ngx-gantt-column>
-                      <ngx-gantt-column name="Start Time" width="130px">
-                          <ng-template #cell let-item="item">
-                              {{ item.start * 1000 | date : 'yyyy-MM-dd' }}
-                          </ng-template>
-                      </ngx-gantt-column>
-                      <ngx-gantt-column name="End Time" width="130px">
-                          <ng-template #cell let-item="item">
-                              {{ item.end * 1000 | date : 'yyyy-MM-dd' }}
-                          </ng-template>
-                      </ngx-gantt-column>
-                  </ngx-gantt-table>
-                  <ng-template #bar let-item="item">
-                    <div  class="gantt-bar-content" style="background: #696cff;" (click)="onTaskClick($event,item.id)">
-                      <span style="color: #fff;">&nbsp;&nbsp;{{ item.title }} </span>
-                      </div>
-                  </ng-template>
-              </ngx-gantt>
-          </div>
-      </div>
+    <div class="btn-group" role="group" aria-label="View Buttons">
+        <button *ngFor="let view of views" [class.active]="view.value === selectedViewType"  type="button" class="btn btn-outline-secondary btn-sm" (click)="selectView(view.value)">
+            {{ view.name }}
+        </button>
+        <button class="btn"  (click)="goToToday()">
+            Scroll to today
+        </button>
+    </div>
+    <div class="col-12">
+        <div class="table-responsive" style="height: 70vh;">
+            <ngx-gantt #gantt *ngIf="data_loaded" [items]="items" [groups]="groups" [viewType]="viewType" [draggable]="userRole !== 4 && userRole!==3 ? true : false" [linkable]="true" [selectable]="true" [multiple]="true"
+                [viewOptions]="viewOptions" [toolbarOptions]="toolbarOptions" [loading]="loading" [virtualScrollEnabled]="true" (barClick)="barClick($event)" (viewChange)="viewChange($event)"
+                (lineClick)="lineClick($event,removalModal)" (dragMoved)="dragMoved($event)" (dragEnded)="dragEnded($event)" (selectedChange)="selectedChange($event)" (linkDragEnded)="linkDragEnded($event)">
+                <ngx-gantt-table [draggable]="false">
+                    <ng-template #group let-group="group" let-items="items">
+                        <span class="text-primary" style="color: #696cff !important;">{{ group.title }}</span>
+                    </ng-template>
+                    <ngx-gantt-column name="Title" width="150px">
+                        <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
+                    </ngx-gantt-column>
+                    <ngx-gantt-column name="Start Time" width="130px">
+                        <ng-template #cell let-item="item">
+                            {{ item.start * 1000 | date : 'yyyy-MM-dd' }}
+                        </ng-template>
+                    </ngx-gantt-column>
+                    <ngx-gantt-column name="End Time" width="130px">
+                        <ng-template #cell let-item="item">
+                            {{ item.end * 1000 | date : 'yyyy-MM-dd' }}
+                        </ng-template>
+                    </ngx-gantt-column>
+                </ngx-gantt-table>
+                <ng-template #bar let-item="item">
+                <div  class="gantt-bar-content" style="background: #696cff;" (click)="onTaskClick($event,item.id)">
+                    <span style="color: #fff;">&nbsp;&nbsp;{{ item.title }} </span>
+                    </div>
+                </ng-template>
+            </ngx-gantt>
+        </div>
+    </div>
   </div>
 </div>
 

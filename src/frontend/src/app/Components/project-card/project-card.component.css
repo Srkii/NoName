@@ -79,18 +79,20 @@ label{ margin-right: 1rem; }
 }
 
 :host::ng-deep .ng-option-selected{
-    background-color: #a8a9f0 !important;
+    background-color: var(--normal-purple)!important;
 }
 
 :host::ng-deep .ng-option-marked{
-    background-color: #9a9cec !important;
+    background-color: var(--normal-purple) !important;
     border-top: 0px !important;
 }
 
 .ng-value-label.ng-star-inserted{
     padding-left: 3px !important;
 }
-
+.ng-selected-container {
+    width: 50px !important;
+}
 :host::ng-deep .ng-value-icon.ng-star-inserted{
     position: relative ;
     top: 0.055rem;

@@ -1,7 +1,12 @@
 * {
   font-family: 'Public Sans', sans-serif !important;
 }
-
+.tdAssignee {
+  width: 25% !important;
+}
+svg.bi.bi-person-circle.archNoSection {
+  padding: 0 !important;
+}
 .project-name:hover {
   cursor: pointer;
   color: var(--normal-purple) !important;
@@ -166,7 +171,7 @@ p {
 .paginate_buttons button:not(:disabled):hover{
   cursor: pointer;
   color: #fff !important;
-  background-color: #696cff!important;
+  background-color: var(--normal-purple)!important;
   transform: translateY(-1px) !important;
 } 
 .paginate_button button:focus{
@@ -296,10 +301,10 @@ p {
 
 .archProject {
   color: var(--text-color);
+  border-bottom: var(--action-border-bottom);
   margin-left: 5px;
   width: 195px;
   border-radius: 0.375rem;
-  border-bottom: var(--action-border-bottom);
 }
 .archProject:hover {
   cursor: pointer;
@@ -312,9 +317,7 @@ p {
 .tdName {
   width: 35% !important;
 }
-.tdAssignee {
-  width: 25% !important;
-}
+
 .tdDate {
   width: 20% !important;
 }
