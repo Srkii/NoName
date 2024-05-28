@@ -205,6 +205,7 @@ export class ProjectDetailComponent implements OnInit {
       next: response => {
         this.availableAssigness = response,
         this.availableAssigness.forEach((assigne: any) => {
+          assigne.appUserId = assigne.id;
           assigne.fullName = assigne.firstName + ' ' + assigne.lastName;
         });
       },
