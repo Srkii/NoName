@@ -1,7 +1,6 @@
 <app-nav></app-nav>
 <div class="content-wrapper">
-  <app-popup style="z-index: 100;"class="pop" *ngIf="showPopUp && clickedTask" [task]="clickedTask" (backClicked)="closePopup();"
-    [@popFromSide]="showPopUp ? 'popFromSide' : ''">
+  <app-popup style="z-index: 100;"class="pop" *ngIf="showPopUp && clickedTask" [task]="clickedTask" (backClicked)="closePopup();">
   </app-popup>
   <div class="container-xxl flex-grow-1 container-p-y">
     <div *ngIf="project">
@@ -144,7 +143,9 @@
                         <span style="margin-left: 5px;">{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}</span>
                       </div>
                       <div *ngIf="!task.profilePicUrl" class="nameAvatar boardAvatar">
-                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName" value="75%"></ngx-avatars>
+                        <!-- <ngx-avatars *ngIf="themeService.isDarkTheme" size="25" bgColor="rgb(56, 54, 87)" fgColor="rgb(183, 180, 242)" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
+                        <ngx-avatars *ngIf="!themeService.isDarkTheme" size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars> -->
+                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
                         <span style="margin-left: 5px;">{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}</span>
                       </div>
                     </td>
@@ -152,8 +153,8 @@
                     <td>{{ task.endDate | date }}</td>
                     <td>
                       <!-- <span class="badge" [style.background-color]="task.color">{{ task.statusName }}</span> -->
-                      <span class="badge" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color">{{ task.statusName }}</span>
-                      <!-- <span class="badge" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color" [style.color]="getDarkerColor(task.color)">{{ task.statusName }}</span> -->
+                      <!-- <span class="badge" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color">{{ task.statusName }}</span> -->
+                      <span class="badge" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color" [style.color]="getDarkerColor(task.color)">{{ task.statusName }}</span>
                       <span class="badge" *ngIf="themeService.isDarkTheme" [style.background-color]="getLessPoppingColor(task.color)" [style.color]="getPoppingColor(task.color)">{{ task.statusName }}</span>
                     </td>
                   </tr>
@@ -250,7 +251,7 @@
       <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers">
           <h5>Add project members</h5>
           <div class="addInfo">
-            <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" name="Assignees" (click)="$event.stopPropagation()" style="height: 2rem;">
+            <ng-select class="tMngMemb" [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" name="Assignees" (click)="$event.stopPropagation()" style="height: 2rem;">
               <ng-template ng-option-tmp let-user="item">
                 <div class="user-detail">
                   <div *ngIf="user.profilePicUrl" class="nameAvatar">

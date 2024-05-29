@@ -166,17 +166,17 @@
   <div class="modal-body">
     <form (ngSubmit)="UpdateUser(curentUserId)">
       <div class="mb-3 tEmail">
-        <label for="email" class="form-label">Email</label>
+        <label for="email" class="form-label tInfoLabel">Email</label>
         <input type="email" id="form3Example3" class="form-control email" name="email" [(ngModel)]="newEmail" placeholder="{{curentEmail}}" [ngClass]="{'is-invalid': !regexEmail.test(newEmail)}"/>
         <div class="invalid" *ngIf="!regexEmail.test(newEmail)">Please enter a valid email address</div>
       </div>
       <div class="mb-3">
-        <label for="fisrt name" class="form-label">Fisrt Name</label>
+        <label for="fisrt name" class="form-label tInfoLabel">First Name</label>
         <input type="text" id="form3Example3" class="form-control fname" name="firstName" [ngClass]="{'is-invalid': invalidName || newFisrtName.length<2 || !regex.test(newFisrtName)}" [(ngModel)]="newFisrtName"/>
         <div class="invalid" *ngIf="invalidName || newFisrtName.length<2 || !regex.test(newFisrtName)">First name must be longer and contain only letters</div>
       </div>
       <div class="mb-3">
-        <label for="last name" class="form-label">Last Name</label>
+        <label for="last name" class="form-label tInfoLabel">Last Name</label>
         <input type="text" id="form3Example3" class="form-control lname" name="lastName" [ngClass]="{'is-invalid': invalidLastName || newLastName.length<2 || !regex.test(newLastName)}" [(ngModel)]="newLastName"/>
         <div class="invalid" *ngIf="invalidLastName || newLastName.length<2 || !regex.test(newLastName)">Last name must be longer and contain only letters</div>
       </div>

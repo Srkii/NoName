@@ -19,7 +19,7 @@ $gantt-table-td-padding: 0 15px !default;
 // calendar
 $gantt-date-primary-color: #888 !default;
 $gantt-date-primary-font-size: 14px !default;
-$gantt-date-primary-border: #ddd !default;
+$gantt-date-primary-border: var(--table-border-color)!default;
 $gantt-date-secondary-color: var(--text-color) !default;
 $gantt-date-secondary-font-size: 14px !default;
 $gantt-date-secondary-weekend-color: #aaa !default;

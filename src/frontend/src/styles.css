@@ -76,7 +76,7 @@ body {
   --kanban-task-background: #3b3d58;
   --scroll-color: #a7a7b8;
   --ng-text-color: #000000;
-  --gant-bg-secondary: #3b3d58;
+  --gant-bg-secondary: #2b2c40d0;
   --gantt-border: #444564;
 }
 
@@ -98,6 +98,33 @@ body {
   background-color: var(--card-color) !important;
   color: var(--text-color) !important;
 } */
+
+.ng-select.asigneeDropdown .ng-select-container,
+.ng-select.task_select .ng-select-container,
+.ng-select.sectionDropdown .ng-select-container
+.ng-select.addProjAss .ng-select-container,
+.ng-select.tMngMemb .ng-select-container,
+.ng-select.chooseSection .ng-has-value {
+  color: var(--ng-text-color) !important;
+}
+
+.ng-select.tMngMemb .ng-option,
+.ng-select.addProjAss .ng-option
+.ng-select.chooseSection .ng-option {
+  background-color: var(--card-color) !important;
+  color: var(--ng-text-color) !important;
+}
+.ng-select.chooseSection .ng-market {
+  color: var(--ng-text-color) !important;
+}
+.ng-select.tMngMemb .ng-option-selected,
+.ng-select.addProjAss .ng-option-selected,
+.ng-select.addProjAss .ng-option-selected,
+.ng-select.chooseSection .ng-option-selected {
+  background-color: var(--normal-purple) !important;
+  color: #fff !important;
+}
+
 .form-control {
   display: inline;
   width: 100%;
@@ -223,13 +250,12 @@ input {
   box-shadow: var(--card-shadow) !important;
 }
 .ng-option {
-  color: var(--text-color) !important;
   background-color: var(--card-color) !important;
   border-bottom: 1px solid var(--table-border-color) !important;
   border-collapse: collapse !important;
 }
 .ng-option:hover {
-  background-color: var(--normal-purple) !important;
+  /* background-color: var(--normal-purple) !important; */
   color: #fff !important;
 }
 .ng-option {

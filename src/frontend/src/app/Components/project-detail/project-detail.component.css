@@ -566,7 +566,7 @@ select:disabled {
 }
 .ng-value-icon:hover{
     background-color: transparent !important;
-    color: black;
+    /* color: black; */
 }
 
 .td_row td:first-child:hover,

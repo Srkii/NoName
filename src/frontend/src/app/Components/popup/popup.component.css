@@ -281,16 +281,11 @@ img{
 .singleComment:last-child {
   border-bottom: none;
 }
-/* .content:last-child{
-  border-bottom: none;
-} */
 .content p{
   color: var(--text-color) !important;
   font-size: 14px;
   margin-top: 5px;
-  /* margin-bottom: 10px; */
   outline: none;
-  /* padding: 10px; */
   padding-left: 20px;
   border-radius: 0.375rem;
   word-wrap: break-word;
@@ -397,6 +392,9 @@ img{
   font-size: 14px;
   width: 60%;
 }
+.ng-select.asigneeDropdown .ng-select-container {
+  border: 1px solid red !important;
+}
 .projectDropdown{
   outline: none;
   margin-top: -5px;
@@ -428,10 +426,6 @@ img{
   background-color: red;
 }
 
-/* .modal-container{
-  border-radius: 0.375rem;
-  padding: 20px;
-} */
 .archSpan {
   font-size: 16px !important;
   line-height: 24px !important;

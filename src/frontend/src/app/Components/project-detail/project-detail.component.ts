@@ -24,6 +24,7 @@ import { ThemeServiceService } from '../../_services/theme-service.service';
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.css',
+  
 })
 export class ProjectDetailComponent implements OnInit {
   project: Project | any;

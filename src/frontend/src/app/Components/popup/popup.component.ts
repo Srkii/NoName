@@ -15,7 +15,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedService } from '../../_services/shared.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ta } from 'date-fns/locale';
 import { HttpError, HttpResponse } from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
 
@@ -424,15 +423,11 @@ export class PopupComponent {
       dueDate: task.endDate,
       sectionId: this.selectedSection ? this.selectedSection.id : 0
     };
-    console.log(dto);
-
-      this.myTasksService.changeTaskInfo(dto).subscribe({
+        this.myTasksService.changeTaskInfo(dto).subscribe({
         next: (updatedTask: ProjectTask) => {
           let rola=this.task?.projectRole;
           this.task = updatedTask;
           this.task.projectRole=rola;
-
-
           this.sharedService.emitTaskUpdated();
           this.cdr.detectChanges();
         },
@@ -591,13 +586,11 @@ export class PopupComponent {
         dependencyTaskId: item.id
       };
 
-
-
       this.myTasksService.deleteTaskDependency(dto).subscribe(
         (response: TaskDependency) => {
         },
         (error: any) => {
-          console.error('Error adding task dependency:', error);
+          console.error('Error deleting task dependency:', error);
         }
       );
       this.sharedService.emitTaskUpdated();
