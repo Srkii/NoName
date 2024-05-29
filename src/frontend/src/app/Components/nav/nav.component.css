@@ -129,22 +129,38 @@ body {
 .dropdown-menu-end{
   --bs-dropdown-link-active-bg: var(--card-color) !important;
 }
- @media only screen and (min-width: 768px){
+/*za tablete*/
+@media screen and (min-width: 768px) and (max-width: 1400px){
 
   .navbar-brand .dropdown-menu{
     display: none;
   }
   .tabs-to-dropdown{
-    display: block
+    display: flex !important;
+  }
+  .mb-2 {
+    margin-bottom: .0rem !important;
   }
 }
+
 /*za telefone*/
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 575px){
   .dropdown-menu-end
     {
       z-index: 100;
     }
 }
+/* @media (min-width: 768px) {
+  .navbar-brand .dropdown-menu{
+    display: none;
+  }
+  .tabs-to-dropdown{
+    display: block;
+  }
+  .mb-2 {
+    margin-bottom: .0rem !important;
+  }
+} */
 .dropdown-menu-responsive a:hover {
   background-color: #b8b9f2; /* Change this to the color you want */
   color: #413561;
@@ -159,13 +175,6 @@ body {
 
 .dropdown-menu-responsive .nav-item:active{
   background-color: var(--card-color);
-}
-
-@media (min-width: 768px) {
-  .dropdown-menu-responsive .firstDrop li:active {
-    background-color: #0000ff; /* Change this to the color you want */
-    color: #413561;
-  }
 }
 .avatar avatar-online {
   margin-left: 10px;

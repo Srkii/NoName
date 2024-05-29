@@ -1,9 +1,17 @@
 * {
   font-family: 'Public Sans', sans-serif;
 }
+.alert-warning {
+  border: none !important;
+  color: var(--warning-div-text);
+  background-color: var(--warning-div);
+}
 .tInfoLabel {
   font-size: 16px;
   text-transform: none !important;
+}
+.tTextAdmin {
+  color: var(--text-color) !important;
 }
 body {
   background-color: var(--background-color);
@@ -56,6 +64,11 @@ table {
 }
 .modal-body {
   padding-top: 0px !important;
+  border-bottom-left-radius: 0.375rem !important;
+}
+.tModalBody {
+  border-bottom-left-radius: 0.375rem !important;
+  border-bottom-right-radius: 0.375rem !important;
 }
 th {
   font-size: 18px;
@@ -173,7 +186,7 @@ p {
   height: 35px;
 }
 .btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
-  background-color: #696cff !important;
+  background-color: var(--normal-purple) !important;
 }
 .card{
   position: static;
@@ -493,8 +506,8 @@ select:focus-visible{
     font-size: small;
     border-radius: 0.375rem;
     color: #fff;
-    background-color: #696cff;
-    border-color: #696cff;
+    background-color: var(--normal-purple);
+    border-color: var(--normal-purple);
     box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
   }
   .inputEmail .btn-primary{
@@ -579,8 +592,8 @@ select:focus-visible{
     font-size: small;
     border-radius: 0.375rem;
     color: #fff;
-    background-color: #696cff;
-    border-color: #696cff;
+    background-color: var(--normal-purple);
+    border-color: var(--normal-purple);
     box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
   }
   .inputEmail .btn-primary{
@@ -618,7 +631,7 @@ select:focus-visible{
 }
 
 .tPCheck {
-  accent-color: #696cff !important;
+  accent-color: var(--normal-purple) !important;
 }
 
 .archAvatar {
@@ -629,8 +642,8 @@ select:focus-visible{
   margin-top: 10px;
 }
 .archBtn:focus {
-  background-color: #696cff;
-  border-color: #696cff;
+  background-color: var(--normal-purple);
+  border-color: var(--normal-purple);
 }
 .invalid{
   height: 0;
@@ -652,4 +665,80 @@ select:focus-visible{
 .tClose:hover,
 .tClose:focus {
   box-shadow: none !important;
+}
+.notifyAdmin{ padding-top: 5px;}
+.notifyAdmin p{
+  text-align: left;
+  color: #212529;
+  font-weight: normal;
+}
+.nameAvatar {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Public Sans', sans-serif;
+  padding-right: 2px;
+}
+.managers{margin-top: 0.2rem;}
+.managers td{
+  width: 50%;
+  vertical-align: middle;
+}
+.managers tr:first-child td{border-top: none;}
+.projectName{
+  border-bottom: 1px solid var(--table-border-color) !important;
+  padding-bottom: 5px;
+  color: var(--text-color) !important;
+  padding-left: 5px;
+}
+.managerScroll{
+  overflow-y: auto; 
+  max-height: 20rem;
+  min-height: 20rem;
+}
+.managerScroll::-webkit-scrollbar {
+  background-color: var(--card-color);
+  width: 16px;
+}
+.managerScroll::-webkit-scrollbar-track {
+  background-color: var(--card-color);
+}
+.managerScroll::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-color);
+    border-radius: 16px;
+    border: 4px solid var(--card-color);
+}
+.managerScroll::-webkit-scrollbar-button {
+  display:none;
+}
+.modal-footer{
+  color: var(--text-color) !important;
+  font-size: small;
+}
+::ng-deep .ng-option-marked{
+  border-top: 0px !important;
+}
+
+::ng-deep .ng-value-label.ng-star-inserted{
+  padding-left: 3px !important;
+}
+::ng-deep .ng-selected-container {
+  width: 50px !important;
+}
+
+::ng-deep .ng-value.ng-star-inserted{
+  display: inline-flex !important;
+  align-items: center !important;
+  border-radius: 0.375rem !important;
+  padding: 2px !important;
+}
+
+::ng-deep .ng-clear .ng-clear-wrapper{
+  display: flex !important;
+  align-items: center;
+}
+
+::ng-deep .ng-clear-wrapper{
+  top:0.1rem;
+  display: flex !important;
+  align-items: center;
 }

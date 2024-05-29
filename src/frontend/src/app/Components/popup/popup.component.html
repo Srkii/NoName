@@ -151,7 +151,7 @@
         [checked]="task.statusName=='Archived'"
         (change)="ArchiveTasks(task)">
       </div>
-      <div>
+      <div class="markButtons">
         <button
           *ngIf="this.task.projectRole!='4'"
           class="mark" 

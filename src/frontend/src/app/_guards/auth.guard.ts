@@ -21,7 +21,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
     localStorage.removeItem('token');
     localStorage.removeItem('id');
     localStorage.removeItem('role');
-    sessionStorage.removeItem('selectedOption');
+    localStorage.removeItem('selectedOption');
     router.navigate(['/login']);
     return false;
   }

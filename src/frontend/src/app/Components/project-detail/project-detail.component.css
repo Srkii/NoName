@@ -39,18 +39,7 @@ svg {
     max-width: 1550px;
 }
 /* za tablete */
-@media screen and (max-width: 1200px) {
-    .button-selectors {
-        flex-direction: row;
-    }
-    .btn-primary {
-        margin: 10px !important;
-        width: 250px !important;
-    }
-    .card-header {
-        font-size: 20px !important;
-    }
-}
+
 .project-heading {
     /* text-align: center; */
     padding: 0px !important;
@@ -65,18 +54,7 @@ svg {
     /* line-height: 1.5; */
 }
 /* za telefone */
-@media screen and (max-width: 500px) { 
-    .button-selectors {
-        flex-direction: column;
-    }
-    .btn-primary {
-        margin: 10px !important;
-        width: 250px !important;
-    }
-    .card-header {
-        font-size: 20px !important;
-    }
-}
+
 .section {
     margin-bottom: 20px; /* Adjust the space between sections */
     margin-top: 20px
@@ -181,6 +159,13 @@ thead th{
     --bs-badge-color: #fff;
     --bs-badge-border-radius: 0.25rem;
 } */
+.is-invalid {
+    border-color: red !important;
+}
+.is-invalid:focus {
+    box-shadow: none;
+    border-color: red !important;
+}
 .badge {
     width: 180px !important;
     text-align: center;
@@ -997,4 +982,62 @@ th {
     transform: rotateX(0deg);
     transition: transform 0.3s;
     color: inherit;
+  }
+  
+
+  @media screen and (max-width: 659px) {
+    .button-selectors {
+        display: flex;
+        flex-direction: column;
+    }
+    .actionLinks {
+        display: flex;
+        flex-direction: column;
+        margin-right: auto;
+    }
+    .viewButtons {
+        margin-right: auto;
+    }
+    .flex-container {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+    .project-heading {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+    .archTasks, .new-item, .mngSection, .mngMembers, .btn{
+        margin-left: 0px !important;
+    }
+    .mFilters{
+        display: flex;
+        flex-direction: column;
+        gap: 25px
+    }
+    .btn-primary {
+        margin-bottom: 10px !important;
+        width: 250px !important;
+    }
+    .card-header {
+        font-size: 20px !important;
+    }
+}
+@media screen and (min-width:660px )and (max-width: 1400px) {
+    .button-selectors {
+        display: flex;
+        flex-direction: column;
+    }
+    .btn-primary {
+        margin: 10px !important;
+        width: 250px !important;
+    }
+    .card-header {
+        font-size: 20px !important;
+    }
+    .actionLinks {
+        margin-right: auto;
+    }
+    .viewButtons {
+        margin-right: auto;
+    }
 }

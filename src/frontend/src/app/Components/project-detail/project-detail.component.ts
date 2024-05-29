@@ -190,8 +190,9 @@ export class ProjectDetailComponent implements OnInit {
 
   loadProjectMembers(){
     this.myProjectsService.getUsersByProjectId(this.project.id).subscribe((users: any[]) => {
-      this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole}));
+      this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole,archived: user.archived}));
       this.filteredUsers = this.usersOnProject;
+      console.log(this.usersOnProject)
     });
   }
 
@@ -804,6 +805,16 @@ export class ProjectDetailComponent implements OnInit {
         this.spinner.hide();
       });
     }
+  }
+
+  showDelete(user: any){
+    var flag = false;
+    if(this.userId != user.appUserId && this.userRole != 2 && this.userRole != 3 && this.userRole != 4 && user.archived==false)
+        flag = true;
+    if(user.projectRole == 0 && this.userRole == 1){
+        flag = false;
+    }
+    return flag;
   }
 
   getDarkerColor(color: string): string {

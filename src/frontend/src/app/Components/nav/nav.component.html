@@ -1,10 +1,10 @@
-<nav class="layout-navbar navbar navbar-expand-md align-items-center bg-navbar-theme" id="layout-navbar">
-
+<nav class="layout-navbar navbar navbar-expand-sm align-items-center bg-navbar-theme" id="layout-navbar">
+  <!-- navbar-expand-md -->
   <div class="navbar-brand">
     <!-- Logo image will act as a toggle for small screens -->
     <img src="../../../assets/navIcons/logo.png"  class="logoImg d-xl-none dropdown-toggle hide-arrow"
     href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
-    <div class="dropdown-menu dropdown-menu-responsive">
+    <div class="dropdown-menu dropdown-menu-responsive d-sm-none">
       <ul class="firstDrop">
         <li class="nav-item active" *ngIf="isAdmin()">
           <a class="nav-link" routerLink="/admin">Manage Users</a>
@@ -25,7 +25,7 @@
     <!-- Content for larger screens -->
     <div class="tabs-to-dropdown">
       <div class="nav-wrapper d-flex align-items-center justify-content-between">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0 ">
           <li class="nav-item active" *ngIf="isAdmin()" [ngClass]="{'active-link-text': selectedOption==='Admin'}" (click)="setActiveOption('Admin')">
             <a class="nav-link" routerLink="/admin">Manage Users</a>
           </li>

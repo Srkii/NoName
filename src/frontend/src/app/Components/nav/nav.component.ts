@@ -47,12 +47,11 @@ export class NavComponent implements OnInit {
 
   async Logout(): Promise<void> {
     try {
-      // Remove token and id from local storage
       localStorage.removeItem('token');
       localStorage.removeItem('id');
       localStorage.removeItem('role');
+      localStorage.removeItem('selectedOption');
       sessionStorage.removeItem('selectedOption');
-      // Navigate to the login page
       this.notificationService.stopHubConnection();
       this.router.navigate(['/login']);
     } catch (error) {
@@ -105,17 +104,20 @@ export class NavComponent implements OnInit {
       else {
         this.selectedOption=''
       }
-    });
-    const storedOption = sessionStorage.getItem('selectedOption');
-    this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
+      localStorage.setItem('selectedOption', this.selectedOption);
 
+    });
+    const storedOption = localStorage.getItem('selectedOption');
+    this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
   }
 
   setActiveOption(option: string) {
     if (option === '') {
       sessionStorage.removeItem('selectedOption');
+      localStorage.removeItem('selectedOption');
     } else {
       sessionStorage.setItem('selectedOption', option);
+      localStorage.setItem('selectedOption', option);
     }
   }
 

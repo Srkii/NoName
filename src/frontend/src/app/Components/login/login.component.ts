@@ -33,11 +33,13 @@ export class LoginComponent implements OnInit {
         {
           this.router.navigate(['/admin']);
           sessionStorage.setItem('selectedOption', "Admin");
+          localStorage.setItem('selectedOption', "Admin");
         }
         else
         {
           this.router.navigate(['/mytasks']);
           sessionStorage.setItem('selectedOption', "MyTasks");
+          localStorage.setItem('selectedOption', "MyTasks");
         }
       },
       error: (error) => {
