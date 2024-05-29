@@ -37,9 +37,13 @@ body {
   --action-active-color: #696cff;
   --kanban-task-background: #e7e7ff;
   --scroll-color: #babac0;
-  --ng-text-color: #697a8d;
   --gant-bg-secondary: #f3f3f3;
   --gantt-border: #eee;
+  --ng-hover-bg: #F8F8F9;
+  --ng-hover-text: #697a8d;
+  --ng-options-selected-bg: #F3F3FF;
+  --ng-options-selected-text: #696cff;
+  --ng-input-item-bg: #E1E4E8;
 }
 
 [data-theme="dark"] {
@@ -75,9 +79,13 @@ body {
   --action-active-color: #fff;
   --kanban-task-background: #3b3d58;
   --scroll-color: #a7a7b8;
-  --ng-text-color: #000000;
   --gant-bg-secondary: #2b2c40d0;
   --gantt-border: #444564;
+  --ng-hover-bg: #3A3A55;
+  --ng-hover-text: #A3A4CC;
+  --ng-options-selected-bg: #363657;
+  --ng-options-selected-text: #696cff;
+  --ng-input-item-bg: #383953;
 }
 
 .form-label {
@@ -99,31 +107,119 @@ body {
   color: var(--text-color) !important;
 } */
 
-.ng-select.asigneeDropdown .ng-select-container,
-.ng-select.task_select .ng-select-container,
-.ng-select.sectionDropdown .ng-select-container
-.ng-select.addProjAss .ng-select-container,
-.ng-select.tMngMemb .ng-select-container,
-.ng-select.chooseSection .ng-has-value {
-  color: var(--ng-text-color) !important;
+/* project-card */
+/* .ng-select.addProjAss .ng-value-label img, 
+.ng-select.addProjAss .ng-value-label ngx-avatars {
+  margin-right: 0.2rem !important;
+} */
+/* align slectovane u inputu */
+.ng-select.addProjAss .ng-value-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-right: 0.2rem !important;
+}
+/* align slectovane u inputu */
+.ng-select.addProjAss .user-detail {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Public Sans', sans-serif;
+}
+/* podesava visinu kontenjera input-a */
+.ng-select.addProjAss .ng-select-container {
+  height: 35px !important;
+  background-color: var(--card-color) !important;
+  border: 1px solid var(--table-border-color) !important;
+}
+/* boje sa hover */
+.ng-select.addProjAss .ng-option-marked {
+  background-color: var(--ng-hover-bg) !important;
+  color: var(--ng-hover-text) !important;
 }
 
-.ng-select.tMngMemb .ng-option,
-.ng-select.addProjAss .ng-option
-.ng-select.chooseSection .ng-option {
+/* boje za selektovano */
+.ng-select.addProjAss .ng-option-selected {
+  background-color: var(--ng-options-selected-bg) !important;
+  color: var(--ng-options-selected-text) !important;
+}
+.ng-select.addProjAss .ng-select-container {
+  color: var(--text-color) !important;
+  
+}
+/* bg i color za polje koje nije selektovano i hoverovano */
+.ng-select.addProjAss .ng-option:not(.ng-option-selected):not(.ng-option-marked) {
   background-color: var(--card-color) !important;
-  color: var(--ng-text-color) !important;
+  color: var(--ng-hover-text) !important;
 }
-.ng-select.chooseSection .ng-market {
-  color: var(--ng-text-color) !important;
+/* border celog ng-select-a */
+.ng-select.addProjAss .ng-dropdown-panel {
+  border: 1px solid var(--table-border-color) !important;
+  background-color: var(--card-color) !important;
 }
-.ng-select.tMngMemb .ng-option-selected,
-.ng-select.addProjAss .ng-option-selected,
-.ng-select.addProjAss .ng-option-selected,
-.ng-select.chooseSection .ng-option-selected {
+/* seletkovana opcija sa ikonicom u inputu */
+.ng-select.addProjAss .ng-value.ng-star-inserted {
+  background-color: var(--ng-input-item-bg) !important;
+  color: var(--ng-hover-text) !important;
+}
+/* ne dozvoljava X na select da menja boju na hover i odrzava */
+.ng-select.addProjAss .ng-value-icon:hover {
+  background-color: transparent !important; 
+}
+
+.ng-select.addProjAss .ng-value-icon.ng-star-inserted {
+  position: relative ;
+  top: 0.055rem;
+  display: inline-flex !important;
+  align-items: center;
+  border-left: none !important;
+  padding-left: 0 !important;
+}
+
+/* sklanja box-shadow na inputu globalno? */
+.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
+  border: 1px solid var(--table-border-color) !important;
+  box-shadow: none !important;
+}
+/* 
+.ng-select-container,
+.ng-dropdown-panel {
+  color: var(--ng-text-color) !important;
+  background-color: var(--card-color) !important;
+  border: 1px solid var(--table-border-color) !important;
+  border-collapse: collapse !important;
+}
+.ng-dropdown-panel {
+  box-shadow: var(--card-shadow) !important;
+}
+.ng-option {
+  background-color: var(--card-color) !important;
+  border-bottom: 1px solid var(--table-border-color) !important;
+  border-collapse: collapse !important;
+}
+.ng-option:hover {
   background-color: var(--normal-purple) !important;
   color: #fff !important;
 }
+.ng-option {
+  color: #fff !important;
+  font-weight: 400 !important;
+}
+
+.ng-value-container .ng-value-label {
+  color: var(--ng-text-color) !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+}
+.ng-option-marked {
+  background-color: var(--normal-purple) !important;
+  color: #fff !important;
+}
+.ng-option:last-child {
+  border: none !important;
+}
+.ng-input > input {
+  color: var(--text-color) !important;
+} */
+
 
 .form-control {
   display: inline;
@@ -194,7 +290,7 @@ select {
 input {
   color: var(--text-color) !important;
 }
-/* toast custom css */
+/* toast css changes */
 .toast-bottom-right {
   font-family: 'Public Sans', sans-serif !important;
 }
@@ -239,52 +335,7 @@ input {
 .MemberManagmentModel{
   height: auto;
 }
-.ng-select-container,
-.ng-dropdown-panel {
-  color: var(--ng-text-color) !important;
-  background-color: var(--card-color) !important;
-  border: 1px solid var(--table-border-color) !important;
-  border-collapse: collapse !important;
-}
-.ng-dropdown-panel {
-  box-shadow: var(--card-shadow) !important;
-}
-.ng-option {
-  background-color: var(--card-color) !important;
-  border-bottom: 1px solid var(--table-border-color) !important;
-  border-collapse: collapse !important;
-}
-.ng-option:hover {
-  /* background-color: var(--normal-purple) !important; */
-  color: #fff !important;
-}
-.ng-option {
-  /* color: #fff !important; */
-  font-weight: 400 !important;
-}
-.ng-option-selected {
-  background-color: var(--normal-purple) !important;
-  color: #fff !important;
-}
-.ng-value-container .ng-value-label {
-  color: var(--ng-text-color) !important;
-  font-weight: normal !important;
-  font-size: 14px !important;
-}
-.ng-option:last-child {
-  border: none !important;
-}
-.ng-option-marked {
-  background-color: var(--normal-purple) !important;
-  color: #fff !important;
-}
-.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
-  border: 1px solid var(--table-border-color) !important;
-  box-shadow: none !important;
-}
-.ng-input > input {
-  color: var(--text-color) !important;
-}
+
 
 /* Quill rich text editor custom css */
 .hide-toolbar .ql-toolbar  {

@@ -58,32 +58,9 @@ label{ margin-right: 1rem; }
     font-family: 'Public Sans', sans-serif;
 }
 
-.ng-value-label{
-    display: inline-flex !important;
-    align-items: center !important;
-    font-family: 'Public Sans', sans-serif;
-}
 
-.ng-value-label img, .ng-value-label ngx-avatars{
-    margin-right: 0.2rem !important;
-}
-
-.user-detail{
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Public Sans', sans-serif;
-}
 
 :host::ng-deep .ng-option-marked{
-    background-color: #F5F5F9 !important;
-}
-
-:host::ng-deep .ng-option-selected{
-    background-color: var(--normal-purple)!important;
-}
-
-:host::ng-deep .ng-option-marked{
-    background-color: var(--normal-purple) !important;
     border-top: 0px !important;
 }
 
@@ -92,18 +69,6 @@ label{ margin-right: 1rem; }
 }
 .ng-selected-container {
     width: 50px !important;
-}
-:host::ng-deep .ng-value-icon.ng-star-inserted{
-    position: relative ;
-    top: 0.055rem;
-    display: inline-flex !important;
-    align-items: center;
-    border-left: none !important;
-    padding-left: 0 !important;
-}
-
-.ng-value-icon:hover{
-    background-color: transparent !important;
 }
 
 :host::ng-deep .ng-value.ng-star-inserted{

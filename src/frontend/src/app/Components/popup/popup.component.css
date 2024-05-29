@@ -392,9 +392,9 @@ img{
   font-size: 14px;
   width: 60%;
 }
-.ng-select.asigneeDropdown .ng-select-container {
+/* .ng-select.asigneeDropdown .ng-select-container {
   border: 1px solid red !important;
-}
+} */
 .projectDropdown{
   outline: none;
   margin-top: -5px;
