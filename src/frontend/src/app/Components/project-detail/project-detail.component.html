@@ -186,15 +186,15 @@
       </svg>
     </div>
     <div class="modal-body">
-        <div class="mb-3 mr-2">
-          <h5 class="heading">Details</h5>
-          <div class="d-flex justify-content-between info tInfoDiv">
-            <div class="my-2">
-              <label for="projectStatus">Status:</label>
-              <select id="projectStatus" class="selectElements" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3 || userRole == 2" [ngClass]="getStatusClass()">
-                <option class="DEFAULT_STAT" value=0>Proposed</option>
-                <option class="DEFAULT_STAT" value=1>InProgress</option>
-                <option class="DEFAULT_STAT" value=2>Completed</option>
+      <div class="mb-3 mr-2">
+        <h5 class="heading">Details</h5>
+        <div class="d-flex justify-content-between info tInfoDiv">
+          <div class="my-2">
+            <label for="projectStatus">Status:</label>
+            <select id="projectStatus" class="selectElements" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3 || userRole == 2" [ngClass]="getStatusClass()">
+              <option class="DEFAULT_STAT" value=0>Proposed</option>
+              <option class="DEFAULT_STAT" value=1>InProgress</option>
+              <option class="DEFAULT_STAT" value=2>Completed</option>
               </select>
             </div>
             <div class="my-2">
@@ -208,7 +208,6 @@
               <div class="sSpan">
                 <span *ngIf="userRole == 2 || userRole == 3 || userRole == 4" id="startDate" class="startDate">{{ update.endDate | date }}</span>
               </div>
-              <div class="sPrimeNg" style="width: 130px !important;" *ngIf="userRole == 0 || userRole == 1">
               <div class="sPrimeNg" style="width: 130px !important;" *ngIf="userRole == 0 || userRole == 1">
                 <p-calendar
                 [(ngModel)]="update.endDate"
