@@ -208,9 +208,8 @@
               <div class="sSpan">
                 <span *ngIf="userRole == 2 || userRole == 3 || userRole == 4" id="startDate" class="startDate">{{ update.endDate | date }}</span>
               </div>
-              <div class="sPrimeNg" style="width: 130px !important;">
+              <div class="sPrimeNg" style="width: 130px !important;" *ngIf="userRole == 0 || userRole == 1">
                 <p-calendar
-                *ngIf="userRole == 0 || userRole == 1"
                 [(ngModel)]="update.endDate"
                 inputId="endDate"
                 name="endDate"
@@ -395,8 +394,8 @@
           dateFormat="MM dd, yy"
           [minDate]="newTaskStartDate"
           [maxDate]="projectEndDate"
-          [ngClass]="{'ng-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}"
-        ></p-calendar>
+          [ngClass]="{'ng-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}">
+          </p-calendar>
           <div *ngIf="buttonClicked && !newTaskEndDate" class="invalid">Please enter end date.</div>
           <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
         </div>
