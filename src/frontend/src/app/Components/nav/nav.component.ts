@@ -1,11 +1,11 @@
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from '../../_services/notifications.service';
-import { Notification } from '../../Entities/Notification';
 import { UploadService } from '../../_services/upload.service';
 import { filter } from 'rxjs';
 import { ThemeServiceService } from '../../_services/theme-service.service';
+
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -18,7 +18,7 @@ export class NavComponent implements OnInit {
     private userInfo:UserinfoService, 
     public uploadService:UploadService,
     public notificationService:NotificationsService,
-    private themeService: ThemeServiceService
+    public themeService: ThemeServiceService
     ) { }
 
   ngOnInit(): void {
@@ -39,7 +39,7 @@ export class NavComponent implements OnInit {
 
   isMyProjectsActive: boolean = false;
 
-  selectedOption: string=''
+  selectedOption: string='';
 
   changeTheme() {
     this.themeService.switchTheme();
@@ -47,13 +47,11 @@ export class NavComponent implements OnInit {
 
   async Logout(): Promise<void> {
     try {
-      // Remove token and id from local storage
       localStorage.removeItem('token');
       localStorage.removeItem('id');
       localStorage.removeItem('role');
       localStorage.removeItem('selectedOption');
       sessionStorage.removeItem('selectedOption');
-      // Navigate to the login page
       this.notificationService.stopHubConnection();
       this.router.navigate(['/login']);
     } catch (error) {
@@ -90,17 +88,14 @@ export class NavComponent implements OnInit {
     ).subscribe((event: NavigationEnd) => {
       if (event.urlAfterRedirects.includes('/mytasks')) {
         this.selectedOption = 'MyTasks'
-        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/myprojects') || event.urlAfterRedirects.includes('/project/'))
       {
         this.selectedOption = 'MyProjects'
-        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/admin'))
       {
         this.selectedOption = 'Admin' 
-        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/userinfo'))
       {

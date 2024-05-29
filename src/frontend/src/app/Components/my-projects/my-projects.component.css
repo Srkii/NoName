@@ -1,52 +1,40 @@
 * {
   font-family: 'Public Sans', sans-serif !important;
 }
-
-html {
-  background-color: #f5f5f9;
+.tdAssignee {
+  width: 25% !important;
 }
-body {
-  background-color: #f5f5f9;
-  color: #697a8d;
-  margin: auto;
-}
-.nav {
-  display: inline;
+svg.bi.bi-person-circle.archNoSection {
+  padding: 0 !important;
 }
 .project-name:hover {
   cursor: pointer;
-  color: #484ac5 !important;
-  border-bottom: 1px solid #696cff;
-}
-.project-name.clicked {
-  cursor: pointer;
-  background-color: #e7e7ff !important;
-  color: #5f61e6 !important;
+  color: var(--normal-purple) !important;
+  border-bottom: 1px solid var(--normal-purple);
 }
 #all {
   /* max-width: 1320px; */
   margin-top: 30px;
   margin: auto;
   padding: 20px;
-  /* width: 85%; */
   min-height: 10vh;
-  background-color: #ffffff;
-  color: #697a8d;
-  border: solid 1px #d9dee3;
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border: 1px solid var(--card-border);
   border-radius: 0.375rem;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  /* overflow-y: hidden;
-  overflow-x: hidden; */
+  box-shadow: var(--card-shadow);
   box-sizing: border-box;
   overflow: visible;
+}
+.container-xxl {
+  max-width: 1550px;
 }
 
 .filter input,
 .filter select,
-.filter p-calendar
-{
-  color: #697a8d;
-  border-radius: 8px;
+.filter p-calendar {
+  color: var(--text-color);
+  border-radius: 0.375rem;
   font-size: 16px;
   height: 100%;
 }
@@ -54,18 +42,17 @@ body {
 .filter input:hover,
 .filter select:hover {
   outline: none;
-  border: 1px solid #5f61e6 !important;
+  border: 1px solid var(--dark-purple) !important;
 }
 .filter input:focus,
 .filter select:focus {
   outline: none;
-  border: 1px solid #5f61e6 !important;
+  border: 1px solid var(--dark-purple) !important;
 }
 
 table {
-  color: #697a8d;
-  font-size: 12px;
-  border: 1px solid lightgray;
+  color: var(--text-color);
+  border: 1px solid var(--table-border-color);
   border-collapse: collapse;
   /* padding: 6px; ovo kom*/
   /* margin-left: -20px;  ovo mok*/
@@ -84,16 +71,21 @@ table {
   }
 } */
 th {
-  font-size: 16px;
+  font-size: 18px;
   /* border: 1.5px solid lightgray; */
-  font-weight: 700;
+  font-weight: 500;
+  line-height: 20px;
   padding: 5px;
   border-left: none;
   border-right: none;
 }
+tr {
+  border-collapse: collapse;
+}
 td {
   padding: 0.5rem;
-  border: 1px solid lightgray;
+  border: 1px solid var(--table-border-color);
+  border-collapse: collapse;
   border-left: none;
   border-right: none;
   /* padding-left: 20px; */
@@ -118,25 +110,27 @@ table:last-child{
 }
 p {
   text-align: center;
-  padding: 2px;
   margin-bottom: 2%;
   border-radius: 0.375rem;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 1.5;
+  padding-left: 0.593em !important;
+  padding-right: 0.52em !important;
 }
 
 .IN p {
   /*IN PROGGRES*/
-  background-color: #e7e7ff !important;
-  color: #696cff !important;
+  background-color: var(--inprogress-background) !important;
+  color: var(--inprogress-text) !important;
 }
 
 .COMPLETED p {
-  background-color: #e8fadf !important;
-  color: #71dd37 !important;
+  background-color: var(--complete-background) !important;
+  color: var(--complete-text) !important;
 }
 .PROPOSED p {
-  background-color: #d7f5fc !important;
-  color: #03c3ec !important;
+  background-color: var(--proposed-background) !important;
+  color: var(--proposed-text) !important;
 }
 .ARCHIVED p {
   background-color: #fff2d6 !important;
@@ -154,17 +148,14 @@ p {
   background-color: #e16a26 !important;
   color: #ffffff !important;
 }
-.tPageinationElements{
-
-}
 
 .paginate_button button,
 .paginate_buttons button {
   border: none;
-  color: #fff;
-  /* font-size: 14px; */
-  background-color: lightslategray;
-  box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+  color: var(--text-color);
+  font-size: 16px;
+  background-color: var(--card-color);
+  box-shadow: var(--card-shadow);
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
@@ -185,27 +176,24 @@ p {
 .paginate_buttons button:not(:disabled):hover{
   cursor: pointer;
   color: #fff !important;
-  background-color: #696cff!important;
+  background-color: var(--normal-purple)!important;
   transform: translateY(-1px) !important;
 } 
 .paginate_button button:focus{
   color: #fff !important;
-  background-color: #5f61e6 !important;
-  border-color: #5f61e6 !important;
+  background-color: var(--normal-purple) !important;
+  border-color: var(--normal-purple) !important;
   transform: translateY(-1px) !important;
 }
 .paginate_buttons button:disabled,
 .paginate_button button:disabled{
-  border: none;
-  color: #ccc; 
-  background-color: #eee; 
-  border-color: #ccc; 
   cursor: not-allowed; 
 }
 
 .paginate_button button.active,
 .paginate_buttons button.active {
-  background-color: #5f61e6; 
+  background-color: var(--normal-purple); 
+  color: #fff;
 }
 
 .header {
@@ -222,16 +210,20 @@ p {
 
 .page-size-container {
   width: 500px;
-  margin-left: 10px; 
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .page_size {
-  color: #697a8d;
+  color: var(--text-color);
   font-size: 16px;
-  border: 0.5px solid lightgray;
+  background-color: var(--card-color);
+  border: 1px solid var(--table-border-color);
   border-radius: 0.375rem;
   padding: 6px;
-  width: 200px; 
+  width: 170px;
+  height: 38px;
 }
 .page_size:hover, .page_size:focus{
   outline: none;
@@ -240,51 +232,63 @@ p {
 
 .addProject{
   font-size: 16px;
-  /* padding: 0.25rem 0.5rem; */
   border-radius: 0.375rem;
   margin-left: 1rem;
-  background-color: #696cff;
-  border-color: #696cff;
 }
 
-.addProject:hover{
-  background-color: #5f61e6 !important;
-  border-color: #5f61e6 !important;
+.progress {
+  border-radius: 10rem !important;
+  background-color: var(--progress-background);
 }
-.addProject:focus {
-  background-color: #5f61e6 !important;
-  border-color: #5f61e6 !important;
-}
-
 .progress-bar{
   cursor: default;
-  background-color: #696cff;
   color: transparent;
-  transition: color 0.5s ease;
+  transition: color 0.3s ease;
+  background-color: var(--normal-purple);
+  border-radius: 10rem !important;
+  box-shadow: var(--btn-shadow);
 }
 
 .progress-bar:hover{
-  color: white;
+  color: #fff;
+  box-shadow: var(--btn-shadow);
 }
 
 .progress-label{
+  border-radius: 10rem !important;
   width: 100%;
   text-align: center;
   color: transparent;
   cursor: default;
+  box-shadow: var(--btn-shadow);
 }
-
-.progress-type1{color: transparent;}
-.progress-type2:hover{color: transparent;}
-.progress:hover .progress-type1{color: white;}
+.progress-type1 {
+  border-radius: 10rem !important;
+  color: transparent;
+  box-shadow: var(--btn-shadow);
+}
+.progress-type2:hover {
+  border-radius: 10rem !important;
+  color: transparent;
+  box-shadow: var(--btn-shadow);
+}
+.progress:hover .progress-type1 {
+  border-radius: 10rem !important;
+  color: #fff;
+  box-shadow: var(--btn-shadow);
+}
 .progress:hover .progress-label{
-  color: #697a8d;
-  transition: color 0.5s ease;
+  border-radius: 10rem !important;
+  color: var(--text-color);
+  transition: color 0.3s ease;
+  box-shadow: var(--btn-shadow);
 }
 
 .progress-label:hover{
-  transition: color 0.5s ease;
-  color: #697a8d;
+  box-shadow: var(--btn-shadow);
+  border-radius: 10rem !important;
+  transition: color 0.3s ease;
+  color: var(--text-color);
 }
 
 .mFilters {
@@ -300,15 +304,6 @@ p {
   line-height: normal !important;
 }
 
-
-
-/* :host::ng-deep.p-inputtext{
-  line-height: normal;
-} */
-
-.container-xxl {
-  max-width: 1550px;
-}
 .tFooter {
   display: flex;
   justify-content: space-between;
@@ -316,25 +311,24 @@ p {
 }
 
 .archProject {
+  color: var(--text-color);
+  border-bottom: var(--action-border-bottom);
   margin-left: 5px;
   width: 195px;
   border-radius: 0.375rem;
-  border-bottom: 2px solid #D7D7F8;
 }
 .archProject:hover {
   cursor: pointer;
-  border-bottom: 2px solid #696cff;
+  border-bottom: 2px solid var(--normal-purple);
 }
 .archTable td, th{
-  border-bottom: 1px solid #d9dee3 !important;
+  border-bottom: 1px solid var(--table-border-color) !important;
   padding: 5px;
 }
 .tdName {
   width: 35% !important;
 }
-.tdAssignee {
-  width: 25% !important;
-}
+
 .tdDate {
   width: 20% !important;
 }
@@ -348,13 +342,6 @@ p {
 }
 .tAssigneeName {
   margin-left: 5px;
-}
-.tArchBtn:focus {
-  color: #fff !important;
-}
-.archBtn:hover {
-  color: #fff !important;
-  transform: translateY(-1px) !important;
 }
 .archBtn {
   margin-top: 20px;
@@ -382,33 +369,12 @@ p {
   border-top: none;
 }
 
-.btn-primary {
-  background-color: #696cff;
-  border-color: #696cff;
-  /* box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12); */
-  /* display: inline-flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
-  /* padding-top: 0.55rem; */
-  /* padding-bottom: 0.55rem; */
-  font-size: 16px;
-  border-radius: 0.375rem;
-  margin-right: 25px;
-  line-height: 1.45;
-  /* width: 200px; */
-  text-align: center;
-}
-.btn-primary:focus { 
-  background-color:#696cff;
-  border-color: #696cff !important;
-}
-
 .noArch {
   margin: 15px !important;
 }
 
 .tPCheck:checked {
-  accent-color: #696cff !important;
+  accent-color: var(--normal-purple) !important;
 }
 
 .filter {
@@ -417,19 +383,19 @@ p {
 .filter:hover,
 .filter:focus {
   cursor: pointer;
-  color: #5f61e6;
+  color: var(--dark-purple);
 }
 
 .sorted-asc {
   transform: rotateX(0deg);
   transition: transform 0.3s;
-  color: #5f61e6;
+  color: var(--dark-purple);
 }
 
 .sorted-desc {
   transform: rotateX(180deg);
   transition: transform 0.3s;
-  color: #5f61e6;
+  color: var(--dark-purple);
 }
 
 .unsorted {

@@ -15,20 +15,20 @@
             </svg>
           </div>
           <div class="projInfoBtn">
-            <input type="button" class="btn btn-outline-info btn-sm tProjDet" (click)="openProjectInfo(projectInfo)" value="Project Details">
+            <button class="btn btn-primary btn-sm tProjDet" (click)="openProjectInfo(projectInfo)">Project Details</button>
           </div>
         </div>
       </div>
       <div class="button-selectors">
         <div class="viewButtons">
-          <button class="btn btn-primary btn-lg tBtnSelectors" [ngClass]="{'btn-active': viewMode === 'table', 'btn-inactive': viewMode !== 'table'}" (click)="changeToTable()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+          <button class="btn btn-primary btn-lg tBtnSelectors btn-ViewType" [ngClass]="{'btn-active': viewMode === 'table', 'btn-inactive': viewMode !== 'table'}" (click)="changeToTable()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
             <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
           </svg>Table View</button>
-          <button class="btn btn-primary btn-lg" [ngClass]="{'btn-active': viewMode === 'kanban', 'btn-inactive': viewMode !== 'kanban'}" (click)="changeToKanban()" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-kanban" viewBox="0 0 16 16">
+          <button class="btn btn-primary btn-lg btn-ViewType" [ngClass]="{'btn-active': viewMode === 'kanban', 'btn-inactive': viewMode !== 'kanban'}" (click)="changeToKanban()" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-kanban" viewBox="0 0 16 16">
             <path d="M13.5 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm-11-1a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
             <path d="M6.5 3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm-4 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm8 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1z"/>
           </svg>Kanban</button>
-          <button class="btn btn-primary btn-lg" [ngClass]="{'btn-active': viewMode === 'gantt', 'btn-inactive': viewMode !== 'gantt'}" (click)="changeToGant()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-steps" viewBox="0 0 16 16">
+          <button class="btn btn-primary btn-lg btn-ViewType" [ngClass]="{'btn-active': viewMode === 'gantt', 'btn-inactive': viewMode !== 'gantt'}" (click)="changeToGant()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-steps" viewBox="0 0 16 16">
             <path d="M.5 0a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 .5 0M2 1.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
           </svg>Gantt</button>
         </div>
@@ -76,8 +76,8 @@
           </div>
           <div class="filter">
             <p-calendar
-              [hideOnDateTimeSelect]="false"
               [style]="{'width':'100%'}"
+              [hideOnDateTimeSelect]="false"
               (onSelect)="filterTasks()"
               (onClearClick)="filterTasks()"
               placeholder="Filter by Date Range"
@@ -92,71 +92,31 @@
         <div class="table-responsive text-nowrap">
           <table class="table">
             <thead>
-              <tr>
-                <th>Task Name
-                  <svg
-                  (click)="toggleSortOrder('TaskName')"
-                  [ngClass]="getSortClass('TaskName')"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="currentColor"
-                  class="filter1"
-                  viewBox="0 0 16 16"
-                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-                </svg>
+              <tr class="tHeader">
+                <th class="sortSvg">Task Name
+                  <svg (click)="toggleSortOrder('TaskName')" [ngClass]="getSortClass('TaskName')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                  </svg>
                 </th>
-                <th>Assignee
-                  <svg
-                  (click)="toggleSortOrder('Assignee')"
-                  [ngClass]="getSortClass('Assignee')"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="currentColor"
-                  class="filter1"
-                  viewBox="0 0 16 16"
-                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-                </svg>
+                <th class="sortSvg">Assignee
+                  <svg (click)="toggleSortOrder('Assignee')" [ngClass]="getSortClass('Assignee')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                  </svg>
                 </th>
-                <th>Start Date
-                  <svg
-                  (click)="toggleSortOrder('StartDate')"
-                  [ngClass]="getSortClass('StartDate')"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="currentColor"
-                  class="filter1"
-                  viewBox="0 0 16 16"
-                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-                </svg>
+                <th class="sortSvg">Start Date
+                  <svg (click)="toggleSortOrder('StartDate')" [ngClass]="getSortClass('StartDate')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                  </svg>
                 </th>
-                <th>End Date
-                  <svg
-                  (click)="toggleSortOrder('EndDate')"
-                  [ngClass]="getSortClass('EndDate')"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="currentColor"
-                  class="filter1"
-                  viewBox="0 0 16 16"
-                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-                </svg>
+                <th class="sortSvg">End Date
+                  <svg (click)="toggleSortOrder('EndDate')" [ngClass]="getSortClass('EndDate')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                  </svg>
                 </th>
-                <th>Status
-                  <svg
-                  (click)="toggleSortOrder('StatusName')"
-                  [ngClass]="getSortClass('StatusName')"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="currentColor"
-                  class="filter1"
-                  viewBox="0 0 16 16"
-                ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-                </svg>
+                <th class="sortSvg">Status
+                  <svg (click)="toggleSortOrder('StatusName')" [ngClass]="getSortClass('StatusName')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                  </svg>
                 </th>
               </tr>
             </thead>
@@ -183,14 +143,19 @@
                         <span style="margin-left: 5px;">{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}</span>
                       </div>
                       <div *ngIf="!task.profilePicUrl" class="nameAvatar boardAvatar">
-                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName" value="75%"></ngx-avatars>
+                        <!-- <ngx-avatars *ngIf="themeService.isDarkTheme" size="25" bgColor="rgb(56, 54, 87)" fgColor="rgb(183, 180, 242)" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
+                        <ngx-avatars *ngIf="!themeService.isDarkTheme" size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars> -->
+                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
                         <span style="margin-left: 5px;">{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}</span>
                       </div>
                     </td>
                     <td>{{ task.startDate | date }}</td>
                     <td>{{ task.endDate | date }}</td>
                     <td>
-                      <span class="badge" [style.background-color]="task.color">{{ task.statusName }}</span>
+                      <!-- <span class="badge" [style.background-color]="task.color">{{ task.statusName }}</span> -->
+                      <!-- <span class="badge" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color">{{ task.statusName }}</span> -->
+                      <span class="badge" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color" [style.color]="getDarkerColor(task.color)">{{ task.statusName }}</span>
+                      <span class="badge" *ngIf="themeService.isDarkTheme" [style.background-color]="getLessPoppingColor(task.color)" [style.color]="getPoppingColor(task.color)">{{ task.statusName }}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -211,23 +176,25 @@
 
 <ng-template #projectInfo>
   <div class="modal-container InfoModal">
-    <div class="modal-header" style="background-color: white;border-bottom: none;">
+    <div class="modal-header modalHeadProjDetails">
       <div class="input-group-text editName">
         <h6 *ngIf="userRole==2 || userRole==3 || userRole==4"  class="projectName">{{ update.projectName }}</h6>
         <input class="form-control titleInp" id="projectName" [(ngModel)]="update.projectName" (blur)="updateProject()" *ngIf="userRole==0 || userRole==1">
       </div>
-      <button type="button" class="btn-close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close"></button>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body">
-        <div class="mb-3 mr-2">
-          <h5 class="heading">Details</h5>
-          <div class="d-flex justify-content-between info tInfoDiv">
-            <div class="my-2">
-              <label for="projectStatus">Status:</label>
-              <select id="projectStatus" class="selectElements" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3 || userRole == 2" [ngClass]="getStatusClass()">
-                <option class="DEFAULT_STAT" value=0>Proposed</option>
-                <option class="DEFAULT_STAT" value=1>InProgress</option>
-                <option class="DEFAULT_STAT" value=2>Completed</option>
+      <div class="mb-3 mr-2">
+        <h5 class="heading">Details</h5>
+        <div class="d-flex justify-content-between info tInfoDiv">
+          <div class="my-2">
+            <label for="projectStatus">Status:</label>
+            <select id="projectStatus" class="selectElements" [(ngModel)]="update.projectStatus" (change)="updateProject()" [disabled]="userRole == 4 || userRole == 3 || userRole == 2" [ngClass]="getStatusClass()">
+              <option class="DEFAULT_STAT" value=0>Proposed</option>
+              <option class="DEFAULT_STAT" value=1>InProgress</option>
+              <option class="DEFAULT_STAT" value=2>Completed</option>
               </select>
             </div>
             <div class="my-2">
@@ -243,7 +210,6 @@
               </div>
               <div class="sPrimeNg" style="width: 130px !important;" *ngIf="userRole == 0 || userRole == 1">
                 <p-calendar
-                [style]="{'width':'130px'}"
                 [(ngModel)]="update.endDate"
                 inputId="endDate"
                 name="endDate"
@@ -276,13 +242,15 @@
   <div class="modal-container">
     <div class="modal-header">
       <h4>{{ (userRole === 0 || userRole === 1 || userRole === 2) ? 'Member Management' : 'Member list' }}</h4>
-      <button type="button" class="btn-close" (click)="modalRef?.hide()"  data-dismiss="modal" aria-label="Close"></button>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body">
       <div *ngIf="userRole==1 || userRole == 0" class="mb-3 addmembers">
           <h5>Add project members</h5>
           <div class="addInfo">
-            <ng-select [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" name="Assignees" (click)="$event.stopPropagation()" style="height: 2rem;">
+            <ng-select class="tMngMemb" [items]="addableUsers" [(ngModel)]="selectedUsers" [multiple]="true" bindLabel="name" placeholder="Add Project Members" optionLabel="name" name="Assignees" (click)="$event.stopPropagation()" style="height: 2rem;">
               <ng-template ng-option-tmp let-user="item">
                 <div class="user-detail">
                   <div *ngIf="user.profilePicUrl" class="nameAvatar">
@@ -334,7 +302,7 @@
                   <span *ngIf="!user.profilePicUrl" class="ng-value-label d-inline-flex"><ngx-avatars size="25" bgColor="#5d57c2" [name]="user.name"></ngx-avatars>{{ user.name }}</span>
                 </td>
                 <td>
-                  <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 2 || userRole == 4 || userRole == 3 || userId == user.appUserId || user.archived==true">
+                  <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 2 || userRole == 4 || userRole == 3 || userId == user.appUserId">
                     <option value=1 *ngIf="!OwnerAlreadyExists(user.appUserId)">Project Owner</option>
                     <option value=2>Manager</option>
                     <option value=3>Participant</option>
@@ -343,11 +311,10 @@
                   <span class="isPM" *ngIf="user.projectRole == 0">Project Manager</span>
                 </td>
                 <td style="text-align: center;" class="tModalRemoveIcon">
-                  <svg *ngIf="showDelete(user)" (click)="deleteAssigne(user.appUserId)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                  <svg *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4" (click)="deleteAssigne(user.appUserId)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                   </svg>
                   <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
-                  <span *ngIf="user.archived==true" style="font-size: small;">(archived)</span>
                 </td>
               </tr>
             </tbody>
@@ -361,9 +328,9 @@
 <ng-template #newTask class="newTaskModal">
   <div class="modal-header">
     <h4 class="modal-title pull-left">Add New Task</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body">
     <form class="mb-3" (ngSubmit)="saveTask()">
@@ -380,6 +347,12 @@
       <div class="mb-1">
         <div class="tLabel">
           <label for="startDate" class="form-label">Start Date</label>
+          <div pTooltip="Please choose a date within the project's specified date range.">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+            </svg>
+          </div>
         </div>
         <div class="tNgCalendar">
           <p-calendar
@@ -402,6 +375,12 @@
       <div class="mb-1">
         <div class="tLabel">
           <label for="endDate" class="form-label">End Date</label>
+          <div pTooltip="Please choose a date within the project's specified date range.">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+            </svg>
+          </div>
         </div>
         <div class="tNgCalendar">
           <p-calendar
@@ -415,16 +394,16 @@
           dateFormat="MM dd, yy"
           [minDate]="newTaskStartDate"
           [maxDate]="projectEndDate"
-          [ngClass]="{'ng-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}"
-        ></p-calendar>
+          [ngClass]="{'ng-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}">
+          </p-calendar>
           <div *ngIf="buttonClicked && !newTaskEndDate" class="invalid">Please enter end date.</div>
           <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
         </div>
       </div>
       <div class="mb-1 chooseAssignee" autocomplete="off">
         <label for="assignee2" class="form-label">Assignee</label>
-        <div class="ng-select-wrapper" [ngClass]="{'is-invalid': buttonClicked && !selectedUser}">
-          <ng-select class="asigneeDropdown" [items]="availableAssigness" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
+        <div class="ng-select-wrapper">
+          <ng-select [ngClass]="{'ng-invalid': buttonClicked && !selectedUser}" class="asigneeDropdown" [items]="availableAssigness" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee">
             <ng-template ng-option-tmp let-user="item" let-index="index">
               <div style="display: flex; align-items: center;">
                 <div *ngIf="user.profilePicUrl" class="nameAvatar">
@@ -486,9 +465,9 @@
 <ng-template #archivedTasksModal>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Archived Tasks</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body" *ngIf="archivedTasks && archivedTasks.length > 0; else noArchivedTasks">
     <div class="table-responsive text-nowrap">
@@ -532,9 +511,9 @@
   <div class="modal-container">
     <div class="modal-header">
       <h4 class="modal-title pull-left">Archive Project</h4>
-      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
-      </button>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body archBody">
       <span class="archSpan">Are you sure you want to archive this project?</span>
@@ -549,7 +528,9 @@
   <div class="modal-container">
     <div class="modal-header">
       <h4>Manage Sections</h4>
-      <button type="button" class="btn-close" (click)="modalRef?.hide()" aria-label="Close"></button>
+      <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg>
     </div>
     <div class="modal-body">
       <div class="createSection">
@@ -571,7 +552,7 @@
             <span>Name</span>
             <span style="text-align: right;">Delete section</span>
           </div>
-          <div class="scroll">
+          <div class="scroll manageSectionScroll">
             <table class="table table-sm SectionTable">
               <tbody>
                 <tr *ngFor="let section of filteredSections">

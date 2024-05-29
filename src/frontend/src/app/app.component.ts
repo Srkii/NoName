@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from './_services/shared.service';
-import { firstValueFrom } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NotificationsService } from './_services/notifications.service';
+import { ThemeServiceService } from './_services/theme-service.service';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +15,17 @@ export class AppComponent implements OnInit{
 
   constructor(
     private router: Router,
-    private sharedService: SharedService,
-    private spinner: NgxSpinnerService,
-    public notificationService: NotificationsService
+    public notificationService: NotificationsService,
+    private themeService: ThemeServiceService
   ) {}
 
   ngOnInit(): void {
-    // this.isLoginOrRegisterPage();
+    this.applyTheme();
+  }
+
+  private applyTheme(): void {
+    const isDarkTheme = localStorage.getItem('isDarkTheme') === 'true';
+    this.themeService.applyTheme(isDarkTheme);
   }
 
   isLoginOrRegisterPage(): boolean {

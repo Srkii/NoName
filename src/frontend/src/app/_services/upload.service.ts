@@ -53,8 +53,7 @@ export class UploadService {
     return false;
   }
   checkFileSize(file:File):boolean{
-    console.log(file.size);
-    if(file.size<10*1024*1024) return true;//ako je manje od 10mb moze da uploaduje
+    if(file.size<10*1024*1024) return true; // ako je manje od 10mb moze da uploaduje
     return false;
   }
   isSelectedFileImage(file:File):boolean{

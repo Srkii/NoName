@@ -126,7 +126,7 @@ namespace backend.Controllers
       
       if(!VerifyPassword(user,data.CurrentPassword))
       {
-        return BadRequest(new {message = "Wrong current password",type = 1});
+        return BadRequest(new {message = "Incorrect current password",type = 1});
       }
 
       var hmac = new HMACSHA512(user.PasswordSalt);

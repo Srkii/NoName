@@ -45,86 +45,38 @@
     <!-- <div class="table-responsive text-nowrap">
       <table class="table">
         <thead> -->
-    <div class="table-responsive text-nowrap">
+    <div class="table-responsive text-nowrap tTable">
       <table>    
-        <tr style="font-size: 16px !important;">
+        <tr style="font-size: 16px !important;" class="tHeader">
           <th style="width: 20% !important;">Project Name
-            <svg
-            (click)="toggleSortOrder('ProjectName')"
-            [ngClass]="getSortClass('ProjectName')"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            fill="currentColor"
-            class="filter"
-            viewBox="0 0 16 16"
-          ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-          </svg>
+            <svg (click)="toggleSortOrder('ProjectName')" [ngClass]="getSortClass('ProjectName')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+            </svg>
           </th>
           <th style="width: 15% !important;">Project Owner
-            <svg
-            (click)="toggleSortOrder('ProjectOwner')"
-            [ngClass]="getSortClass('ProjectOwner')"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            fill="currentColor"
-            class="filter"
-            viewBox="0 0 16 16"
-          ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-          </svg>
+            <svg (click)="toggleSortOrder('ProjectOwner')" [ngClass]="getSortClass('ProjectOwner')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+            </svg>
           </th>
           <th style="width: 15% !important;">Status
-            <svg
-            (click)="toggleSortOrder('ProjectStatus')"
-            [ngClass]="getSortClass('ProjectStatus')"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            fill="currentColor"
-            class="filter"
-            viewBox="0 0 16 16"
-          ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-          </svg>
+            <svg (click)="toggleSortOrder('ProjectStatus')" [ngClass]="getSortClass('ProjectStatus')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter" viewBox="0 0 16 16" >
+              <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+            </svg>
           </th>
           <th style="width: 20% !important;">Progress
-            <svg
-            (click)="toggleSortOrder('Progress')"
-            [ngClass]="getSortClass('Progress')"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            fill="currentColor"
-            class="filter"
-            viewBox="0 0 16 16"
-          ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-          </svg>
+            <svg (click)="toggleSortOrder('Progress')" [ngClass]="getSortClass('Progress')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+            </svg>
           </th>
           <th style="width: 20% !important;">Start Date
-            <svg
-            (click)="toggleSortOrder('StartDate')"
-            [ngClass]="getSortClass('StartDate')"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            fill="currentColor"
-            class="filter"
-            viewBox="0 0 16 16"
-          ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-          </svg>
+            <svg (click)="toggleSortOrder('StartDate')" [ngClass]="getSortClass('StartDate')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+            </svg>
           </th>
           <th style="width: 20% !important;">End Date
-            <svg
-            (click)="toggleSortOrder('EndDate')"
-            [ngClass]="getSortClass('EndDate')"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            fill="currentColor"
-            class="filter"
-            viewBox="0 0 16 16"
-          ><path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-          </svg>
+            <svg (click)="toggleSortOrder('EndDate')" [ngClass]="getSortClass('EndDate')" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="filter" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+            </svg>
           </th>
         </tr>
       <!-- </thead> -->
@@ -145,12 +97,12 @@
                 {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
               </span>
               <span *ngIf="!projectOwners[project.id]?.profilePicUrl" class="d-flex align-items-center">
-                <ngx-avatars class="mx-1" size="21" bgColor="#5d57c2" [name]="projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName" value="75%"></ngx-avatars>
+                <ngx-avatars class="mx-1" size="25" bgColor="#5d57c2" [name]="projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName" value="75%"></ngx-avatars>
                 {{projectOwners[project.id]?.firstName + ' ' + projectOwners[project.id]?.lastName}}
               </span>
             </td>
             <td [ngClass]="getStatusString(project.projectStatus)">
-              <p style="width: 85% !important;">{{ getStatusString(project.projectStatus) }}</p>
+              <p style="width: 75% !important;">{{ getStatusString(project.projectStatus) }}</p>
             </td>
             <td>
               <div class="progress">
@@ -159,7 +111,7 @@
               </div>
             </td>
             <td>{{ project.startDate | date }}</td>
-            <td [ngStyle]="{'color': isOverdue(project.endDate) ? '#a64266' : ''}">{{ project.endDate | date }}</td>
+            <td [ngStyle]="{'color': isOverdue(project.endDate) ? '#ec818a' : ''}">{{ project.endDate | date }}</td>
           </ng-container>
         </tr>
       </table>
@@ -167,7 +119,7 @@
   </div>   
   <div class="tFooter">
     <div class="ViewarchProj" (click)="openViewArchProjModal(ViewArchivedProjModal)" *ngIf="userRole == 2">
-      <div class="archProject"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+      <div class="archProject"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16" style="margin-right: 3px;">
         <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
         </svg>View Archived Projects
       </div>
@@ -194,13 +146,12 @@
   </div>
 </div>
 
-
 <ng-template #ViewArchivedProjModal>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Archived Projects</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   
   <div class="modal-body" *ngIf="archivedProjects && archivedProjects.length > 0; else noArchivedProjects">
@@ -219,13 +170,16 @@
             <div *ngIf="project.ownerProfilePicture">
               <img [src]="uploadservice.getImage(project.ownerProfilePicture)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
             </div>
-            <div *ngIf="!project.ownerProfilePicture" class="nameAvatar boardAvatar">
+            <div *ngIf="!project.ownerProfilePicture && !project.ownerFirstName" class="nameAvatar boardAvatar tNoSectionAvatar" style=" padding: 0 !important;">
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" style="margin-right:0.25rem" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                </svg>
+              </svg>
             </div>
-            <div class="tAssigneeName">
+            <div *ngIf="!project.ownerProfilePicture && project.ownerFirstName">
+              <ngx-avatars size="25" bgColor="#5d57c2" [name]="project.ownerFirstName + ' ' + project.ownerLastName"></ngx-avatars>
+            </div>
+            <div class="tAssigneeName" [ngStyle]="!project.ownerFirstName ? {'margin': '0'} : {}">
               {{ project.ownerFirstName || project.ownerLastName ? (project.ownerFirstName + ' ' + project.ownerLastName) : 'Not assigned' }}
             </div>
           </div>
@@ -240,7 +194,7 @@
     </div>
   </div>
   <ng-template #noArchivedProjects>
-    <div class="text-center noArch">There are currently no archived projects.</div>
+    <div class="text-center noArch">There are no archived projects.</div>
   </ng-template>
 </ng-template>
 

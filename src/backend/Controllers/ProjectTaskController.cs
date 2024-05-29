@@ -300,16 +300,8 @@ namespace backend.Controllers
                 var existingDependency = await _context.TaskDependencies
                 .AnyAsync(dep => dep.TaskId == dto.TaskId && dep.DependencyTaskId == dto.DependencyTaskId);
 
-                if (existingDependency)
+                if (!existingDependency)
                 {
-                    // If the dependency already exists, update it
-                    var existing = await _context.TaskDependencies.FirstOrDefaultAsync(dep => dep.TaskId == dto.TaskId);
-                    existing.TaskId = dto.TaskId;
-                    existing.DependencyTaskId = dto.DependencyTaskId;
-                }
-                else
-                {
-                    // If the dependency doesn't exist, add a new one
                     var newDependency = new TaskDependency
                     {
                         TaskId = dto.TaskId,
