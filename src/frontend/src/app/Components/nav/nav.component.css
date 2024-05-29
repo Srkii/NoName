@@ -114,6 +114,9 @@ body {
   margin-right: 7px;
   cursor: pointer;
 }
+.tSonMoon svg:hover {
+  fill: var(--normal-purple);
+}
 .logoImg{
   width: 60px;
   padding-top: 0%;
