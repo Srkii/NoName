@@ -34,6 +34,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .MemberManagmentModel{
   height: auto;
 }
+.projectInfoModal{
+  height: auto;
+}
 .ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
   border: 1px solid #ccc !important;
   box-shadow: none !important;

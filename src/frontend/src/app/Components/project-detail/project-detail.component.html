@@ -1,7 +1,6 @@
 <app-nav></app-nav>
 <div class="content-wrapper">
-  <app-popup style="z-index: 100;"class="pop" *ngIf="showPopUp && clickedTask" [task]="clickedTask" (backClicked)="closePopup();"
-    [@popFromSide]="showPopUp ? 'popFromSide' : ''">
+  <app-popup style="z-index: 100;"class="pop" *ngIf="showPopUp && clickedTask" [task]="clickedTask" (backClicked)="closePopup();">
   </app-popup>
   <div class="container-xxl flex-grow-1 container-p-y">
     <div *ngIf="project">
@@ -242,9 +241,8 @@
               <div class="sSpan">
                 <span *ngIf="userRole == 2 || userRole == 3 || userRole == 4" id="startDate" class="startDate">{{ update.endDate | date }}</span>
               </div>
-              <div class="sPrimeNg" style="width: 130px !important;">
+              <div class="sPrimeNg" style="width: 130px !important;" *ngIf="userRole == 0 || userRole == 1">
                 <p-calendar
-                *ngIf="userRole == 0 || userRole == 1"
                 [style]="{'width':'130px'}"
                 [(ngModel)]="update.endDate"
                 inputId="endDate"
@@ -267,7 +265,7 @@
         </div>
         <div class="mb-3 description">
           <h5>Description</h5>
-          <quill-editor id="area-desc" class="area-desc" (click)="showEditOptions()" [(ngModel)]="update.description" (onBlur)="updateProject()" [modules]="quillService.editorModules" [formats]="quillService.editorFormats" [disabled]="userRole == 4 || userRole == 3 || userRole==2" [ngClass]="{'hide-toolbar': userRole == 4 || userRole == 3 || userRole == 2 || !enabledEditorOptions, 'show-toolbar': userRole == 0 && userRole == 1 && enabledEditorOptions}" placeholder="Change description here ..."></quill-editor>
+          <quill-editor id="area-desc" class="area-desc" (click)="showEditOptions()" [(ngModel)]="update.description" (onBlur)="updateProject()" [modules]="quillService.editorModules" [formats]="quillService.editorFormats" [disabled]="userRole == 4 || userRole == 3 || userRole==2" [ngClass]="{'hide-toolbar': userRole == 4 || userRole == 3 || userRole == 2 || !enabledEditorOptions, 'show-toolbar': userRole == 0 && userRole == 1 && enabledEditorOptions}" placeholder=""></quill-editor>
         </div>
       </div>
   </div>
