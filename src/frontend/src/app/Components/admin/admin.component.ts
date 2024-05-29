@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
-
 import { AdminService } from '../../_services/admin.service';
 import { RegisterInvitation } from '../../Entities/RegisterInvitation';
 import { Member, UserRole } from '../../Entities/Member';
@@ -9,6 +8,9 @@ import { ToastrService } from 'ngx-toastr';
 import { UploadService } from '../../_services/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Project } from '../../Entities/Project';
+import { SelectedUser } from '../../Entities/SelectedUser';
+import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { th } from 'date-fns/locale';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -24,14 +26,18 @@ import { th } from 'date-fns/locale';
 })
 export class AdminComponent implements OnInit{
 
-  constructor(private adminService: AdminService, private toastr: ToastrService, public uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
+  constructor(
+    private adminService: AdminService, 
+    private toastr: ToastrService, 
+    public uploadservice:UploadService, 
+    private spinner:NgxSpinnerService,
+    private modalService:BsModalService,
+  ){}
 
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
-  //  this.PicturesOfRoles();
-  //  this.getArchivedUsers(); // zasto u onInit a ne tek kad se otvori modal
-   // vrv je problem sto 5-6 salje server request i svaki put proverava validnost tokena na onInit. On ne stigne i ne prikaze nista
+ //  this.PicturesOfRoles();
   }
 
   invitation:RegisterInvitation={
@@ -90,11 +96,20 @@ export class AdminComponent implements OnInit{
   currentLastName: string=''
   currentRole: string=''
   currentId=localStorage.getItem('id');
+  selectedUserRole: UserRole | null = null;
+
+  pmCounter: number = 0;
+  pmProjects: Project[] = [];
+  pmProjectCount: number = 0;
+  projectManagers: SelectedUser[] = [];
+  selectedManagers: SelectedUser[] = [];
 
   isFilterActive: boolean=true;
-  isFilter1: number=0
+  isFilter1: number=0;
 
   archived_users: Member[]=[];
+
+  filterRole: string|null=null;
 
   archivedIds:number[]=[];
   archId: boolean=false;
@@ -105,8 +120,6 @@ export class AdminComponent implements OnInit{
   regexEmail: RegExp =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   archMembers: { [key: string]: Member[] } = {};
-
-  filterRole: string|null=null
 
   Invite(): void{
    
@@ -145,19 +158,16 @@ export class AdminComponent implements OnInit{
         Id:id,
         Role: parseInt(this.userRole)
       }
-
       if(ChangeDto)
       {
         this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
           this.GetUsers()
         },error: (error)=>{
-          console.log(error)
+    
         }}
         )
       }
-      else{
-        console.log("Can't change user role")
-      }}
+      }
 
     UpdateUser(id: number): void{
       
@@ -178,9 +188,7 @@ export class AdminComponent implements OnInit{
           this.GetUsers();
           this.modalRef?.hide();
         },
-        error: (error) => {
-          console.log(error);
-        }
+        error: (error) => {}
     })
       
     }
@@ -226,6 +234,7 @@ export class AdminComponent implements OnInit{
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
+        
         this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
           this.filteredUsers=res;
           this.totalPages= Math.ceil(res / this.pageSize);
@@ -287,7 +296,6 @@ export class AdminComponent implements OnInit{
       })
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        //this.loadPicture(this.allUsers);
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
@@ -297,15 +305,15 @@ export class AdminComponent implements OnInit{
 
     }
 
-    numbersOfRoles():void {
-      this.adminService.getFilterCount().subscribe(res => {
-        this.numOfAdmins = res.adminCount;
+    numbersOfRoles():void{
+      this.adminService.getFilterCount().subscribe(res=>{
+        this.numOfAdmins=res.adminCount;
         this.numOfMembers = res.memberCount;
         this.numOfPM = res.projectManagerCount;
         this.admins=res.admins;
         this.members=res.members;
         this.projectMangers=res.pManagers;
-      });
+      })
     }
 
     // PicturesOfRoles():void{
@@ -323,21 +331,90 @@ export class AdminComponent implements OnInit{
     //   })
     // }
 
-    openModal(modal: TemplateRef<void>, user:Member)
+    assignProjectManagers(){
+      var projectMembers = this.pmProjects.map<ProjectMember>((project,i) => 
+        ({AppUserId: this.selectedManagers[i].appUserId, ProjectId: project.id , ProjectRole: ProjectRole.ProjectManager}))
+      this.adminService.assignProjectManagers(projectMembers).subscribe(response => {});
+    }
+
+    demoteProjectManager(){
+      this.adminService.demoteProjectManager(this.curentUserId).subscribe({
+        next: response => {
+          this.assignProjectManagers();
+          this.onLoad();
+        }
+      })
+    }
+
+    checkAssignementCompletition(){
+      var count = this.selectedManagers.filter((x:any) => x != null).length;
+      if(count == this.pmProjectCount)
+        return true;
+      return false;
+    }
+
+    async loadPMInfo(user: Member){
+      try
+      {
+        this.pmCounter = this.allUsers.filter((x:any) => x.role === 2).length
+        this.pmProjects = await this.adminService.getManagersProjects(user.id).toPromise();
+        this.pmProjectCount = this.pmProjects.length;
+        this.projectManagers = await this.adminService.getManagers(user.id).toPromise();
+      }
+      catch(error){}
+    }
+
+    openUserEditModal(modal: TemplateRef<void>, user:Member)
     {
       this.newEmail = user.email;
       this.newFisrtName = user.firstName;
       this.newLastName = user.lastName;
       this.curentUserId=user.id;
-      
-      this.userRole = user.role.toString();
-      this.currentRole=this.GetUserRole(user.role)
 
       this.modalRef = this.modalService.show(
         modal,
         {
           class: 'modal-sm modal-dialog-centered'
         });
+    }
+
+    async openRoleArchModal(modal: TemplateRef<void>, user:Member)
+    {
+      this.selectedUserRole = user.role;
+      this.curentUserId=user.id;
+      this.selectedManagers = [];
+
+      this.userRole = user.role.toString();
+      this.currentRole=this.GetUserRole(user.role)
+
+      if(user.role==0)
+      {
+        this.currentRole="Admin";
+      }
+      else if(user.role==1)
+      {
+        this.currentRole="Member"
+      }
+      else if(user.role==2)
+      {
+        await this.loadPMInfo(user);
+        this.currentRole="Project Manager"
+      }
+      
+      if(user.role != 2 || (user.role == 2 && this.pmProjectCount == 0 || this.pmCounter==1)){
+        this.modalRef = this.modalService.show(
+          modal,
+          {
+            class: 'modal-sm modal-dialog-centered'
+          });
+      }
+      else{
+        this.modalRef = this.modalService.show(
+          modal,
+          {
+            class: 'modal-lg modal-dialog-centered'
+          });
+      }
     }
 
     openModal1(modal: TemplateRef<void>){
@@ -352,7 +429,7 @@ export class AdminComponent implements OnInit{
     noFilter():void
     {
       this.selectedRolee='';
-      this.filterRole=null
+      this.filterRole=null;
       this.onLoad();
     }
 
@@ -364,28 +441,21 @@ export class AdminComponent implements OnInit{
 
     }
 
-    toogleFilter(role:string): void {
-
-      if(this.filterRole===role){
-        console.log(this.filterRole)
+    toogleFilter(role: string): void{
+      if(this.filterRole===role)
+      {
         this.noFilter();
-        
       }
       else{
-        console.log("pre: " +this.filterRole)
         this.filterRole=role;
-        console.log("posle: "+this.filterRole)
         this.filterUsers();
-       
       }
     }
 
     getArchivedUsers(): void{
       this.adminService.getArchivedUsers().subscribe({next:(res)=>{
         this.archived_users=res;
-      },error:(error)=>{
-        console.log(error);
-      }
+      },error:(error)=>{}
     })
 
     }
@@ -435,6 +505,5 @@ export class AdminComponent implements OnInit{
         event.stopPropagation(); 
       }
     }
-
   }
 

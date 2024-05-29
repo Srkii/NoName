@@ -43,7 +43,7 @@ namespace backend.Controllers
     [HttpGet("availableUsers/{projectCreatorId}")]
     public async Task<ActionResult<AppUser>> GetAvailableUsers(int projectCreatorId)
     {
-      var availableUsers = await _context.Users.Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin).ToListAsync();
+      var availableUsers = await _context.Users.Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin && user.Archived == false).ToListAsync();
       return  Ok(availableUsers);
     }
 

@@ -7,6 +7,7 @@ import { UpdateUser } from '../Entities/UpdateUser';
 import { RegisterInvitation } from '../Entities/RegisterInvitation';
 import { environment } from '../../environments/environment';
 import { RoleCount } from '../Entities/RoleCount';
+import { ProjectMember } from '../Entities/ProjectMember';
 
 @Injectable({
   providedIn: 'root'
@@ -109,5 +110,21 @@ export class AdminService {
 
   removeFromArchieve(usersIds:number[]):Observable<any>{
     return this.httpClient.put<Member[]>(`${this.apiUrl}/users/removeFromArch`,usersIds,{headers:this.getHeaders()})
+  }
+
+  assignProjectManagers(managers: ProjectMember[]):Observable<any>{
+    return this.httpClient.post(`${this.apiUrl}/projects/AssignProjectManagers`,managers,{headers:this.getHeaders(),responseType: 'text'})
+  }
+
+  demoteProjectManager(userId: number):Observable<any>{
+    return this.httpClient.post(`${this.apiUrl}/projects/DemoteProjectManager/${userId}`,null,{headers:this.getHeaders(),responseType: 'text'})
+  }
+
+  getManagersProjects(userId: number): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/projects/GetManagersProjects/${userId}`,{  headers: this.getHeaders() });
+  }
+
+  getManagers(userId: number): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/projects/GetManagers/${userId}`,{  headers: this.getHeaders() });
   }
 }

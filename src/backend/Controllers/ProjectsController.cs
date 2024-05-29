@@ -357,7 +357,7 @@ namespace backend.Controllers
         {
             var users = await _context.ProjectMembers
                 .Where(pm => pm.ProjectId == projectId)
-                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName,pm.AppUser.Email, pm.AppUser.ProfilePicUrl, pm.ProjectRole })
+                .Select(pm => new { pm.AppUserId, pm.AppUser.FirstName, pm.AppUser.LastName,pm.AppUser.Email, pm.AppUser.ProfilePicUrl, pm.ProjectRole, pm.AppUser.Archived})
                 .ToListAsync();
 
             if (users == null)
@@ -373,7 +373,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<object>>> GetAddableUsers(int projectId)
         {
             var users = await _context.Users
-            .Where(user => !_context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId) && user.Role != UserRole.Admin)
+            .Where(user => !_context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId) && user.Role != UserRole.Admin && user.Archived==false)
             .Select(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl })
             .ToListAsync();
 
@@ -564,7 +564,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<object>>> GetAvailableAssigness(int projectId)
         {
             var users = await _context.Users
-            .Where(user => _context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId && member.ProjectRole != ProjectRole.Guest) && user.Role != UserRole.Admin)
+            .Where(user => _context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId && member.ProjectRole != ProjectRole.Guest) && user.Role != UserRole.Admin && user.Archived==false)
             .Select(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl })
             .ToListAsync();
 
@@ -574,6 +574,69 @@ namespace backend.Controllers
             }
 
             return Ok(users);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetManagersProjects/{userId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetManagersProjects(int userId)
+        {
+            var projects = await _context.Projects
+            .Where(project => _context.ProjectMembers.Any(member => member.AppUserId == userId && member.ProjectId == project.Id && member.ProjectRole == ProjectRole.ProjectManager))
+            .Select(project => new { project.Id, project.ProjectName })
+            .ToListAsync();
+
+            return Ok(projects);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetManagers/{userId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetManagers(int userId)
+        {
+            var users = await _context.Users
+            .Where(user => user.Id != userId && user.Role == UserRole.ProjectManager)
+            .Select(user => new {AppUserId = user.Id ,user.FirstName, user.LastName, user.ProfilePicUrl})
+            .ToListAsync();
+
+            return Ok(users);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("AssignProjectManagers")]
+        public async Task<ActionResult> AssignProjectManagers(ProjectMember[] dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var member = await _context.ProjectMembers.FirstOrDefaultAsync(x => x.ProjectId == dto.ProjectId && x.AppUserId == dto.AppUserId);
+                if(member != null)
+                {
+                    member.ProjectRole = ProjectRole.ProjectManager;
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    await _context.ProjectMembers.AddAsync(dto);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return Ok("Users roles successfully set to Project Manager role");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("DemoteProjectManager/{userId}")]
+        public async Task<ActionResult> DemoteProjectManager(int userId)
+        {   
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            user.Role = UserRole.Member;
+
+            var members = _context.ProjectMembers.Where(x => x.AppUserId == userId && x.ProjectRole == ProjectRole.ProjectManager);
+            foreach (var member in members)
+            {
+                member.ProjectRole = ProjectRole.Participant;
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok("Project manager successfully demoted");
         }
 
         public async Task<bool> RoleCheck(int projectId, List<ProjectRole> roles)

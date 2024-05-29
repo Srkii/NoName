@@ -424,7 +424,6 @@ export class PopupComponent {
       dueDate: task.endDate,
       sectionId: this.selectedSection ? this.selectedSection.id : 0
     };
-    console.log(dto);
 
       this.myTasksService.changeTaskInfo(dto).subscribe({
         next: (updatedTask: ProjectTask) => {
