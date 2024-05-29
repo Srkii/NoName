@@ -336,7 +336,7 @@
                   <span *ngIf="!user.profilePicUrl" class="ng-value-label d-inline-flex"><ngx-avatars size="25" bgColor="#5d57c2" [name]="user.name"></ngx-avatars>{{ user.name }}</span>
                 </td>
                 <td>
-                  <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 2 || userRole == 4 || userRole == 3 || userId == user.appUserId">
+                  <select *ngIf="user.projectRole!=0" class="assignee" [(ngModel)]="user.projectRole" (change)="updateUsersRole(user)" [disabled]="userRole == 2 || userRole == 4 || userRole == 3 || userId == user.appUserId || user.archived==true">
                     <option value=1 *ngIf="!OwnerAlreadyExists(user.appUserId)">Project Owner</option>
                     <option value=2>Manager</option>
                     <option value=3>Participant</option>
@@ -345,10 +345,11 @@
                   <span class="isPM" *ngIf="user.projectRole == 0">Project Manager</span>
                 </td>
                 <td style="text-align: center;" class="tModalRemoveIcon">
-                  <svg *ngIf="userId != user.appUserId && userRole != 2 && userRole != 3 && userRole != 4" (click)="deleteAssigne(user.appUserId)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                  <svg *ngIf="showDelete(user)" (click)="deleteAssigne(user.appUserId)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                   </svg>
                   <span *ngIf="userId == user.appUserId" style="font-size: small;">(you)</span>
+                  <span *ngIf="user.archived==true" style="font-size: small;">(archived)</span>
                 </td>
               </tr>
             </tbody>

@@ -130,3 +130,11 @@ img{
 .datetd{
   text-align: end;
 }
+@media screen and (max-width: 649px){
+  .dropdown-menu-end[data-bs-popper] {
+    right: -60px;
+    left: auto;
+    margin-right: 7px; 
+    width: 250px !important;
+}
+}

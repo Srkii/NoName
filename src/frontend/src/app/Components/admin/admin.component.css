@@ -666,6 +666,11 @@ select:focus-visible{
   box-shadow: none !important;
 }
 .notifyAdmin{ padding-top: 5px;}
+.notifyAdmin p{
+  text-align: left;
+  color: #212529;
+  font-weight: normal;
+}
 .nameAvatar {
   display: inline-flex;
   align-items: center;
@@ -685,8 +690,9 @@ select:focus-visible{
   padding-left: 5px;
 }
 .managerScroll{
-  overflow-y: scroll; 
+  overflow-y: auto; 
   max-height: 20rem;
+  min-height: 20rem;
 }
 .managerScroll::-webkit-scrollbar {
   background-color: #ffffff;
@@ -702,4 +708,8 @@ select:focus-visible{
 }
 .managerScroll::-webkit-scrollbar-button {
   display:none;
+}
+.modal-footer{
+  color: #697a8d;
+  font-size: small;
 }

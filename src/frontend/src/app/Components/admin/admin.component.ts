@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
-
 import { AdminService } from '../../_services/admin.service';
 import { RegisterInvitation } from '../../Entities/RegisterInvitation';
 import { Member, UserRole } from '../../Entities/Member';
@@ -9,10 +8,10 @@ import { ToastrService } from 'ngx-toastr';
 import { UploadService } from '../../_services/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { MyProjectsService } from '../../_services/my-projects.service';
 import { Project } from '../../Entities/Project';
-import { AppUser } from '../../Entities/AppUser';
-
+import { SelectedUser } from '../../Entities/SelectedUser';
+import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
+import { th } from 'date-fns/locale';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -33,13 +32,12 @@ export class AdminComponent implements OnInit{
     public uploadservice:UploadService, 
     private spinner:NgxSpinnerService,
     private modalService:BsModalService,
-    private myProjectsService: MyProjectsService,
   ){}
 
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
-   this.PicturesOfRoles();
+ //  this.PicturesOfRoles();
   }
 
   invitation:RegisterInvitation={
@@ -103,12 +101,15 @@ export class AdminComponent implements OnInit{
   pmCounter: number = 0;
   pmProjects: Project[] = [];
   pmProjectCount: number = 0;
-  projectManagers: AppUser[] = [];
-  selectedManager: AppUser[] = [];
+  projectManagers: SelectedUser[] = [];
+  selectedManagers: SelectedUser[] = [];
 
   isFilterActive: boolean=true;
+  isFilter1: number=0;
 
   archived_users: Member[]=[];
+
+  filterRole: string|null=null;
 
   archivedIds:number[]=[];
   archId: boolean=false;
@@ -162,13 +163,11 @@ export class AdminComponent implements OnInit{
         this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
           this.GetUsers()
         },error: (error)=>{
-          console.log(error)
+    
         }}
         )
       }
-      else{
-        console.log("Can't change user role")
-      }}
+      }
 
     UpdateUser(id: number): void{
       
@@ -189,9 +188,7 @@ export class AdminComponent implements OnInit{
           this.GetUsers();
           this.modalRef?.hide();
         },
-        error: (error) => {
-          console.log(error);
-        }
+        error: (error) => {}
     })
       
     }
@@ -237,7 +234,7 @@ export class AdminComponent implements OnInit{
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        var counnt=this.allUsers.length;
+        
         this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
           this.filteredUsers=res;
           this.totalPages= Math.ceil(res / this.pageSize);
@@ -309,45 +306,65 @@ export class AdminComponent implements OnInit{
     }
 
     numbersOfRoles():void{
-      this.adminService.getFilterCount("Admin").subscribe(res=>{
-        this.numOfAdmins=res;
-      })
-      this.adminService.getFilterCount("Member").subscribe(res=>{
-        this.numOfMembers=res;
-      })
-      this.adminService.getFilterCount("projectManager").subscribe(res=>{
-        this.numOfPM=res;
+      this.adminService.getFilterCount().subscribe(res=>{
+        this.numOfAdmins=res.adminCount;
+        this.numOfMembers = res.memberCount;
+        this.numOfPM = res.projectManagerCount;
+        this.admins=res.admins;
+        this.members=res.members;
+        this.projectMangers=res.pManagers;
       })
     }
 
-    PicturesOfRoles():void{
-      this.adminService.getAllUsers3("Admin").subscribe(res=>{
-        this.admins=res;
-        //this.loadPicture(this.admins);
+    // PicturesOfRoles():void{
+    //   this.adminService.getAllUsers3("Admin").subscribe(res=>{
+    //     this.admins=res;
+    //     //this.loadPicture(this.admins);
+    //   })
+    //   this.adminService.getAllUsers3("Member").subscribe(res=>{
+    //     this.members=res;
+    //     //this.loadPicture(this.members)
+    //   })
+    //   this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
+    //     this.projectMangers=res;
+    //     //this.loadPicture(this.projectMangers);
+    //   })
+    // }
+
+    assignProjectManagers(){
+      var projectMembers = this.pmProjects.map<ProjectMember>((project,i) => 
+        ({AppUserId: this.selectedManagers[i].appUserId, ProjectId: project.id , ProjectRole: ProjectRole.ProjectManager}))
+      this.adminService.assignProjectManagers(projectMembers).subscribe(response => {});
+    }
+
+    demoteProjectManager(){
+      this.adminService.demoteProjectManager(this.curentUserId).subscribe({
+        next: response => {
+          this.assignProjectManagers();
+          this.onLoad();
+        }
       })
-      this.adminService.getAllUsers3("Member").subscribe(res=>{
-        this.members=res;
-        //this.loadPicture(this.members)
-      })
-      this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
-        this.projectMangers=res;
-        //this.loadPicture(this.projectMangers);
-      })
+    }
+
+    checkAssignementCompletition(){
+      var count = this.selectedManagers.filter((x:any) => x != null).length;
+      if(count == this.pmProjectCount)
+        return true;
+      return false;
     }
 
     async loadPMInfo(user: Member){
       try
       {
         this.pmCounter = this.allUsers.filter((x:any) => x.role === 2).length
-        this.pmProjects = await this.myProjectsService.getManagersProjects(user.id).toPromise();
+        this.pmProjects = await this.adminService.getManagersProjects(user.id).toPromise();
         this.pmProjectCount = this.pmProjects.length;
-        console.log(this.pmProjectCount)
-        this.projectManagers = await this.myProjectsService.getManagers(user.id).toPromise();
+        this.projectManagers = await this.adminService.getManagers(user.id).toPromise();
       }
       catch(error){}
     }
 
-    openModal(modal: TemplateRef<void>, user:Member)
+    openUserEditModal(modal: TemplateRef<void>, user:Member)
     {
       this.newEmail = user.email;
       this.newFisrtName = user.firstName;
@@ -361,11 +378,15 @@ export class AdminComponent implements OnInit{
         });
     }
 
-    async openRoleModal(modal: TemplateRef<void>, user:Member)
+    async openRoleArchModal(modal: TemplateRef<void>, user:Member)
     {
       this.selectedUserRole = user.role;
       this.curentUserId=user.id;
-    
+      this.selectedManagers = [];
+
+      this.userRole = user.role.toString();
+      this.currentRole=this.GetUserRole(user.role)
+
       if(user.role==0)
       {
         this.currentRole="Admin";
@@ -408,6 +429,7 @@ export class AdminComponent implements OnInit{
     noFilter():void
     {
       this.selectedRolee='';
+      this.filterRole=null;
       this.onLoad();
     }
 
@@ -419,23 +441,21 @@ export class AdminComponent implements OnInit{
 
     }
 
-    toogleFilter(): void{
-      if(this.isFilterActive)
+    toogleFilter(role: string): void{
+      if(this.filterRole===role)
       {
-        this.filterUsers();
-      }
-      else{
         this.noFilter();
       }
-      this.isFilterActive=!this.isFilterActive;
+      else{
+        this.filterRole=role;
+        this.filterUsers();
+      }
     }
 
     getArchivedUsers(): void{
       this.adminService.getArchivedUsers().subscribe({next:(res)=>{
         this.archived_users=res;
-      },error:(error)=>{
-        console.log(error);
-      }
+      },error:(error)=>{}
     })
 
     }
@@ -482,10 +502,8 @@ export class AdminComponent implements OnInit{
     clickOutside(event: MouseEvent) {
       const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
       if (!clickedInside && this.selectedRolee!='') {
-        // Click was outside the .clickable-div and the filter is active
-        event.stopPropagation(); // This prevents other click events from executing
+        event.stopPropagation(); 
       }
     }
-
   }
 

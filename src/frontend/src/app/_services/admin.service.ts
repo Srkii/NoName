@@ -6,6 +6,8 @@ import { ChangeRole } from '../Entities/ChangeRole';
 import { UpdateUser } from '../Entities/UpdateUser';
 import { RegisterInvitation } from '../Entities/RegisterInvitation';
 import { environment } from '../../environments/environment';
+import { RoleCount } from '../Entities/RoleCount';
+import { ProjectMember } from '../Entities/ProjectMember';
 
 @Injectable({
   providedIn: 'root'
@@ -84,15 +86,9 @@ export class AdminService {
     return this.httpClient.get<number>(`${this.apiUrl}/users/fcount`,{params:params,headers:this.getHeaders()})
   }
 
-  getFilterCount(role:string|null): Observable<number>
+  getFilterCount(): Observable<RoleCount>
   {
-    var params=new HttpParams();
-
-    if(role){
-      params=params.set('role',role);
-    }
-
-    return this.httpClient.get<number>(`${this.apiUrl}/users/filteredCount`,{params: params,headers:this.getHeaders()});
+    return this.httpClient.get<RoleCount>(`${this.apiUrl}/users/filteredCount`,{headers:this.getHeaders()});
   }
 
   getAllUsers2():Observable<number>{
@@ -114,5 +110,21 @@ export class AdminService {
 
   removeFromArchieve(usersIds:number[]):Observable<any>{
     return this.httpClient.put<Member[]>(`${this.apiUrl}/users/removeFromArch`,usersIds,{headers:this.getHeaders()})
+  }
+
+  assignProjectManagers(managers: ProjectMember[]):Observable<any>{
+    return this.httpClient.post(`${this.apiUrl}/projects/AssignProjectManagers`,managers,{headers:this.getHeaders(),responseType: 'text'})
+  }
+
+  demoteProjectManager(userId: number):Observable<any>{
+    return this.httpClient.post(`${this.apiUrl}/projects/DemoteProjectManager/${userId}`,null,{headers:this.getHeaders(),responseType: 'text'})
+  }
+
+  getManagersProjects(userId: number): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/projects/GetManagersProjects/${userId}`,{  headers: this.getHeaders() });
+  }
+
+  getManagers(userId: number): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/projects/GetManagers/${userId}`,{  headers: this.getHeaders() });
   }
 }
