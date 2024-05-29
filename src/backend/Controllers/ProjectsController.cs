@@ -429,7 +429,7 @@ namespace backend.Controllers
             if(OwnerMember!=null)
             {
                 var ProjectOwner = await _context.Users.FirstOrDefaultAsync(member => member.Id == OwnerMember.AppUserId);
-                return Ok(ProjectOwner);
+                return Ok(new {ProjectOwner.FirstName,ProjectOwner.LastName,ProjectOwner.Email,ProjectOwner.ProfilePicUrl,ProjectOwner.Archived, ProjectOwner.Role});
             }
             return null;
         }
@@ -565,7 +565,7 @@ namespace backend.Controllers
         {
             var users = await _context.Users
             .Where(user => _context.ProjectMembers.Any(member => member.AppUserId == user.Id && member.ProjectId == projectId && member.ProjectRole != ProjectRole.Guest) && user.Role != UserRole.Admin && user.Archived==false)
-            .Select(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl })
+            .Select(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl, user.Role })
             .ToListAsync();
 
             if (users == null)
@@ -594,7 +594,7 @@ namespace backend.Controllers
         {
             var users = await _context.Users
             .Where(user => user.Id != userId && user.Role == UserRole.ProjectManager)
-            .Select(user => new {AppUserId = user.Id ,user.FirstName, user.LastName, user.ProfilePicUrl})
+            .Select(user => new {AppUserId = user.Id ,user.FirstName, user.LastName, user.ProfilePicUrl, user.Role})
             .ToListAsync();
 
             return Ok(users);
