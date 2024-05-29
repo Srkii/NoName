@@ -29,7 +29,7 @@ export class AdminComponent implements OnInit{
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
-   this.PicturesOfRoles();
+  //  this.PicturesOfRoles();
   //  this.getArchivedUsers(); // zasto u onInit a ne tek kad se otvori modal
    // vrv je problem sto 5-6 salje server request i svaki put proverava validnost tokena na onInit. On ne stigne i ne prikaze nista
   }
@@ -297,32 +297,31 @@ export class AdminComponent implements OnInit{
 
     }
 
-    numbersOfRoles():void{
-      this.adminService.getFilterCount("Admin").subscribe(res=>{
-        this.numOfAdmins=res;
-      })
-      this.adminService.getFilterCount("Member").subscribe(res=>{
-        this.numOfMembers=res;
-      })
-      this.adminService.getFilterCount("projectManager").subscribe(res=>{
-        this.numOfPM=res;
-      })
+    numbersOfRoles():void {
+      this.adminService.getFilterCount().subscribe(res => {
+        this.numOfAdmins = res.adminCount;
+        this.numOfMembers = res.memberCount;
+        this.numOfPM = res.projectManagerCount;
+        this.admins=res.admins;
+        this.members=res.members;
+        this.projectMangers=res.pManagers;
+      });
     }
 
-    PicturesOfRoles():void{
-      this.adminService.getAllUsers3("Admin").subscribe(res=>{
-        this.admins=res;
-        //this.loadPicture(this.admins);
-      })
-      this.adminService.getAllUsers3("Member").subscribe(res=>{
-        this.members=res;
-        //this.loadPicture(this.members)
-      })
-      this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
-        this.projectMangers=res;
-        //this.loadPicture(this.projectMangers);
-      })
-    }
+    // PicturesOfRoles():void{
+    //   this.adminService.getAllUsers3("Admin").subscribe(res=>{
+    //     this.admins=res;
+    //     //this.loadPicture(this.admins);
+    //   })
+    //   this.adminService.getAllUsers3("Member").subscribe(res=>{
+    //     this.members=res;
+    //     //this.loadPicture(this.members)
+    //   })
+    //   this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
+    //     this.projectMangers=res;
+    //     //this.loadPicture(this.projectMangers);
+    //   })
+    // }
 
     openModal(modal: TemplateRef<void>, user:Member)
     {

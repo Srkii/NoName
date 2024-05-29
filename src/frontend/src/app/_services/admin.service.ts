@@ -6,6 +6,7 @@ import { ChangeRole } from '../Entities/ChangeRole';
 import { UpdateUser } from '../Entities/UpdateUser';
 import { RegisterInvitation } from '../Entities/RegisterInvitation';
 import { environment } from '../../environments/environment';
+import { RoleCount } from '../Entities/RoleCount';
 
 @Injectable({
   providedIn: 'root'
@@ -84,15 +85,9 @@ export class AdminService {
     return this.httpClient.get<number>(`${this.apiUrl}/users/fcount`,{params:params,headers:this.getHeaders()})
   }
 
-  getFilterCount(role:string|null): Observable<number>
+  getFilterCount(): Observable<RoleCount>
   {
-    var params=new HttpParams();
-
-    if(role){
-      params=params.set('role',role);
-    }
-
-    return this.httpClient.get<number>(`${this.apiUrl}/users/filteredCount`,{params: params,headers:this.getHeaders()});
+    return this.httpClient.get<RoleCount>(`${this.apiUrl}/users/filteredCount`,{headers:this.getHeaders()});
   }
 
   getAllUsers2():Observable<number>{

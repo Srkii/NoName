@@ -238,20 +238,22 @@ namespace backend.Controllers
     
     [Authorize(Roles = "Admin")]
     [HttpGet("filteredCount")]
-    public async Task<ActionResult<int>> CountFilteredUsers(UserRole? role=null)
+    public async Task<ActionResult<RoleDTO>> CountFilteredUsers()
     {
-      var query=_context.Users.AsQueryable();
-      query = query.Where(u => u.Archived == false);
+      var adminCount = await _context.Users.CountAsync(u => u.Role == UserRole.Admin && !u.Archived);
+      var memberCount = await _context.Users.CountAsync(u => u.Role == UserRole.Member && !u.Archived);
+      var projectManagerCount = await _context.Users.CountAsync(u => u.Role == UserRole.ProjectManager && !u.Archived);
 
-      if(role!=null)
-      {
-        query=query.Where(u=>u.Role==role);
-      }
-      
+      var roleCount=new RoleDTO{
+        AdminCount=adminCount,
+        MemberCount=memberCount,
+        ProjectManagerCount= projectManagerCount,
+        Admins=await _context.Users.Where( u => u.Role == UserRole.Admin && !u.Archived).ToListAsync(),
+        Members=await _context.Users.Where( u => u.Role == UserRole.Member && !u.Archived).ToListAsync(),
+        PManagers=await _context.Users.Where( u => u.Role == UserRole.ProjectManager && !u.Archived).ToListAsync()
+      };
 
-      var filteredUsers=await query.ToListAsync();
-
-      return filteredUsers.Count;
+      return Ok(roleCount);
     }
     [Authorize(Roles = "Admin")]
     [HttpGet("getByRole")]
