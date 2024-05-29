@@ -102,23 +102,17 @@ body {
   box-shadow: var(--card-shadow);
   border-width: 0;
 }
-/* .card-header {
-  background-color: var(--card-color) !important;
-  color: var(--text-color) !important;
-} */
 
-/* project-card */
-/* .ng-select.addProjAss .ng-value-label img, 
-.ng-select.addProjAss .ng-value-label ngx-avatars {
-  margin-right: 0.2rem !important;
-} */
-/* align slectovane u inputu */
+.ng-select.asigneeDropdown.ng-invalid .ng-select-container {
+  border-color: red !important;
+}
 
 .ng-select.addProjAss .ng-value-label,
 .ng-select.asigneeDropdown .ng-value-label,
 .ng-select.sectionDropdown .ng-value-label,
 .ng-select.tMngMemb .ng-value-label,
-.ng-select.ngAdminSelect .ng-value-label {
+.ng-select.ngAdminSelect .ng-value-label,
+.ng-select.task_select .ng-value-label {
   display: inline-flex !important;
   align-items: center !important;
   margin-right: 0.2rem !important;
@@ -128,7 +122,8 @@ body {
 .ng-select.asigneeDropdown .user-detail,
 .ng-select.sectionDropdown .user-detail,
 .ng-select.tMngMemb .user-detail,
-.ng-select.ngAdminSelect .user-detail {
+.ng-select.ngAdminSelect .user-detail,
+.ng-select.task_select .user-detail {
   display: flex;
   justify-content: space-between;
   font-family: 'Public Sans', sans-serif;
@@ -138,7 +133,8 @@ body {
 .ng-select.asigneeDropdown .ng-select-container,
 .ng-select.sectionDropdown .ng-select-container,
 .ng-select.tMngMemb .ng-select-container,
-.ng-select.ngAdminSelect .ng-select-container {
+.ng-select.ngAdminSelect .ng-select-container,
+.ng-select.task_select .ng-select-container {
   height: 35px !important;
   background-color: var(--card-color) !important;
   border: 1px solid var(--table-border-color) !important;
@@ -148,7 +144,8 @@ body {
 .ng-select.asigneeDropdown .ng-option-marked,
 .ng-select.sectionDropdown .ng-option-marked,
 .ng-select.tMngMemb .ng-option-marked,
-.ng-select.ngAdminSelect .ng-option-marked {
+.ng-select.ngAdminSelect .ng-option-marked,
+.ng-select.task_select .ng-option-marked {
   background-color: var(--ng-hover-bg) !important;
   color: var(--ng-hover-text) !important;
 }
@@ -158,7 +155,8 @@ body {
 .ng-select.asigneeDropdown .ng-option-selected,
 .ng-select.sectionDropdown .ng-option-selected,
 .ng-select.tMngMemb .ng-option-selected,
-.ng-select.ngAdminSelect .ng-option-selected {
+.ng-select.ngAdminSelect .ng-option-selected,
+.ng-select.task_select .ng-option-selected {
   background-color: var(--ng-options-selected-bg) !important;
   color: var(--ng-options-selected-text) !important;
 }
@@ -166,7 +164,8 @@ body {
 .ng-select.asigneeDropdown .ng-select-container,
 .ng-select.sectionDropdown .ng-select-container,
 .ng-select.tMngMemb .ng-select-container,
-.ng-select.ngAdminSelect .ng-select-container {
+.ng-select.ngAdminSelect .ng-select-container,
+.ng-select.task_select .ng-select-container {
   color: var(--text-color) !important;
   
 }
@@ -175,7 +174,8 @@ body {
 .ng-select.asigneeDropdown .ng-option:not(.ng-option-selected):not(.ng-option-marked),
 .ng-select.sectionDropdown .ng-option:not(.ng-option-selected):not(.ng-option-marked),
 .ng-select.tMngMemb .ng-option:not(.ng-option-selected):not(.ng-option-marked),
-.ng-select.ngAdminSelect .ng-option:not(.ng-option-selected):not(.ng-option-marked) {
+.ng-select.ngAdminSelect .ng-option:not(.ng-option-selected):not(.ng-option-marked),
+.ng-select.task_select .ng-option:not(.ng-option-selected):not(.ng-option-marked) {
   background-color: var(--card-color) !important;
   color: var(--ng-hover-text) !important;
 }
@@ -184,14 +184,16 @@ body {
 .ng-select.asigneeDropdown .ng-dropdown-panel,
 .ng-select.sectionDropdown .ng-dropdown-panel,
 .ng-select.tMngMemb .ng-dropdown-panel,
-.ng-select.ngAdminSelect .ng-dropdown-panel {
+.ng-select.ngAdminSelect .ng-dropdown-panel,
+.ng-select.task_select .ng-dropdown-panel {
   border: 1px solid var(--table-border-color) !important;
   background-color: var(--card-color) !important;
 }
 /* seletkovana opcija sa ikonicom u inputu */
 .ng-select.addProjAss .ng-value.ng-star-inserted,
 .ng-select.tMngMemb .ng-value.ng-star-inserted,
-.ng-select.ngAdminSelect .ng-value.ng-star-inserted {
+.ng-select.ngAdminSelect .ng-value.ng-star-inserted,
+.ng-select.task_selectDep .ng-value.ng-star-inserted {
   background-color: var(--ng-input-item-bg) !important;
   color: var(--ng-hover-text) !important;
 }
@@ -203,6 +205,7 @@ body {
 
 .ng-select.asigneeDropdown .ng-value.ng-star-inserted,
 .ng-select.sectionDropdown .ng-value.ng-star-inserted,
+.ng-select.sectionDropdown .ng-value.ng-star-inserted,
 .ng-select.sectionDropdown .ng-value.ng-star-inserted {
   color: var(--text-color) !important;
 }
@@ -211,7 +214,8 @@ body {
 .ng-select.asigneeDropdown .ng-value-icon:hover,
 .ng-select.sectionDropdown .ng-value-icon:hover,
 .ng-select.tMngMemb .ng-value-icon:hover,
-.ng-select.ngAdminSelect .ng-value-icon:hover {
+.ng-select.ngAdminSelect .ng-value-icon:hover,
+.ng-select.task_select .ng-value-icon:hover {
   background-color: transparent !important; 
 }
 
@@ -219,7 +223,8 @@ body {
 .ng-select.asigneeDropdown .ng-value-icon.ng-star-inserted,
 .ng-select.sectionDropdown .ng-value-icon.ng-star-inserted,
 .ng-select.tMngMemb .ng-value-icon.ng-star-inserted,
-.ng-select.ngAdminSelect .ng-value-icon.ng-star-inserted {
+.ng-select.ngAdminSelect .ng-value-icon.ng-star-inserted,
+.ng-select.task_select .ng-value-icon.ng-star-inserted {
   position: relative ;
   top: 0.055rem;
   display: inline-flex !important;
