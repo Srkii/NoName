@@ -51,6 +51,7 @@ export class NavComponent implements OnInit {
       localStorage.removeItem('token');
       localStorage.removeItem('id');
       localStorage.removeItem('role');
+      localStorage.removeItem('selectedOption');
       sessionStorage.removeItem('selectedOption');
       // Navigate to the login page
       this.notificationService.stopHubConnection();
@@ -89,14 +90,17 @@ export class NavComponent implements OnInit {
     ).subscribe((event: NavigationEnd) => {
       if (event.urlAfterRedirects.includes('/mytasks')) {
         this.selectedOption = 'MyTasks'
+        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/myprojects') || event.urlAfterRedirects.includes('/project/'))
       {
         this.selectedOption = 'MyProjects'
+        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/admin'))
       {
         this.selectedOption = 'Admin' 
+        console.log(this.selectedOption)
       }
       else if(event.urlAfterRedirects.includes('/userinfo'))
       {
@@ -105,17 +109,20 @@ export class NavComponent implements OnInit {
       else {
         this.selectedOption=''
       }
-    });
-    const storedOption = sessionStorage.getItem('selectedOption');
-    this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
+      localStorage.setItem('selectedOption', this.selectedOption);
 
+    });
+    const storedOption = localStorage.getItem('selectedOption');
+    this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
   }
 
   setActiveOption(option: string) {
     if (option === '') {
       sessionStorage.removeItem('selectedOption');
+      localStorage.removeItem('selectedOption');
     } else {
       sessionStorage.setItem('selectedOption', option);
+      localStorage.setItem('selectedOption', option);
     }
   }
 

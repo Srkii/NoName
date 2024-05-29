@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UploadService } from '../../_services/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { th } from 'date-fns/locale';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -28,7 +29,7 @@ export class AdminComponent implements OnInit{
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
-   this.PicturesOfRoles();
+  //  this.PicturesOfRoles();
   //  this.getArchivedUsers(); // zasto u onInit a ne tek kad se otvori modal
    // vrv je problem sto 5-6 salje server request i svaki put proverava validnost tokena na onInit. On ne stigne i ne prikaze nista
   }
@@ -91,6 +92,7 @@ export class AdminComponent implements OnInit{
   currentId=localStorage.getItem('id');
 
   isFilterActive: boolean=true;
+  isFilter1: number=0
 
   archived_users: Member[]=[];
 
@@ -103,6 +105,8 @@ export class AdminComponent implements OnInit{
   regexEmail: RegExp =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   archMembers: { [key: string]: Member[] } = {};
+
+  filterRole: string|null=null
 
   Invite(): void{
    
@@ -141,6 +145,7 @@ export class AdminComponent implements OnInit{
         Id:id,
         Role: parseInt(this.userRole)
       }
+
       if(ChangeDto)
       {
         this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
@@ -221,7 +226,6 @@ export class AdminComponent implements OnInit{
     GetUsers(): void {
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        var counnt=this.allUsers.length;
         this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
           this.filteredUsers=res;
           this.totalPages= Math.ceil(res / this.pageSize);
@@ -293,32 +297,31 @@ export class AdminComponent implements OnInit{
 
     }
 
-    numbersOfRoles():void{
-      this.adminService.getFilterCount("Admin").subscribe(res=>{
-        this.numOfAdmins=res;
-      })
-      this.adminService.getFilterCount("Member").subscribe(res=>{
-        this.numOfMembers=res;
-      })
-      this.adminService.getFilterCount("projectManager").subscribe(res=>{
-        this.numOfPM=res;
-      })
+    numbersOfRoles():void {
+      this.adminService.getFilterCount().subscribe(res => {
+        this.numOfAdmins = res.adminCount;
+        this.numOfMembers = res.memberCount;
+        this.numOfPM = res.projectManagerCount;
+        this.admins=res.admins;
+        this.members=res.members;
+        this.projectMangers=res.pManagers;
+      });
     }
 
-    PicturesOfRoles():void{
-      this.adminService.getAllUsers3("Admin").subscribe(res=>{
-        this.admins=res;
-        //this.loadPicture(this.admins);
-      })
-      this.adminService.getAllUsers3("Member").subscribe(res=>{
-        this.members=res;
-        //this.loadPicture(this.members)
-      })
-      this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
-        this.projectMangers=res;
-        //this.loadPicture(this.projectMangers);
-      })
-    }
+    // PicturesOfRoles():void{
+    //   this.adminService.getAllUsers3("Admin").subscribe(res=>{
+    //     this.admins=res;
+    //     //this.loadPicture(this.admins);
+    //   })
+    //   this.adminService.getAllUsers3("Member").subscribe(res=>{
+    //     this.members=res;
+    //     //this.loadPicture(this.members)
+    //   })
+    //   this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
+    //     this.projectMangers=res;
+    //     //this.loadPicture(this.projectMangers);
+    //   })
+    // }
 
     openModal(modal: TemplateRef<void>, user:Member)
     {
@@ -326,20 +329,10 @@ export class AdminComponent implements OnInit{
       this.newFisrtName = user.firstName;
       this.newLastName = user.lastName;
       this.curentUserId=user.id;
-
-      if(user.role==0)
-      {
-        this.currentRole="Admin";
-      }
-      else if(user.role==1)
-      {
-        this.currentRole="Member"
-      }
-      else if(user.role==2)
-      {
-        this.currentRole="Project Manager"
-      }
       
+      this.userRole = user.role.toString();
+      this.currentRole=this.GetUserRole(user.role)
+
       this.modalRef = this.modalService.show(
         modal,
         {
@@ -359,6 +352,7 @@ export class AdminComponent implements OnInit{
     noFilter():void
     {
       this.selectedRolee='';
+      this.filterRole=null
       this.onLoad();
     }
 
@@ -370,15 +364,20 @@ export class AdminComponent implements OnInit{
 
     }
 
-    toogleFilter(): void{
-      if(this.isFilterActive)
-      {
-        this.filterUsers();
+    toogleFilter(role:string): void {
+
+      if(this.filterRole===role){
+        console.log(this.filterRole)
+        this.noFilter();
+        
       }
       else{
-        this.noFilter();
+        console.log("pre: " +this.filterRole)
+        this.filterRole=role;
+        console.log("posle: "+this.filterRole)
+        this.filterUsers();
+       
       }
-      this.isFilterActive=!this.isFilterActive;
     }
 
     getArchivedUsers(): void{
@@ -433,8 +432,7 @@ export class AdminComponent implements OnInit{
     clickOutside(event: MouseEvent) {
       const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
       if (!clickedInside && this.selectedRolee!='') {
-        // Click was outside the .clickable-div and the filter is active
-        event.stopPropagation(); // This prevents other click events from executing
+        event.stopPropagation(); 
       }
     }
 
