@@ -51,6 +51,7 @@ export class NavComponent implements OnInit {
       localStorage.removeItem('token');
       localStorage.removeItem('id');
       localStorage.removeItem('role');
+      localStorage.removeItem('selectedOption');
       sessionStorage.removeItem('selectedOption');
       // Navigate to the login page
       this.notificationService.stopHubConnection();
@@ -108,19 +109,21 @@ export class NavComponent implements OnInit {
       else {
         this.selectedOption=''
       }
-      sessionStorage.setItem('selectedOption', this.selectedOption);
+      localStorage.setItem('selectedOption', this.selectedOption);
 
     });
-    const storedOption = sessionStorage.getItem('selectedOption');
+    const storedOption = localStorage.getItem('selectedOption');
     this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
   }
 
   setActiveOption(option: string) {
-    // if (option === '') {
-    //   sessionStorage.removeItem('selectedOption');
-    // } else {
+    if (option === '') {
+      sessionStorage.removeItem('selectedOption');
+      localStorage.removeItem('selectedOption');
+    } else {
       sessionStorage.setItem('selectedOption', option);
-    //}
+      localStorage.setItem('selectedOption', option);
+    }
   }
 
 }
