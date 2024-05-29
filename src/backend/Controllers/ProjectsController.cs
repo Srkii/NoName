@@ -576,6 +576,30 @@ namespace backend.Controllers
             return Ok(users);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetManagersProjects/{userId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetManagersProjects(int userId)
+        {
+            var projects = await _context.Projects
+            .Where(project => _context.ProjectMembers.Any(member => member.AppUserId == userId && member.ProjectId == project.Id && member.ProjectRole == ProjectRole.ProjectManager))
+            .Select(project => new { project.Id, project.ProjectName })
+            .ToListAsync();
+
+            return Ok(projects);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetManagers/{userId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetManagers(int userId)
+        {
+            var users = await _context.Users
+            .Where(user => user.Id != userId && user.Role == UserRole.ProjectManager)
+            .Select(user => new {user.Id ,user.FirstName, user.LastName, user.ProfilePicUrl})
+            .ToListAsync();
+
+            return Ok(users);
+        }
+
         public async Task<bool> RoleCheck(int projectId, List<ProjectRole> roles)
         {
             string authHeader = HttpContext.Request.Headers["Authorization"];

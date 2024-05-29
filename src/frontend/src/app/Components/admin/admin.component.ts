@@ -9,6 +9,10 @@ import { ToastrService } from 'ngx-toastr';
 import { UploadService } from '../../_services/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MyProjectsService } from '../../_services/my-projects.service';
+import { Project } from '../../Entities/Project';
+import { AppUser } from '../../Entities/AppUser';
+
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -23,14 +27,19 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 export class AdminComponent implements OnInit{
 
-  constructor(private adminService: AdminService, private toastr: ToastrService, public uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
+  constructor(
+    private adminService: AdminService, 
+    private toastr: ToastrService, 
+    public uploadservice:UploadService, 
+    private spinner:NgxSpinnerService,
+    private modalService:BsModalService,
+    private myProjectsService: MyProjectsService,
+  ){}
 
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
    this.PicturesOfRoles();
-  //  this.getArchivedUsers(); // zasto u onInit a ne tek kad se otvori modal
-   // vrv je problem sto 5-6 salje server request i svaki put proverava validnost tokena na onInit. On ne stigne i ne prikaze nista
   }
 
   invitation:RegisterInvitation={
@@ -89,6 +98,13 @@ export class AdminComponent implements OnInit{
   currentLastName: string=''
   currentRole: string=''
   currentId=localStorage.getItem('id');
+  selectedUserRole: UserRole | null = null;
+
+  pmCounter: number = 0;
+  pmProjects: Project[] = [];
+  pmProjectCount: number = 0;
+  projectManagers: AppUser[] = [];
+  selectedManager: AppUser[] = [];
 
   isFilterActive: boolean=true;
 
@@ -283,7 +299,6 @@ export class AdminComponent implements OnInit{
       })
       this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
         this.allUsers = response;
-        //this.loadPicture(this.allUsers);
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
         this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
@@ -320,6 +335,18 @@ export class AdminComponent implements OnInit{
       })
     }
 
+    async loadPMInfo(user: Member){
+      try
+      {
+        this.pmCounter = this.allUsers.filter((x:any) => x.role === 2).length
+        this.pmProjects = await this.myProjectsService.getManagersProjects(user.id).toPromise();
+        this.pmProjectCount = this.pmProjects.length;
+        console.log(this.pmProjectCount)
+        this.projectManagers = await this.myProjectsService.getManagers(user.id).toPromise();
+      }
+      catch(error){}
+    }
+
     openModal(modal: TemplateRef<void>, user:Member)
     {
       this.newEmail = user.email;
@@ -327,6 +354,18 @@ export class AdminComponent implements OnInit{
       this.newLastName = user.lastName;
       this.curentUserId=user.id;
 
+      this.modalRef = this.modalService.show(
+        modal,
+        {
+          class: 'modal-sm modal-dialog-centered'
+        });
+    }
+
+    async openRoleModal(modal: TemplateRef<void>, user:Member)
+    {
+      this.selectedUserRole = user.role;
+      this.curentUserId=user.id;
+    
       if(user.role==0)
       {
         this.currentRole="Admin";
@@ -337,14 +376,24 @@ export class AdminComponent implements OnInit{
       }
       else if(user.role==2)
       {
+        await this.loadPMInfo(user);
         this.currentRole="Project Manager"
       }
       
-      this.modalRef = this.modalService.show(
-        modal,
-        {
-          class: 'modal-sm modal-dialog-centered'
-        });
+      if(user.role != 2 || (user.role == 2 && this.pmProjectCount == 0 || this.pmCounter==1)){
+        this.modalRef = this.modalService.show(
+          modal,
+          {
+            class: 'modal-sm modal-dialog-centered'
+          });
+      }
+      else{
+        this.modalRef = this.modalService.show(
+          modal,
+          {
+            class: 'modal-lg modal-dialog-centered'
+          });
+      }
     }
 
     openModal1(modal: TemplateRef<void>){

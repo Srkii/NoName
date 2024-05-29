@@ -129,22 +129,25 @@
             </div>
           </td>
           <td class="ostaleKolone"> <span class="text-body text-truncate fw-medium">{{GetUserRole(user.role)}}</span></td>
-          
           <td class="ostaleKolone">
             <div class="d-flex align-items-center tblActions">
-              <svg xmlns="http://www.w3.org/2000/svg" (click)="openModal(updateUser,user)" width="16" height="16" fill="currentColor" class="bi bi-person-up" id="tableIcon"
-                viewBox="0 0 16 16">
-                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg"  (click)="openModal(changeRole,user)" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" id="tableIcon"
-                viewBox="0 0 16 16">
-                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" *ngIf="currentUser(user.id)" (click)="openModal(archiveUser,user)" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16" class="bi bi-pencil-square" id="tableIcon">
-                <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
-              </svg>
+              <div class="tActionSvg" pTooltip="Update User" tooltipPosition="top">
+                <svg xmlns="http://www.w3.org/2000/svg" (click)="openModal(updateUser,user)" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" id="tableIcon" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                </svg>
+              </div>
+              <div class="tActionSvg" pTooltip="Change Role" tooltipPosition="top">
+                <svg xmlns="http://www.w3.org/2000/svg"  (click)="openRoleModal(changeRole,user)" width="16" height="16" fill="currentColor" class="bi bi-person-up" id="tableIcon" viewBox="0 0 16 16">
+                  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                  <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                </svg>
+              </div>
+              <div class="tActionSvg" pTooltip="Archive User" tooltipPosition="top">
+                <svg pTooltip="Archive User" xmlns="http://www.w3.org/2000/svg" *ngIf="currentUser(user.id)" (click)="openModal(archiveUser,user)" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16" class="bi bi-pencil-square" id="tableIcon">
+                  <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+                </svg>
+              </div>
             </div>
           </td>
         </tr>
@@ -251,7 +254,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <form (ngSubmit)="ChangeUserRole(curentUserId)">
+    <form *ngIf="selectedUserRole!=2 || (selectedUserRole==2 && pmCounter>1 && pmProjectCount==0)" (ngSubmit)="ChangeUserRole(curentUserId)">
       <div class="mb-3 selectRole">
         <select name="role" [(ngModel)]="userRole" required>
           <option value="" hidden selected>{{currentRole}}</option>
@@ -264,6 +267,54 @@
         <button class="btn btn-primary d-grid w-100" type="submit" (click)="modalRef?.hide()" >Change</button>
       </div>
     </form>
+    <div *ngIf="selectedUserRole==2 && pmCounter==1" class="notifyAdmin">
+      <p>It is currently not possible to change the role of a project manager as there is no other project manager assigned within the application</p>
+    </div>
+    <div *ngIf="selectedUserRole==2 && pmCounter>1 && pmProjectCount>0">
+      <div class="alert alert-warning" style="margin-top: 16px;">
+        You have to assign projects to another project manager before changing role
+      </div>
+      <div class="projectName">Project Name</div>
+      <div class="managerScroll">
+        <table class="table managers">
+          <tbody>
+            <tr *ngFor="let project of pmProjects; let i = index">
+              <td>{{project.projectName}}</td>
+              <td>
+                <ng-select [items]="projectManagers" [(ngModel)]="selectedManager[i]" name="assignee{{i}}" bindLabel="fullName" placeholder="Select Project Manager">
+                  <ng-template ng-option-tmp let-manager="item" let-index="index">
+                    <div style="display: flex; align-items: center;">
+                      <div *ngIf="manager.profilePicUrl" class="nameAvatar">
+                        <img [src]="uploadservice.getImage(manager.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                      </div>
+                      <div *ngIf="!manager.profilePicUrl" class="nameAvatar">
+                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="manager?.firstName + ' ' + manager?.lastName" value="75%"></ngx-avatars>
+                      </div>
+                      <div class="tAssigneeName">
+                        {{ manager?.firstName + ' ' + manager?.lastName }}
+                      </div>
+                    </div>
+                  </ng-template>
+                  <ng-template ng-label-tmp let-item="item">
+                    <div style="display: inline-flex; align-items: center;">
+                      <div *ngIf="item.profilePicUrl" class="nameAvatar">
+                        <img [src]="uploadservice.getImage(item.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" height="25" width="25"/>
+                      </div>
+                      <div *ngIf="!item.profilePicUrl" class="nameAvatar">
+                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="item?.firstName + ' ' + item?.lastName" value="75%"></ngx-avatars>
+                      </div>
+                      <div>
+                        {{ item?.firstName + ' ' + item?.lastName }}
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+     </div>
+    </div>
   </div>
 </ng-template>
 

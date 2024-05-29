@@ -177,5 +177,13 @@ export class MyProjectsService {
   getUserProjectRole(projectId: number, userId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/getProjectUserRole/${projectId}/${userId}`,{  headers: this.getHeaders() });
   }
+
+  getManagersProjects(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/GetManagersProjects/${userId}`,{  headers: this.getHeaders() });
+  }
+
+  getManagers(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/GetManagers/${userId}`,{  headers: this.getHeaders() });
+  }
 }
 
