@@ -471,8 +471,9 @@ export class PopupComponent {
   }
 
   updateTaskAppUserId(task: ProjectTask): void {
+    var senderid = localStorage.getItem("id");
     this.myTasksService
-      .changeTaskAppUserId(task.id, this.selectedUser?.appUserId)
+      .changeTaskAppUserId(task.id, this.selectedUser?.appUserId,Number(senderid))
       .subscribe({
         next: () => {
           this.sharedService.emitTaskUpdated();
