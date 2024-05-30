@@ -630,8 +630,7 @@ namespace backend.Controllers
             var inReviewStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "InReview" && ts.ProjectId == taskStatusDto.ProjectId);
             var CompletedStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "Completed" && ts.ProjectId == taskStatusDto.ProjectId);
             var ArchivedStatus = await _context.TaskStatuses.FirstOrDefaultAsync(ts => ts.StatusName == "Archived" && ts.ProjectId == taskStatusDto.ProjectId);
-            var newPosition = inReviewStatus != null ? inReviewStatus.Position : 0; // Assuming positions are 0-indexed
-
+            var newPosition = inReviewStatus != null ? inReviewStatus.Position : 0;
             if (inReviewStatus != null) inReviewStatus.Position += 1;
             if (CompletedStatus != null) CompletedStatus.Position += 1;
             if (ArchivedStatus != null) ArchivedStatus.Position += 1;
