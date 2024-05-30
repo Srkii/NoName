@@ -171,7 +171,9 @@ export class MyProjectsService {
   }
 
   removeProjectsFromArchived(projectIds: number[]): Observable<any> {
-    return this.http.put(`${this.baseUrl}/unarchiveMultiple`, JSON.stringify( projectIds ), { headers: this.getHeaders() });
+    return this.http.put(`${this.baseUrl}/unarchiveMultiple`, JSON.stringify(projectIds), { 
+      headers: this.getHeaders().set('Content-Type', 'application/json')
+    });
   }
 
   getUserProjectRole(projectId: number, userId: number): Observable<any> {

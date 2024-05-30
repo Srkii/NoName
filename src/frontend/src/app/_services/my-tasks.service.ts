@@ -9,6 +9,7 @@ import { TaskDependency } from '../Entities/TaskDependency';
 import { DateTimeDto } from '../Entities/DateTimeDto';
 import { Project } from '../Entities/Project';
 import { sectionChangeDTO } from '../Entities/sectionChangeDTO';
+import { DateTimeDto1 } from '../Entities/DateTimeDto1';
 
 @Injectable({
   providedIn: 'root',
@@ -109,8 +110,28 @@ export class MyTasksService {
   GetClosedTasksByUserId(userId: any, count: number,sortedColumn:string|null=null,sortedOrder:number=0): Observable<ProjectTask[]> {
     return this.http.get<ProjectTask[]>(`${this.baseUrl}/user/${userId}/count3/${count}?sortedColumn=${sortedColumn}&sortedOrder=${sortedOrder}`, {headers:this.getHeaders()});
   }
-  changeTaskInfo(dto: ChangeTaskInfo): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskInfo`, dto, {headers:this.getHeaders()});
+
+  changeTaskName(taskId: any, newName: string): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskName/${taskId}/${newName}`, null, { headers: this.getHeaders() });
+  }
+  
+  // Function to change task description
+  changeTaskDescription(taskId: any, newDescription: string): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskDescription/${taskId}/${newDescription}`, null, { headers: this.getHeaders() });
+  }
+  
+  // Function to change task due date
+  changeTaskDueDate(taskId: any, dto: DateTimeDto1): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskDueDate/${taskId}`, dto, { headers: this.getHeaders() });
+  }
+  // Function to change task app user ID
+  changeTaskAppUserId(taskId: any, newAppUserId: any): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskAppUserId/${taskId}/${newAppUserId}`, null, { headers: this.getHeaders() });
+  }
+  
+  // Function to change task section ID
+  changeTaskSectionId(taskId: any, newSectionId: any): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskSectionId/${taskId}/${newSectionId}`, null, { headers: this.getHeaders() });
   }
 
   addTaskDependencies(dtos: TaskDependency[]): Observable<any> {
@@ -119,6 +140,9 @@ export class MyTasksService {
 
   deleteTaskDependency(dto: TaskDependency): Observable<any> {
     return this.http.post(`${this.baseUrl}/deleteTaskDependency`, dto, {headers:this.getHeaders()});
+  }
+  deleteAllTaskDependency(dtos: TaskDependency[]): Observable<any> {
+    return this.http.post(`${this.baseUrl}/deleteAllTaskDependency`, dtos, {headers:this.getHeaders()});
   }
   GetAllTasksDependencies():Observable<TaskDependency[]>{
     return this.http.get<TaskDependency[]>(`${this.baseUrl}/getAllTasksDependencies`, {headers:this.getHeaders()});

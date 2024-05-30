@@ -1,14 +1,6 @@
 * {
   font-family: 'Public Sans', sans-serif !important;
 }
-html {
-  background-color: #f5f5f9;
-}
-
-body {
-  background-color: #f5f5f9;
-  color: #697a8d;
-}
 .nav {
   display: inline;
 }
@@ -19,24 +11,23 @@ body {
 .all {
   margin-top: 30px;
   margin: auto;
-  margin-bottom: 20px !important;
+  margin-bottom: 10px !important;
   padding: 20px;
-  /* width: 85%; */
   min-height: 10vh; 
-  background-color: #ffffff;
-  color: #697a8d;
-  border: solid 1px #d9dee3;
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border: solid 1px var(--card-border);
   border-radius: 0.375rem;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  box-shadow: var(--card-shadow);
   overflow-y: hidden; 
   overflow-x: auto; 
   box-sizing: border-box; 
 }
 
 table {
-  color: #697a8d;
-  font-size: 12px;
-  border: 1px solid lightgray;
+  color: var(--text-color);
+  font-size: 16px;
+  border: 1px solid var(--table-border-color);
   border-collapse: collapse;
   margin-bottom: -20px;
   margin-top: 10px;
@@ -52,49 +43,48 @@ table {
   }
 }
 th {
-  font-size: 16px;
-  border: 1.5px solid lightgray;
-  font-weight: 700; 
+  font-size: 18px;
+  border: 1px solid var(--table-border-color);
+  border-collapse: collapse;
+  font-weight: 500; 
+  line-height: 20px;
   padding: 5px;
   border-left: none;
   border-right: none;
-  width: 30%; 
-  /* padding-left: 10%; */
+  width: 30%;
+  /* ove 2 linije kolko tolko sredjuju overflow na praznoj tabeli. nisam siguran dal je dovoljno*/
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 td {
   padding: 0.5rem;
-  border: 1px solid lightgray;
+  border-collapse: collapse;
+  border: 1px solid var(--table-border-color);
   border-left: none;
   border-right: none;
   font-size: 16px;
   width: 30%;
   white-space: nowrap; 
   text-overflow: ellipsis;
-  /* text-align: center; */
 }
-
+.empty-table th {
+  border-bottom: none;
+  overflow-x: hidden;
+}
 
 tr:last-child {
-  border-bottom: none;
+  border-bottom: 1px transparent !important;
 }
 tr:last-child td {
-  border-bottom: none;
+  border-bottom: 1px transparent !important;
 }
-
 
 .name:hover {
   cursor: pointer;
-  color: #484ac5 !important;
+  color: var(--dark-purple)!important;
+  border-bottom: 1px solid var(--dark-purple) !important;
 }
-
-/* .td_row:hover,
-.td_row.clicked {
-  cursor: pointer;
-  /* background-color: #e7e7ff !important; */
-  /* color: #5f61e6 !important; */
-  /* font-weight: 600; */
-/* }  */
 
 p {
   text-align: center;
@@ -107,13 +97,13 @@ p {
 .filter:hover,
 .filter:focus {
   cursor: pointer;
-  color: #5f61e6;
+  color: var(--dark-purple);
 }
-.empty-table th {
-  border-bottom: none;
-  overflow-x: hidden;
+.projectname:hover{
+  cursor: pointer;
+  color: var(--dark-purple);
+  border-bottom: 1px solid var(--dark-purple) !important;
 }
-
 
 .header {
   display: flex;
@@ -126,9 +116,9 @@ p {
 }
 
 .page_size {
-  color: #697a8d;
+  color: var(--text-color);
   font-size: 16px;
-  border: 0.5px solid lightgray;
+  border: 1px solid var(--table-border-color);
   border-radius: 0.375rem;
   padding-left: 3px;
   padding-right: 3px;
@@ -140,15 +130,12 @@ p {
 }
 .page_size:hover{
   outline: none;
-  border: 1px solid #5f61e6 !important;
+  border: 1px solid var(--dark-purple)!important;
 }
 .page_size:focus{
   outline: none;
 }
-.projectname:hover{
-  cursor: pointer;
-  color: #484ac5 !important;
-}
+
 .align-middle {
   vertical-align: middle;
 }
@@ -156,13 +143,13 @@ p {
 .sorted-asc {
   transform: rotateX(0deg);
   transition: transform 0.3s;
-  color: #5f61e6;
+  color: var(--dark-purple);
 }
 
 .sorted-desc {
   transform: rotateX(180deg);
   transition: transform 0.3s;
-  color: #5f61e6;
+  color: var(--dark-purple);
 }
 
 .unsorted {

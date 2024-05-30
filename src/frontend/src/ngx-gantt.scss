@@ -1,34 +1,16 @@
-// @use '../node_modules/@worktile/gantt/styles/index.scss';
-// @use '../node_modules/@worktile/gantt/styles/variables.scss';
-// @use '../node_modules/@worktile/gantt/gantt.component.scss';
-// @use '../node_modules/@worktile/gantt/components/table/gantt-table.scss';
-// @use '../node_modules/@worktile/gantt/components/calendar/calendar.scss';
-// @use '../node_modules/@worktile/gantt/components/drag-backdrop/drag-backdrop.component.scss';
-// @use '../node_modules/@worktile/gantt/components/bar/bar.component.scss';
-// @use '../node_modules/@worktile/gantt/components/range/range.component.scss';
-// @use '../node_modules/@worktile/gantt/components/icon/icon.component.scss';
-// @use '../node_modules/@worktile/gantt/components/links/links.component.scss';
-// @use '../node_modules/@worktile/gantt/components/baseline/baseline.component.scss';
-// @use '../node_modules/@worktile/gantt/components/toolbar/toolbar.component.scss';
-// @use '../node_modules/@worktile/gantt/components/loader/loader.component.scss';
-
 @use 'sass:math';
 
-//boje
-
-
-
 // basic
-$gantt-color: #333 !default;
+$gantt-color: var(--text-color) !default;
 $gantt-primary-color: #6698ff !default;
 $gantt-header-height: 44px !default;
-$gantt-border-color: #eee !default;
-$gantt-bg-color: #fff !default;
+$gantt-border-color: var(--gantt-border) !default;
+$gantt-bg-color: var(--card-color) !default;
 $gantt-side-shadow: 12px 0 16px -10px rgba(0, 0, 0, 0.15) !default;
-$gantt-container-background-color: #fafafa !default;
+$gantt-container-background-color: var(--gant-bg-secondary) !default;
 $gantt-item-height: 44px !default;
 $gantt-group-background-color: rgba(
-  $color: #f3f3f3,
+  $color: var(--gant-bg-secondary),
   $alpha: 0.5
 ) !default;
 $gantt-group-height: 44px !default;
@@ -37,20 +19,20 @@ $gantt-table-td-padding: 0 15px !default;
 // calendar
 $gantt-date-primary-color: #888 !default;
 $gantt-date-primary-font-size: 14px !default;
-$gantt-date-primary-border: #ddd !default;
-$gantt-date-secondary-color: #333 !default;
+$gantt-date-primary-border: var(--table-border-color)!default;
+$gantt-date-secondary-color: var(--text-color) !default;
 $gantt-date-secondary-font-size: 14px !default;
 $gantt-date-secondary-weekend-color: #aaa !default;
 $gantt-date-week-backdrop-bg: rgba(
   $color: #f3f3f3,
   $alpha: 0.5
 ) !default;
-$gantt-date-today-color: #ff9f73 !default;
+$gantt-date-today-color: #ec818a !default;
 $gantt-date-today-text-color: #fff !default;
 
 // bar
 $gantt-bar-bg: #fff !default;
-$gantt-bar-layer-bg: #fff !default;
+$gantt-bar-layer-bg: var(--card-color) !default;
 $gantt-bar-handle-color: #cacaca !default;
 $gantt-bar-handle-height: 12px !default;
 $gantt-bar-link-handle-point: $gantt-primary-color !default;
@@ -80,17 +62,21 @@ $gantt-loader-loading-color: $gantt-primary-color !default;
 // footer
 $gantt-footer-height: 44px !default;
 
-
-
-
+// custom css dodati
+.gantt-table-column {
+  background-color: var(--card-color);
+}
+.btn.btn-outline-secondary.btn-sm {
+  background-color: var(--card-color);
+  border: 1px solid var(--gantt-border) !important;
+  color: (--text-color) !important;
+}
+.btn.btn-outline-secondary.btn-sm:hover {
+  border: 1px solid (--gantt-border) !important;
+}
+// custom css dodati
 
 //gantt.component.scss
-
-
-
-
-
-
 .gantt {
   width: 100%;
   height: 100%;
@@ -283,20 +269,7 @@ $gantt-footer-height: 44px !default;
   }
 }
 
-
-
-
-
-
-
 //gantt.table.scss
-
-
-
-
-
-
-
 @mixin gantt-table-item-base() {
   display: flex;
   box-sizing: border-box;
@@ -448,7 +421,7 @@ $gantt-footer-height: 44px !default;
     //     }
     //   }
     // }
-    //ZAKOMENTIRAO MAKSIM NO MORE HOVER
+    // Iskljucuje hover na tabeli
 
     .drop-position-before {
       background: $gantt-table-items-drop-background-color !important;
@@ -573,17 +546,7 @@ $gantt-footer-height: 44px !default;
 @include gantt-items-drag-drop();
 
 
-
-
-
-
-
 //calendar.scss
-
-
-
-
-
 .gantt-calendar {
   display: block;
   height: 100%;
@@ -674,15 +637,7 @@ $gantt-footer-height: 44px !default;
   }
 }
 
-
-
-
 //drag-backgrop.component.scss
-
-
-
-
-
 .gantt-drag-backdrop {
   position: absolute;
   top: 0;
@@ -733,16 +688,7 @@ $gantt-footer-height: 44px !default;
   }
 }
 
-
-
-
-
-
 //bar.component.scss
-
-
-
-
 $gantt-bar-layer-append-width: 32px;
 $gantt-bar-layer-append-height: 42px;
 $gantt-bar-link-height: 16px;
@@ -946,13 +892,7 @@ $gantt-bar-link-drop-border: 5px;
   }
 }
 
-
-
 //range.component.scss
-
-
-
-
 .gantt-range {
   position: absolute;
   z-index: 2;
@@ -989,12 +929,7 @@ $gantt-bar-link-drop-border: 5px;
   }
 }
 
-
-
 //icon.component.scss
-
-
-
 .gantt-icon {
   font-size: 1rem;
   line-height: 0;
@@ -1009,17 +944,7 @@ $gantt-bar-link-drop-border: 5px;
 
 }
 
-
-
-
-
 //links.component.scss
-
-
-
-
-
-
 .gantt-links-overlay {
   position: absolute;
   top: 0px;
@@ -1048,16 +973,7 @@ $gantt-bar-link-drop-border: 5px;
   }
 }
 
-
-
-
-
 //baseline.component.scss
-
-
-
-
-
 .gantt-baseline {
   position: absolute;
   z-index: 2;
@@ -1068,18 +984,7 @@ $gantt-bar-link-drop-border: 5px;
   }
 }
 
-
-
-
-
-
 //toolbar.component.scss
-
-
-
-
-
-
 .gantt-toolbar {
   position: absolute;
   top: 60px;
@@ -1110,16 +1015,7 @@ $gantt-bar-link-drop-border: 5px;
   }
 }
 
-
-
-
-
 //loader.component.scss
-
-
-
-
-
 .gantt-loader {
   &-overlay {
     position: absolute;

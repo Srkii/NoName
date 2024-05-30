@@ -1,4 +1,3 @@
-import { ApiUrl } from './../../ApiUrl/ApiUrl';
 import { UploadService } from '../../_services/upload.service';
 import { Component, OnInit, TemplateRef} from '@angular/core';
 import { UserinfoService } from '../../_services/userinfo.service';
@@ -19,6 +18,8 @@ export class UserInfoComponent implements OnInit {
   public newpas="";
   public confirmpass="";
   public role:any;
+  public showSuccess: boolean = false;
+  public showError: boolean = false;
   public invalidCurrPassword: boolean = false;
   public invalidNewPassword: boolean = false;
 
@@ -36,16 +37,14 @@ export class UserInfoComponent implements OnInit {
     public uploadService:UploadService,
     private spinner:NgxSpinnerService,
     private modalService:BsModalService,
-    private toastr: ToastrService
+    private toast:ToastrService
     ) {}
-
-  ngOnInit(){
+  
+    ngOnInit(){
     this.spinner.show();
     this.UserInfo();
     this.spinner.hide();
   }
-
-
 
   UserInfo(){
     const id = localStorage.getItem('id');
@@ -75,6 +74,7 @@ export class UserInfoComponent implements OnInit {
     if(this.newData.NewPassword && this.confirmpass)
       return this.newData.NewPassword === this.confirmpass;
     return false;
+
   }
   clearInputs(){
     this.newData.CurrentPassword = '';
@@ -87,57 +87,36 @@ export class UserInfoComponent implements OnInit {
   turnOfNewPassError(){
     this.invalidNewPassword = false;
   }
-  swapDesign(num: number){
-    if(num==1){
-      var succ = document.getElementById("success_div")
-      if(succ) succ.style.display='block';
-      var base = document.getElementById("warning_div");
-      if(base) base.style.display='none';
-      var change = document.getElementById("alert_div");
-      if(change){
-        change.style.backgroundColor = '#83EDA1'
-        change.style.color = '#FFFFFF';
-      }
-    }
-    else{
-      var succ = document.getElementById("success_div")
-      if(succ) succ.style.display='none';
-      var base = document.getElementById("warning_div");
-      if(base) base.style.display='block';
-      var change = document.getElementById("alert_div");
-      if(change){
-        change.style.backgroundColor = '#FFF2D6'
-        change.style.color = '#FFAB00';
-      }
-    }
-  }
-  apply_changes(){
 
+  apply_changes() {
     if(!this.newData.CurrentPassword || !this.passwordMatch())
       return; 
     if(this.newData.NewPassword && this.newData.NewPassword?.length < 5)
     {
       this.invalidNewPassword = true;
-      this.swapDesign(2);
+      this.showSuccess = false;
+      this.showError = true;
       return;
     }
-    
-    var id= Number(localStorage.getItem('id'));
+
+
+    var id = Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');
-    this.userinfoService.updateUserInfo(token,id,this.newData).subscribe({
-      next: (response) => {
-        this.swapDesign(1);
-        this.invalidCurrPassword = false;
-        this.invalidNewPassword = false;
-        this.clearInputs()
+    this.userinfoService.updateUserInfo(token, id, this.newData).subscribe({
+      next: () => {
+        this.showSuccess = true;
+        this.showError = false;
+        this.clearInputs();
       },
-      error: (obj)=>{
-        this.swapDesign(2)
-        this.toastr.error(obj.error.message)
+      error: (obj) => {
+        this.toast.error(obj.error.message)
         if(obj.error.type == 1) this.invalidCurrPassword = true;
         else this.invalidCurrPassword = false;
         if(obj.error.type == 2) this.invalidNewPassword = true;
         else this.invalidNewPassword = false;
+
+        this.showSuccess = false;
+        this.showError = true;
       }
     });
   }
@@ -159,7 +138,7 @@ export class UserInfoComponent implements OnInit {
           }
         )
       }else{
-        this.toastr.error("Please upload an image.");
+        this.toast.error("Please upload an image.");
       }
   }
   cropImg(event: ImageCroppedEvent) {

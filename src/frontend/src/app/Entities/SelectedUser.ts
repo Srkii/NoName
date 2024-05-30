@@ -7,4 +7,5 @@ export interface SelectedUser {
     projectRole: ProjectRole,
     profilePicUrl: string,
     profilePic?: string
+    archived?: boolean
 }

@@ -1,4 +1,6 @@
+
 .toast_wrapper {
+  font-family: 'Public Sans', sans-serif !important;
   border-radius: 8px;
   position: fixed;
   z-index: 123123;
@@ -7,7 +9,9 @@
   width: 380px;
   height: 88px;
   word-break: break-word;
-  background-color: #ffffff;
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border: 1px solid var(--table-border-color);
   overflow: hidden;
   cursor: pointer;
 }
@@ -38,11 +42,11 @@
 
 .progress_bar {
   width: 100%;
-  background: #696cff;
+  background: var(--normal-purple);
   height: 3px;
   transition: width 0.1s;
   transition-timing-function: ease-out;
-  border-radius: 8px;
+  border-radius: 0.375rem;
 }
 .flex{
   display: flex;
@@ -63,6 +67,6 @@ img{
   z-index: 123123123;
 }
 .exit:hover{
-  color: #696cff;
+  color: var(--normal-purple);
   transition: 0.5s ease-in-out;
 }

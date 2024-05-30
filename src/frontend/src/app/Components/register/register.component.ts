@@ -4,7 +4,6 @@ import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Invintation } from '../../Entities/Invitation';
 import { ToastrService } from 'ngx-toastr';
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -31,9 +30,9 @@ export class RegisterComponent implements OnInit {
     private registerService: RegisterService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
-  ) {}
-
+    private toastr: ToastrService,
+  ) { }
+  
   token: any;
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');

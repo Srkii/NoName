@@ -43,21 +43,20 @@
               "node_modules/primeng/resources/primeng.min.css",
               "src/styles.css",
               "node_modules/@ng-select/ng-select/themes/default.theme.css",
-              "node_modules/@worktile/gantt/styles/index.scss",
               "node_modules/quill/dist/quill.snow.css",
               {
-                "input": "src/GanttStyle.scss",
-                "bundleName": "ganttStyleMaksim",
+                "input": "src/ngx-gantt.scss",
+                "bundleName": "ngx-gantt",
                 "inject": true
               },
               {
-                "input": "src/tihomir-light-purple.css",
-                "bundleName": "tihomir-light-purple",
+                "input": "src/ng-light-purple.css",
+                "bundleName": "ng-light-purple",
                 "inject": false
               },
               {
-                "input": "src/lara-dark-purple.css",
-                "bundleName": "lara-dark-purple",
+                "input": "src/ng-dark-purple.css",
+                "bundleName": "ng-dark-purple",
                 "inject": false
               }
             ],
