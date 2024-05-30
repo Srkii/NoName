@@ -226,6 +226,10 @@ namespace backend.Services
             }
             await _context.SaveChangesAsync();
         }
-
+        public async void DeleteRelatedNotifications(int taskId){
+            var notifications = await _context.Notifications.Where(x => x.task_id==taskId).ToListAsync();
+            _context.Notifications.RemoveRange(notifications);
+            await _context.SaveChangesAsync();
+        }
     }
 }
