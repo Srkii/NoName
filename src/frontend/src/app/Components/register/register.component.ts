@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
     console.log(this.newUser.Email)
     if(!this.token || this.newUser.Email == '')
     {
-      this.toastr.error("Unvalid token provided");
+      this.toastr.error("Invalid token provided");
       return
     }
 

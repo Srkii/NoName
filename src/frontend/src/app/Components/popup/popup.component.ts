@@ -1,14 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ElementRef,
-  ViewChild,
-  ChangeDetectorRef,
-  SimpleChanges,
-  TemplateRef,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectorRef, SimpleChanges, TemplateRef, OnInit} from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { UserinfoService } from '../../_services/userinfo.service';
@@ -18,7 +8,6 @@ import { MyProjectsService } from '../../_services/my-projects.service';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { Project } from '../../Entities/Project';
 import { UploadService } from '../../_services/upload.service';
-import { ChangeTaskInfo } from '../../Entities/ChangeTaskInfo';
 import { Router } from '@angular/router';
 import { TaskDependency } from '../../Entities/TaskDependency';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -27,7 +16,6 @@ import { ProjectSection } from '../../Entities/ProjectSection';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HttpError, HttpResponse } from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
-import { DateTimeDto } from '../../Entities/DateTimeDto';
 import { DateTimeDto1 } from '../../Entities/DateTimeDto1';
 
 @Component({
@@ -35,7 +23,7 @@ import { DateTimeDto1 } from '../../Entities/DateTimeDto1';
   templateUrl: './popup.component.html',
   styleUrls: ['./popup.component.css'],
 })
-export class PopupComponent {
+export class PopupComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('commentInput') commentInput!: ElementRef;
   @ViewChild('containerDiv') containerDiv!: ElementRef;
@@ -68,6 +56,7 @@ export class PopupComponent {
   attachment_added: boolean = false;
   file: any;
   today: Date = new Date();
+  todayTico: Date = new Date();
   projectEndDate: Date = new Date();
   projectStartDate: Date = new Date();
   dtos: TaskDependency[] = [];
@@ -86,6 +75,10 @@ export class PopupComponent {
     private uploadService: UploadService,
     private toast: ToastrService
   ) {}
+  ngOnInit(): void {
+    this.todayTico.setHours(0, 0, 0, 0);
+    this.getTaskStartDate();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('task' in changes && this.task) {
@@ -436,6 +429,17 @@ export class PopupComponent {
         console.error('Error updating task name:', error);
       },
     });
+  }
+  
+  // za dute date na taskCard; ovo saljem  u p-datepicker minDate
+  // ako je startDate taska manji od today, min = today
+  // u suprotnom min = startDate taska
+  tTaskDueMin: Date = new Date();
+  getTaskStartDate(): void {
+    if (this.task) {
+      let taskStartDate = new Date(this.task.startDate);
+      this.tTaskDueMin = taskStartDate < this.todayTico ? this.todayTico : taskStartDate;
+    }
   }
 
   updateTaskDescription(task: ProjectTask): void {

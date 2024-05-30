@@ -20,7 +20,15 @@
                 <div *ngIf="buttonClicked && projectNameExists" class="invalid">Project with the same name already exists.</div>
               </div>
               <div class="mb-3">
-                <label for="StartDate" class="form-label">Start Date</label>
+                <div class="tLabel">
+                  <label for="StartDate" class="form-label">Start Date</label>
+                  <div pTooltip="Please choose a date that is today or in the future">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                    </svg>
+                  </div>
+                </div>
                 <div class="tNgCalendar">
                   <p-calendar
                   (click)="$event.stopPropagation()"
@@ -41,7 +49,15 @@
                 <div *ngIf="isInvalidDate()" class="invalid">Please check if the end date is set after the start date.</div>
               </div>
               <div class="mb-3">
-                <label for="EndDate" class="form-label">End Date</label>
+                <div class="tLabel">
+                  <label for="StartDate" class="form-label">End Date</label>
+                  <div pTooltip="Please choose a date that is not earlier than the start date">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                    </svg>
+                  </div>
+                </div>
                 <div class="tNgCalendar">
                   <p-calendar
                   (click)="$event.stopPropagation()"
@@ -53,7 +69,7 @@
                   [firstDayOfWeek]="1"
                   placeholder="End Date"          
                   dateFormat="MM dd, yy"
-                  [minDate]="newProject.StartDate"
+                  [minDate]="newProject.StartDate==null?today:(newProject.StartDate<=today?today:newProject.StartDate)"
                   [ngClass]="{'ng-invalid': buttonClicked && !newProject.EndDate || isInvalidDate()}"></p-calendar>
                 </div>
                 <div *ngIf="buttonClicked && !newProject.EndDate" class="invalid">Please enter end date.</div>

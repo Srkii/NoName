@@ -1,6 +1,15 @@
 * {
     z-index: 100;
 }
+.tLabel {
+    display: flex;
+    justify-content: space-between;
+    svg {
+        padding-top: 3px !important;
+        margin-right: 5px !important;
+        fill: var(--text-color) !important;
+    }
+}
 #container {
     position: relative;
 }

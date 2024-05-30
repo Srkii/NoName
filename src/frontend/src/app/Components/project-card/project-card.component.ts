@@ -47,7 +47,6 @@ export class ProjectCardComponent {
       this.users = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
     });
   }
-
   async CreateProject(): Promise<void>{
     this.projectNameExists = false;
     this.buttonClicked = true;
@@ -138,7 +137,7 @@ export class ProjectCardComponent {
       let currentDate = new Date();
       startDate.setHours(0,0,0,0);
       currentDate.setHours(0,0,0,0);
-      return !(this.newProject.StartDate < this.newProject.EndDate && (startDate>=currentDate));
+      return !(this.newProject.StartDate <= this.newProject.EndDate && (startDate>=currentDate));
     }
     return false;
   }

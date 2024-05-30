@@ -31,7 +31,7 @@ namespace backend.Controllers
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {   
             if(!await IsValidTokenAsync(registerDto.Token))
-                return BadRequest(new {message = "Unvalid request token"});
+                return BadRequest(new {message = "Invalid request token"});
 
             if(await EmailExists(registerDto.Email))
                 return BadRequest(new {message = "E-mail is already in use."});

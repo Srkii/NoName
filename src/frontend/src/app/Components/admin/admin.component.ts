@@ -74,7 +74,7 @@ export class AdminComponent implements OnInit{
 
   selectedRolee: string=''
 
-  sortOrder: 'asc' | 'desc' = 'asc';
+  sortOrder: string = '';
 
   pageNumber: number = 1;
   pageSize: number = 5;
@@ -120,6 +120,14 @@ export class AdminComponent implements OnInit{
   regexEmail: RegExp =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   archMembers: { [key: string]: Member[] } = {};
+
+  getSortClass(): string {
+    if (this.sortOrder === 'desc') // da ne bih menjao u logici samo sam rotirao
+      return 'sorted-asc';
+    if (this.sortOrder === 'asc')
+      return 'sorted-desc';
+    return 'unsorted';
+  }
 
   Invite(): void{
    

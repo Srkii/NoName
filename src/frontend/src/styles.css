@@ -193,8 +193,12 @@ body {
 .ng-select.addProjAss .ng-value.ng-star-inserted,
 .ng-select.tMngMemb .ng-value.ng-star-inserted,
 .ng-select.ngAdminSelect .ng-value.ng-star-inserted,
-.ng-select.task_selectDep .ng-value.ng-star-inserted {
+.ng-select.task_select .ng-value.ng-star-inserted {
   background-color: var(--ng-input-item-bg) !important;
+  color: var(--ng-hover-text) !important;
+}
+.ng-select.task_selectDep .ng-value.ng-star-inserted {
+  background-color: var(--card-color) !important;
   color: var(--ng-hover-text) !important;
 }
 
