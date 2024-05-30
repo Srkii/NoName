@@ -90,7 +90,6 @@ export class ProjectDetailComponent implements OnInit {
   sortedOrder: number = 0; 
 
   fetchingTaskId: number | null = null;
-  
 
   constructor(
     private route: ActivatedRoute,
