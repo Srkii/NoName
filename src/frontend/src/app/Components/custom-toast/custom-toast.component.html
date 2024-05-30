@@ -1,9 +1,4 @@
-<div
-  (mouseenter)="stopCountDown()"
-  (mouseleave)="countDown()"
-  class="toast_wrapper"
-  [@openClose]="toastService.data && toastService.data.show ? 'open' : 'closed'"
->
+<div (mouseenter)="stopCountDown()" (mouseleave)="countDown()" class="toast_wrapper" [@openClose]="toastService.data && toastService.data.show ? 'open' : 'closed'">
   <div class="inner_wrapper">
     <div class="flex" *ngIf="toastService.data" (click)="notificationService.follow_notif($event,toastService.data.target)" (click)="this.toastService.hide()">
       <img *ngIf="toastService.data.target?.sender?.profilePicUrl && (toastService.data.target.type==0 || toastService.data.target.type==1)" class="dropImg1 rounded-circle shadow-4-strong"  [src]="uploadService.getImage(toastService.data.target.sender.profilePicUrl)" alt="">
@@ -36,10 +31,5 @@
       </svg> 
     </div>              
   </div>
-  <div
-    class="progress_bar"
-    [ngClass]="{ success: toastService.data && toastService.data.type === 1 }"
-    #element
-  ></div>
-
+  <div class="progress_bar" [ngClass]="{ success: toastService.data && toastService.data.type === 1 }" #element></div>
 </div>

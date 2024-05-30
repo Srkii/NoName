@@ -4,24 +4,13 @@
       <!-- ako treba brojac notif, made meni isk deluje suvisno... -->
     </div>
   </div>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    fill="currentColor"
-    class="bi bi-bell"
-    viewBox="0 0 16 16"
-    class="nav-link dropdown-toggle"
-    data-bs-toggle="dropdown"
-    aria-expanded="false"
-    data-bs-boundary="viewport"
-    (click)="getNotifications()">
+  <svg (click)="getNotifications()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
   </svg>
-  <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static" style="width: 350px; border: none;">
+  <ul class="dropdown-menu dropdown-menu-end tDropDown" data-bs-popper="static" style="width: 350px; border: none;">
     <li class="dropdown-menu-header border-bottom">
       <div class="dropdown-header d-flex align-items-center py-3">
-        <h5 class="text-body mb-0 me-auto">Notifications</h5>
+        <h5 class="text-body mb-0 me-auto tHeader">Notifications</h5>
         <a class="dropdown-notifications-all text-body" data-bs-placement="top"  data-bs-original-title="Mark all as read">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#696cff" class="bi bi-envelope-open" viewBox="0 0 16 16" role="img" (click)="readAllFromTab($event)">
             <title>Mark all as read</title>
@@ -30,13 +19,10 @@
         </a>
       </div>
     </li>
-    <li>
-      <span style="font-size: 16px; margin:15px;" *ngIf="notification_list.length==0">No new notifications.</span>
+    <li style="margin:15px !important;">
+      <span style="font-size: 16px;" *ngIf="notification_list.length==0">You have no new notifications.</span>
     </li>
-    <li
-    class="dropdown-notifications-list scrollable-container ps"
-    style="width: 100%; max-height: 300px; overflow: scroll;overflow-x: hidden;"
-    >
+    <li class="dropdown-notifications-list scrollable-container ps" style="width: 100%; max-height: 300px; overflow: scroll;overflow-x: hidden;">
       <ul class="list-group list-group-flush">
         <li class="list-group-item list-group-item-action dropdown-notifications-item" *ngFor="let notification of notification_list" >
           <div class="d-flex">
@@ -58,8 +44,8 @@
               </svg>
             </div>
             <div class="flex-grow-1" (click)="notificationService.follow_notif_from_tab($event,notification)">
-              <h6 class="mb-1" style="font-weight: 600;">{{notificationService.getType(notification.type)}}</h6>
-              <small class="mb-0">
+              <h6 class="mb-1 tNotifType" style="font-weight: 600;">{{notificationService.getType(notification.type)}}</h6>
+              <small class="mb-0 tNotifContent">
                 {{notificationService.getNotificationText_small(notification)}}
               </small><br>
               <small class="text-muted">{{this.getNotificationTimeAgo(notification)}}</small>
@@ -72,7 +58,7 @@
         </li>
       </ul>
     <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></li>
-    <li class="dropdown-menu-footer border-top p-3">
+    <li class="dropdown-menu-footer border-top p-3 tFooter">
       <button class="btn btn-primary text-uppercase w-100" fdprocessedid="tvmgk" (click)="see_all_notifications(AllNotifications)">view all notifications</button>
     </li>
   </ul>
@@ -85,21 +71,21 @@
 <ng-template #AllNotifications>
   <div class="modal-header">
     <h4 class="modal-title pull-left">All Notifications</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalref?.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+    <svg (click)="modalref?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg>
   </div>
   <div class="modal-body" *ngIf="this.notifications.length!=0 || this.notifications_read.length!=0">
     <!-- table 1 -->
     <table class="notifications-table">
       <tr class="inactive_tr">
-        <td><i>Unread</i></td>
+        <td>Unread</td>
         <td>&nbsp;</td>
         <td style="text-align: end;">
-          <input class="form-check-input" type = "checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0">
+          <input class="form-check-input" type="checkbox" (change)="selectAllNotifications()" [disabled]="notifications.length===0">
         </td>
       </tr>
-      <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td><i>No Unread Notifications.</i></td></tr>
+      <tr class="inactive_tr_flag" *ngIf="notifications.length==0"><td>You have no unread notifications.</td></tr>
 
       <tr class="active_tr" *ngFor="let notification of notifications">
         <td class="imagetd" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
@@ -123,13 +109,8 @@
         <td class="datetd">
           {{notification.dateTime | date}}
         </td>
-        <td class="last_td"> 
-          <input
-            class="form-check-input myinput" 
-            type="checkbox"
-            [checked]="markedNotifications.includes(notification.id)"
-            (change)="toList(notification.id)" *ngIf="notification.read===false"
-            >
+        <td class="last_td" style="text-align: end;"> 
+          <input class="form-check-input myinput" type="checkbox" [checked]="markedNotifications.includes(notification.id)" (change)="toList(notification.id)" *ngIf="notification.read===false">
         </td>
       </tr>
     </table>
@@ -138,12 +119,12 @@
 
     <table class="notifications-table">
       <tr class="inactive_tr">
-        <td><i>Read</i></td>
+        <td>Read</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
       <tr class="inactive_tr_flag" *ngIf="notifications_read.length==0">
-        <td><i>No Read Notifications.</i></td>
+        <td>No Read Notifications.</td>
       </tr>
       <tr class="active_tr" *ngFor="let notification of notifications_read">
         <td class="imagetd" (click)="notificationService.follow_notif($event,notification)" (click)="this.modalref?.hide()" style="display: flex;">
@@ -168,7 +149,7 @@
         <td class="datetd">
           {{notification.dateTime | date}}
         </td>
-        <td class="last_td">
+        <td class="last_td" style="text-align: end;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#696cff" class="bi bi-check-all mysvg" viewBox="0 0 16 16">
             <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
           </svg>
@@ -176,10 +157,10 @@
       </tr>
     </table>
   </div>
-  <div class="modal-body" style="align-content: center;height: 100px;" *ngIf="this.notifications.length===0 && this.notifications_read.length===0">
-    <h5 style="text-align: center;">There are no available Notifications.</h5>
+  <div class="modal-body noNewNotficBody" style="align-content: center; height: 50px; margin-bottom: 10px !important;" *ngIf="this.notifications.length===0 && this.notifications_read.length===0">
+    <h5 style="text-align: center;">You have no new notifications.</h5>
   </div>
-  <div class="modal-footer" *ngIf="this.notifications.length!=0 || this.notifications_read.length!=0">
-    <button class="btn-primary" type="submit" (click)="read_notifications()" [disabled]="notifications.length===0">Mark as read</button>
+  <div class="modal-footer tFooter" *ngIf="this.notifications.length!=0 || this.notifications_read.length!=0">
+    <button class="btn btn-primary" type="submit" (click)="read_notifications()" [disabled]="notifications.length===0">Mark as read</button>
   </div>
 </ng-template>

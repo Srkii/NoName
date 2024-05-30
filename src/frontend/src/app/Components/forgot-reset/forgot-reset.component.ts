@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AppUser } from '../../Entities/AppUser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MailresetService } from '../../_services/mailreset.service';
 import { ResetRequest } from '../../Entities/ResetRequest';
@@ -21,7 +20,12 @@ export class ForgotResetComponent implements OnInit{
   invalidPassword: boolean = false;
   confirmPassword: string = '';
 
-  constructor(private mailresetService: MailresetService, private router: Router, private route: ActivatedRoute, private toastr: ToastrService) { }
+  constructor(
+    private mailresetService: MailresetService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private toastr: ToastrService
+    ) { }
 
   token: any;
   ngOnInit(): void {

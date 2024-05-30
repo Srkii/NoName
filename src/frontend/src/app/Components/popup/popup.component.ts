@@ -25,7 +25,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedService } from '../../_services/shared.service';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ta } from 'date-fns/locale';
 import { HttpError, HttpResponse } from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
 import { DateTimeDto } from '../../Entities/DateTimeDto';
@@ -69,10 +68,8 @@ export class PopupComponent {
   attachment_added: boolean = false;
   file: any;
   today: Date = new Date();
-  nextDayToday: Date = new Date();
   projectEndDate: Date = new Date();
   projectStartDate: Date = new Date();
-  nextDayProjectStartDate: Date = new Date();
   dtos: TaskDependency[] = [];
 
   constructor(
@@ -95,12 +92,6 @@ export class PopupComponent {
       this.projectEndDate = new Date(this.task.project.endDate);
       this.projectEndDate = this.resetTime(this.projectEndDate);
       this.projectStartDate = new Date(this.task.project.startDate);
-      this.nextDayToday = new Date(this.today);
-      this.nextDayToday.setDate(this.nextDayToday.getDate() + 1);
-      this.nextDayProjectStartDate = new Date(this.projectStartDate);
-      this.nextDayProjectStartDate.setDate(
-        this.nextDayProjectStartDate.getDate() + 1
-      );
       if (Array.isArray(this.task.dependencies)) {
         this.selectedTasks = [...this.task.dependencies];
       } else {
