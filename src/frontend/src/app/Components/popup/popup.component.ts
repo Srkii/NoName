@@ -309,22 +309,24 @@ export class PopupComponent implements OnInit {
   }
   getUser(): void {
     var id = this.task?.appUser?.id;
-    this.userInfo.getUserInfo2(id).subscribe({
-      next: (response) => {
-        this.user = response;
-        this.user.fullName = this.user.firstName + ' ' + this.user.lastName;
-        this.selectedUser = this.user;
-        if (this.selectedUser) {
-          this.selectedUser.appUserId = this.user.id;
-          this.selectedUser.lastName = this.user.lastName;
-          this.selectedUser.firstName = this.user.firstName;
-          this.selectedUser.profilePicUrl = this.user.profilePicUrl;
-        }
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+    if(id){
+      this.userInfo.getUserInfo2(id).subscribe({
+        next: (response) => {
+          this.user = response;
+          this.user.fullName = this.user.firstName + ' ' + this.user.lastName;
+          this.selectedUser = this.user;
+          if (this.selectedUser) {
+            this.selectedUser.appUserId = this.user.id;
+            this.selectedUser.lastName = this.user.lastName;
+            this.selectedUser.firstName = this.user.firstName;
+            this.selectedUser.profilePicUrl = this.user.profilePicUrl;
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+    }
   }
 
   addComment(): void {
@@ -476,8 +478,7 @@ export class PopupComponent implements OnInit {
 
   updateTaskAppUserId(task: ProjectTask): void {
     this.myTasksService
-      .changeTaskAppUserId(task.id, this.selectedUser?.appUserId)
-      .subscribe({
+      .changeTaskAppUserId(task.id, this.selectedUser?.appUserId).subscribe({
         next: () => {
           this.sharedService.emitTaskUpdated();
           this.cdr.detectChanges();
