@@ -1,6 +1,23 @@
 * {
   font-family: 'Public Sans', sans-serif;
 }
+.sorted-asc {
+  transform: rotateX(0deg);
+  transition: transform 0.3s;
+  color: var(--dark-purple);
+}
+
+.sorted-desc {
+  transform: rotateX(180deg);
+  transition: transform 0.3s;
+  color: var(--dark-purple);
+}
+
+.unsorted {
+  transform: rotateX(0deg);
+  transition: transform 0.3s;
+  color: inherit;
+}
 .alert-warning {
   border: none !important;
   color: var(--warning-div-text);

@@ -194,7 +194,6 @@ export class ProjectDetailComponent implements OnInit {
     this.myProjectsService.getUsersByProjectId(this.project.id).subscribe((users: any[]) => {
       this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole,archived: user.archived}));
       this.filteredUsers = this.usersOnProject;
-      console.log(this.usersOnProject)
     });
   }
 

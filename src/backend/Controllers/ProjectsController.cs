@@ -30,9 +30,9 @@ namespace backend.Controllers
                 return ValidationProblem("Project start date can't be in the past");
             }
 
-            if(projectDto.EndDate <= projectDto.StartDate)
+            if(projectDto.EndDate < projectDto.StartDate)
             {
-                return ValidationProblem("Project end date must be set after start date and can't be set in the past");
+                return ValidationProblem("Project end date must be >= start date and can't be set in the past");
             }
 
             var project = new Project

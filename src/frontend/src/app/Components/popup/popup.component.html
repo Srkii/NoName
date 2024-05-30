@@ -55,7 +55,7 @@
           [firstDayOfWeek]="1"
           placeholder="{{task.endDate|date}}"
           dateFormat="MM dd, yy"
-          [minDate]="projectStartDate<=today?today:projectStartDate"
+          [minDate]="tTaskDueMin"
           [maxDate]="projectEndDate"
           (onSelect)="updateTaskDueDate()"
           (click)="$event.stopPropagation()"
@@ -111,7 +111,7 @@
       <textarea class="description1 tNoBoxShadow" [class.no-hover]="task.projectRole=='3' || task.projectRole=='4'" rows="3" placeholder="Description" [value]="task.description" readonly *ngIf="task.projectRole=='3' || task.projectRole=='4'"></textarea>
         <textarea class="description tNoBoxShadow" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskDescription(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'"></textarea>
       <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Dependency</p>
-      <ng-select [disabled]="this.task.projectRole=='4' || this.task.projectRole=='3'" [placeholder]="this.task.projectRole=='4'?'No Dependencies':'Select Project Tasks'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name"  class="task_select" bindValue="id" style="border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d; " name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
+      <ng-select class="task_select" [disabled]="this.task.projectRole=='4' || this.task.projectRole=='3'" [placeholder]="this.task.projectRole=='4'?'No Dependencies':'Select Project Tasks'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" bindValue="id" style="border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d; " name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
         <ng-template ng-option-tmp let-task="item">
           <div class="user-detail" >
             <div class="nameAvatar">
@@ -126,7 +126,7 @@
       </ng-select>
 
       <p style="font-size: 16px; margin-bottom: 5px; margin-top:10px;">Section</p>
-      <ng-select  class="task_select" style="margin-bottom: 10px; border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" [placeholder]="this.task.projectRole=='4'?'No Section':'Select Project Section'" (click)="$event.stopPropagation()" (change)="updateTaskSectionId(this.task)"
+      <ng-select  class="task_select task_selectDep" style="margin-bottom: 10px; border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" [placeholder]="this.task.projectRole=='4'?'No Section':'Select Project Section'" (click)="$event.stopPropagation()" (change)="updateTaskSectionId(this.task)"
       [disabled]="this.task.projectRole=='4' || this.task.projectRole=='3'" >
         <ng-template ng-option-tmp let-section="item" let-index="index">
           <div style="display: flex; align-items: center;">
