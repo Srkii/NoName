@@ -223,7 +223,7 @@
             <tr *ngFor="let project of pmProjects; let i = index">
               <td>{{project.projectName}}</td>
               <td>
-                <ng-select [items]="projectManagers" [(ngModel)]="selectedManagers[i]" name="assignee" bindLabel="fullName" placeholder="Select Project Manager">
+                <ng-select class="ngAdminSelect" [items]="projectManagers" [(ngModel)]="selectedManagers[i]" name="assignee" bindLabel="fullName" placeholder="Select Project Manager">
                   <ng-template ng-option-tmp let-manager="item" let-index="index">
                     <div style="display: flex; align-items: center;">
                       <div *ngIf="manager.profilePicUrl" class="nameAvatar">
