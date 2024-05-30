@@ -40,7 +40,7 @@ import { CustomToastComponent } from './Components/custom-toast/custom-toast.com
 import { enUS } from 'date-fns/locale';
 import { QuillModule } from 'ngx-quill';
 
-const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
+const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"]; // bespotrebno al me mrzi da trazim gde sve trebam da izbacujem
 
 @NgModule({
   declarations: [

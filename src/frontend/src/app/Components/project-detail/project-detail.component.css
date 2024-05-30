@@ -1,6 +1,11 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
+.boardAvatar svg {
+    margin: 0px !important;
+    padding: 0px !important;
+    display: inline-block;
+}
 .tLabel {
     display: flex;
     justify-content: space-between;
@@ -516,7 +521,7 @@ select:disabled {
     color: var(--text-color);
 }
 .nameAvatar {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     font-family: 'Public Sans', sans-serif;
 }

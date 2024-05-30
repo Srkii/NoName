@@ -145,7 +145,11 @@
                       <div *ngIf="!task.profilePicUrl" class="nameAvatar boardAvatar">
                         <!-- <ngx-avatars *ngIf="themeService.isDarkTheme" size="25" bgColor="rgb(56, 54, 87)" fgColor="rgb(183, 180, 242)" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
                         <ngx-avatars *ngIf="!themeService.isDarkTheme" size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars> -->
-                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
+                        <ngx-avatars *ngIf="task.firstName" size="25" bgColor="#5d57c2" [name]="task?.firstName + ' ' + task?.lastName"></ngx-avatars>
+                        <svg *ngIf="!task.firstName" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                        </svg>
                         <span style="margin-left: 5px;">{{ task.firstName || task.lastName ? (task.firstName + ' ' + task.lastName) : 'Not assigned' }}</span>
                       </div>
                     </td>
