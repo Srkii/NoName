@@ -1,6 +1,11 @@
 * {
     font-family: 'Public Sans', sans-serif !important;
 }
+/* ukoliko je predugacko ime status na taableView da ga odsece i sakrije */
+.tBadgeHide {
+    white-space: nowrap;
+    overflow: hidden;
+}
 .boardAvatar svg {
     margin: 0px !important;
     padding: 0px !important;

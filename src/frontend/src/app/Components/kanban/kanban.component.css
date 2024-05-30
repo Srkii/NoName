@@ -137,20 +137,21 @@ svg {
     border-bottom-right-radius: 0.375rem !important;
 }
 .card {
-    /* background-color: rgb(230, 224, 224); */
     display: flex;
     flex-direction: column;
     flex-grow: 0;
     flex-basis: 200px;
-    /* flex-grow: 1; */
-    /* flex-basis: 0; */
     min-width: 200px;
+
+    /* ukoliko je ime predugacko*/
+    white-space: nowrap;
+    overflow: hidden; 
+
     min-height: 300px;
     margin: 15px;
     margin-top: 0px !important;
     margin-left: 3px !important;
     border-radius: 0.375rem !important;
-
     box-shadow: var(--card-shadow);
     border: 0px solid #d9dee3;
     background-clip: border-box;
