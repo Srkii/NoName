@@ -2,7 +2,7 @@
   <div class="col-md-5 mx-2" id="popUp" *ngIf="task" #containerDiv>
     <div class="cardHead">
       <h6 *ngIf="this.task.projectRole=='3' || this.task.projectRole=='4'"  class="popupTaskName">{{ task.taskName }}</h6>
-      <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskInfo(this.task)" *ngIf="task.projectRole=='0' || task.projectRole=='1' || this.task.projectRole=='2'">
+      <input  class="taskName" type="text" value="{{task.taskName}}" [(ngModel)]="task.taskName" (blur)="updateTaskName(task)" *ngIf="task.projectRole=='0' || task.projectRole=='1' || this.task.projectRole=='2'">
       <div class="cardHeadSvg">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="full" viewBox="0 0 16 16" (click)="full()">
           <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"/>
@@ -55,7 +55,7 @@
           [firstDayOfWeek]="1"
           placeholder="{{task.endDate|date}}"
           dateFormat="MM dd, yy"
-          [minDate]="today"
+          [minDate]="projectStartDate<=today?today:projectStartDate"
           [maxDate]="projectEndDate"
           (onSelect)="updateTaskDueDate()"
           (click)="$event.stopPropagation()"
@@ -78,7 +78,7 @@
         <div class="mInfoTitle">
           <label for="assignee" class="form-label">Assignee:</label>
         </div>
-        <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" name="assignee" bindLabel="fullName" placeholder="Select Assignee" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)">
+        <ng-select class="asigneeDropdown" [items]="users" [(ngModel)]="selectedUser" [clearable]="false" name="assignee" bindLabel="fullName" placeholder="Select Assignee" (click)="$event.stopPropagation()" (change)="updateTaskAppUserId(this.task)">
           <ng-template ng-option-tmp let-user="item" let-index="index">
             <div style="display: flex; align-items: center;">
               <div *ngIf="user.profilePicUrl" class="nameAvatar">
@@ -109,9 +109,9 @@
       </div>
       <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Description</p>
       <textarea class="description1 tNoBoxShadow" [class.no-hover]="task.projectRole=='3' || task.projectRole=='4'" rows="3" placeholder="Description" [value]="task.description" readonly *ngIf="task.projectRole=='3' || task.projectRole=='4'"></textarea>
-        <textarea class="description tNoBoxShadow" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskInfo(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'"></textarea>
+        <textarea class="description tNoBoxShadow" rows="3" placeholder="Description" [value]="task.description" [(ngModel)]="task.description" (blur)="updateTaskDescription(this.task)" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'"></textarea>
       <p style=" font-size: 16px; margin-bottom: 5px; margin-top:10px;">Dependency</p>
-      <ng-select class="task_select task_selectDep" [disabled]="this.task.projectRole=='4' || this.task.projectRole=='3'" [placeholder]="this.task.projectRole=='4'?'No Dependencies':'Select Project Tasks'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name" bindValue="id" style="border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d; " name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
+      <ng-select [disabled]="this.task.projectRole=='4' || this.task.projectRole=='3'" [placeholder]="this.task.projectRole=='4'?'No Dependencies':'Select Project Tasks'"  [items]="this.tasks"  [(ngModel)]="selectedTasks" bindLabel="name"  class="task_select" bindValue="id" style="border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d; " name="Dependency" [multiple]="true" (click)="$event.stopPropagation()" (blur)="this.addTaskDependency()">
         <ng-template ng-option-tmp let-task="item">
           <div class="user-detail" >
             <div class="nameAvatar">
@@ -121,12 +121,12 @@
         </ng-template>
         <ng-template ng-label-tmp let-item="item" let-clear="clear">
           <span class="ng-value-label">{{ item.taskName }}</span>
-          <div class="ng-value-icon right" (click)="clear(item); deleteTaskDependency(item);"  aria-hidden="true">×</div>
+          <div class="ng-value-icon right" (click)="deleteTaskDependency(item); clear(item);"  aria-hidden="true">×</div>
         </ng-template>
       </ng-select>
 
       <p style="font-size: 16px; margin-bottom: 5px; margin-top:10px;">Section</p>
-      <ng-select  class="task_select" style="margin-bottom: 10px; border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" [placeholder]="this.task.projectRole=='4'?'No Section':'Select Project Section'" (click)="$event.stopPropagation()" (change)="updateTaskInfo(this.task)"
+      <ng-select  class="task_select" style="margin-bottom: 10px; border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" [placeholder]="this.task.projectRole=='4'?'No Section':'Select Project Section'" (click)="$event.stopPropagation()" (change)="updateTaskSectionId(this.task)"
       [disabled]="this.task.projectRole=='4' || this.task.projectRole=='3'" >
         <ng-template ng-option-tmp let-section="item" let-index="index">
           <div style="display: flex; align-items: center;">

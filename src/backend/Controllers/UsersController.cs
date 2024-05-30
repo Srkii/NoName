@@ -30,7 +30,7 @@ namespace backend.Controllers
     public async Task<ActionResult<IEnumerable<object>>> GetUsers()
     {
       var users = await _context.Users
-      .Select(user => new {user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived,user.Role})
+      .Select(user => new {user.Id,user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived,user.Role})
       .ToListAsync();
       return users;
     }
@@ -39,7 +39,7 @@ namespace backend.Controllers
     public async Task<ActionResult<object>> GetUser(int id)
     {
       var user = await _context.Users.FindAsync(id);
-      return new {user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived};
+      return new {user.Id,user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived};
     }
 
     [Authorize]
@@ -48,7 +48,7 @@ namespace backend.Controllers
     {
       var availableUsers = await _context.Users
       .Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin && user.Archived == false)
-      .Select(user => new {user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived,user.Role})
+      .Select(user => new {user.Id,user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived,user.Role})
       .ToListAsync();
       return  Ok(availableUsers);
     }
@@ -190,7 +190,7 @@ namespace backend.Controllers
         query = query.Where(u => u.Archived == false);
 
         var Users=await query
-        .Select(user => new {user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived, user.Role})
+        .Select(user => new {user.Id,user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived, user.Role})
         .ToListAsync();
 
         return Users.Count;
@@ -275,7 +275,7 @@ namespace backend.Controllers
         query=query.Where(u=>u.Role==role);
       }
       var filteredUsers=await query
-      .Select(user => new {user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived, user.Role})
+      .Select(user => new {user.Id,user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived, user.Role})
       .ToListAsync();
 
       return filteredUsers;
@@ -289,7 +289,7 @@ namespace backend.Controllers
       query = query.Where(u => u.Archived == true);
 
       var archUsers=await query
-      .Select(user => new {user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived, user.Role})
+      .Select(user => new {user.Id,user.FirstName,user.LastName,user.Email,user.ProfilePicUrl,user.Archived, user.Role})
       .ToListAsync();
       return archUsers;
 

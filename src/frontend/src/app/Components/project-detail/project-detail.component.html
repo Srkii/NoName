@@ -217,7 +217,7 @@
                 [firstDayOfWeek]="1"
                 placeholder="{{ update.endDate | date }}"
                 dateFormat="MM dd, yy"
-                [minDate]="today"
+                [minDate]="this.projectEndDate"
                 (onSelect)="updateProject()"
                 (click)="$event.stopPropagation()"
                 ></p-calendar>
@@ -364,12 +364,11 @@
           [firstDayOfWeek]="1"
           placeholder="Start Date"
           dateFormat="MM dd, yy"
-          [minDate]="today"
+          [minDate]="projectStartDate<=today?today:projectStartDate"
           [maxDate]="projectEndDate"
           [ngClass]="{'ng-invalid': buttonClicked && !newTaskStartDate || isInvalidDate()}"
           ></p-calendar>
         <div *ngIf="buttonClicked && !newTaskStartDate" class="invalid">Please enter start date.</div>
-        <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
         </div>
       </div>
       <div class="mb-1">
@@ -397,7 +396,6 @@
           [ngClass]="{'ng-invalid': buttonClicked && !newTaskEndDate || isInvalidDate()}">
           </p-calendar>
           <div *ngIf="buttonClicked && !newTaskEndDate" class="invalid">Please enter end date.</div>
-          <div *ngIf="isInvalidDate()" class="invalid">Please check if the start date is in the past or if the end date is set before the start date.</div>
         </div>
       </div>
       <div class="mb-1 chooseAssignee" autocomplete="off">

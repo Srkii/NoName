@@ -76,6 +76,7 @@ export class ProjectDetailComponent implements OnInit {
 
   today: Date = new Date();
   projectEndDate: Date = new Date();
+  projectStartDate: Date = new Date();
   userRole: ProjectRole | any;
 
 
@@ -177,6 +178,7 @@ export class ProjectDetailComponent implements OnInit {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
         this.projectEndDate = new Date(project.endDate);
+        this.projectStartDate= new Date(project.startDate);
         this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder, this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
           this.allTasks=this.projectTasks;
