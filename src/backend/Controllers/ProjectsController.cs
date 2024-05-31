@@ -396,6 +396,7 @@ namespace backend.Controllers
             if(projectMember != null)
             {
                 _context.ProjectMembers.Remove(projectMember);
+                _notificationService.DeleteUsersProjectNotifications(userId);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

@@ -250,5 +250,12 @@ namespace backend.Services
             await _context.SaveChangesAsync();
             CheckUserNotifications(notifications);
         }
+        public async void DeleteUsersProjectNotifications(int userid){
+            var notifications = await _context.Notifications.Where(x=>x.reciever_id == userid).ToListAsync();
+            _context.Notifications.RemoveRange(notifications);
+            await _context.SaveChangesAsync();
+
+            CheckUserNotifications(notifications);
+        }
     }
 }
