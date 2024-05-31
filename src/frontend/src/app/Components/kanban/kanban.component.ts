@@ -163,7 +163,7 @@ export class KanbanComponent implements OnInit{
   drop(event: CdkDragDrop<ProjectTask[]>) {
     const targetStatus = this.taskStatuses.find(s => s.name === event.container.id);
     if (targetStatus.name === 'Completed' && this.userRole !== 1 && this.userRole !== 0) {
-      this.toastr.error('Only Project Managers can move tasks to the Completed board.');
+      this.toastr.error('Only Project Owner can move tasks to the Completed board.');
       return;
     }
 
