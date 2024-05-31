@@ -27,7 +27,6 @@ export class NotificationsComponent {
     this.notificationService.notifications.forEach((n:any) => {
       n.timeAgo = this.notificationService.getTimeAgo(n.dateTime);
     });
-    // console.log(this.notification_list);
   }
   see_all_notifications(modal:TemplateRef<void>){
     this.handleNotificationDisplay();
@@ -49,7 +48,6 @@ export class NotificationsComponent {
         this.notifications_read.push(n);//lista procitanih
       }
     });
-    // console.log(this.notifications);
   }
   selectAllNotifications() {
     if (this.areAllNotificationsSelected()) {

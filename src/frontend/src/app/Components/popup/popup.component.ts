@@ -147,7 +147,6 @@ export class PopupComponent implements OnInit {
 
               this.myTasksService.deleteTaskDependency(deleteDto).subscribe(
                 () => {
-                  // console.log('Dependency deleted successfully');
                 },
                 (error: any) => {
                   console.error('Error deleting dependency:', error);
@@ -770,7 +769,7 @@ export class PopupComponent implements OnInit {
       this.attachment_name = this.file.name;
       this.attachment_added = true;
     } else {
-      console.log('no file data');
+      console.error('no file data');
     }
   }
   uploadAttachment(): boolean {
@@ -783,9 +782,6 @@ export class PopupComponent implements OnInit {
           .UploadFile(task_id, user_id, this.file, token)
           .subscribe({
             next: (response: HttpResponse) => {
-              //vise ne treba ovo da radi
-              // console.log(response);
-              // this.comments.push(response);
               this.attachment_name = '';
               this.attachment_added = false;
             },

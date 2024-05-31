@@ -66,8 +66,6 @@ export class GanttComponent implements OnInit{
       this.myProjectsService.getProjectById(+projectId).subscribe(project => {
         this.projectStartDate = new Date(project.startDate);
         this.projectEndDate = new Date(project.endDate);
-        console.log(this.projectStartDate);
-        console.log(this.projectEndDate);
       });
     if(userId)
       this.getUsersProjectRole(+projectId, +userId);
