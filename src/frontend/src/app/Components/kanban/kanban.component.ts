@@ -12,6 +12,7 @@ import { SharedService } from '../../_services/shared.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastrService } from 'ngx-toastr';
 import { ThemeServiceService } from '../../_services/theme-service.service';
+import { TaskStatusDto } from '../../Entities/TaskStatusDto';
 
 @Component({
   selector: 'app-kanban',
@@ -368,5 +369,34 @@ export class KanbanComponent implements OnInit{
       b = hue2rgb(p, q, h - 1/3);
     }
     return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+  }
+
+  newStatusName: string = '';
+  renameTaskStatus(statusId: number, newStatusName: string): void {
+    if (newStatusName.length < 1 || newStatusName.length > 30) {
+      this.toastr.error("Status name must be between 1 and 30 characters long.");
+      return;
+    }
+    if(statusId && this.currentProjectId){
+      var changedTaskStatusDto: TaskStatusDto = {
+        Id: statusId,
+        StatusName: newStatusName,
+        ProjectId: this.currentProjectId
+      }
+    } else {
+      this.toastr.error("Could not detected status that you want to change.");
+      return;
+    }
+    this.myTasksService.renameTaskStatus(changedTaskStatusDto)
+      .subscribe({
+        next: () => {
+          console.log('Status name updated successfully');
+          // Optionally refresh data or update UI here
+        },
+        error: (error) => {
+          console.error('Error updating status name', error);
+          this.toastr.error(error);
+        }
+      });
   }
 }

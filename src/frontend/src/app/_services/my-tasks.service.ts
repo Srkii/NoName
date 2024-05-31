@@ -10,6 +10,7 @@ import { DateTimeDto } from '../Entities/DateTimeDto';
 import { Project } from '../Entities/Project';
 import { sectionChangeDTO } from '../Entities/sectionChangeDTO';
 import { DateTimeDto1 } from '../Entities/DateTimeDto1';
+import { TaskStatusDto } from '../Entities/TaskStatusDto';
 
 @Injectable({
   providedIn: 'root',
@@ -173,5 +174,7 @@ export class MyTasksService {
     return this.http.get<ProjectTask>(`${this.baseUrl}/getTaskByName/${taskName}/${projectID}`, {headers:this.getHeaders()});
   }
 
-
+  renameTaskStatus(changedTaskStatusDto: TaskStatusDto): Observable<any> {
+    return this.http.put(`${this.baseUrl}/RenameTaskStatus/`, changedTaskStatusDto, { headers: this.getHeaders() });
+  }
 }

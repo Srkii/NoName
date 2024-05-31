@@ -156,6 +156,27 @@ svg {
 .card-header {
     color: var(--kanban-status-text) !important;
 }
+.status-input {
+    min-width: 160px;
+    width: 160px;
+    height: 22px !important;
+    border: none !important;
+    background-color: inherit;
+    padding: 0 !important;
+    /* box-sizing: border-box; */
+}
+.titleInp {
+    background-color: inherit;
+    border: none !important;
+    outline: none;
+    width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0;
+    box-sizing: border-box;
+    height: 20px !important;
+}
 .status-name {
     /* ukoliko je ime predugacko*/
     white-space: nowrap;

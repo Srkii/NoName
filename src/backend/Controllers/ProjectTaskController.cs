@@ -1069,7 +1069,30 @@ namespace backend.Controllers
             }
             return false;
         }
+
+        [Authorize(Roles = "ProjectManager,Member")]
+        [HttpPut("RenameTaskStatus")]
+        public async Task<IActionResult> RenameTaskStatus([FromBody] TaskStatusDto taskStatusDto)
+        {
+            if (!await RoleCheck(taskStatusDto.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager]))
+                return Unauthorized("Invalid role");
+                
+            if (string.IsNullOrEmpty(taskStatusDto.StatusName) || taskStatusDto.StatusName.Length > 30)
+            {
+                return BadRequest("Status name must be between 1 and 30 characters long.");
+            }
+
+            var status = await _context.TaskStatuses.FindAsync(taskStatusDto.Id);
+            if (status == null)
+            {
+                return NotFound("Task status not found.");
+            }
+
+            status.StatusName = taskStatusDto.StatusName;
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+        
     }
-
-
 }
