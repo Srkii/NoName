@@ -184,6 +184,7 @@ export class KanbanComponent implements OnInit{
       const newStatus = this.taskStatuses.find(s => s.name === event.container.id);
       if (task && newStatus) {
         task.taskStatusId = newStatus.id;
+        task.senderid = Number(localStorage.getItem("id"));
         this.myTasksService.updateTicoTaskStatus(task.id, task).subscribe();
       }
     }

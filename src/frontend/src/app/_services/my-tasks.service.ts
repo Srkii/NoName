@@ -58,8 +58,8 @@ export class MyTasksService {
     return this.http.get<ProjectTask>(`${this.baseUrl}/${taskId}/${userId}`,{headers:this.getHeaders()});
   }
   //tico: mirkov updateTaskStatus. Treba da se promeni
-  updateTaskStatus1(id: number, statusName: string): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`,null,{headers:this.getHeaders()});
+  updateTaskStatus1(id: number, statusName: string,senderid:number): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/updateStatus/${id}/${statusName}`,senderid,{headers:this.getHeaders()});
   }
 
   // kada pomeram taskove iz archived saljem listu zbog boljih performansi

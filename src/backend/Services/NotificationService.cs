@@ -125,13 +125,13 @@ namespace backend.Services
                          });
         }
 
-        public async Task notifyTaskCompleted(ProjectTask task){
+        public async Task notifyTaskCompleted(ProjectTask task,int senderid){
             var Owner = await _context.ProjectMembers
             .FirstOrDefaultAsync(x=>x.ProjectId == task.ProjectId &&
                                      x.ProjectRole == ProjectRole.ProjectOwner);
             var owner = await _context.Users.FirstOrDefaultAsync(x=>x.Id == Owner.AppUserId);
             if(owner==null) throw new Exception("Owner not found");
-            if(owner.Id != task.AppUserId){
+            if(owner.Id != task.AppUserId && owner.Id!=senderid){
                 Notification notification = new Notification
                 {
                     task_id = task.Id,
@@ -256,6 +256,16 @@ namespace backend.Services
             await _context.SaveChangesAsync();
 
             CheckUserNotifications(notifications);
+        }
+        public async Task DeleteRelatedAssignmentNotificationTask(int userid, int taskid){
+            var notification = await _context.Notifications.FirstOrDefaultAsync(x=>x.reciever_id == userid && x.Type==NotificationType.TaskAssignment && x.task_id == taskid);
+
+            _context.Notifications.Remove(notification);
+            
+            await _context.SaveChangesAsync();
+            List<Notification> arr = new List<Notification>();
+            arr.Add(notification);
+            CheckUserNotifications(arr);
         }
     }
 }

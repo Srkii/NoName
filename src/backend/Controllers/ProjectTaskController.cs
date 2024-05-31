@@ -162,8 +162,9 @@ namespace backend.Controllers
             task.TskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
             var status = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id==taskDto.TaskStatusId);
+            if(taskDto.senderid!=null)Console.WriteLine("SENDER ID "+taskDto.senderid);
             if(status.StatusName.Equals("InReview")){
-                await _notificationService.notifyTaskCompleted(task);
+                await _notificationService.notifyTaskCompleted(task, (int)taskDto.senderid);
             }
             await updateProgress(task.ProjectId);
 
@@ -172,7 +173,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("updateStatus/{taskId}/{statusName}")]
-        public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName)
+        public async Task<ActionResult<ProjectTaskDto>> UpdateTaskStatus1(int taskId, string statusName,[FromBody] int senderid)
         {
             var task = await _context.ProjectTasks
                 .Include(t => t.TskStatus)
@@ -211,7 +212,7 @@ namespace backend.Controllers
             }
             else if (statusName.Equals("InReview"))
             {
-                await _notificationService.notifyTaskCompleted(task);
+                await _notificationService.notifyTaskCompleted(task,senderid);
             }
 
             // Now, after saving changes, fetch the updated task again
@@ -304,7 +305,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("changeTaskAppUserId/{id}/{appUserId}")]
-        public async Task<ActionResult<ProjectTask>> changeTaskAppUserId(int id, int? appUserId,[FromBody] int senderid)
+        public async Task<ActionResult<ProjectTask>> changeTaskAppUserId(int id, int appUserId,[FromBody] int senderid)
         {
             var task = await _context.ProjectTasks.FindAsync(id);
 
@@ -317,8 +318,15 @@ namespace backend.Controllers
 
             if (appUserId!=0)
             {
+                int previousappuser = 0;
+                if(task.AppUserId!=null) previousappuser = (int)task.AppUserId;
+
                 task.AppUserId = appUserId;
-                if(appUserId != senderid)  await _notificationService.TriggerTaskNotification(task.Id);
+                
+                if(appUserId != senderid)  {
+                    if(previousappuser!=0) await _notificationService.DeleteRelatedAssignmentNotificationTask(previousappuser,task.Id);
+                    await _notificationService.TriggerTaskNotification(task.Id);
+                }
             }
             else
             {
