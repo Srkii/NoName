@@ -74,9 +74,9 @@ export class GanttComponent implements OnInit{
     }
 
     this.spinner.show();
-    // this.loading = true;
-    // this.items=[];
-    // this.groups=[];
+    this.loading = true;
+    this.items=[];
+    this.groups=[];
     this.getGanttData();//kupimo sve podatke za trenutni projekat
     this.spinner.hide();
     setTimeout(()=>
@@ -86,7 +86,7 @@ export class GanttComponent implements OnInit{
     }, 250);
 
     this.shared.taskUpdated.subscribe(() => {
-      // this.loading = true;
+      this.loading = true;
       this.data_loaded = false;
       this.items=[]; // ako ne stavim prazan niz nece znati da mora opet da ga pokupi
       this.groups=[]; // ako se napravi emit koji samo izbacuje iz array na frontu dosta ce se ubrzati
@@ -159,7 +159,7 @@ export class GanttComponent implements OnInit{
               this.data_loaded = true
             });
           } else {
-            this.toastr.error("Tasks must be within the project's date range.")
+            this.toastr.error("Tasks must be within the project's date range.");
             this.loading = true;
             this.data_loaded = false;
             this.items=[];
