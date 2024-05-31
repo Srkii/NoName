@@ -42,8 +42,25 @@
     width: 48% !important;
   }
 }
-
-
+.guestDependencyView {
+  pointer-events: none !important;
+}
+.guestAssigneeView {
+  display: flex;
+  align-items: center;
+}
+.nnAvatar {
+  margin-right: 5px;
+  margin-left: 10px;
+}
+.ngxGuestView {
+  margin-left: 5px !important;
+  margin-right: 0px !important;
+}
+.guestAssigneeImage {
+  display: flex;
+  /* margin-left: 5px; */
+}
 .popupTaskName {
   font-size: 18px;
   /* font-weight: bold; */
@@ -542,10 +559,7 @@ img{
 .assigneeNameGuest {
   font-size: 16px;
 }
-.guestAssigneeImage {
-  display: flex;
-  margin-left: 5px;
-}
+
 .guestDdate{
   margin-left: 10px;
 }

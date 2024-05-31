@@ -76,12 +76,6 @@ namespace backend.Controllers
 
         if (comment == null)
             return BadRequest("Comment doesn't exist");
-        
-        // Check if the user is authorized to delete the comment
-        // (You might need to implement this logic depending on your authentication mechanism)
-        // For example:
-        // if (comment.SenderId != currentUserId)
-        //     return BadRequest("Unauthorized: You cannot delete other people's comments");
 
         _context.Comments.Remove(comment);
         await _context.SaveChangesAsync();
@@ -100,35 +94,27 @@ namespace backend.Controllers
         [HttpPut("updateComment/{commentId}/{content}")]
         public async Task<IActionResult> UpdateComment(int commentId, string content)
         {
-            // Find the comment in the database by its ID
             var comment = await _context.Comments.FindAsync(commentId);
 
-            // Check if the comment exists
             if (comment == null)
             {
                 return NotFound("Comment not found");
             }
 
-            // Update the content and message sent date of the comment
             comment.Content = content;
             comment.Edited=true;
-            comment.MessageSent = DateTime.Now; // Update the message sent date
+            comment.MessageSent = DateTime.Now;
 
-            // Save the changes to the database
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                // Handle concurrency conflicts, if necessary
-                throw; // You can customize this behavior as per your requirements
+                throw; 
             }
 
-            // Return a success response with the updated comment
             return Ok(comment);
-    }   
-
+        }   
     }
-
 }

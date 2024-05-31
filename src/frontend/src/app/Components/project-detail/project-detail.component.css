@@ -5,6 +5,7 @@
 .tBadgeHide {
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 .boardAvatar svg {
     margin: 0px !important;
