@@ -615,3 +615,7 @@ img{
 .no-hover {
   pointer-events: none; /* Disables hover effects */
 }
+
+::ng-deep .guestDependencyView .ng-arrow-wrapper {
+  display: none;
+}

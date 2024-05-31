@@ -87,7 +87,7 @@
           <span class="assigneeNameGuest">{{user?.firstName}} {{user?.lastName}}</span>
         </div>
       </div>
-      <div class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'">
+      <div  class="mb-1 chooseAssignee" autocomplete="off" *ngIf="this.task.projectRole=='0' || this.task.projectRole=='1' || this.task.projectRole=='2'">
         <div class="mInfoTitle">
           <label for="assignee" class="form-label">Assignee:</label>
         </div>
@@ -139,7 +139,7 @@
       </ng-select>
 
       <p style="font-size: 16px; margin-bottom: 5px; margin-top:10px;">Section</p>
-      <ng-select  class="task_select task_selectDep" style="margin-bottom: 10px; border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" [placeholder]="this.task.projectRole=='4'?'No Section':'Select Project Section'" (click)="$event.stopPropagation()" (change)="updateTaskSectionId(this.task)"
+      <ng-select  [ngClass]="{'guestDependencyView': this.task.projectRole=='3' || this.task.projectRole=='4'}"  class="task_select task_selectDep" style="margin-bottom: 10px; border-radius: 8px; font-size: 16 ; font-weight: 100;  color: #697a8d;" [items]="sections" [(ngModel)]="selectedSection" name="assignee" bindLabel="fullName" [placeholder]="this.task.projectRole=='4'?'No Section':'Select Project Section'" (click)="$event.stopPropagation()" (change)="updateTaskSectionId(this.task)"
       [disabled]="this.task.projectRole=='4' || this.task.projectRole=='3'" >
         <ng-template ng-option-tmp let-section="item" let-index="index">
           <div style="display: flex; align-items: center;">
