@@ -161,9 +161,13 @@ namespace backend.Controllers
             }
             task.TskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
+            var status = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id==taskDto.TaskStatusId);
+            if(status.StatusName.Equals("InReview")){
+                await _notificationService.notifyTaskCompleted(task);
+            }
             await updateProgress(task.ProjectId);
 
-            return Ok(task);
+            return Ok(new {message="task status updated successfully"});
         }
 
         [Authorize(Roles = "ProjectManager,Member")]
