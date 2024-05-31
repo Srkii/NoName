@@ -477,8 +477,9 @@ export class PopupComponent implements OnInit {
   }
 
   updateTaskAppUserId(task: ProjectTask): void {
+    var senderid = localStorage.getItem("id");
     this.myTasksService
-      .changeTaskAppUserId(task.id, this.selectedUser?.appUserId).subscribe({
+      .changeTaskAppUserId(task.id, this.selectedUser?.appUserId,Number(senderid)).subscribe({
         next: () => {
           this.sharedService.emitTaskUpdated();
           this.cdr.detectChanges();

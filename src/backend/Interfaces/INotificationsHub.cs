@@ -11,5 +11,6 @@ namespace backend.Interfaces
         Task InvokeGetAllNotifications();
         Task recieveAllNotifications(List<NotificationDto> notifications);
         Task readNotifications(List<int> notifications);
+        Task notifyState(bool flag);
     }
 }

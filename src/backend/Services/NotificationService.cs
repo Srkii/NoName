@@ -198,12 +198,27 @@ namespace backend.Services
 
             return users;
         }
+
+        void CheckUserNotifications(List<Notification> notifications){
+            List<int> checkedUsers = new List<int>();
+            foreach(Notification n in notifications){
+                if(checkedUsers.Any(x=>x==n.reciever_id)==false){
+                    CheckUserNotificationState(n.reciever_id);
+                    checkedUsers.Add(n.reciever_id);//ne javljam istom coveku dvaput ovo sranje
+                }
+            }
+        }
+        void CheckUserNotificationState(int id){
+            bool flag = _context.Notifications.Any(x=> x.reciever_id == id && x.read == false && x.originArchived == false);
+            _hubContext.Clients.Group(id.ToString()).notifyState(flag);
+        }
         public async void ArchiveRelatedTaskNotifications(int id){
             var notifications = await  _context.Notifications.Where(x => x.task_id == id).ToListAsync();
             foreach(Notification n in notifications){
                 n.originArchived = true;
             }
             await _context.SaveChangesAsync();
+            CheckUserNotifications(notifications);
         }
         public async void ArchiveRelatedProjectNotifications(int id){
             var notifications = await  _context.Notifications.Where(x => x.project_id == id || x.Task.ProjectId == id).ToListAsync();
@@ -211,6 +226,7 @@ namespace backend.Services
                 n.originArchived = true;
             }
             await _context.SaveChangesAsync();
+            CheckUserNotifications(notifications);
         }
         public async void DeArchiveRelatedTaskNotifications(int id){
             var notifications = await  _context.Notifications.Where(x => x.task_id == id).ToListAsync();
@@ -218,6 +234,7 @@ namespace backend.Services
                 n.originArchived = false;
             }
             await _context.SaveChangesAsync();
+            CheckUserNotifications(notifications);
         }
         public async void DeArchiveRelatedProjectNotifications(int id){
             var notifications = await  _context.Notifications.Where(x => x.project_id == id || x.Task.ProjectId == id).ToListAsync();
@@ -225,7 +242,20 @@ namespace backend.Services
                 n.originArchived = false;
             }
             await _context.SaveChangesAsync();
+            CheckUserNotifications(notifications);
         }
+        public async void DeleteRelatedNotifications(int taskId){
+            var notifications = await _context.Notifications.Where(x => x.task_id==taskId).ToListAsync();
+            _context.Notifications.RemoveRange(notifications);
+            await _context.SaveChangesAsync();
+            CheckUserNotifications(notifications);
+        }
+        public async void DeleteUsersProjectNotifications(int userid){
+            var notifications = await _context.Notifications.Where(x=>x.reciever_id == userid).ToListAsync();
+            _context.Notifications.RemoveRange(notifications);
+            await _context.SaveChangesAsync();
 
+            CheckUserNotifications(notifications);
+        }
     }
 }

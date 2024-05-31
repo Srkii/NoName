@@ -125,8 +125,8 @@ export class MyTasksService {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskDueDate/${taskId}`, dto, { headers: this.getHeaders() });
   }
   // Function to change task app user ID
-  changeTaskAppUserId(taskId: any, newAppUserId: any): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskAppUserId/${taskId}/${newAppUserId}`, null, { headers: this.getHeaders() });
+  changeTaskAppUserId(taskId: any, newAppUserId: any,senderid:any): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskAppUserId/${taskId}/${newAppUserId}`, senderid, { headers: this.getHeaders() });
   }
   
   // Function to change task section ID

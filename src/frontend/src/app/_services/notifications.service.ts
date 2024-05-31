@@ -69,6 +69,9 @@ export class NotificationsService{
       this.allNotifications = notifications;//pokupim sve u niz
       // console.log(this.allNotifications);
     })
+    this.hubConnection.on("notifyState",(response:any)=>{
+      this.newNotifications = response;
+    })
   }
   stopHubConnection(){
     this.hubConnection?.stop().catch();

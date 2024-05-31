@@ -26,7 +26,7 @@ namespace backend.SignalR
             int userId = Convert.ToInt32(userIdClaim.Value);
             await Groups.AddToGroupAsync(Context.ConnectionId,Context.UserIdentifier);
             
-            var notifications = await _context.Notifications.Where(x=>x.reciever_id==userId && x.read==false && x.originArchived == false).ToListAsync();
+            var notifications = _context.Notifications.Any(x=>x.reciever_id==userId && x.read==false && x.originArchived == false);
 
             if (!_userConnections.ContainsKey(userId.ToString()))
             {
@@ -34,7 +34,7 @@ namespace backend.SignalR
             }
 
             _userConnections[userId.ToString()].Add(Context.ConnectionId);
-            if(notifications!=null && notifications.Any()) await Clients.Group(userId.ToString()).newNotifications();
+            if(notifications) await Clients.Group(userId.ToString()).newNotifications();
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception exception)

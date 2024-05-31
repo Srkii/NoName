@@ -161,9 +161,13 @@ namespace backend.Controllers
             }
             task.TskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
+            var status = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id==taskDto.TaskStatusId);
+            if(status.StatusName.Equals("InReview")){
+                await _notificationService.notifyTaskCompleted(task);
+            }
             await updateProgress(task.ProjectId);
 
-            return Ok(task);
+            return Ok(new {message="task status updated successfully"});
         }
 
         [Authorize(Roles = "ProjectManager,Member")]
@@ -300,7 +304,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("changeTaskAppUserId/{id}/{appUserId}")]
-        public async Task<ActionResult<ProjectTask>> changeTaskAppUserId(int id, int? appUserId)
+        public async Task<ActionResult<ProjectTask>> changeTaskAppUserId(int id, int? appUserId,[FromBody] int senderid)
         {
             var task = await _context.ProjectTasks.FindAsync(id);
 
@@ -314,7 +318,7 @@ namespace backend.Controllers
             if (appUserId!=0)
             {
                 task.AppUserId = appUserId;
-                await _notificationService.TriggerTaskNotification(task.Id);
+                if(appUserId != senderid)  await _notificationService.TriggerTaskNotification(task.Id);
             }
             else
             {
