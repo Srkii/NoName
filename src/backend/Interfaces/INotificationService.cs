@@ -11,8 +11,9 @@ namespace backend.Interfaces
         public void DeArchiveRelatedTaskNotifications(int id);
         public void DeArchiveRelatedProjectNotifications(int id);
         public void DeleteRelatedNotifications(int id);
-        public Task notifyTaskCompleted(ProjectTask task);
+        public Task notifyTaskCompleted(ProjectTask task,int senderid);
         public void DeleteUsersProjectNotifications(int id);
+        public Task DeleteRelatedAssignmentNotificationTask(int userid,int taskId);
 
     }
 }

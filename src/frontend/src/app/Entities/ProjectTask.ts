@@ -23,5 +23,6 @@ export interface ProjectTask {
   selected?: boolean;
   appUserId?:number;
   appUser?:Member;
+  senderid?:number;
   projectSection:ProjectSection
 }

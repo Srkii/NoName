@@ -130,8 +130,8 @@ export class PopupComponent implements OnInit {
       if (previousTaskStatus != '') task.statusName = previousTaskStatus;
       else task.statusName = 'InProgress';
     }
-
-    this.myTasksService.updateTaskStatus1(task.id, task.statusName).subscribe({
+    var senderid = localStorage.getItem("id");
+    this.myTasksService.updateTaskStatus1(task.id, task.statusName,Number(senderid)).subscribe({
       next: () => {
         this.myTasksService
           .GetAllTasksDependencies()
@@ -172,8 +172,8 @@ export class PopupComponent implements OnInit {
       if (previousTaskStatus != '') task.statusName = previousTaskStatus;
       else task.statusName = 'InProgress';
     }
-
-    this.myTasksService.updateTaskStatus1(task.id, task.statusName).subscribe({
+    var senderid = localStorage.getItem("id");
+    this.myTasksService.updateTaskStatus1(task.id, task.statusName,Number(senderid)).subscribe({
       next: () => {
         this.myTasksService
           .GetAllTasksDependencies()
@@ -211,8 +211,8 @@ export class PopupComponent implements OnInit {
       if (previousTaskStatus != '') task.statusName = previousTaskStatus;
       else task.statusName = 'InProgress';
     }
-
-    this.myTasksService.updateTaskStatus1(task.id, task.statusName).subscribe({
+    var senderid = localStorage.getItem("id");
+    this.myTasksService.updateTaskStatus1(task.id, task.statusName,Number(senderid)).subscribe({
       next: () => {
         this.myTasksService
           .GetAllTasksDependencies()

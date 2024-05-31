@@ -17,6 +17,7 @@ namespace backend.DTO
         public int TaskStatusId { get; set; }
         public int AppUserId { get; set; }
         public int ProjectId { get; set; }
+        public int? senderid{get;set;}
         public int? ProjectSectionId { get; set; }
     }
 }
