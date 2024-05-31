@@ -155,11 +155,11 @@
                     </td>
                     <td>{{ task.startDate | date }}</td>
                     <td>{{ task.endDate | date }}</td>
-                    <td>
+                    <td class="badgeTd">
                       <!-- <span class="badge" [style.background-color]="task.color">{{ task.statusName }}</span> -->
                       <!-- <span class="badge" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color">{{ task.statusName }}</span> -->
-                      <span class="badge tBadgeHide" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color" [style.color]="getDarkerColor(task.color)">{{ task.statusName }}</span>
-                      <span class="badge tBadgeHide" *ngIf="themeService.isDarkTheme" [style.background-color]="getLessPoppingColor(task.color)" [style.color]="getPoppingColor(task.color)">{{ task.statusName }}</span>
+                      <div class="badgeX" *ngIf="!themeService.isDarkTheme" [style.background-color]="task.color" [style.color]="getDarkerColor(task.color)">{{ task.statusName }}</div>
+                      <div class="badgeX" *ngIf="themeService.isDarkTheme" [style.background-color]="getLessPoppingColor(task.color)" [style.color]="getPoppingColor(task.color)">{{ task.statusName }}</div>
                     </td>
                   </tr>
                 </tbody>
