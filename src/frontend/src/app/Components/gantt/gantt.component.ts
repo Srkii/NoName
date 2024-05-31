@@ -105,7 +105,6 @@ export class GanttComponent implements OnInit{
         this.data_loaded = false;
         this.items=[];
         this.groups=[];
-        this.loading = true;
         this.getGanttData();
         setTimeout(()=>
         {
@@ -121,7 +120,6 @@ export class GanttComponent implements OnInit{
       this.data_loaded = false;
       this.items=[];
       this.groups=[];
-      this.loading = true;
       this.getGanttData();
       setTimeout(()=>
       {
@@ -145,7 +143,6 @@ export class GanttComponent implements OnInit{
   goToToday() {
     this.ganttComponent.scrollToToday();
   }
-
   ElementwasDragged: boolean = false;
   dragEnded($event: GanttDragEvent) {
     if (this.userRole !== 4 && this.userRole !== 3) { // ovaj check je nepotreban? proverava u html draggable
@@ -154,30 +151,36 @@ export class GanttComponent implements OnInit{
         const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
         if(this.projectStartDate && this.projectEndDate) {
           if (startdate >= this.projectStartDate && enddate <= this.projectEndDate) {
+
             this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
             .subscribe(() => {
               this.data_loaded = true
             });
           } else {
             this.toastr.error("Tasks must be within the project's date range.");
-            this.loading = true;
-            this.data_loaded = false;
-            this.items=[];
-            this.groups=[];
-            this.loading = true;
-            this.getGanttData();
-            setTimeout(()=>
-            {
-              this.loading = false;
-              this.data_loaded = true
-            }, 250);
+            $event.item.start = Number(this.initialState.start);
+            $event.item.end = Number(this.initialState.end);
+            this.items = [...this.items];
           }
         }
       }
-    } else this.toastr.error("fuck off");
+    } else return
     this.ElementwasDragged = true; // cemu ovo sluzi?
     setTimeout(() => { this.ElementwasDragged = false; }, 200); // cemu ovo sluzi?
   }
+  initialState:any = null;
+  initialstart:number = 0;
+  initialend:number = 0;
+
+  startdrag($event:GanttDragEvent){//~~~~~~~~~~~~~~~~~~~~~
+    // console.log("INITIAL: ",$event);
+    this.initialState = $event.item;
+    this.initialState = JSON.parse(JSON.stringify($event.item));
+    console.log("INITIAL: ", this.initialState);
+    // console.log(this.initialState);
+  }
+
+  dragMoved(event: any) {}
 
   linkDragEnded(event: any){
     let taskDependency: TaskDependency = {
