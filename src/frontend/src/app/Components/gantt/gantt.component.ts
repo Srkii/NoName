@@ -1,28 +1,14 @@
 import { TaskDependency } from './../../Entities/TaskDependency';
 import { MyProjectsService } from './../../_services/my-projects.service';
-import { MyTasksComponent } from './../my-tasks/my-tasks.component';
-import { HttpClient} from '@angular/common/http';
-import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  GanttDragEvent,
-  GanttItem,
-  GanttSelectedEvent,
-  GanttTableDragDroppedEvent,
-  GanttTableDragEndedEvent,
-  GanttTableDragStartedEvent,
-  GanttView,
-  GanttViewType,
-  NgxGanttComponent,
-  GanttGroup,
-  GanttDate,
-  GanttLink,
-  LinkColors,
-} from '@worktile/gantt';
+import { GanttDragEvent, GanttItem, GanttSelectedEvent, GanttView, GanttViewType, NgxGanttComponent, GanttGroup, GanttDate, GanttLink } from '@worktile/gantt';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { SharedService } from '../../_services/shared.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-gantt',
@@ -36,10 +22,17 @@ export class GanttComponent implements OnInit{
   userRole: number | null = null;
 
   ngOnInit(): void {
-
     const userId = localStorage.getItem("id");
     const projectId = this.route.snapshot.paramMap.get('id');  
     this.currentProjectId = projectId ? +projectId : null;
+    if (projectId) {
+      this.myProjectsService.getProjectById(+projectId).subscribe(project => {
+        this.projectStartDate = new Date(project.startDate);
+        this.projectEndDate = new Date(project.endDate);
+        console.log(this.projectStartDate);
+        console.log(this.projectEndDate);
+      });
+    }
     if (projectId && userId) {
       this.getUsersProjectRole(+projectId, +userId);
     }
@@ -89,16 +82,16 @@ export class GanttComponent implements OnInit{
     // emit za novu sekciju
     this.shared.sectionUpdated.subscribe(() => {
       this.loading = true;
-        this.data_loaded = false;
-        this.items=[];
-        this.groups=[];
-        this.loading = true;
-        this.getGanttData();
-        setTimeout(()=>
-        {
-          this.loading = false;
-          this.data_loaded = true
-        }, 250);
+      this.data_loaded = false;
+      this.items=[];
+      this.groups=[];
+      this.loading = true;
+      this.getGanttData();
+      setTimeout(()=>
+      {
+        this.loading = false;
+        this.data_loaded = true
+      }, 250);
     });
   }
   constructor(
@@ -107,7 +100,9 @@ export class GanttComponent implements OnInit{
     private myTasksService:MyTasksService,
     private myProjectsService:MyProjectsService,
     private shared:SharedService,
-    private modalService:BsModalService
+    private modalService:BsModalService,
+    private toastr: ToastrService,
+    private changeDetectorRef: ChangeDetectorRef
     ) { }
 
   views = [{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
@@ -126,6 +121,9 @@ export class GanttComponent implements OnInit{
 
   items: GanttItem[] = [];
   groups: GanttGroup[] = [];
+
+  projectStartDate: Date | undefined;
+  projectEndDate: Date | undefined;
 
   viewOptions = {
     dateFormat: {
@@ -158,18 +156,34 @@ export class GanttComponent implements OnInit{
   }
   ElementwasDragged:boolean = false;
   dragEnded($event: GanttDragEvent) {
-    if (this.userRole !== 4) { // Check if the user is not a guest
+    if (4 == 4) { // Check if the user is not a guest
       if ($event?.item.start !== undefined && $event.item.end !== undefined) {
         const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
         const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
         // this.checkLinks($event?.item);
-        this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
-        .subscribe(() => {
-          //  this.reloadGanttData();
-        });
-        
+        if(this.projectStartDate && this.projectEndDate) {
+          if (startdate >= this.projectStartDate && enddate <= this.projectEndDate) {
+            this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
+            .subscribe(() => {
+              // Handle successful update
+            });
+          } else {
+            this.toastr.error("Tasks must be within the project's date range.")
+            // this.loading = true;
+            // this.data_loaded = false;
+            // this.items=[];
+            // this.groups=[];
+            // this.loading = true;
+            // this.getGanttData();
+            // setTimeout(()=>
+            // {
+            //   this.loading = false;
+            //   this.data_loaded = true
+            // }, 250);
+          }
+        }
       }
-    }
+    } else this.toastr.error("fuck off");
     this.ElementwasDragged = true; // Set the flag indicating that a drag event has occurred
     setTimeout(() => { this.ElementwasDragged = false; }, 200); // Reset the flag after a delay
   }

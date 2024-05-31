@@ -931,7 +931,7 @@ namespace backend.Controllers
         {
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (!await RoleCheck(task.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner]))
+            if (!await RoleCheck(task.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
 
             task.StartDate = newDateTime.StartDate.AddDays(1);
