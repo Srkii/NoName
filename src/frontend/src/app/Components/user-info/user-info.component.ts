@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { ThemeServiceService } from '../../_services/theme-service.service';
 
 @Component({
   selector: 'app-user-info',
@@ -37,7 +38,8 @@ export class UserInfoComponent implements OnInit {
     public uploadService:UploadService,
     private spinner:NgxSpinnerService,
     private modalService:BsModalService,
-    private toast:ToastrService
+    private toast:ToastrService,
+    public themeService: ThemeServiceService
     ) {}
   
     ngOnInit(){
@@ -53,7 +55,7 @@ export class UserInfoComponent implements OnInit {
       this.userinfoService.getUserInfo(id,token).subscribe({
         next: (response) =>{
           this.userInfo = response;
-          // console.log(response);
+          console.log(response);
           if(this.userInfo.role == 2){
             this.role="Project manager";
           }else if(this.userInfo.role == 1){

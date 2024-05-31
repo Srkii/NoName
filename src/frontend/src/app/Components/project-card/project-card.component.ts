@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ProjectCardService } from '../../_services/project-card.service';
 import { CreateProject } from '../../Entities/CreateProject';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { SelectedUser } from '../../Entities/SelectedUser';
-import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { UploadService } from '../../_services/upload.service';
 import { QuillConfigService } from '../../_services/quill-config.service';
 

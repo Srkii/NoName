@@ -53,8 +53,10 @@
     </svg>
     <app-notifications *ngIf="!isAdmin()"  class="notifications"></app-notifications>
 
-    <ngx-avatars  *ngIf="!user?.profilePicUrl" size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
-      href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
+    <ngx-avatars *ngIf="!user?.profilePicUrl && themeService.isDarkTheme" size="35" bgColor="rgb(56, 54, 87)" fgColor="rgb(183, 180, 242)" [name]="user?.firstName + ' ' + user?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
+    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
+    <ngx-avatars *ngIf="!user?.profilePicUrl && !themeService.isDarkTheme" size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName" class="nav-link dropdown-toggle hide-arrow avatar1"
+    href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport"></ngx-avatars>
       <img *ngIf="user?.profilePicUrl" [src]="uploadService.getImage(user.profilePicUrl)" alt="Avatar" class="rightImg nav-link rounded-circle shadow-4-strong dropdown-toggle hide-arrow avatar1"
       href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
 
@@ -63,7 +65,8 @@
         <div class="dropdown-item tUserInfoDd">
           <div class="d-flex">
             <div class="avatar avatar-online">
-              <ngx-avatars *ngIf="!user?.profilePicUrl" size="40" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName"></ngx-avatars>
+              <ngx-avatars *ngIf="!user?.profilePicUrl && themeService.isDarkTheme" size="35" bgColor="rgb(56, 54, 87)" fgColor="rgb(183, 180, 242)" [name]="user?.firstName + ' ' + user?.lastName"></ngx-avatars>
+              <ngx-avatars *ngIf="!user?.profilePicUrl && !themeService.isDarkTheme" size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName"></ngx-avatars>
               <img *ngIf="user?.profilePicUrl" [src]="uploadService.getImage(user.profilePicUrl)" alt="Avatar" class="dropImg1 rounded-circle shadow-4-strong">
             </div>
             <div class="flex-grow-1">

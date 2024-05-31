@@ -387,14 +387,21 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ProjectManager,Member")]
         [HttpDelete("DeleteProjectMember/{projectId}/{userId}")]
-        public async Task<ActionResult> DeleteProjectMember(int projectId,int userId)
+        public async Task<ActionResult> DeleteProjectMember(int projectId, int userId)
         {
-            if(!await RoleCheck(projectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner]))
+            if (!await RoleCheck(projectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner]))
                 return Unauthorized("Invalid role");
 
             var projectMember = await _context.ProjectMembers.FirstOrDefaultAsync(member => member.ProjectId == projectId && member.AppUserId == userId);
-            if(projectMember != null)
+            if (projectMember != null)
             {
+                // sklanjam korisnika sa taskova na projektu
+                var tasks = await _context.ProjectTasks.Where(t => t.ProjectId == projectId && t.AppUserId == userId).ToListAsync();
+                foreach (var task in tasks)
+                {
+                    task.AppUserId = null; // postavljam na null tj not assigned
+                }
+
                 _context.ProjectMembers.Remove(projectMember);
                 _notificationService.DeleteUsersProjectNotifications(userId);
                 await _context.SaveChangesAsync();

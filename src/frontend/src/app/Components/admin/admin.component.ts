@@ -11,7 +11,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Project } from '../../Entities/Project';
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
-import { th } from 'date-fns/locale';
+import { ThemeServiceService } from '../../_services/theme-service.service';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
@@ -32,6 +32,7 @@ export class AdminComponent implements OnInit{
     public uploadservice:UploadService, 
     private spinner:NgxSpinnerService,
     private modalService:BsModalService,
+    public themeService: ThemeServiceService
   ){}
 
   ngOnInit(): void {

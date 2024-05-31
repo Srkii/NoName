@@ -90,7 +90,6 @@ export class ProjectDetailComponent implements OnInit {
   sortedOrder: number = 0; 
 
   fetchingTaskId: number | null = null;
-  
 
   constructor(
     private route: ActivatedRoute,
@@ -379,7 +378,8 @@ export class ProjectDetailComponent implements OnInit {
     this.spinner.show()
     if(this.userRole == 0 || this.userRole == 1)
     {
-      this.myProjectsService.DeleteProjectMember(this.project.id,userId).subscribe(updatedProject => {
+      this.myProjectsService.DeleteProjectMember(this.project.id,userId).subscribe(() => {
+        this.shared.emitTaskUpdated();
         this.loadProjectMembers()
         this.loadAddableUsers()
         this.searchTerm = ''

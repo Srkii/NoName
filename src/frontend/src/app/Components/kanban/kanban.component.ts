@@ -125,7 +125,6 @@ export class KanbanComponent implements OnInit{
   }
 
   populateTasks() {
-    
     this.GetTaskStatuses();
     if (this.currentProjectId) {
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) => {

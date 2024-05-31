@@ -5,7 +5,8 @@
       <div id="account_banner">
         <div id="photo_wrap">
           <img *ngIf="userInfo?.profilePicUrl" id="profile_photo"[src]="uploadService.getProfileImage(userInfo.profilePicUrl)">
-          <ngx-avatars class="square-avatar" *ngIf="!userInfo?.profilePicUrl" size="130" bgColor="#5d57c2" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
+          <ngx-avatars *ngIf="!userInfo?.profilePicUrl && themeService.isDarkTheme" size="130" bgColor="rgb(56, 54, 87)" fgColor="rgb(183, 180, 242)" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
+          <ngx-avatars *ngIf="!userInfo?.profilePicUrl && !themeService.isDarkTheme" size="130" bgColor="#5d57c2" [name]="userInfo?.firstName + ' ' + userInfo?.lastName"></ngx-avatars>
           <img class="overlay" src="../../../assets/profile_photo_placeholders/change_photo.jpg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <ul class="dropdown-menu dropdown-menu-end">
             <li><button class="dropdown-item" (click)="viewImageModal(viewModal)" [disabled]="!userInfo?.profilePicUrl" >View</button></li>
@@ -34,10 +35,6 @@
           <div class="InfoWrap">
             <div class="tInfoCategory">Email:</div>
             <div class="tInfo">{{userInfo?.email}}</div>
-          </div>
-          <div class="InfoWrap">
-            <div class="tInfoCategory">Role:</div>
-            <div class="tInfo">{{role}}</div>
           </div>
         </div>
       </div>
