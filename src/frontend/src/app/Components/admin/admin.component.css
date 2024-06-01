@@ -305,6 +305,7 @@ select:focus-visible{
 .pics{
   display: flex;
   padding-right: 0px;
+  flex-direction: row;
   /* padding-right: 0px; */
 }
 .btn-primary2{
