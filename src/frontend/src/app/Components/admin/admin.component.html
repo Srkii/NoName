@@ -85,7 +85,7 @@
     </div>
     <br />
     <div class="table-responsive text-nowrap">
-      <table class="table">
+      <table class="table tTableAdmin">
       <thead>
         <tr>
           <th>User
@@ -245,12 +245,12 @@
               <td>
                 <ng-select class="ngAdminSelect" [items]="projectManagers" [(ngModel)]="selectedManagers[i]" name="assignee" bindLabel="fullName" placeholder="Select Project Manager">
                   <ng-template ng-option-tmp let-manager="item" let-index="index">
-                    <div style="display: flex; align-items: center;">
+                    <div classs="tArchUser">
                       <div *ngIf="manager.profilePicUrl" class="nameAvatar">
                         <img [src]="uploadservice.getImage(manager.profilePicUrl)" class="avatar rounded-circle shadow-4-strong" style="height: 25px; width: 25px;"/>
                       </div>
                       <div *ngIf="!manager.profilePicUrl" class="nameAvatar">
-                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="manager?.firstName + ' ' + manager?.lastName" value="75%"></ngx-avatars>
+                        <ngx-avatars size="25" bgColor="#5d57c2" [name]="manager?.firstName + ' ' + manager?.lastName"></ngx-avatars>
                       </div>
                       <div class="tAssigneeName">
                         {{ manager?.firstName + ' ' + manager?.lastName }}

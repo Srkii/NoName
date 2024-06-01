@@ -706,6 +706,9 @@ select:disabled {
     padding-bottom: 0 !important;
     vertical-align: middle !important;
 }
+.asigneeDropdown ngx-avatars {
+    margin-right: 5px !important;
+}
 .tProjectSection {
     margin-top: 10px;
 }
@@ -815,7 +818,7 @@ input.is-invalid:focus{
 }
 
 .tAssigneeName {
-    margin-left: 5px;
+    margin-left: 5px !important;
 }
 
 .manageMemberScroll::-webkit-scrollbar {
