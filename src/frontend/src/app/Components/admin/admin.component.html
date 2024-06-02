@@ -28,9 +28,8 @@
     <div class="card clickable-div" name="number" [(ngModel)]="selectedRolee"  btnRadio="projectManager" (click)="toogleFilter('projectManager')">
       <div class="card-title">
         <label>Total {{numOfPM}} project managers</label>
-        <div class="pics">
-          <div *ngIf="projectMangers">
-          <ng-container *ngFor="let user of projectMangers.slice(0,1)">
+          <div *ngIf="projectMangers" class="pics">
+          <ng-container *ngFor="let user of projectMangers.slice(0,3)">
             <div *ngIf="user.profilePicUrl && !user.archived" class="avatar avatar-sm me-1">
               <img [src]="uploadservice.getImage(user.profilePicUrl)" alt="Avatar" class="avatar rounded-circle shadow-4-strong">
             </div>
@@ -39,8 +38,7 @@
               <ngx-avatars *ngIf="!themeService.isDarkTheme" size="35" bgColor="#5d57c2" [name]="user?.firstName + ' ' + user?.lastName"></ngx-avatars>
             </div>
           </ng-container>
-        </div>
-        </div>
+        </div>     
       </div>
       <div class="card-body">
         <h3>Project Manager</h3>
