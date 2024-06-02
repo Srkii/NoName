@@ -6,7 +6,7 @@ namespace backend.DTO
     {
         public int Id {get; set;}
         public int TaskId {get; set;}
-        [StringLength(1024, ErrorMessage = "Comment is too short or too long", MinimumLength = 1)]
+        [StringLength(1024, ErrorMessage = "Comment is too short or too long")]
         public string Content {get; set;}
         public int SenderId{get;set;}
         public DateTime MessageSent { get; set; } = DateTime.UtcNow.AddHours(2);

@@ -183,7 +183,7 @@
     <div class="modal-header modalHeadProjDetails">
       <div class="input-group-text editName">
         <h6 *ngIf="userRole==2 || userRole==3 || userRole==4"  class="projectName">{{ update.projectName }}</h6>
-        <input class="form-control titleInp" id="projectName" [(ngModel)]="update.projectName" (blur)="updateProject()" *ngIf="userRole==0 || userRole==1">
+        <input class="form-control titleInp" id="projectName" [(ngModel)]="update.projectName" (blur)="updateProject()" *ngIf="userRole==0 || userRole==1" [ngClass]="{'is-invalid': update.projectName?.length == 0 || (update && update.projectName && update.projectName.length > 100)}">
       </div>
       <svg (click)="modalRef?.hide()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
@@ -341,13 +341,15 @@
     <form class="mb-3" (ngSubmit)="saveTask()">
       <div class="mb-1" autocomplete="off">
           <label for="taskName" class="form-label">Task Name</label>
-          <input type="text" class="form-control tFormControl tNoBoxShadow" name="taskName" [(ngModel)]="newTaskName"  [ngClass]="{'is-invalid': buttonClicked && (!newTaskName || taskNameExists)}" placeholder="Enter new tasks's name"/>
+          <input type="text" class="form-control tFormControl tNoBoxShadow" name="taskName" [(ngModel)]="newTaskName"  [ngClass]="{'is-invalid': buttonClicked && (!newTaskName || taskNameExists || newTaskName.length > 100)}" placeholder="Enter new tasks's name"/>
           <div *ngIf="buttonClicked && !newTaskName && !taskNameExists" class="invalid">Please enter task name.</div>
           <div *ngIf="buttonClicked && taskNameExists" class="invalid">You already have task with the same name.</div>
+          <div *ngIf="buttonClicked && newTaskName.length > 100 && !taskNameExists" class="invalid">Task name is too long</div>
       </div>
       <div class="mb-1" autocomplete="off">
           <label for="taskDescription" class="form-label">Task Description</label>
-          <textarea style="font-size: 16px !important;" class="form-control tNoBoxShadow" class="form-control" name="taskDescription" [(ngModel)]="newTaskDescription" placeholder="Enter new tasks's description"></textarea>
+          <textarea [ngClass]="{'is-invalid': newTaskDescription.length > 5000}" style="font-size: 16px !important;" class="form-control tNoBoxShadow" class="form-control" name="taskDescription" [(ngModel)]="newTaskDescription" placeholder="Enter new tasks's description"></textarea>
+          <div class="invalid" *ngIf="newTaskDescription.length > 5000" class="invalid">Task description is too long</div>
       </div>
       <div class="mb-1">
         <div class="tLabel">

@@ -11,6 +11,7 @@ import { Project } from '../Entities/Project';
 import { sectionChangeDTO } from '../Entities/sectionChangeDTO';
 import { DateTimeDto1 } from '../Entities/DateTimeDto1';
 import { TaskStatusDto } from '../Entities/TaskStatusDto';
+import { UpdateTaskDescription } from '../Entities/UpdateTaskDescription';
 
 @Injectable({
   providedIn: 'root',
@@ -117,8 +118,8 @@ export class MyTasksService {
   }
   
   // Function to change task description
-  changeTaskDescription(taskId: any, newDescription: string): Observable<ProjectTask> {
-    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskDescription/${taskId}/${newDescription}`, null, { headers: this.getHeaders() });
+  changeTaskDescription(dto: UpdateTaskDescription): Observable<ProjectTask> {
+    return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskDescription`, dto, { headers: this.getHeaders() });
   }
   
   // Function to change task due date

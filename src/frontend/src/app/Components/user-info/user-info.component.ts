@@ -100,7 +100,14 @@ export class UserInfoComponent implements OnInit {
       this.showError = true;
       return;
     }
-
+    if(this.newData.NewPassword && this.newData.NewPassword?.length > 30)
+    {
+      this.invalidNewPassword = true;
+      this.showSuccess = false;
+      this.showError = true;
+      this.toast.error("New password is too long");
+      return;
+    }
 
     var id = Number(localStorage.getItem('id'));
     var token = localStorage.getItem('token');

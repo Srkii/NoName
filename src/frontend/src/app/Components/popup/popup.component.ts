@@ -17,6 +17,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { HttpError, HttpResponse } from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
 import { DateTimeDto1 } from '../../Entities/DateTimeDto1';
+import { UpdateTaskDescription } from '../../Entities/UpdateTaskDescription';
 
 @Component({
   selector: 'app-popup',
@@ -336,7 +337,7 @@ export class PopupComponent implements OnInit {
     var id = localStorage.getItem('id');
     if(content.length>1024)
     {
-      this.toast.error("Comment can't be longer than 1024 characters");
+      this.toast.error("Comment cannot be longer than 1024 characters");
       return;
     }
     this.userInfo.getUserInfo2(id).subscribe({
@@ -428,7 +429,7 @@ export class PopupComponent implements OnInit {
   }
 
   updateTaskName(task: ProjectTask): void {
-    if(task.taskName.length == 0)
+    if(task.taskName.length == 0 || task.taskName.length>100)
     {
       task.taskName = this.oldTaskName;
       return;
@@ -456,8 +457,16 @@ export class PopupComponent implements OnInit {
   }
 
   updateTaskDescription(task: ProjectTask): void {
+    if(task.description.length > 5000){
+      this.toast.error("Description is too long")
+      return;
+    }
+    const dto: UpdateTaskDescription = {
+      Id : task.id,
+      Description: task.description
+    }
     this.myTasksService
-      .changeTaskDescription(task.id, task.description)
+      .changeTaskDescription(dto)
       .subscribe({
         next: () => {
           this.sharedService.emitTaskUpdated();
@@ -557,6 +566,16 @@ export class PopupComponent implements OnInit {
     const original_content = this.comments.find(
       (comment) => comment.id === comment_id
     )?.content;
+
+    if(edit.value.length > 1024){
+      this.toast.error("Comment is too long");
+      return;
+    }
+
+    if(edit.value.length == 0){
+      this.toast.error("Comment cannot be empty");
+      return;
+    }
 
     if (edit.value != original_content) {
       this.commentsService.updateComment(comment_id, edit.value).subscribe({
