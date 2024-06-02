@@ -114,10 +114,8 @@ export class AdminComponent implements OnInit{
 
   archivedIds:number[]=[];
   archId: boolean=false;
-  invalidName: boolean=false;
-  invalidLastName: boolean=false;
   invalidEmail: boolean=false;
-  regex: RegExp = /^[A-Za-zĀ-ž]{2,}$/;
+  regex: RegExp = /^[A-Za-zĀ-ž]{2,30}$/;
   regexEmail: RegExp =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   archMembers: { [key: string]: Member[] } = {};
@@ -181,6 +179,7 @@ export class AdminComponent implements OnInit{
     UpdateUser(id: number): void{
       
       if (this.newEmail==this.updateUser.Email && this.newFisrtName==this.updateUser.FirstName && this.newLastName == this.updateUser.LastName) {
+        this.modalRef?.hide();
         return;
       }
 

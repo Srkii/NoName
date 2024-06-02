@@ -249,6 +249,11 @@ export class KanbanComponent implements OnInit{
       console.error('Project ID is null');
       return;
     }
+    if(!this.newSectionName || this.newSectionName.length > 30)
+    {
+      this.toastr.error("Status name is too long");
+      return
+    }
     const taskStatus = {
       statusName: this.newSectionName,
       projectId: this.currentProjectId,

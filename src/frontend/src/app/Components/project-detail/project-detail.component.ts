@@ -77,6 +77,7 @@ export class ProjectDetailComponent implements OnInit {
   today: Date = new Date();
   projectEndDate: Date = new Date();
   projectStartDate: Date = new Date();
+  oldProjectName: string = "";
   userRole: ProjectRole | any;
 
 
@@ -176,6 +177,7 @@ export class ProjectDetailComponent implements OnInit {
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
+        this.oldProjectName = project.projectName;
         this.projectEndDate = new Date(project.endDate);
         this.projectStartDate= new Date(project.startDate);
         this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder, this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
@@ -339,6 +341,15 @@ export class ProjectDetailComponent implements OnInit {
   updateProject()
   { 
     this.spinner.show()
+    if(!this.update.projectName || (this.update.projectName && this.update.projectName?.length > 100)){
+      this.update.projectName = this.oldProjectName;
+      return;
+    }
+    if(this.update.description && this.update.description?.length > 10000)
+    {
+      this.toastr.error("Description is too long");
+      return;
+    }
     if(this.userRole == 1 || this.userRole == 0)
     {
       if(this.update.projectName !== this.project.projectName || this.update.projectStatus!=this.project.projectStatus ||
@@ -484,11 +495,12 @@ export class ProjectDetailComponent implements OnInit {
     this.taskNameExists = false;
     this.buttonClicked = true;
 
-    if(!this.newTaskName)
-    {
+    if(!this.newTaskName || this.newTaskName.length>100)
         return;
-    }
 
+    if(this.newTaskDescription.length > 5000)
+      return;
+    
     if(await this.TaskNameExists())
     {
       this.taskNameExists = true;
@@ -496,9 +508,7 @@ export class ProjectDetailComponent implements OnInit {
     }
 
     if(!this.newTaskStartDate || !this.newTaskEndDate)
-    {
       return;
-    }
 
     // uklanja milisekunde
     this.newTaskStartDate = this.resetTime(this.newTaskStartDate);

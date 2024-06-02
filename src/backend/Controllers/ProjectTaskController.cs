@@ -244,6 +244,11 @@ namespace backend.Controllers
         [HttpPut("changeTaskName/{id}/{taskName}")]
         public async Task<ActionResult<ProjectTask>> ChangeTaskName(int id, string taskName)
         {
+            if(taskName.Length==0 || taskName.Length>100)
+            {
+                return ValidationProblem("Task name must be shorter or longer");
+            }
+
             var task = await _context.ProjectTasks.FindAsync(id);
 
             if (task == null)
@@ -260,10 +265,10 @@ namespace backend.Controllers
         }
 
         [Authorize(Roles = "ProjectManager,Member")]
-        [HttpPut("changeTaskDescription/{id}/{description}")]
-        public async Task<ActionResult<ProjectTask>> changeTaskDescription(int id, string description)
+        [HttpPut("changeTaskDescription")]
+        public async Task<ActionResult<ProjectTask>> changeTaskDescription(UpdateTaskDescription dto)
         {
-            var task = await _context.ProjectTasks.FindAsync(id);
+            var task = await _context.ProjectTasks.FindAsync(dto.Id);
 
             if (task == null)
                 return BadRequest("Task doesn't exist");
@@ -271,7 +276,7 @@ namespace backend.Controllers
             if (!await RoleCheck(task.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
 
-            task.Description = description;
+            task.Description = dto.Description;
 
             await _context.SaveChangesAsync();
 

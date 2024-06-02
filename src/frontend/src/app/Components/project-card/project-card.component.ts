@@ -5,6 +5,7 @@ import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { UploadService } from '../../_services/upload.service';
 import { QuillConfigService } from '../../_services/quill-config.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-project-card',
@@ -36,7 +37,8 @@ export class ProjectCardComponent {
   constructor(
     private myProjectCardService: ProjectCardService,
     public uploadservice: UploadService,
-    public quillService: QuillConfigService
+    public quillService: QuillConfigService,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -49,22 +51,24 @@ export class ProjectCardComponent {
     this.projectNameExists = false;
     this.buttonClicked = true;
 
-    if(!this.newProject.ProjectName)
-    {
+    if(!this.newProject.ProjectName || this.newProject.ProjectName.length > 100)
       return;
-    }
-
+    
     if(await this.ProjectNameExists(this.newProject.ProjectName))
     {
       this.projectNameExists = true;
       return;
     }
 
-    if(this.isInvalidDate())
+    if(this.newProject.Description && this.newProject.Description?.length>10000)
     {
+      this.toast.error("Description is too long");
       return;
     }
 
+    if(this.isInvalidDate())
+      return;
+  
     if(this.newProject.StartDate)
       this.newProject.StartDate = this.resetTime(this.newProject.StartDate);
     if(this.newProject.EndDate)
@@ -137,6 +141,6 @@ export class ProjectCardComponent {
       currentDate.setHours(0,0,0,0);
       return !(this.newProject.StartDate <= this.newProject.EndDate && (startDate>=currentDate));
     }
-    return false;
+    return true;
   }
 }

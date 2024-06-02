@@ -1,6 +1,11 @@
 * {
   font-family: 'Public Sans', sans-serif;
 }
+
+.tTableAdmin td {
+  vertical-align: middle !important;
+}
+
 .sorted-asc {
   transform: rotateX(0deg);
   transition: transform 0.3s;
@@ -60,14 +65,10 @@ table {
   color: var(--text-color) !important;
   background-color: var(--card-color) !important;
   font-size: 12px;
-  /* border: 1px solid lightgray; */
   border-collapse: collapse;
-  /* padding: 6px; */
-  /* margin-left: -20px; */
   margin-bottom: 10px;
   margin-top: 10px;
   width: 100%;
-  /* margin-left: 20px; */
   border-left: none;
   border-right: none;
 }
@@ -89,7 +90,7 @@ table {
 }
 th {
   font-size: 18px;
-  font-weight: 500; /* thinner text */
+  font-weight: 500;
   padding-left: 5px;
   line-height: 20px;
   border-left: none;
@@ -101,7 +102,7 @@ th {
 }
 td {
   background-color: var(--card-color) !important;
-  padding-bottom: 10px;
+  /* padding-bottom: 10px; */
   padding-left: 5px;
   border: 1px solid var(--table-border-color);
   color: var(--text-color) !important;
@@ -691,12 +692,12 @@ select:focus-visible{
   font-weight: normal;
 }
 .nameAvatar {
-  display: inline-flex;
-  align-items: center;
+  /* display: inline-flex;
+  align-items: center; */
   font-family: 'Public Sans', sans-serif;
   padding-right: 2px;
 }
-.managers{margin-top: 0.2rem;}
+
 .managers td{
   width: 50%;
   vertical-align: middle;
