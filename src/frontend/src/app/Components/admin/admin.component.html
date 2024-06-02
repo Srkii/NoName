@@ -195,13 +195,15 @@
       </div>
       <div class="mb-3">
         <label for="fisrt name" class="form-label tInfoLabel">First Name</label>
-        <input type="text" id="form3Example3" class="form-control fname" name="firstName" [ngClass]="{'is-invalid': invalidName || newFisrtName.length<2 || !regex.test(newFisrtName)}" [(ngModel)]="newFisrtName"/>
-        <div class="invalid" *ngIf="invalidName || newFisrtName.length<2 || !regex.test(newFisrtName)">First name must be longer and contain only letters</div>
+        <input type="text" id="form3Example3" class="form-control fname" name="firstName" [ngClass]="{'is-invalid': !regex.test(newFisrtName)}" [(ngModel)]="newFisrtName"/>
+        <div class="invalid" *ngIf="!regex.test(newFisrtName) && newFisrtName.length<=30">First name must be longer and contain only letters</div>
+        <div class="invalid" *ngIf="!regex.test(newFisrtName) && newFisrtName.length>30">First Name is too long</div>
       </div>
       <div class="mb-3">
         <label for="last name" class="form-label tInfoLabel">Last Name</label>
-        <input type="text" id="form3Example3" class="form-control lname" name="lastName" [ngClass]="{'is-invalid': invalidLastName || newLastName.length<2 || !regex.test(newLastName)}" [(ngModel)]="newLastName"/>
-        <div class="invalid" *ngIf="invalidLastName || newLastName.length<2 || !regex.test(newLastName)">Last name must be longer and contain only letters</div>
+        <input type="text" id="form3Example3" class="form-control lname" name="lastName" [ngClass]="{'is-invalid': !regex.test(newLastName)}" [(ngModel)]="newLastName"/>
+        <div class="invalid" *ngIf="!regex.test(newLastName) && newLastName.length<=30">Last name must be longer and contain only letters</div>
+        <div class="invalid" *ngIf="!regex.test(newLastName) && newLastName.length>30">Last Name is too long</div>
       </div>
       <div class="mb-3">
         <button class="btn btn-primary d-grid w-100" style="margin-top: 1.5rem;" type="submit">Update</button>
@@ -296,6 +298,7 @@
       <div class="mb-3 selectRole">
         <select name="role" [(ngModel)]="userRole" required>
           <option value="" hidden selected>{{currentRole}}</option>
+          <option value="0" hidden>Admin</option>
           <option value="1">Member</option>
           <option value="2">Project Manager</option>
         </select>

@@ -60,6 +60,7 @@ export class PopupComponent implements OnInit {
   projectEndDate: Date = new Date();
   projectStartDate: Date = new Date();
   dtos: TaskDependency[] = [];
+  oldTaskName: string = "";
 
   constructor(
     private myTasksService: MyTasksService,
@@ -85,6 +86,7 @@ export class PopupComponent implements OnInit {
       this.projectEndDate = new Date(this.task.project.endDate);
       this.projectEndDate = this.resetTime(this.projectEndDate);
       this.projectStartDate = new Date(this.task.project.startDate);
+      this.oldTaskName = this.task.taskName;
       if (Array.isArray(this.task.dependencies)) {
         this.selectedTasks = [...this.task.dependencies];
       } else {
@@ -332,6 +334,11 @@ export class PopupComponent implements OnInit {
     this.spinner.show();
     const content = this.commentInput.nativeElement.value.trim();
     var id = localStorage.getItem('id');
+    if(content.length>1024)
+    {
+      this.toast.error("Comment can't be longer than 1024 characters");
+      return;
+    }
     this.userInfo.getUserInfo2(id).subscribe({
       next: (response) => {
         this.current_user = response;
@@ -421,6 +428,11 @@ export class PopupComponent implements OnInit {
   }
 
   updateTaskName(task: ProjectTask): void {
+    if(task.taskName.length == 0)
+    {
+      task.taskName = this.oldTaskName;
+      return;
+    }
     this.myTasksService.changeTaskName(task.id, task.taskName).subscribe({
       next: () => {
         this.sharedService.emitTaskUpdated();

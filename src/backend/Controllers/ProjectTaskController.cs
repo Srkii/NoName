@@ -244,6 +244,11 @@ namespace backend.Controllers
         [HttpPut("changeTaskName/{id}/{taskName}")]
         public async Task<ActionResult<ProjectTask>> ChangeTaskName(int id, string taskName)
         {
+            if(taskName.Length==0 || taskName.Length>100)
+            {
+                return ValidationProblem("Task name must be shorter or longer");
+            }
+
             var task = await _context.ProjectTasks.FindAsync(id);
 
             if (task == null)
