@@ -38,12 +38,13 @@ export class AdminComponent implements OnInit{
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
- //  this.PicturesOfRoles();
   }
 
   invitation:RegisterInvitation={
-    receiver: ''
+    receiver:''
   }
+
+  
 
   allUsers: Member[]=[]
 
@@ -129,8 +130,8 @@ export class AdminComponent implements OnInit{
   }
 
   Invite(): void{
-   
-    if(this.invitation.receiver!='')
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(this.regexEmail.test(this.invitation.receiver))
     {
       this.spinner.show();
       this.adminService.sendInvatation(this.invitation).subscribe(
@@ -442,11 +443,7 @@ export class AdminComponent implements OnInit{
     }
 
     currentUser(id:number):boolean{
-      var id1=id.toString();
-      if(this.currentId===id1)
-        return false
-      else return true
-
+      return this.admins.some(admin => admin.id === id);
     }
 
     toogleFilter(role: string): void{
