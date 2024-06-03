@@ -64,7 +64,6 @@ export class UserInfoComponent implements OnInit {
         },
         error: (error) => {
           // console.log(error);
-          // console.log("GET USER INFO FAILED");
         }
       });
     }else {

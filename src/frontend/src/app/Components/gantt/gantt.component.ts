@@ -81,7 +81,7 @@ export class GanttComponent implements OnInit{
     {
       this.loading = false;
       this.data_loaded = true
-    }, 250);
+    }, 300);
 
     this.shared.taskUpdated.subscribe(() => {
       this.loading = true;
@@ -108,7 +108,7 @@ export class GanttComponent implements OnInit{
         {
           this.loading = false;
           this.data_loaded = true
-        }, 250);
+        }, 300);
       }
     });
 
@@ -123,7 +123,7 @@ export class GanttComponent implements OnInit{
       {
         this.loading = false;
         this.data_loaded = true
-      }, 250);
+      }, 300);
     });
   }
 
@@ -163,19 +163,16 @@ export class GanttComponent implements OnInit{
         }
       }
     } else return
-    this.ElementwasDragged = true; // cemu ovo sluzi?
-    setTimeout(() => { this.ElementwasDragged = false; }, 200); // cemu ovo sluzi?
+    this.ElementwasDragged = true;
+    setTimeout(() => { this.ElementwasDragged = false; }, 200);
   }
   initialState:any = null;
   initialstart:number = 0;
   initialend:number = 0;
 
-  startdrag($event:GanttDragEvent){//~~~~~~~~~~~~~~~~~~~~~
-    // console.log("INITIAL: ",$event);
+  startdrag($event:GanttDragEvent) {
     this.initialState = $event.item;
     this.initialState = JSON.parse(JSON.stringify($event.item));
-    console.log("INITIAL: ", this.initialState);
-    // console.log(this.initialState);
   }
 
   dragMoved(event: any) {}
@@ -211,7 +208,7 @@ export class GanttComponent implements OnInit{
   }
 
   openAddTaskToLinkDialog(first_task : number,second_task : number,modal:TemplateRef<void>): void {
-    if (this.userRole === 3 || this.userRole === 4) { // sprecavam participant i guest da otvore
+    if (this.userRole === 3 || this.userRole === 4) {
       return;
     }
     this.dependency.taskId = Number(first_task);
@@ -251,7 +248,7 @@ export class GanttComponent implements OnInit{
     if(this.currentProjectId){
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) =>{
         tasks.forEach((t:any) =>{
-          if (t.statusName !== 'Archived') { // Filter out archived tasks
+          if (t.statusName !== 'Archived') {
             var dependencies:GanttLink[] = [];
             this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:TaskDependency[])=>{
               depencency_array.forEach((dep:TaskDependency) => {
@@ -264,7 +261,7 @@ export class GanttComponent implements OnInit{
             })
             let item:GanttItem={
               id: String(t.id),
-              group_id :t.projectSectionId? String(t.projectSectionId):'no-section', // Assign 'no-section' if there is no section
+              group_id :t.projectSectionId? String(t.projectSectionId):'no-section',
               title:t.taskName,
               start: this.convertToUnixTimestamp(t.startDate),
               end: this.convertToUnixTimestamp(t.endDate),

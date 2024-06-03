@@ -58,11 +58,8 @@ export class RegisterComponent implements OnInit {
 
   Register(): void {
     this.buttonClicked = true;
-    
     if (!this.checkFirstName() || !this.checkLastName() || !this.checkPassword() || !this.passwordMatch())
       return;
-
-    console.log(this.newUser.Email)
     if(!this.token || this.newUser.Email == '')
     {
       this.toastr.error("Invalid token provided");

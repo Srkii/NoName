@@ -376,7 +376,6 @@ export class KanbanComponent implements OnInit{
     return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
   }
 
-  newStatusName: string = '';
   renameTaskStatus(statusId: number, newStatusName: string): void {
     if (newStatusName.length < 1 || newStatusName.length > 30) {
       this.toastr.error("Status name must be between 1 and 30 characters long.");
@@ -395,8 +394,6 @@ export class KanbanComponent implements OnInit{
     this.myTasksService.renameTaskStatus(changedTaskStatusDto)
       .subscribe({
         next: () => {
-          console.log('Status name updated successfully');
-          // Optionally refresh data or update UI here
         },
         error: (error) => {
           console.error('Error updating status name', error);
