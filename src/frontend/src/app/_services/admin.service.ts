@@ -51,7 +51,8 @@ export class AdminService {
     return this.httpClient.post<ChangeRole>(`${this.apiUrl}/users/changeUserRole`,response,{headers:this.getHeaders()})
   }
 
-  getAllUsers1(pageNumber: number, pageSize: number, role: string|null, searchTerm: string|null): Observable<any>{
+  getAllUsers1(pageNumber: number, pageSize: number, role: string|null, searchTerm: string|null, sortedColumn:string|null=null,
+    sortedOrder:number=0): Observable<any>{
 
     var params=new HttpParams();
 
@@ -68,11 +69,18 @@ export class AdminService {
     if(searchTerm){
       params=params.set('searchTerm', searchTerm);
     }
+    if (sortedColumn) {
+      params = params.set('sortedColumn', sortedColumn);
+    }
+    if (sortedOrder !=null) {
+      params = params.set('sortedOrder', sortedOrder);
+    }
 
     return this.httpClient.get<Member[]>(`${this.apiUrl}/users/filtered`,{params:params,headers:this.getHeaders()})
   }
 
-  getCount(role: string|null, searchTerm: string|null): Observable<any>{
+  getCount(role: string|null, searchTerm: string|null,sortedColumn:string|null=null,
+    sortedOrder:number=0): Observable<any>{
 
     var params=new HttpParams();
 
@@ -81,6 +89,12 @@ export class AdminService {
     }
     if(searchTerm) {
       params=params.set('searchTerm', searchTerm);
+    }
+    if (sortedColumn) {
+      params = params.set('sortedColumn', sortedColumn);
+    }
+    if (sortedOrder) {
+      params = params.set('sortedOrder', sortedOrder);
     }
 
     return this.httpClient.get<number>(`${this.apiUrl}/users/fcount`,{params:params,headers:this.getHeaders()})

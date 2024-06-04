@@ -121,6 +121,9 @@ export class AdminComponent implements OnInit{
 
   archMembers: { [key: string]: Member[] } = {};
 
+  sortedColumn: string = '';
+  sortedOrder: number = 0; 
+
   getSortClass(): string {
     if (this.sortOrder === 'desc') // da ne bih menjao u logici samo sam rotirao
       return 'sorted-asc';
@@ -241,10 +244,10 @@ export class AdminComponent implements OnInit{
 
 
     GetUsers(): void {
-      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
+      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm,this.sortedColumn,this.sortedOrder).subscribe(response => {
         this.allUsers = response;
         
-        this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
+        this.adminService.getCount(this.selectedRolee, this.searchTerm,this.sortedColumn,this.sortedOrder).subscribe({next:(res)=>{
           this.filteredUsers=res;
           this.totalPages= Math.ceil(res / this.pageSize);
           if(this.currentPage>1 && this.totalPages==1)
@@ -287,23 +290,11 @@ export class AdminComponent implements OnInit{
       this.GetUsers();
     }
 
-    //metoda za prikaz slike
-    // loadPicture(usersArray:Member[]) : void{
-    //   usersArray.forEach(user => {
-    //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){
-    //       this.uploadservice.getImage(user.profilePicUrl).subscribe(
-    //         url => {
-    //           user.url = url;
-    //         }
-    //       )
-    //   }
-    // });
-
     onLoad(): void{
       this.adminService.getAllUsers2().subscribe(response=>{
         this.allUsersCount=response;
       })
-      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
+      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm,this.sortedColumn,this.sortedOrder).subscribe(response => {
         this.allUsers = response;
         this.filteredUsers=this.allUsersCount;
         this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
@@ -324,21 +315,6 @@ export class AdminComponent implements OnInit{
         this.projectMangers=res.pManagers;
       })
     }
-
-    // PicturesOfRoles():void{
-    //   this.adminService.getAllUsers3("Admin").subscribe(res=>{
-    //     this.admins=res;
-    //     //this.loadPicture(this.admins);
-    //   })
-    //   this.adminService.getAllUsers3("Member").subscribe(res=>{
-    //     this.members=res;
-    //     //this.loadPicture(this.members)
-    //   })
-    //   this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
-    //     this.projectMangers=res;
-    //     //this.loadPicture(this.projectMangers);
-    //   })
-    // }
 
     assignProjectManagers(){
       var projectMembers = this.pmProjects.map<ProjectMember>((project,i) => 
@@ -510,5 +486,15 @@ export class AdminComponent implements OnInit{
         event.stopPropagation(); 
       }
     }
+
+    toggleSortOrder(column: string): void {
+      
+        this.sortedOrder = (this.sortedOrder+1) % 3;
+      
+        this.sortedColumn = column;
+     
+      this.GetUsers();
+    }
+
   }
 

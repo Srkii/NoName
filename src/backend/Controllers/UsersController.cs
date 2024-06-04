@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -198,7 +199,7 @@ namespace backend.Controllers
 
     [Authorize(Roles = "Admin")]
     [HttpGet("filtered")]
-    public async Task<ActionResult<IEnumerable<object>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="")
+    public async Task<ActionResult<IEnumerable<object>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="", int sortedOrder=0,  string sortedColumn = null)
     {
         var query = _context.Users.AsQueryable();
         query = query.Where(u => u.Archived == false);
@@ -214,6 +215,12 @@ namespace backend.Controllers
             query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
         }
 
+        if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+        {
+          
+          query = sortedOrder == 1 ? query.OrderBy(u => (u.FirstName + " " + u.LastName).ToLower()) : query.OrderByDescending(u => (u.FirstName + " " + u.LastName).ToLower());
+                
+        }
 
         var filteredUsers=await query.Skip((currentPage-1)*pageSize).Take(pageSize).ToListAsync();
 
@@ -222,7 +229,7 @@ namespace backend.Controllers
     
     [Authorize(Roles = "Admin")]
     [HttpGet("fcount")]
-    public async Task<ActionResult<int>> GetUsersFF( UserRole? role=null, string searchTerm="")
+    public async Task<ActionResult<int>> GetUsersFF( UserRole? role=null, string searchTerm="" , int sortedOrder=0,  string sortedColumn = null)
     {
         var query = _context.Users.AsQueryable();
         query = query.Where(u => u.Archived == false);
@@ -238,6 +245,12 @@ namespace backend.Controllers
             query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
         }
 
+        if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+        {
+          
+          query = sortedOrder == 1 ? query.OrderBy(u => (u.FirstName + " " + u.LastName).ToLower()) : query.OrderByDescending(u => (u.FirstName + " " + u.LastName).ToLower());
+                 
+        }
 
         var filteredUsers=await query.ToListAsync();
 
