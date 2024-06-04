@@ -72,11 +72,11 @@ export class UserInfoComponent implements OnInit {
 
   }
   passwordMatch(): boolean {
-    if(this.newData.NewPassword && this.confirmpass)
+    if(this.newData.NewPassword && this.confirmpass && this.newData.CurrentPassword)
       return this.newData.NewPassword === this.confirmpass;
     return false;
-
   }
+  
   clearInputs(){
     this.newData.CurrentPassword = '';
     this.newData.NewPassword = '';
