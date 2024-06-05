@@ -139,7 +139,10 @@ export class KanbanComponent implements OnInit{
   GetTaskStatuses() {
     if (this.currentProjectId) {
       this.myTasksService.GetTaskStatuses(this.currentProjectId).subscribe((statuses) => {
-        this.taskStatuses = statuses;
+        this.taskStatuses = statuses.map(status => ({
+          ...status,
+          tempStatusName: status.name
+        }));
         this.taskStatuses.sort((a, b) => a.position - b.position);
       });
     }
@@ -394,6 +397,7 @@ export class KanbanComponent implements OnInit{
     this.myTasksService.renameTaskStatus(changedTaskStatusDto)
       .subscribe({
         next: () => {
+          this.populateTasks();
         },
         error: (error) => {
           console.error('Error updating status name', error);

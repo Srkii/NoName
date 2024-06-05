@@ -133,7 +133,6 @@ export class AdminComponent implements OnInit{
   }
 
   Invite(): void{
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if(this.regexEmail.test(this.invitation.receiver))
     {
       this.spinner.show();
