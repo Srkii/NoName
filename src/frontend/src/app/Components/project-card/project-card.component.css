@@ -1,10 +1,25 @@
 * {
     z-index: 100;
 }
+.tLabel {
+    display: flex;
+    justify-content: space-between;
+    svg {
+        padding-top: 3px !important;
+        margin-right: 5px !important;
+        fill: var(--text-color) !important;
+    }
+}
 #container {
     position: relative;
 }
-  
+.form-label {
+    font-size: 16px !important;
+    text-transform: none !important;
+}
+.form-control::placeholder {
+    color: var(--text-color) !important;
+}
 .col-md-5 {
     position: absolute;
     top: 0%;
@@ -12,7 +27,9 @@
     transition: right 0.5s;
     z-index: 50;
 }
-
+.form-control {
+    color: var(--text-color) !important;
+}
 .project-header{
     display: flex;
     justify-content: space-between;
@@ -27,21 +44,13 @@
     cursor: pointer;
     color: #5f61e6;
 }
-
-input[type="date"]{
-    display: block;
+.card-header {
+    background-color: var(--card-color) !important;
+    color: var(--text-color) !important;
+}
+.desc{
     width: 100%;
-    padding: .4375rem .875rem;
-    font-size: 0.9375rem;
-    font-weight: 400;
-    line-height: 1.53;
-    color: #697a8d;
-    appearance: none;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: var(--bs-border-width) solid #d9dee3;
-    border-radius: var(--bs-border-radius);
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    height: 10rem;
 }
 
 input::placeholder {color: #697a8d; }
@@ -58,50 +67,17 @@ label{ margin-right: 1rem; }
     font-family: 'Public Sans', sans-serif;
 }
 
-.ng-value-label{
-    display: inline-flex !important;
-    align-items: center !important;
-    font-family: 'Public Sans', sans-serif;
-}
 
-.ng-value-label img, .ng-value-label ngx-avatars{
-    margin-right: 0.2rem !important;
-}
-
-.user-detail{
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Public Sans', sans-serif;
-}
 
 :host::ng-deep .ng-option-marked{
-    background-color: #F5F5F9 !important;
-}
-
-:host::ng-deep .ng-option-selected{
-    background-color: #a8a9f0 !important;
-}
-
-:host::ng-deep .ng-option-marked{
-    background-color: #9a9cec !important;
     border-top: 0px !important;
 }
 
 .ng-value-label.ng-star-inserted{
     padding-left: 3px !important;
 }
-
-:host::ng-deep .ng-value-icon.ng-star-inserted{
-    position: relative ;
-    top: 0.055rem;
-    display: inline-flex !important;
-    align-items: center;
-    border-left: none !important;
-    padding-left: 0 !important;
-}
-
-.ng-value-icon:hover{
-    background-color: transparent !important;
+.ng-selected-container {
+    width: 50px !important;
 }
 
 :host::ng-deep .ng-value.ng-star-inserted{
@@ -134,20 +110,6 @@ h4{
 
 i{
     color: #a0a6ac;
-}
-
-.btn{
-    color: #fff;
-    background-color: #696cff;
-    border-color: #696cff;
-    box-shadow: 0 .125rem .25rem 0 rgba(105,108,255,.4)
-}
-
-.btn:hover{
-    color: #fff !important;
-    background-color: #5f61e6 !important;
-    border-color: #5f61e6 !important;
-    transform: translateY(-1px) !important
 }
 
 .is-invalid{
@@ -234,7 +196,27 @@ flex-grow: 1;
     color: #697a8d;
     float: right;
 }
-
+.tAddBtn {
+    color: var(--btn-text) !important;
+    background-color: var(--normal-purple) !important;
+    border-color: var(--normal-purple) !important;
+    box-shadow: var(--btn-shadow) !important;
+}
+.tAddBtn:hover {
+    color: var(--btn-text) !important;
+    background-color: var(--dark-purple) !important;
+    border-color: var(--dark-purple) !important;
+    transform: translateY(-1px) !important;
+}
+.tAddBtn:focus {
+    color: var(--btn-text) !important;
+    background-color: var(--dark-purple) !important;
+    border-color: var(--dark-purple) !important;
+}
+.tAddBtn:disabled {
+    background-color: var(--normal-purple) !important;
+    border-color: var(--normal-purple) !important;
+}
 .form-select.form-select-xs:focus {
     outline: none;
     box-shadow: none;
@@ -253,5 +235,5 @@ font-size: smaller;
 textarea:hover,textarea:focus,input:hover,input:focus{
     outline: none;
     border: 1px solid #5f61e6 !important; 
-    box-shadow: 0 0 3px #5f61e6; 
+    box-shadow: none !important; 
 }

@@ -1,4 +1,4 @@
-export interface Notification{
+export interface Notification {
   id: number;
   reciever_id: number;
   sender_id:number,

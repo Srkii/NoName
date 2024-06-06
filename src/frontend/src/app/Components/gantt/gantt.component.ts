@@ -1,29 +1,13 @@
 import { TaskDependency } from './../../Entities/TaskDependency';
 import { MyProjectsService } from './../../_services/my-projects.service';
-import { MyTasksComponent } from './../my-tasks/my-tasks.component';
-import { HttpClient} from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  GanttDragEvent,
-  GanttItem,
-  GanttSelectedEvent,
-  GanttTableDragDroppedEvent,
-  GanttTableDragEndedEvent,
-  GanttTableDragStartedEvent,
-  GanttView,
-  GanttViewType,
-  NgxGanttComponent,
-  GanttGroup,
-  GanttDate,
-  GanttLink,
-  GanttGroupInternal,
-} from '@worktile/gantt';
-import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { GanttDragEvent, GanttItem, GanttSelectedEvent, GanttView, GanttViewType, NgxGanttComponent, GanttGroup, GanttLink } from '@worktile/gantt';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { ProjectSection } from '../../Entities/ProjectSection';
 import { SharedService } from '../../_services/shared.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-gantt',
@@ -32,93 +16,10 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 export class GanttComponent implements OnInit{
   removeModalRef?:BsModalRef;
-  date = new GanttDate(1713125075).format("yyyy-mm-dd-hh-mm-ss");
   currentProjectId: number | null = null;
-  ngOnInit(): void {
-    this.shared.taskUpdated.subscribe(() => {
-      this.loading = true;
-      this.data_loaded = false;
-      this.items=[];
-      this.groups=[];
-      this.loading = true;
-      this.getGanttData();//kupimo sve podatke za trenutni projekat
-      setTimeout(()=>
-        {
-        this.loading = false;
-        this.data_loaded = true
-      }, 100);
-    });
-    this.spinner.show();
-    this.loading = true;
-    this.items=[];
-    this.groups=[];
-    this.getGanttData();//kupimo sve podatke za trenutni projekat
-    this.spinner.hide();
-    setTimeout(()=>
-    {
-      this.loading = false;
-      this.data_loaded = true
-    }, 100);
+  userRole: number | null = null;
 
-    // emit kad se doda novi task
-    this.shared.taskAdded$.subscribe(success => {
-      if (success) {
-        this.loading = true;
-        this.data_loaded = false;
-        this.items=[];
-        this.groups=[];
-        this.loading = true;
-        this.getGanttData();
-        setTimeout(()=>
-        {
-          this.loading = false;
-          this.data_loaded = true
-        }, 100);
-      }
-    });
-
-    // emit za novu sekciju
-    this.shared.sectionUpdated.subscribe(() => {
-      this.loading = true;
-        this.data_loaded = false;
-        this.items=[];
-        this.groups=[];
-        this.loading = true;
-        this.getGanttData();
-        setTimeout(()=>
-        {
-          this.loading = false;
-          this.data_loaded = true
-        }, 100);
-    });
-  }
-  constructor(
-    private http: HttpClient,
-    private route:ActivatedRoute,
-    private spinner:NgxSpinnerService,
-    private myTasksService:MyTasksService,
-    private myProjectsService:MyProjectsService,
-    private shared:SharedService,
-    private modalService:BsModalService
-    ) { }
-
-  views = [{name:'Hour',value:GanttViewType.hour},{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
-
-  @ViewChild('gantt') ganttComponent!: NgxGanttComponent;
-  viewType: GanttViewType = GanttViewType.month;
-  selectedViewType: GanttViewType = GanttViewType.month;
-  isBaselineChecked = false;
-  isShowToolbarChecked = true;
-  loading = false;
-  data_loaded = false;
-  toolbarOptions = {
-    viewTypes: [GanttViewType.day, GanttViewType.week, GanttViewType.month]
-  };
-
-
-  items: GanttItem[] = [];
-  groups: GanttGroup[] = [];
-
+  views = [{ name: 'Week', value: GanttViewType.day },{ name: 'Month',value: GanttViewType.month }, { name: 'Year', value: GanttViewType.quarter }];
   viewOptions = {
     dateFormat: {
       year: `yyyy`,
@@ -129,38 +30,161 @@ export class GanttComponent implements OnInit{
     }
   };
 
-  private reloadGanttData() {//ovo zna da duplira podatke u ganttu ~maksim
-    this.getGanttData(); // Fetch data again
+  @ViewChild('gantt') ganttComponent!: NgxGanttComponent;
+  viewType: GanttViewType = GanttViewType.month;
+  selectedViewType: GanttViewType = GanttViewType.month;
+  isBaselineChecked = false;
+  isShowToolbarChecked = true;
+  loading = false; // poprilicno sam siguran da nicemu ne sluzi
+  data_loaded = false;
+  toolbarOptions = {
+    viewTypes: [GanttViewType.day, GanttViewType.week, GanttViewType.month]
+  };
+
+  items: GanttItem[] = [];
+  groups: GanttGroup[] = [];
+
+  projectStartDate: Date | undefined;
+  projectEndDate: Date | undefined;
+
+
+  constructor(
+    private route:ActivatedRoute,
+    private spinner:NgxSpinnerService,
+    private myTasksService:MyTasksService,
+    private myProjectsService:MyProjectsService,
+    private shared:SharedService,
+    private modalService:BsModalService,
+    private toastr: ToastrService,
+    ) { }
+
+  ngOnInit(): void {
+    const userId = localStorage.getItem("id");
+    const projectId = this.route.snapshot.paramMap.get('id');  
+    this.currentProjectId = projectId ? +projectId : null;
+    if (projectId) {
+      this.myProjectsService.getProjectById(+projectId).subscribe(project => {
+        this.projectStartDate = new Date(project.startDate);
+        this.projectEndDate = new Date(project.endDate);
+      });
+    if(userId)
+      this.getUsersProjectRole(+projectId, +userId);
+    }
+
+    this.spinner.show();
+    this.loading = true;
+    this.items=[];
+    this.groups=[];
+    this.getGanttData(); // kupimo sve podatke za trenutni projekat
+    this.spinner.hide();
+    setTimeout(()=>
+    {
+      this.loading = false;
+      this.data_loaded = true
+    }, 300);
+
+    this.shared.taskUpdated.subscribe(() => {
+      this.loading = true;
+      this.data_loaded = false;
+      this.items=[]; // ako ne stavim prazan niz nece znati da mora opet da ga pokupi
+      this.groups=[]; // ako se napravi emit koji samo izbacuje iz array na frontu dosta ce se ubrzati
+      this.getGanttData(); // kupimo sve podatke za trenutni projekat
+      setTimeout(()=>
+        {
+        this.loading = false;
+        this.data_loaded = true
+      }, 300);
+    });
+
+    // emit kad se doda novi task
+    this.shared.taskAdded$.subscribe(success => {
+      if (success) {
+        this.loading = true;
+        this.data_loaded = false;
+        this.items=[];
+        this.groups=[];
+        this.getGanttData();
+        setTimeout(()=>
+        {
+          this.loading = false;
+          this.data_loaded = true
+        }, 300);
+      }
+    });
+
+    // emit za novu sekciju
+    this.shared.sectionUpdated.subscribe(() => {
+      this.loading = true;
+      this.data_loaded = false;
+      this.items=[];
+      this.groups=[];
+      this.getGanttData();
+      setTimeout(()=>
+      {
+        this.loading = false;
+        this.data_loaded = true
+      }, 300);
+    });
+  }
+
+  getUsersProjectRole(projectId: number, userId: number) {
+    this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
+        next: (role) => {
+            this.userRole = role;
+        },
+        error: (error) => {
+            console.error('Failed to fetch user role', error);
+        }
+    });
   }
 
   goToToday() {
     this.ganttComponent.scrollToToday();
   }
-
+  ElementwasDragged: boolean = false;
   dragEnded($event: GanttDragEvent) {
-    if ($event?.item.start !== undefined && $event.item.end!==undefined) {
-      const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
-      const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
+    if (this.userRole !== 4 && this.userRole !== 3) {
+      if ($event?.item.start !== undefined && $event.item.end !== undefined) {
+        const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
+        const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
+        if(this.projectStartDate && this.projectEndDate) {
+          if (startdate >= this.projectStartDate && enddate <= this.projectEndDate) {
 
-      this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
-      .subscribe(() => {
-        // this.reloadGanttData();
-      });
-    }
+            this.myTasksService.UpdateTimeGantt(Number($event.item.id), startdate, enddate)
+            .subscribe(() => {
+              this.data_loaded = true
+            });
+          } else {
+            this.toastr.error("Tasks must be within the project's date range.");
+            $event.item.start = Number(this.initialState.start);
+            $event.item.end = Number(this.initialState.end);
+            this.items = [...this.items];
+          }
+        }
+      }
+    } else return
+    this.ElementwasDragged = true;
+    setTimeout(() => { this.ElementwasDragged = false; }, 200);
   }
+  initialState:any = null;
+  initialstart:number = 0;
+  initialend:number = 0;
+
+  startdrag($event:GanttDragEvent) {
+    this.initialState = $event.item;
+    this.initialState = JSON.parse(JSON.stringify($event.item));
+  }
+
+  dragMoved(event: any) {}
 
   linkDragEnded(event: any){
-    let taskDependency:TaskDependency={
-      taskId:Number(event.source.id),
-      dependencyTaskId:Number(event.target.id)
+    let taskDependency: TaskDependency = {
+        taskId: Number(event.target.id),
+        dependencyTaskId: Number(event.source.id)
     }
-    let arr:TaskDependency[] = [taskDependency];
+    let arr: TaskDependency[] = [taskDependency];
     this.myTasksService.addTaskDependencies(arr).subscribe((response)=>{});
-  }
-
-  dragMoved(event: any) {
-    //ovde nikako nista, ovo cita svaki pokret elementa unutar gantta
-  }
+  } 
 
   selectView(type: GanttViewType) {
     this.viewType = type;
@@ -184,6 +208,9 @@ export class GanttComponent implements OnInit{
   }
 
   openAddTaskToLinkDialog(first_task : number,second_task : number,modal:TemplateRef<void>): void {
+    if (this.userRole === 3 || this.userRole === 4) {
+      return;
+    }
     this.dependency.taskId = Number(first_task);
     this.dependency.dependencyTaskId = Number(second_task);
     this.removeModalRef = this.modalService.show(
@@ -221,27 +248,26 @@ export class GanttComponent implements OnInit{
     if(this.currentProjectId){
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) =>{
         tasks.forEach((t:any) =>{
-          if (t.statusName !== 'Archived') { // Filter out archived tasks
+          if (t.statusName !== 'Archived') {
             var dependencies:GanttLink[] = [];
-
             this.myTasksService.GetTaskDependencies(t.id).subscribe((depencency_array:TaskDependency[])=>{
-
               depencency_array.forEach((dep:TaskDependency) => {
                 dependencies.push({
-                  type: 1,
-                  link: String(dep.dependencyTaskId)
-                });
+                  type: 4,
+                  link: String(dep.dependencyTaskId),
+                },
+              );
               });
             })
             let item:GanttItem={
               id: String(t.id),
-              group_id :t.projectSectionId? String(t.projectSectionId):'no-section', // Assign 'no-section' if there is no section
+              group_id :t.projectSectionId? String(t.projectSectionId):'no-section',
               title:t.taskName,
               start: this.convertToUnixTimestamp(t.startDate),
               end: this.convertToUnixTimestamp(t.endDate),
               links: dependencies,
               expandable: false,
-              linkable: true
+              linkable: false // link-ovanje elemenata na ganttu iskljuceno
             }
             this.items.push(item);
           }
@@ -254,17 +280,20 @@ export class GanttComponent implements OnInit{
       this.myTasksService.deleteTaskDependency(this.dependency)
       .subscribe((response:any)=>{
         const index = this.items.findIndex(item => item.id === String(this.dependency.taskId));
-        const linkIndex = this.items[index].links?.findIndex(link =>link == String(this.dependency.dependencyTaskId));
-        this.items[index].links?.splice(Number(linkIndex),1);
+        const linkIndex = this.items[index].links?.findIndex(link => link.link === String(this.dependency.dependencyTaskId));
+        if (linkIndex !== -1 && linkIndex!=undefined) {
+          this.items[index].links?.splice(linkIndex, 1);
+        }
         this.items = [...this.items];
-        this.dependency ={
-          taskId:0,
-          dependencyTaskId:0
+        this.dependency = {
+          taskId: 0,
+          dependencyTaskId: 0
         }
         this.removeModalRef?.hide();
       });
     }
   }
+
   convertToUnixTimestamp(dateString: string): number {
     const date = new Date(dateString);
     return date.getTime() / 1000;
@@ -275,7 +304,12 @@ export class GanttComponent implements OnInit{
   }
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    event.stopPropagation();
-    this.shared.triggerPopup(event, taskId);
+    if(!this.ElementwasDragged){
+      if (this.shared.current_task_id != taskId) {
+        this.shared.triggerPopup(event, taskId);
+      } else {
+        this.shared.current_task_id = null;
+      }
+    }
   }
 }

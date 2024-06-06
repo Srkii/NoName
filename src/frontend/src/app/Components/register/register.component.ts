@@ -24,47 +24,49 @@ export class RegisterComponent implements OnInit {
   };
   confirmPassword: string = '';
 
+  regexName: RegExp = /^[A-Za-zĀ-ž]{2,}$/;
+  buttonClicked: boolean = false;
+
   constructor(
     private registerService: RegisterService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
-  ) {}
-
+    private toastr: ToastrService,
+  ) { }
+  
   token: any;
   ngOnInit(): void {
-    this.token = this.route.snapshot.queryParamMap.get('token')?.toString();
-    console.log('Token from URL:', this.token);
+    this.token = this.route.snapshot.queryParamMap.get('token');
     this.GetEmailByToken(this.token);
   }
 
   GetEmailByToken(token: string | null): void {
-    if (!token) {
-      console.error('Token is missing');
+    if (!token && token == undefined) {
       return;
     }
 
     this.registerService.getEmailByToken(token).subscribe({
       next: (response: any) => {
-        console.log(response);
         const email = response?.email;
-        if (email) {
+        if (email) 
+        {
           this.newUser.Email = email;
-        } else {
-          console.error('Email not found in response');
-        }
+        } 
       },
-      error: (error) => {
-        console.error('Error fetching email:', error);
-      },
+      error: () => {},
     });
   }
 
   Register(): void {
-    if (this.newUser.Password !== this.confirmPassword) {
-      console.log('Passwords do not match');
+    this.buttonClicked = true;
+    if (!this.checkFirstName() || !this.checkLastName() || !this.checkPassword() || !this.passwordMatch())
       return;
+    if(!this.token || this.newUser.Email == '')
+    {
+      this.toastr.error("Invalid token provided");
+      return
     }
+
     this.newUser.Token = this.token;
 
     this.registerService.register(this.newUser).subscribe({
@@ -72,13 +74,24 @@ export class RegisterComponent implements OnInit {
         localStorage.setItem('id', response.id);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
-        console.log('Successful registration');
         this.router.navigate(['/mytasks']);
       },
-      error: () => {
-        this.toastr.error('Unsuccessful registration');
+      error: (error) => {
+        this.toastr.error(error.error.message);
       },
     });
+  }
+
+  checkFirstName(): boolean{
+    return this.newUser.FirstName!=null && this.regexName.test(this.newUser.FirstName);
+  }
+
+  checkLastName(): boolean{
+    return this.newUser.LastName!=null && this.regexName.test(this.newUser.LastName);
+  }
+
+  checkPassword(): boolean{
+    return this.newUser.Password!=null && this.newUser.Password.length >= 5
   }
 
   passwordMatch(): boolean {

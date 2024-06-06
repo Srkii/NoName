@@ -3,22 +3,25 @@ import { LoginService } from '../_services/login.service';
 import { inject } from '@angular/core';
 import { AdminService } from '../_services/admin.service';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = async (route, state) => {
   const service=inject(LoginService);
   const router=inject(Router)
   const adminService=inject(AdminService)
 
-  if(service.checkToken()===true)
+  if(await service.checkToken())
   {
-    if(adminService.check()===true)
+    if(await adminService.check()===true)
     {
       router.navigate(['/admin']);
       return false
     }
      return true
   }
-    
-  else{
+  else {
+    localStorage.removeItem('token');
+    localStorage.removeItem('id');
+    localStorage.removeItem('role');
+    localStorage.removeItem('selectedOption');
     router.navigate(['/login']);
     return false;
   }

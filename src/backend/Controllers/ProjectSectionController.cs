@@ -1,6 +1,8 @@
+using System.IdentityModel.Tokens.Jwt;
 using backend.Data;
 using backend.DTO;
 using backend.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,9 +17,13 @@ namespace backend.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost]
-        public IActionResult CreateSection([FromBody] CreateSectionDto createSectionDto)
+        async public Task<IActionResult> CreateSection([FromBody] CreateSectionDto createSectionDto)
         {
+            if(!await RoleCheck(createSectionDto.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner,ProjectRole.Manager]))
+                return Unauthorized("Invalid role");
+
             var section = new ProjectSection
             {
                 SectionName = createSectionDto.SectionName,
@@ -28,6 +34,7 @@ namespace backend.Controllers
             return Ok(section);
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("{id}")] // GET: api/ProjectSection/5
         public async Task<ActionResult<ProjectSection>> GetSection(int id)
         {
@@ -41,12 +48,14 @@ namespace backend.Controllers
             return section;
         }
 
-        [HttpGet("project/{id}")]//nzm nisam kreativan
+        [Authorize(Roles = "ProjectManager,Member")]
+        [HttpGet("project/{id}")]
         public async Task<ActionResult<IEnumerable<ProjectSection>>> GetSectionsByProject(int id){
             var sections = await _context.ProjectSections.Where(x => x.ProjectId == id).ToListAsync();
             return sections;
         }
 
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpDelete("{id}")] // DELETE: api/ProjectSection/5
         public async Task<IActionResult> DeleteSection(int id)
         {
@@ -55,6 +64,9 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
+
+            if(!await RoleCheck(section.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner,ProjectRole.Manager]))
+                return Unauthorized("Invalid role.");
 
             var tasks = await _context.ProjectTasks
                 .Where(t => t.ProjectSectionId == id && t.ProjectId == section.ProjectId)
@@ -67,6 +79,23 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        public async Task<bool> RoleCheck(int projectId, List<ProjectRole> roles)
+        {
+            string authHeader = HttpContext.Request.Headers["Authorization"];
+            if (authHeader != null && authHeader.StartsWith("Bearer "))
+            {
+                string token = authHeader.Substring("Bearer ".Length).Trim();
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jsonToken = tokenHandler.ReadJwtToken(token);
+
+                var userid = int.Parse(jsonToken.Claims.FirstOrDefault(c => c.Type == "nameid").Value);
+                var ProjectMember = await _context.ProjectMembers.FirstOrDefaultAsync(x => x.ProjectId == projectId && x.AppUserId == userid && roles.Contains(x.ProjectRole));
+            
+                return ProjectMember != null;
+            }
+            return false;
         }
     }
 }

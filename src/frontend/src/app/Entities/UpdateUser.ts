@@ -1,4 +1,4 @@
-export interface UpdateUser{
+export interface UpdateUser {
     FirstName: string,
     LastName: string,
     Email: string

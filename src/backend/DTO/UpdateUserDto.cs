@@ -4,10 +4,10 @@ namespace backend.DTO
 {
     public class UpdateUserDto
     {
-        [RegularExpression("^(?=[A-Z])[A-Za-z]{2,}$")]
+        [RegularExpression(@"^[A-Za-zĀ-ž]{2,30}$", ErrorMessage = "First name must contain only letters and be at least two characters long.")]
         public string FirstName { get; set; }
 
-        [RegularExpression("^(?=[A-Z])[A-Za-z]{2,}$")]
+        [RegularExpression(@"^[A-Za-zĀ-ž]{2,30}$", ErrorMessage = "Last name must contain only letters and be at least two characters long.")]
         public string LastName { get; set; }
         
         [EmailAddress]

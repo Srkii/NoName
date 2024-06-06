@@ -22,9 +22,11 @@ export class NotificationsComponent {
     private shared:SharedService
   ){}
   async getNotifications(){
-    await this.notificationService.getNotifications();//ovde smanjim da uzima manje notifikacija, tipa da uzme 10 najskorijih neprocitanih notifikacija
+    await this.notificationService.getNotifications(); // ovde smanjim da uzima manje notifikacija, tipa da uzme 10 najskorijih neprocitanih notifikacija
     this.notification_list = this.notificationService.notifications;
-    // console.log(this.notification_list);
+    this.notificationService.notifications.forEach((n:any) => {
+      n.timeAgo = this.notificationService.getTimeAgo(n.dateTime);
+    });
   }
   see_all_notifications(modal:TemplateRef<void>){
     this.handleNotificationDisplay();
@@ -38,15 +40,14 @@ export class NotificationsComponent {
   async handleNotificationDisplay(){
     await this.notificationService.getAllNotifications();
     this.notifications = [];
-    this.notifications_read = [];//refresh
+    this.notifications_read = []; // refresh
     this.notificationService.allNotifications.forEach((n:any) => {
       if(n.read == false){
-        this.notifications.push(n);//lista neprocitanih
+        this.notifications.push(n); // lista neprocitanih
       }else{
-        this.notifications_read.push(n);//lista procitanih
+        this.notifications_read.push(n); // lista procitanih
       }
     });
-    // console.log(this.notifications);
   }
   selectAllNotifications() {
     if (this.areAllNotificationsSelected()) {
@@ -84,4 +85,9 @@ export class NotificationsComponent {
   getNotificationType(type:any):string{
     return this.notificationService.getNotificationType(type);
   }
+
+  getNotificationTimeAgo(notification: any): string {
+    return this.notificationService.getTimeAgo(notification.dateTime);
+  }
+
 }

@@ -15,9 +15,13 @@ export class LoginComponent implements OnInit {
     Password: '',
   };
 
-  constructor(private loginService: LoginService, private router: Router, private toastr: ToastrService) { }
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private toastr: ToastrService,
+    ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   login() {
     this.loginService.login(this.newUser).subscribe({
@@ -28,10 +32,14 @@ export class LoginComponent implements OnInit {
         if(localStorage.getItem('role')=='0')
         {
           this.router.navigate(['/admin']);
+          sessionStorage.setItem('selectedOption', "Admin");
+          localStorage.setItem('selectedOption', "Admin");
         }
         else
         {
           this.router.navigate(['/mytasks']);
+          sessionStorage.setItem('selectedOption', "MyTasks");
+          localStorage.setItem('selectedOption', "MyTasks");
         }
       },
       error: (error) => {

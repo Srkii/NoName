@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Output, EventEmitter, HostListener, ViewChild, ElementRef, Renderer2  } from '@angular/core';
+import { Component, OnInit, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { MyTasksService } from '../../_services/my-tasks.service';
@@ -8,37 +8,17 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { UploadService } from '../../_services/upload.service';
-import { NewTask } from '../../Entities/NewTask';
 import { SharedService } from '../../_services/shared.service';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastrService } from 'ngx-toastr';
-
+import { ThemeServiceService } from '../../_services/theme-service.service';
+import { TaskStatusDto } from '../../Entities/TaskStatusDto';
 
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
-  styleUrl: './kanban.component.css',
-  animations: [
-    trigger('popFromSide', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        }),
-        animate('300ms ease-out', style({
-          opacity: 1,
-          transform: 'translateX(0)',
-        })),
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        })),
-      ]),
-    ]),
-  ],
+  styleUrl: './kanban.component.css'
 })
+
 export class KanbanComponent implements OnInit{
   tasks: any[] = [];
   taskStatuses: any[] = [];
@@ -52,11 +32,11 @@ export class KanbanComponent implements OnInit{
   // Section koji ce biti obrisan
   currentSectionName: string = '';
   currentSectionId: number | null = null;
-
   
   selectedArchivedTasks: any[] = [];
 
   userId: number = -1;
+  userProjectRole: number | null = null;
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
@@ -64,6 +44,8 @@ export class KanbanComponent implements OnInit{
   users: TaskAssignee[] = [];
   selectedUser: TaskAssignee | undefined;;
   filterValue: string | undefined = '';
+
+  userRole: number | null = null;
 
   @Output() sectionChanged = new EventEmitter<boolean>();
 
@@ -75,13 +57,21 @@ export class KanbanComponent implements OnInit{
     private myProjectsService: MyProjectsService,
     public uploadservice: UploadService,
     private shared: SharedService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public themeService: ThemeServiceService
   ) { }
 
   ngOnInit() {
+    const userId = localStorage.getItem("id");
+    const projectId = this.route.snapshot.paramMap.get('id');
+    this.currentProjectId = projectId ? +projectId : null;
+    if (projectId && userId) {
+      this.getUsersProjectRole(+projectId, +userId);
+    }
+
     this.spinner.show();
     this.shared.taskUpdated.subscribe(() => {
-      this.loadTasksAndUsers();  // Reload tasks and users
+      this.loadTasksAndUsers();
     });
     this.populateTasks();
     if (this.currentProjectId !== null) {
@@ -90,7 +80,7 @@ export class KanbanComponent implements OnInit{
     this.spinner.hide();
     this.shared.taskAdded$.subscribe(success => {
       if (success) {
-          this.populateTasks();  // Reload tasks
+          this.populateTasks();
       }
     });
   }
@@ -104,14 +94,24 @@ export class KanbanComponent implements OnInit{
     this.spinner.hide();
   }
 
+  getUsersProjectRole(projectId: number, userId: number) {
+    this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
+        next: (role) => {
+            this.userRole = role;
+        },
+        error: (error) => {
+            console.error('Failed to fetch user role.', error);
+        }
+    });
+  }
+
   populateTasks() {
-    const projectId = this.route.snapshot.paramMap.get('id');
-    this.currentProjectId = projectId ? +projectId : null;
     this.GetTaskStatuses();
     if (this.currentProjectId) {
       this.myTasksService.GetTasksByProjectId(this.currentProjectId).subscribe((tasks) => {
         this.tasks = tasks;
         this.groupTasksByStatus();
+        this.userProjectRole = this.tasks.find(x => x)
       });
     }
   }
@@ -119,7 +119,10 @@ export class KanbanComponent implements OnInit{
   GetTaskStatuses() {
     if (this.currentProjectId) {
       this.myTasksService.GetTaskStatuses(this.currentProjectId).subscribe((statuses) => {
-        this.taskStatuses = statuses;
+        this.taskStatuses = statuses.map(status => ({
+          ...status,
+          tempStatusName: status.name
+        }));
         this.taskStatuses.sort((a, b) => a.position - b.position);
       });
     }
@@ -142,6 +145,12 @@ export class KanbanComponent implements OnInit{
   }
 
   drop(event: CdkDragDrop<ProjectTask[]>) {
+    const targetStatus = this.taskStatuses.find(s => s.name === event.container.id);
+    if (targetStatus.name === 'Completed' && this.userRole !== 1 && this.userRole !== 0) {
+      this.toastr.error('Only Project Owner can move tasks to the Completed board.');
+      return;
+    }
+
     // kad nece da prevuce ukoliko se odmah nakon pokretanja servera zabaguje
     // samo prvo prevlacenje nece da radi. sledece hoce
     if (!event.previousContainer.data || !event.container.data) {
@@ -159,6 +168,7 @@ export class KanbanComponent implements OnInit{
       const newStatus = this.taskStatuses.find(s => s.name === event.container.id);
       if (task && newStatus) {
         task.taskStatusId = newStatus.id;
+        task.senderid = Number(localStorage.getItem("id"));
         this.myTasksService.updateTicoTaskStatus(task.id, task).subscribe();
       }
     }
@@ -174,10 +184,12 @@ export class KanbanComponent implements OnInit{
 
   updateTaskStatusPositions() {
     const updatedStatuses = this.taskStatuses.map((status, index) => ({ ...status, position: index }));
-    this.myTasksService.updateTaskStatusPositions(updatedStatuses).subscribe(() => {
-      this.GetTaskStatuses();
-    });
+    if(this.currentProjectId)
+      this.myTasksService.updateTaskStatusPositions(updatedStatuses, this.currentProjectId).subscribe(() => {
+        this.GetTaskStatuses();
+      });
   }
+  
   openDeleteStatusModal(modal: TemplateRef<void>, sectionName: string = '', sectionId: number) {
     this.currentSectionName = sectionName;
     this.currentSectionId = sectionId;
@@ -202,13 +214,14 @@ export class KanbanComponent implements OnInit{
   }
   deleteBoardFunction() {
     if (this.currentSectionId === null) {
-      console.error('Section ID is null');
+      console.error('Section ID is null.');
       return;
     }
     this.myTasksService.deleteTaskStatus(this.currentSectionId).subscribe({
       next: () => {
         this.modalRef?.hide();
         this.sectionChanged.emit(true);
+        this.shared.notifyTaskStatusChange();
         this.populateTasks();
       },
       error: (error) => console.error('Error deleting section:', error)
@@ -216,8 +229,13 @@ export class KanbanComponent implements OnInit{
   }
   saveNewBoard() {
     if (this.currentProjectId === null) {
-      console.error('Project ID is null');
+      console.error('Project ID is null.');
       return;
+    }
+    if(!this.newSectionName || this.newSectionName.length > 30)
+    {
+      this.toastr.error("Status name is too long.");
+      return
     }
     const taskStatus = {
       statusName: this.newSectionName,
@@ -230,13 +248,12 @@ export class KanbanComponent implements OnInit{
         this.newSectionName = '';
         this.newSectionColor = '#ffffff';
         this.sectionChanged.emit(true);
+        this.shared.notifyTaskStatusChange();
         this.populateTasks();
       },
       error: (error) => this.toastr.error(error.error)
     });
   }
-
-  
 
   // vraca AppUsers koji su na projektu
   getProjectsUsers(currentProjectId: number) {
@@ -250,11 +267,120 @@ export class KanbanComponent implements OnInit{
       error: error => console.log(error)
     });
   }
-  
 
   onTaskClick(event: MouseEvent, taskId: number) {
-    event.stopPropagation(); 
+    // event.stopPropagation(); 
     this.shared.triggerPopup(event, taskId);
   }
 
+  getDarkerColor(color: string): string {
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+    let darkeningFactor = 0.5; // ovde je moguce promeniti shade factor
+    r = Math.floor(r * darkeningFactor);
+    g = Math.floor(g * darkeningFactor);
+    b = Math.floor(b * darkeningFactor);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  getLessPoppingColor(color: string): string {
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+  
+    let { h, s, l } = this.rgbToHsl(r, g, b);
+  
+    s = Math.max(s * 0.5, 0);
+    l = Math.max(l * 0.5, 0);
+  
+    ({ r, g, b } = this.hslToRgb(h, s, l));
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  getPoppingColor(color: string): string {
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+  
+    let { h, s, l } = this.rgbToHsl(r, g, b);
+  
+    s = Math.min(s * 1.5, 100);
+    l = Math.min(l * 1.5, 100);
+  
+    ({ r, g, b } = this.hslToRgb(h, s, l));
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  
+  rgbToHsl(r: number, g: number, b: number): { h: number, s: number, l: number } {
+    r /= 255, g /= 255, b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s, l = (max + min) / 2;
+  
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return { h, s, l };
+  }
+  
+  hslToRgb(h: number, s: number, l: number): { r: number, g: number, b: number } {
+    let r, g, b;
+  
+    if (s === 0) {
+      r = g = b = l;
+    } else {
+      const hue2rgb = (p: number, q: number, t: number) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+      };
+  
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+    }
+    return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+  }
+
+  renameTaskStatus(statusId: number, newStatusName: string): void {
+    if (newStatusName.length < 1 || newStatusName.length > 30) {
+      this.toastr.error("Status name must be between 1 and 30 characters long.");
+      return;
+    }
+    if(statusId && this.currentProjectId){
+      var changedTaskStatusDto: TaskStatusDto = {
+        Id: statusId,
+        StatusName: newStatusName,
+        ProjectId: this.currentProjectId
+      }
+    } else {
+      this.toastr.error("Could not detected status that you want to change.");
+      return;
+    }
+    this.myTasksService.renameTaskStatus(changedTaskStatusDto)
+      .subscribe({
+        next: () => {
+          this.populateTasks();
+          this.shared.notifyTaskStatusChange();
+        },
+        error: (error) => {
+          console.error('Error updating status name.', error);
+          this.toastr.error(error);
+        }
+      });
+  }
 }

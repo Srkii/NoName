@@ -8,42 +8,23 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UpdateProject } from '../../Entities/UpdateProject';
-import { DatePipe } from '@angular/common';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { NewTask } from '../../Entities/NewTask';
 import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { ProjectSection } from '../../Entities/ProjectSection';
 import { ProjectSectionService } from '../../_services/project-section.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { QuillConfigService } from '../../_services/quill-config.service';
+import { ThemeServiceService } from '../../_services/theme-service.service';
 
 @Component({
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.css',
-  animations: [
-    trigger('popFromSide', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        }),
-        animate('300ms ease-out', style({
-          opacity: 1,
-          transform: 'translateX(0)',
-        })),
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        })),
-      ]),
-    ]),
-  ],
+  
 })
 export class ProjectDetailComponent implements OnInit {
   project: Project | any;
@@ -59,7 +40,7 @@ export class ProjectDetailComponent implements OnInit {
   filteredUsers: SelectedUser[] = [];
   userId: number = -1;
   searchTerm: string = "";
-  userRole: ProjectRole | any;
+
   clickedTask: ProjectTask | null = null;
   showPopUp: boolean = false;
   task!: ProjectTask;
@@ -74,12 +55,15 @@ export class ProjectDetailComponent implements OnInit {
   currentProjectId: number | null = null;
   users: TaskAssignee[] = [];
   selectedUser: TaskAssignee | undefined;
+  availableAssigness: any;
   selectedSection: ProjectSection | undefined;
   filterValue: string | undefined = '';
   @Output() taskAdded = new EventEmitter<boolean>();
 
   buttonClicked: boolean = false;
   taskNameExists: boolean = false;
+  enabledEditorOptions: boolean = false;
+  allTasks: any[] = [];
 
   // za view archived tasks
   archivedTasks: ProjectTask[] = [];
@@ -91,6 +75,21 @@ export class ProjectDetailComponent implements OnInit {
   searchSection: string = '';
 
   today: Date = new Date();
+  projectEndDate: Date = new Date();
+  projectStartDate: Date = new Date();
+  oldProjectName: string = "";
+  userRole: ProjectRole | any;
+
+  rangeDates: Date[] | undefined;
+  selectedStatus: string = '';
+  searchText: string='';
+
+  allStatuses:any[]=[];
+
+  sortedColumn: string = '';
+  sortedOrder: number = 0; 
+
+  fetchingTaskId: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -98,57 +97,93 @@ export class ProjectDetailComponent implements OnInit {
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
-    private datePipe: DatePipe,
     public uploadservice: UploadService,
     private shared: SharedService,
     private projectSectionService: ProjectSectionService,
     private router: Router,
-    private toastr: ToastrService
-  ) {}
-
-  get formattedEndDate() {
-    return this.datePipe.transform(this.update.endDate, 'yyyy-MM-dd');
-  }
-
-  get formattedStartDate() {
-    return this.datePipe.transform(this.update.startDate, 'yyyy-MM-dd');
-  }
+    private toastr: ToastrService,
+    public quillService: QuillConfigService,
+    public themeService: ThemeServiceService
+  ) { }
 
   ngOnInit(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
+    this.shared.taskStatusChanged.subscribe(() => {
+      if(projectId)
+        this.myTasksService.GetTaskStatuses(parseInt(projectId)).subscribe((statuses: any[]) => {
+          this.allStatuses = statuses;
+          this.allStatuses = this.allStatuses.filter(status => status.name !== 'Archived');
+        });
+    });
+    if(projectId)
+      this.myTasksService.GetTaskStatuses(parseInt(projectId)).subscribe((statuses: any[]) => {
+        this.allStatuses = statuses;
+        this.allStatuses = this.allStatuses.filter(status => status.name !== 'Archived');
+      });
+    const userId = localStorage.getItem("id");
     this.currentProjectId = projectId ? +projectId : null;
+
+    if (projectId && userId) {
+      this.getUsersProjectRole(+projectId, +userId);
+    }
     this.shared.taskUpdated.subscribe(() => {
-      this.getProjectInfo();  // Reload project info
+      this.getProjectInfo();  
     });
     this.shared.sectionUpdated.subscribe(() => {
       this.getProjectInfo();
     })
-    // nzm koliko je ovo pametno
     this.route.params.subscribe(params => {
-      const projectId = +params['id']; // '+' converts the parameter string to a number
+      const projectId = +params['id'];
       this.currentProjectId = projectId;
       this.getProjectInfo();
     });
     this.shared.togglePopup$.subscribe(({ event, taskId }) => {
     this.togglePopUp(event, taskId);
-
-  });
+    });
   }
+  getUsersProjectRole(projectId: number, userId: number) {
+    this.myProjectsService.getUserProjectRole(projectId, userId).subscribe({
+        next: (role) => {
+            this.userRole = role;
+        },
+        error: (error) => {
+            console.error('Failed to fetch user role', error);
+        }
+    });
+  }
+
   getProjectInfo() {
     this.spinner.show();
-    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1
+    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
+
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
+    }
 
     const projectId = this.route.snapshot.paramMap.get('id');
     if (projectId) {
       this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
         this.project = project;
-        this.myTasksService.GetTasksByProjectId(project.id).subscribe((tasks) => {
+        this.oldProjectName = project.projectName;
+        this.projectEndDate = new Date(project.endDate);
+        this.projectStartDate= new Date(project.startDate);
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder, this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
           this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.allTasks=this.projectTasks;
           this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
           this.groupedTasks = this.groupTasksBySection(this.projectTasks);
         });
-        this.loadProjectMembers();
-        this.loadAddableUsers();
         this.spinner.hide();
       });
     }
@@ -156,16 +191,27 @@ export class ProjectDetailComponent implements OnInit {
 
   loadProjectMembers(){
     this.myProjectsService.getUsersByProjectId(this.project.id).subscribe((users: any[]) => {
-      this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole}));
+      this.usersOnProject = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.appUserId, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: +user.projectRole,archived: user.archived}));
       this.filteredUsers = this.usersOnProject;
-      this.userRole = this.usersOnProject.find(x => x.appUserId == this.userId)?.projectRole;
     });
   }
 
   loadAddableUsers(){
     this.myProjectsService.GetAddableUsers(this.project.id).subscribe((users: any[]) => {
       this.addableUsers = users.map<SelectedUser>(user => ({ name: `${user.firstName} ${user.lastName}`, appUserId: user.id, email: user.email, profilePicUrl: user.profilePicUrl,projectRole: ProjectRole.Guest}));
-      //this.loadPicture(this.addableUsers)
+    });
+  }
+
+  loadAvailableAssigness(){
+    this.myProjectsService.getAvailableAssigness(this.project.id).subscribe({
+      next: response => {
+        this.availableAssigness = response,
+        this.availableAssigness.forEach((assigne: any) => {
+          assigne.appUserId = assigne.id;
+          assigne.fullName = assigne.firstName + ' ' + assigne.lastName;
+        });
+      },
+      error: error => console.log(error)
     });
   }
 
@@ -184,6 +230,51 @@ export class ProjectDetailComponent implements OnInit {
 
     return grouped;
   }
+  groupTasksBySectionSorted(tasks: any[]): { [key: string]: any } {
+    const grouped = tasks.reduce((acc, task) => {
+      const section = task.sectionName || 'No Section';
+      if (!acc[section]) {
+        if(this.sortedOrder==0)
+        {
+          acc[section] = { tasks: [], visible: section === 'No Section' };
+        }
+        else
+        {
+          acc[section] = { tasks: [], visible: section != 'No Section' };
+        }
+      }
+      acc[section].tasks.push(task);
+      return acc;
+    }, {});
+    if (!grouped['No Section']) {
+      grouped['No Section'] = { tasks: [], visible: true };
+    }
+
+    return grouped;
+  }
+  groupTasksBySectionFiltered(tasks: any[]): { [key: string]: any } {
+    const grouped = tasks.reduce((acc, task) => {
+      const section = task.sectionName || 'No Section';
+      if (!acc[section]) {
+        if(this.searchText=='' && this.selectedStatus=="" &&  this.rangeDates==undefined)
+        {
+          acc[section] = { tasks: [], visible: section === 'No Section' };
+        }
+        else
+        {
+          acc[section] = { tasks: [], visible: section != 'No Section' };
+        }
+      }
+      acc[section].tasks.push(task);
+      return acc;
+    }, {});
+    if (!grouped['No Section']) {
+      grouped['No Section'] = { tasks: [], visible: true };
+    }
+
+    return grouped;
+  }
+ 
 
   toggleSectionVisibility(section: string): void {
     this.groupedTasks[section].visible = !this.groupedTasks[section].visible;
@@ -222,9 +313,12 @@ export class ProjectDetailComponent implements OnInit {
       this.update.startDate = this.project.startDate;
       this.update.endDate = this.project.endDate;
       this.update.projectStatus = this.project.projectStatus;
+      this.enabledEditorOptions = false;
   }
 
   openMemberManagment(modal: TemplateRef<void>){
+    this.loadProjectMembers();
+    this.loadAddableUsers();
     this.modalRef = this.modalService.show(
       modal,
       {
@@ -233,21 +327,42 @@ export class ProjectDetailComponent implements OnInit {
     );
   }
 
+  
+  resetTimeProjInfo(date: Date | string): Date {
+    if (!(date instanceof Date)) {
+      date = new Date(date);
+    }
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
   updateProject()
-  {
+  { 
     this.spinner.show()
-    if(this.userRole == 1 || this.userRole == 2 || this.userRole == 0)
+    if(!this.update.projectName || (this.update.projectName && this.update.projectName?.length > 100)){
+      this.update.projectName = this.oldProjectName;
+      return;
+    }
+    if(this.update.description && this.update.description?.length > 10000)
+    {
+      this.toastr.error("Description is too long.");
+      return;
+    }
+    if(this.userRole == 1 || this.userRole == 0)
     {
       if(this.update.projectName !== this.project.projectName || this.update.projectStatus!=this.project.projectStatus ||
         this.update.endDate != this.project.endDate || this.update.description != this.project.description)
       {
         if(this.update.projectStatus!==undefined)
             this.update.projectStatus = +this.update.projectStatus;
+        
+        if(this.update.endDate)
+          this.update.endDate = this.resetTimeProjInfo(this.update.endDate);
 
-          this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
-            this.getProjectInfo()
-            this.spinner.hide()
-          })
+        this.myProjectsService.UpdateProject(this.update).subscribe(updatedProject => {
+          this.getProjectInfo()
+          this.spinner.hide()
+        })
       }
     }
   }
@@ -272,7 +387,8 @@ export class ProjectDetailComponent implements OnInit {
     this.spinner.show()
     if(this.userRole == 0 || this.userRole == 1)
     {
-      this.myProjectsService.DeleteProjectMember(this.project.id,userId).subscribe(updatedProject => {
+      this.myProjectsService.DeleteProjectMember(this.project.id,userId).subscribe(() => {
+        this.shared.emitTaskUpdated();
         this.loadProjectMembers()
         this.loadAddableUsers()
         this.searchTerm = ''
@@ -322,38 +438,40 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation();
-    this.myTasksService
-      .GetProjectTask(taskId,this.userId)
-      .subscribe((task: ProjectTask) => {
-        if (
-          this.clickedTask &&
-          this.clickedTask.id === taskId &&
-          this.showPopUp
-        ) {
-          this.showPopUp = false;
-          this.clickedTask = null;
-          this.shared.current_task_id = null;
-        } else {
+    if (this.clickedTask && this.clickedTask.id === taskId && this.showPopUp) {
+      this.closePopup();
+    } else {
+      this.showPopUp = false;
+      this.fetchingTaskId = taskId; 
+      this.myTasksService.GetProjectTask(taskId, this.userId).subscribe((task: ProjectTask) => {
+        if (this.fetchingTaskId === taskId) { 
           this.clickedTask = task;
           this.showPopUp = true;
           this.shared.current_task_id = this.clickedTask.id;
+          this.fetchingTaskId = null; 
         }
       });
+    }
+  }
+  
+  closePopup() {
+    this.clickedTask = null;
+    this.showPopUp = false;
+    this.shared.current_task_id = null;
   }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const popUp = document.querySelector('.pop') as HTMLElement;
+    const elementRef = document.getElementById('area-desc') as HTMLElement;
     if (popUp && !popUp.contains(event.target as Node) && this.showPopUp) {
       this.showPopUp = false;
       this.clickedTask = null;
+      this.shared.current_task_id=null;
     }
-  }
-
-  closePopup() {
-    this.clickedTask = null;
-    this.showPopUp = false;
+    else if (elementRef && !elementRef.contains(event.target as Node)) {
+      this.enabledEditorOptions = false;
+    }
   }
 
   getStatusClass(){
@@ -371,54 +489,43 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-  enableNameChange(){
-    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
-    changeNameInp.disabled = false;
-    changeNameInp.focus();
-  }
-
-  disableNameChange(){
-    let changeNameInp = document.getElementById("projectName") as HTMLInputElement
-    changeNameInp.disabled = true;
-  }
-
   async saveTask() {
     this.taskNameExists = false;
     this.buttonClicked = true;
 
-    if(!this.newTaskName)
-    {
+    if(!this.newTaskName || this.newTaskName.length>100)
         return;
-    }
 
+    if(this.newTaskDescription.length > 5000)
+      return;
+    
     if(await this.TaskNameExists())
-      {
-        this.taskNameExists = true;
-        return;
-      }
-
-    if(this.newTaskStartDate == undefined || this.newTaskEndDate == undefined)
     {
+      this.taskNameExists = true;
       return;
     }
+
+    if(!this.newTaskStartDate || !this.newTaskEndDate)
+      return;
+
+    // uklanja milisekunde
+    this.newTaskStartDate = this.resetTime(this.newTaskStartDate);
+    this.newTaskEndDate = this.resetTime(this.newTaskEndDate);
+
 
     if(this.isInvalidDate())
     {
       return;
     }
 
-    if(this.newTaskName == undefined)
-    {
-      return;
-    }
-    if(this.selectedUser==undefined)
+    if(!this.selectedUser)
     {
       return;
     }
 
     this.buttonClicked = false;
     const task: NewTask = {
-      CreatorId: Number(localStorage.getItem('id')),//treba mi da ne bih kreatoru slao da je dodelio sam sebi task ~maksim
+      CreatorId: Number(localStorage.getItem('id')), // treba mi da ne bih kreatoru slao da je dodelio sam sebi task
       TaskName: this.newTaskName,
       Description: this.newTaskDescription,
       StartDate: this.newTaskStartDate || new Date(),
@@ -432,20 +539,29 @@ export class ProjectDetailComponent implements OnInit {
         this.modalRef?.hide();
         this.getProjectInfo();
         this.shared.taskAdded(true);
-
-        // Resetuj polja
-        this.newTaskName = '';
-        this.newTaskDescription = '';
-        this.newTaskStartDate = null;
-        this.newTaskEndDate = null;
-        this.newTaskStatusId = null;
-        this.newTaskProjectSectionId = null;
-        this.selectedUser = undefined;
-        this.selectedSection = undefined;
+        this.resetNewTaskFields();
       },
       error: (error) => console.error('Error creating task:', error)
     });
   }
+
+  resetNewTaskFields(): void {
+    this.newTaskName = '';
+    this.newTaskDescription = '';
+    this.newTaskStartDate = null;
+    this.newTaskEndDate = null;
+    this.newTaskStatusId = null;
+    this.newTaskProjectSectionId = null;
+    this.selectedUser = undefined;
+    this.selectedSection = undefined;
+  }
+
+  // sklanja milisekunde
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
   // vraca AppUsers koji su na projektu
   getProjectsUsersAndSections(currentProjectId: number) {
     const noSection = { id: 0, sectionName: 'No Section', projectId:currentProjectId };
@@ -468,6 +584,7 @@ export class ProjectDetailComponent implements OnInit {
 
   openNewTaskModal(modal: TemplateRef<void>) {
     this.buttonClicked=false;
+    this.loadAvailableAssigness();
     if (this.currentProjectId !== null)
     {
       this.getProjectsUsersAndSections(this.currentProjectId);
@@ -575,13 +692,12 @@ export class ProjectDetailComponent implements OnInit {
       let currentDate = new Date();
       startDate.setHours(0,0,0,0);
       currentDate.setHours(0,0,0,0);
-      return !(this.newTaskStartDate < this.newTaskEndDate && (startDate>=currentDate));
+      return !(this.newTaskStartDate <= this.newTaskEndDate && (startDate>=currentDate));
     }
     return false;
   }
-
-  restoreInvalidInputs():void{
-    this.buttonClicked=false;
+  showEditOptions(){
+    this.enabledEditorOptions = true;
   }
 
   openArchiveProjectcModal(template: TemplateRef<any>) {
@@ -600,7 +716,7 @@ export class ProjectDetailComponent implements OnInit {
     if (this.project && this.project.id) {
       this.myProjectsService.archiveProject(this.project.id).subscribe({
         next: () => {
-          this.getProjectInfo(); // Refresh project info or navigate away
+          this.getProjectInfo();
           this.modalRef?.hide();
           this.router.navigate(['/myprojects']).then(() => {
             this.toastr.success('Project has been archived.');
@@ -611,5 +727,185 @@ export class ProjectDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+ toggleSortOrder(column: string): void {
+    if (this.sortedColumn === column) {
+      this.sortedOrder = (this.sortedOrder + 1) % 3;
+    } else {
+      this.sortedColumn = column;
+      this.sortedOrder = 1;
+    }
+    this.spinner.show();
+    this.userId = localStorage.getItem("id") ? Number(localStorage.getItem("id")) : -1;
+
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
+    }
+
+    const projectId = this.route.snapshot.paramMap.get('id');
+    if (projectId) {
+      this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
+        this.project = project;
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder,this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
+          this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.allTasks=this.projectTasks;
+          this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
+          this.groupedTasks = this.groupTasksBySectionSorted(this.projectTasks);
+        });
+        this.loadProjectMembers();
+        this.loadAddableUsers();
+        this.spinner.hide();
+      });
+    }
+  }
+
+  getSortClass(column: string): string {
+    if (this.sortedColumn === column) {
+      if(this.sortedOrder==1)
+        return 'sorted-asc';
+      if(this.sortedOrder==2)
+        return 'sorted-desc';
+      else
+        return 'unsorted';
+    }
+    return 'unsorted';
+  }
+
+  filterTasks():void{
+    let startDate = '';
+    let endDate = '';
+    if (this.rangeDates && this.rangeDates.length === 2) {
+      const start = new Date(this.rangeDates[0]);
+      const end = new Date(this.rangeDates[1]);
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
+    }
+
+    const projectId = this.route.snapshot.paramMap.get('id');
+    if (projectId) {
+      this.myProjectsService.getProjectById(+projectId).subscribe((project) => {
+        this.project = project;
+        this.myTasksService.GetTasksByProjectId(project.id, this.sortedColumn,this.sortedOrder,this.searchText,this.selectedStatus,startDate,endDate).subscribe((tasks) => {
+          this.projectTasks = tasks.filter(task => task.statusName !== 'Archived');
+          this.allTasks=this.projectTasks;
+          this.archivedTasks = tasks.filter(task => task.statusName === 'Archived');
+          this.groupedTasks = this.groupTasksBySectionFiltered(this.projectTasks);
+        });
+        this.loadProjectMembers();
+        this.loadAddableUsers();
+        this.spinner.hide();
+      });
+    }
+  }
+
+  showDelete(user: any){
+    var flag = false;
+    if(this.userId != user.appUserId && this.userRole != 2 && this.userRole != 3 && this.userRole != 4 && user.archived==false)
+        flag = true;
+    if(user.projectRole == 0 && this.userRole == 1){
+        flag = false;
+    }
+    return flag;
+  }
+
+  getDarkerColor(color: string): string {
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+    let darkeningFactor = 0.5; // promeni shade factor
+    r = Math.floor(r * darkeningFactor);
+    g = Math.floor(g * darkeningFactor);
+    b = Math.floor(b * darkeningFactor);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  getLessPoppingColor(color: string): string {
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+  
+    let { h, s, l } = this.rgbToHsl(r, g, b);
+  
+    s = Math.max(s * 0.5, 0);
+    l = Math.max(l * 0.5, 0);
+  
+    ({ r, g, b } = this.hslToRgb(h, s, l));
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  getPoppingColor(color: string): string {
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+  
+    let { h, s, l } = this.rgbToHsl(r, g, b);
+  
+    s = Math.min(s * 1.5, 100);
+    l = Math.min(l * 1.5, 100);
+  
+    ({ r, g, b } = this.hslToRgb(h, s, l));
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  
+  rgbToHsl(r: number, g: number, b: number): { h: number, s: number, l: number } {
+    r /= 255, g /= 255, b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s, l = (max + min) / 2;
+  
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return { h, s, l };
+  }
+  
+  hslToRgb(h: number, s: number, l: number): { r: number, g: number, b: number } {
+    let r, g, b;
+  
+    if (s === 0) {
+      r = g = b = l;
+    } else {
+      const hue2rgb = (p: number, q: number, t: number) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+      };
+  
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+    }
+    return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
   }
 }

@@ -1,5 +1,4 @@
-import { MatDialogModule } from '@angular/material/dialog';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,12 +34,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NotificationsComponent } from './Components/notifications/notifications.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { GANTT_GLOBAL_CONFIG, NgxGanttModule } from '@worktile/gantt';
-import { LandingPageComponent } from './Components/landing-page/landing-page.component';
 import { TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CustomToastComponent } from './Components/custom-toast/custom-toast.component';
-import { fr } from 'date-fns/locale';
-const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"];
+import { enUS } from 'date-fns/locale';
+import { QuillModule } from 'ngx-quill';
+
+const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07AFED"]; // bespotrebno al me mrzi da trazim gde sve trebam da izbacujem
 
 @NgModule({
   declarations: [
@@ -61,8 +61,7 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     GanttComponent,
     ProjectCardComponent,
     NotificationsComponent,
-    LandingPageComponent,
-    CustomToastComponent,
+    CustomToastComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +86,8 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     ImageCropperModule,
     NgxGanttModule,
     TooltipModule,
-    CalendarModule
+    CalendarModule,
+    QuillModule.forRoot()
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
@@ -97,12 +97,11 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
       provide: GANTT_GLOBAL_CONFIG,
       useValue: {
         dateOptions: {
-             locale: fr,
+             locale: enUS,
              weekStartsOn: 1
         }
       }
-    },
-
+    }
   ],
   bootstrap: [AppComponent],
   

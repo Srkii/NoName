@@ -1,11 +1,10 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from '../../_services/shared.service';
-import { trigger, transition, style, animate } from '@angular/animations';
 import { Project } from '../../Entities/Project';
 
 @Component({
@@ -13,26 +12,6 @@ import { Project } from '../../Entities/Project';
   templateUrl: './my-tasks.component.html',
   styleUrls: ['./my-tasks.component.css'],
   providers: [DatePipe], 
-  animations: [
-    trigger('popFromSide', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        }),
-        animate('300ms ease-out', style({
-          opacity: 1,
-          transform: 'translateX(0)',
-        })),
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        })),
-      ]),
-    ]),
-  ],
 })
 
 export class MyTasksComponent implements OnInit {
@@ -46,7 +25,18 @@ export class MyTasksComponent implements OnInit {
   TaskStatus: any;
   static showPopUp: boolean;
   userId=localStorage.getItem('id');
+  sortedColumn1: string = '';
+  sortedOrder1: number = 0; 
+  sortedColumn2: string = '';
+  sortedOrder2: number = 0; 
+  sortedColumn3: string = '';
+  sortedOrder3: number = 0; 
 
+  pageSize1: number = 5;
+  pageSize2: number = 5;
+  pageSize3: number = 5;
+
+  fetchingTaskId: number | null = null;
 
   constructor(
     private myTasksService: MyTasksService,
@@ -57,11 +47,6 @@ export class MyTasksComponent implements OnInit {
     private sharedService:SharedService
   ) {}
 
-  closePopup() {
-    this.clickedTask = null; 
-    this.showPopUp = false; 
-  }
-
   ngOnInit(): void {
     this.sharedService.taskUpdated.subscribe(() => {
       this.loadTasks();  
@@ -71,24 +56,26 @@ export class MyTasksComponent implements OnInit {
   }
 
   togglePopUp(event: MouseEvent, taskId: number): void {
-    event.stopPropagation(); 
-    this.myTasksService
-      .GetProjectTask(taskId,this.userId)
-      .subscribe((task: ProjectTask) => {
-        if (
-          this.clickedTask &&
-          this.clickedTask.id === taskId &&
-          this.showPopUp
-        ) {
-          this.showPopUp = false;
-          this.clickedTask = null;
-          this.shared.current_task_id = null;
-        } else {
+    if (this.clickedTask && this.clickedTask.id === taskId && this.showPopUp) {
+      this.closePopup();
+    } else {
+      this.showPopUp = false;
+      this.fetchingTaskId = taskId; 
+      this.myTasksService.GetProjectTask(taskId, this.userId).subscribe((task: ProjectTask) => {
+        if (this.fetchingTaskId === taskId) { 
           this.clickedTask = task;
           this.showPopUp = true;
           this.shared.current_task_id = this.clickedTask.id;
+          this.fetchingTaskId = null; 
         }
       });
+    }
+  }
+  
+  closePopup() {
+    this.clickedTask = null;
+    this.showPopUp = false;
+    this.shared.current_task_id = null;
   }
 
 
@@ -97,19 +84,19 @@ export class MyTasksComponent implements OnInit {
 
     if (this.userId !== null) {
     this.myTasksService
-      .GetNewTasksByUserId(this.userId,5)
+      .GetNewTasksByUserId(this.userId,this.pageSize1, this.sortedColumn1,this.sortedOrder1)
       .subscribe((tasks: ProjectTask[]) => {
         this.new_tasks = tasks;
         this.spinner.hide();
       });
     this.myTasksService
-      .GetSoonTasksByUserId(this.userId,5)
+      .GetSoonTasksByUserId(this.userId,this.pageSize2, this.sortedColumn2,this.sortedOrder2)
       .subscribe((tasks: ProjectTask[]) => {
         this.soon_tasks = tasks;
         this.spinner.hide();
       });
     this.myTasksService
-      .GetClosedTasksByUserId(this.userId,5)
+      .GetClosedTasksByUserId(this.userId,this.pageSize3,this.sortedColumn3,this.sortedOrder3)
       .subscribe((tasks: ProjectTask[]) => {
         this.closed_tasks = tasks;
         this.spinner.hide();
@@ -120,28 +107,6 @@ export class MyTasksComponent implements OnInit {
     }
     this.cdr.detectChanges();
   }
-
-  
-  
-  sortOrder: 'asc' | 'desc' = 'asc';
-
-  sortTasks() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
-
-    this.spinner.show();
-    this.myTasksService.sortTasksByDueDate(this.userId,this.sortOrder)
-      .subscribe({
-        next: (sortedTasks: ProjectTask[]) => {
-          this.closed_tasks = sortedTasks;
-          this.spinner.hide();
-        },
-        error: (error: any) => {
-          console.error('Error sorting tasks:', error);
-          this.spinner.hide();
-        }
-      });
-}
-
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -162,39 +127,36 @@ export class MyTasksComponent implements OnInit {
     return this.closed_tasks.length === 0;
   }
 
-  LoadNewTasks(event:Event):void{
-    const selectedValue = (event.target as HTMLSelectElement).value;
+  LoadNewTasks():void{
     this.spinner.show();
 
     if (this.userId !== null) {
     this.myTasksService
-      .GetNewTasksByUserId(this.userId,parseInt(selectedValue))
+      .GetNewTasksByUserId(this.userId,this.pageSize1,this.sortedColumn1,this.sortedOrder1)
       .subscribe((tasks: ProjectTask[]) => {
         this.new_tasks = tasks;
         this.spinner.hide();
       });
     }
   }
-  LoadSoonTasks(event:Event):void{
-    const selectedValue = (event.target as HTMLSelectElement).value;
+  LoadSoonTasks():void{
     this.spinner.show();
 
     if (this.userId !== null) {
       this.myTasksService
-      .GetSoonTasksByUserId(this.userId,parseInt(selectedValue))
+      .GetSoonTasksByUserId(this.userId,this.pageSize2, this.sortedColumn2,this.sortedOrder2)
       .subscribe((tasks: ProjectTask[]) => {
         this.soon_tasks = tasks;
         this.spinner.hide();
       });
     }
   }
-  LoadClosedTasks(event:Event):void{
-    const selectedValue = (event.target as HTMLSelectElement).value;
+  LoadClosedTasks():void{
     this.spinner.show();
 
     if (this.userId !== null) {
       this.myTasksService
-      .GetClosedTasksByUserId(this.userId,parseInt(selectedValue))
+      .GetClosedTasksByUserId(this.userId,this.pageSize3,this.sortedColumn3,this.sortedOrder3)
       .subscribe((tasks: ProjectTask[]) => {
         this.closed_tasks = tasks;
         this.spinner.hide();
@@ -202,10 +164,18 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
+  // ukoliko zatreba za otklanjanje milisekundi
+  resetTime(date: Date): Date {
+    date.setHours(2, 0, 0, 0);
+    return date;
+  }
+
   isOverdue(endDate: Date): boolean {
-    const now = new Date().getTime(); 
-    const endDateTimestamp = new Date(endDate).getTime(); 
-    return endDateTimestamp <= now; 
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const endDateReset = new Date(endDate);
+    endDateReset.setHours(0, 0, 0, 0);
+    return endDateReset < now;
   }
 
   
@@ -213,78 +183,101 @@ export class MyTasksComponent implements OnInit {
     this.router.navigate(['/project', project.id]);
   }
 
-  sortTasksByName(tasks: ProjectTask[]) {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
-  
-    tasks.sort((a, b) => {
-      const nameA = a.taskName.toLowerCase();
-      const nameB = b.taskName.toLowerCase();
-  
-      if (nameA < nameB) {
-        return this.sortOrder === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrder === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  }
-  sortTasksByProjectName(tasks: ProjectTask[]) {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
-  
-    tasks.sort((a, b) => {
-      const nameA = a.project.projectName.toLowerCase();
-      const nameB = b.project.projectName.toLowerCase();
-  
-      if (nameA < nameB) {
-        return this.sortOrder === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrder === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  }
-  sortTasksBySectionName(tasks: ProjectTask[]) {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
-  
-    tasks.sort((a, b) => {
-      const nameA = a.sectionName.toLowerCase();
-      const nameB = b.sectionName.toLowerCase();
-  
-      if (nameA < nameB) {
-        return this.sortOrder === 'asc' ? -1 : 1;
-      }
-      if (nameA > nameB) {
-        return this.sortOrder === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  }
-  sortTasksByDueDate(tasks: ProjectTask[]) {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'; 
-  
-    tasks.sort((a, b) => {
-      const dateA = new Date(a.endDate);
-      const dateB = new Date(b.endDate);
-  
-      if (dateA < dateB) {
-        return this.sortOrder === 'asc' ? -1 : 1;
-      }
-      if (dateA > dateB) {
-        return this.sortOrder === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  }
-
-  //~maksim
   openTaskPopup(taskId: number): void {
     this.myTasksService.GetProjectTask(taskId, this.userId)
       .subscribe((task: ProjectTask) => {
         this.clickedTask = task;
         this.showPopUp = true;
       });
+  }
+
+  toggleSortOrder1(column: string): void {
+    if (this.sortedColumn1 === column) {
+      this.sortedOrder1 = (this.sortedOrder1 + 1) % 3;
+    } else {
+      this.sortedColumn1 = column;
+      this.sortedOrder1 = 1;
+    }
+    this.LoadNewTasks();
+  }
+  toggleSortOrder2(column: string): void {
+    if (this.sortedColumn2 === column) {
+      this.sortedOrder2 = (this.sortedOrder2 + 1) % 3;
+    } else {
+      this.sortedColumn2 = column;
+      this.sortedOrder2 = 1;
+    }
+    this.LoadSoonTasks();
+  }
+  toggleSortOrder3(column: string): void {
+    if (this.sortedColumn3 === column) {
+      this.sortedOrder3 = (this.sortedOrder3 + 1) % 3;
+    } else {
+      this.sortedColumn3 = column;
+      this.sortedOrder3 = 1;
+    }
+    this.LoadClosedTasks();
+  }
+
+  changePageSize1(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    if (target.value !== '') {
+      const pageSize = Number(target.value);
+      this.pageSize1 = pageSize;
+      this.LoadNewTasks();
+    }
+  }
+  changePageSize2(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    if (target.value !== '') {
+      const pageSize = Number(target.value);
+      this.pageSize2 = pageSize;
+      this.LoadSoonTasks();
+    }
+  }
+  changePageSize3(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    if (target.value !== '') {
+      const pageSize = Number(target.value);
+      this.pageSize3 = pageSize;
+      this.LoadClosedTasks();
+    }
+  }
+
+  getSortClass1(column: string): string {
+    if (this.sortedColumn1 === column) {
+      if(this.sortedOrder1==1)
+        return 'sorted-asc';
+      if(this.sortedOrder1==2)
+        return 'sorted-desc';
+      else
+        return 'unsorted';
+    }
+    return 'unsorted';
+  }
+
+  getSortClass2(column: string): string {
+    if (this.sortedColumn2 === column) {
+      if(this.sortedOrder2==1)
+        return 'sorted-asc';
+      if(this.sortedOrder2==2)
+        return 'sorted-desc';
+      else
+        return 'unsorted';
+    }
+    return 'unsorted';
+  }
+
+  getSortClass3(column: string): string {
+    if (this.sortedColumn3 === column) {
+      if(this.sortedOrder3==1)
+        return 'sorted-asc';
+      if(this.sortedOrder3==2)
+        return 'sorted-desc';
+      else
+        return 'unsorted';
+    }
+    return 'unsorted';
   }
   
 }

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -25,28 +26,33 @@ namespace backend.Controllers
       _tokenService = ts;
     }
 
-    [AllowAnonymous] //skloni ovo ako hoces da radi samo ako ima token
+    [Authorize(Roles = "Admin")]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<object>>> GetUsers()
     {
-      var users = await _context.Users.ToListAsync();
+      var users = await _context.Users
+      .Select(user => new {user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl, user.Archived, user.Role})
+      .ToListAsync();
       return users;
     }
-    //[AllowAnonymous] 
+    [Authorize]
     [HttpGet("{id}")] // /api/users/2
-    public async Task<ActionResult<AppUser>> GetUser(int id)
+    public async Task<ActionResult<object>> GetUser(int id)
     {
-      return await _context.Users.FindAsync(id);
+      var user = await _context.Users.FindAsync(id);
+      return new {user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl, user.Archived, user.Role};
     }
 
-    [AllowAnonymous]
+    [Authorize]
     [HttpGet("availableUsers/{projectCreatorId}")]
     public async Task<ActionResult<AppUser>> GetAvailableUsers(int projectCreatorId)
     {
-      var availableUsers = await _context.Users.Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin).ToListAsync();
+      var availableUsers = await _context.Users
+      .Where(user => user.Id != projectCreatorId && user.Role != UserRole.Admin && user.Archived == false)
+      .Select(user => new {user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl, user.Archived, user.Role})
+      .ToListAsync();
       return  Ok(availableUsers);
     }
-
 
     [Authorize(Roles = "Admin")]
     [HttpPut("updateUser/{id}")] // /api/users/updateUser
@@ -61,14 +67,13 @@ namespace backend.Controllers
       {
         UserId = user.Id,
         Updated = true,
-        Message = "User data has been updated"
+        Message = "User data has been updated."
       };
 
       return Ok(responseData);
     }
 
-    //[Authorize(Roles = "Admin")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpPost("setAsArchived/{id}")]   //api/users/setAsArchived/1
     public async Task<ActionResult<UserDto>> ArchiveUser(int id)
     {
@@ -79,19 +84,19 @@ namespace backend.Controllers
         user.Archived = true;
         await _context.SaveChangesAsync();
       }
-      else { return BadRequest("User doesn't exists"); }
+      else { return BadRequest("User doesn't exist."); }
 
       var responseData = new
       {
         UserId = user.Id,
         Archived = true,
-        Message = "User is successfully archived"
+        Message = "User is successfully archived."
       };
 
       return Ok(responseData);
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpPost("changeUserRole")]   //api/users/changeUserRole
     public async Task<ActionResult<UserDto>> ChangeUserRole(RoleChangeDTO dto)
     {
@@ -102,7 +107,7 @@ namespace backend.Controllers
         user.Role = dto.Role;
         await _context.SaveChangesAsync();
       }
-      else { return BadRequest("User doesn't exists"); }
+      else { return BadRequest("User doesn't exist."); }
 
       var responseData = new
       {
@@ -114,6 +119,7 @@ namespace backend.Controllers
       return Ok(responseData);
     }
 
+    [Authorize]
     [HttpPut("changePassword/{id}")] // /api/users/changePassword
     public async Task<ActionResult<UserDto>> ChangePassword(int id, [FromBody] ChangePasswordDto data)
     {
@@ -121,11 +127,28 @@ namespace backend.Controllers
       
       if(!VerifyPassword(user,data.CurrentPassword))
       {
-        return Unauthorized("Password is unvalid");
+        return BadRequest(new {message = "Incorrect current password.",type = 1});
       }
 
-      var hmac = new HMACSHA512();
-      user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
+      var hmac = new HMACSHA512(user.PasswordSalt);
+      var hashNewPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.NewPassword));
+
+      var different = false;
+      for(int i=0;i<hashNewPassword.Length;i++)
+      {
+          if(user.PasswordHash[i] != hashNewPassword[i])
+          {
+              different = true;
+              break;
+          }
+      }
+
+      if(!different)
+      {
+        return BadRequest(new {message = "Your new password is the same as your previous.", type = 2});
+      }
+
+      user.PasswordHash = hashNewPassword;
       user.PasswordSalt = hmac.Key;
       await _context.SaveChangesAsync();
 
@@ -133,7 +156,7 @@ namespace backend.Controllers
       {
         UserId = user.Id,
         Updated = true,
-        Message = "Password has been updated"
+        Message = "Password has been updated."
       };
       return Ok(responseData);
     }
@@ -160,21 +183,23 @@ namespace backend.Controllers
       return new InvitationDto { Email = invitation.Email, Token = invitation.Token };
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpGet("all")]
     public async Task<ActionResult<int>> GetAllUsers()
     {
         var query=_context.Users.AsQueryable();
         query = query.Where(u => u.Archived == false);
 
-        var Users=await query.ToListAsync();
+        var Users=await query
+        .Select(user => new {user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl, user.Archived, user.Role})
+        .ToListAsync();
 
         return Users.Count;
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpGet("filtered")]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="")
+    public async Task<ActionResult<IEnumerable<object>>> GetUsersFP(int pageSize=0, int currentPage = 0, UserRole? role=null, string searchTerm="", int sortedOrder=0,  string sortedColumn = null)
     {
         var query = _context.Users.AsQueryable();
         query = query.Where(u => u.Archived == false);
@@ -190,14 +215,21 @@ namespace backend.Controllers
             query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
         }
 
+        if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+        {
+          
+          query = sortedOrder == 1 ? query.OrderBy(u => (u.FirstName + " " + u.LastName).ToLower()) : query.OrderByDescending(u => (u.FirstName + " " + u.LastName).ToLower());
+                
+        }
 
         var filteredUsers=await query.Skip((currentPage-1)*pageSize).Take(pageSize).ToListAsync();
 
         return filteredUsers;
     }
-    [AllowAnonymous]
+    
+    [Authorize(Roles = "Admin")]
     [HttpGet("fcount")]
-    public async Task<ActionResult<int>> GetUsersFF( UserRole? role=null, string searchTerm="")
+    public async Task<ActionResult<int>> GetUsersFF( UserRole? role=null, string searchTerm="" , int sortedOrder=0,  string sortedColumn = null)
     {
         var query = _context.Users.AsQueryable();
         query = query.Where(u => u.Archived == false);
@@ -213,31 +245,40 @@ namespace backend.Controllers
             query = query.Where(u => EF.Functions.Like(u.FirstName.ToLower(), $"%{searchTerm.ToLower()}%") || EF.Functions.Like(u.LastName.ToLower(), $"%{searchTerm.ToLower()}%"));
         }
 
+        if (!string.IsNullOrEmpty(sortedColumn) && sortedOrder > 0)
+        {
+          
+          query = sortedOrder == 1 ? query.OrderBy(u => (u.FirstName + " " + u.LastName).ToLower()) : query.OrderByDescending(u => (u.FirstName + " " + u.LastName).ToLower());
+                 
+        }
 
         var filteredUsers=await query.ToListAsync();
 
         return filteredUsers.Count;
     }
-    [AllowAnonymous]
+    
+    [Authorize(Roles = "Admin")]
     [HttpGet("filteredCount")]
-    public async Task<ActionResult<int>> CountFilteredUsers(UserRole? role=null)
+    public async Task<ActionResult<RoleDTO>> CountFilteredUsers()
     {
-      var query=_context.Users.AsQueryable();
-      query = query.Where(u => u.Archived == false);
+      var adminCount = await _context.Users.CountAsync(u => u.Role == UserRole.Admin && !u.Archived);
+      var memberCount = await _context.Users.CountAsync(u => u.Role == UserRole.Member && !u.Archived);
+      var projectManagerCount = await _context.Users.CountAsync(u => u.Role == UserRole.ProjectManager && !u.Archived);
 
-      if(role!=null)
-      {
-        query=query.Where(u=>u.Role==role);
-      }
-      
+      var roleCount=new RoleDTO{
+        AdminCount=adminCount,
+        MemberCount=memberCount,
+        ProjectManagerCount= projectManagerCount,
+        Admins=await _context.Users.Where( u => u.Role == UserRole.Admin && !u.Archived).ToListAsync(),
+        Members=await _context.Users.Where( u => u.Role == UserRole.Member && !u.Archived).ToListAsync(),
+        PManagers=await _context.Users.Where( u => u.Role == UserRole.ProjectManager && !u.Archived).ToListAsync()
+      };
 
-      var filteredUsers=await query.ToListAsync();
-
-      return filteredUsers.Count;
+      return Ok(roleCount);
     }
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpGet("getByRole")]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetUserByRole(UserRole? role=null)
+    public async Task<ActionResult<IEnumerable<object>>> GetUserByRole(UserRole? role=null)
     {
       var query=_context.Users.AsQueryable();
       query = query.Where(u => u.Archived == false);
@@ -246,24 +287,28 @@ namespace backend.Controllers
       {
         query=query.Where(u=>u.Role==role);
       }
-      var filteredUsers=await query.ToListAsync();
+      var filteredUsers=await query
+      .Select(user => new {user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl, user.Archived, user.Role})
+      .ToListAsync();
 
       return filteredUsers;
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpGet("getArchived")]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetArchivedUsers()
+    public async Task<ActionResult<IEnumerable<object>>> GetArchivedUsers()
     {
       var query = _context.Users.AsQueryable();
       query = query.Where(u => u.Archived == true);
 
-      var archUsers=await query.ToListAsync();
+      var archUsers=await query
+      .Select(user => new {user.Id, user.FirstName, user.LastName, user.Email, user.ProfilePicUrl, user.Archived, user.Role})
+      .ToListAsync();
       return archUsers;
 
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpPut("removeFromArch")]   //api/users/setAsArchived/1
     public async Task<IActionResult> RemoveArch([FromBody] List<int> userIds)
     { 

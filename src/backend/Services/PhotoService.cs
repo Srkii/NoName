@@ -7,8 +7,6 @@ namespace backend.Services
     [Authorize]
     public class PhotoService : IPhotoService
     {
-    
-        // public readonly string _path = Directory.GetCurrentDirectory()+"\\Assets\\Images";
         public readonly string _path =Path.Combine(Directory.GetCurrentDirectory(),"Assets","Images");
 
         public string AddPhoto(IFormFile file)

@@ -8,16 +8,71 @@
   }
 
 }
+@media screen and (min-width:401px) and (max-width: 600px) {
+  .col-md-5{
+    width: calc(100% - 22px);
+  }
+  .full{
+    display: none;
+  }
 
+}
+@media screen and (max-width:400px) {
+  .markButtons{
+    display: flex;
+    flex-direction: column;
+    margin-top: 35px;
+    margin-right: 8px;
+  }
+  .mark{
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .col-md-5{
+    width: calc(100% - 22px);
+  }
+  .full{
+    display: none;
+  }
+
+}
+@media screen and (min-width: 760px) and (max-width: 860px) {
+  .col-md-5{
+    flex: 0 0 auto;
+    width: 48% !important;
+  }
+}
+.guestDependencyView {
+  pointer-events: none !important;
+}
+.guestAssigneeView {
+  display: flex;
+  align-items: center;
+}
+.nnAvatar {
+  margin-right: 5px;
+  margin-left: 10px;
+}
+.ngxGuestView {
+  margin-left: 5px !important;
+  margin-right: 0px !important;
+}
+.guestAssigneeImage {
+  display: flex;
+}
 .popupTaskName {
   font-size: 18px;
-  font-weight: bold;
-  color: #697a8d;
+  color: var(--text-color) !important;
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 5px;
   width: 70%;
   border-bottom: 1px solid #5f61e6;
+}
+
+.bi-x-lg:hover{
+  fill: var(--normal-purple);
+  transition: 0.5s ease-in-out;
 }
 
 .header {
@@ -36,21 +91,12 @@
   margin-bottom: 5px;
   font-size: 16px !important;
 }
-/* #popupOriginProject {
-  font-weight: normal !important;
-  margin-left: 15px !important;
-  background-color: #8072cf !important;
-  color: #5322db !important;
-  text-align: center;
-  padding: 2px !important;
-  border-radius: 8px;
-} */
 #popupOriginProject:hover{
   cursor: pointer;
 }
 .badge {
   font-size: 16px !important;
-  background-color: #5f61e6 !important;
+  background-color: var(--normal-purple) !important;
   font-weight: normal !important;
 }
 #assignee {
@@ -72,28 +118,16 @@ img{
 }
 .description,
 .description1{
-  color: #697a8d;
+  color: var(--text-color) !important;
   font-size: 16px;
   outline: none;
-  border: 0.5px solid lightgray;
+  border: 1px solid var(--table-border-color);
   border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
   word-wrap: break-word;
-}
-.form-control {
-  color: #697a8d;
-  font-size: 12px;
-  border: 0.5px solid lightgray;
-  border-radius: 0.375rem;
-  padding: 6px;
-  margin-left: 5%;
-  margin-bottom: 1%;
-}
-.form-control[type="file"]:not(:disabled):not([readonly]):hover {
-  cursor: pointer;
-  background-color: #e7e7ff !important;
-  color: #5f61e6 !important;
+  background-color: var(--card-color) !important;
+  color: var(--text-color) !important;
 }
 
 .comment:hover,
@@ -113,7 +147,7 @@ img{
   padding-right: 10px;
   padding-left: 10px;
   border: none;
-  background-color: #5f61e6;
+  background-color: var(--normal-purple);
   color: #ffffff;
   border-radius: 0.375rem;
   box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
@@ -150,7 +184,8 @@ img{
   overflow-y: auto;
 }
 .col-md-5 {
-  background-color: #ffffff;
+  z-index: 100;
+  background-color: var(--card-color) !important;
   padding: 15px;
   padding-top: 12px;
   padding-bottom: 10px;
@@ -158,22 +193,22 @@ img{
   position: absolute;
   right: 4px;
   transition: right 0.5s;
-  color: #697a8d;
+  color: var(--text-color) !important;
   border-color: solid #d9dee3;
   border-width: 0;
   border-radius: 0.375rem;
-  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-  /* font-weight: 600; */
+  box-shadow: var(--card-shadow);
   font-size: 14px;
   overflow-y: hidden;
   overflow-x: hidden;
 }
 
 .comment {
-  color: #697a8d;
+  color: var(--text-color) !important;
+  border: 1px solid var(--table-border-color) !important;
+  background-color: var(--card-color) !important;
   font-size: 16px;
   outline: none;
-  border: 0.5px solid lightgray;
   border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
@@ -182,10 +217,11 @@ img{
   resize: none;
 }
 .edit_content{
-  color: #697a8d;
+  color: var(--text-color) !important;
   font-size: 14px;
   outline: none;
-  border: 0.5px solid lightgray;
+  border: 1px solid var(--table-border-color);
+  background-color: var(--card-color) !important;
   border-radius: 0.375rem;
   padding: 5px;
   width: 100%;
@@ -196,7 +232,7 @@ img{
 }
 .comments {
   margin-top: 20px;
-  color: #697a8d;
+  color: var(--text-color) !important;
   border-radius: 0.375rem;
   width: 100%;
   overflow-y: auto;
@@ -204,7 +240,7 @@ img{
 }
 .visible_comments{
   margin-top: -5px;
-  border: 0.5px solid lightgray;
+  border: 1px solid var(--table-border-color);
   border-radius: 0.375rem;
   padding: 5px;
 }
@@ -232,7 +268,7 @@ img{
   padding-left: 10px;
   border: none;
   background-color: #3fb94c;
-  color: #ffffff;
+  color: var(--text-color) !important;
   border-radius: 0.375rem;
   box-shadow: 0 5px 8px 0 rgba(67, 89, 113, 0.12);
   float: right;
@@ -252,7 +288,7 @@ img{
   margin-left: -10px;
 }
 .fixed-comment-area {
-  border-top: 0.5px solid lightgray;
+  border-top: 1px solid var(--table-border-color);
   position: absolute;
   padding-right: 15px;
   padding-left: 15px;
@@ -260,19 +296,19 @@ img{
   height: 140px;
   bottom: 0;
   right: 0;
-  background-color: #ffffff;
+  background-color: var(--card-color) !important;
+  color: var(--text-color) !important;
 }
 .scroll{
   width: 100%;
 }
 .show_comment {
-  /* height: calc(var(--col-md-5-height) - var(--scroll-height)); */
-  /* height: 78%; */
+  height: calc(100% - 180px);
   overflow-y: auto;
 }
 
 .hide_comment{
-  height: 95%;
+  height: 93%;
   overflow-y: auto;
 }
 .no_comments{
@@ -280,21 +316,16 @@ img{
 }
 
 .singleComment {
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid var(--table-border-color);
 }
 .singleComment:last-child {
   border-bottom: none;
 }
-/* .content:last-child{
-  border-bottom: none;
-} */
 .content p{
-  color: #697a8d;
+  color: var(--text-color) !important;
   font-size: 14px;
   margin-top: 5px;
-  /* margin-bottom: 10px; */
   outline: none;
-  /* padding: 10px; */
   padding-left: 20px;
   border-radius: 0.375rem;
   word-wrap: break-word;
@@ -304,7 +335,7 @@ img{
   margin-top: -40px;
   margin-right: 5px;
   font-size: 12px;
-  color: #697a8d;
+  color: var(--text-color) !important;
 }
 .edit{
   margin-top: -5px;
@@ -335,13 +366,14 @@ img{
   margin-left: 1px;
   margin-bottom: 10px;
   font-size: 18px;
-  font-weight: bold;
-  color: #697a8d;
+  font-weight: 500;
+  color: var(--text-color) !important;
   padding-left: 10px;
   padding-right: 10px;
   width: 70%;
   border: 1px solid transparent;
   border-bottom: 1px solid #5f61e6;
+  background-color: var(--card-color) !important;
 }
 /* sklanja crni outline na inputima; nesto do chrome-a */
 *,*:focus,*:hover{
@@ -350,35 +382,29 @@ img{
 .taskName:hover, .taskName:focus, .taskName:active {
   border-radius: 0.375rem;
   border: 1px solid #5f61e6 !important;
-  box-shadow: 0 0 3px #5f61e6;
+  box-shadow: none !important;
 }
-
+.taskDueDate {
+  display: flex;
+  align-items: center;
+}
 .taskDueDate input:hover,
 .taskDueDate input:focus
 {
   outline: 1px solid #5f61e6 !important;
   border-radius: 0.375rem;
-  box-shadow: 0 0 3px #5f61e6;
+  box-shadow: none !important;
 }
 .taskDueDate{
   display: flex;
   margin-top: 10px;
-}
-.taskDueDate input{
-  margin-top: -6px;
   margin-bottom: 10px;
-  font-size: 16px;
-  border: none;
-  outline: none;
-  color: #697a8d;
-  border-radius: 0.375rem;
-  padding: 3px;
-  padding-left: 10px;
 }
+
 #taskOriginProject{
   margin-left: 20px;
   font-size: 16px;
-  color: #697a8d;
+  color: var(--text-color) !important;
   background-color: #d9dee3;
   padding: 5px;
   padding-left: 10px;
@@ -398,6 +424,7 @@ img{
 .form-label{
   font-size: 16px;
   margin-right: 20px;
+  text-transform: none !important;
 }
 .asigneeDropdown{
   outline: none;
@@ -405,6 +432,7 @@ img{
   font-size: 14px;
   width: 60%;
 }
+
 .projectDropdown{
   outline: none;
   margin-top: -5px;
@@ -432,14 +460,10 @@ img{
 }
 
 .mark.disabled {
-  opacity: 0.5; 
+  opacity: 0.5;
   background-color: red;
 }
 
-/* .modal-container{
-  border-radius: 0.375rem;
-  padding: 20px;
-} */
 .archSpan {
   font-size: 16px !important;
   line-height: 24px !important;
@@ -454,7 +478,7 @@ img{
   border-radius: 0.375rem;
 }
 .cancel_task{
-  background-color: #697a8d;
+  background-color: var(--text-color) !important;
 }
 .delete_task:hover,
 .cancel_task:hover
@@ -473,20 +497,19 @@ img{
   align-items: center;
 }
 
-
 .scroll::-webkit-scrollbar {
-  background-color: #ffffff;
+  background-color: var(--card-color);
   width: 16px;
 }
 
 .scroll::-webkit-scrollbar-track {
-  background-color: #ffffff;
+  background-color: var(--card-color);
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  background-color: #babac0;
+  background-color: var(--scroll-color);
   border-radius: 16px;
-  border: 4px solid #ffffff;
+  border: 4px solid var(--card-color);
 }
 
 .scroll::-webkit-scrollbar-button {
@@ -531,10 +554,7 @@ img{
 .assigneeNameGuest {
   font-size: 16px;
 }
-.guestAssigneeImage {
-  display: flex;
-  margin-left: 5px;
-}
+
 .guestDdate{
   margin-left: 10px;
 }
@@ -542,7 +562,7 @@ img{
 
 .download-link
 {
-  padding-left: 3px; 
+  padding-left: 3px;
   padding-right: 3px;
   color: #696cff;
 }
@@ -556,22 +576,14 @@ img{
   margin-bottom: 10px;
   margin-right: 10px;
 }
+.upload_attachment svg:hover,
+.upload_attachment span:hover{
+  cursor: pointer;
+}
+.m-SVG:hover{
+  color: #a64266
+}
 
-.btn-primary {
-  background-color: #696cff;
-  border-color: #696cff;
-  font-size: 1rem;
-  border-radius: 0.375rem;
-  margin-right: 25px;
-  line-height: 1.45;
-  text-align: center;
-}
-.btn-primary:hover {
-  color: #fff !important;
-  background-color: #5f61e6 !important;
-  border-color: #5f61e6 !important;
-  transform: translateY(-1px) !important;
-}
 .archBody {
   border-bottom: none !important;
 }
@@ -579,4 +591,34 @@ img{
   display: flex;
   flex-direction: row;
   border-top: none !important;
+}
+.tNgDatePicker {
+  margin-left: 10px;
+}
+.tNoBoxShadow:focus,
+.tNoBoxShadow:hover {
+    box-shadow: none !important;
+    border: 1px solid #5f61e6 !important;
+}
+.tClose:focus,
+.tClose:active {
+  box-shadow: none !important;
+}
+.tPCheck {
+  accent-color: #696cff !important;
+}
+.no-hover {
+  pointer-events: none;
+}
+::ng-deep .guestDependencyView .ng-arrow-wrapper {
+  display: none;
+}
+.is_invalid{
+  border-color: red !important;
+}
+.is-invalid:hover, .is-invalid:focus {
+  border-color: red !important;
+}
+.dueDateTooltip {
+  margin-left: 10px !important;
 }

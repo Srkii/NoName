@@ -23,6 +23,7 @@ namespace backend.Controllers
             _notificationService = ns;
         }
 
+        [Authorize]
         [HttpPost("uploadpfp/{id}")] // /api/FileUpload
         public async Task<ActionResult> UploadImage(int id,IFormFile image){
             if(image==null) return BadRequest("photo is null");
@@ -37,14 +38,16 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok(user);
         }
+
         [HttpGet("images/{filename}")]
         public FileContentResult GetImage(string filename){
-            // string path = Directory.GetCurrentDirectory()+"\\Assets\\Images\\"+filename;
             string path = Path.Combine(Directory.GetCurrentDirectory(),"Assets","Images",filename);
             var imageBytes = System.IO.File.ReadAllBytes(path);
             string mimetype = GetMimeType(filename);
             return File(imageBytes,mimetype);
         }
+
+        [Authorize]
         [HttpDelete("removepfp/{id}")]
         public async Task<OkObjectResult> RemoveImage(int id,string token){
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -98,40 +101,72 @@ namespace backend.Controllers
                 case ".xlsm":
                     return "application/vnd.ms-excel.sheet.macroEnabled.12";
                 default:
-                    return "application/octet-stream"; // Fallback if the file type is not recognized
+                    return "application/octet-stream"; // Fallback ako ti fajla nije prepoznat
             }
         }
-
+        public bool IsExtensionAllowed(string filename){
+            var extension = Path.GetExtension(filename).ToLowerInvariant();
+            switch(extension){
+                case ".jpg":
+                    return true;
+                case ".jpeg":
+                    return true;
+                case ".png":
+                    return true;
+                case ".gif":
+                    return true;
+                case ".pdf":
+                    return true;
+                case ".zip":
+                    return true;
+                case ".rar ":
+                    return true;
+                case ".doc":
+                    return true;
+                case ".docx":
+                    return true;
+                case ".xls":
+                    return true;
+                case ".xlsx":
+                    return true;
+                case ".ppt":
+                    return true;
+                case ".pptx":
+                    return true;;
+                case ".txt":
+                    return true;
+                case ".csv":
+                    return true;
+                case ".xlsm":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("uploadfile/{id}")]
         public async Task<ActionResult> UploadFile(int id,[FromForm]int user_id,IFormFile file){
             if(file==null) return BadRequest("file is null");
-            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
-            var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == user_id);
-            //doraditi: treba da proveri dal task postoji pa onda da upload file. ako ne postoji vraca BadRequest sa opisom greske
-            if(task!=null){
-                var filename =  _uploadService.AddFile(file);
-                // var comment = new Comment{
-                //     TaskId = task.Id,
-                //     SenderId = user_id,
-                //     SenderFirstName = sender.FirstName,
-                //     SenderLastName = sender.LastName,
-                //     Content = "",
-                //     FileUrl = filename
-                // };
-                // _context.Comments.Add(comment);
-                // await _context.SaveChangesAsync();
-                // await _notificationService.TriggerNotification(task.Id,user_id,comment.Id,NotificationType.Attachment);
-                return Ok();
+            if(IsExtensionAllowed(file.FileName)==false){
+                return BadRequest("File type not allowed.");
             }else{
-                return BadRequest("SPECIFIED TASK DOES NOT EXIST");
+                var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
+                var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == user_id);
+                
+                if(task!=null){
+                    var filename =  _uploadService.AddFile(file);
+                    return Ok();
+                }else{
+                    return BadRequest("Task does not exist.");
+                }
             }
         }
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("files/{filename}")]
         public FileContentResult GetFile(string filename){
             string path = Path.Combine(Directory.GetCurrentDirectory(),"Assets","Attachments",filename);
             string mimeType = GetMimeType(filename);
             var fileBytes = System.IO.File.ReadAllBytes(path);
-
             return File(fileBytes,mimeType);
         }
     }

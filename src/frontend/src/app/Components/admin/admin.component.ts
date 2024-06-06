@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
-
 import { AdminService } from '../../_services/admin.service';
 import { RegisterInvitation } from '../../Entities/RegisterInvitation';
 import { Member, UserRole } from '../../Entities/Member';
@@ -9,8 +8,10 @@ import { ToastrService } from 'ngx-toastr';
 import { UploadService } from '../../_services/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { Project } from '../../Entities/Project';
+import { SelectedUser } from '../../Entities/SelectedUser';
+import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
+import { ThemeServiceService } from '../../_services/theme-service.service';
 
 @Component({
   selector: 'app-admin',
@@ -23,21 +24,25 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 export class AdminComponent implements OnInit{
 
-  constructor(private adminService: AdminService, private toastr: ToastrService, public uploadservice:UploadService, private spinner:NgxSpinnerService,private modalService:BsModalService){}
+  constructor(
+    private adminService: AdminService, 
+    private toastr: ToastrService, 
+    public uploadservice:UploadService, 
+    private spinner:NgxSpinnerService,
+    private modalService:BsModalService,
+    public themeService: ThemeServiceService
+  ){}
 
   ngOnInit(): void {
    this.onLoad();
    this.numbersOfRoles();
-   this.PicturesOfRoles();
-   this.getArchivedUsers();
   }
 
   invitation:RegisterInvitation={
-    receiver: ''
+    receiver:''
   }
 
   allUsers: Member[]=[]
-
   admins: Member[]=[]
   members: Member[]=[]
   projectMangers: Member[]=[]
@@ -66,7 +71,7 @@ export class AdminComponent implements OnInit{
 
   selectedRolee: string=''
 
-  sortOrder: 'asc' | 'desc' = 'asc';
+  sortOrder: string = '';
 
   pageNumber: number = 1;
   pageSize: number = 5;
@@ -88,19 +93,42 @@ export class AdminComponent implements OnInit{
   currentLastName: string=''
   currentRole: string=''
   currentId=localStorage.getItem('id');
+  selectedUserRole: UserRole | null = null;
+
+  pmCounter: number = 0;
+  pmProjects: Project[] = [];
+  pmProjectCount: number = 0;
+  projectManagers: SelectedUser[] = [];
+  selectedManagers: SelectedUser[] = [];
 
   isFilterActive: boolean=true;
+  isFilter1: number=0;
 
   archived_users: Member[]=[];
 
+  filterRole: string|null=null;
+
   archivedIds:number[]=[];
   archId: boolean=false;
+  invalidEmail: boolean=false;
+  regex: RegExp = /^[A-Za-zĀ-ž]{2,30}$/;
+  regexEmail: RegExp =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   archMembers: { [key: string]: Member[] } = {};
 
+  sortedColumn: string = '';
+  sortedOrder: number = 0; 
+
+  getSortClass(): string {
+    if (this.sortedOrder == 1)
+      return 'sorted-asc';
+    if (this.sortedOrder == 2)
+      return 'sorted-desc';
+    return 'unsorted';
+  }
+
   Invite(): void{
-   
-    if(this.invitation.receiver!='')
+    if(this.regexEmail.test(this.invitation.receiver))
     {
       this.spinner.show();
       this.adminService.sendInvatation(this.invitation).subscribe(
@@ -113,333 +141,349 @@ export class AdminComponent implements OnInit{
     else{
       this.toastr.error("Email is not valid");
     }
+  }
 
-    }
-
-    GetUserRole(role: UserRole): string{
-        switch(role){
-          case UserRole.Admin:
-            return "Admin"
-          case UserRole.Member:
-            return "Member"
-          case UserRole.ProjectManager:
-            return "Project Manager"
-          default:
-            return ''
-        }
-    }
-
-    ChangeUserRole(id:number): void{
-      this.changeRole.Id=id;
-      const ChangeDto={
-        Id:id,
-        Role: parseInt(this.userRole)
+  GetUserRole(role: UserRole): string{
+      switch(role){
+        case UserRole.Admin:
+          return "Admin"
+        case UserRole.Member:
+          return "Member"
+        case UserRole.ProjectManager:
+          return "Project Manager"
+        default:
+          return ''
       }
-      if(ChangeDto)
-      {
-        this.adminService.changeUserRole(ChangeDto).subscribe({next:(response)=>{
-          this.GetUsers()
-        },error: (error)=>{
-          console.log(error)
-        }}
-        )
-      }
-      else{
-        console.log("Can't change user role")
-      }}
+  }
 
-    UpdateUser(id: number): void{
-      if (this.newEmail) {
-        this.updateUser.Email=this.newEmail;
-      }
-      else{
-        this.updateUser.Email=this.curentEmail
-      }
-      if (this.newFisrtName) {
-        this.updateUser.FirstName=this.newFisrtName;
-      }
-      else{
-        this.updateUser.FirstName=this.curentName;
-      }
-      if (this.newLastName) {
-        this.updateUser.LastName=this.newLastName;
-      }
-      else{
-        this.updateUser.LastName=this.currentLastName
-      }
-      if(this.updateUser){
-        this.adminService.updateUser(id,this.updateUser).subscribe({
-          next:()=>{
-            this.GetUsers();
-          },
-          error: (error) => {
-            console.log(error);
-          }
-      })
-      }
-      else {
-        console.log("Can't update user role")
-      }
+  ChangeUserRole(id:number): void{
+    this.changeRole.Id=id;
+    const ChangeDto={
+      Id:id,
+      Role: parseInt(this.userRole)
     }
-
-    ArchiveUser(id:number): void{
-      this.adminService.archiveUser(id).subscribe(
-        (response)=>{
-          if(this.currentPage>1 && this.totalPages==1)
-            {
-              this.currentPage=1;
-            }
-          this.GetUsers()        
-
-        }
-      )
-
-    }
-    sortUsersByName(): void {
-      if(this.sortOrder==='asc')
-      {
-      this.allUsers.sort((a, b) => {
-        const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
-        const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
-        if (fullNameA < fullNameB) return -1;
-        if (fullNameA > fullNameB) return 1;
-        return 0;
-      });
-      this.sortOrder = 'desc';
-    }
-    else{
-      this.allUsers.sort((a, b) => {
-        const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
-        const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
-        if (fullNameA < fullNameB) return 1;
-        if (fullNameA > fullNameB) return -1;
-        return 0;
-      });
-      this.sortOrder = 'asc';
-    }
-    }
-
-
-    GetUsers(): void {
-      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
-        this.allUsers = response;
-        var counnt=this.allUsers.length;
-        this.adminService.getCount(this.selectedRolee, this.searchTerm).subscribe({next:(res)=>{
-          this.filteredUsers=res;
-          this.totalPages= Math.ceil(res / this.pageSize);
-          console.log("get2 "+this.totalPages);
-          console.log("count "+res)
-          console.log("trenutna "+this.currentPage);
-          if(this.currentPage>1 && this.totalPages==1)
-            {
-              this.currentPage=1;
-              this.GetUsers();
-              return;
-            }
-          this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-        
-        }})
-
-        this.spinner.hide();
-      });
-      this.getArchivedUsers();
-    }
-
-    nextPage(): void {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      this.GetUsers();
-      }
-    }
-
-    previousPage(): void {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      this.GetUsers();
-      }
-    }
-    goToPage(pageNumber: number): void {
-      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
-        this.currentPage = pageNumber;
-      this.GetUsers();
-      }
-    }
-
-    filterUsers():void{
-      this.currentPage=1;
-      this.GetUsers();
-    }
-
-    //metoda za prikaz slike
-    // loadPicture(usersArray:Member[]) : void{
-    //   usersArray.forEach(user => {
-    //     if(user.profilePicUrl!='' && user.profilePicUrl!=null){
-    //       this.uploadservice.getImage(user.profilePicUrl).subscribe(
-    //         url => {
-    //           user.url = url;
-    //         }
-    //       )
-    //   }
-    // });
-
-    onLoad(): void{
-      this.adminService.getAllUsers2().subscribe(response=>{
-        this.allUsersCount=response;
-      })
-      this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm).subscribe(response => {
-        this.allUsers = response;
-        //this.loadPicture(this.allUsers);
-        this.filteredUsers=this.allUsersCount;
-        this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
-        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
-        this.spinner.hide();
-      });
-      
-
-    }
-
-    numbersOfRoles():void{
-      this.adminService.getFilterCount("Admin").subscribe(res=>{
-        this.numOfAdmins=res;
-      })
-      this.adminService.getFilterCount("Member").subscribe(res=>{
-        this.numOfMembers=res;
-      })
-      this.adminService.getFilterCount("projectManager").subscribe(res=>{
-        this.numOfPM=res;
-      })
-    }
-
-    PicturesOfRoles():void{
-      this.adminService.getAllUsers3("Admin").subscribe(res=>{
-        this.admins=res;
-        //this.loadPicture(this.admins);
-      })
-      this.adminService.getAllUsers3("Member").subscribe(res=>{
-        this.members=res;
-        //this.loadPicture(this.members)
-      })
-      this.adminService.getAllUsers3("ProjectManager").subscribe(res=>{
-        this.projectMangers=res;
-        //this.loadPicture(this.projectMangers);
-      })
-    }
-
-    openModal(modal: TemplateRef<void>, user:Member)
+    if(ChangeDto)
     {
-      this.curentUserId=user.id;
-      this.curentEmail=user.email;
-      this.curentName=user.firstName;
-      this.currentLastName=user.lastName;
-      if(user.role==0)
-      {
-        this.currentRole="Admin";
+      this.adminService.changeUserRole(ChangeDto).subscribe(
+        {
+          next:() => {
+          this.GetUsers()
+          this.numbersOfRoles();
+      },
+      error: (error)=>{
+      }}
+      )
+    }
+    }
+
+  UpdateUser(id: number): void{
+    
+    if (this.newEmail==this.updateUser.Email && this.newFisrtName==this.updateUser.FirstName && this.newLastName == this.updateUser.LastName) {
+      this.modalRef?.hide();
+      return;
+    }
+
+    if(!this.regex.test(this.newFisrtName) || !this.regex.test(this.newLastName) || !this.regexEmail.test(this.newEmail)){
+      return;
+    }
+
+    this.updateUser.Email = this.newEmail;
+    this.updateUser.FirstName = this.newFisrtName;
+    this.updateUser.LastName = this.newLastName;
+    
+    this.adminService.updateUser(id,this.updateUser).subscribe({
+      next:()=>{
+        this.GetUsers();
+        this.modalRef?.hide();
+      },
+      error: (error) => {}
+  })
+    
+  }
+
+  ArchiveUser(id:number): void{
+    this.adminService.archiveUser(id).subscribe(
+      (response)=>{
+        if(this.currentPage>1 && this.totalPages==1)
+          {
+            this.currentPage=1;
+          }
+        this.GetUsers()        
+
       }
-      else if(user.role==1)
-      {
-        this.currentRole="Member"
-      }
-      else if(user.role==2)
-      {
-        this.currentRole="Project Manager"
-      }
+    )
+
+  }
+  sortUsersByName(): void {
+    if(this.sortOrder==='asc')
+    {
+    this.allUsers.sort((a, b) => {
+      const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+      const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+      if (fullNameA < fullNameB) return -1;
+      if (fullNameA > fullNameB) return 1;
+      return 0;
+    });
+    this.sortOrder = 'desc';
+  }
+  else{
+    this.allUsers.sort((a, b) => {
+      const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+      const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+      if (fullNameA < fullNameB) return 1;
+      if (fullNameA > fullNameB) return -1;
+      return 0;
+    });
+    this.sortOrder = 'asc';
+  }
+  }
+
+  GetUsers(): void {
+    this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm,this.sortedColumn,this.sortedOrder).subscribe(response => {
+      this.allUsers = response;
       
+      this.adminService.getCount(this.selectedRolee, this.searchTerm,this.sortedColumn,this.sortedOrder).subscribe({next:(res)=>{
+        this.filteredUsers=res;
+        this.totalPages= Math.ceil(res / this.pageSize);
+        if(this.currentPage>1 && this.totalPages==1)
+          {
+            this.currentPage=1;
+            this.GetUsers();
+            return;
+          }
+        this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+      
+      }})
+
+      this.spinner.hide();
+    });
+    this.getArchivedUsers();
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    this.GetUsers();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    this.GetUsers();
+    }
+  }
+  goToPage(pageNumber: number): void {
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      this.currentPage = pageNumber;
+    this.GetUsers();
+    }
+  }
+
+  filterUsers():void{
+    this.currentPage=1;
+    this.GetUsers();
+  }
+
+  onLoad(): void{
+    this.adminService.getAllUsers2().subscribe(response=>{
+      this.allUsersCount=response;
+    })
+    this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm,this.sortedColumn,this.sortedOrder).subscribe(response => {
+      this.allUsers = response;
+      this.filteredUsers=this.allUsersCount;
+      this.totalPages= Math.ceil(this.allUsersCount / this.pageSize);
+      this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
+      this.spinner.hide();
+    });
+  }
+
+  numbersOfRoles():void{
+    this.adminService.getFilterCount().subscribe(res=>{
+      this.numOfAdmins=res.adminCount;
+      this.numOfMembers = res.memberCount;
+      this.numOfPM = res.projectManagerCount;
+      this.admins=res.admins;
+      this.members=res.members;
+      this.projectMangers=res.pManagers;
+    })
+  }
+
+  assignProjectManagers(){
+    var projectMembers = this.pmProjects.map<ProjectMember>((project,i) => 
+      ({AppUserId: this.selectedManagers[i].appUserId, ProjectId: project.id , ProjectRole: ProjectRole.ProjectManager}))
+    this.adminService.assignProjectManagers(projectMembers).subscribe(response => {});
+  }
+
+  demoteProjectManager(){
+    this.adminService.demoteProjectManager(this.curentUserId).subscribe({
+      next: response => {
+        this.assignProjectManagers();
+        this.onLoad();
+      }
+    })
+  }
+
+  checkAssignementCompletition(){
+    var count = this.selectedManagers.filter((x:any) => x != null).length;
+    if(count == this.pmProjectCount)
+      return true;
+    return false;
+  }
+
+  async loadPMInfo(user: Member){
+    try
+    {
+      this.pmCounter = this.allUsers.filter((x:any) => x.role === 2).length
+      this.pmProjects = await this.adminService.getManagersProjects(user.id).toPromise();
+      this.pmProjectCount = this.pmProjects.length;
+      this.projectManagers = await this.adminService.getManagers(user.id).toPromise();
+    }
+    catch(error){}
+  }
+
+  openUserEditModal(modal: TemplateRef<void>, user:Member)
+  {
+    this.newEmail = user.email;
+    this.newFisrtName = user.firstName;
+    this.newLastName = user.lastName;
+    this.curentUserId=user.id;
+
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: 'modal-sm modal-dialog-centered'
+      });
+  }
+
+  async openRoleArchModal(modal: TemplateRef<void>, user:Member)
+  {
+    this.selectedUserRole = user.role;
+    this.curentUserId=user.id;
+    this.selectedManagers = [];
+
+    this.userRole = user.role.toString();
+    this.currentRole=this.GetUserRole(user.role)
+
+    if(user.role==0)
+    {
+      this.currentRole="Admin";
+    }
+    else if(user.role==1)
+    {
+      this.currentRole="Member"
+    }
+    else if(user.role==2)
+    {
+      await this.loadPMInfo(user);
+      this.currentRole="Project Manager"
+    }
+    
+    if(user.role != 2 || (user.role == 2 && this.pmProjectCount == 0 || this.pmCounter==1)){
       this.modalRef = this.modalService.show(
         modal,
         {
           class: 'modal-sm modal-dialog-centered'
         });
     }
-
-    openModal1(modal: TemplateRef<void>){
+    else{
       this.modalRef = this.modalService.show(
         modal,
         {
           class: 'modal-lg modal-dialog-centered'
         });
     }
+  }
 
-    noFilter():void
+  openModal1(modal: TemplateRef<void>){
+    this.getArchivedUsers();
+    this.modalRef = this.modalService.show(
+      modal,
+      {
+        class: 'modal-lg modal-dialog-centered'
+      });
+  }
+
+  noFilter():void
+  {
+    this.selectedRolee='';
+    this.filterRole=null;
+    this.onLoad();
+  }
+
+  currentUser(id:number):boolean{
+    return this.admins.some(admin => admin.id === id);
+  }
+
+  toogleFilter(role: string): void{
+    if(this.filterRole===role)
     {
-      this.selectedRolee='';
-      this.onLoad();
+      this.noFilter();
     }
-
-    currentUser(id:number):boolean{
-      var id1=id.toString();
-      if(this.currentId===id1)
-        return false
-      else return true
-
+    else{
+      this.filterRole=role;
+      this.filterUsers();
     }
+  }
 
-    toogleFilter(): void{
-      if(this.isFilterActive)
-      {
-        this.filterUsers();
-      }
-      else{
-        this.noFilter();
-      }
-      this.isFilterActive=!this.isFilterActive;
-    }
-
-    getArchivedUsers(): void{
-      this.adminService.getArchivedUsers().subscribe({next:(res)=>{
-        this.archived_users=res;
-      },error:(error)=>{
-        console.log(error);
-      }
-    })
-
-    }
-
-    putInArray(id:number): void{
-      this.archivedIds.push(id);
-    }
-
-    removeFromArchived() : void{
-      if(this.archivedIds!=null)
-      {
-        this.adminService.removeFromArchieve(this.archivedIds).subscribe({
-          next:()=>{
-            this.onLoad();
-            this.getArchivedUsers();
-          }
-        })
-      }
-      else{
-        this.toastr.error("There is no checked users");
-      }
-    }
-
-    isFocused: boolean = false;
-
-    toggleFocus(): void {
-      this.isFocused = !this.isFocused;
-    }
-
-    getDisplayedPages(): number[] {
-      const maxDisplayedPages = 5;
-      let startPage = Math.max(this.currentPage - Math.floor(maxDisplayedPages / 2), 1);
-      let endPage = Math.min(startPage + maxDisplayedPages - 1, this.totalPages);
-  
-      if (startPage > this.totalPages - maxDisplayedPages + 1) {
-          startPage = Math.max(this.totalPages - maxDisplayedPages + 1, 1);
-          endPage = this.totalPages;
-      }
-  
-      return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-    }
-
- @HostListener('document:click', ['$event'])
-    clickOutside(event: MouseEvent) {
-      const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
-      if (!clickedInside && this.selectedRolee!='') {
-        // Click was outside the .clickable-div and the filter is active
-        event.stopPropagation(); // This prevents other click events from executing
-      }
-    }
+  getArchivedUsers(): void{
+    this.adminService.getArchivedUsers().subscribe({next:(res)=>{
+      this.archived_users=res;
+    },error:(error)=>{}
+  })
 
   }
 
+  putInArray(id:number): void{
+    this.archivedIds.push(id);
+  }
+
+  removeFromArchived() : void{
+    if(this.archivedIds!=null)
+    {
+      this.adminService.removeFromArchieve(this.archivedIds).subscribe({
+        next:()=>{
+          this.onLoad();
+          this.getArchivedUsers();
+        }
+      })
+    }
+    else{
+      this.toastr.error("There are no selected users.");
+    }
+  }
+
+  isFocused: boolean = false;
+
+  toggleFocus(): void {
+    this.isFocused = !this.isFocused;
+  }
+
+  getDisplayedPages(): number[] {
+    const maxDisplayedPages = 5;
+    let startPage = Math.max(this.currentPage - Math.floor(maxDisplayedPages / 2), 1);
+    let endPage = Math.min(startPage + maxDisplayedPages - 1, this.totalPages);
+
+    if (startPage > this.totalPages - maxDisplayedPages + 1) {
+        startPage = Math.max(this.totalPages - maxDisplayedPages + 1, 1);
+        endPage = this.totalPages;
+    }
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
+
+ @HostListener('document:click', ['$event'])
+  clickOutside(event: MouseEvent) {
+    const clickedInside = (event.target as HTMLElement).closest('.clickable-div');
+    if (!clickedInside && this.selectedRolee!='') {
+      event.stopPropagation(); 
+    }
+  }
+
+  toggleSortOrder(column: string): void {
+    this.sortedOrder = (this.sortedOrder+1) % 3;
+    this.sortedColumn = column;
+    this.GetUsers();
+  }
+
+}

@@ -15,9 +15,9 @@ import { ArchivedProject } from '../../Entities/ArchivedProject';
   styleUrls: ['./my-projects.component.css']
 })
 export class MyProjectsComponent implements OnInit {
-  all_projects:number=0;
+  all_projects: number = 0;
   projects: Project[] = [];
-  filteredProjects: number=0;
+  filteredProjects: number = 0;
   pageSize: number = 5;
   currentPage: number = 1;
   totalPages: number = 0;
@@ -34,6 +34,8 @@ export class MyProjectsComponent implements OnInit {
   modalRef?: BsModalRef;
 
   archivedProjects: ArchivedProject[] = [];
+  sortedColumn: string = '';
+  sortedOrder: number = 0; 
 
   constructor(
     private myProjectsService: MyProjectsService,
@@ -44,7 +46,6 @@ export class MyProjectsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    var all_projects:number=-1;
     this.spinner.show();
     const userId = localStorage.getItem('id')
     this.userRole = localStorage.getItem('role');
@@ -54,11 +55,14 @@ export class MyProjectsComponent implements OnInit {
     if (this.rangeDates && this.rangeDates.length === 2) {
       const start = new Date(this.rangeDates[0]);
       const end = new Date(this.rangeDates[1]);
-      if(this.rangeDates[0])
-        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
-      if(this.rangeDates[1])
-        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
-    
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
     }
 
     this.myProjectsService.GetUsersProjectsCount(userId).pipe(
@@ -71,7 +75,9 @@ export class MyProjectsComponent implements OnInit {
           endDate,
           userId,
           this.currentPage,
-          this.pageSize
+          this.pageSize,
+          this.sortedColumn,
+          this.sortedOrder
         );
       })
     ).subscribe((projects: Project[]) => {
@@ -86,18 +92,19 @@ export class MyProjectsComponent implements OnInit {
 
   loadProjects(userId: any): void {
     this.spinner.show();
-    // this.myProjectsService.GetUsersProjectsCount(userId).subscribe((count: number) => {
-    //   this.all_projects = count;
-    // });
     let startDate = '';
     let endDate = '';
     if (this.rangeDates && this.rangeDates.length === 2) {
       const start = new Date(this.rangeDates[0]);
       const end = new Date(this.rangeDates[1]);
-      if(this.rangeDates[0])
-        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
-      if(this.rangeDates[1])
-        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
+      if (this.rangeDates[0]) {
+        start.setHours(0, 0, 0, 0);
+        startDate = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}T00:00:00`;
+      }
+      if (this.rangeDates[1]) {
+        end.setHours(23, 59, 59, 999);
+        endDate = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}T23:59:59`;
+      }
     }
     this.myProjectsService.filterAndPaginateProjects(
       this.searchText,
@@ -106,7 +113,9 @@ export class MyProjectsComponent implements OnInit {
       endDate,
       userId,
       this.currentPage,
-      this.pageSize
+      this.pageSize,
+      this.sortedColumn,
+      this.sortedOrder
     ).subscribe((projects: Project[]) => {
       this.projects = projects;
       this.loadProjectOwners();
@@ -118,7 +127,7 @@ export class MyProjectsComponent implements OnInit {
       endDate,
       userId,
       this.currentPage,
-      this.pageSize
+      this.pageSize,
     ).subscribe((filteredProjects: number) => {
       this.filteredProjects=filteredProjects;
       this.totalPages = Math.ceil(this.filteredProjects / this.pageSize);
@@ -228,11 +237,13 @@ export class MyProjectsComponent implements OnInit {
   }
 }
 
-  isOverdue(endDate: Date): boolean {
-    const now = new Date().getTime(); 
-    const endDateTimestamp = new Date(endDate).getTime(); 
-    return endDateTimestamp <= now; 
-  }
+isOverdue(endDate: Date): boolean {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const endDateReset = new Date(endDate);
+  endDateReset.setHours(0, 0, 0, 0);
+  return endDateReset < now;
+}
 
   getProgressClass(progress: number): string {
     return progress <= 15? 'progress-type2' : 'progress-type1';
@@ -289,5 +300,29 @@ export class MyProjectsComponent implements OnInit {
         this.spinner.hide();
       }
     });
+  }
+
+
+  toggleSortOrder(column: string): void {
+    const userId = localStorage.getItem('id');
+    if (this.sortedColumn === column) {
+      this.sortedOrder = (this.sortedOrder + 1) % 3;
+    } else {
+      this.sortedColumn = column;
+      this.sortedOrder = 1;
+    }
+    this.loadProjects(userId);
+  }
+
+  getSortClass(column: string): string {
+    if (this.sortedColumn === column) {
+      if(this.sortedOrder==1)
+        return 'sorted-asc';
+      if(this.sortedOrder==2)
+        return 'sorted-desc';
+      else
+        return 'unsorted';
+    }
+    return 'unsorted';
   }
 }

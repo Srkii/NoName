@@ -1,6 +1,9 @@
 * {
     font-family: 'Public Sans', sans-serif;
 }
+svg {
+    fill: var(--text-color);
+}
 .board {
     display: flex;
     flex-direction: column;
@@ -9,7 +12,12 @@
     min-width: 0;
     min-height: 0;
 }
-
+.form-label {
+    color: var(--text-color);
+    font-size: 18px !important;
+    letter-spacing: inherit;
+    text-transform: none !important;
+}
 /* primeng dropdown  */
 .chooseAssignee {
     display: flex;
@@ -49,10 +57,7 @@
     font-family: 'Public Sans', sans-serif;
     border-radius: 0.375rem !important;
 }
-/* ::ng-deep .p-dropdown:focus {
-    border: 1px solid #5f61e6 !important; 
-    border-radius: 0.5 rem !important;
-} */
+
 ::ng-deep .p-dropdown-label {
     width: calc(100% - 2em);
     font-family: 'Public Sans', sans-serif; 
@@ -107,90 +112,82 @@
 }
 
 .board-wrapper::-webkit-scrollbar {
-    background-color: #F5F5F9;
+    background-color: var(--card-color);
     width: 16px;
 }
 
 .board-wrapper::-webkit-scrollbar-track {
-    background-color: #F5F5F9;
+    background-color: var(--background-color);
 }
 
 .board-wrapper::-webkit-scrollbar-thumb {
-    background-color: #babac0;
+    background-color: var(--scroll-color);
     border-radius: 16px;
-    border: 4px solid #F5F5F9;
+    border: 4px solid var(--background-color);
 }
 
 .board-wrapper::-webkit-scrollbar-button {
     display:none;
 }
-
-.add-task {
-    margin-top: 10px !important;
-    margin-left: 30px;
-    cursor: pointer;
-}
-.new-items {
-    display: flex;
-    flex-direction: column;
-}
-.new-item {
-    margin: 10px !important;
-    margin-left: 30px !important;
-    cursor: pointer;
-    width: 150px;
-    border-radius: 0.375rem;
-    border-bottom: 2px solid #D7D7F8;
-}
-.new-item:hover {
-    border-bottom: 2px solid #696cff;
-}
-.archTasks {
-    margin: 10px !important;
-    margin-left: 30px !important;
-    cursor: pointer;
-    width: 185px;
-    border-radius: 0.375rem;
-    border-bottom: 2px solid #D7D7F8;
-}
-.new-items svg {
-    margin-right: 5px;
-}
-.archTasks:hover {
-    border-bottom: 2px solid #696cff;
+.boardBody {
+    border-bottom-left-radius: 0.375rem !important;
+    border-bottom-right-radius: 0.375rem !important;
 }
 .card {
-    /* background-color: rgb(230, 224, 224); */
     display: flex;
     flex-direction: column;
     flex-grow: 0;
     flex-basis: 200px;
-    /* flex-grow: 1; */
-    /* flex-basis: 0; */
     min-width: 200px;
+
     min-height: 300px;
     margin: 15px;
     margin-top: 0px !important;
     margin-left: 3px !important;
-    border-radius: 0.375rem;
-
-    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+    border-radius: 0.375rem !important;
+    box-shadow: var(--card-shadow);
     border: 0px solid #d9dee3;
     background-clip: border-box;
-    background: rgb(247, 244, 244);
+    background-color: var(--card-color);
+}
+.card-header {
+    color: var(--kanban-status-text) !important;
+}
+.status-input {
+    min-width: 160px;
+    width: 160px;
+    height: 22px !important;
+    border: none !important;
+    background-color: inherit;
+    padding: 0 !important;
+}
+.titleInp {
+    background-color: inherit;
+    border: none !important;
+    outline: none;
+    width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0;
+    box-sizing: border-box;
+    height: 20px !important;
+}
+.status-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 160px;
 }
 .card-body {
     padding: 0px;
+    border-collapse: collapse !important;
 }
 .task-title {
     padding: 10px;
 }
 .card-header {
-    /* font-size: 15px; */
     font-weight: 400;
-    /* text-transform: uppercase; */
-    /* margin-bottom: 10px; */
-    /* text-align: center; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -199,10 +196,8 @@
     padding-left: 15px !important;
     padding-top: 4px !important;
     padding-right: 5px !important;
-    /* color: #fff; */
     border: 0px solid #d9dee3;
     background-clip: border-box;
-    /* border: 1px solid rgb(211, 210, 210); */
 }
 .tasks-container {
     flex-grow: 1;
@@ -211,26 +206,27 @@
     display: flex;
     flex-direction: column;
     padding: 0px;
-    background: rgb(247, 244, 244);
-    /* border-bottom: solid 1px #ddd; */
     border-radius: 0.375rem;
     margin-bottom: 15px;
     margin-top: 15px !important;
     margin-left: 15px !important;
-    /* box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05), 0 3px 14px 2px rgba(0, 0, 0, 0.05); */
-    
     box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
-    /* border: 1px solid #d9dee3; */
     background-clip: border-box;
-    background-color: #fff;
+    background-color: var(--card-color) !important;
+    border: 1px solid var(--table-border-color) !important;
+    border-collapse: collapse !important;
     min-width: 100px;
     min-height: 70px !important;
+}
+.assignee {
+    background-color: var(--card-color) !important;
+    border-collapse: collapse !important;
 }
 .card-footer {
     font-size: 15px;
     padding: 2px;
     text-align: center;
-    border-top: 1px solid #edeff1;
+    border-top: 1px solid var(--table-border-color) !important;
     background-color: #fff;
     svg {
         margin-right: 3px;
@@ -296,36 +292,17 @@ input[type='checkbox'] {
     transform: translateY(-1px) !important;
 }
 
-.form-control {
-    display: inline;
-    width: 100%;
-    padding: 0.4375rem 0.875rem;
-    font-size: 0.9375rem;
-    font-weight: 400;
-    line-height: 1.53;
-    color: #697a8d;
-    appearance: none;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #d9dee3;
-    border-radius: 0.375rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-.form-control:focus {
-    border-color: #5f61e6 !important;
-    box-shadow: 0 0 2px #5f61e6;
-}
 .btn-save-section {
     margin-bottom: 0px !important;
 }
 .more-options {
-    display: none; /* Hide by default */
+    display: none;
 }
 .more-options:hover {
     cursor: pointer;
 }
 .card-header:hover .more-options {
-    display: block; /* Show on hover */
+    display: block;
 }
 
 .card-body-task-title {
@@ -335,17 +312,13 @@ input[type='checkbox'] {
 .card-body-task-title:hover,
 .card-body-task-title.clicked {
     cursor: pointer;
-    background-color: #e7e7ff !important;
-    color: #5f61e6 !important;
+    background-color: var(--kanban-task-background) !important;
+    color: var(--normal-purple) !important;
     border-bottom-left-radius: 0%;
     border-bottom-right-radius: 0%;
-    /* font-weight: 600; */
 }
 
 .card-body-task-title{
-
-    /* flex-grow: 1; */
-    /* flex-basis: 0; */
     padding: 15px;
     margin-top: 0px !important;
     border-radius: 0.375rem;
@@ -355,18 +328,3 @@ input[type='checkbox'] {
     cursor: pointer;
     height: 25px;
 }
-/* tooltip boje */
-::ng-deep .p-tooltip .p-tooltip-text {
-    background-color: #696cff;
-    color: #ffffff;
-    font-family: 'Public Sans', sans-serif !important;
-}
-/* tooltip arrow mora ovako */
-/* u tihomir-purple sam promenio direktno */
-/* ::ng-deep .p-tooltip .p-tooltip-arrow {
-    width: 0;
-    height: 0;
-    border-right: 3px solid #696cff;
-    border-bottom: 3px solid transparent;
-    border-top: 3px solid transparent;
-} */

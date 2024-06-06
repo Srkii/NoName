@@ -31,10 +31,10 @@ namespace backend.Controllers
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {   
             if(!await IsValidTokenAsync(registerDto.Token))
-                return BadRequest("Token is not valid");
+                return BadRequest(new {message = "Invalid request token."});
 
             if(await EmailExists(registerDto.Email))
-                return BadRequest("E-mail is already in use.");
+                return BadRequest(new {message = "E-mail is already in use."});
 
             var hmac = new HMACSHA512();
 
@@ -67,8 +67,8 @@ namespace backend.Controllers
             
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == loginDto.Email);
 
-            if(user == null) return Unauthorized("Account with this e-mail doesn't exists.");
-            if(user.Archived) return Unauthorized("Account with this e-mail doesn't exists.");
+            if(user == null) return Unauthorized("Account with this e-mail doesn't exist.");
+            if(user.Archived) return Unauthorized("Account with this e-mail doesn't exist.");
 
             var hmac = new HMACSHA512(user.PasswordSalt);
 
@@ -76,7 +76,7 @@ namespace backend.Controllers
 
             for(int i=0;i<computedHash.Length;i++)
             {
-                if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
+                if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password.");
             }
 
             return new UserDto
@@ -92,19 +92,36 @@ namespace backend.Controllers
         [HttpPost("resetPassword")] // /api/account/resetPassword
         public async Task<ActionResult<InvitationDto>> ResetPassword(PasswordResetDto PassDto)
         {
-            var request = await _context.UserRequests.FirstOrDefaultAsync(i => i.Token == PassDto.Token);
+            var request = await _context.UserRequests.FirstOrDefaultAsync(i => i.Token == PassDto.Token && i.IsUsed == false);
 
             if (request == null)
             {
-                return NotFound("Request not found");
+                return BadRequest(new {message = "Token not found or already used."});
             }
 
             request.IsUsed = true;
 
             var user = await _context.Users.FirstOrDefaultAsync(i => i.Email == PassDto.Email);
 
-            var hmac = new HMACSHA512();
-            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(PassDto.NewPassword));
+            var hmac = new HMACSHA512(user.PasswordSalt);
+            var hashNewPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(PassDto.NewPassword));
+            var different = false;
+
+            for(int i=0;i<hashNewPassword.Length;i++)
+            {
+                if(user.PasswordHash[i] != hashNewPassword[i])
+                {
+                    different = true;
+                    break;
+                }
+            }
+
+            if(!different)
+            {
+                return BadRequest(new {message = "Please choose a new password."});
+            }
+
+            user.PasswordHash = hashNewPassword;
             user.PasswordSalt = hmac.Key;
 
             await _context.SaveChangesAsync();
@@ -128,7 +145,7 @@ namespace backend.Controllers
 
         private async Task<bool> EmailExists(string email)
         {
-            return await _context.Users.AnyAsync(x => x.Email == email); //ako bude problema ovo email.ToLower() treba da se prepravi
+            return await _context.Users.AnyAsync(x => x.Email == email);
         }
 
         public async Task<bool> IsValidTokenAsync(string token)

@@ -1,11 +1,11 @@
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { UserinfoService } from '../../_services/userinfo.service';
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from '../../_services/notifications.service';
-import { Notification } from '../../Entities/Notification';
 import { UploadService } from '../../_services/upload.service';
 import { filter } from 'rxjs';
 import { ThemeServiceService } from '../../_services/theme-service.service';
+
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -18,7 +18,7 @@ export class NavComponent implements OnInit {
     private userInfo:UserinfoService, 
     public uploadService:UploadService,
     public notificationService:NotificationsService,
-    private themeService: ThemeServiceService
+    public themeService: ThemeServiceService
     ) { }
 
   ngOnInit(): void {
@@ -28,6 +28,7 @@ export class NavComponent implements OnInit {
       this.notificationService.createHubConnection();
     }
     this.navigation();
+    this.setActiveOption(this.selectedOption)
   }
   admin!: boolean
   logovan!: boolean
@@ -38,18 +39,19 @@ export class NavComponent implements OnInit {
 
   isMyProjectsActive: boolean = false;
 
+  selectedOption: string='';
+
   changeTheme() {
     this.themeService.switchTheme();
   }
 
   async Logout(): Promise<void> {
     try {
-      // Remove token and id from local storage
       localStorage.removeItem('token');
       localStorage.removeItem('id');
       localStorage.removeItem('role');
-
-      // Navigate to the login page
+      localStorage.removeItem('selectedOption');
+      sessionStorage.removeItem('selectedOption');
       this.notificationService.stopHubConnection();
       this.router.navigate(['/login']);
     } catch (error) {
@@ -82,9 +84,41 @@ export class NavComponent implements OnInit {
 
   navigation():void{
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((NavigationEnd) => {
-      this.isMyProjectsActive = this.router.url.includes('/myprojects') || this.router.url.includes('/project/');
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      if (event.urlAfterRedirects.includes('/mytasks')) {
+        this.selectedOption = 'MyTasks'
+      }
+      else if(event.urlAfterRedirects.includes('/myprojects') || event.urlAfterRedirects.includes('/project/'))
+      {
+        this.selectedOption = 'MyProjects'
+      }
+      else if(event.urlAfterRedirects.includes('/admin'))
+      {
+        this.selectedOption = 'Admin' 
+      }
+      else if(event.urlAfterRedirects.includes('/userinfo'))
+      {
+        this.selectedOption = '' 
+      }
+      else {
+        this.selectedOption=''
+      }
+      localStorage.setItem('selectedOption', this.selectedOption);
+
     });
+    const storedOption = localStorage.getItem('selectedOption');
+    this.selectedOption = storedOption && storedOption !== 'null' ? storedOption : '';
   }
+
+  setActiveOption(option: string) {
+    if (option === '') {
+      sessionStorage.removeItem('selectedOption');
+      localStorage.removeItem('selectedOption');
+    } else {
+      sessionStorage.setItem('selectedOption', option);
+      localStorage.setItem('selectedOption', option);
+    }
+  }
+
 }

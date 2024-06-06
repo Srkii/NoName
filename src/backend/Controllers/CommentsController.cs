@@ -17,12 +17,13 @@ namespace backend.Controllers
             _notificationService = notificationService;
         }
         
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPost("postComment")] // /api/comments/postComment
         public async Task<IActionResult> PostComment(CommentDto commentDto)
         {
             //doraditi: treba da proveri dal task postoji pa onda da post komentar. ako ne postoji vraca BadRequest sa opisom greske
             var task = await _context.ProjectTasks.FindAsync(commentDto.TaskId);
+            if(task==null) return BadRequest("task does not exist.");
             var comment = new Comment
             {
                 TaskId = commentDto.TaskId,
@@ -38,55 +39,43 @@ namespace backend.Controllers
             return Ok(comment);
         }
 
-    [AllowAnonymous]
-    [HttpGet("getComments/{taskId}")]
-    public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments(int taskId)
-    {
-        var comments = await _context.Comments
-            .Where(x => x.TaskId == taskId)
-            .Join(
-                _context.Users,
-                comment => comment.SenderId,
-                user => user.Id,
-                (comment, user) => new CommentDto
-                {
-                    Id=comment.Id,
-                    TaskId = comment.TaskId,
-                    Content = comment.Content,
-                    MessageSent=comment.MessageSent,
-                    SenderId = comment.SenderId,
-                    SenderFirstName = comment.SenderFirstName,
-                    SenderLastName = comment.SenderLastName,
-                    FileUrl =comment.FileUrl,
-                    Edited=comment.Edited,
-                    AppUserPicUrl = user.ProfilePicUrl,
-                }
-            )
-            .ToListAsync();
-        
-        return Ok(comments);
-    }
+        [Authorize(Roles = "ProjectManager,Member")]
+        [HttpGet("getComments/{taskId}")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments(int taskId)
+        {
+            var comments = await _context.Comments
+                .Where(x => x.TaskId == taskId)
+                .Join(
+                    _context.Users,
+                    comment => comment.SenderId,
+                    user => user.Id,
+                    (comment, user) => new CommentDto
+                    {
+                        Id=comment.Id,
+                        TaskId = comment.TaskId,
+                        Content = comment.Content,
+                        MessageSent=comment.MessageSent,
+                        SenderId = comment.SenderId,
+                        SenderFirstName = comment.SenderFirstName,
+                        SenderLastName = comment.SenderLastName,
+                        FileUrl =comment.FileUrl,
+                        Edited=comment.Edited,
+                        AppUserPicUrl = user.ProfilePicUrl,
+                    }
+                )
+                .ToListAsync();
+            
+            return Ok(comments);
+        }
 
-
-
-
-
-
-        // [Authorize]
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpDelete("deleteComment/{commentId}")]
         public async Task<ActionResult> DeleteComment(int commentId)
         {
             var comment = await _context.Comments.FindAsync(commentId);
 
         if (comment == null)
-            return BadRequest("Comment doesn't exist");
-        
-        // Check if the user is authorized to delete the comment
-        // (You might need to implement this logic depending on your authentication mechanism)
-        // For example:
-        // if (comment.SenderId != currentUserId)
-        //     return BadRequest("Unauthorized: You cannot delete other people's comments");
+            return BadRequest("The comment doesn't exist.");
 
         _context.Comments.Remove(comment);
         await _context.SaveChangesAsync();
@@ -101,39 +90,31 @@ namespace backend.Controllers
         return Ok(responseData);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("updateComment/{commentId}/{content}")]
         public async Task<IActionResult> UpdateComment(int commentId, string content)
         {
-            // Find the comment in the database by its ID
             var comment = await _context.Comments.FindAsync(commentId);
 
-            // Check if the comment exists
             if (comment == null)
             {
-                return NotFound("Comment not found");
+                return NotFound("Comment not found.");
             }
 
-            // Update the content and message sent date of the comment
             comment.Content = content;
             comment.Edited=true;
-            comment.MessageSent = DateTime.UtcNow.AddHours(2); // Update the message sent date
+            comment.MessageSent = DateTime.Now;
 
-            // Save the changes to the database
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                // Handle concurrency conflicts, if necessary
-                throw; // You can customize this behavior as per your requirements
+                throw; 
             }
 
-            // Return a success response with the updated comment
             return Ok(comment);
-    }   
-
+        }   
     }
-
 }
