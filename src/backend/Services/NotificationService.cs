@@ -259,12 +259,13 @@ namespace backend.Services
         public async Task DeleteRelatedAssignmentNotificationTask(int userid, int taskid){
             var notification = await _context.Notifications.FirstOrDefaultAsync(x=>x.reciever_id == userid && x.Type==NotificationType.TaskAssignment && x.task_id == taskid);
 
+            if (notification != null) {
             _context.Notifications.Remove(notification);
-            
             await _context.SaveChangesAsync();
             List<Notification> arr = new List<Notification>();
             arr.Add(notification);
             CheckUserNotifications(arr);
+            }
         }
     }
 }
