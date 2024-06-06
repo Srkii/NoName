@@ -112,7 +112,6 @@ td{
 }
 .inactive_tr{
   border-bottom: #697a8d;
-  /* background-color: #f5f5f9; */
   border-bottom : 1px solid var(--normal-purple) !important;
   font-size: 18px;
   line-height: 20px;

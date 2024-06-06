@@ -13,5 +13,3 @@ namespace backend
         public ICollection<ProjectTask> Tasks { get; set; }
     }
 }
-
-

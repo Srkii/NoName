@@ -44,30 +44,24 @@ svg {
 .container-xxl {
     max-width: 1550px;
 }
-/* za tablete */
 
 .project-heading {
-    /* text-align: center; */
     padding: 0px !important;
     margin: 0px !important;
 }
 .projName > span {
-    /* font-weight: bold; */
     font-size: 30px !important;
     letter-spacing: -1px;
     color: var(--text-color);
     font-weight: 550;
-    /* line-height: 1.5; */
 }
-/* za telefone */
 
 .section {
-    margin-bottom: 20px; /* Adjust the space between sections */
+    margin-bottom: 20px;
     margin-top: 20px
 }
 .section-name {
     cursor: pointer;
-    /* color: var(--text-color); */
     text-decoration: underline;
     font-size: large;
     line-height: 20px;
@@ -75,7 +69,6 @@ svg {
         margin-right: 4px;
     }
 }
-/* Assignee temp */
 
 .text-nowrap {
     white-space: nowrap !important;
@@ -105,17 +98,12 @@ thead th{
 .table tbody tr:last-child {
     margin-bottom: -30px;
 }
-/* sklanja border poslednjeg elementa
- .table tbody tr:last-child td {
-    border-bottom: none;
-} */
 
 .btn-active {
     background-color: var(--action-active-background) !important;
     border: none!important;
     border: 0px;
     font-weight: 400;
-    /* color: var(--normal-purple) !important; */
     color: var(--action-active-color) !important;
     box-shadow: var(--card-shadow) !important;
     svg {
@@ -168,11 +156,8 @@ thead th{
     padding-bottom: 2px !important;
     padding-left: 10px !important;
     padding-right: 5px !important;
-    /* display: inline-block; */
-    /* line-height: 1.5; */
     border-radius: 0.375rem;
     font-size: 16px !important;
-    /* padding: 0px 8.32px 0px 9.488px !important; */
     font-weight: 500;
 }
 .btn-primary svg {
@@ -187,7 +172,6 @@ thead th{
     display: flex;
     align-items: stretch;
     flex: 1 1 auto;
-    /* flex-direction: column; */
     justify-content: space-between;
     box-sizing: border-box;
 }
@@ -208,23 +192,14 @@ thead th{
     padding: 15px;
     margin-top: 20px;
 }
-/* .table {
-    border: 1px solid black;
-} */
+
 .table table, td, th, tr {
-    /* border: 1px solid #d9dee3 !important; */
     color: var(--text-color);
     background-color: var(--card-color);
     width: 20%;
     border-color: var(--table-border-color);
     border-collapse: collapse;
 }
-
-/* sklanja border za poslednji row svake tabele */
-/* .table tbody tr:last-child td, 
-.table tbody tr:last-child th {
-  border-bottom: none;
-} */
 
 .editName{
     width: 100%;
@@ -265,7 +240,6 @@ thead th{
 }
 .titleInp{
     font-size: 18px !important;
-    /* font-weight: bold !important; */
     color: #697a8d;
     width: 70% !important;
     border-radius: 0% !important;
@@ -283,7 +257,6 @@ thead th{
     text-align: left;
     margin-bottom: 0;
     font-size: 18px;
-    /* font-weight: bold; */
     color: var(--text-color) !important;
     padding: 8px 8px 8px 0px;
     width: 70%;
@@ -323,16 +296,13 @@ select:disabled {
     height: 15rem !important;
     border: 1px solid var(--table-border-color) !important;
     border-radius: 0.375rem !important;
-    /* border-color: var(--table-border-color); */
     overflow: hidden;
-    /* border-collapse: collapse !important; */
 }
 .area-desc .ql-editor{
     font-family: 'Public Sans', sans-serif !important;
 }
 .ql-toolbar.ql-snow {
     border: none !important;
-    /* border-collapse: collapse !important; */
 }
 .info label{
     font-weight: 500;
@@ -561,7 +531,6 @@ select:disabled {
     display: inline-flex !important;
     align-items: center !important;
     border-radius: 0.375rem !important;
-    /* padding: 2px !important; */
 }
 
 ::ng-deep .ng-clear .ng-clear-wrapper{
@@ -578,7 +547,6 @@ select:disabled {
     vertical-align: middle;
     padding-top: 7px !important;
     padding-bottom: 7px !important;
-    /* font-size: 14px; */
 }
 .badgeTd {
     vertical-align: middle !important;
@@ -599,7 +567,7 @@ select:disabled {
 .flex-container {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Optional: aligns items vertically in the center */
+    align-items: center;
 }
 
 .addTask {
@@ -625,11 +593,11 @@ select:disabled {
 }
 
 .viewButtons {
-    flex-shrink: 0; /* Ensures that viewButtons only take up necessary space */
+    flex-shrink: 0;
 }
 .actionLinks {
     display: flex;
-    flex-direction: row;  /* Ensures horizontal layout */
+    flex-direction: row;
     justify-content: flex-end;
     flex-grow: 1;
     color: var(--text-color);
@@ -807,11 +775,6 @@ input[type="date"].is-invalid{
 input.is-invalid:focus{
     box-shadow: none;
 }
-/* .ng-select-wrapper.is-invalid{
-    border: 1px solid  red !important;
-    border-radius: 0.375rem;
-} */
-
   
 .mb-1{
     padding-bottom: 12px;
@@ -857,8 +820,6 @@ input.is-invalid:focus{
 .manageSectionScroll::-webkit-scrollbar-button {
     display:none;
 }
-
-
 
 .archIcon:hover {
     cursor: pointer;

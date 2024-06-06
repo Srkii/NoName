@@ -27,12 +27,12 @@ namespace backend.Controllers
         {
             if(projectDto.StartDate < DateTime.UtcNow.Date)
             {
-                return ValidationProblem("Project start date can't be in the past");
+                return ValidationProblem("Project start date can't be in the past.");
             }
 
             if(projectDto.EndDate < projectDto.StartDate)
             {
-                return ValidationProblem("Project end date must be >= start date and can't be set in the past");
+                return ValidationProblem("Project end date must be >= start date and can't be set in the past.");
             }
 
             var project = new Project
@@ -111,7 +111,7 @@ namespace backend.Controllers
         public async Task<ActionResult<Project>> UpdateProject(ProjectDto projectDto)
         {
             if(projectDto.EndDate < DateTime.UtcNow.Date)
-                return ValidationProblem("End date can't be in the past");
+                return ValidationProblem("End date can't be in the past.");
 
             var project = await _context.Projects.FindAsync(projectDto.ProjectId);
             if (project == null)
@@ -627,7 +627,7 @@ namespace backend.Controllers
                 }
             }
 
-            return Ok("Users roles successfully set to Project Manager role");
+            return Ok("Users' roles successfully set to Project Manager role.");
         }
 
         [Authorize(Roles = "Admin")]
@@ -666,4 +666,3 @@ namespace backend.Controllers
         
     }
 }
-

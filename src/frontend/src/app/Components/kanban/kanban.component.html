@@ -2,7 +2,6 @@
   <div class="board-wrapper" cdkDropListGroup cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="taskStatuses" (cdkDropListDropped)="dropColumn($event)">
     <ng-container *ngFor="let status of taskStatuses">
       <div *ngIf="status.name !== 'Archived'" class="card draggable" cdkDrag [cdkDragDisabled]="userRole === 4 || userRole === 3">
-        <!-- <div class="card-header" [style.background-color]="status.color"> -->
         <div class="card-header" 
         [style.background-color]="themeService.isDarkTheme ? (getLessPoppingColor(status.color) + ' !important') : status.color" 
         [style.color]="themeService.isDarkTheme ? (getPoppingColor(status.color) + ' !important') : null">
@@ -46,7 +45,6 @@
     </svg>
   </div>
 </div>
-
 
 <ng-template #deleteBoard>
   <div class="modal-header">

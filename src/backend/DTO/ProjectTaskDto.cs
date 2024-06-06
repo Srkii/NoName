@@ -8,10 +8,10 @@ namespace backend.DTO
         public int Id { get; set; }
         public int CreatorId{get;set;}
 
-        [StringLength(100, ErrorMessage = "Task name must be at least 1 characters long", MinimumLength = 1)]
+        [StringLength(100, ErrorMessage = "Task name must be between 1 and 100 characters long.", MinimumLength = 1)]
         public string TaskName { get; set; }
 
-        [StringLength(5000, ErrorMessage = "Description is too long")]
+        [StringLength(5000, ErrorMessage = "Task description can't exceed 5000 characters.")]
         public string Description { get; set; }
         
         public DateTime StartDate { get; set; }

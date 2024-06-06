@@ -1,4 +1,3 @@
-
 .toast_wrapper {
   font-family: 'Public Sans', sans-serif !important;
   border-radius: 8px;
@@ -59,7 +58,7 @@ img{
   height: 40px;
 }
 .exit {
-  height: 100%;/* nece nesto nervira me opasno */
+  height: 100%;
   width: 50px;
   display: flex;
   align-items: center;

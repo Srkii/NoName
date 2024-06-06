@@ -1,8 +1,7 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { ProjectCardService } from '../_services/project-card.service';
 import { inject } from '@angular/core';
-import { map, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export const projectGuard: CanActivateFn = (route, state) => {
   
@@ -27,6 +26,4 @@ export const projectGuard: CanActivateFn = (route, state) => {
     return false;
     
   }
-
-  
 };

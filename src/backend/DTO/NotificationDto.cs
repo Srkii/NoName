@@ -4,7 +4,6 @@ namespace backend.DTO
 {
     public class NotificationDto
     {
-        //doraditi, ne salji celog usera ovako ...~maksim
         public int Id{get;set;}
         public Comment? Comment{get;set;}
         public ProjectTaskDto? Task{get;set;}

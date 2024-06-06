@@ -12,7 +12,6 @@
           <p class="mb-4">Enter your email and we'll send you the link to reset the password</p>
 
           <form #loginForm="ngForm" class="mg-3" autocomplete="off" id="formAuthentication" (ngSubmit)="sendResetLink()">
-            <!-- Email input -->
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <input [(ngModel)]="resetEmail.Receiver" type="email" id="form3Example3" class="form-control" name="email" placeholder="Enter your email"/>

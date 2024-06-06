@@ -63,7 +63,6 @@ export class UserInfoComponent implements OnInit {
           }else this.role="Admin";
         },
         error: (error) => {
-          // console.log(error);
         }
       });
     }else {
@@ -209,7 +208,6 @@ export class UserInfoComponent implements OnInit {
         location.reload();
       },
       error: (error) => {
-        // console.error(error);
       }
     });
   }

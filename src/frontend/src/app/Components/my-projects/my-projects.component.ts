@@ -15,9 +15,9 @@ import { ArchivedProject } from '../../Entities/ArchivedProject';
   styleUrls: ['./my-projects.component.css']
 })
 export class MyProjectsComponent implements OnInit {
-  all_projects:number=0;
+  all_projects: number = 0;
   projects: Project[] = [];
-  filteredProjects: number=0;
+  filteredProjects: number = 0;
   pageSize: number = 5;
   currentPage: number = 1;
   totalPages: number = 0;
@@ -46,7 +46,6 @@ export class MyProjectsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    var all_projects:number=-1;
     this.spinner.show();
     const userId = localStorage.getItem('id')
     this.userRole = localStorage.getItem('role');

@@ -18,8 +18,7 @@ namespace backend.Services
             _context = context;
         }
 
-        public async Task TriggerNotification(int task_id,int sender_id,int comment_id,NotificationType type){//ova je za task-ove , tj komentare i attachmente, poraditi na semantici...
-            
+        public async Task TriggerNotification(int task_id,int sender_id,int comment_id,NotificationType type) {
             var Users = await GetUsersForTaskNotification(task_id, sender_id);
             var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == sender_id);
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
@@ -30,7 +29,7 @@ namespace backend.Services
                     sender_id = sender_id,
                     comment_id = comment_id,
                     task_id=task_id,
-                    Type = type,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
+                    Type = type, // 1 attachment, 2 comment, 3 novi task, 4 novi projekat
                     dateTime = DateTime.UtcNow,
                     read=false,
                     originArchived = false
@@ -60,14 +59,14 @@ namespace backend.Services
         }
 
         public async Task TriggerTaskNotification(int task_id){
-            //zadatak ove funkcije jeste da posalje notifikaciju korisniku kojem je dodeljen zadatak ili projekat
+            // zadatak ove funkcije jeste da posalje notifikaciju korisniku kojem je dodeljen zadatak ili projekat
             var task = await _context.ProjectTasks.FirstOrDefaultAsync(x=>x.Id == task_id);
             var reciever = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
             if(reciever==null) throw new Exception("reciever not found");
             Notification notification = new Notification{
                 reciever_id = reciever.Id,
                 task_id=task.Id,
-                Type = NotificationType.TaskAssignment,//1 attachment, 2 comment, 3 novi task, 4 novi projekat
+                Type = NotificationType.TaskAssignment, // 1 attachment, 2 comment, 3 novi task, 4 novi projekat
                 dateTime = DateTime.UtcNow,
                 read=false,
                 originArchived = false
@@ -99,7 +98,7 @@ namespace backend.Services
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == reciever_id);
             if (project == null || user == null)
             {
-                throw new Exception("Project or User not found");
+                throw new Exception("Project or User not found.");
             }
             Notification notification = new Notification{
                 reciever_id = user.Id,
@@ -130,7 +129,7 @@ namespace backend.Services
             .FirstOrDefaultAsync(x=>x.ProjectId == task.ProjectId &&
                                      x.ProjectRole == ProjectRole.ProjectOwner);
             var owner = await _context.Users.FirstOrDefaultAsync(x=>x.Id == Owner.AppUserId);
-            if(owner==null) throw new Exception("Owner not found");
+            if(owner==null) throw new Exception("Owner not found.");
             if(owner.Id != task.AppUserId && owner.Id!=senderid){
                 Notification notification = new Notification
                 {
@@ -204,7 +203,7 @@ namespace backend.Services
             foreach(Notification n in notifications){
                 if(checkedUsers.Any(x=>x==n.reciever_id)==false){
                     CheckUserNotificationState(n.reciever_id);
-                    checkedUsers.Add(n.reciever_id);//ne javljam istom coveku dvaput ovo sranje
+                    checkedUsers.Add(n.reciever_id);
                 }
             }
         }

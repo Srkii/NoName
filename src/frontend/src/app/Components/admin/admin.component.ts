@@ -12,8 +12,6 @@ import { Project } from '../../Entities/Project';
 import { SelectedUser } from '../../Entities/SelectedUser';
 import { ProjectMember, ProjectRole } from '../../Entities/ProjectMember';
 import { ThemeServiceService } from '../../_services/theme-service.service';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @Component({
   selector: 'app-admin',
@@ -44,10 +42,7 @@ export class AdminComponent implements OnInit{
     receiver:''
   }
 
-  
-
   allUsers: Member[]=[]
-
   admins: Member[]=[]
   members: Member[]=[]
   projectMangers: Member[]=[]
@@ -243,7 +238,6 @@ export class AdminComponent implements OnInit{
   }
   }
 
-
   GetUsers(): void {
     this.adminService.getAllUsers1(this.currentPage, this.pageSize,this.selectedRolee, this.searchTerm,this.sortedColumn,this.sortedOrder).subscribe(response => {
       this.allUsers = response;
@@ -302,8 +296,6 @@ export class AdminComponent implements OnInit{
       this.totalusersArray= Array.from({ length: this.totalPages }, (_, index) => index + 1);
       this.spinner.hide();
     });
-    
-
   }
 
   numbersOfRoles():void{
@@ -457,7 +449,7 @@ export class AdminComponent implements OnInit{
       })
     }
     else{
-      this.toastr.error("There is no checked users");
+      this.toastr.error("There are no selected users.");
     }
   }
 

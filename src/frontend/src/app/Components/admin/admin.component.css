@@ -102,7 +102,6 @@ th {
 }
 td {
   background-color: var(--card-color) !important;
-  /* padding-bottom: 10px; */
   padding-left: 5px;
   border: 1px solid var(--table-border-color);
   color: var(--text-color) !important;
@@ -211,22 +210,11 @@ p {
 }
 
 .col-sm-12.col-md-6 {
-  /* display: flex;
-  justify-content: flex-end; */
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   width: 100%;
 }
-
-/* .col-sm-12.col-md-6 .dataTables_paginate {
-  width: 90%;
-} */
-
-/* .col-sm-12.col-md-6 .dataTables_paginate .pagination {
-   justify-content: flex-end; 
-  justify-content: right;
-} */
 
 .card-container {
   display: flex;
@@ -264,17 +252,14 @@ select:active{
 select:focus-visible{
   outline: none;
   border: 1px solid var(--normal-purple) !important;
-  /* box-shadow: 0 0 2px var(--normal-purple) !important; */
 }
 .form-control:focus-visible{
   outline: none;
   border: 1px solid var(--normal-purple) !important;
-  /* box-shadow: 0 0 2px var(--normal-purple) !important;  */
 }
 .btn:focus-visible{
   outline: none;
   border: 1px solid var(--normal-purple) !important;
-  /* box-shadow: 0 0 2px var(--normal-purple) !important; */
 }
 .card{
   margin-right: 0px;
@@ -307,7 +292,6 @@ select:focus-visible{
   display: flex;
   padding-right: 0px;
   flex-direction: row;
-  /* padding-right: 0px; */
 }
 .btn-primary2{
   background-color: #ffffff;
@@ -331,7 +315,6 @@ select:focus-visible{
 .form-control:hover {
   outline: none;
   border: 1px solid var(--normal-purple) !important;
-  /* box-shadow:  var(--normal-purple); */
 }
 .form-control:focus {
   outline: none;
@@ -377,20 +360,6 @@ select:focus-visible{
   background-color: var(--card-color) !important;
   border: 1px solid var(--normal-purple) !important;
 }
-/* .paginate_button1 .btn{
-  margin-left: 3px;
-  margin-right: 3px;
-  border-color: #5d57c2;
-}
-.paginate_button1 .btn:focus{
-  background-color: #5d57c2;
-  color: #ffffff;
-}
-.paginate_button1 .btn .page:active{
-  background-color: #5d57c2 !important;
-  color: #ffffff;
-} */
-
 .paginate_button button,
 .paginate_buttons button {
   border: none;
@@ -558,9 +527,7 @@ select:focus-visible{
   
   .dataTables_paginate {
     padding-top: 5px;
-    /* align-self: flex-end; */
     justify-content: flex-end;
-    /* width: 50% !important; */
   }
   .pagination .btn-primary{
     width: 70px;
@@ -586,7 +553,6 @@ select:focus-visible{
 
   .inputEmail{
     width: auto;
-    /* margin-left: 15px; */
   }
   .leftInvite{
     justify-content: baseline;
@@ -625,9 +591,6 @@ select:focus-visible{
     justify-content: right;
   }
 }
-
-/* @media screen and (min-width: 601px) and (max-width: 767px){*/
-
 
 .noFilt{
   margin-right: 5px;
@@ -691,8 +654,6 @@ select:focus-visible{
   font-weight: normal;
 }
 .nameAvatar {
-  /* display: inline-flex;
-  align-items: center; */
   font-family: 'Public Sans', sans-serif;
   padding-right: 2px;
 }

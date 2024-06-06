@@ -20,8 +20,7 @@ export class UploadService {
   UploadImage(id:any,imageData:File,token:any){
     const formData = new FormData();
     formData.append('image',imageData,imageData.name);
-    //tico: koristi apiUrl ako si ga vec importovao
-    return this.httpClient.post<any>(`${this.baseUrl}/uploadpfp/${id}`,formData,{headers:this.getHeaders()});//saljem sliku na back
+    return this.httpClient.post<any>(`${this.baseUrl}/uploadpfp/${id}`,formData,{headers:this.getHeaders()}); // saljem sliku na back
   }
 
   getImage(filename:string){//ova vraca avatare

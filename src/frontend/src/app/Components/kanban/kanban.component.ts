@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Output, EventEmitter, HostListener, ViewChild, ElementRef, Renderer2  } from '@angular/core';
+import { Component, OnInit, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { MyTasksService } from '../../_services/my-tasks.service';
@@ -9,7 +9,6 @@ import { TaskAssignee } from '../../Entities/TaskAssignee';
 import { MyProjectsService } from '../../_services/my-projects.service';
 import { UploadService } from '../../_services/upload.service';
 import { SharedService } from '../../_services/shared.service';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastrService } from 'ngx-toastr';
 import { ThemeServiceService } from '../../_services/theme-service.service';
 import { TaskStatusDto } from '../../Entities/TaskStatusDto';
@@ -17,28 +16,9 @@ import { TaskStatusDto } from '../../Entities/TaskStatusDto';
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
-  styleUrl: './kanban.component.css',
-  animations: [
-    trigger('popFromSide', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        }),
-        animate('300ms ease-out', style({
-          opacity: 1,
-          transform: 'translateX(0)',
-        })),
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({
-          opacity: 0,
-          transform: 'translateX(50%)',
-        })),
-      ]),
-    ]),
-  ],
+  styleUrl: './kanban.component.css'
 })
+
 export class KanbanComponent implements OnInit{
   tasks: any[] = [];
   taskStatuses: any[] = [];
@@ -91,7 +71,7 @@ export class KanbanComponent implements OnInit{
 
     this.spinner.show();
     this.shared.taskUpdated.subscribe(() => {
-      this.loadTasksAndUsers();  // Reload tasks and users
+      this.loadTasksAndUsers();
     });
     this.populateTasks();
     if (this.currentProjectId !== null) {
@@ -100,7 +80,7 @@ export class KanbanComponent implements OnInit{
     this.spinner.hide();
     this.shared.taskAdded$.subscribe(success => {
       if (success) {
-          this.populateTasks();  // Reload tasks
+          this.populateTasks();
       }
     });
   }
@@ -120,7 +100,7 @@ export class KanbanComponent implements OnInit{
             this.userRole = role;
         },
         error: (error) => {
-            console.error('Failed to fetch user role', error);
+            console.error('Failed to fetch user role.', error);
         }
     });
   }
@@ -234,7 +214,7 @@ export class KanbanComponent implements OnInit{
   }
   deleteBoardFunction() {
     if (this.currentSectionId === null) {
-      console.error('Section ID is null');
+      console.error('Section ID is null.');
       return;
     }
     this.myTasksService.deleteTaskStatus(this.currentSectionId).subscribe({
@@ -249,12 +229,12 @@ export class KanbanComponent implements OnInit{
   }
   saveNewBoard() {
     if (this.currentProjectId === null) {
-      console.error('Project ID is null');
+      console.error('Project ID is null.');
       return;
     }
     if(!this.newSectionName || this.newSectionName.length > 30)
     {
-      this.toastr.error("Status name is too long");
+      this.toastr.error("Status name is too long.");
       return
     }
     const taskStatus = {
@@ -275,8 +255,6 @@ export class KanbanComponent implements OnInit{
     });
   }
 
-  
-
   // vraca AppUsers koji su na projektu
   getProjectsUsers(currentProjectId: number) {
     this.myProjectsService.getUsersByProjectId(currentProjectId).subscribe({
@@ -289,7 +267,6 @@ export class KanbanComponent implements OnInit{
       error: error => console.log(error)
     });
   }
-  
 
   onTaskClick(event: MouseEvent, taskId: number) {
     // event.stopPropagation(); 
@@ -300,7 +277,7 @@ export class KanbanComponent implements OnInit{
     let r = parseInt(color.slice(1, 3), 16);
     let g = parseInt(color.slice(3, 5), 16);
     let b = parseInt(color.slice(5, 7), 16);
-    let darkeningFactor = 0.5; // promeni shade factor
+    let darkeningFactor = 0.5; // ovde je moguce promeniti shade factor
     r = Math.floor(r * darkeningFactor);
     g = Math.floor(g * darkeningFactor);
     b = Math.floor(b * darkeningFactor);
@@ -401,7 +378,7 @@ export class KanbanComponent implements OnInit{
           this.shared.notifyTaskStatusChange();
         },
         error: (error) => {
-          console.error('Error updating status name', error);
+          console.error('Error updating status name.', error);
           this.toastr.error(error);
         }
       });

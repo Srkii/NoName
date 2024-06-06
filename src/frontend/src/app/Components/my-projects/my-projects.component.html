@@ -42,9 +42,6 @@
           [firstDayOfWeek]="1"></p-calendar>
       </div>
     </div>
-    <!-- <div class="table-responsive text-nowrap">
-      <table class="table">
-        <thead> -->
     <div class="table-responsive text-nowrap tTable">
       <table>    
         <tr style="font-size: 16px !important;" class="tHeader">
@@ -79,7 +76,6 @@
             </svg>
           </th>
         </tr>
-      <!-- </thead> -->
         <tr  *ngFor="let project of projects">
           <ng-container>
             <td class="project-name" (click)="goToProject(project.id)">{{ project.projectName }}</td>

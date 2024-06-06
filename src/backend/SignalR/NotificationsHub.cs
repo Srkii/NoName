@@ -114,7 +114,7 @@ namespace backend.SignalR
             var userId = Context.UserIdentifier;
 
             var notifications = await _context.Notifications
-            .Where(x=>x.reciever_id.ToString()==userId && x.originArchived == false)//samo nearhivirane
+            .Where(x=>x.reciever_id.ToString()==userId && x.originArchived == false) // samo nearhivirane
             .OrderByDescending(x=>x.dateTime)
             .Select(notification => new NotificationDto{
                 Id = notification.Id,

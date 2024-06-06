@@ -1,13 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { ProjectTask } from '../Entities/ProjectTask';
-import { ChangeTaskInfo } from '../Entities/ChangeTaskInfo';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ApiUrl } from '../ApiUrl/ApiUrl';
 import { TaskDependency } from '../Entities/TaskDependency';
 import { DateTimeDto } from '../Entities/DateTimeDto';
-import { Project } from '../Entities/Project';
 import { sectionChangeDTO } from '../Entities/sectionChangeDTO';
 import { DateTimeDto1 } from '../Entities/DateTimeDto1';
 import { TaskStatusDto } from '../Entities/TaskStatusDto';
@@ -117,21 +114,18 @@ export class MyTasksService {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskName/${taskId}/${newName}`, null, { headers: this.getHeaders() });
   }
   
-  // Function to change task description
   changeTaskDescription(dto: UpdateTaskDescription): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskDescription`, dto, { headers: this.getHeaders() });
   }
   
-  // Function to change task due date
   changeTaskDueDate(taskId: any, dto: DateTimeDto1): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskDueDate/${taskId}`, dto, { headers: this.getHeaders() });
   }
-  // Function to change task app user ID
+
   changeTaskAppUserId(taskId: any, newAppUserId: any,senderid:any): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskAppUserId/${taskId}/${newAppUserId}`, senderid, { headers: this.getHeaders() });
   }
   
-  // Function to change task section ID
   changeTaskSectionId(taskId: any, newSectionId: any): Observable<ProjectTask> {
     return this.http.put<ProjectTask>(`${this.baseUrl}/changeTaskSectionId/${taskId}/${newSectionId}`, null, { headers: this.getHeaders() });
   }

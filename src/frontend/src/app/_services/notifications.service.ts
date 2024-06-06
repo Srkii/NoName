@@ -1,28 +1,23 @@
 import * as SignalR from '@microsoft/signalr';
 import { environment } from '../../environments/environment';
-import { ComponentRef, Injectable} from '@angular/core';
+import { Injectable} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CustomToastService } from './custom-toast.service';
 import { SharedService } from './shared.service';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationsService{
   hubUrl = environment.hubUrl;
-  //flag koji dopusta izvlacenje novih notifikacija sa backenda -> ukoliko nema novih notifikacija user ne sme da ima pravo da spamuje requestove klikom na zvonce
   newNotifications:boolean = false;
   private hubConnection?:SignalR.HubConnection;
-
 
   notifications : Notification[] = [];
   allNotifications:Notification[] = [];
 
-
   constructor(
-    private toastr:ToastrService,//mogu opet preko hub-a da uzimam notifikacije i ne bakcem se sa httpclientom ura!
     private customToast:CustomToastService,
     private shared:SharedService,
     private router:Router
@@ -40,7 +35,6 @@ export class NotificationsService{
       .configureLogging(SignalR.LogLevel.None)
       .build();
     this.hubConnection.start().catch(error =>{
-      // console.log(error);
     });
 
     this.hubConnection.on('newNotifications',() =>{
@@ -48,9 +42,8 @@ export class NotificationsService{
     });
 
     this.hubConnection.on('Notify',(notification:any)=>{
-      // console.log(notification);
-      this.notifications.push(notification);//ide u listu real-time notifikacija
-      this.allNotifications.push(notification);//lista neprocitanih u tabeli..
+      this.notifications.push(notification); // ide u listu real-time notifikacija
+      this.allNotifications.push(notification); // lista neprocitanih u tabeli
       this.newNotifications = true;
       this.customToast.initiate(
         {
@@ -62,12 +55,10 @@ export class NotificationsService{
     })
     this.hubConnection.on('recieveNotifications',(notifications:[Notification])=>{
       this.notifications = notifications;
-      // console.log(notifications);
     });
 
     this.hubConnection.on('recieveAllNotifications',(notifications:[Notification])=>{
-      this.allNotifications = notifications;//pokupim sve u niz
-      // console.log(this.allNotifications);
+      this.allNotifications = notifications; // pokupim sve u niz
     })
     this.hubConnection.on("notifyState",(response:any)=>{
       this.newNotifications = response;
@@ -77,11 +68,11 @@ export class NotificationsService{
     this.hubConnection?.stop().catch();
   }
   async getNotifications(){
-    await this.hubConnection?.invoke('invokeGetNotifications');//top 10 najskorijih neprocitanih notif -> OD SADA SAMO NAJSKORIJE, U NOTIF TAB-U IZBACUJE SAD MALO DRUGACIJE..
+    await this.hubConnection?.invoke('invokeGetNotifications'); // top 10 najskorijih neprocitanih notif -> OD SADA SAMO NAJSKORIJE, U NOTIF TAB-U IZBACUJE SAD MALO DRUGACIJE
 
   }
   async getAllNotifications(){
-    await this.hubConnection?.invoke('invokeGetAllNotifications');//sve notifikacije sortirane prvo po vremenu, pa onda po tome da li su procitane...
+    await this.hubConnection?.invoke('invokeGetAllNotifications'); // sve notifikacije sortirane prvo po vremenu, pa onda po tome da li su procitane
   }
   read_notifications(notificationIds:number[]){
     this.hubConnection?.invoke("readNotifications", notificationIds);
@@ -141,7 +132,6 @@ export class NotificationsService{
   }
 
   async follow_notif(event: MouseEvent, notification: any) {
-    // console.log(notification);
     this.read_notifications([notification.id]);
     if (notification.task != null) {
       event.stopPropagation();
@@ -153,7 +143,7 @@ export class NotificationsService{
         await this.router.navigate(['/project/' + notification.project.id]);
     }
   }
-  async follow_notif_from_tab(event:MouseEvent,notification:any){//jedina razlika je sto nema stop propagination... Xd
+  async follow_notif_from_tab(event:MouseEvent,notification:any){//jedina razlika je sto nema stop propagination
     this.read_notifications([notification.id]);
     if (notification.task != null) {
       await this.router.navigate(['/project/' + notification.task.projectId]);

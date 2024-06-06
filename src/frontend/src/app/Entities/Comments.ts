@@ -10,4 +10,3 @@ export interface Comment {
   edited: boolean;
   appUserPicUrl?:any;
 }
-

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { ProjectTask } from '../../Entities/ProjectTask';
 import { MyTasksService } from '../../_services/my-tasks.service';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from '../../_services/shared.service';
@@ -38,9 +38,6 @@ export class MyTasksComponent implements OnInit {
 
   fetchingTaskId: number | null = null;
 
-
-
-  
   constructor(
     private myTasksService: MyTasksService,
     private spinner: NgxSpinnerService,
@@ -49,7 +46,6 @@ export class MyTasksComponent implements OnInit {
     private router: Router,
     private sharedService:SharedService
   ) {}
-
 
   ngOnInit(): void {
     this.sharedService.taskUpdated.subscribe(() => {
@@ -111,8 +107,6 @@ export class MyTasksComponent implements OnInit {
     }
     this.cdr.detectChanges();
   }
-
-  
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -189,9 +183,6 @@ export class MyTasksComponent implements OnInit {
     this.router.navigate(['/project', project.id]);
   }
 
- 
-
-  //~maksim
   openTaskPopup(taskId: number): void {
     this.myTasksService.GetProjectTask(taskId, this.userId)
       .subscribe((task: ProjectTask) => {

@@ -247,63 +247,6 @@ body {
   border: 1px solid red !important;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 
-.ng-select-container,
-.ng-dropdown-panel {
-  color: var(--ng-text-color) !important;
-  background-color: var(--card-color) !important;
-  border: 1px solid var(--table-border-color) !important;
-  border-collapse: collapse !important;
-}
-.ng-dropdown-panel {
-  box-shadow: var(--card-shadow) !important;
-}
-.ng-option {
-  background-color: var(--card-color) !important;
-  border-bottom: 1px solid var(--table-border-color) !important;
-  border-collapse: collapse !important;
-}
-.ng-option:hover {
-  background-color: var(--normal-purple) !important;
-  color: #fff !important;
-}
-.ng-option {
-  color: #fff !important;
-  font-weight: 400 !important;
-}
-
-.ng-value-container .ng-value-label {
-  color: var(--ng-text-color) !important;
-  font-weight: normal !important;
-  font-size: 14px !important;
-}
-.ng-option-marked {
-  background-color: var(--normal-purple) !important;
-  color: #fff !important;
-}
-.ng-option:last-child {
-  border: none !important;
-}
-.ng-input > input {
-  color: var(--text-color) !important;
-} */
-
-
 .form-control {
   display: inline;
   width: 100%;
@@ -418,7 +361,6 @@ input {
 .MemberManagmentModel{
   height: auto;
 }
-
 
 /* Quill rich text editor custom css */
 .hide-toolbar .ql-toolbar  {

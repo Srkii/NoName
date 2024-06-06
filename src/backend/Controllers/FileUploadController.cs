@@ -41,7 +41,6 @@ namespace backend.Controllers
 
         [HttpGet("images/{filename}")]
         public FileContentResult GetImage(string filename){
-            // string path = Directory.GetCurrentDirectory()+"\\Assets\\Images\\"+filename;
             string path = Path.Combine(Directory.GetCurrentDirectory(),"Assets","Images",filename);
             var imageBytes = System.IO.File.ReadAllBytes(path);
             string mimetype = GetMimeType(filename);
@@ -102,7 +101,7 @@ namespace backend.Controllers
                 case ".xlsm":
                     return "application/vnd.ms-excel.sheet.macroEnabled.12";
                 default:
-                    return "application/octet-stream"; // Fallback if the file type is not recognized
+                    return "application/octet-stream"; // Fallback ako ti fajla nije prepoznat
             }
         }
         public bool IsExtensionAllowed(string filename){
@@ -149,7 +148,7 @@ namespace backend.Controllers
         public async Task<ActionResult> UploadFile(int id,[FromForm]int user_id,IFormFile file){
             if(file==null) return BadRequest("file is null");
             if(IsExtensionAllowed(file.FileName)==false){
-                return BadRequest("file type not allowed.");
+                return BadRequest("File type not allowed.");
             }else{
                 var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id==id);
                 var sender = await _context.Users.FirstOrDefaultAsync(x => x.Id == user_id);

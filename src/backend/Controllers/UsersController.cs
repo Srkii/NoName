@@ -67,7 +67,7 @@ namespace backend.Controllers
       {
         UserId = user.Id,
         Updated = true,
-        Message = "User data has been updated"
+        Message = "User data has been updated."
       };
 
       return Ok(responseData);
@@ -84,13 +84,13 @@ namespace backend.Controllers
         user.Archived = true;
         await _context.SaveChangesAsync();
       }
-      else { return BadRequest("User doesn't exists"); }
+      else { return BadRequest("User doesn't exist."); }
 
       var responseData = new
       {
         UserId = user.Id,
         Archived = true,
-        Message = "User is successfully archived"
+        Message = "User is successfully archived."
       };
 
       return Ok(responseData);
@@ -107,7 +107,7 @@ namespace backend.Controllers
         user.Role = dto.Role;
         await _context.SaveChangesAsync();
       }
-      else { return BadRequest("User doesn't exists"); }
+      else { return BadRequest("User doesn't exist."); }
 
       var responseData = new
       {
@@ -127,7 +127,7 @@ namespace backend.Controllers
       
       if(!VerifyPassword(user,data.CurrentPassword))
       {
-        return BadRequest(new {message = "Incorrect current password",type = 1});
+        return BadRequest(new {message = "Incorrect current password.",type = 1});
       }
 
       var hmac = new HMACSHA512(user.PasswordSalt);
@@ -156,7 +156,7 @@ namespace backend.Controllers
       {
         UserId = user.Id,
         Updated = true,
-        Message = "Password has been updated"
+        Message = "Password has been updated."
       };
       return Ok(responseData);
     }

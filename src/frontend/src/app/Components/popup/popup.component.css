@@ -59,11 +59,9 @@
 }
 .guestAssigneeImage {
   display: flex;
-  /* margin-left: 5px; */
 }
 .popupTaskName {
   font-size: 18px;
-  /* font-weight: bold; */
   color: var(--text-color) !important;
   padding-left: 10px;
   padding-right: 10px;
@@ -200,7 +198,6 @@ img{
   border-width: 0;
   border-radius: 0.375rem;
   box-shadow: var(--card-shadow);
-  /* font-weight: 600; */
   font-size: 14px;
   overflow-y: hidden;
   overflow-x: hidden;
@@ -435,9 +432,7 @@ img{
   font-size: 14px;
   width: 60%;
 }
-/* .ng-select.asigneeDropdown .ng-select-container {
-  border: 1px solid red !important;
-} */
+
 .projectDropdown{
   outline: none;
   margin-top: -5px;
@@ -613,7 +608,7 @@ img{
   accent-color: #696cff !important;
 }
 .no-hover {
-  pointer-events: none; /* Disables hover effects */
+  pointer-events: none;
 }
 ::ng-deep .guestDependencyView .ng-arrow-wrapper {
   display: none;

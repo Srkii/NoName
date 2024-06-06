@@ -80,7 +80,6 @@ export class ProjectDetailComponent implements OnInit {
   oldProjectName: string = "";
   userRole: ProjectRole | any;
 
-
   rangeDates: Date[] | undefined;
   selectedStatus: string = '';
   searchText: string='';
@@ -133,9 +132,8 @@ export class ProjectDetailComponent implements OnInit {
     this.shared.sectionUpdated.subscribe(() => {
       this.getProjectInfo();
     })
-    // nzm koliko je ovo pametno
     this.route.params.subscribe(params => {
-      const projectId = +params['id']; // '+' converts the parameter string to a number
+      const projectId = +params['id'];
       this.currentProjectId = projectId;
       this.getProjectInfo();
     });
@@ -347,7 +345,7 @@ export class ProjectDetailComponent implements OnInit {
     }
     if(this.update.description && this.update.description?.length > 10000)
     {
-      this.toastr.error("Description is too long");
+      this.toastr.error("Description is too long.");
       return;
     }
     if(this.userRole == 1 || this.userRole == 0)
@@ -527,7 +525,7 @@ export class ProjectDetailComponent implements OnInit {
 
     this.buttonClicked = false;
     const task: NewTask = {
-      CreatorId: Number(localStorage.getItem('id')),//treba mi da ne bih kreatoru slao da je dodelio sam sebi task ~maksim
+      CreatorId: Number(localStorage.getItem('id')), // treba mi da ne bih kreatoru slao da je dodelio sam sebi task
       TaskName: this.newTaskName,
       Description: this.newTaskDescription,
       StartDate: this.newTaskStartDate || new Date(),
@@ -718,7 +716,7 @@ export class ProjectDetailComponent implements OnInit {
     if (this.project && this.project.id) {
       this.myProjectsService.archiveProject(this.project.id).subscribe({
         next: () => {
-          this.getProjectInfo(); // Refresh project info or navigate away
+          this.getProjectInfo();
           this.modalRef?.hide();
           this.router.navigate(['/myprojects']).then(() => {
             this.toastr.success('Project has been archived.');
@@ -911,4 +909,3 @@ export class ProjectDetailComponent implements OnInit {
     return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
   }
 }
-  

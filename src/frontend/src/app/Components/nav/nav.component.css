@@ -19,7 +19,6 @@ body {
   align-items: center;
   padding-left: 20px;
   padding-right: 20px;
-  /* padding: 10px 20px; */
   box-shadow: var(--card-shadow);
   background-color: var(--card-color) !important;
   backdrop-filter: saturate(200%) blur(6px);
@@ -150,19 +149,9 @@ body {
       z-index: 100;
     }
 }
-/* @media (min-width: 768px) {
-  .navbar-brand .dropdown-menu{
-    display: none;
-  }
-  .tabs-to-dropdown{
-    display: block;
-  }
-  .mb-2 {
-    margin-bottom: .0rem !important;
-  }
-} */
+
 .dropdown-menu-responsive a:hover {
-  background-color: #b8b9f2; /* Change this to the color you want */
+  background-color: #b8b9f2;
   color: #413561;
 }
 

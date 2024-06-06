@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SharedService } from './_services/shared.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { NotificationsService } from './_services/notifications.service';
 import { ThemeServiceService } from './_services/theme-service.service';
 

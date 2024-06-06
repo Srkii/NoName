@@ -35,7 +35,7 @@ export class ForgotResetComponent implements OnInit{
 
   GetEmailByToken(token: string | null): void {
     if (!token) {
-      console.error('Token is missing');
+      console.error('Token is missing.');
       return;
     }
     this.mailresetService.getEmailByToken(token).subscribe({
@@ -44,7 +44,7 @@ export class ForgotResetComponent implements OnInit{
         if (email) {
           this.newRequest.Email = email;
         } else {
-          console.error('Email not found in response');
+          console.error('Email not found in response.');
         }
       },
       error: (error) => {
@@ -67,7 +67,7 @@ export class ForgotResetComponent implements OnInit{
       this.newRequest.NewPassword = '';
       this.confirmPassword = '';
       this.invalidPassword = false;
-      this.toastr.error("Recovery token doesn't exists")
+      this.toastr.error("Recovery token doesn't exists.")
       return false;
     }
 

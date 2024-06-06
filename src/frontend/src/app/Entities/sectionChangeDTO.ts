@@ -1,4 +1,4 @@
-export interface sectionChangeDTO{
+export interface sectionChangeDTO {
     sectionId:number,
     taskId:number
 }

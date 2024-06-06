@@ -75,7 +75,7 @@ namespace backend.Controllers
             var comment = await _context.Comments.FindAsync(commentId);
 
         if (comment == null)
-            return BadRequest("Comment doesn't exist");
+            return BadRequest("The comment doesn't exist.");
 
         _context.Comments.Remove(comment);
         await _context.SaveChangesAsync();
@@ -98,7 +98,7 @@ namespace backend.Controllers
 
             if (comment == null)
             {
-                return NotFound("Comment not found");
+                return NotFound("Comment not found.");
             }
 
             comment.Content = content;

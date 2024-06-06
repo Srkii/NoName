@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 })
 export class MyProjectsService {
   private apiUrl = environment.apiUrl;
-  private baseUrl = `${this.apiUrl}/projects`; // corrected base URL
+  private baseUrl = `${this.apiUrl}/projects`;
 
   constructor(private http: HttpClient) {}
 
@@ -180,4 +180,3 @@ export class MyProjectsService {
     return this.http.get(`${this.baseUrl}/getProjectUserRole/${projectId}/${userId}`,{  headers: this.getHeaders() });
   }
 }
-

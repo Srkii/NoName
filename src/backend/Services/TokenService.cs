@@ -22,7 +22,6 @@ namespace backend.Services
             {
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.Role,user.Role.ToString()),
-                // Add new claims here
                 new Claim(JwtRegisteredClaimNames.NameId,user.Id.ToString()),
             };
 

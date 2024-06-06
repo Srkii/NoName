@@ -11,7 +11,6 @@
           <p class="mb-4">Enter your new password</p>
 
           <form #loginForm="ngForm" class="mg-3" autocomplete="off" id="formAuthentication" (ngSubmit)="resetPassword()">                
-            <!-- Password input -->
             <div class="mb-3 form-password-toggle">
               <div class="d-flex justify-content-between">
                 <label class="form-label" for="password">Password</label>
@@ -32,7 +31,6 @@
                   placeholder="Confirm Password"/>
                 </div>
             </div>
-            <!-- Submit button -->
             <div class="mb-3">
               <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="!passwordMatch() || !newRequest.NewPassword">Reset Password</button>
             </div>

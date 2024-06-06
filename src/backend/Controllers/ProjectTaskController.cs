@@ -31,7 +31,7 @@ namespace backend.Controllers
 
             var project = await _context.Projects.FindAsync(taskDto.ProjectId);
             if (taskDto.StartDate < DateTime.UtcNow.Date || taskDto.StartDate < project.StartDate || taskDto.EndDate > project.EndDate)
-                return ValidationProblem("Start and end date must be set within the project dates and can't be in past");
+                return ValidationProblem("Start and end date must be set within the project dates and can't be in past.");
 
             var task = new ProjectTask
             {
@@ -44,7 +44,6 @@ namespace backend.Controllers
                         .Where(ts => ts.ProjectId == taskDto.ProjectId && ts.Position == 0)
                         .Select(ts => ts.Id)
                         .FirstOrDefault(),
-                // ProjectSectionId = taskDto.ProjectSectionId,
                 DateCreated = DateTime.Now, // postavlja vreme i datum kad je task kreiran
                 AppUserId = taskDto.AppUserId,
                 ProjectSectionId = taskDto.ProjectSectionId != 0 ? taskDto.ProjectSectionId : null,
@@ -162,13 +161,12 @@ namespace backend.Controllers
             task.TskStatusId = taskDto.TaskStatusId;
             await _context.SaveChangesAsync();
             var status = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id==taskDto.TaskStatusId);
-            if(taskDto.senderid!=null)Console.WriteLine("SENDER ID "+taskDto.senderid);
             if(status.StatusName.Equals("InReview")){
                 await _notificationService.notifyTaskCompleted(task, (int)taskDto.senderid);
             }
             await updateProgress(task.ProjectId);
 
-            return Ok(new {message="task status updated successfully"});
+            return Ok(new {message="Task status updated successfully."});
         }
 
         [Authorize(Roles = "ProjectManager,Member")]
@@ -189,7 +187,7 @@ namespace backend.Controllers
             }
 
             if (!await RoleCheck(task.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager, ProjectRole.Participant]))
-                return Unauthorized("Invalid role");
+                return Unauthorized("Invalid role.");
 
             var status = await _context.TaskStatuses
                 .FirstOrDefaultAsync(s => s.StatusName == statusName && s.ProjectId == task.ProjectId);
@@ -215,12 +213,10 @@ namespace backend.Controllers
                 await _notificationService.notifyTaskCompleted(task,senderid);
             }
 
-            // Now, after saving changes, fetch the updated task again
             task = await _context.ProjectTasks
                 .Include(t => t.TskStatus)
                 .FirstOrDefaultAsync(t => t.Id == taskId);
 
-            // Create a DTO to shape the response
             var taskDto = new ProjectTaskDto
             {
                 Id = task.Id,
@@ -236,7 +232,6 @@ namespace backend.Controllers
             };
 
             await updateProgress(task.ProjectId);
-
             return taskDto;
         }
 
@@ -246,16 +241,16 @@ namespace backend.Controllers
         {
             if(taskName.Length==0 || taskName.Length>100)
             {
-                return ValidationProblem("Task name must be shorter or longer");
+                return ValidationProblem("Task name must be between 1 and 100 characters long.");
             }
 
             var task = await _context.ProjectTasks.FindAsync(id);
 
             if (task == null)
-                return BadRequest("Task doesn't exist");
+                return BadRequest("Task doesn't exist.");
 
             if (!await RoleCheck(task.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager]))
-                return Unauthorized("Invalid role");
+                return Unauthorized("Invalid role.");
 
             task.TaskName = taskName;
 
@@ -271,10 +266,10 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks.FindAsync(dto.Id);
 
             if (task == null)
-                return BadRequest("Task doesn't exist");
+                return BadRequest("Task doesn't exist.");
 
             if (!await RoleCheck(task.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager]))
-                return Unauthorized("Invalid role");
+                return Unauthorized("Invalid role.");
 
             task.Description = dto.Description;
 
@@ -290,16 +285,16 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks.FindAsync(id);
 
             if (task == null)
-                return BadRequest("Task doesn't exist");
+                return BadRequest("Task doesn't exist.");
 
             if (task.StartDate > dto.StartDate)
-                return BadRequest("Start date must be before or equal to end date");
+                return BadRequest("Start date must be before or equal to end date.");
 
             if (dto.EndDate > dto.ProjectEndDate)
-                return BadRequest("Task end date cannot be set after project end date");
+                return BadRequest("Task end date cannot be set after project end date.");
 
             if (!await RoleCheck(task.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager]))
-                return Unauthorized("Invalid role");
+                return Unauthorized("Invalid role.");
 
             task.EndDate = dto.EndDate;
 
@@ -339,9 +334,9 @@ namespace backend.Controllers
             }
 
             await _context.SaveChangesAsync();
-
             return Ok(task);
         }
+
         [Authorize(Roles = "ProjectManager,Member")]
         [HttpPut("changeTaskSectionId/{id}/{sectionId}")]
         public async Task<ActionResult<ProjectTask>> changeTaskSectionId(int id, int sectionId)
@@ -368,10 +363,10 @@ namespace backend.Controllers
             var task = await _context.ProjectTasks.FindAsync(dto.Id);
 
             if (task == null)
-                return BadRequest("Task doesn't exists");
+                return BadRequest("Task doesn't exists.");
 
             if (!await RoleCheck(task.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner]))
-                return Unauthorized("Invalid role");
+                return Unauthorized("Invalid role.");
 
             if (dto.StartDate != null) task.StartDate = (DateTime)dto.StartDate;
             if (dto.EndDate != null) task.EndDate = (DateTime)dto.EndDate;
@@ -409,8 +404,7 @@ namespace backend.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            //komentar
-            return Ok(); // Return success
+            return Ok();
         }
 
         [Authorize(Roles = "ProjectManager,Member")]
@@ -422,16 +416,14 @@ namespace backend.Controllers
             if (!await RoleCheck(test.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager]))
                 return Unauthorized("Invalid role");
 
-            // Find the task dependency to delete
             var dependencyToDelete = await _context.TaskDependencies
                 .FirstOrDefaultAsync(dep => dep.TaskId == dto.TaskId && dep.DependencyTaskId == dto.DependencyTaskId);
 
             if (dependencyToDelete != null)
             {
-                // If the dependency exists, remove it from the context
                 _context.TaskDependencies.Remove(dependencyToDelete);
                 await _context.SaveChangesAsync();
-                return Ok(); // Return success
+                return Ok();
             }
             else
             {
@@ -440,7 +432,7 @@ namespace backend.Controllers
                 {
                     return NotFound("Task not found.");
                 }
-                return NotFound("Dependency not found."); // Return not found if the dependency doesn't exist
+                return NotFound("Dependency not found.");
             }
 
         }
@@ -503,12 +495,12 @@ namespace backend.Controllers
             var isMember = await _context.ProjectMembers.AnyAsync(pm => pm.AppUserId == userId && pm.ProjectId == projectId);
             if (!isMember)
             {
-                return BadRequest("User is not a member of the project");
+                return BadRequest("User is not a member of the project.");
             }
 
             var task = await _context.ProjectTasks.FindAsync(taskId);
             if (task == null)
-                return NotFound("Task not found");
+                return NotFound("Task not found.");
 
             task.AppUserId = userId;
             await _context.SaveChangesAsync();
@@ -516,7 +508,7 @@ namespace backend.Controllers
             return Ok(task);
         }
 
-        // [Authorize(Roles = "ProjectManager,Member")]
+        [Authorize(Roles = "ProjectManager,Member")]
         [HttpGet("ByProject/{projectId}")]
         public async Task<ActionResult<IEnumerable<ProjectTask>>> GetTasksByProjectId(int projectId, string sortedColumn = null, int sortedOrder = 0, string searchText = null, string taskStatus = null, DateTime? startDate = null, DateTime? endDate = null)
         {
@@ -549,14 +541,11 @@ namespace backend.Controllers
                     EF.Functions.Like(p.FirstName + " " + p.LastName, $"%{searchText.ToLower()}%")
                 );
             }
-
             if (taskStatus != null)
             {
                 if (taskStatus != "All")
                     query = query.Where(p => p.StatusName == taskStatus);
             }
-
-
             if (startDate.HasValue && !endDate.HasValue)
             {
                 query = query.Where(p => p.StartDate == startDate);
@@ -613,7 +602,7 @@ namespace backend.Controllers
         public async Task<IActionResult> UpdateTaskStatusPositions([FromBody] List<TskStatus> updatedStatuses)
         {
             if (updatedStatuses.Count == 0)
-                return BadRequest("No task status positions to update");
+                return BadRequest("No task status positions to update.");
 
             int projectId = updatedStatuses[0].ProjectId; // Extract projectId from the first status
 
@@ -671,15 +660,12 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<object>>> SortTasksByDueDate(int userId, string sortOrder)
         {
             var query = _context.ProjectTasks.AsQueryable();
-            // Apply sorting based on the sortBy parameter
             switch (sortOrder)
             {
                 case "asc":
                     query = query.OrderBy(task => task.EndDate);
                     break;
-                // Add more cases for additional sorting criteria if needed
                 case "desc":
-                    // Default sorting by task ID if sortBy parameter is not recognized
                     query = query.OrderByDescending(task => task.EndDate);
                     break;
             }
@@ -757,7 +743,7 @@ namespace backend.Controllers
        .Where(task => task.AppUserId == userId && task.TskStatusId == task.TskStatus.Id && task.TskStatus.StatusName != "InReview"
                       && task.TskStatus.StatusName != "Completed" && task.TskStatus.StatusName != "Archived" && !task.IsOriginProjectArchived)
        .Take(count)
-       .OrderByDescending(task => task.DateCreated) // Order by DateCreated in descending order initially
+       .OrderByDescending(task => task.DateCreated)
        .Select(task => new
        {
            task.Id,
@@ -807,7 +793,7 @@ namespace backend.Controllers
                 .Where(task => task.AppUserId == userId && task.TskStatusId == task.TskStatus.Id && task.TskStatus.StatusName != "InReview"
                 && task.TskStatus.StatusName != "Completed" && task.TskStatus.StatusName != "Archived" && !task.IsOriginProjectArchived)
                 .Take(count)
-                .OrderBy(task => task.EndDate) // Order by DateCreated in descending order
+                .OrderBy(task => task.EndDate)
                 .Select(task => new
                 {
                     task.Id,
@@ -909,11 +895,11 @@ namespace backend.Controllers
 
             if (test == null)
             {
-                return BadRequest("No tasks to update");
+                return BadRequest("No tasks to update.");
             }
 
             if (!await RoleCheck(test.ProjectId, [ProjectRole.ProjectManager, ProjectRole.ProjectOwner, ProjectRole.Manager]))
-                return Unauthorized("Invalid role");
+                return Unauthorized("Invalid role.");
 
             var InProgressId = await _context.TaskStatuses
                 .Where(s => s.StatusName == "InProgress")
@@ -952,7 +938,7 @@ namespace backend.Controllers
                 return Unauthorized("Invalid role");
 
             task.StartDate = newDateTime.StartDate.AddDays(1);
-            task.EndDate = newDateTime.EndDate.AddDays(1);//sace da pamti normalno
+            task.EndDate = newDateTime.EndDate.AddDays(1);
 
             await _context.SaveChangesAsync();
             return Ok(task);
@@ -976,15 +962,14 @@ namespace backend.Controllers
 
             if (section == null && dto.sectionId != 0)
             {
-                //ako je ovo stanje onda je neki error
-                //poenta je sto treba da mozes da izbacis task iz section-a
-                //section id 0 ce da bude prosledjen sa fronta samo u slucaju izbacivanja iz sectiona
-                //ukoliko dobijem null ovde a prosledio sam !=0 sectionId, to znaci da sam poslao nepostojeci section
-                return NotFound("SECTION ID NOT FOUND " + dto.sectionId);
+                // ako je ovo stanje onda je neki error
+                // section id 0 ce da bude prosledjen sa fronta samo u slucaju izbacivanja iz sectiona
+                // ukoliko dobijem null ovde a prosledio sam !=0 sectionId, to znaci da sam poslao nepostojeci section
+                return NotFound("Section Id not found " + dto.sectionId);
             }
 
             if (dto.sectionId != 0)
-            {//ako smo prosledili id 0 onda ide u no section
+            { // ako smo prosledili id 0 onda ide u no section
                 task.ProjectSectionId = dto.sectionId;
                 task.ProjectSection = section;
             }
@@ -1012,14 +997,11 @@ namespace backend.Controllers
                 return NotFound("Task not found.");
             }
 
-            // Delete task dependencies
             var taskDependencies = _context.TaskDependencies.Where(dep => dep.TaskId == taskId || dep.DependencyTaskId == taskId);
             _context.TaskDependencies.RemoveRange(taskDependencies);
 
-            // Delete comments associated with the task
             var comments = _context.Comments.Where(c => c.TaskId == taskId);
             _context.Comments.RemoveRange(comments);
-            // Set notifications related to the task to null
 
             _notificationService.ArchiveRelatedTaskNotifications(task.Id);
 
@@ -1047,7 +1029,7 @@ namespace backend.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok("Project progress updated");
+            return Ok("Project progress updated.");
         }
 
         [Authorize(Roles = "ProjectManager,Member")]

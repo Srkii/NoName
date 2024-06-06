@@ -285,13 +285,8 @@ export class PopupComponent implements OnInit {
       }
       pop.style.width = 'calc(100% - 22px)';
       pop.style.padding = '15px';
-      // back.style.marginRight = '1%';
-      // exit_full.style.marginRight = '30px';
-      // trash.style.marginRight = '30px';
       exit_full.style.display = 'flex';
       full.style.display = 'none';
-      // file.style.marginRight = '3%';
-      // comments.style.marginTop = '0%';
       comments.style.width = '100%';
       this.fullscreen = !this.fullscreen;
     } else {
@@ -301,7 +296,6 @@ export class PopupComponent implements OnInit {
       pop.style.padding = '';
       back.style.marginRight = '';
       exit_full.style.marginRight = '';
-      // trash.style.marginRight = '';
       exit_full.style.display = 'none';
       full.style.display = '';
       comments.style.marginTop = '';
@@ -347,7 +341,7 @@ export class PopupComponent implements OnInit {
           var success = true;
           if (this.attachment_name != '') {
             success = this.uploadAttachment();
-          } //ne dam upload komentara sa nevalidnim attachmentom..
+          } // ne dozvoljavam upload komentara sa nevalidnim attachmentom
           if (success) {
             const commentDto: Comment = {
               id: -1,
@@ -675,7 +669,7 @@ export class PopupComponent implements OnInit {
 
   addTaskDependency(): void {
     if (!this.task) {
-      console.error('Task is null');
+      console.error('Task is null.');
       return;
     }
 
@@ -715,7 +709,6 @@ export class PopupComponent implements OnInit {
             taskId: this.task!.id,
             dependencyTaskId: item.id,
           };
-          // Delete the dependency
           this.myTasksService.deleteTaskDependency(dto).subscribe(
             () => {},
             error => console.error('Error deleting task dependency:', error)
@@ -791,8 +784,6 @@ export class PopupComponent implements OnInit {
     }
   }
 
-  //emigrirao sam ovde ~maksim
-
   fileInputHandler($event: any) {
     this.file = $event.target.files[0];
 
@@ -806,7 +797,7 @@ export class PopupComponent implements OnInit {
   uploadAttachment(): boolean {
     var task_id = Number(this.sharedService.current_task_id);
     var token = localStorage.getItem('token');
-    var user_id = localStorage.getItem('id'); //prosledim id posiljaoce
+    var user_id = localStorage.getItem('id'); //prosledim id posiljaoca
     if (this.uploadService.checkFileType(this.file)) {
       if (this.uploadService.checkFileSize(this.file)) {
         this.uploadService
@@ -842,7 +833,7 @@ export class PopupComponent implements OnInit {
 
     const extension = filename.substring(filename.lastIndexOf('.'));
     const baseName = filename.substring(0, filename.lastIndexOf('.'));
-    const abbreviationLength = maxLength - extension.length - 3; // 3 for the ellipsis
+    const abbreviationLength = maxLength - extension.length - 3;
 
     return baseName.substring(0, abbreviationLength) + '...' + extension;
   }
@@ -853,7 +844,6 @@ export class PopupComponent implements OnInit {
       return;
     }
 
-    // Fetch the latest dependencies
     this.myTasksService.GetTaskDependencies(this.task.id).subscribe({
       next: (dependencies) => {
         dependencies.forEach((dependency) => {
@@ -861,7 +851,6 @@ export class PopupComponent implements OnInit {
             taskId: this.task!.id,
             dependencyTaskId: dependency.dependencyTaskId,
           };
-          // Delete each dependency
           this.myTasksService.deleteTaskDependency(dto).subscribe(
             () => {},
             (error) => console.error('Error deleting task dependency:', error)

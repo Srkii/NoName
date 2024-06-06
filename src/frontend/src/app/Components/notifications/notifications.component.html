@@ -63,10 +63,6 @@
   </ul>
 </div>
 
-
-<!-- table -->
-
-
 <ng-template #AllNotifications>
   <div class="modal-header">
     <h4 class="modal-title pull-left">All Notifications</h4>
@@ -75,7 +71,6 @@
     </svg>
   </div>
   <div class="modal-body" *ngIf="this.notifications.length!=0 || this.notifications_read.length!=0">
-    <!-- table 1 -->
     <table class="notifications-table">
       <tr class="inactive_tr">
         <td>Unread</td>
@@ -113,8 +108,6 @@
         </td>
       </tr>
     </table>
-
-    <!-- table 2 -->
 
     <table class="notifications-table">
       <tr class="inactive_tr">

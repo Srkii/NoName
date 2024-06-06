@@ -8,10 +8,10 @@ namespace backend.DTO
         public int AppUserId { get; set; }
         public int ProjectId { get; set;}
 
-        [StringLength(100, ErrorMessage = "Project name must be at least 1 character long and a maximum of 100 characters.", MinimumLength = 1)]
+        [StringLength(100, ErrorMessage = "Project name must be between 1 and 100 characters long.", MinimumLength = 1)]
         public string ProjectName { get; set; }
 
-        [StringLength(10000, ErrorMessage = "Project cennot be longer than 10000 characters.")]
+        [StringLength(10000, ErrorMessage = "Project description can't exceed 10000 characters.")]
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

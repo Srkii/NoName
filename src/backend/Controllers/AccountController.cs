@@ -31,7 +31,7 @@ namespace backend.Controllers
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {   
             if(!await IsValidTokenAsync(registerDto.Token))
-                return BadRequest(new {message = "Invalid request token"});
+                return BadRequest(new {message = "Invalid request token."});
 
             if(await EmailExists(registerDto.Email))
                 return BadRequest(new {message = "E-mail is already in use."});
@@ -67,8 +67,8 @@ namespace backend.Controllers
             
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == loginDto.Email);
 
-            if(user == null) return Unauthorized("Account with this e-mail doesn't exists.");
-            if(user.Archived) return Unauthorized("Account with this e-mail doesn't exists.");
+            if(user == null) return Unauthorized("Account with this e-mail doesn't exist.");
+            if(user.Archived) return Unauthorized("Account with this e-mail doesn't exist.");
 
             var hmac = new HMACSHA512(user.PasswordSalt);
 
@@ -76,7 +76,7 @@ namespace backend.Controllers
 
             for(int i=0;i<computedHash.Length;i++)
             {
-                if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
+                if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password.");
             }
 
             return new UserDto
@@ -96,7 +96,7 @@ namespace backend.Controllers
 
             if (request == null)
             {
-                return BadRequest(new {message = "Token not found or already used"});
+                return BadRequest(new {message = "Token not found or already used."});
             }
 
             request.IsUsed = true;
@@ -118,7 +118,7 @@ namespace backend.Controllers
 
             if(!different)
             {
-                return BadRequest(new {message = "Please choose a new password"});
+                return BadRequest(new {message = "Please choose a new password."});
             }
 
             user.PasswordHash = hashNewPassword;
@@ -145,7 +145,7 @@ namespace backend.Controllers
 
         private async Task<bool> EmailExists(string email)
         {
-            return await _context.Users.AnyAsync(x => x.Email == email); //ako bude problema ovo email.ToLower() treba da se prepravi
+            return await _context.Users.AnyAsync(x => x.Email == email);
         }
 
         public async Task<bool> IsValidTokenAsync(string token)

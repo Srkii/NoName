@@ -13,7 +13,6 @@ svg.bi.bi-person-circle.archNoSection {
   border-bottom: 1px solid var(--normal-purple);
 }
 #all {
-  /* max-width: 1320px; */
   margin-top: 30px;
   margin: auto;
   padding: 20px;
@@ -54,25 +53,17 @@ table {
   color: var(--text-color);
   border: 1px solid var(--table-border-color);
   border-collapse: collapse;
-  /* padding: 6px; ovo kom*/
-  /* margin-left: -20px;  ovo mok*/
   margin-bottom: -10px;
   margin-top: 10px;
   width: 100%;
-  /* margin-left: 20px;ovo kom */
   border-left: none;
   border-right: none; 
   overflow-y: hidden;
   caption-side: bottom;
 }
-/* @media (max-width: 1200px) {
-  td {
-    padding: 2px;
-  }
-} */
+
 th {
   font-size: 18px;
-  /* border: 1.5px solid lightgray; */
   font-weight: 500;
   line-height: 20px;
   padding: 5px;
@@ -88,11 +79,8 @@ td {
   border-collapse: collapse;
   border-left: none;
   border-right: none;
-  /* padding-left: 20px; */
   font-size: 16px;
-  /*dodato*/
   white-space: nowrap; 
-  /* text-overflow: ellipsis; */
 }
 tr:last-child {
   border-bottom: none;
@@ -119,7 +107,6 @@ p {
 }
 
 .IN p {
-  /*IN PROGGRES*/
   background-color: var(--inprogress-background) !important;
   color: var(--inprogress-text) !important;
 }
@@ -197,9 +184,6 @@ p {
 }
 
 .header {
-  /* display: flex;
-  align-items: center;
-  justify-content: space-between;  */
   font-size: 20px !important;
   letter-spacing: -1px;
   color: #676f79;
@@ -410,8 +394,6 @@ p {
 .tNameSearch:focus {
   box-shadow: none !important;
 }
-
-/*miljana*/
 
 .project-heading{
   display: flex;

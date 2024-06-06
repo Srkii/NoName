@@ -2,7 +2,7 @@ import { TaskDependency } from './../../Entities/TaskDependency';
 import { MyProjectsService } from './../../_services/my-projects.service';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { GanttDragEvent, GanttItem, GanttSelectedEvent, GanttView, GanttViewType, NgxGanttComponent, GanttGroup, GanttDate, GanttLink } from '@worktile/gantt';
+import { GanttDragEvent, GanttItem, GanttSelectedEvent, GanttView, GanttViewType, NgxGanttComponent, GanttGroup, GanttLink } from '@worktile/gantt';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MyTasksService } from '../../_services/my-tasks.service';
 import { SharedService } from '../../_services/shared.service';
@@ -75,7 +75,7 @@ export class GanttComponent implements OnInit{
     this.loading = true;
     this.items=[];
     this.groups=[];
-    this.getGanttData();//kupimo sve podatke za trenutni projekat
+    this.getGanttData(); // kupimo sve podatke za trenutni projekat
     this.spinner.hide();
     setTimeout(()=>
     {
@@ -88,7 +88,7 @@ export class GanttComponent implements OnInit{
       this.data_loaded = false;
       this.items=[]; // ako ne stavim prazan niz nece znati da mora opet da ga pokupi
       this.groups=[]; // ako se napravi emit koji samo izbacuje iz array na frontu dosta ce se ubrzati
-      this.getGanttData();//kupimo sve podatke za trenutni projekat
+      this.getGanttData(); // kupimo sve podatke za trenutni projekat
       setTimeout(()=>
         {
         this.loading = false;
@@ -143,7 +143,7 @@ export class GanttComponent implements OnInit{
   }
   ElementwasDragged: boolean = false;
   dragEnded($event: GanttDragEvent) {
-    if (this.userRole !== 4 && this.userRole !== 3) { // ovaj check je nepotreban? proverava u html draggable
+    if (this.userRole !== 4 && this.userRole !== 3) {
       if ($event?.item.start !== undefined && $event.item.end !== undefined) {
         const startdate: Date = new Date(this.convertToStandardTimeStamp($event.item.start));
         const enddate: Date = new Date(this.convertToStandardTimeStamp($event.item.end));
@@ -293,7 +293,6 @@ export class GanttComponent implements OnInit{
       });
     }
   }
-  
 
   convertToUnixTimestamp(dateString: string): number {
     const date = new Date(dateString);

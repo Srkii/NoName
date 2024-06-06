@@ -93,7 +93,6 @@ export class ProjectCardComponent {
     return date;
   }
 
-
   async ProjectNameExists(ProjectName: string)
   {
     try

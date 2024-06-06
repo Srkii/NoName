@@ -49,7 +49,7 @@ namespace backend.Controllers
         }
 
         [Authorize(Roles = "ProjectManager,Member")]
-        [HttpGet("project/{id}")]//nzm nisam kreativan
+        [HttpGet("project/{id}")]
         public async Task<ActionResult<IEnumerable<ProjectSection>>> GetSectionsByProject(int id){
             var sections = await _context.ProjectSections.Where(x => x.ProjectId == id).ToListAsync();
             return sections;
@@ -66,7 +66,7 @@ namespace backend.Controllers
             }
 
             if(!await RoleCheck(section.ProjectId,[ProjectRole.ProjectManager,ProjectRole.ProjectOwner,ProjectRole.Manager]))
-                return Unauthorized("Invalid role");
+                return Unauthorized("Invalid role.");
 
             var tasks = await _context.ProjectTasks
                 .Where(t => t.ProjectSectionId == id && t.ProjectId == section.ProjectId)
