@@ -398,6 +398,7 @@ export class KanbanComponent implements OnInit{
       .subscribe({
         next: () => {
           this.populateTasks();
+          this.shared.notifyTaskStatusChange();
         },
         error: (error) => {
           console.error('Error updating status name', error);

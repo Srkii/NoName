@@ -60,3 +60,10 @@
 .tClose:active {
     box-shadow: none !important;
 }
+
+:host::ng-deep .today-line {
+    background-color: #696cff !important; 
+  }
+:host::ng-deep .start-line {
+    background-color: green !important; 
+  }
