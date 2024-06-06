@@ -111,3 +111,9 @@
   border-top-right-radius: 0.375rem !important;
   border-bottom-right-radius: 0.375rem !important;
 }
+.form-control:disabled {
+  outline: none !important;
+  box-shadow: none !important;
+  /* border-color: inherit !important; */
+  border: 1px solid var(--input-border) !important;
+}
