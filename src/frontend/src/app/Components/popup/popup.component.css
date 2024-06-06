@@ -619,3 +619,6 @@ img{
 .is-invalid:hover, .is-invalid:focus {
   border-color: red !important;
 }
+.dueDateTooltip {
+  margin-left: 10px !important;
+}
