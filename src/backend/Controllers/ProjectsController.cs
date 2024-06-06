@@ -110,10 +110,10 @@ namespace backend.Controllers
         [HttpPut("updateProject")] // PUT: api/projects/updateProject
         public async Task<ActionResult<Project>> UpdateProject(ProjectDto projectDto)
         {
-            if(projectDto.EndDate < DateTime.UtcNow.Date)
+            var project = await _context.Projects.FindAsync(projectDto.ProjectId);
+            if((projectDto.EndDate < DateTime.UtcNow.Date) && (project.EndDate != projectDto.EndDate))
                 return ValidationProblem("End date can't be in the past.");
 
-            var project = await _context.Projects.FindAsync(projectDto.ProjectId);
             if (project == null)
             {
                 return NotFound();
