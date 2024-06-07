@@ -128,41 +128,42 @@ namespace backend.Services
             var Owner = await _context.ProjectMembers
             .FirstOrDefaultAsync(x=>x.ProjectId == task.ProjectId &&
                                      x.ProjectRole == ProjectRole.ProjectOwner);
-            var owner = await _context.Users.FirstOrDefaultAsync(x=>x.Id == Owner.AppUserId);
-            if(owner==null) throw new Exception("Owner not found.");
-            if(owner.Id != task.AppUserId && owner.Id!=senderid){
-                Notification notification = new Notification
-                {
-                    task_id = task.Id,
-                    sender_id = task.AppUserId,
-                    reciever_id = owner.Id,
-                    Type = NotificationType.TaskCompleted,
-                    dateTime = DateTime.UtcNow,
-                    read = false,
-                    originArchived = false
-                };
-                await _context.Notifications.AddAsync(notification);
-                await _context.SaveChangesAsync();
-                var sender = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
-                var notifDTO = new NotificationDto{
-                            Id = notification.Id,
-                            Reciever = owner,
-                            Comment = notification.Comment,
-                            Task = new ProjectTaskDto{
-                                Id = task.Id,
-                                TaskName = task.TaskName,
-                                AppUserId = (int)task.AppUserId,
-                                ProjectId = (int)task.ProjectId,
-                                StartDate = task.StartDate,
-                                EndDate = task.EndDate   
-                            },
-                            Sender = sender,
-                            dateTime = notification.dateTime,
-                            Type = notification.Type,
-                            read = notification.read
-                        };
-                await _hubContext.Clients.Group(owner.Id.ToString()).Notify(notifDTO);   
-            }     
+            if(Owner!=null){
+                var owner = await _context.Users.FirstOrDefaultAsync(x=>x.Id == Owner.AppUserId);
+                if(owner != null && owner.Id != task.AppUserId && owner.Id!=senderid){
+                    Notification notification = new Notification
+                    {
+                        task_id = task.Id,
+                        sender_id = task.AppUserId,
+                        reciever_id = owner.Id,
+                        Type = NotificationType.TaskCompleted,
+                        dateTime = DateTime.UtcNow,
+                        read = false,
+                        originArchived = false
+                    };
+                    await _context.Notifications.AddAsync(notification);
+                    await _context.SaveChangesAsync();
+                    var sender = await _context.Users.FirstOrDefaultAsync(x=>x.Id == task.AppUserId);
+                    var notifDTO = new NotificationDto{
+                                Id = notification.Id,
+                                Reciever = owner,
+                                Comment = notification.Comment,
+                                Task = new ProjectTaskDto{
+                                    Id = task.Id,
+                                    TaskName = task.TaskName,
+                                    AppUserId = (int)task.AppUserId,
+                                    ProjectId = (int)task.ProjectId,
+                                    StartDate = task.StartDate,
+                                    EndDate = task.EndDate   
+                                },
+                                Sender = sender,
+                                dateTime = notification.dateTime,
+                                Type = notification.Type,
+                                read = notification.read
+                            };
+                    await _hubContext.Clients.Group(owner.Id.ToString()).Notify(notifDTO);   
+                }   
+            }  
         }
 
         public async Task<List<int>> GetUsersForTaskNotification(int taskId, int initiatorId)
@@ -213,27 +214,33 @@ namespace backend.Services
         }
         public async void ArchiveRelatedTaskNotifications(int id){
             var notifications = await  _context.Notifications.Where(x => x.task_id == id).ToListAsync();
-            foreach(Notification n in notifications){
-                n.originArchived = true;
+            if(notifications!=null){
+                foreach(Notification n in notifications){
+                    n.originArchived = true;
+                }
+                await _context.SaveChangesAsync();
+                CheckUserNotifications(notifications);
             }
-            await _context.SaveChangesAsync();
-            CheckUserNotifications(notifications);
         }
         public async void ArchiveRelatedProjectNotifications(int id){
             var notifications = await  _context.Notifications.Where(x => x.project_id == id || x.Task.ProjectId == id).ToListAsync();
-            foreach(Notification n in notifications){
-                n.originArchived = true;
+            if(notifications!=null){
+                foreach(Notification n in notifications){
+                    n.originArchived = true;
+                }
+                await _context.SaveChangesAsync();
+                CheckUserNotifications(notifications);
             }
-            await _context.SaveChangesAsync();
-            CheckUserNotifications(notifications);
         }
         public async void DeArchiveRelatedTaskNotifications(int id){
             var notifications = await  _context.Notifications.Where(x => x.task_id == id).ToListAsync();
-            foreach(Notification n in notifications){
-                n.originArchived = false;
-            }
-            await _context.SaveChangesAsync();
-            CheckUserNotifications(notifications);
+            if(notifications!=null){
+                foreach(Notification n in notifications){
+                    n.originArchived = false;
+                }
+                await _context.SaveChangesAsync();
+                CheckUserNotifications(notifications);
+                }
         }
         public async void DeArchiveRelatedProjectNotifications(int id){
             var notifications = await  _context.Notifications.Where(x => x.project_id == id || x.Task.ProjectId == id).ToListAsync();
@@ -245,26 +252,40 @@ namespace backend.Services
         }
         public async void DeleteRelatedNotifications(int taskId){
             var notifications = await _context.Notifications.Where(x => x.task_id==taskId).ToListAsync();
-            _context.Notifications.RemoveRange(notifications);
-            await _context.SaveChangesAsync();
-            CheckUserNotifications(notifications);
+            if(notifications!=null){
+                _context.Notifications.RemoveRange(notifications);
+                await _context.SaveChangesAsync();
+                CheckUserNotifications(notifications);
+            }
         }
         public async void DeleteUsersProjectNotifications(int userid){
             var notifications = await _context.Notifications.Where(x=>x.reciever_id == userid).ToListAsync();
-            _context.Notifications.RemoveRange(notifications);
-            await _context.SaveChangesAsync();
+            if(notifications!=null){
+                _context.Notifications.RemoveRange(notifications);
+                await _context.SaveChangesAsync();
 
-            CheckUserNotifications(notifications);
+                CheckUserNotifications(notifications);
+            }
         }
         public async Task DeleteRelatedAssignmentNotificationTask(int userid, int taskid){
             var notification = await _context.Notifications.FirstOrDefaultAsync(x=>x.reciever_id == userid && x.Type==NotificationType.TaskAssignment && x.task_id == taskid);
 
             if (notification != null) {
-            _context.Notifications.Remove(notification);
-            await _context.SaveChangesAsync();
-            List<Notification> arr = new List<Notification>();
-            arr.Add(notification);
-            CheckUserNotifications(arr);
+                _context.Notifications.Remove(notification);
+                await _context.SaveChangesAsync();
+                List<Notification> arr = new List<Notification>();
+                arr.Add(notification);
+                CheckUserNotifications(arr);
+            }
+        }
+        public async Task revokeCompletionNotif(int taskid, int senderid){
+            var notification = await _context.Notifications.FirstOrDefaultAsync(x=>x.sender_id == senderid && x.task_id == taskid && x.Type == NotificationType.TaskCompleted);
+            if (notification != null) {
+                _context.Notifications.Remove(notification);
+                await _context.SaveChangesAsync();
+                List<Notification> arr = new List<Notification>();
+                arr.Add(notification);
+                CheckUserNotifications(arr);
             }
         }
     }

@@ -177,9 +177,13 @@ namespace backend.Controllers
                 .Include(t => t.TskStatus)
                 .FirstOrDefaultAsync(t => t.Id == taskId);
             bool wasArchived = false;
+            bool wasInReview = false;
             if (task.TskStatus.StatusName.Equals("Archived"))
             {
                 wasArchived = true;
+            }
+            if(task.TskStatus.StatusName.Equals("InReview")){
+                wasInReview = true;
             }
             if (task == null)
             {
@@ -211,6 +215,10 @@ namespace backend.Controllers
             else if (statusName.Equals("InReview"))
             {
                 await _notificationService.notifyTaskCompleted(task,senderid);
+            }
+            else if(wasInReview && !statusName.Equals("Completed")){
+                //ako je bio u review
+                await _notificationService.revokeCompletionNotif(task.Id,senderid);
             }
 
             task = await _context.ProjectTasks
