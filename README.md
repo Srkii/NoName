@@ -49,5 +49,10 @@ miljana@gmail.com / password
 Globalni Member:
 srdjan@gmail.com / password
 
+Ostali nalozi:
+maksim@gmail.com / password
+mirko@gmail.com / password
+andrija@gmail.com / password
+
 Uputstvo za testere:
-https://gitlab.pmf.kg.ac.rs/si2024/access-denied/-/blob/master/docs/Uputstvo-za-tester-Access-Denied.pdf
+https://gitlab.pmf.kg.ac.rs/si2024/access-denied/-/blob/master/docs/manuals/Uputstvo%20za%20testere%20-%20AccessDenied.pdf
