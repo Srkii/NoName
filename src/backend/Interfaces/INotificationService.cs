@@ -14,6 +14,6 @@ namespace backend.Interfaces
         public Task notifyTaskCompleted(ProjectTask task,int senderid);
         public void DeleteUsersProjectNotifications(int id);
         public Task DeleteRelatedAssignmentNotificationTask(int userid,int taskId);
-
+        public Task revokeCompletionNotif(int taskid,int senderid);
     }
 }

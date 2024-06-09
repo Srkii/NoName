@@ -87,6 +87,7 @@ tr:last-child {
 }
 tr:last-child td {
   border-bottom: none;
+  padding-bottom: 10px !important;
 }
 table:last-child{
   border-bottom: none;
