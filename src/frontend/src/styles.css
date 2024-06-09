@@ -481,3 +481,6 @@ line.ql-color-label.ql-stroke,
 .ng-invalid .p-inputtext{
   border: 1px solid red !important;
 }
+.projectInfoModal{
+  height: auto;
+}
