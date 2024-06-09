@@ -158,11 +158,22 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            task.TskStatusId = taskDto.TaskStatusId;
-            await _context.SaveChangesAsync();
-            var status = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id==taskDto.TaskStatusId);
+            bool wasInReview = false;
+            //stari status i ono sto je on bio
+            var status = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id == task.TskStatusId);
             if(status.StatusName.Equals("InReview")){
+                wasInReview = true;
+            }
+            task.TskStatusId = taskDto.TaskStatusId;
+
+            await _context.SaveChangesAsync();
+            //novi status i ponasanja u odnosu na njega
+            var newstatus = await _context.TaskStatuses.FirstOrDefaultAsync(x=>x.Id==taskDto.TaskStatusId);
+            if(newstatus.StatusName.Equals("InReview")){//saljem ga u review
                 await _notificationService.notifyTaskCompleted(task, (int)taskDto.senderid);
+            }
+            else if(wasInReview && !newstatus.StatusName.Equals("InReview")){
+                await _notificationService.revokeCompletionNotif(id,(int)taskDto.senderid);
             }
             await updateProgress(task.ProjectId);
 
@@ -177,9 +188,13 @@ namespace backend.Controllers
                 .Include(t => t.TskStatus)
                 .FirstOrDefaultAsync(t => t.Id == taskId);
             bool wasArchived = false;
+            bool wasInReview = false;
             if (task.TskStatus.StatusName.Equals("Archived"))
             {
                 wasArchived = true;
+            }
+            if(task.TskStatus.StatusName.Equals("InReview")){
+                wasInReview = true;
             }
             if (task == null)
             {
@@ -211,6 +226,10 @@ namespace backend.Controllers
             else if (statusName.Equals("InReview"))
             {
                 await _notificationService.notifyTaskCompleted(task,senderid);
+            }
+            else if(wasInReview && !statusName.Equals("InReview")){
+                //ako je bio u review
+                await _notificationService.revokeCompletionNotif(task.Id,senderid);
             }
 
             task = await _context.ProjectTasks
