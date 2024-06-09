@@ -18,7 +18,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyTasksComponent } from './Components/my-tasks/my-tasks.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ProjectDetailComponent } from './Components/project-detail/project-detail.component';
-import { FileUploadComponent } from './Components/file-upload/file-upload.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { PopupComponent } from './Components/popup/popup.component';
 import { KanbanComponent } from './Components/kanban/kanban.component';
@@ -56,7 +55,6 @@ const avatarColors = ["#4BC5BF", "#5d57c2", "#B84BC5", "#25BA17", "#EDEC07","#07
     MyTasksComponent,
     PopupComponent,
     ProjectDetailComponent,
-    FileUploadComponent,
     KanbanComponent,
     GanttComponent,
     ProjectCardComponent,

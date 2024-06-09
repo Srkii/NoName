@@ -55,7 +55,7 @@ export class UserInfoComponent implements OnInit {
       this.userinfoService.getUserInfo(id,token).subscribe({
         next: (response) =>{
           this.userInfo = response;
-          console.log(response);
+          // console.log(response);
           if(this.userInfo.role == 2){
             this.role="Project manager";
           }else if(this.userInfo.role == 1){

@@ -279,7 +279,7 @@ namespace backend.Services
             }
         }
         public async Task revokeCompletionNotif(int taskid, int senderid){
-            var notification = await _context.Notifications.FirstOrDefaultAsync(x=>x.sender_id == senderid && x.task_id == taskid && x.Type == NotificationType.TaskCompleted);
+            var notification = await _context.Notifications.FirstOrDefaultAsync(x=> (x.sender_id == senderid || x.reciever_id == senderid)&& x.task_id == taskid && x.Type == NotificationType.TaskCompleted);
             if (notification != null) {
                 _context.Notifications.Remove(notification);
                 await _context.SaveChangesAsync();
